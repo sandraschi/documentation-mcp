@@ -1,0 +1,101 @@
+Metadata-Version: 2.4
+Name: documentation-mcp
+Version: 1.0.0
+Summary: Public MCP Documentation Server - Federated RAG for the MCP ecosystem
+Author-email: FlowEngineer sandraschi <sandra@vienna.at>
+License: MIT
+Project-URL: Homepage, https://github.com/sandraschi/documentation-mcp
+Project-URL: Documentation, https://github.com/sandraschi/documentation-mcp#readme
+Project-URL: Issues, https://github.com/sandraschi/documentation-mcp/issues
+Project-URL: Source, https://github.com/sandraschi/documentation-mcp
+Keywords: mcp,documentation,search,federated-rag,fastmcp,portmanteau,semantic-search,cross-reference
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Documentation
+Classifier: Topic :: Text Processing :: Indexing
+Classifier: Framework :: FastMCP
+Classifier: Framework :: FastMCP :: Portmanteau
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: fastmcp<4,>=3.2.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: aiohttp>=3.9.0
+Requires-Dist: beautifulsoup4>=4.12.0
+Requires-Dist: python-multipart>=0.0.6
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: python-frontmatter>=1.1.0
+Requires-Dist: python-dateutil>=2.8.2
+Requires-Dist: watchfiles>=0.21.0
+Requires-Dist: fastembed>=0.2.0
+Requires-Dist: lancedb>=0.4.0
+Requires-Dist: fastapi>=0.109.0
+Requires-Dist: uvicorn>=0.27.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.3.4; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.24.0; extra == "dev"
+Requires-Dist: ruff>=0.1.6; extra == "dev"
+Requires-Dist: pyright>=1.1.390; extra == "dev"
+Requires-Dist: bandit>=1.7.0; extra == "dev"
+Requires-Dist: safety>=3.0.0; extra == "dev"
+Requires-Dist: build>=1.0.0; extra == "dev"
+Requires-Dist: twine>=5.0.0; extra == "dev"
+Dynamic: license-file
+
+# Documentation-MCP (Docs-MCP v14.0)
+
+> [!IMPORTANT]
+> **Federated Public Documentation Hub**: This repository is the public-facing control plane for MCP standards, fleet registries, and architectural patterns. It leverages a Federated RAG engine to unify search across internal core documentation and external intelligence repositories (like Advanced Memory MCP).
+
+## Overview
+
+Documentation-MCP is part of the **Alsergrund Industrial Fleet**. It provides:
+- **Core Standards**: SOTA v13.1 protocols for FastMCP 3.2+, Git workflows, and UI/UX design.
+- **Fleet Registry**: High-fidelity indexing of the 135+ repository MCP ecosystem.
+- **Federated RAG**: A neural search engine that cross-links documentation with agentic memory and personal skills.
+
+## Architecture
+
+```mermaid
+graph TD
+    User([User Agent]) --> MCP[Docs-MCP Server]
+    MCP --> RAG[Federated RAG Engine]
+    RAG --> Core[Internal /docs]
+    RAG --> AMP[Advanced Memory MCP]
+    AMP --> Knowledge[/knowledge]
+    AMP --> Notes[/notes]
+    MCP --> Web[SOTA Dashboard]
+```
+
+## Setup
+
+1. **Install Dependencies**:
+   ```powershell
+   cd src/docs_mcp
+   pip install -e .
+   ```
+
+2. **Run Server**:
+   ```powershell
+   python -m docs_mcp.server
+   ```
+
+3. **Start Dashboard**:
+   ```powershell
+   ./web_sota/start.bat
+   ```
+
+## Federated Intelligence
+This server automatically detects sibling repositories. If `advanced-memory-mcp` is located in the same parent directory, its knowledge and notes will be indexed and prioritized during semantic retrieval.
+
+---
+**Maintained by**: FlowEngineer sandraschi (Vienna, AT)
+**Philosophy**: Materialist Reductionism & Industrial Efficiency.

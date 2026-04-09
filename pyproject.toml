@@ -1,0 +1,103 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "documentation-mcp"
+version = "1.0.0"
+description = "Public MCP Documentation Server - Federated RAG for the MCP ecosystem"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "FlowEngineer sandraschi", email = "sandra@vienna.at"}
+]
+keywords = [
+    "mcp", "documentation", "search", "federated-rag", "fastmcp",
+    "portmanteau", "semantic-search", "cross-reference"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Text Processing :: Indexing",
+    "Framework :: FastMCP",
+    "Framework :: FastMCP :: Portmanteau",
+]
+dependencies = [
+    "fastmcp>=3.2.0,<4",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+    "aiohttp>=3.9.0",
+    "beautifulsoup4>=4.12.0",
+    "python-multipart>=0.0.6",
+    "pyyaml>=6.0",
+    "python-frontmatter>=1.1.0",
+    "python-dateutil>=2.8.2",
+    "watchfiles>=0.21.0",
+    "fastembed>=0.2.0",
+    "lancedb>=0.4.0",
+    "fastapi>=0.109.0",
+    "uvicorn>=0.27.0"
+]
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.4",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.1.6",
+    "pyright>=1.1.390",
+    "bandit>=1.7.0",
+    "safety>=3.0.0",
+    "build>=1.0.0",
+    "twine>=5.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/sandraschi/documentation-mcp"
+Documentation = "https://github.com/sandraschi/documentation-mcp#readme"
+Issues = "https://github.com/sandraschi/documentation-mcp/issues"
+Source = "https://github.com/sandraschi/documentation-mcp"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["docs_mcp*"]
+
+[tool.pytest.ini_options]
+testpaths = ["src/docs_mcp/tests", "tests"]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=src/docs_mcp",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "-v"
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

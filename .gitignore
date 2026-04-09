@@ -1,0 +1,51 @@
+# Node.js
+node_modules/
+dist/
+build/
+target/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.env
+*.log
+
+# IDEs
+.vscode/
+.idea/
+.gemini/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup / scratch
+*.bak
+
+# Project Specific
+debug.log
+scripts/out/
+src/docs_mcp/frontend/node_modules/
+src/docs_mcp/frontend/dist/
+.lancedb/
+*.lance
+src/docs_mcp/data/lancedb/
+
+# Nested git clones under claude-skills (stale submodule pointers; keep local only)
+not-mcp-related/claude-skills/temp/

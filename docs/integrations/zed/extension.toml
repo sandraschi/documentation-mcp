@@ -1,0 +1,11 @@
+id = "advanced-memory-mcp"
+name = "Advanced Memory MCP"
+version = "0.7.0"
+schema_version = 1
+authors = ["Sandra Schipal <sandraschipal@gmail.com>"]
+description = "Local-first knowledge management system with MCP bidirectional communication. FastMCP 2.14.3 with conversational error handling and agentic content workflows."
+repository = "https://github.com/sandraschi/advanced-memory-mcp"
+
+[context_servers.knowledge-server]
+name = "Advanced Memory MCP"
+description = "Knowledge graph navigation, note management, project organization, search, and conversational AI assistance"
