@@ -1,0 +1,18 @@
+{
+  "title": "Compatibility Matrix (January 2026 Baseline)",
+  "subtitle": "Verified against FastMCP 3.1+",
+  "columns": [
+    { "id": "stdio", "label": "Stdio" },
+    { "id": "sse", "label": "SSE / HTTP" },
+    { "id": "resources", "label": "Resources" },
+    { "id": "tools", "label": "Tools" },
+    { "id": "prompts", "label": "Prompts" }
+  ],
+  "clients": [
+    { "name": "Cursor", "status": "VERIFIED", "features": { "stdio": "pass", "sse": "pass", "resources": "pass", "tools": "pass", "prompts": "pass" } },
+    { "name": "Antigravity", "status": "VERIFIED", "features": { "stdio": "pass", "sse": "pass", "resources": "pass", "tools": "pass", "prompts": "pass" } },
+    { "name": "Claude Desktop", "status": "STABLE", "features": { "stdio": "pass", "sse": "fail", "resources": "partial", "tools": "pass", "prompts": "fail" } },
+    { "name": "Zed", "status": "BETA", "features": { "stdio": "pass", "sse": "partial", "resources": "pass", "tools": "pass", "prompts": "partial" } },
+    { "name": "Windsurf", "status": "LEGACY", "features": { "stdio": "pass", "sse": "fail", "resources": "fail", "tools": "pass", "prompts": "fail" } }
+  ]
+}

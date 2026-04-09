@@ -1,49 +1,35 @@
-# Documentation-MCP (Docs-MCP v14.0)
+# Documentation MCP Hub (Docs-MCP)
 
-> [!IMPORTANT]
-> **Federated Public Documentation Hub**: This repository is the public-facing control plane for MCP standards, fleet registries, and architectural patterns. It leverages a Federated RAG engine to unify search across internal core documentation and external intelligence repositories (like Advanced Memory MCP).
+A high-performance documentation control plane featuring a Federated RAG engine and a unified dashboard for the MCP ecosystem.
 
-## Overview
+## Core Features
+- **Federated RAG**: Semantic search unified across internal docs and external memory repositories.
+- **Fleet Registry Host**: Authoritative source of truth for the 135+ repository MCP fleet (Port Reservoir, Registries).
+- **SOTA Hub**: Dedicated React/Vite dashboard for search, exploration, and administration.
+- **Technical Standards**: Hosting the Golden Set of MCP protocols and fleet registries.
 
-Documentation-MCP is part of the **Alsergrund Industrial Fleet**. It provides:
-- **Core Standards**: SOTA v13.1 protocols for FastMCP 3.2+, Git workflows, and UI/UX design.
-- **Fleet Registry**: High-fidelity indexing of the 135+ repository MCP ecosystem.
-- **Federated RAG**: A neural search engine that cross-links documentation with agentic memory and personal skills.
+## Quick Start
 
-## Architecture
+### 1. Requirements
+Ensure you have [uv](https://github.com/astral-sh/uv) installed and are using Python 3.12+.
 
-```mermaid
-graph TD
-    User([User Agent]) --> MCP[Docs-MCP Server]
-    MCP --> RAG[Federated RAG Engine]
-    RAG --> Core[Internal /docs]
-    RAG --> AMP[Advanced Memory MCP]
-    AMP --> Knowledge[/knowledge]
-    AMP --> Notes[/notes]
-    MCP --> Web[SOTA Dashboard]
+### 2. Basic Installation
+```powershell
+# Clone and prepare environment
+git clone https://github.com/sandraschi/documentation-mcp
+cd documentation-mcp
+uv sync
 ```
 
-## Setup
+### 3. Execution
+- **MCP Server**: `uv run docs-mcp` (Stdio mode)
+- **UI Dashboard**: `./web_sota/start.bat` (Opens http://localhost:10794)
 
-1. **Install Dependencies**:
-   ```powershell
-   cd src/docs_mcp
-   pip install -e .
-   ```
+## Repository Structure
 
-2. **Run Server**:
-   ```powershell
-   python -m docs_mcp.server
-   ```
-
-3. **Start Dashboard**:
-   ```powershell
-   ./web_sota/start.bat
-   ```
-
-## Federated Intelligence
-This server automatically detects sibling repositories. If `advanced-memory-mcp` is located in the same parent directory, its knowledge and notes will be indexed and prioritized during semantic retrieval.
+- [**Backend Engine (`src/`)**](src/README.md): Details on the FastMCP server, Federated RAG, and ingestion logic.
+- [**Frontend Dashboard (`web_sota/`)**](web_sota/README.md): Information on the SOTA React UI, port allocation, and development.
+- [**Documentation Content (`docs/`)**](docs/README.md): Organization of the "Golden Set" and guidance on contributing new documents.
 
 ---
-**Maintained by**: FlowEngineer sandraschi (Vienna, AT)
-**Philosophy**: Materialist Reductionism & Industrial Efficiency.
+*Maintained by sandraschi, Vienna (2026).*

@@ -1,0 +1,278 @@
+# Webapp Port Reservoir
+
+**Version**: 1.0  
+**Last Updated**: 2025-02-10  
+**Status**: MANDATORY
+
+---
+
+## Purpose
+
+All MCP server webapps and dashboards MUST use ports from the reserved range **10700-10800**. This eliminates port conflicts with common dev defaults (3000, 5000, 5173, 8000, 8080) and provides a single predictable range for the entire ecosystem.
+
+## Port Range
+
+- **Reserved**: 10700-10800 (100 ports)
+- **Spacing**: Use even-numbered ports with gaps (10700, 10702, 10704...) to absorb "port hopper" drift
+- **No collision** with IANA well-known (0-1023) or common dev ports
+- **Adjacency Rule (MANDATORY)**: Frontend and Backend ports for a single project MUST be kept together (e.g., 10792/10793). Do NOT "hop" into unused lower gaps if it breaks project adjacency.
+
+## FORBIDDEN Ports
+
+**NEVER** use these for new webapps:
+
+- 3000 (Create React App, many Node dev servers)
+- 5000 (Flask default, many Python dev servers)
+- 5173 (Vite default)
+- 8000, 8080 (common API/defaults)
+- 5174, 5175 (Vite fallbacks)
+- Any port below 1024 (privileged)
+
+## Port Allocation Registry
+
+| Port | Repo | Service |
+|------|------|---------|
+| 10700 | virtualization-mcp | Web dashboard |
+| 10702 | git-github-mcp | Git GitHub Hub |
+| 10704 | advanced-memory-mcp | Webapp |
+| 10705 | advanced-memory-mcp | Bridge server |
+| 10706 | robotics-mcp | Web dashboard |
+| 10708 | database-operations-mcp | Web dashboard |
+| 10710 | unity3d-mcp | Web dashboard |
+| 10712 | vrchat-mcp | Web dashboard |
+| 10714 | resonite-mcp | Web dashboard |
+| 10716 | tapo-camera-mcp | Web dashboard |
+| 10718 | meta_mcp | Backend |
+| 10719 | meta_mcp | Frontend |
+| 10720 | calibre-mcp | Backend |
+| 10721 | calibre-mcp | Frontend |
+| 10722 | mywienerlinien | Frontend |
+| 10724 | mcp-studio | Backend |
+| 10725 | mcp-studio | Frontend |
+| 10726 | games-app | Main app |
+| 10728 | ring-mcp | Web dashboard |
+| 10730 | moltbot-mcp | Webapp |
+| 10740 | plex-mcp | Webapp backend |
+| 10741 | plex-mcp | Webapp frontend |
+| 10732 | advanced-memory-mcp | MCP SSE transport |
+| 10733 | advanced-memory-mcp | Startup service |
+| 10734 | myai/calibre_plus | Frontend |
+| 10735 | advanced-memory-mcp | Auto-start service |
+| 10736 | myai/calibre_plus | Backend |
+| 10744 | myai/document_viewer | Webapp |
+| 10746 | myai/future_you | Webapp |
+| 10768 | myai/stablediff_gradio | Webapp |
+| 10754 | myai/immich_plus | Backend |
+| 10756 | myai/immich_plus | Frontend |
+| 10758 | myai/plex_plus | Backend |
+| 10760 | myai/plex_plus | Frontend |
+| 10772 | gimp-mcp | Frontend |
+| 10773 | gimp-mcp | Backend |
+| 10776 | myai/voice_ai_suite | Backend |
+| 10778 | myai/voice_ai_suite | Frontend |
+| 10780 | avatar-mcp/grafana | Grafana dashboard |
+| 10782 | home-assistant-mcp | MCP HTTP |
+| 10784 | docker-mcp | MCP API |
+| 10785 | docker-mcp | Grafana |
+| 10786 | monitoring-mcp | MCP API |
+| 10790 | myai/traefik | Traefik dashboard |
+| 10742 | filesystem-mcp | Backend (was 13000) |
+| 10743 | filesystem-mcp | Frontend (was 13001) |
+| 10748 | windows-operations-mcp | Backend (was 13000) |
+| 10749 | windows-operations-mcp | Frontend (was 13001) |
+| 10750 | reversing-mcp | Webapp (was 5000) |
+| 10752 | nest-protect-mcp | Frontend (was 7770) |
+| 10753 | nest-protect-mcp | Backend (was 7771) |
+| 10762 | winrar-mcp | Backend (was 13400) |
+| 10763 | winrar-mcp | Frontend (was 13401) |
+| 10764 | openclaw-molt-mcp | Frontend (was 5180) |
+| 10765 | openclaw-molt-mcp | Backend (was 5181) |
+| 10766 | osc-mcp | Web dashboard frontend |
+| 10767 | osc-mcp | Web dashboard backend |
+| 10792 | avatar-mcp | Web dashboard frontend |
+| 10793 | avatar-mcp | Web dashboard backend (API) |
+| 10738 | dark-app-factory | Web dashboard |
+| 10794 | mcp-central-docs | Fleet Dashboard |
+| 10795 | mcp-central-docs | Fleet Frontend |
+| 10796 | reaper-mcp | Web dashboard frontend |
+| 10797 | reaper-mcp | Web dashboard backend |
+| 10788 | pywinauto-mcp | Web dashboard frontend |
+| 10789 | pywinauto-mcp | Web dashboard backend |
+| 10798 | multi-backup-mcp | Frontend |
+| 10799 | multi-backup-mcp | Backend |
+| 10800 | alexa-mcp | Web dashboard frontend |
+| 10801 | alexa-mcp | Web dashboard backend |
+| 10802 | bookmarks-mcp | Web dashboard frontend |
+| 10803 | bookmarks-mcp | Web dashboard backend |
+| 10804 | rustdesk-mcp | Web dashboard frontend |
+| 10805 | rustdesk-mcp | Web dashboard backend |
+| 10806 | docker-mcp | Web dashboard frontend |
+| 10807 | docker-mcp | Web dashboard backend |
+| 10808 | monitoring-mcp | Web dashboard frontend |
+| 10809 | monitoring-mcp | Web dashboard backend |
+| 10810 | notion-mcp | Web dashboard frontend |
+| 10811 | notion-mcp | Web dashboard backend |
+| 10812 | email-mcp | Web dashboard frontend |
+| 10813 | email-mcp | Web dashboard backend |
+| 10814 | notepadpp-mcp | Web dashboard frontend |
+| 10815 | notepadpp-mcp | Web dashboard backend (API) |
+| 10816 | pinokio-mcp | Web dashboard frontend |
+| 10817 | pinokio-mcp | Web dashboard backend (API) |
+| 10818 | obs-mcp | Web dashboard frontend |
+| 10819 | obs-mcp | Web dashboard backend (API) |
+| 10820 | tailscale-mcp | Web dashboard frontend |
+| 10821 | tailscale-mcp | Web dashboard backend (API) |
+| 10822 | netatmo-weather-mcp | Web dashboard frontend |
+| 10823 | netatmo-weather-mcp | Web dashboard backend (API) |
+| 10824 | observability-mcp | Web dashboard frontend |
+| 10825 | observability-mcp | Web dashboard backend (API) |
+| 10826 | directmedia-mcp | Web dashboard frontend |
+| 10827 | directmedia-mcp | Web dashboard backend (API) |
+| 10828 | nest-protect-mcp | Web dashboard frontend |
+| 10829 | nest-protect-mcp | Web dashboard backend (API) |
+| 10830 | unity3d-mcp | Web dashboard frontend |
+| 10831 | unity3d-mcp | Web dashboard backend (API) |
+| 10832 | local-llm-mcp | Web dashboard frontend |
+| 10833 | local-llm-mcp | Web dashboard backend (API) |
+| 10834 | home-assistant-mcp | Web dashboard frontend |
+| 10835 | home-assistant-mcp | Web dashboard backend (API) |
+| 10836 | llm-txt-mcp | Web dashboard frontend |
+| 10837 | llm-txt-mcp | Web dashboard backend (API) |
+| 10838 | immich-mcp | Web dashboard frontend |
+| 10839 | immich-mcp | Web dashboard backend (API) |
+| 10840 | beyondcompare-mcp | Web dashboard frontend |
+| 10841 | beyondcompare-mcp | Web dashboard backend (API) |
+| 10842 | davinci-resolve-mcp | Web dashboard frontend |
+| 10843 | davinci-resolve-mcp | Web dashboard backend (API) |
+| 10844 | fastsearch-mcp | Web dashboard frontend |
+| 10845 | fastsearch-mcp | Web dashboard backend (API) |
+| 10846 | inkscape-mcp | Web dashboard frontend |
+| 10847 | inkscape-mcp | Web dashboard backend (API) |
+| 10848 | blender-mcp | Web dashboard frontend |
+| 10849 | blender-mcp | Web dashboard backend (API) |
+| 10850 | monitoring-mcp | Web dashboard frontend |
+| 10851 | monitoring-mcp | Web dashboard backend (API) |
+| 10852 | web-development-mcp | Web dashboard frontend |
+| 10853 | web-development-mcp | Web dashboard backend (API) |
+| 10854 | paperless-ngx | Web interface |
+| 10856 | mcp-federation-hub | Web interface |
+| 10857 | mcp-federation-hub | Web dashboard backend (API) |
+| 10858 | ocr-mcp | Web dashboard frontend |
+| 10859 | ocr-mcp | Web dashboard backend (API) |
+| 10860 | system-admin-mcp | Web dashboard frontend |
+| 10861 | system-admin-mcp | Web dashboard backend (API) |
+| 10862 | readly-mcp | Web dashboard frontend |
+| 10863 | readly-mcp | Web dashboard backend (API) |
+| 10864 | worldlabs-mcp | Web dashboard frontend |
+| 10865 | worldlabs-mcp | Web dashboard backend (API) |
+
+
+## Port Allocation Registry (Live)
+
+The source of truth for links is now maintained in machine-readable JSON registries:
+- [webapp-registry.json](./webapp-registry.json)
+- [container-registry.json](./container-registry.json)
+
+> [!WARNING]
+> **FORBIDDEN PORTS (3000, 5000, 5173, 8000, 8080)**: These are strictly prohibited for production webapps. They are reserved for local development defaults or external services only. Any webapp found squatting on these ports will be forcefully migrated.
+
+## Future: Links Service
+
+Webapp and container links are currently hardcoded in consumer topbars (e.g. Calibre/Plex). Currently, the **Links Service** MCP (`mcp-links-service`) provides these lists and performs starts/stops using this registry as the single source of truth. See [WEBAPP_LINKS_SERVICE_FUTURE.md](./WEBAPP_LINKS_SERVICE_FUTURE.md).
+
+---
+
+## Usage
+
+### New Webapp
+
+1. Pick next available port from registry (check for gaps)
+2. Add entry to this document
+3. Configure via env: `WEB_PORT=107xx` or `PORT=107xx`
+4. Update vite.config.ts proxy if using Vite dev
+
+### Configuration Pattern
+
+```python
+# FastAPI / Flask
+port = int(os.getenv("WEB_PORT", 10700))
+```
+
+```typescript
+// vite.config.ts proxy
+server: {
+  proxy: {
+    '/api': { target: 'http://localhost:10702', changeOrigin: true },
+  },
+},
+```
+
+```yaml
+# docker-compose.yml
+ports:
+  - "10702:10702"
+```
+
+## Migration
+
+Existing repos using 3000, 3080, 5000, 8000, 11900, etc. MUST be migrated to this range. Update:
+
+- Env vars / .env.example
+- docker-compose.yml
+- vite.config.ts proxy target
+- README / docs
+- start.ps1 / run scripts
+
+---
+
+## Webapp Startup (MANDATORY)
+
+### Port Clearing Before Start
+
+Every webapp start script MUST clear its port of zombies and port squatters before binding. Do NOT assume the port is free.
+
+### Required Files
+
+1. **start.ps1** - Primary startup script (port clear, build if needed, run server)
+2. **start.bat** - Double-click launcher for Windows users
+
+### start.ps1 Pattern
+
+```powershell
+# Webapp Start - Clears port, builds, runs
+$WebPort = 10700   # Use YOUR port from registry above
+$ProjectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+
+# 1. Clear port from zombies/squatters (cross-platform via npm)
+Set-Location $PSScriptRoot
+if (-not (Test-Path "node_modules")) { npm install }
+npx --yes kill-port $WebPort 2>$null
+
+# 2. Build (if React/Vite)
+npm run build
+
+# 3. Run server
+Set-Location $ProjectRoot
+$env:PYTHONPATH = "$ProjectRoot\src"
+python -m your_package.web.server
+```
+
+Add `kill-port` to devDependencies: `npm install --save-dev kill-port`. Use `npx --yes kill-port $WebPort` if not installed (stderr redirect `2>$null` avoids noise when port is free).
+
+**Alternative** (no Node): Use PowerShell `Get-NetTCPConnection` + `Stop-Process`.
+
+### start.bat Pattern
+
+```bat
+@echo off
+cd /d "%~dp0"
+powershell -ExecutionPolicy Bypass -File "%~dp0start.ps1"
+```
+
+Place both in the `web/` folder. Users double-click `start.bat` to run without opening PowerShell manually.
+
+**Note**: Do NOT use `$pid` as a variable name in PowerShell (it is a read-only automatic variable).
+
+## myai Platform
+
+myai has many services (Dashboard 3060, Bob&Alice 5188, etc.). Those are platform-internal. New standalone MCP webapps use this reservoir. If myai absorbs an MCP, its port may stay in myai's range; new integrations use 107xx.

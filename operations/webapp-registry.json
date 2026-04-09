@@ -1,0 +1,1484 @@
+{
+    "webapps": [
+        {
+            "id": "virtualization-mcp",
+            "label": "Virtualization MCP",
+            "port": 10700,
+            "repo_path": "D:/Dev/repos/virtualization-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "robotics-mcp",
+            "label": "Robotics MCP",
+            "port": 10706,
+            "repo_path": "D:/Dev/repos/robotics-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "devices-mcp",
+            "label": "Devices MCP (Tapo/Ring)",
+            "port": 10716,
+            "repo_path": "D:/Dev/repos/devices-mcp",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "infra",
+                "sota"
+            ]
+        },
+        {
+            "id": "filesystem-mcp-backend",
+            "label": "Filesystem MCP Backend",
+            "port": 10742,
+            "repo_path": "D:/Dev/repos/filesystem-mcp",
+            "start_command": "python -m uvicorn webapp.backend.main:app --port 10742",
+            "tags": [
+                "backend",
+                "infra"
+            ]
+        },
+        {
+            "id": "filesystem-mcp-frontend",
+            "label": "Filesystem MCP Frontend",
+            "port": 10743,
+            "repo_path": "D:/Dev/repos/filesystem-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "windows-operations-mcp-backend",
+            "label": "Windows Operations MCP Backend",
+            "port": 10748,
+            "repo_path": "D:/Dev/repos/windows-operations-mcp",
+            "start_command": "python -m uvicorn webapp.backend.main:app --port 10748",
+            "tags": [
+                "backend",
+                "infra"
+            ]
+        },
+        {
+            "id": "windows-operations-mcp-frontend",
+            "label": "Windows Operations MCP Frontend",
+            "port": 10749,
+            "repo_path": "D:/Dev/repos/windows-operations-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "web-development-mcp",
+            "label": "Web Development MCP",
+            "port": 10852,
+            "repo_path": "D:/Dev/repos/web-development-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "resolume-mcp",
+            "label": "Resolume VJ MCP",
+            "port": 10770,
+            "repo_path": "D:/Dev/repos/resolume-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota",
+                "media",
+                "vj"
+            ]
+        },
+        {
+            "id": "reaper-mcp",
+            "label": "Reaper MCP",
+            "port": 10796,
+            "repo_path": "D:/Dev/repos/reaper-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "handbrake-mcp-backend",
+            "label": "Handbrake MCP Backend",
+            "port": 10875,
+            "repo_path": "D:/Dev/repos/handbrake-mcp",
+            "start_command": "uv run uvicorn handbrake_mcp.main:app --port 10875",
+            "tags": [
+                "backend",
+                "media"
+            ]
+        },
+        {
+            "id": "handbrake-mcp-frontend",
+            "label": "Handbrake MCP Frontend",
+            "port": 10874,
+            "repo_path": "D:/Dev/repos/handbrake-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "media",
+                "sota"
+            ]
+        },
+        {
+            "id": "virtualdj-mcp-backend",
+            "label": "VirtualDJ MCP Backend",
+            "port": 10877,
+            "repo_path": "D:/Dev/repos/virtualdj-mcp",
+            "start_command": "uv run uvicorn virtualdj_mcp.main:app --port 10877",
+            "tags": [
+                "backend",
+                "media"
+            ]
+        },
+        {
+            "id": "virtualdj-mcp-frontend",
+            "label": "VirtualDJ MCP Frontend",
+            "port": 10876,
+            "repo_path": "D:/Dev/repos/virtualdj-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "media",
+                "sota"
+            ]
+        },
+        {
+            "id": "vienna-live-mcp-backend",
+            "label": "Vienna Live MCP Backend",
+            "port": 10879,
+            "repo_path": "D:/Dev/repos/vienna-live-mcp",
+            "start_command": "uv run uvicorn vienna_live_mcp.main:app --port 10879",
+            "tags": [
+                "backend",
+                "transit"
+            ]
+        },
+        {
+            "id": "vienna-live-mcp-frontend",
+            "label": "Vienna Live MCP Frontend",
+            "port": 10878,
+            "repo_path": "D:/Dev/repos/vienna-live-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "transit",
+                "sota"
+            ]
+        },
+        {
+            "id": "vroidstudio-mcp-backend",
+            "label": "VroidStudio MCP Backend",
+            "port": 10881,
+            "repo_path": "D:/Dev/repos/vroidstudio-mcp",
+            "start_command": "uv run uvicorn vroidstudio_mcp.main:app --port 10881",
+            "tags": [
+                "backend",
+                "avatar"
+            ]
+        },
+        {
+            "id": "vroidstudio-mcp-frontend",
+            "label": "VroidStudio MCP Frontend",
+            "port": 10880,
+            "repo_path": "D:/Dev/repos/vroidstudio-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "avatar",
+                "sota"
+            ]
+        },
+        {
+            "id": "obs-mcp-frontend",
+            "label": "OBS Control Frontend",
+            "port": 10818,
+            "repo_path": "D:/Dev/repos/obs-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "media",
+                "sota"
+            ]
+        },
+        {
+            "id": "local-llm-mcp-frontend",
+            "label": "Local LLM Frontend",
+            "port": 10832,
+            "repo_path": "D:/Dev/repos/local-llm-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "ai",
+                "sota"
+            ]
+        },
+        {
+            "id": "home-assistant-mcp-frontend",
+            "label": "Home Assistant Frontend",
+            "port": 10834,
+            "repo_path": "D:/Dev/repos/home-assistant-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "smart-home",
+                "sota"
+            ]
+        },
+        {
+            "id": "advanced-memory-mcp-frontend",
+            "label": "Advanced Memory Frontend",
+            "port": 10704,
+            "repo_path": "D:/Dev/repos/advanced-memory-mcp",
+            "start_command": "powershell ./webapp/frontend/start.ps1",
+            "tags": [
+                "frontend",
+                "knowledge",
+                "sota"
+            ]
+        },
+        {
+            "id": "avatar-mcp",
+            "label": "Avatar MCP",
+            "port": 10792,
+            "repo_path": "D:/Dev/repos/avatar-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "avatar",
+                "sota"
+            ]
+        },
+        {
+            "id": "blender-mcp",
+            "label": "Blender MCP",
+            "port": 10848,
+            "repo_path": "D:/Dev/repos/blender-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "creative",
+                "3d",
+                "sota"
+            ]
+        },
+        {
+            "id": "calibre-mcp",
+            "label": "Calibre MCP",
+            "port": 10721,
+            "repo_path": "D:/Dev/repos/calibre-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "books",
+                "sota"
+            ]
+        },
+        {
+            "id": "sakana-mcp-frontend",
+            "label": "Sakana MCP Frontend",
+            "port": 10862,
+            "repo_path": "D:/Dev/repos/sakana-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "research",
+                "sota"
+            ]
+        },
+        {
+            "id": "sakana-mcp-backend",
+            "label": "Sakana MCP Backend",
+            "port": 10863,
+            "repo_path": "D:/Dev/repos/sakana-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "backend",
+                "research",
+                "sota"
+            ]
+        },
+        {
+            "id": "kyutai-mcp-backend",
+            "label": "Kyutai MCP API",
+            "port": 10924,
+            "repo_path": "D:/Dev/repos/kyutai-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "backend",
+                "voice",
+                "sota"
+            ]
+        },
+        {
+            "id": "kyutai-mcp-frontend",
+            "label": "Kyutai MCP Dashboard",
+            "port": 10925,
+            "repo_path": "D:/Dev/repos/kyutai-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "voice",
+                "sota"
+            ]
+        },
+        {
+            "id": "kyutai-mcp-mcp-http",
+            "label": "Kyutai MCP HTTP transport",
+            "port": 10926,
+            "repo_path": "D:/Dev/repos/kyutai-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "mcp",
+                "voice",
+                "sota"
+            ]
+        },
+        {
+            "id": "dark-app-factory",
+            "label": "Dark App Factory",
+            "port": 10738,
+            "repo_path": "D:/Dev/repos/dark-app-factory",
+            "start_command": "powershell ./web/start.ps1",
+            "tags": [
+                "frontend",
+                "ai",
+                "factory"
+            ]
+        },
+        {
+            "id": "dark-app-factory-mcp",
+            "label": "Dark App Factory MCP (embedded)",
+            "port": 10739,
+            "repo_path": "D:/Dev/repos/dark-app-factory",
+            "start_command": "powershell ./mcp-server/start.ps1",
+            "tags": [
+                "mcp",
+                "fleet",
+                "factory"
+            ]
+        },
+        {
+            "id": "robofang",
+            "label": "robofang",
+            "port": 10870,
+            "repo_path": "D:/Dev/repos/robofang",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "infra",
+                "sota"
+            ]
+        },
+        {
+            "id": "osc-mcp",
+            "label": "OSC MCP",
+            "port": 10766,
+            "repo_path": "D:/Dev/repos/osc-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "control",
+                "sota"
+            ]
+        },
+        {
+            "id": "plex-mcp",
+            "label": "Plex MCP",
+            "port": 10741,
+            "repo_path": "D:/Dev/repos/plex-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "media",
+                "sota"
+            ]
+        },
+        {
+            "id": "resonite-mcp",
+            "label": "Resonite MCP",
+            "port": 10714,
+            "repo_path": "D:/Dev/repos/resonite-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "vr",
+                "sota"
+            ]
+        },
+        {
+            "id": "rustdesk-mcp",
+            "label": "RustDesk MCP",
+            "port": 10804,
+            "repo_path": "D:/Dev/repos/rustdesk-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "infra",
+                "sota"
+            ]
+        },
+        {
+            "id": "unity3d-mcp",
+            "label": "Unity3D MCP",
+            "port": 10830,
+            "repo_path": "D:/Dev/repos/unity3d-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "vr",
+                "development",
+                "sota"
+            ]
+        },
+        {
+            "id": "vrchat-mcp",
+            "label": "VRChat MCP",
+            "port": 10712,
+            "repo_path": "D:/Dev/repos/vrchat-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "vr",
+                "sota"
+            ]
+        },
+        {
+            "id": "worldlabs-mcp",
+            "label": "WorldLabs MCP",
+            "port": 10864,
+            "repo_path": "D:/Dev/repos/worldlabs-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "3d",
+                "ai",
+                "sota"
+            ]
+        },
+        {
+            "id": "mcp-federation-hub",
+            "label": "Fleet Command Hub",
+            "port": 10856,
+            "repo_path": "D:/Dev/repos/mcp-federation-hub/webapp",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "command",
+                "sota"
+            ]
+        },
+        {
+            "id": "git-github-mcp",
+            "label": "Git Github MCP",
+            "port": 10702,
+            "repo_path": "D:/Dev/repos/git-github-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "advanced-memory-mcp",
+            "label": "Advanced Memory MCP",
+            "port": 10704,
+            "repo_path": "D:/Dev/repos/advanced-memory-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "database-operations-mcp",
+            "label": "Database Operations MCP",
+            "port": 10708,
+            "repo_path": "D:/Dev/repos/database-operations-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "meta_mcp",
+            "label": "Meta_Mcp",
+            "port": 10718,
+            "repo_path": "D:/Dev/repos/meta_mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "mywienerlinien",
+            "label": "Mywienerlinien",
+            "port": 10722,
+            "repo_path": "D:/Dev/repos/mywienerlinien",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "mcp-studio",
+            "label": "Mcp Studio",
+            "port": 10724,
+            "repo_path": "D:/Dev/repos/mcp-studio",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "ring-mcp",
+            "label": "Ring MCP",
+            "port": 10728,
+            "repo_path": "D:/Dev/repos/ring-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "moltbot-mcp",
+            "label": "Moltbot MCP",
+            "port": 10730,
+            "repo_path": "D:/Dev/repos/moltbot-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "filesystem-mcp",
+            "label": "Filesystem MCP",
+            "port": 10742,
+            "repo_path": "D:/Dev/repos/filesystem-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "windows-operations-mcp",
+            "label": "Windows Operations MCP",
+            "port": 10748,
+            "repo_path": "D:/Dev/repos/windows-operations-mcp",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "reversing-mcp",
+            "label": "Reversing MCP",
+            "port": 10750,
+            "repo_path": "D:/Dev/repos/reversing-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "nest-protect-mcp",
+            "label": "Nest Protect MCP",
+            "port": 10752,
+            "repo_path": "D:/Dev/repos/nest-protect-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "winrar-mcp",
+            "label": "Winrar MCP",
+            "port": 10762,
+            "repo_path": "D:/Dev/repos/winrar-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "openclaw-molt-mcp",
+            "label": "Openclaw Molt MCP",
+            "port": 10764,
+            "repo_path": "D:/Dev/repos/openclaw-molt-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "gimp-mcp",
+            "label": "Gimp MCP",
+            "port": 10772,
+            "repo_path": "D:/Dev/repos/gimp-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "home-assistant-mcp",
+            "label": "Home Assistant MCP",
+            "port": 10782,
+            "repo_path": "D:/Dev/repos/home-assistant-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "pywinauto-mcp",
+            "label": "Pywinauto MCP",
+            "port": 10788,
+            "repo_path": "D:/Dev/repos/pywinauto-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "documentation-mcp",
+            "label": "Documentation MCP Hub",
+            "port": 10794,
+            "repo_path": "D:/Dev/repos/documentation-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "multi-backup-mcp",
+            "label": "Multi Backup MCP",
+            "port": 10798,
+            "repo_path": "D:/Dev/repos/multi-backup-mcp",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "alexa-mcp",
+            "label": "Alexa MCP",
+            "port": 10800,
+            "repo_path": "D:/Dev/repos/alexa-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "bookmarks-mcp",
+            "label": "Bookmarks MCP",
+            "port": 10802,
+            "repo_path": "D:/Dev/repos/bookmarks-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "docker-mcp",
+            "label": "Docker MCP",
+            "port": 10806,
+            "repo_path": "D:/Dev/repos/docker-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "notion-mcp",
+            "label": "Notion MCP",
+            "port": 10810,
+            "repo_path": "D:/Dev/repos/notion-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "email-mcp",
+            "label": "Email MCP",
+            "port": 10812,
+            "repo_path": "D:/Dev/repos/email-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "notepadpp-mcp",
+            "label": "Notepadpp MCP",
+            "port": 10814,
+            "repo_path": "D:/Dev/repos/notepadpp-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "obs-mcp",
+            "label": "Obs MCP",
+            "port": 10818,
+            "repo_path": "D:/Dev/repos/obs-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "tailscale-mcp",
+            "label": "Tailscale MCP",
+            "port": 10820,
+            "repo_path": "D:/Dev/repos/tailscale-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "netatmo-weather-mcp",
+            "label": "Netatmo Weather MCP",
+            "port": 10822,
+            "repo_path": "D:/Dev/repos/netatmo-weather-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "directmedia-mcp",
+            "label": "Directmedia MCP",
+            "port": 10826,
+            "repo_path": "D:/Dev/repos/directmedia-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "local-llm-mcp",
+            "label": "Local Llm MCP",
+            "port": 10832,
+            "repo_path": "D:/Dev/repos/local-llm-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "llm-txt-mcp",
+            "label": "Llm Txt MCP",
+            "port": 10836,
+            "repo_path": "D:/Dev/repos/llm-txt-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "immich-mcp",
+            "label": "Immich MCP",
+            "port": 10838,
+            "repo_path": "D:/Dev/repos/immich-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "beyondcompare-mcp",
+            "label": "Beyondcompare MCP",
+            "port": 10840,
+            "repo_path": "D:/Dev/repos/beyondcompare-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "davinci-resolve-mcp",
+            "label": "Davinci Resolve MCP",
+            "port": 10842,
+            "repo_path": "D:/Dev/repos/davinci-resolve-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "fastsearch-mcp",
+            "label": "Fastsearch MCP",
+            "port": 10844,
+            "repo_path": "D:/Dev/repos/fastsearch-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "yahboom-mcp-backend",
+            "label": "Yahboom MCP Backend",
+            "port": 10892,
+            "repo_path": "D:/Dev/repos/yahboom-mcp",
+            "start_command": "uv run python -m yahboom_mcp.server --mode dual --port 10892",
+            "tags": [
+                "backend",
+                "robotics"
+            ]
+        },
+        {
+            "id": "yahboom-mcp-frontend",
+            "label": "Yahboom MCP Frontend",
+            "port": 10893,
+            "repo_path": "D:/Dev/repos/yahboom-mcp/webapp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "robotics",
+                "sota"
+            ]
+        },
+        {
+            "id": "dreame-mcp-backend",
+            "label": "Dreame MCP Backend",
+            "port": 10894,
+            "repo_path": "D:/Dev/repos/dreame-mcp",
+            "start_command": "uv run python -m dreame_mcp.server --mode dual --port 10894",
+            "tags": [
+                "backend",
+                "robotics",
+                "sota"
+            ]
+        },
+        {
+            "id": "dreame-mcp-frontend",
+            "label": "Dreame MCP Frontend",
+            "port": 10895,
+            "repo_path": "D:/Dev/repos/dreame-mcp/webapp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "robotics",
+                "sota"
+            ]
+        },
+        {
+            "id": "monitoring-mcp",
+            "label": "Monitoring MCP",
+            "port": 10850,
+            "repo_path": "D:/Dev/repos/monitoring-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "ocr-mcp",
+            "label": "Ocr MCP",
+            "port": 10858,
+            "repo_path": "D:/Dev/repos/ocr-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "system-admin-mcp",
+            "label": "System Admin MCP",
+            "port": 10860,
+            "repo_path": "D:/Dev/repos/system-admin-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "handbrake-mcp",
+            "label": "Handbrake MCP",
+            "port": 10874,
+            "repo_path": "D:/Dev/repos/handbrake-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "virtualdj-mcp",
+            "label": "Virtualdj MCP",
+            "port": 10876,
+            "repo_path": "D:/Dev/repos/virtualdj-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "vienna-live-mcp",
+            "label": "Vienna Live MCP",
+            "port": 10878,
+            "repo_path": "D:/Dev/repos/vienna-live-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "vroidstudio-mcp",
+            "label": "Vroidstudio MCP",
+            "port": 10880,
+            "repo_path": "D:/Dev/repos/vroidstudio-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "suno-mcp",
+            "label": "Suno MCP",
+            "port": 10882,
+            "repo_path": "D:/Dev/repos/suno-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "songgeneration-mcp",
+            "label": "Songgeneration MCP",
+            "port": 10884,
+            "repo_path": "D:/Dev/repos/songgeneration-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "myconf",
+            "label": "Myconf",
+            "port": 10886,
+            "repo_path": "D:/Dev/repos/myconf",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "myai",
+            "label": "MyAI Platform",
+            "port": 10888,
+            "repo_path": "D:/Dev/repos/myai",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota",
+                "mcp",
+                "platform"
+            ]
+        },
+        {
+            "id": "edge-bookmark-mcp-server",
+            "label": "Edge Bookmark MCP Server",
+            "port": 10891,
+            "repo_path": "D:/Dev/repos/edge-bookmark-mcp-server",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "fullstack-demo",
+            "label": "Fullstack Demo",
+            "port": 10893,
+            "repo_path": "D:/Dev/repos/fullstack-demo",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "games-app",
+            "label": "Games App",
+            "port": 10895,
+            "repo_path": "D:/Dev/repos/games-app",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "gtfs-mcp",
+            "label": "Gtfs MCP",
+            "port": 10922,
+            "repo_path": "D:/Dev/repos/gtfs-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "inkscape-mcp",
+            "label": "Inkscape MCP",
+            "port": 10899,
+            "repo_path": "D:/Dev/repos/inkscape-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "observability-mcp",
+            "label": "Observability MCP",
+            "port": 10901,
+            "repo_path": "D:/Dev/repos/observability-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "obsidian-mcp",
+            "label": "Obsidian MCP",
+            "port": 10903,
+            "repo_path": "D:/Dev/repos/obsidian-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "onenote-mcp",
+            "label": "Onenote MCP",
+            "port": 10905,
+            "repo_path": "D:/Dev/repos/onenote-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "pinokio-mcp",
+            "label": "Pinokio MCP",
+            "port": 10907,
+            "repo_path": "D:/Dev/repos/pinokio-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "qbt-mcp",
+            "label": "Qbt MCP",
+            "port": 10909,
+            "repo_path": "D:/Dev/repos/qbt-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "readly-mcp",
+            "label": "Readly MCP",
+            "port": 10911,
+            "repo_path": "D:/Dev/repos/readly-mcp",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "repomix-mcp",
+            "label": "Repomix MCP",
+            "port": 10913,
+            "repo_path": "D:/Dev/repos/repomix-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "sdr-mcp",
+            "label": "Sdr MCP",
+            "port": 10915,
+            "repo_path": "D:/Dev/repos/sdr-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "speech-mcp",
+            "label": "Speech MCP",
+            "port": 10917,
+            "repo_path": "D:/Dev/repos/speech-mcp/web",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "universal-actuator-mcp",
+            "label": "Universal Actuator MCP",
+            "port": 10919,
+            "repo_path": "D:/Dev/repos/universal-actuator-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "nuki-mcp",
+            "label": "Nuki Smart Lock MCP",
+            "port": 10892,
+            "repo_path": "D:/Dev/repos/nuki-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "smart-home",
+                "sota"
+            ]
+        },
+        {
+            "id": "vienna-life-assistant",
+            "label": "Vienna Life Assistant",
+            "port": 10921,
+            "repo_path": "D:/Dev/repos/vienna-life-assistant",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "openmanus-mcp-backend",
+            "label": "OpenManus MCP Backend",
+            "port": 10768,
+            "repo_path": "D:/Dev/repos/openmanus-mcp",
+            "start_command": "uv run python -m openmanus_mcp.run_api",
+            "tags": [
+                "backend",
+                "sota",
+                "agent"
+            ]
+        },
+        {
+            "id": "openmanus-mcp-frontend",
+            "label": "OpenManus MCP Frontend",
+            "port": 10769,
+            "repo_path": "D:/Dev/repos/openmanus-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota",
+                "agent"
+            ]
+        },
+        {
+            "id": "discord-mcp-backend",
+            "label": "Discord MCP Backend",
+            "port": 10756,
+            "repo_path": "D:/Dev/repos/discord-mcp",
+            "start_command": "uv run python -m discord_mcp.server --mode dual --port 10756",
+            "tags": [
+                "backend",
+                "sota",
+                "discord"
+            ]
+        },
+        {
+            "id": "discord-mcp-frontend",
+            "label": "Discord MCP Dashboard",
+            "port": 10757,
+            "repo_path": "D:/Dev/repos/discord-mcp",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "sota",
+                "discord"
+            ]
+        },
+        {
+            "id": "arxiv-mcp-backend",
+            "label": "arXiv MCP Backend",
+            "port": 10770,
+            "repo_path": "D:/Dev/repos/arxiv-mcp",
+            "start_command": "uv run python -m arxiv_mcp --serve",
+            "tags": [
+                "backend",
+                "sota",
+                "arxiv"
+            ]
+        },
+        {
+            "id": "arxiv-mcp-frontend",
+            "label": "arXiv MCP Dashboard",
+            "port": 10771,
+            "repo_path": "D:/Dev/repos/arxiv-mcp",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "sota",
+                "arxiv"
+            ]
+        },
+        {
+            "id": "bumi-mcp-backend",
+            "label": "Bumi MCP Backend",
+            "port": 10774,
+            "repo_path": "D:/Dev/repos/bumi-mcp",
+            "start_command": "uv run python -m bumi_mcp --serve",
+            "tags": [
+                "backend",
+                "sota",
+                "robotics",
+                "noetix"
+            ]
+        },
+        {
+            "id": "bumi-mcp-frontend",
+            "label": "Bumi MCP Dashboard",
+            "port": 10775,
+            "repo_path": "D:/Dev/repos/bumi-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota",
+                "robotics",
+                "noetix"
+            ]
+        },
+        {
+            "id": "glance-mcp-backend",
+            "label": "glance-mcp Backend",
+            "port": 10776,
+            "repo_path": "D:/Dev/repos/glance-mcp",
+            "start_command": "uv run glance-mcp --serve",
+            "tags": [
+                "backend",
+                "sota",
+                "rss",
+                "fleet"
+            ]
+        },
+        {
+            "id": "glance-mcp-frontend",
+            "label": "glance-mcp Dashboard",
+            "port": 10777,
+            "repo_path": "D:/Dev/repos/glance-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota",
+                "rss",
+                "fleet"
+            ]
+        },
+        {
+            "id": "xkcd-mcp-backend",
+            "label": "xkcd-mcp Backend",
+            "port": 10778,
+            "repo_path": "D:/Dev/repos/xkcd-mcp",
+            "start_command": "uv run --extra apps xkcd-mcp --serve",
+            "tags": [
+                "backend",
+                "sota",
+                "xkcd",
+                "fleet"
+            ]
+        },
+        {
+            "id": "xkcd-mcp-frontend",
+            "label": "xkcd-mcp Dashboard",
+            "port": 10779,
+            "repo_path": "D:/Dev/repos/xkcd-mcp",
+            "start_command": "powershell ./web_sota/start.ps1",
+            "tags": [
+                "frontend",
+                "sota",
+                "xkcd",
+                "fleet"
+            ]
+        },
+        {
+            "id": "iflow-mcp-catalog-backend",
+            "label": "iflow-mcp-catalog API",
+            "port": 10809,
+            "repo_path": "D:/Dev/repos/iflow-mcp-catalog",
+            "start_command": "uv run iflow-mcp-catalog web",
+            "tags": [
+                "backend",
+                "sota",
+                "catalog",
+                "fleet"
+            ]
+        },
+        {
+            "id": "iflow-mcp-catalog-frontend",
+            "label": "iflow-mcp-catalog Dashboard",
+            "port": 10808,
+            "repo_path": "D:/Dev/repos/iflow-mcp-catalog",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "sota",
+                "catalog",
+                "fleet"
+            ]
+        },
+        {
+            "id": "toolbench-mcp-frontend",
+            "label": "toolbench-mcp Dashboard",
+            "port": 10816,
+            "repo_path": "D:/Dev/repos/toolbench-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "toolbench",
+                "fleet"
+            ]
+        },
+        {
+            "id": "toolbench-mcp-backend",
+            "label": "toolbench-mcp Backend",
+            "port": 10817,
+            "repo_path": "D:/Dev/repos/toolbench-mcp",
+            "start_command": "powershell -Command \"cd D:/Dev/repos/toolbench-mcp; .\\.venv\\Scripts\\Activate.ps1; python -m toolbench_mcp --serve\"",
+            "tags": [
+                "backend",
+                "toolbench",
+                "fleet"
+            ]
+        },
+        {
+            "id": "lewm-mcp-backend",
+            "label": "LeWM-MCP API + MCP",
+            "port": 10927,
+            "repo_path": "D:/Dev/repos/lewm-mcp",
+            "start_command": "uv run uvicorn lewm_mcp.server:app --host 127.0.0.1 --port 10927",
+            "tags": [
+                "backend",
+                "ai",
+                "fleet",
+                "sota"
+            ]
+        },
+        {
+            "id": "lewm-mcp-frontend",
+            "label": "LeWM-MCP Dashboard",
+            "port": 10928,
+            "repo_path": "D:/Dev/repos/lewm-mcp",
+            "start_command": "powershell ./webapp/start.ps1",
+            "tags": [
+                "frontend",
+                "ai",
+                "fleet",
+                "sota"
+            ]
+        },
+        {
+            "id": "openclaude-mcp-backend",
+            "label": "OpenClaude MCP Backend",
+            "port": 10932,
+            "repo_path": "D:/Dev/repos/openclaude-mcp",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "backend",
+                "ai",
+                "local-llm",
+                "sota",
+                "kairos"
+            ]
+        },
+        {
+            "id": "openclaude-mcp-frontend",
+            "label": "OpenClaude MCP Dashboard",
+            "port": 10933,
+            "repo_path": "D:/Dev/repos/openclaude-mcp",
+            "start_command": "powershell ./start.ps1",
+            "tags": [
+                "frontend",
+                "ai",
+                "local-llm",
+                "sota",
+                "kairos"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "mcp-central-docs": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/mcp-central-docs",
+        "run",
+        "python",
+        "-m",
+        "docs_mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/mcp-central-docs/src",
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}

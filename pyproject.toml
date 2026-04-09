@@ -60,6 +60,10 @@ dev = [
     "twine>=5.0.0"
 ]
 
+[project.scripts]
+docs-mcp = "docs_mcp.server:main"
+docs-mcp-ui = "docs_mcp.starts_ui.asgi:main"
+
 [project.urls]
 Homepage = "https://github.com/sandraschi/documentation-mcp"
 Documentation = "https://github.com/sandraschi/documentation-mcp#readme"

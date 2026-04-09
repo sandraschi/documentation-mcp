@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Cursor Marketplace",
+    "description": "Cursor IDE's official depot for plugins and skills. Browse and install via Cursor: /add-plugin in chat or Settings → Rules. Open standard: agentskills.io.",
+    "url": "https://cursor.com/marketplace",
+    "install_hint": "In Cursor: run /add-plugin in Agent chat and search, or install from GitHub via Settings → Rules → Add Rule → Remote Rule (Github). Skills go in .cursor/skills/ or ~/.cursor/skills/.",
+    "install_command": null
+  },
+  {
+    "name": "Antigravity Skills Directory",
+    "description": "2,384+ agentic skills for AI coding agents (Claude, Cursor, Gemini, Antigravity). Searchable by category: AI agents, coding, security, DevOps, etc.",
+    "url": "https://antigravityskills.directory/",
+    "install_hint": "Browse and download skills; install to .cursor/skills/, ~/.claude/skills/, or Antigravity skill dir. Skill Manager (VS Code) extension supports batch install from GitHub.",
+    "install_command": null
+  },
+  {
+    "name": "Antigravity Skills (antigravityskills.org)",
+    "description": "Curated directory: 245+ skills for Claude Code, Cursor, Gemini CLI, and Google Antigravity. 10 categories including Coding, Data, Security, DevOps.",
+    "url": "https://www.antigravityskills.org/",
+    "install_hint": "Download or clone skill repos; copy to .cursor/skills/ or ~/.claude/skills/. Compatible SKILL.md format across agents.",
+    "install_command": null
+  },
+  {
+    "name": "Claude Skills (claudeskills.info)",
+    "description": "Large curated collection: 158+ free, open-source skills (SKILL.md). Official and community. Download from skill pages.",
+    "url": "https://claudeskills.info/skills",
+    "install_hint": "Open a skill and download or copy SKILL.md; place in ~/.claude/skills/<skill-id>/SKILL.md",
+    "install_command": null
+  },
+  {
+    "name": "SkillsMP",
+    "description": "Agent Skills Marketplace: 530k+ open-source agent skills. Categories: dev, business, testing, DevOps.",
+    "url": "https://www.skillsmp.com/",
+    "install_hint": "Browse by category; download or follow install instructions on each skill page.",
+    "install_command": null
+  },
+  {
+    "name": "ClawHub (OpenClaw)",
+    "description": "Public skill registry for OpenClaw (npm for AI agents). 3k+ community skills. CLI install.",
+    "url": "https://clawhub.ai/",
+    "install_hint": "Install OpenClaw CLI, then: clawhub search \"...\" ; clawhub install <skill-name>",
+    "install_command": "clawhub install"
+  },
+  {
+    "name": "Claude Plugins (claude-plugins.dev)",
+    "description": "Community registry for Claude Code plugins. CLI: npx claude-plugins install.",
+    "url": "https://www.claude-plugins.dev/",
+    "install_hint": "Use their CLI: npx claude-plugins install <name>",
+    "install_command": "npx claude-plugins install"
+  },
+  {
+    "name": "Claude Skill Registry (GitHub)",
+    "description": "Daily-updated registry with web UI, CLI (sk), and JSON API.",
+    "url": "https://majiayu000.github.io/claude-skill-registry-core/",
+    "install_hint": "Browse or use CLI 'sk' for search/install. See repo: majiayu000/claude-skill-registry",
+    "install_command": null
+  }
+]

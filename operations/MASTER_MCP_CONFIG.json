@@ -1,0 +1,1394 @@
+{
+  "mcpServers": {
+    "knowops": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/advanced-memory-mcp",
+        "run",
+        "python",
+        "-m",
+        "advanced_memory.cli.main",
+        "mcp",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/advanced-memory-mcp/src",
+        "PYTHONUNBUFFERED": "1",
+        "ADVANCED_MEMORY_HOME": "C:/Users/sandr"
+      },
+      "disabled": true
+    },
+    "ag-gazebo-bridge": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/ag-gazebo-bridge",
+        "run",
+        "python",
+        "-m",
+        "ag_gazebo_bridge.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/ag-gazebo-bridge/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "alexa-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/alexa-mcp",
+        "run",
+        "python",
+        "-m",
+        "alexa_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/alexa-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "arxiv-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/arxiv-mcp",
+        "run",
+        "python",
+        "-m",
+        "arxiv_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/arxiv-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "bumi-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/bumi-mcp",
+        "run",
+        "python",
+        "-m",
+        "bumi_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/bumi-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "avatar-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/avatar-mcp",
+        "run",
+        "python",
+        "-m",
+        "avatarmcp",
+        "--stdio"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/avatar-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "basic-memory": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/basic-memory",
+        "run",
+        "python",
+        "-m",
+        "basic_memory.cli.main",
+        "mcp",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/basic-memory/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "beyondcompare-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/beyondcompare-mcp",
+        "run",
+        "python",
+        "-m",
+        "beyondcompare_mcp.cli"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/beyondcompare-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "blender-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/blender-mcp",
+        "run",
+        "python",
+        "-m",
+        "blender_mcp.cli"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/blender-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "bookmarks-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/bookmarks-mcp",
+        "run",
+        "bookmarks-mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/bookmarks-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "bookops": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/calibre-mcp",
+        "run",
+        "python",
+        "-m",
+        "calibre_mcp.__main__"
+      ],
+      "env": {
+        "CALIBRE_LIBRARY_PATH": "L:/Multimedia Files/Written Word/Calibre-Bibliothek IT",
+        "PYTHONPATH": "D:/Dev/repos/calibre-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "dbops": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/database-operations-mcp",
+        "run",
+        "python",
+        "-m",
+        "browser_bookmarks_tools.mcp_server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/database-operations-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "davinci-resolve-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/davinci-resolve-mcp",
+        "run",
+        "python",
+        "-m",
+        "davinci_resolve_mcp.main"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/davinci-resolve-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": false
+    },
+    "devices-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/devices-mcp",
+        "run",
+        "python",
+        "-m",
+        "devices_mcp.cli_v2"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/devices-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "directmedia-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/directmedia-mcp",
+        "run",
+        "python",
+        "-m",
+        "directmedia_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/directmedia-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "dj-media-hub": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/dj-media-hub",
+        "run",
+        "python",
+        "-m",
+        "dj_media_hub.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/dj-media-hub/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "docker-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/docker-mcp",
+        "run",
+        "docker-mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/docker-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "edge-bookmark-mcp-server": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/edge-bookmark-mcp-server",
+        "run",
+        "python",
+        "-m",
+        "src.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/edge-bookmark-mcp-server/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "email-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/email-mcp",
+        "run",
+        "python",
+        "-m",
+        "email_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/email-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "fastsearch-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/fastsearch-mcp",
+        "run",
+        "python",
+        "-m",
+        "fastsearch_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/fastsearch-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "fileops": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/filesystem-mcp",
+        "run",
+        "python",
+        "-m",
+        "filesystem_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/filesystem-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "gameops": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/games-app",
+        "run",
+        "python",
+        "-m",
+        "games_mcp.mcp_server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/games-app/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "gimp-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/gimp-mcp",
+        "run",
+        "python",
+        "-m",
+        "gimp_mcp.main"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/gimp-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "git-github-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/git-github-mcp",
+        "run",
+        "python",
+        "-m",
+        "git_github_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/git-github-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "gtfs-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/gtfs-mcp",
+        "run",
+        "gtfs-mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/gtfs-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "handbrake-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/handbrake-mcp",
+        "run",
+        "python",
+        "-m",
+        "handbrake_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/handbrake-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "home-assistant-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/home-assistant-mcp",
+        "run",
+        "python",
+        "-m",
+        "home_assistant_mcp.server",
+        "--mode",
+        "stdio"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/home-assistant-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "immich-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/immich-mcp",
+        "run",
+        "python",
+        "-m",
+        "immich_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/immich-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "llm-txt-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/llm-txt-mcp",
+        "run",
+        "python",
+        "-m",
+        "llm_txt_mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/llm-txt-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "local-llm-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/local-llm-mcp",
+        "run",
+        "python",
+        "-m",
+        "llm_mcp.main"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/local-llm-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "mcp-central-docs": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/mcp-central-docs",
+        "run",
+        "python",
+        "-m",
+        "docs_mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/mcp-central-docs/src",
+        "PYTHONUNBUFFERED": "1"
+      }
+    },
+    "mcp-links-service": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/mcp-links-service",
+        "run",
+        "python",
+        "-m",
+        "mcp_links_service.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/mcp-links-service/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "mcp-monorepo-demo": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/mcp-monorepo-demo",
+        "run",
+        "python",
+        "-m",
+        "demo.showcase_all_servers"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "mcp-server-template": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/mcp-server-template",
+        "run",
+        "python",
+        "-m",
+        "src.cli"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/mcp-server-template/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "mcp-studio": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/mcp-studio",
+        "run",
+        "mcp-studio"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/mcp-studio/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "metaops": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/meta_mcp",
+        "run",
+        "python",
+        "-m",
+        "meta_mcp.main"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "INFO",
+        "PYTHONPATH": "D:/Dev/repos/meta_mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "moltbot-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/moltbot-mcp",
+        "run",
+        "python",
+        "-m",
+        "moltbot_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/moltbot-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "monitoring-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/monitoring-mcp",
+        "run",
+        "monitoring-mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/monitoring-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "multi-backup-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/multi-backup-mcp",
+        "run",
+        "python",
+        "-m",
+        "multi_backup_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/multi-backup-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "mywienerlinien": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/mywienerlinien",
+        "run",
+        "python",
+        "-m",
+        "wienerlinien_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/mywienerlinien/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "nest-protect-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/nest-protect-mcp",
+        "run",
+        "python",
+        "-m",
+        "nest_protect_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/nest-protect-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "netatmo-weather-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/netatmo-weather-mcp",
+        "run",
+        "python",
+        "-m",
+        "netatmo_weather_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/netatmo-weather-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "notepadpp-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/notepadpp-mcp",
+        "run",
+        "python",
+        "-m",
+        "notepadpp_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/notepadpp-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "notion-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/notion-mcp",
+        "run",
+        "python",
+        "-m",
+        "server"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "obs-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/obs-mcp",
+        "run",
+        "python",
+        "-m",
+        "obs_studio_mcp.mcp_server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/obs-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "observability-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/observability-mcp",
+        "run",
+        "python",
+        "-m",
+        "observability_mcp.cli"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/observability-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "obsidian-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/obsidian-mcp",
+        "run",
+        "obsidian-mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/obsidian-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "ocr-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/ocr-mcp",
+        "run",
+        "python",
+        "-m",
+        "ocr_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/ocr-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "onenote-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/onenote-mcp",
+        "run",
+        "python",
+        "-m",
+        "onenote_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/onenote-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "clawops": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/openclaw-molt-mcp",
+        "run",
+        "python",
+        "-m",
+        "openclaw_molt_mcp"
+      ],
+      "env": {
+        "OPENCLAW_GATEWAY_URL": "http://localhost:18789",
+        "OPENCLAW_GATEWAY_TOKEN": "850c909e1e7960358899859f7",
+        "PYTHONPATH": "D:/Dev/repos/openclaw-molt-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "oscops": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/osc-mcp",
+        "run",
+        "python",
+        "-m",
+        "oscmcp.cli"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/osc-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "pinokio-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/pinokio-mcp",
+        "run",
+        "python",
+        "-m",
+        "pinokio_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/pinokio-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "mediaops": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/plex-mcp",
+        "run",
+        "python",
+        "-m",
+        "plex_mcp.server"
+      ],
+      "env": {
+        "PLEX_URL": "http://192.168.0.81:32400",
+        "PLEX_TOKEN": "8DcZg-jSXgUj7yCN3CVm",
+        "PYTHONPATH": "D:/Dev/repos/plex-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "pywinauto-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/pywinauto-mcp",
+        "run",
+        "python",
+        "-m",
+        "pywinauto_mcp.main",
+        "--stdio"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/pywinauto-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "qbt-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/qbt-mcp",
+        "run",
+        "python",
+        "-m",
+        "rtorrent_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/qbt-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "readly-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/readly-mcp",
+        "run",
+        "python",
+        "-m",
+        "readly_mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/readly-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "reaper-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/reaper-mcp",
+        "run",
+        "python",
+        "-m",
+        "reaper_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/reaper-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "repomix-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/repomix-mcp",
+        "run",
+        "python",
+        "-m",
+        "repomix_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/repomix-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "resolume-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/resolume-mcp",
+        "run",
+        "python",
+        "-m",
+        "resolume_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/resolume-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "resonite-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/resonite-mcp",
+        "run",
+        "python",
+        "-m",
+        "resonite_mcp.cli"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/resonite-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "reversing-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/reversing-mcp",
+        "run",
+        "python",
+        "-m",
+        "reversing_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/reversing-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "ring-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/ring-mcp",
+        "run",
+        "python",
+        "-m",
+        "ring_mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/ring-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "robotics-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/robotics-mcp",
+        "run",
+        "python",
+        "-m",
+        "robotics_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/robotics-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "rustdesk-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/rustdesk-mcp",
+        "run",
+        "python",
+        "-m",
+        "rustdesk_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/rustdesk-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "speech-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/speech-mcp",
+        "run",
+        "python",
+        "-m",
+        "speech_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/speech-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "sdr-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/sdr-mcp",
+        "run",
+        "python",
+        "-m",
+        "sdr_mcp.cli"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/sdr-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "songgeneration-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/songgeneration-mcp",
+        "run",
+        "songgeneration-mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/songgeneration-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "suno-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/suno-mcp",
+        "run",
+        "python",
+        "-m",
+        "suno_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/suno-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "system-admin-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/system-admin-mcp",
+        "run",
+        "python",
+        "-m",
+        "system_admin_mcp.main"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/system-admin-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "tailscale-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/tailscale-mcp",
+        "run",
+        "tailscale-mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/tailscale-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "tapo-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/tapo-mcp",
+        "run",
+        "tapo-camera-mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/tapo-mcp/src",
+        "PYTHONUNBUFFERED": "1",
+        "TAPO_MCP_SKIP_HARDWARE_INIT": "true"
+      },
+      "disabled": true
+    },
+    "unity3d-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/unity3d-mcp",
+        "run",
+        "python",
+        "-m",
+        "unity3d_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/unity3d-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "universal-actuator-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/universal-actuator-mcp",
+        "run",
+        "universal-actuator-mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/universal-actuator-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "vienna-live-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/vienna-live-mcp",
+        "run",
+        "python",
+        "-m",
+        "vienna_live_mcp.server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/vienna-live-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "virtualdj-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/virtualdj-mcp",
+        "run",
+        "python",
+        "-m",
+        "virtualdj_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/virtualdj-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "virtctl": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/virtualization-mcp",
+        "run",
+        "python",
+        "-m",
+        "virtualization_mcp.all_tools_server"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/virtualization-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "vrchat-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/vrchat-mcp",
+        "run",
+        "python",
+        "-m",
+        "vrchat_mcp.cli"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/vrchat-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "vroidstudio-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/vroidstudio-mcp",
+        "run",
+        "python",
+        "-m",
+        "vroidstudio_mcp.cli"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/vroidstudio-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "web-development-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/web-development-mcp",
+        "run",
+        "python",
+        "-m",
+        "web_development_mcp.cli"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/web-development-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "sysops": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/windows-operations-mcp",
+        "run",
+        "python",
+        "-m",
+        "windows_operations_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/windows-operations-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "winrar-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/winrar-mcp",
+        "run",
+        "python",
+        "-m",
+        "winrarmcp.__main__"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/winrar-mcp/src",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "scrapeops": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@brightdata/mcp"
+      ],
+      "env": {
+        "API_TOKEN": "49c82509-1e61-4dde-9822-827e3bbbcfe1"
+      },
+      "disabled": true
+    },
+    "browser-ops": {
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ],
+      "command": "npx",
+      "disabled": true,
+      "env": {}
+    },
+    "fibase-ops": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "firebase-tools@latest",
+        "mcp"
+      ],
+      "env": {},
+      "disabled": true
+    },
+    "xkcd-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/xkcd-mcp",
+        "run",
+        "python",
+        "-m",
+        "xkcd_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "glance-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/glance-mcp",
+        "run",
+        "python",
+        "-m",
+        "glance_mcp.__main__"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "magentart-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/magentart-mcp",
+        "run",
+        "python",
+        "-m",
+        "magentart_mcp.server"
+      ],
+      "env": {
+        "MAGENTA_RT_HOST": "localhost",
+        "MAGENTA_RT_PORT": "8765",
+        "MAGENTA_RT_OUTPUT_DIR": "D:/Dev/repos/magentart-mcp/outputs",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": true
+    },
+    "yahboom-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:/Dev/repos/yahboom-mcp",
+        "run",
+        "python",
+        "-m",
+        "yahboom_mcp.server",
+        "--mode",
+        "dual",
+        "--port",
+        "10892"
+      ],
+      "env": {
+        "PYTHONPATH": "D:/Dev/repos/yahboom-mcp/src",
+        "PYTHONUNBUFFERED": "1",
+        "YAHBOOM_IP": "192.168.1.11"
+      },
+      "disabled": false
+    }
+  }
+}

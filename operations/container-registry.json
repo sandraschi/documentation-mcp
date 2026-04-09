@@ -1,0 +1,40 @@
+{
+    "containers": [
+        {
+            "id": "portainer",
+            "label": "Portainer",
+            "url": "http://localhost:9443",
+            "tags": [
+                "infra",
+                "management"
+            ]
+        },
+        {
+            "id": "traefik",
+            "label": "Traefik",
+            "url": "http://localhost:10790",
+            "tags": [
+                "infra",
+                "network"
+            ]
+        },
+        {
+            "id": "grafana",
+            "label": "Grafana",
+            "url": "http://localhost:10785",
+            "tags": [
+                "infra",
+                "monitoring"
+            ]
+        },
+        {
+            "id": "plex-server",
+            "label": "Plex Server",
+            "url": "http://localhost:32400/web",
+            "tags": [
+                "frontend",
+                "media"
+            ]
+        }
+    ]
+}

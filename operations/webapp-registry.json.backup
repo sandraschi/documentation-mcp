@@ -1,0 +1,103 @@
+{
+    "webapps": [
+        {
+            "id": "virtualization-mcp",
+            "label": "Virtualization MCP",
+            "port": 10700,
+            "repo_path": "D:/Dev/repos/virtualization-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "robotics-mcp",
+            "label": "Robotics MCP",
+            "port": 10706,
+            "repo_path": "D:/Dev/repos/robotics-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "tapo-camera-mcp",
+            "label": "Tapo Camera MCP",
+            "port": 10716,
+            "repo_path": "D:/Dev/repos/tapo-camera-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "filesystem-mcp-backend",
+            "label": "Filesystem MCP Backend",
+            "port": 10742,
+            "repo_path": "D:/Dev/repos/filesystem-mcp",
+            "start_command": "python -m uvicorn webapp.backend.main:app --port 10742",
+            "tags": [
+                "backend",
+                "infra"
+            ]
+        },
+        {
+            "id": "filesystem-mcp-frontend",
+            "label": "Filesystem MCP Frontend",
+            "port": 10743,
+            "repo_path": "D:/Dev/repos/filesystem-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "windows-operations-mcp-backend",
+            "label": "Windows Operations MCP Backend",
+            "port": 10748,
+            "repo_path": "D:/Dev/repos/windows-operations-mcp",
+            "start_command": "python -m uvicorn webapp.backend.main:app --port 10748",
+            "tags": [
+                "backend",
+                "infra"
+            ]
+        },
+        {
+            "id": "windows-operations-mcp-frontend",
+            "label": "Windows Operations MCP Frontend",
+            "port": 10749,
+            "repo_path": "D:/Dev/repos/windows-operations-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "web-development-mcp",
+            "label": "Web Development MCP",
+            "port": 10852,
+            "repo_path": "D:/Dev/repos/web-development-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        },
+        {
+            "id": "reaper-mcp",
+            "label": "Reaper MCP",
+            "port": 10796,
+            "repo_path": "D:/Dev/repos/reaper-mcp",
+            "start_command": "npm run dev",
+            "tags": [
+                "frontend",
+                "sota"
+            ]
+        }
+    ]
+}
