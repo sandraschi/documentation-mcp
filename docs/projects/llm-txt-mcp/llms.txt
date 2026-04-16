@@ -1,0 +1,28 @@
+# llm-txt-mcp
+> **Complete guide to packaging and distributing MCP servers with MCPB** --- 📄 [MCPB_BUILDING_GUIDE.md](MCPB_BUILDING_GUIDE.md) **Complete 1,900+ line comprehensive guide** **What it covers**: - ✅ MCPB ...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](docs\mcpb-packaging\README.md): **Complete guide to packaging and distributing MCP servers with MCPB**
+- [Readme](docs\github\README.md): > **Purpose**: Comprehensive GitHub configuration guide to avoid hours of trial-and-error setup.
+- [Readme](README.md): > Automated generation and management of llms.txt documentation files for AI accessibility
+- [Readme](docs\glama\README.md): This directory contains documentation related to achieving GLAMA AI Gold standard status for the LLM...
+- [Complete Setup Guide](docs\github\COMPLETE_SETUP_GUIDE.md): > **6 hours of pain distilled into 30 minutes of setup**
+- [Glama Ai Requirements](docs\glama\GLAMA_AI_REQUIREMENTS.md): This document outlines the requirements and recommendations for listing LLM.txt MCP on Glama.ai's MC...
+- [Dependency Management](docs\github\DEPENDENCY_MANAGEMENT.md): > **Single source of truth** - How to avoid "missing dependency" disasters
+- [Complete Type Fix Guide](docs\github\COMPLETE_TYPE_FIX_GUIDE.md): > **From 130+ type errors to 0** - The systematic approach that actually works!
+- [Megatest Quick Reference](docs\testing\MEGATEST_QUICK_REFERENCE.md): | Scenario | Level | Time | Command |
+- [Tool Docstring Standard](docs\TOOL_DOCSTRING_STANDARD.md): **Version:** 1.0.0
+
+## Api
+- [Service](src\llm_txt_mcp\models\service.py): Models definitions and implementations
+
+## Configuration
+- [Pyproject](pyproject.toml): Python project configuration and dependencies
+- [Package](web_sota\package.json): Node.js project configuration and dependencies
+- [Config](.git\config): Application configuration files
+
+## Optional
+- [Changelog](CHANGELOG.md): Project changelog information
+- [Contributing](CONTRIBUTING.md): Project contributing information

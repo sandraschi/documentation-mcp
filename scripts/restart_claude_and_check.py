@@ -60,9 +60,7 @@ def stop_claude():
     """
     print("\n[1/4] Stopping Claude Desktop (using taskkill)...")
     try:
-        result = subprocess.run(
-            ["taskkill", "/F", "/IM", "Claude.exe"], capture_output=True, text=True, timeout=10
-        )
+        result = subprocess.run(["taskkill", "/F", "/IM", "Claude.exe"], capture_output=True, text=True, timeout=10)
         if result.returncode == 0:
             print("[OK] Claude Desktop stopped")
             time.sleep(2)  # Wait for process to fully terminate
@@ -239,9 +237,7 @@ def monitor_logs_for_startup(
 
                         # Check for errors first
                         if any(indicator.lower() in line_lower for indicator in error_indicators):
-                            if "error" in line_lower and (
-                                "startup" in line_lower or "import" in line_lower
-                            ):
+                            if "error" in line_lower and ("startup" in line_lower or "import" in line_lower):
                                 found_error = True
                                 print("[FAIL] Last startup attempt FAILED:")
                                 print(f"  {line.strip()[:200]}...")
@@ -297,28 +293,20 @@ def monitor_logs_for_startup(
                             line_lower = line.lower()
 
                             # Check for errors first
-                            if any(
-                                indicator.lower() in line_lower for indicator in error_indicators
-                            ):
-                                if "error" in line_lower and (
-                                    "startup" in line_lower or "import" in line_lower
-                                ):
+                            if any(indicator.lower() in line_lower for indicator in error_indicators):
+                                if "error" in line_lower and ("startup" in line_lower or "import" in line_lower):
                                     print("\n[FAIL] Error detected in new logs:")
                                     print(f"  {line.strip()[:200]}...")
                                     return False
 
                             # Check for success
-                            if any(
-                                indicator.lower() in line_lower for indicator in success_indicators
-                            ):
+                            if any(indicator.lower() in line_lower for indicator in success_indicators):
                                 if (
                                     "registered" in line_lower
                                     or "tools imported" in line_lower
                                     or "initialized" in line_lower
                                 ):
-                                    print(
-                                        "\n[SUCCESS] MCP server started successfully (new log entry)!"
-                                    )
+                                    print("\n[SUCCESS] MCP server started successfully (new log entry)!")
                                     print(f"  {line.strip()[:200]}...")
                                     return True
         except Exception as e:
@@ -394,24 +382,16 @@ def main():
     """Main entry point."""
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Restart Claude Desktop and verify MCP server loads"
-    )
-    parser.add_argument(
-        "--skip-precheck", action="store_true", help="Skip pre-check (not recommended)"
-    )
+    parser = argparse.ArgumentParser(description="Restart Claude Desktop and verify MCP server loads")
+    parser.add_argument("--skip-precheck", action="store_true", help="Skip pre-check (not recommended)")
     parser.add_argument(
         "--timeout",
         type=int,
         default=30,
         help="Timeout for log monitoring in seconds (default: 30)",
     )
-    parser.add_argument(
-        "--claude-path", type=str, help="Path to Claude.exe (auto-detected if not specified)"
-    )
-    parser.add_argument(
-        "--no-restart", action="store_true", help="Only monitor logs (do not restart Claude)"
-    )
+    parser.add_argument("--claude-path", type=str, help="Path to Claude.exe (auto-detected if not specified)")
+    parser.add_argument("--no-restart", action="store_true", help="Only monitor logs (do not restart Claude)")
 
     args = parser.parse_args()
 

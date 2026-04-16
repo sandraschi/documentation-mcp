@@ -1,0 +1,12 @@
+# moltbot-mcp
+> - **Integration**: [mcp-central-docs Moltbot series](https://github.com/sandraschi/mcp-central-docs/tree/main/docs/integrations#moltbot-clawdbot) - **Moltbot upstream**: [docs.molt.bot](https://docs.m...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](docs\README.md): - **Integration**: [mcp-central-docs Moltbot series](https://github.com/sandraschi/mcp-central-docs/...
+- [Readme](README.md): MCP server for [Moltbot](https://github.com/moltbot/moltbot) (ClawdBot) Gateway: status, health, sen...
+
+## Configuration
+- [Pyproject](pyproject.toml): Python project configuration and dependencies
+- [Package](webapp\package.json): Node.js project configuration and dependencies

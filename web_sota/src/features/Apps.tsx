@@ -151,7 +151,7 @@ export function Apps() {
     return (
         <div className="flex-1 flex flex-col min-h-0 container max-w-6xl mx-auto py-8 px-6">
             <div className="mb-8 space-y-2 shrink-0">
-                <h1 className="text-3xl font-bold tracking-tight">Fleet Registry</h1>
+                <h1 className="text-3xl font-bold tracking-tight">Fleet Dashboard</h1>
                 <p className="text-muted-foreground">
                     Centralized directory for all integrated MCP applications and autonomous services.
                 </p>

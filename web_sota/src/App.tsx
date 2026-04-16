@@ -12,6 +12,10 @@ import { Apps } from "@/features/Apps"
 import { DockerDesktop } from "@/features/DockerDesktop"
 import { Settings } from "@/features/Settings"
 import { ChatView } from "@/features/Chat"
+import { ProjectPortfolio } from "@/features/ProjectPortfolio"
+import { Logs } from "@/features/Logs"
+
+
 
 function App() {
     return (
@@ -28,7 +32,11 @@ function App() {
                 <Route path="skills" element={<Skills />} />
                 <Route path="chat" element={<ChatView />} />
                 <Route path="apps" element={<Apps />} />
+                <Route path="fleet" element={<ProjectPortfolio />} />
+                <Route path="logs" element={<Logs />} />
+
                 <Route path="docker" element={<DockerDesktop />} />
+
                 <Route path="settings" element={<Settings />} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Route>

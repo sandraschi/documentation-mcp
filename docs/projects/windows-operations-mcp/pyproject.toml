@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "windows-operations-mcp"
+version = "1.18.1"
+description = "Windows Operations MCP - Comprehensive Windows system operations for Claude Desktop with MCPB packaging"
+readme = "README.md"
+authors = [
+    { name = "Sandra Schi", email = "sandra@sandraschi.dev" },
+]
+license = { text = "MIT" }
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=3.1.0,<4",
+    "psutil>=5.9.0",
+    "structlog>=23.0.0",
+    "fastapi>=0.95.0",
+    "uvicorn>=0.22.0",
+    "pydantic>=1.10.0",
+    "python-dotenv>=1.0.0",
+    "pywin32>=305; sys_platform == 'win32'",
+    "ruff>=0.15.2",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/sandraschi/windows-operations-mcp"
+Documentation = "https://github.com/sandraschi/windows-operations-mcp#readme"
+Issues = "https://github.com/sandraschi/windows-operations-mcp/issues"
+Source = "https://github.com/sandraschi/windows-operations-mcp"
+
+[project.scripts]
+windows-operations-mcp = "windows_operations_mcp.__main__:main"
+
+[tool.mcpb]
+manifest = "mcpb/manifest.json"
+build-dir = "dist"
+signing-key = ""
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.md", "*.json", "*.yaml", "*.yml"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "S"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

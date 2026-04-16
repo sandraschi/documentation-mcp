@@ -101,7 +101,7 @@ def respond(message: str, history: list | None = None):
 
     # 4️⃣ Return the answer (string) and updated chat history
     answer = reply["message"]["content"]
-    return answer, history + [(message, answer)]
+    return answer, [*history, (message, answer)]
 
 
 # ---------- Gradio UI ----------

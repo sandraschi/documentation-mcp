@@ -1,6 +1,5 @@
 import json
 import os
-
 import tomllib
 
 REPOS_DIR = r"D:\Dev\repos"
@@ -65,7 +64,7 @@ def scan_repos():
                         script_name = key
                         break
                 if not script_name and scripts:
-                    script_name = list(scripts.keys())[0]
+                    script_name = next(iter(scripts.keys()))
 
                 if not script_name:
                     script_name = repo_name  # Fallback

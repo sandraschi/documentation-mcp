@@ -1,0 +1,15 @@
+# fullstack-builder-script
+> This repository showcases the AI-generated PowerShell script that scaffolds a production-ready fullstack application. The script was produced during a single agentic coding session in Cursor to demons...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](README.md): This repository showcases the AI-generated PowerShell script that scaffolds a production-ready fulls...
+- [Todo](TODO.md): - Split `new-fullstack-app.ps1` into reusable modules/functions and document the refactoring approac...
+- [Assessment](ASSESSMENT.md): **Category**: Other Project
+
+## Configuration
+- [Config](.git\config): Application configuration files
+
+## Optional
+- [License](LICENSE): Project license information

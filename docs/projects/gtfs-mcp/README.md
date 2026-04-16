@@ -1,0 +1,151 @@
+﻿# GTFS MCP Server
+
+A FastMCP 3.1.1+ compliant server for downloading, parsing, and serving GTFS
+(General Transit Feed Specification) data. This server provides a standardized API
+for accessing transit data from various agencies, handling the quirks and
+inconsistencies of real-world GTFS feeds.
+
+## Features
+
+- **GTFS Feed Management**: Download and update GTFS feeds from any URL
+- **Robust Parser**: Handles malformed/missing data with grace
+- **FastMCP 3.1.1+ Compliant**: Full compatibility with the Model Control Protocol
+- **RESTful API**: Easy integration with web and mobile applications
+- **Real-time Updates**: WebSocket support for live departure information
+- **Geospatial Queries**: Find stops and routes near a location
+
+## Quick Start
+
+### Prerequisites
+
+- Python 3.10+
+- pip (Python package manager)
+
+## ðŸš€ Installation
+
+### Prerequisites
+- [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
+- Python 3.12+
+
+### ðŸ“¦ Quick Start
+Run immediately via `uvx`:
+```bash
+uvx gtfs-mcp
+```
+
+### ðŸŽ¯ Claude Desktop Integration
+Add to your `claude_desktop_config.json`:
+```json
+"mcpServers": {
+  "gtfs-mcp": {
+    "command": "uv",
+    "args": ["--directory", "D:/Dev/repos/gtfs-mcp", "run", "gtfs-mcp"]
+  }
+}
+```
+### Running the Server
+
+```bash
+uvicorn gtfs_mcp.main:app --reload
+```
+
+The server will be available at `http://localhost:8000`
+
+## API Documentation
+
+Once the server is running, you can access:
+
+- **OpenAPI Docs**: `http://localhost:8000/docs`
+- **ReDoc**: `http://localhost:8000/redoc`
+- **MCP Tools**: `http://localhost:8000/mcp/docs`
+
+## Adding a GTFS Feed
+
+1. Find the GTFS feed URL for your transit agency (e.g., [TransitFeeds](https://transitfeeds.com/))
+2. Add the feed using the MCP tool:
+
+   ```bash
+   curl -X POST "http://localhost:8000/v1/feeds" \
+     -H "Content-Type: application/json" \
+     -d '{"id":"my-feed","url":"https://example.com/gtfs.zip","update_interval":3600}'
+   ```
+
+## Example Queries
+
+### Find Stops by Name
+
+```bash
+curl "http://localhost:8000/v1/stops/search?feed_id=my-feed&query=central"
+```
+
+### Get Stop Information
+
+```bash
+curl "http://localhost:8000/v1/stops/12345?feed_id=my-feed"
+```
+
+### Get Upcoming Departures
+
+```bash
+curl "http://localhost:8000/v1/stops/12345/departures?feed_id=my-feed&limit=5"
+```
+
+## Development
+
+### Project Structure
+
+```text
+gtfs-mcp/
+â”œâ”€â”€ src/
+â”‚   â””â”€â”€ gtfs_mcp/           # Main package
+â”‚       â”œâ”€â”€ __init__.py     # Package initialization
+â”‚       â”œâ”€â”€ main.py         # FastAPI application
+â”‚       â”œâ”€â”€ config.py       # Configuration management
+â”‚       â”œâ”€â”€ api/            # API endpoints
+â”‚       â”œâ”€â”€ core/           # Core functionality
+â”‚       â””â”€â”€ services/       # Business logic
+â”œâ”€â”€ tests/                  # Test suite
+â”œâ”€â”€ pyproject.toml          # Project metadata and dependencies
+â””â”€â”€ README.md               # This file
+```
+
+### Running Tests
+
+```bash
+pytest
+```
+
+### Code Style
+
+This project uses:
+
+- **Black** for code formatting
+- **isort** for import sorting
+- **mypy** for type checking
+
+Run the following before committing:
+
+```bash
+black .
+isort .
+mypy .
+```
+
+## License
+
+MIT
+
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting pull requests.
+
+## Related Projects
+
+- [HandBrake MCP](https://github.com/sandraschi/handbrake-mcp)
+- [LLM MCP](https://github.com/sandraschi/llm-mcp)
+- [RustDesk MCP](https://github.com/sandraschi/rustdesk-mcp)
+
+## Support
+
+For support, please open an issue on the [GitHub repository](https://github.com/sandraschi/gtfs-mcp/issues).
+

@@ -1,0 +1,192 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qbtmcp"
+version = "3.0.0"
+description = "rTorrent MCP Server - Austrian anime automation with FastMCP 2.13 SOTA (Portmanteau, MCPB, Prompts, CI/CD)"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Sandra's Austrian Anime Automation", email = "sandra@vienna.at"}
+]
+maintainers = [
+    {name = "Sandra", email = "sandra@vienna.at"}
+]
+# NOTE: Package named 'qbtmcp' for historical reasons (started as qBittorrent MCP,
+# pivoted to rTorrent mid-development because qBittorrent had no API/CLI)
+keywords = [
+    "rtorrent", "anime", "mcp", "torrents", "austria", "asw",
+    "fastmcp", "scgi", "portmanteau", "sota", "mcpb", "prompts", "workflow"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Communications :: File Sharing",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Topic :: Multimedia :: Video",
+    "Framework :: FastMCP",
+    "Framework :: FastMCP :: Portmanteau",
+    "Framework :: FastMCP :: MCPB",
+    "Typing :: Typed"
+]
+dependencies = [
+    "fastmcp[all]>=3.1.0,<4",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "aiohttp>=3.9.0",
+    "beautifulsoup4>=4.12.0",
+    "requests>=2.31.0",
+    "psutil>=5.9.0",
+    "python-multipart>=0.0.6",
+    "pyyaml>=6.0",
+    "python-dateutil>=2.8.2",
+    "croniter>=2.0.0",
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.7.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+    "mkdocs>=1.4.3",
+    "mkdocs-material>=9.1.18",
+    "ruff>=0.14.2",
+]
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest>=8.3.4",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.24.0",
+    
+    # Linting & Type Checking
+    "ruff>=0.1.6",
+    "pyright>=1.1.390",
+    "mypy>=1.8.0",
+    
+    # Security
+    "bandit>=1.7.0",
+    "safety>=3.0.0",
+    "defusedxml>=0.7.1",
+    
+    # Building & Publishing (CRITICAL - don't forget!)
+    "build>=1.0.0",
+    "twine>=5.0.0",
+    
+    # Documentation
+    "mkdocs>=1.4.3",
+    "mkdocs-material>=9.1.18"
+]
+
+test = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0"
+]
+
+docs = [
+    "mkdocs>=1.4.3",
+    "mkdocs-material>=9.1.18"
+]
+
+[project.urls]
+Homepage = "https://github.com/sandraschi/qbtmcp"
+Documentation = "https://github.com/sandraschi/qbtmcp#readme"
+Issues = "https://github.com/sandraschi/qbtmcp/issues"
+Source = "https://github.com/sandraschi/qbtmcp"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["qbtmcp*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_optional = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = ["pydantic.*", "pydantic_schema.*", "fastmcp.*"]
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=src/qbtmcp",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-report=xml",
+    "--cov-fail-under=80",
+    "-v"
+]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Slow running tests"
+]
+
+[tool.coverage.run]
+source = ["src/qbtmcp"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/conftest.py"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError"
+]

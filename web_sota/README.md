@@ -1,27 +1,33 @@
 # Frontend: SOTA Documentation Dashboard
 
-A premium React-based Single Page Application (SPA) for interacting with the Documentation MCP Hub.
+A professional React-based interface for the Documentation MCP Hub, providing centralized access to fleet telemetry and project documentation.
 
-## Design Philosophy
-- **Dark Mode Default**: Premium night-first aesthetics.
-- **Glassmorphism**: Modern UI components with subtle transparency and gradients.
-- **SOTA UI/UX**: Adheres to Alsergrund v14.0 standards (Vibrant colors, high-density telemetry).
+## Navigational Hubs
 
-## Technical Stack
-- **Framework**: React 18+ via Vite.
-- **Styling**: Tailwind CSS for rapid, low-friction design.
-- **State Management**: React Context & Hooks for local store integration.
+| Hub | Description |
+| :--- | :--- |
+| **Fleet Dashboard** | Operational launcher for active MCP servers and ecosystem webapps. |
+| **Project Portfolio** | Searchable index of all 100+ repositories with integrated "Deep Research" tools. |
+| **Search (RAG)** | Federated semantic search interface for technical documentation. |
+| **Persistence** | Visualization of stored memories via the `advanced-memory-mcp` integration. |
+| **Docker Desktop** | Real-time monitoring of local container orchestration. |
 
-## Key Hubs
-- **Search**: High-fidelity semantic search interface with score visualization.
-- **Documents**: Interactive file explorer for repo-internal and federated documentation.
-- **Settings**: Dynamic configuration for LLM endpoints (Ollama/LM Studio).
-- **Tools**: Real-time analysis of the host MCP server tools and metadata.
+## Technical Implementation
+- **Architecture**: React 18 / Vite SPA.
+- **Styling**: Tailwind CSS with glassmorphism design tokens.
+- **Routing**: Component-based layout with deep-link support for research queries.
 
 ## Ports & Orchestration
-- **Frontend Port**: **10794**
-- **Startup**: Use `./start.ps1` or `start.bat`. These scripts:
-  1. Kill any zombie processes squatting on the ports.
-  2. Start the Python backend (hidden).
-  3. Start the Vite dev server.
-- **Build**: `npm run build` generates a production bundle in `dist/`, which is automatically served by the Starlette backend.
+- **Development Port**: **10794**
+- **Production Port**: Served via the Python backend on **10795**.
+- **Startup Logic**: 
+    1. `./start.ps1` clears port squatters.
+    2. Backend (Uvicorn/Starlette) initializes the vector store and registry.
+    3. Frontend is served via Vite (dev) or Backend (production bundle).
+
+## Development
+```bash
+npm install
+npm run dev
+```
+For production testing, run `npm run build` and launch the Python server.

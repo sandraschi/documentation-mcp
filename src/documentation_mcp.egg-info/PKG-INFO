@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: documentation-mcp
-Version: 1.0.0
+Version: 1.0.1
 Summary: Public MCP Documentation Server - Federated RAG for the MCP ecosystem
 Author-email: FlowEngineer sandraschi <sandra@vienna.at>
 License: MIT
@@ -38,6 +38,7 @@ Requires-Dist: fastembed>=0.2.0
 Requires-Dist: lancedb>=0.4.0
 Requires-Dist: fastapi>=0.109.0
 Requires-Dist: uvicorn>=0.27.0
+Requires-Dist: prefab-ui>=0.14.0
 Provides-Extra: dev
 Requires-Dist: pytest>=8.3.4; extra == "dev"
 Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
@@ -50,52 +51,44 @@ Requires-Dist: build>=1.0.0; extra == "dev"
 Requires-Dist: twine>=5.0.0; extra == "dev"
 Dynamic: license-file
 
-# Documentation-MCP (Docs-MCP v14.0)
+# Documentation MCP Hub (Docs-MCP)
 
-> [!IMPORTANT]
-> **Federated Public Documentation Hub**: This repository is the public-facing control plane for MCP standards, fleet registries, and architectural patterns. It leverages a Federated RAG engine to unify search across internal core documentation and external intelligence repositories (like Advanced Memory MCP).
+A technical documentation control plane featuring a Federated RAG engine and an industrial dashboard for the RoboFang ecosystem.
 
-## Overview
+## Core Pillars
+- **Federated RAG**: Semantic search unified across local `/docs` and external sibling repositories (e.g., `advanced-memory-mcp`).
+- **Fleet Registry**: Authoritative index for the 100+ project fleet, managing port allocations and repository metadata.
+- **Port Reservoir**: Registry-driven management of host ports (10700–10800 range) for all ecosystem webapps.
+- **Industrial Dashboard**: A high-density React interface for search, fleet management, and AI-assisted deep research.
 
-Documentation-MCP is part of the **Alsergrund Industrial Fleet**. It provides:
-- **Core Standards**: SOTA v13.1 protocols for FastMCP 3.2+, Git workflows, and UI/UX design.
-- **Fleet Registry**: High-fidelity indexing of the 135+ repository MCP ecosystem.
-- **Federated RAG**: A neural search engine that cross-links documentation with agentic memory and personal skills.
+## Quick Start
 
-## Architecture
+### 1. Requirements
+- [uv](https://github.com/astral-sh/uv) (Python 3.12+ package manager)
+- Node.js 18+ (for frontend)
 
-```mermaid
-graph TD
-    User([User Agent]) --> MCP[Docs-MCP Server]
-    MCP --> RAG[Federated RAG Engine]
-    RAG --> Core[Internal /docs]
-    RAG --> AMP[Advanced Memory MCP]
-    AMP --> Knowledge[/knowledge]
-    AMP --> Notes[/notes]
-    MCP --> Web[SOTA Dashboard]
+### 2. Environment Setup
+```powershell
+# Sync Python dependencies
+uv sync
+
+# Install frontend dependencies
+cd web_sota
+npm install
+cd ..
 ```
 
-## Setup
+### 3. Execution
+- **Automated Startup**: Run `./start.ps1` or `start.bat`. This handles port clearing, backend initialization, and frontend serving.
+- **Manual Launch**:
+    - Backend: `uv run docs-mcp` (Port 10795)
+    - Frontend: `cd web_sota; npm run dev` (Port 10794)
 
-1. **Install Dependencies**:
-   ```powershell
-   cd src/docs_mcp
-   pip install -e .
-   ```
+## Repository Structure
 
-2. **Run Server**:
-   ```powershell
-   python -m docs_mcp.server
-   ```
-
-3. **Start Dashboard**:
-   ```powershell
-   ./web_sota/start.bat
-   ```
-
-## Federated Intelligence
-This server automatically detects sibling repositories. If `advanced-memory-mcp` is located in the same parent directory, its knowledge and notes will be indexed and prioritized during semantic retrieval.
+- [**Backend Engine (`src/`)**](src/README.md): FastMCP server, RAG ingestion logic, and Starlette API.
+- [**Frontend Dashboard (`web_sota/`)**](web_sota/README.md): React/Vite SPA with Fleet Dashboard and Project Portfolio.
+- [**Documentation Library (`docs/`)**](docs/README.md): The "Golden Set" of MCP standards and ecosystem protocols.
 
 ---
-**Maintained by**: FlowEngineer sandraschi (Vienna, AT)
-**Philosophy**: Materialist Reductionism & Industrial Efficiency.
+*Maintained for the RoboFang Fleet Registry.*

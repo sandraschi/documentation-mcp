@@ -1,0 +1,35 @@
+[project]
+name = "alexa-mcp"
+version = "0.1.0"
+description = "MCP server to control Alexa via TTS and STT acoustic bridge"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=3.1.0,<4",
+    "faster-whisper>=0.10.0",
+    "edge-tts>=6.1.9",
+    "sounddevice>=0.4.6",
+    "numpy>=1.26.0",
+    "scipy>=1.11.0",
+    "pydub>=0.25.1",
+    "ruff>=0.15.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+alexa-mcp = "alexa_mcp.server:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "S"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

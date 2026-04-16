@@ -320,7 +320,10 @@ def _render_html(entries: list[StartEntry], started_recently: dict[str, float]) 
     for e in entries:
         categories.setdefault(e.category, []).append(e)
 
-    category_names = sorted(categories.keys(), key=lambda s: (s.lower() != "infra", s.lower()))
+    category_names = sorted(
+        categories.keys(),
+        key=lambda s: (s.lower() != "infra", s.lower()),
+    )
 
     def esc(s: str) -> str:
         return (
@@ -428,7 +431,8 @@ def _render_html(entries: list[StartEntry], started_recently: dict[str, float]) 
       }}
       body {{
         margin: 0;
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+                     "Noto Sans", "Liberation Sans", sans-serif;
         background: radial-gradient(1200px 700px at 20% 10%, rgba(124,58,237,0.35), transparent 60%),
                     radial-gradient(900px 600px at 85% 20%, rgba(34,197,94,0.20), transparent 55%),
                     radial-gradient(800px 500px at 60% 90%, rgba(59,130,246,0.18), transparent 55%),
@@ -662,7 +666,13 @@ def _render_html(entries: list[StartEntry], started_recently: dict[str, float]) 
         <div>
           <div class="h1">Fleet Starts Launcher</div>
           <div class="subtitle">Runs entries from <code>mcp-central-docs\\starts</code> (bat launchers).</div>
-          <div class="subtitle2">Launchers map to <code>operations/fleet-registry.json</code> (category, port, path, <code>aliases</code>, optional <code>fastmcp</code>). FastMCP version: registry field or scan of <code>pyproject.toml</code>. Card copy comes from each repo’s <code>README.md</code> hero when present; otherwise the registry description is shown.</div>
+          <div class="subtitle2">
+            Launchers map to <code>operations/fleet-registry.json</code>
+            (category, port, path, <code>aliases</code>, optional <code>fastmcp</code>).
+            FastMCP version: registry field or scan of <code>pyproject.toml</code>.
+            Card copy comes from each repo's <code>README.md</code> hero when present;
+            otherwise the registry description is shown.
+          </div>
         </div>
         <div class="toolbar">
           <div class="pill" id="countPill">Loading…</div>
@@ -672,7 +682,9 @@ def _render_html(entries: list[StartEntry], started_recently: dict[str, float]) 
         </div>
       </div>
       <div class="search-row">
-        <input type="search" id="searchQ" class="search-inp" placeholder="Search title, repo, category… (type 3.1 for FastMCP 3.1+ tier)" autocomplete="off" />
+        <input type="search" id="searchQ" class="search-inp"
+               placeholder="Search title, repo, category… (type 3.1 for FastMCP 3.1+ tier)"
+               autocomplete="off" />
         <label class="chk" title="Show only repos with FastMCP 3.1+ (registry or pyproject)">
           <input type="checkbox" id="filterFm31" />
           FastMCP 3.1+ only
@@ -880,8 +892,10 @@ def create_app() -> FastAPI:
         # as starts\, so "start.ps1" is missing and the window exits instantly.
         resolved = target.resolve()
         try:
-            subprocess.Popen(
-                ["cmd.exe", "/c", str(resolved)],
+            # S607: Use absolute path for cmd.exe to prevent path injection
+            # S603: input 'resolved' is from the local 'starts' dir, which is audited
+            subprocess.Popen(  # noqa: S603
+                ["C:\\Windows\\System32\\cmd.exe", "/c", str(resolved)],
                 cwd=str(resolved.parent),
                 creationflags=_windows_creationflags_new_console(),
             )

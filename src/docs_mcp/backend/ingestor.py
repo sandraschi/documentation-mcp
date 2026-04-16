@@ -26,7 +26,7 @@ EXCLUDE_DIRS = {
 
 class ContentIngestor:
     """Crawls and chunks documentation for the VectorStore.
-    
+
     Federated Edition: Ingests internal /docs and external Advanced Memory roots.
     """
 
@@ -93,7 +93,7 @@ class ContentIngestor:
             chunks = self.chunk_text(body)
             docs = []
             for i, chunk in enumerate(chunks):
-                doc_id = hashlib.md5(f"{file_path}_{i}".encode()).hexdigest()
+                doc_id = hashlib.sha256(f"{file_path}_{i}".encode()).hexdigest()
 
                 try:
                     # Relativize to the specific root it came from
@@ -144,14 +144,24 @@ class ContentIngestor:
             paths = self.glob_markdown(config.knowledge_path)
             logger.info(f"Federating {len(paths)} files from advanced-memory/knowledge")
             for p in paths:
-                all_docs.extend(self.process_file(p, config.knowledge_path, extra_meta={"type": "intelligence", "source_repo": "advanced-memory-mcp"}))
+                all_docs.extend(
+                    self.process_file(
+                        p,
+                        config.knowledge_path,
+                        extra_meta={"type": "intelligence", "source_repo": "advanced-memory-mcp"},
+                    )
+                )
 
         # 3. Federated: Advanced Memory Notes (Optional)
         if config.notes_path.exists():
             paths = self.glob_markdown(config.notes_path)
             logger.info(f"Federating {len(paths)} files from advanced-memory/notes")
             for p in paths:
-                all_docs.extend(self.process_file(p, config.notes_path, extra_meta={"type": "memory", "source_repo": "advanced-memory-mcp"}))
+                all_docs.extend(
+                    self.process_file(
+                        p, config.notes_path, extra_meta={"type": "memory", "source_repo": "advanced-memory-mcp"}
+                    )
+                )
 
         # 4. User Provided Custom Paths
         if extra_paths:
@@ -160,7 +170,11 @@ class ContentIngestor:
                     paths = self.glob_markdown(extra_root)
                     logger.info(f"Found {len(paths)} files in custom path {extra_root}")
                     for p in paths:
-                        all_docs.extend(self.process_file(p, extra_root, extra_meta={"type": "custom", "custom_root": str(extra_root)}))
+                        all_docs.extend(
+                            self.process_file(
+                                p, extra_root, extra_meta={"type": "custom", "custom_root": str(extra_root)}
+                            )
+                        )
 
         logger.info(f"Total: {len(all_docs)} chunks ready for embedding")
         return all_docs

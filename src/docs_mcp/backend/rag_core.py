@@ -68,14 +68,14 @@ class BaseVectorStore:
 
         logger.info(f"Indexed {len(data)} items into LanceDB table '{self.table_name}'.")
 
-    def search(self, query: str, limit: int = 5, where: str = None) -> list[dict[str, any]]:
+    def search(self, query: str, limit: int = 5, where: str | None = None) -> list[dict[str, any]]:
         """Semantic search with optional Pre-filter (where clause)"""
         if self.table_name not in self.db.table_names():
             logger.warning(f"Table '{self.table_name}' not found.")
             return []
 
         tbl = self.db.open_table(self.table_name)
-        query_embedding = list(self.embedding_model.embed([query]))[0]
+        query_embedding = next(iter(self.embedding_model.embed([query])))
 
         search_req = tbl.search(query_embedding).limit(limit)
         if where:

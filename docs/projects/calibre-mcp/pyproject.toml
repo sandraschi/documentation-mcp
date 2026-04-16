@@ -1,0 +1,101 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "calibre-mcp"
+version = "1.1.0"
+description = "FastMCP 2.14.4+ server for conversational Calibre e-book library management with sampling, dialogic returns, and AI workflows"
+authors = [
+    {name = "Sandra", email = "sandra@example.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.12"
+keywords = ["mcp", "calibre", "ebooks", "fastmcp"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
+
+dependencies = [
+    "fastmcp>=3.1.0,<4",
+    "fastapi>=0.115.0",
+    "httpx>=0.27.0",
+    "pydantic>=2.9.0",
+    "python-dotenv>=1.0.1",
+    "rich>=13.8.0",
+    "structlog>=24.4.0",
+    "sqlalchemy>=2.0.0",
+    "aiohttp>=3.9.0",
+    "keyring>=24.0.0",
+    "py-key-value-aio[disk]>=0.3.0,<0.4.0", # FastMCP 2.14.1+ persistent storage backend
+    "tenacity>=8.2.0", # Retry logic for network operations and external API calls
+    "psutil>=5.9.0", # System and process utilities (required by system_tools)
+    "beautifulsoup4>=4.12.0", # Anna's Archive HTML parsing
+    "ruff>=0.14.1",
+]
+
+[project.optional-dependencies]
+rag = [
+    "chromadb>=0.4.0",
+    "fastembed>=0.3.0",
+]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=5.0.0",
+    "black>=24.0.0",
+    "ruff>=0.6.0",
+    "mypy>=1.11.0",
+    "bandit>=1.7.8",
+    "twine>=5.1.0",
+    "build>=1.2.0",
+    "pre-commit>=3.6.0"  # Git hooks for code quality
+]
+
+[project.scripts]
+calibre-mcp = "calibre_mcp.__main__:run"
+
+[project.urls]
+Homepage = "https://github.com/sandra/calibre-mcp"
+Repository = "https://github.com/sandra/calibre-mcp.git"
+Issues = "https://github.com/sandra/calibre-mcp/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP", "S"]
+ignore = ["E501", "B008", "C901", "B904"]
+exclude = ["__pycache__", ".git", ".venv", "venv", "dist", "build"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]  # Allow assert in tests
+"src/calibre_mcp/__main__.py" = ["E402"]  # Imports after warning suppression for MCP stdio protocol
+"src/calibre_mcp/server.py" = ["E402"]  # Imports after warning suppression for MCP stdio protocol
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "pytest-cov>=7.0.0",
+]

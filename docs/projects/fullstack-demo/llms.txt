@@ -1,0 +1,21 @@
+# fullstack-demo
+> A **professional fullstack application** with AI, MCP integration, and comprehensive monitoring. - ✅ Modern dashboard with beautiful UI - ✅ AI ChatBot (4 providers: OpenAI, Anthropic, Ollama, LM Studi...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](README.md): A **professional fullstack application** with AI, MCP integration, and comprehensive monitoring.
+- [Changelog](CHANGELOG.md): - ✅ Added comprehensive 12-command CLI for MCP server
+- [Mcp Server Complete](MCP_SERVER_COMPLETE.md): A **professional-grade MCP server** with:
+- [Documentation Update Summary](DOCUMENTATION_UPDATE_SUMMARY.md): ---
+- [Assessment](ASSESSMENT.md): **Category**: Other Project
+- [Assessment](docs\ASSESSMENT.md): **Date:** 2025-11-18
+- [Mcp Cli Reference](MCP_CLI_REFERENCE.md): ---
+
+## Configuration
+- [Package](electron\package.json): Node.js project configuration and dependencies
+- [](.env): Environment variables and configuration
+- [Config](.git\config): Application configuration files
+
+## Optional
+- [Changelog](CHANGELOG.md): Project changelog information

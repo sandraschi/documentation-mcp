@@ -1,0 +1,30 @@
+# meta_mcp
+> **MetaMCP Enterprise** is the complete **"Argh-Coding" bloop-buster** - a comprehensive enterprise-grade management platform for MCP (Model Context Protocol) ecosystems. **Version**: 3.2.1 (SOTA Compl...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](README.md): **MetaMCP Enterprise** is the complete **"Argh-Coding" bloop-buster** - a comprehensive enterprise-g...
+- [Readme](docs\tools\README.md): MetaMCP is organized into modular tool suites, each handling a specific domain of the MCP ecosystem.
+- [Debug Output](debug_output.txt): Documentation for debug_output
+- [Analysis](docs\tools\analysis.md): **Advanced insights and SOTA compliance.**
+- [Client Management](docs\tools\client-management.md): **Multi-IDE ecosystem control and configuration.**
+- [Powershell Best Practices](docs\POWERSHELL_BEST_PRACTICES.md): This guide prevents the most common PowerShell syntax issues that LLMs suggest in Windows environmen...
+- [Toolchains](docs\tools\toolchains.md): The **Toolchains** suite (also referred to as Presets) is a core feature of Meta MCP designed to dra...
+- [Server Management](docs\tools\server-management.md): **Lifecycle control and process orchestration for MCP servers.**
+- [Install](INSTALL.md): Complete step-by-step installation and configuration guide for Meta MCP.
+- [Scaffolding](docs\tools\scaffolding.md): **Enterprise-grade project generation.**
+
+## Api
+- [Api Router](src\meta_mcp\api_router.py): Api definitions and implementations
+- [Scaffolding](src\meta_mcp\models\scaffolding.py): Models definitions and implementations
+
+## Configuration
+- [Pyproject](pyproject.toml): Python project configuration and dependencies
+- [Package](web_sota\package.json): Node.js project configuration and dependencies
+- [Config](.git\config): Application configuration files
+
+## Optional
+- [Changelog](CHANGELOG.md): Project changelog information
+- [License](LICENSE): Project license information
+- [Tech Debt Roadmap](TECH_DEBT_ROADMAP.md): Project roadmap information

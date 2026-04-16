@@ -1,34 +1,26 @@
-# Documentation Library: The Golden Set
+# Documentation Library
 
-This directory contains the core documentation indexed by the MCP engine. It is organized into functional categories to maximize retrieval precision.
+This directory serves as the static source for the Documentation MCP Hub. It contains the "Golden Set" of protocols, standards, and ecosystem guides.
 
 ## Content Structure
 
-- **`core/`**: Fundamental standards (e.g., `AGENT_PROTOCOLS.md`, `SOTA_REQUIREMENTS.md`).
-- **`fleet/`**: Registries and technical specifications for the MCP fleet repositories.
-- **`integrations/`**: Documentation for specific IDE and tool integrations (Cursor, Zed, etc.).
-- **`guides/`**: How-to documents and architectural pattern descriptions.
+### 1. [Standards](./standards/)
+Defines the authoritative protocols for the RoboFang ecosystem:
+- **`AGENT_PROTOCOLS.md`**: Behavioral and communication standards for AI agents.
+- **`SOTA_REQUIREMENTS.md`**: Technical standards for industrial-grade repositories.
 
-## Contributing
+### 2. [Operations](./operations/)
+Infrastructure and lifecycle documentation:
+- **`WEBAPP_PORTS.md`**: Port allocation registry.
+- **`BOOTSTRAP.md`**: Environment initialization procedures.
 
-### 1. File Format
-All documentation must be in **Markdown (.md)**. Use standard GitHub Flavored Markdown.
+### 3. [Guides](./guides/)
+Procedural documentation for common workflows:
+- **`MCP_DEVELOPMENT.md`**: Guide for building FastMCP servers.
+- **`FLEET_MANAGEMENT.md`**: Handling multi-repo orchestration.
 
-### 2. Frontmatter (Optional)
-The ingestor recognizes YAML frontmatter for advanced filtering:
-```yaml
----
-title: "Agent Protocol Specification"
-category: "Core"
-audience: "Agents/Developers"
-skill_candidate: true
----
-```
-
-### 3. Standards
-- **Conciseness**: Avoid prose; prefer structured lists and code blocks.
-- **Cross-linking**: Use absolute URLs or repo-relative paths where possible.
-- **Privacy**: Ensure no PII (Private Identifiable Information) or hardcoded local paths are included in files placed here.
-
-## Ingestion Logic
-Files in this directory are automatically chunked and embedded when the server starts or when the `reindex_docs` tool is called.
+## Contribution
+To add new documentation:
+1. Create a markdown file in the appropriate subdirectory.
+2. Ensure the file contains structured YAML frontmatter (Title, Date, Category).
+3. Run `npm run reindex` (or trigger via UI) to update the semantic search index.

@@ -1,0 +1,16 @@
+# edge-bookmark-mcp-server
+> Edge-bookmarks MCP server was causing JSON parsing errors in Claude Desktop: ``` Unexpected non-whitespace character after JSON at position 4 (line 1 column 5) ``` The server was logging emojis to `st...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Mcp Json Fix Readme](MCP_JSON_FIX_README.md): Edge-bookmarks MCP server was causing JSON parsing errors in Claude Desktop:
+- [Readme](README.md): A comprehensive Model Context Protocol (MCP) server for Microsoft Edge bookmark management, built wi...
+- [Tool Docstring Migration](docs\TOOL_DOCSTRING_MIGRATION.md): **Status:** In Progress
+- [Assessment](ASSESSMENT.md): **Category**: MCP Server
+- [Tool Docstring Standard](docs\TOOL_DOCSTRING_STANDARD.md): **Version:** 1.0.0
+
+## Configuration
+- [Pyproject](pyproject.toml): Python project configuration and dependencies
+- [Package](web_sota\package.json): Node.js project configuration and dependencies
+- [Config](.git\config): Application configuration files

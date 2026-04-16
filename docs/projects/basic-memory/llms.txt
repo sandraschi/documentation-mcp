@@ -1,0 +1,37 @@
+# basic-memory
+> This directory contains documentation related to achieving GLAMA AI Gold standard status for the Advanced Memory MCP project. GLAMA AI is a quality assurance platform that evaluates MCP servers agains...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](docs\glama\README.md): This directory contains documentation related to achieving GLAMA AI Gold standard status for the Adv...
+- [Readme](README.md): [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/lic...
+- [Readme](docs\github\README.md): > **Purpose**: Comprehensive GitHub configuration guide to avoid hours of trial-and-error setup.
+- [Readme](docs\mcpb-packaging\README.md): **Complete guide to packaging and distributing MCP servers with MCPB**
+- [Complete Setup Guide](docs\github\COMPLETE_SETUP_GUIDE.md): > **6 hours of pain distilled into 30 minutes of setup**
+- [Pdf Book Creation Guide](docs\pdf-book-creation-guide.md): Transform your Basic Memory notes into beautiful, professional PDF books with title pages, table of ...
+- [Workflows](docs\github\WORKFLOWS.md): > **Copy-paste ready workflows** for MCP projects. Tested and proven through our 6-hour debugging od...
+- [Migration Plan](MIGRATION_PLAN.md): This document outlines the ethical migration strategy for transitioning from a basic-memory fork to ...
+- [Notion Integration Plan](docs\notion-integration-plan.md): Add comprehensive Notion import/export capabilities to Basic Memory, allowing users to migrate from ...
+- [Research Orchestrator Guide](docs\research-orchestrator-guide.md): AI-guided research planning and workflow orchestration for comprehensive knowledge building.
+
+## Api
+- [Project Router](src\basic_memory\api\routers\project_router.py): Api definitions and implementations
+- [Memory Router](src\basic_memory\api\routers\memory_router.py): Api definitions and implementations
+- [Knowledge Router](src\basic_memory\api\routers\knowledge_router.py): Api definitions and implementations
+- [Search](src\basic_memory\models\search.py): Models definitions and implementations
+- [Base](src\basic_memory\models\base.py): Models definitions and implementations
+- [Project](src\basic_memory\models\project.py): Models definitions and implementations
+- [Response](src\basic_memory\schemas\response.py): Schemas definitions and implementations
+- [Prompt](src\basic_memory\schemas\prompt.py): Schemas definitions and implementations
+- [Base](src\basic_memory\schemas\base.py): Schemas definitions and implementations
+
+## Configuration
+- [Pyproject](pyproject.toml): Python project configuration and dependencies
+- [Package](.venv\Lib\site-packages\pyright\dist\package.json): Node.js project configuration and dependencies
+- [Config](.git\config): Application configuration files
+
+## Optional
+- [Changelog](CHANGELOG.md): Project changelog information
+- [Contributing](CONTRIBUTING.md): Project contributing information
+- [License](LICENSE): Project license information

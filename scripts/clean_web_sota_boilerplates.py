@@ -56,7 +56,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     return (
         <aside
             className={cn(
-                "relative flex flex-col border-r border-slate-800 bg-slate-950/50 backdrop-blur-xl transition-all duration-300 ease-in-out",
+                "relative flex flex-col border-r border-slate-800 bg-slate-950/50 " +
+                "backdrop-blur-xl transition-all duration-300 ease-in-out",
                 collapsed ? "w-16" : "w-64"
             )}
         >
@@ -75,7 +76,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                             key={item.href}
                             to={item.href}
                             className={cn(
-                                "group flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-slate-800 hover:text-white",
+                                "group flex items-center rounded-md px-3 py-2 text-sm font-medium " +
+                                "transition-colors hover:bg-slate-800 hover:text-white",
                                 isActive ? "bg-slate-800 text-white" : "text-slate-400",
                                 collapsed ? "justify-center" : "justify-start"
                             )}
@@ -97,9 +99,17 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             <div className="border-t border-slate-800 p-2">
                 <button
                     onClick={onToggle}
-                    className="flex w-full items-center justify-center rounded-md p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+                    className="flex w-full items-center justify-center rounded-md p-2 text-slate-400 " +
+                              "hover:bg-slate-800 hover:text-white transition-colors"
                 >
-                    {collapsed ? <ChevronRight className="h-5 w-5" /> : <div className="flex items-center w-full"><ChevronLeft className="h-5 w-5 mr-3" /><span>Collapse</span></div>}
+                    {collapsed ? (
+                        <ChevronRight className="h-5 w-5" />
+                    ) : (
+                        <div className="flex items-center w-full">
+                            <ChevronLeft className="h-5 w-5 mr-3" />
+                            <span>Collapse</span>
+                        </div>
+                    )}
                 </button>
             </div>
         </aside>
@@ -283,7 +293,8 @@ export function Chat() {
                 <div className="p-4 border-t border-slate-800 bg-slate-900/30">
                     <div className="flex gap-2">
                         <input
-                            className="flex-1 bg-slate-950 border border-slate-800 rounded-md px-4 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                            className="flex-1 bg-slate-950 border border-slate-800 rounded-md px-4 py-2 " +
+                                      "text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
                             placeholder="Type a natural language command..."
                         />
                         <Button size="icon" className="bg-blue-600 hover:bg-blue-700">
@@ -385,9 +396,7 @@ def main():
                     f.write(APP_TSX_TEMPLATE)
 
                 # Overwrite layout/sidebar.tsx
-                sidebar_path = os.path.join(
-                    web_sota_pth, "src", "components", "layout", "sidebar.tsx"
-                )
+                sidebar_path = os.path.join(web_sota_pth, "src", "components", "layout", "sidebar.tsx")
                 if os.path.exists(sidebar_path):
                     with open(sidebar_path, "w", encoding="utf-8") as f:
                         f.write(SIDEBAR_TSX_TEMPLATE.replace("{REPO_NAME}", friendly_name))

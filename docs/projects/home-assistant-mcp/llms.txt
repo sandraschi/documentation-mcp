@@ -1,0 +1,17 @@
+# home-assistant-mcp
+> **AI-Powered Smart Home Control via Model Context Protocol** Transform your Home Assistant smart home into a conversational AI assistant. Control lights, climate, automations, and all your smart devic...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](README.md): [![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)](https://github.com/sandraschi/home...
+- [Sota Enhancement Summary](SOTA_ENHANCEMENT_SUMMARY.md): **Version 0.2.0 - Complete SOTA Implementation**
+- [Extensive Refinement Summary](EXTENSIVE_REFINEMENT_SUMMARY.md): **Day of Honing and Extending - Production-Ready Implementation**
+
+## Examples
+- [Examples](examples/): Example code and implementations
+
+## Configuration
+- [Pyproject](pyproject.toml): Python project configuration and dependencies
+- [Package](mcpb\package.json): Node.js project configuration and dependencies
+- [Config](.git\config): Application configuration files

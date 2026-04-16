@@ -1,0 +1,29 @@
+# gimp-mcp
+> **Complete guide to achieving and maintaining Gold Status on Glama.ai** --- 1. [Gold Status Achievement](GOLD_STATUS_ACHIEVEMENT.md) - **Original certification** (85/100) 2. [Gold Status Update 2025-1...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](docs\glama-platform\README.md): **Complete guide to achieving and maintaining Gold Status on Glama.ai**
+- [Readme](docs\development\README.md): **Guides, best practices, and lessons learned for developing blender-mcp**
+- [Readme](docs\github\README.md): > **Purpose**: Comprehensive GitHub configuration guide to avoid hours of trial-and-error setup.
+- [Readme](docs\docsviewer\README.md): **Complete MkDocs setup for viewing Blender MCP documentation with beautiful sidebar navigation and ...
+- [Readme](docs\mcp-technical\README.md): **Technical guides for MCP server development, deployment, and troubleshooting**
+- [Readme](docs\repository-protection\README.md): **Complete guide to keeping your notepadpp-mcp repository safe**
+- [Readme](docs\glama\platform\README.md): **Complete guide to achieving and maintaining Gold Status on Glama.ai**
+- [Readme](docs\mcpb-packaging\README.md): **Complete guide to packaging and distributing MCP servers with MCPB**
+- [Readme](docs\glama\README.md): **Complete documentation for Glama AI platform integration, optimization, and deployment.**
+- [New Tools Readme](docs\NEW_TOOLS_README.md): This document describes the newly implemented tools for the GIMP MCP server, following FastMCP 2.10 ...
+
+## Examples
+- [Examples](docs\EXAMPLES.md): Example usage and code samples
+
+## Configuration
+- [Pyproject](pyproject.toml): Python project configuration and dependencies
+- [Package](webapp\frontend\package.json): Node.js project configuration and dependencies
+- [Cargo](Cargo.toml): Rust project configuration and dependencies
+- [Config](.git\config): Application configuration files
+
+## Optional
+- [Changelog](CHANGELOG.md): Project changelog information
+- [Implementation Roadmap](docs\IMPLEMENTATION_ROADMAP.md): Project roadmap information

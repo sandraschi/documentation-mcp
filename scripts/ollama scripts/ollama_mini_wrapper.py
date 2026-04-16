@@ -48,8 +48,7 @@ while True:
 
         # Build a short context from the top 3 hits
         context = "\n\n".join(
-            f"{r['title']}\n{r['link']}\n{r.get('snippet', '')}"
-            for r in results.get("organic_results", [])[:3]
+            f"{r['title']}\n{r['link']}\n{r.get('snippet', '')}" for r in results.get("organic_results", [])[:3]
         )
         # 2️⃣ Feed back to the model
         final = chat.send(

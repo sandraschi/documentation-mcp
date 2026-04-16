@@ -1,0 +1,26 @@
+# veogen
+> This directory contains comprehensive documentation for VeoGen's revolutionary **multi-provider AI orchestration architecture**. VeoGen doesn't compete with Google and Anthropic - we orchestrate them,...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](docs\architecture\README.md): This directory contains comprehensive documentation for VeoGen's revolutionary **multi-provider AI o...
+- [Readme](README.md): **🚀 PRODUCTION READY** - VeoGen is a comprehensive AI-powered video generation platform with full ob...
+- [Readme](docs\concepts\README.md): VeoGen's transformation from video generation tool to **comprehensive AI orchestration platform** - ...
+- [Readme](docs\README.md): **VeoGen is evolving beyond media generation to become the world's first multi-provider AI orchestra...
+- [Readme](docs\integrations\README.md): VeoGen leverages multiple MCP (Model Context Protocol) servers to create a comprehensive AI-powered ...
+- [User Manager Readme](USER_MANAGER_README.md): A beautiful, standalone user management interface for the VeoGen platform with enhanced readability ...
+- [Quickstart](QUICKSTART.md): This guide will help you get the complete VeoGen monitoring stack up and running in minutes.
+- [Claude Code Installation Guide](docs\claude\CLAUDE_CODE_INSTALLATION_GUIDE.md): You have WSL2 with Ubuntu - perfect! Claude Code requires a Unix-like environment.
+- [Mcp Servers Installation Guide](MCP_SERVERS_INSTALLATION_GUIDE.md): Add to your Claude MCP configuration:
+- [Github Setup Guide](docs\claude\GITHUB_SETUP_GUIDE.md): 1. Go to https://github.com/sandraschi
+
+## Configuration
+- [Package](package.json): Node.js project configuration and dependencies
+- [](.env): Environment variables and configuration
+- [Config](.git\config): Application configuration files
+
+## Optional
+- [Changelog](CHANGELOG.md): Project changelog information
+- [License](LICENSE): Project license information
+- [Media Roadmap 2025](docs\projects\veogen\media-roadmap-2025.md): Project roadmap information

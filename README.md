@@ -1,35 +1,41 @@
 # Documentation MCP Hub (Docs-MCP)
 
-A high-performance documentation control plane featuring a Federated RAG engine and a unified dashboard for the MCP ecosystem.
+A technical documentation control plane featuring a Federated RAG engine and an industrial dashboard for the RoboFang ecosystem.
 
-## Core Features
-- **Federated RAG**: Semantic search unified across internal docs and external memory repositories.
-- **Fleet Registry Host**: Authoritative source of truth for the 135+ repository MCP fleet (Port Reservoir, Registries).
-- **SOTA Hub**: Dedicated React/Vite dashboard for search, exploration, and administration.
-- **Technical Standards**: Hosting the Golden Set of MCP protocols and fleet registries.
+## Core Pillars
+- **Federated RAG**: Semantic search unified across local `/docs` and external sibling repositories (e.g., `advanced-memory-mcp`).
+- **Fleet Registry**: Authoritative index for the 100+ project fleet, managing port allocations and repository metadata.
+- **Port Reservoir**: Registry-driven management of host ports (10700–10800 range) for all ecosystem webapps.
+- **Industrial Dashboard**: A high-density React interface for search, fleet management, and AI-assisted deep research.
 
 ## Quick Start
 
 ### 1. Requirements
-Ensure you have [uv](https://github.com/astral-sh/uv) installed and are using Python 3.12+.
+- [uv](https://github.com/astral-sh/uv) (Python 3.12+ package manager)
+- Node.js 18+ (for frontend)
 
-### 2. Basic Installation
+### 2. Environment Setup
 ```powershell
-# Clone and prepare environment
-git clone https://github.com/sandraschi/documentation-mcp
-cd documentation-mcp
+# Sync Python dependencies
 uv sync
+
+# Install frontend dependencies
+cd web_sota
+npm install
+cd ..
 ```
 
 ### 3. Execution
-- **MCP Server**: `uv run docs-mcp` (Stdio mode)
-- **UI Dashboard**: `./web_sota/start.bat` (Opens http://localhost:10794)
+- **Automated Startup**: Run `./start.ps1` or `start.bat`. This handles port clearing, backend initialization, and frontend serving.
+- **Manual Launch**:
+    - Backend: `uv run docs-mcp` (Port 10795)
+    - Frontend: `cd web_sota; npm run dev` (Port 10794)
 
 ## Repository Structure
 
-- [**Backend Engine (`src/`)**](src/README.md): Details on the FastMCP server, Federated RAG, and ingestion logic.
-- [**Frontend Dashboard (`web_sota/`)**](web_sota/README.md): Information on the SOTA React UI, port allocation, and development.
-- [**Documentation Content (`docs/`)**](docs/README.md): Organization of the "Golden Set" and guidance on contributing new documents.
+- [**Backend Engine (`src/`)**](src/README.md): FastMCP server, RAG ingestion logic, and Starlette API.
+- [**Frontend Dashboard (`web_sota/`)**](web_sota/README.md): React/Vite SPA with Fleet Dashboard and Project Portfolio.
+- [**Documentation Library (`docs/`)**](docs/README.md): The "Golden Set" of MCP standards and ecosystem protocols.
 
 ---
-*Maintained by sandraschi, Vienna (2026).*
+*Maintained for the RoboFang Fleet Registry.*

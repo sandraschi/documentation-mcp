@@ -1,0 +1,49 @@
+# HandBrake MCP Server - Semantic Manifest
+
+> [!IMPORTANT]
+> This is a machine-readable summary of the HandBrake MCP repository for LLM context.
+> **Version**: 1.1.1 (Industrial SOTA)
+> **Endpoint**: `handbrake_mcp.server`
+
+## 🧠 System Architecture
+
+HandBrake MCP is an industrial-grade transcoding control plane built on FastMCP 3.2. It manages video processing queues via `HandBrakeCLI` and provides real-time telemetry via a FastAPI REST bridge.
+
+## 🛠️ Core Toolset
+
+### 📽️ Transcoding Ops (`handbrake_tools.py`)
+- `transcode_file`: Professional single-file transcoding.
+- `batch_transcode`: Parallel queue processing.
+- `get_media_info`: FFmpeg-powered metadata extraction.
+
+### 🤖 Orchestration (`agentic_workflow.py`)
+- `agentic_workflow`: High-level goal planning (e.g., "Transcode all movies in /input to AV1").
+
+### 📊 Telemetry (`status_tools.py`)
+- `health_check`: CPU/RAM/GPU/PID monitoring.
+- `get_job_status`: Real-time progress with ETA and bitrate.
+- `get_presets`: Discover native HandBrake presets.
+
+## 🖥️ Industrial Dashboard
+The frontend (`web_sota/`) is a React/TypeScript/Vite app configured for:
+- Port (Frontend): `10874`
+- API Base (Backend): `http://127.0.0.1:10875`
+- Features: PWA support, Glassmorphism UI, real-time polling via TanStack Query.
+
+## 📁 Repository Structure
+- `src/handbrake_mcp/`: Core Python package.
+  - `server.py`: Entry point and FastMCP instance.
+  - `core/`: Config and state management.
+  - `services/`: Watchers, processing, and notifications.
+  - `tools/`: MCP tool implementations.
+- `web_sota/`: SOTA v13.1 industrial frontend.
+- `docs/`: Expanded documentation (v13.1 compliant).
+- `scripts/`: Operational scripts (sync, backup, deploy).
+
+## 🔧 Operational Constants
+- **Default Port**: `10875` (HTTP Bridge)
+- **Primary Transport**: `stdio` (Stdlib discovery)
+- **Networking**: Enforces `127.0.0.1` to bypass Windows IPv6 loopback issues.
+
+---
+*Index Generated: 2026-04-09*

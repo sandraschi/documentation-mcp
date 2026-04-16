@@ -10,7 +10,10 @@ export type ViewState =
     | "skills"
     | "chat"
     | "apps"
+    | "fleet"
     | "docker"
+    | "logs"
+
     | "settings"
 
 export const viewToPath: Record<ViewState, string> = {
@@ -24,7 +27,10 @@ export const viewToPath: Record<ViewState, string> = {
     skills: "/skills",
     chat: "/chat",
     apps: "/apps",
+    fleet: "/fleet",
     docker: "/docker",
+    logs: "/logs",
+
     settings: "/settings",
 }
 

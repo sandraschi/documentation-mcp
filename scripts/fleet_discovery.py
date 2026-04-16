@@ -147,9 +147,7 @@ def generate_markdown(fleet):
             for repo in fleet[cat]:
                 # Remove backslashes for URL compatibility
                 clean_path = repo["path"].replace("\\", "/")
-                f.write(
-                    f"| [{repo['name']}](file:///{clean_path}) | {repo['description']} | {repo['updated']} |\n"
-                )
+                f.write(f"| [{repo['name']}](file:///{clean_path}) | {repo['description']} | {repo['updated']} |\n")
             f.write("\n")
 
 
@@ -442,9 +440,7 @@ def serve_dashboard(port=10794):
     socketserver.TCPServer.allow_reuse_address = True
 
     with socketserver.TCPServer(("", port), handler) as httpd:
-        print(
-            f"\n[SOTA] Fleet Dashboard serving at: http://localhost:{port}/{Path(HTML_OUTPUT).name}"
-        )
+        print(f"\n[SOTA] Fleet Dashboard serving at: http://localhost:{port}/{Path(HTML_OUTPUT).name}")
         httpd.serve_forever()
 
 

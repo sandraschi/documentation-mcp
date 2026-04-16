@@ -1,0 +1,332 @@
+﻿# Unity3D MCP Server
+
+**FastMCP 3.1.1++ Compliant** - Comprehensive Unity 3D automation with VRM avatar pipeline and VRChat integration.
+
+## Features
+
+### Core Unity Automation
+
+- **Unity Editor Management**: Launch, control, and automate Unity Editor
+- **Project Operations**: Create, configure, and manage Unity projects
+- **Scene Management**: Create and manipulate Unity scenes
+- **Build Pipeline**: Automated builds for multiple platforms
+
+### Avatar & VRM Pipeline
+
+- **VRM Import**: Import and configure VRM avatars for Unity
+- **Avatar Optimization**: Optimize avatars for VRChat compatibility
+- **Animation System**: Setup animator controllers and animation clips
+- **Performance Profiling**: Analyze and optimize avatar performance
+
+### Asset Management
+
+- **Package Import**: Import Unity asset packages
+- **Texture Optimization**: Platform-specific texture optimization
+- **Material Management**: Create and convert materials for VRChat
+- **Asset Organization**: Automated asset organization and versioning
+
+### VRChat Integration
+
+- **SDK Automation**: Automate VRChat SDK operations
+- **Avatar Upload**: Upload avatars to VRChat platform
+- **OSC Communication**: Real-time OSC parameter control
+- **Performance Validation**: VRChat-specific performance validation
+- **Authentication**: VRChat API auth with 2FA/TOTP support
+
+### Multi-Platform Social VR
+
+| Platform | Engine | Avatar Format | SDK | Status |
+|----------|--------|---------------|-----|--------|
+| **VRChat** | Unity | VRC prefab | VRChat SDK | Full support |
+| **ChilloutVR** | Unity | CVR prefab | CCK | Supported |
+| **Resonite** | FrooxEngine | VRM/GLB direct | None needed | Supported |
+| **Cluster** | Unity | VRM | Creator Kit | Supported |
+
+- **ChilloutVR**: CCK detection, CVRAvatar setup, validation
+- **Resonite**: Direct VRM/GLB import (no Unity needed!)
+- **Cluster**: Japanese social VR with VRM support
+
+### Unity Editor API Tools (Advanced)
+
+**âš ï¸ Future Enhancement** - Scaffolded for Unity Editor API integration
+
+These tools provide direct Unity Editor API access for advanced operations that CLI cannot handle:
+
+#### Core API Tools
+- **Method Execution**: `api_execute_method()` - Execute Unity methods with complex parameters
+- **Scene Inspection**: `api_get_scene_objects()` - Get detailed scene object information
+- **Object Manipulation**: `api_modify_object()` - Direct object property modification
+- **Prefab Creation**: `api_create_prefab()` - Create prefabs with proper references
+- **Physics Simulation**: `api_run_simulation()` - Run physics simulation with data recording
+- **Batch Operations**: `api_batch_operations()` - Atomic multi-operation execution
+
+#### Path Movement Tools
+- **Path Animation**: `api_move_along_path()` - Move objects along straight/spline/2D/3D paths
+- **Path Visualization**: `api_create_path_visualization()` - Create visual path representations
+- **2D Path Following**: `api_follow_path_2d()` - 2D movement with rotation and look-ahead
+- **3D Path Following**: `api_follow_path_3d()` - 3D movement with banking and elevation
+- **Movement Control**: `api_stop_path_movement()` - Stop path movement with deceleration
+
+#### Motor Control Tools
+- **Add Motor**: `api_add_motor()` - Attach configurable motors to objects
+- **Start Motor**: `api_start_motor()` - Start motors with speed/acceleration control
+- **Stop Motor**: `api_stop_motor()` - Stop motors with deceleration options
+- **Set Speed**: `api_set_motor_speed()` - Dynamic speed adjustments during operation
+- **Motor Status**: `api_get_motor_status()` - Real-time motor monitoring and diagnostics
+- **Physics Config**: `api_configure_motor_physics()` - Realistic motor physics simulation
+
+#### Import/Export Tools
+- **Import Package**: `import_asset_package()` - Import Unity .unitypackage files
+- **Import 3D Model**: `import_3d_model()` - Import FBX, OBJ, GLTF, etc.
+- **Import Texture**: `import_texture()` - Import textures with type-specific settings
+- **Export FBX**: `export_fbx()` - Export objects to FBX format
+- **Export Package**: `export_unity_package()` - Create .unitypackage files
+- **Export Prefab**: `export_prefab()` - Export objects as prefabs
+- **Batch Import**: `batch_import()` - Perform multiple imports at once
+- **Import Status**: `get_import_status()` - Monitor import operation progress
+- **Export Status**: `get_export_status()` - Monitor export operation progress
+
+#### VRM Avatar Tools (Unity Integration)
+- **Import VRM to Unity**: `import_vrm_to_unity()` - Import VRM into Unity projects
+- **Unity Rigging Setup**: `setup_unity_avatar_rigging()` - Configure Unity humanoid rigging
+- **Unity Materials**: `configure_unity_materials()` - Setup Unity-specific materials
+- **Build Avatar Package**: `build_unity_avatar_package()` - Create complete Unity packages
+- **Avatar-mcp Integration**: `integrate_with_avatarmcp()` - Connect to avatar-mcp for compositing
+- **Import Status**: `get_unity_import_status()` - Monitor Unity VRM import progress
+- **Legacy VRM Import**: `import_vrm_avatar()` - Basic VRM import (delegates to avatar-mcp)
+
+*Note: These tools are currently scaffolded and return "not implemented" status. They require Unity Editor plugin development for full functionality.*
+
+### Technical Standards
+
+- **FastMCP 3.1.1++**: Latest MCP protocol implementation with security fixes
+- **Structured Logging**: JSON-formatted logs via `structlog` for production monitoring
+- **Server Lifespan**: Proper startup/shutdown lifecycle management
+- **Comprehensive Documentation**: 200+ line tool docstrings with Args/Returns/Examples
+- **Security**: CVE-2025-62801 and CVE-2025-62800 fixes applied
+
+### World Labs Integration
+
+- **Marble Import**: Import AI-generated 3D worlds from World Labs Marble
+- **Chisel Support**: Works with Chisel-edited environments
+- **Gaussian Splatting**: Install renderer for `.ply`/`.splat` files
+- **VRChat Optimization**: Recommendations for VRChat world uploads
+- **Format Support**: OBJ, FBX, GLB, GLTF meshes + Gaussian Splats
+
+### UniVRM Management
+
+- **Package Detection**: Check if UniVRM is installed
+- **Auto-Install**: Install UniVRM 0.x or 1.0 via Package Manager
+- **Project Templates**: Create projects with UniVRM pre-configured
+
+### Advanced Features
+
+- **Dual Interface**: Both stdio and HTTP interfaces
+- **FastMCP 3.1.1+**: Modern MCP server architecture
+- **Comprehensive Logging**: Structured logging with performance metrics
+- **Platform Management**: Multi-platform build and optimization
+- **Path Resolution**: Intelligent Unity installation detection
+
+## ðŸš€ Installation
+
+### Prerequisites
+- [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
+- Python 3.12+
+
+### ðŸ“¦ Quick Start
+Run immediately via `uvx`:
+```bash
+uvx unity3d-mcp
+```
+
+### ðŸŽ¯ Claude Desktop Integration
+Add to your `claude_desktop_config.json`:
+```json
+"mcpServers": {
+  "unity3d-mcp": {
+    "command": "uv",
+    "args": ["--directory", "D:/Dev/repos/unity3d-mcp", "run", "unity3d-mcp"]
+  }
+}
+```
+### From PyPI (Recommended)
+
+```bash
+pip install unity3d-mcp
+```
+
+## ðŸ“¦ Packaging & Distribution
+
+This repository is SOTA 2026 compliant and uses the officially validated `@anthropic-ai/mcpb` workflow for distribution.
+
+### Pack Extension
+To generate a `.mcpb` distribution bundle with complete source code and automated build exclusions:
+```bash
+# SOTA 2026 standard pack command
+mcpb pack . dist/unity3d-mcp.mcpb
+```
+
+### From GitHub Releases
+
+```bash
+# Direct wheel download
+pip install https://github.com/sandraschi/unity3d-mcp/releases/download/v1.2.0/unity3d_mcp-1.2.0-py3-none-any.whl
+
+# Or from git
+pip install git+https://github.com/sandraschi/unity3d-mcp.git
+```
+
+## Configuration
+
+Create a configuration file or use environment variables:
+
+```json
+{
+  "unity_editor_path": "C:/Program Files/Unity/Hub/Editor/2022.3.0f1/Editor/Unity.exe",
+  "project_path": "D:/Unity Projects",
+  "auto_detect_unity": true,
+  "enable_http": true,
+  "http_port": 8080,
+  "log_level": "INFO"
+}
+```
+
+## Usage
+
+### Command Line
+
+```bash
+# Start in stdio mode
+unity3d-mcp --mode stdio
+
+# Start HTTP server
+unity3d-mcp --mode http --port 8080
+
+# Dual mode (stdio + HTTP)
+unity3d-mcp --mode dual
+```
+
+### MCP Tools
+
+#### Core Unity Operations
+
+- `launch_unity_editor`: Launch Unity Editor with project
+- `create_unity_project`: Create new Unity project
+- `execute_unity_method`: Execute Unity Editor methods
+
+#### Avatar Management
+
+- `import_vrm_avatar`: Import VRM avatar into Unity
+- `setup_avatar_animator`: Configure animator controller
+- `optimize_for_vrchat`: Apply VRChat optimizations
+
+#### Asset Operations
+
+- `import_asset_package`: Import Unity packages
+- `optimize_textures`: Optimize textures for platforms
+- `create_material`: Create Unity materials
+
+#### Build Pipeline
+
+- `build_unity_project`: Build for target platforms
+- `switch_platform`: Switch Unity platform
+- `optimize_for_platform`: Apply platform optimizations
+
+#### VRChat Integration
+
+- `upload_vrchat_avatar`: Upload avatar to VRChat
+- `vrchat_check_auth`: Check authentication status
+- `vrchat_authenticate`: Authenticate with VRChat API
+- `vrchat_check_sdk`: Verify SDK installation
+- `vrchat_validate_avatar`: Validate avatar before upload
+- `send_avatar_parameter`: Send OSC parameters
+- `send_chatbox_message`: Send VRChat chatbox messages
+
+#### World Labs (Marble/Chisel)
+
+- `import_marble_world`: Import 3D worlds from Marble exports
+- `check_gaussian_splatting`: Check renderer installation
+- `install_gaussian_splatting`: Install Gaussian Splatting package
+- `optimize_worldlabs_for_vrchat`: Get VRChat optimization tips
+
+#### UniVRM Management
+
+- `check_univrm_installed`: Check UniVRM installation
+- `install_univrm`: Install UniVRM packages
+- `create_unity_project_with_univrm`: Create project with UniVRM
+
+## Architecture
+
+```
+unity3d_mcp/
+â”œâ”€â”€ core/           # Unity Editor automation, project management, UniVRM
+â”œâ”€â”€ avatar/         # VRM avatar management
+â”œâ”€â”€ assets/         # Asset import and optimization
+â”œâ”€â”€ build/          # Build pipeline management
+â”œâ”€â”€ vrchat/         # VRChat SDK integration + authentication
+â”œâ”€â”€ worldlabs/      # World Labs Marble/Chisel integration
+â””â”€â”€ utils/          # Shared utilities
+```
+
+## Testing
+
+```powershell
+# Run all tests
+.\scripts\run-tests.ps1
+
+# Run with coverage
+.\scripts\run-tests.ps1 -Coverage
+
+# Run E2E tests (requires Unity)
+.\scripts\run-tests.ps1 -E2E
+
+# Run specific test pattern
+.\scripts\run-tests.ps1 -Pattern "test_worldlabs"
+```
+
+## Requirements
+
+- Python 3.8+
+- Unity Editor (2019.4 LTS or newer)
+- VRChat SDK (for VRChat features)
+- Windows 10/11 (primary support)
+
+## Performance
+
+Optimized for:
+
+- VRChat avatar requirements
+- Mobile VR platforms
+- Multi-platform deployment
+- Real-time OSC communication
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+## Support
+
+- Documentation: [GitHub Wiki](https://github.com/sandraschi/unity3d-mcp/wiki)
+- Issues: [GitHub Issues](https://github.com/sandraschi/unity3d-mcp/issues)
+- Discussions: [GitHub Discussions](https://github.com/sandraschi/unity3d-mcp/discussions)
+
+
+## ðŸŒ Webapp Dashboard
+
+This MCP server includes a free, premium web interface for monitoring and control.
+By default, the web dashboard runs on port **10710**.
+*(Assigned ports: **10710** (Web dashboard), **10830** (Web dashboard frontend), **10831** (Web dashboard backend (API)))*
+
+To start the webapp:
+1. Navigate to the `webapp` (or `web`, `frontend`) directory.
+2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
+3. Open `http://localhost:10710` in your browser.
+

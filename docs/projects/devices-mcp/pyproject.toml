@@ -1,0 +1,337 @@
+[build-system]
+requires = ["setuptools>=42.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "devices-mcp"
+version = "1.18.0"  # HomeAware Motion Detection & Robust Error Handling - Zigbee mesh monitoring, circuit breakers, crash prevention
+description = "Devices MCP Platform - Universal IoT and surveillance dashboard with multi-device support (Tapo, Ring, Nest Protect, Philips Hue, Netatmo), and Claude Desktop integration"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    {name = "Devices MCP Team", email = "devices-mcp@example.com"},
+]
+maintainers = [
+    {name = "Devices MCP Maintainers", email = "devices-mcp@example.com"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Home Automation",
+    "Topic :: Multimedia :: Video :: Capture",
+    "Topic :: Security",
+    "Typing :: Typed",
+    "Framework :: FastMCP",
+]
+keywords = ["home-security", "surveillance", "mcp", "fastmcp", "tapo", "ring", "nest-protect", "webcam", "home-automation", "security-dashboard"]
+
+dependencies = [
+    # Core dependencies
+    "fastmcp>=3.1.0,<4",       # MCP 2.14.3+ stdio protocol with sampling
+    "pytapo>=3.3.54,<4.0.0",        # Tapo camera control (Updated to 3.3.x)
+    "python-kasa>=0.6.0,<0.7.0",   # TP-Link Kasa (required by pytapo, compatibility shim in src/devices_mcp/compat/)
+    "pydantic>=2.0.0,<3.0.0",      # Data validation and settings management
+    "python-dotenv>=1.0.0,<2.0.0", # Environment variable management
+    "aiohttp>=3.9.0,<4.0.0",       # Async HTTP client
+    "pillow>=10.0.0,<11.0.0",      # Image processing
+    "numpy>=1.24.0,<2.0.0",        # Image array manipulation
+    "opencv-python>=4.8.0,<5.0.0", # Computer vision and video processing
+    "ring-doorbell>=0.7.0,<1.0.0", # Ring doorbell camera support
+    "ffmpeg-python>=0.2.0,<1.0.0", # FFmpeg integration
+    "python-multipart>=0.0.6,<1.0.0", # File upload handling
+    "pyyaml>=6.0.0,<7.0.0",        # YAML config parsing
+    "aiofiles>=23.1.0,<24.0.0",    # Async file operations
+    "httpx>=0.23.0,<1.0.0",        # Async HTTP client
+    "python-jose[cryptography]>=3.3.0,<4.0.0", # JWT authentication
+    "oauthlib>=3.2.0,<4.0.0",      # OAuth authentication
+    "requests-oauthlib>=1.3.0,<2.0.0", # OAuth requests
+    "fastapi>=0.104.0,<1.0.0",     # REST API framework
+    "uvicorn[standard]>=0.24.0,<1.0.0", # ASGI server
+    "passlib[bcrypt]>=1.7.4,<2.0.0", # Password hashing
+    "email-validator>=2.0.0,<3.0.0", # Email validation
+    "tenacity>=8.0.0,<9.0.0",       # Retry logic
+    "pyserial>=3.5,<4.0.0",         # Serial port communication (Wien Energie smart meters)
+    "pyserial-asyncio>=0.6,<1.0.0", # Async serial communication (Wien Energie smart meters)
+    "psycopg2-binary>=2.9.0,<3.0.0", # PostgreSQL driver
+    "psutil>=5.9.0,<6.0.0",         # System utilities
+    "pyatmo>=8.0.0,<9.0.0",         # Netatmo weather integration
+    "onvif-zeep>=0.2.12,<1.0.0",   # ONVIF camera protocol
+    "phue>=1.1,<2.0.0",             # Philips Hue Bridge integration
+    "jinja2>=3.0.0,<4.0.0",         # Template engine for web dashboard
+    "tapo>=0.1.0,<1.0.0",           # Tapo P115 smart plug integration
+    "plexapi>=4.15.0,<5.0.0",       # Plex Media Server API integration
+    "pyrtlsdr[lib]>=0.3.0,<1.0.0",   # RTL-SDR hardware interface
+    "websockets>=12.0,<16.0.0",      # WebSocket support for real-time streaming
+    "watchfiles>=0.21.0",            # File monitoring and crashproofing
+]
+
+[project.optional-dependencies]
+# Development dependencies
+dev = [
+    # Testing
+    "pytest>=7.0.0,<8.0.0",
+    "pytest-asyncio>=0.20.0,<1.0.0",
+    "pytest-mock>=3.10.0,<4.0.0",
+    "pytest-cov>=4.0.0,<5.0.0",
+    "pytest-xdist>=3.0.0,<4.0.0",  # Parallel test execution
+    "pytest-benchmark>=4.0.0,<5.0.0",  # Performance testing
+    "pytest-html>=4.0.0,<5.0.0",   # HTML test reports
+    "pytest-sugar>=0.9.0,<1.0.0",  # Better test output
+    "respx>=0.20.0,<1.0.0",        # Mock HTTP requests
+    "asynctest>=0.13.0,<1.0.0",    # Async test utilities
+    "hypothesis>=6.0.0,<7.0.0",    # Property-based testing
+    "freezegun>=1.0.0,<2.0.0",     # Time freezing for tests
+    "pytest-aiohttp>=1.0.0,<2.0.0", # Async HTTP testing
+    "pytest-timeout>=2.0.0,<3.0.0", # Test timeouts
+    "pytest-env>=0.8.0,<1.0.0",    # Environment variables in tests
+
+    # Code quality
+    "ruff>=0.14.10,<1.0.0",              # Fast Python linter and formatter
+    "mypy>=1.0.0,<2.0.0",
+    "pylint>=2.12.0,<3.0.0",
+    "flake8>=5.0.0,<7.0.0",
+    "bandit>=1.7.0,<2.0.0",        # Security linting
+    "safety>=2.0.0,<3.0.0",        # Dependency vulnerability scanning
+    "pre-commit>=2.20.0,<3.0.0",   # Git hooks
+    "mypy-extensions>=0.4.0,<1.0.0",
+    "types-pillow>=10.0.0",
+    "types-python-dateutil>=2.8.0",
+    "types-PyYAML>=6.0.0",
+    "types-requests>=2.28.0",
+    "types-pytz>=2022.1.0",
+    "types-six>=1.16.0",
+
+    # Documentation
+    "sphinx>=5.0.0,<8.0.0",
+    "sphinx-rtd-theme>=1.0.0,<2.0.0",
+    "sphinx-autodoc-typehints>=1.0.0,<2.0.0",
+    "myst-parser>=0.18.0,<1.0.0",
+    "sphinx-copybutton>=0.5.0,<1.0.0",
+    "sphinxcontrib-mermaid>=0.8.0,<1.0.0",  # For diagrams
+    "sphinxcontrib-httpdomain>=1.8.0,<2.0.0",
+    "sphinxcontrib-httpexample>=0.1.0,<1.0.0",
+
+    # Development tools
+    "ipython>=8.0.0,<9.0.0",
+    "jupyter>=1.0.0,<2.0.0",
+    "jupyterlab>=3.0.0,<4.0.0",
+    "pdbpp>=0.10.0,<1.0.0",
+    "ipdb>=0.13.0,<1.0.0",
+    "debugpy>=1.6.0,<2.0.0",
+    "pudb>=2022.0.0,<2023.0.0",
+    "py-spy>=0.3.0,<1.0.0",  # Profiling
+    "memory-profiler>=0.60.0,<1.0.0",
+    "pyinstrument>=4.0.0,<5.0.0",
+    "snakeviz>=2.2.0,<3.0.0"
+]
+
+
+# Documentation dependencies
+docs = [
+    "sphinx>=5.0.0,<8.0.0",
+    "sphinx-rtd-theme>=1.0.0,<2.0.0",
+    "sphinx-autodoc-typehints>=1.0.0,<2.0.0",
+    "myst-parser>=0.18.0,<1.0.0",
+    "sphinx-copybutton>=0.5.0,<1.0.0",
+    "sphinxcontrib-mermaid>=0.8.0,<1.0.0",
+    "sphinxcontrib-httpdomain>=1.8.0,<2.0.0",
+    "sphinxcontrib-httpexample>=0.1.0,<1.0.0",
+    "sphinx-issues>=3.0.0,<4.0.0",
+    "sphinx-notfound-page>=0.7.0,<1.0.0"
+]
+
+# Voice/Audio capabilities - "Alexa 2" features with SOTA engines (fully offline)
+voice = [
+    # Wake word detection (Alexa-style, always-on)
+    "openwakeword>=0.6.0; python_version < '3.12'",       # SOTA wake word detection (offline)
+    # STT engines (ordered by preference)
+    "faster-whisper>=1.0.0,<2.0.0",     # SOTA STT - 4x faster than vanilla Whisper
+    "vosk>=0.3.45,<1.0.0",              # Lightweight STT fallback + wake word
+    "openai-whisper>=20231117",         # Vanilla Whisper fallback
+    # TTS engines (ordered by preference)
+    "piper-tts>=1.2.0,<2.0.0",          # SOTA local neural TTS
+    "edge-tts>=6.1.0,<8.0.0",           # Microsoft Edge TTS (needs internet)
+    "pyttsx3>=2.90,<3.0.0",             # Offline system SAPI fallback
+    # Audio I/O
+    "sounddevice>=0.4.6,<1.0.0",        # Audio recording/playback
+    "soundfile>=0.12.0,<1.0.0",         # Audio file I/O
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/devices-mcp"
+Documentation = "https://devices-mcp.readthedocs.io/"
+Changelog = "https://github.com/yourusername/devices-mcp/blob/main/CHANGELOG.md"
+"Bug Tracker" = "https://github.com/yourusername/devices-mcp/issues"
+Source = "https://github.com/yourusername/devices-mcp"
+
+[project.scripts]
+devices-mcp = "devices_mcp.cli_v2:main"
+tapo-llms = "devices_mcp.cli:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+    "N",  # pep8-naming
+    "S",  # flake8-bandit
+    "T20", # flake8-print
+    "SIM", # flake8-simplify
+    "RET", # flake8-return
+    "ARG", # flake8-unused-arguments
+    "PIE", # flake8-pie
+    "TCH", # flake8-type-checking
+    "ERA", # eradicate
+    "PD",  # pandas-vet
+    "PGH", # pygrep-hooks
+    "PL",  # pylint
+    "TRY", # tryceratops
+    "NPY", # numpy
+    "RUF", # ruff-specific rules
+]
+ignore = [
+    "E501", # line too long, handled by ruff formatter
+    "B008", # do not perform function calls in argument defaults
+    "PLR0913", # too many arguments
+    "PLR0912", # too many branches
+    "PLR0915", # too many statements
+    "PLR2004", # magic value used in comparison
+    "PLR0911", # too many return statements (often needed for error handling)
+    "S101", # use of assert detected
+    "S104", # possible binding to all interfaces (0.0.0.0 is intentional for servers)
+    "S105", # possible hardcoded password (default values, should be changed in production)
+    "S311", # standard pseudo-random generators are not suitable for cryptographic purposes
+    "S603", # subprocess call - check for execution of untrusted input
+    "S607", # starting a process with a partial executable path
+    "S102", # use of exec detected (needed for dynamic tool registration)
+    "S108", # probable insecure usage of temporary file or directory (false positives)
+    "TRY003", # avoid specifying long messages outside the exception class
+    "TRY300", # consider moving return to else block (often less readable)
+    "TRY301", # abstract raise to inner function (sometimes overly pedantic)
+    "NPY002", # replace legacy numpy.random
+    "RUF012", # mutable class attributes should be annotated with `typing.ClassVar`
+
+    "B023", # function definition does not bind loop variable (intentional closures)
+    "N806", # variable in function should be lowercase (Meta class is conventional)
+    "PLW0603", # using global statement (intentional module-level state)
+    "PLW0127", # self-assignment of variable (intentional re-export pattern)
+    "E402", # module level import not at top of file (intentional after path manipulation)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = [
+    "S101", # use of assert detected
+    "S106", # possible hardcoded password
+    "PLR2004", # magic value used in comparison
+    "ARG", # unused function argument
+    "RET504", # unnecessary assignment before return
+    "T201", # print statements (intentional for test output)
+]
+
+[tool.pylint.master]
+load-plugins = "pylint.ext.mccabe"
+
+[tool.pylint.messages_control]
+disable = [
+    # Documentation
+    "C0114",  # missing-module-docstring
+    "C0115",  # missing-class-docstring
+    "C0116",  # missing-function-docstring
+
+    # Design
+    "R0903",  # too-few-public-methods
+    "R0913",  # too-many-arguments
+    "R0902",  # too-many-instance-attributes
+    "R0912",  # too-many-branches
+    "R0914",  # too-many-locals
+    "R0915",  # too-many-statements
+    "R0911",  # too-many-return-statements
+
+    # Variables
+    "W0613",  # unused-argument
+    "W0621",  # redefined-outer-name (common in pytest fixtures)
+    "W0212",  # protected-access (needed for testing)
+
+    # Type hints
+    "C0415",  # import-outside-toplevel (sometimes needed for type checking)
+    "E1136",  # unsubscriptable-object (false positives with type hints)
+]
+
+[project.entry-points]
+"fastmcp.plugins" = { tapo_camera = "devices_mcp.plugin:register_plugin" }
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "-v --cov=devices_mcp --cov-report=term-missing"
+markers = [
+    "broken: marks tests as broken and should be skipped",
+    "integration: marks tests as integration tests (require real services)",
+    "hardware: marks tests that require hardware connectivity",
+    "connectivity: marks hardware connectivity tests",
+    "critical: marks critical functionality tests (must pass)",
+    "optional: marks optional functionality tests (can be skipped)",
+    "webapp: marks webapp-specific tests",
+    "plex: marks Plex integration tests",
+    "theme: marks theme system tests",
+    "unit: Unit tests (no external dependencies)",
+    "mock: Tests using mocks/fixtures",
+    "real: Tests using real devices/services",
+    "slow: Slow running tests",
+]
+
+[tool.coverage.run]
+source = ["devices_mcp"]
+omit = [
+    "**/tests/**",
+    "**/__main__.py",
+    "**/version.py",
+    "**/migrations/**"
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+skip_empty = true
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = ["pytapo.*", "fastmcp.*"]
+ignore_missing_imports = true

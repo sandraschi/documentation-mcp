@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Outlet, useLocation, useNavigate, NavLink } from "react-router-dom"
-import { Search as SearchIcon, Home, CircleHelp, BookOpen, Menu, Terminal, MessageSquare, Bot, Send, X as CloseIcon, LayoutGrid, Settings as SettingsIcon, FileSearch, BookMarked, Brain, Shield, Wrench } from "lucide-react"
+import { Search as SearchIcon, Home, CircleHelp, BookOpen, Menu, Terminal, MessageSquare, Bot, Send, X as CloseIcon, LayoutGrid, Settings as SettingsIcon, FileSearch, BookMarked, Brain, Shield, Wrench, FolderOpen, ScrollText } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -25,11 +25,15 @@ const navItems: NavItem[] = [
     { title: "Persistence", view: "memory", icon: Brain },
     { title: "Skills", view: "skills", icon: BookMarked },
     { title: "AI Assistant", view: "chat", icon: MessageSquare },
-    { title: "Fleet", view: "apps", icon: LayoutGrid },
+    { title: "Fleet Dashboard", view: "apps", icon: LayoutGrid },
+    { title: "Project Portfolio", view: "fleet", icon: FolderOpen },
+    { title: "System Logs", view: "logs", icon: ScrollText },
+
     { title: "Docker Desktop", view: "docker", icon: Wrench },
     { title: "Settings", view: "settings", icon: SettingsIcon },
     { title: "Help", view: "help", icon: CircleHelp },
 ]
+
 
 export function AppLayout() {
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)

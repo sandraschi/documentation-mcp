@@ -1,0 +1,150 @@
+# MCP Federation Hub
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/)
+[![Node.js](https://img.shields.io/badge/node.js-20+-green.svg)](https://nodejs.org/)
+[![FastMCP](https://img.shields.io/badge/FastMCP-3.0.2-blue.svg)](https://github.com/PrefectHQ/fastmcp)
+
+**Unified SOTA orchestration layer for MCP (Model Context Protocol) server ecosystems**
+
+The MCP Federation Hub provides a centralized way to discover, manage, and interact with multiple MCP servers. It federates existing MCP server repositories, providing unified dashboards, intelligence telemetry, and a secure playground for tool execution.
+
+## 🏗️ Architecture
+
+```
+MCP Federation Hub
+├── 📊 Unified Dashboard (React/Vite) - Port 10701
+│   ├── Apps Hub & Launcher
+│   ├── Security & Bastion Monitoring
+│   ├── Intelligence & Hardware Telemetry
+│   ├── Tools Playground
+│   └── SOTA Premium UI
+│
+├── 🔀 Federation Bridge (FastAPI/FastMCP 3.0) - Port 10700
+│   ├── Intelligent request routing
+│   ├── Standardized health monitoring
+│   ├── Sampling & orchestration
+│   └── App launching integration
+│
+└── 📦 MCPB Package Standard
+    ├── manifest.json
+    ├── mcpb.json
+    └── prompts/
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.13+ (managed by `uv`)
+- Node.js 20+
+- [uv](https://github.com/astral-sh/uv) installed
+
+### Installation
+
+```powershell
+# Clone the federation hub
+git clone https://github.com/sandraschi/mcp-federation-hub.git
+cd mcp-federation-hub
+
+# Initialize Backend (FastMCP 3.0)
+cd bridge
+uv sync
+uv run main.py
+
+# Initialize Dashboard (SOTA UI)
+cd ../webapp
+npm install
+npm run dev
+```
+
+### Access Points
+- **Unified Dashboard**: http://localhost:10701
+- **Federation API**: http://localhost:10700
+- **Redoc Documentation**: http://localhost:10700/redoc
+
+## ✨ SOTA Premium Interface
+
+The Federation Hub has been completely redesigned with a **Neon Slate** visual identity, optimized for high-performance orchestration.
+
+- **Immersive Glassmorphism**: High-contrast cards with `backdrop-blur-2xl` and subtle glow effects.
+- **Advanced Telemetry**: Real-time data visualization using `recharts` for GPU load and fleet latency.
+- **Retractable Navigation**: Sidebar with icon-only mode and smooth width transitions.
+- **Neural Audio Handshake**: Integrated **Lyria 3** synaptic audio sync via procedural Web Audio synthesis for interactive feedback.
+- **Fluid Motion**: Page-level entry/exit animations and micro-interactions via `framer-motion`.
+
+## 🛠️ Feature Suite (10-Page Suite)
+
+### 📊 Dashboard
+High-density telemetry overview focusing on the health of the entire federation.
+
+### 🚀 Apps Hub
+Real-time fleet discovery and application launcher. Directly triggers `start.bat` for registered webapps.
+
+### 🛡️ Security Command
+Comprehensive monitoring of authentication logs, threat levels, and secure bastion status.
+
+### 🎶 Neural Audio Staging
+Real-time "Lyria 3" audio synthesis engine staging interactive jingles for synaptic handshakes.
+
+### 🧠 Intelligence Hub
+Hardware-level telemetry focusing on RTX 4090 performance and LLM inference thread monitoring. Includes experimental **Nano Banana** cognitive mapping.
+
+### 🧪 Tools Lab
+Premium interactive environment to exercise MCP tools with live schema introspection and result visualization.
+
+### 🌐 Fleet Servers
+Manage and monitor federated MCP nodes across the global substrate with tunnel controls.
+
+### 🛸 Phase 5/6 Orchestration
+Escalated command level with active **FTL Data Bus** and **Mind Uploading** (84.2% neural sync).
+
+### 📋 Hub Health
+Global node health overview with resource distribution charts and uptime registries.
+
+### 🗺️ Worlds
+Immersive environment simulation hub for managing virtual orchestration spaces.
+
+## 🛠️ Project Structure
+
+```
+mcp-federation-hub/
+├── bridge/                      # Federation bridge (FastAPI + FastMCP 3.0)
+│   ├── app/                    # Application source
+│   ├── pyproject.toml          # Uv dependency management
+│   └── .env                    # Environment configuration
+│
+├── webapp/                      # Unified dashboard (React + Vite)
+│   ├── src/                    # Premium UI components & pages
+│   ├── tsconfig.json           # Path alias configuration
+│   └── tailwind.config.ts      # Premium design system
+│
+├── mcpb/                        # Standardized MCPB packaging
+│   ├── manifest.json           # Package metadata
+│   ├── mcpb.json               # Build configuration
+│   └── prompts/                # Shared prompt library
+│
+└── federation-config.json       # Authoritative server registry
+```
+
+## 🧪 Testing & Validation
+
+```bash
+# Backend Quality (Ruff)
+cd bridge
+uv run ruff check .
+
+# Frontend Build
+cd webapp
+npm run build
+```
+
+## 📚 Documentation
+- [PRD.md](PRD.md) - Product Requirements & Vision
+- [CHANGELOG.md](CHANGELOG.md) - Version history and recent upgrades
+- [AGENT_PROTOCOLS.md](file:///D:/Dev/repos/mcp-central-docs/standards/AGENT_PROTOCOLS.md) - Autoritative SOTA Protocols
+
+## 📄 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+**Federating the future of MCP ecosystems with SOTA intelligence.** 🏠🤖✨

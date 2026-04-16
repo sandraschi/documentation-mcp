@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "multi-backup-mcp"
+version = "0.3.0"
+description = "Multi-method backup MCP server - System backups, ZIP archives, and Git/GitHub integration. FastMCP 3.1+ compliant."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Sandra Schi", email = "sandra@example.com"}
+]
+requires-python = ">=3.12"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = [
+    "mcp",
+    "modelcontextprotocol",
+    "fastmcp",
+    "sota",
+    "backup",
+    "backup-tools",
+    "system-backup",
+    "archive",
+    "zip",
+    "git",
+    "github",
+    "version-control",
+]
+
+dependencies = [
+    "fastmcp>=3.1.0,<4",
+    "fastapi>=0.95.0",
+    "uvicorn>=0.21.0",
+    "pydantic>=1.10.7",
+    "python-dotenv>=1.0.0",
+    "httpx>=0.24.0",
+    "pytest>=7.3.1",
+    "pytest-asyncio>=0.21.0",
+    "ruff>=0.15.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.3.1",
+    "pytest-asyncio>=0.21.0",
+    "ruff>=0.3.0",
+    "mypy>=1.5.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/sandraschi/multi-backup-mcp"
+Repository = "https://github.com/sandraschi/multi-backup-mcp"
+Documentation = "https://github.com/sandraschi/multi-backup-mcp#readme"
+Issues = "https://github.com/sandraschi/multi-backup-mcp/issues"
+
+[project.scripts]
+multi-backup-mcp = "multi_backup_mcp.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+asyncio_mode = "auto"
+

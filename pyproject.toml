@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "documentation-mcp"
-version = "1.0.0"
+version = "1.0.1"
 description = "Public MCP Documentation Server - Federated RAG for the MCP ecosystem"
 readme = "README.md"
 license = {text = "MIT"}
@@ -43,7 +43,8 @@ dependencies = [
     "fastembed>=0.2.0",
     "lancedb>=0.4.0",
     "fastapi>=0.109.0",
-    "uvicorn>=0.27.0"
+    "uvicorn>=0.27.0",
+    "prefab-ui>=0.14.0",
 ]
 requires-python = ">=3.10"
 

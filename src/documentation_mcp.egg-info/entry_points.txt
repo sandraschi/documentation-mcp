@@ -1,0 +1,3 @@
+[console_scripts]
+docs-mcp = docs_mcp.server:main
+docs-mcp-ui = docs_mcp.starts_ui.asgi:main

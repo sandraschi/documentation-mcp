@@ -62,7 +62,7 @@ class MemoryStore(BaseVectorStore):
         if self.table_name not in self.db.list_tables():
             return []
         tbl = self.db.open_table(self.table_name)
-        query_embedding = list(self.embedding_model.embed([query]))[0]
+        query_embedding = next(iter(self.embedding_model.embed([query])))
         # Restrict to namespace; escape single quotes in namespace for safety
         safe_ns = namespace.replace("'", "''") if namespace else ""
         where_expr = f"namespace = '{safe_ns}'" if safe_ns else None

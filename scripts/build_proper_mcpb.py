@@ -92,9 +92,7 @@ def build_proper_mcpb_package():
 
     # Calculate sizes
     package_size = package_file.stat().st_size
-    prompt_size = sum(
-        f.stat().st_size for f in (mcp_server_dir / "assets" / "prompts").rglob("*") if f.is_file()
-    )
+    prompt_size = sum(f.stat().st_size for f in (mcp_server_dir / "assets" / "prompts").rglob("*") if f.is_file())
 
     print(f"✅ MCPB package built successfully: {package_file}")
     print(f"📦 Total Size: {package_size / 1024:.1f} KB")

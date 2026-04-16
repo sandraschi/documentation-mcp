@@ -1,0 +1,118 @@
+# Games Collection
+
+**150+ browser games · Japanese learning suite · AI game analysis · MCP server**
+
+A personal monorepo combining a large browser game collection with professional AI engine integration (Stockfish, KataGo, YaneuraOu) and a FastMCP-based server for AI-assisted correspondence play and analysis.
+
+---
+
+## What's in this repo
+
+| Component | Description |
+|-----------|-------------|
+| `games/` | 150+ HTML5 browser games across 8 categories |
+| `backend/` | Python servers: chess/go/shogi AI bridges, multiplayer, kanji/JLPT APIs |
+| `games-mcp/` | FastMCP server for AI-assisted game play and analysis |
+| `web_sota/` | React/Vite frontend dashboard |
+| `electron/` | Desktop packager (experimental) |
+| `docs/` | 150+ documentation files |
+
+### Game categories
+
+Arcade (Pac-Man, Galaga, Tetris, Robotron...) · Board (Chess 2D/3D, Go, Shogi, Backgammon, Xiangqi, Senet...) · Card (Bridge, Canasta, Skat, Tarock, Hanafuda...) · Casino · Strategy (Catan, Carcassonne, Risk...) · Puzzle (Sudoku variants, Crossword, Kenken, Sokoban...) · Educational · Japanese Language (JLPT, Kanji, Stroke Order, Flashcards, Karuta...)
+
+Most board and puzzle games include an `-education.html` variant with encyclopedic history, rules, and cultural context.
+
+---
+
+## Quick start (web app)
+
+```powershell
+# Start backend servers (chess AI on :10001, go on :10002, shogi on :10003)
+.\scripts\START_ALL_SERVERS.ps1
+
+# Open games in browser
+start http://localhost:8080
+```
+
+See [docs/INSTALL.md](docs/INSTALL.md) for full setup including Python dependencies.
+
+---
+
+## Quick start (MCP server)
+
+For AI-assisted correspondence play via Claude Desktop or Cursor:
+
+```powershell
+cd games-mcp
+pip install -e .
+# add to claude_desktop_config.json - see games-mcp/README.md
+```
+
+The MCP server provides tools for: new games, move recording, AI move suggestions, position analysis, tournaments, ELO ratings, puzzles, and knowledge search.
+
+→ **[games-mcp/README.md](games-mcp/README.md)** — full MCP server documentation
+
+---
+
+## AI engines
+
+| Game | Engine | Port | Strength |
+|------|--------|------|----------|
+| Chess | Stockfish 16 | 10001 | ~3500 Elo |
+| Go | KataGo | 10002 | Professional level |
+| Shogi | YaneuraOu | 10003 | World-champion level |
+
+Engines run as local HTTP servers. Philosophy: **real AI or no AI** — no JavaScript fallbacks.
+
+---
+
+## Japanese learning suite
+
+- Kanji wall (2,500 kanji, filterable by JLPT/grade/radical/stroke count)
+- 3D Kanji Cosmos (semantic relationship visualizer, Three.js)
+- JLPT practice tests (N5–N1, database-driven)
+- Vocabulary flashcards (600+ with spaced repetition)
+- Stroke order, grammar, listening, Karuta, Yojijukugo
+- Data: edict2, 33MB wakan_vocab.json, 13,108 kanji in games.db
+
+---
+
+## Documentation
+
+| Topic | Document |
+|-------|----------|
+| Installation | [docs/INSTALL.md](docs/INSTALL.md) |
+| Full doc index | [docs/README.md](docs/README.md) |
+| Web app overview | [docs/README_WEBAPP.md](docs/README_WEBAPP.md) |
+| Tech stack | [docs/TECH_STACK.md](docs/TECH_STACK.md) |
+| Tech details | [docs/TECH_DETAILS.md](docs/TECH_DETAILS.md) |
+| Roadmap | [docs/ROADMAP.md](docs/ROADMAP.md) |
+| Mobile / iPad | [docs/MOBILE_APPLE.md](docs/MOBILE_APPLE.md) |
+| Remote access | [docs/REMOTE_ACCESS_SETUP.md](docs/REMOTE_ACCESS_SETUP.md) |
+| MCP server | [games-mcp/README.md](games-mcp/README.md) |
+| AI engines | [docs/ai/](docs/ai/) |
+| Architecture | [docs/HOW_THIS_IS_BUILT.md](docs/HOW_THIS_IS_BUILT.md) |
+
+---
+
+## Tech stack
+
+- **Frontend**: Vanilla JS, HTML5 Canvas, CSS3 (no build step for games)
+- **Dashboard**: React 18, Vite, TypeScript (`web_sota/`)
+- **Backend**: Python 3.13, FastAPI, WebSockets, SQLite
+- **MCP**: FastMCP 3.1.1++ (upgrade to 3.0 pending)
+- **AI**: Stockfish, KataGo, YaneuraOu via UCI/GTP bridges
+- **Desktop**: Electron (experimental)
+
+---
+
+## Status
+
+Active development. v2.4.2 (2026-02-07). See [CHANGELOG.md](CHANGELOG.md) for release history.
+
+Known tech debt tracked in [docs/project/CLEANUP_TODO.md](docs/project/CLEANUP_TODO.md).
+
+---
+
+MIT License

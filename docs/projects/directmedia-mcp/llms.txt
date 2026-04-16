@@ -1,0 +1,13 @@
+# directmedia-mcp
+> **FastMCP 2.13+ server for accessing Directmedia Publishing "Digitale Bibliothek" - TEXT EXTRACTION WORKING!** The Directmedia Publishing "Digitale Bibliothek" was a pioneering German electronic book ...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](README.md): [![Python](https://img.shields.io/badge/Python-3.10+-green)](https://python.org)
+- [Assessment](ASSESSMENT.md): **Category**: MCP Server
+
+## Configuration
+- [Pyproject](pyproject.toml): Python project configuration and dependencies
+- [Package](web_sota\package.json): Node.js project configuration and dependencies
+- [Config](.git\config): Application configuration files

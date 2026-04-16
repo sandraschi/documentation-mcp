@@ -1,0 +1,19 @@
+# apple-test
+> iOS/iPadOS/macOS app development using Cursor IDE with Xcode 26.1 integration, focusing on Apple Intelligence applications. This project is set up for developing Apple Intelligence-powered application...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](README.md): iOS/iPadOS/macOS app development using Cursor IDE with Xcode 26.1 integration, focusing on Apple Int...
+- [Directory Setup](DIRECTORY_SETUP.md): **Windows Directory:**
+- [Github Sync Setup](GITHUB_SYNC_SETUP.md): When I say "Git sync," I mean using **GitHub** (or GitLab, etc.) as the remote repository to sync be...
+- [Setup Complete](SETUP_COMPLETE.md): - ✅ Git repository initialized
+- [Setup Status](SETUP_STATUS.md): - [x] Cursor IDE installed ✅
+- [Setup Guide](docs\setup-guide.md): This guide provides step-by-step instructions for setting up your development environment for Apple ...
+- [Setup Checklist](SETUP_CHECKLIST.md): This checklist covers all steps needed to set up your Apple development environment with Cursor IDE,...
+- [Tailscale Smb Setup](TAILSCALE_SMB_SETUP.md): This setup allows your Mac to access `D:\Dev\repos\apple-test` directly from Windows over the networ...
+- [Setup Quick Start](SETUP_QUICK_START.md): 1. ✅ Install Cursor IDE
+- [Mac Requirements](docs\mac-requirements.md): **Do you need the Mac running all the time?**
+
+## Configuration
+- [Config](.git\config): Application configuration files

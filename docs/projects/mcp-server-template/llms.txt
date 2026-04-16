@@ -1,0 +1,24 @@
+# mcp-server-template
+> A simple tool to generate FastMCP 2.10+ compliant servers with stdio transport. - Simple command-line interface - Generates fully functional MCP servers - Uses stdio transport for MCP client compatibi...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme New](README_NEW.md): A simple tool to generate FastMCP 2.10+ compliant servers with stdio transport.
+- [Readme](README.md): **🚀 Generate FastMCP 2.10+ compliant servers with stdio transport in seconds**
+- [Readme](docs\github\README.md): > **Purpose**: Comprehensive GitHub configuration guide to avoid hours of trial-and-error setup.
+- [Mcp Server Template Readme Extended](docs\MCP_SERVER_TEMPLATE_README_EXTENDED.md): **The Complete Guide to Building Production-Ready MCP Servers**
+- [Quickstart](QUICKSTART.md): - Python 3.9+
+- [Complete Setup Guide](docs\github\COMPLETE_SETUP_GUIDE.md): > **6 hours of pain distilled into 30 minutes of setup**
+- [Testing Standards](docs\standards\Testing Standards.md): ```javascript
+- [React Standards](docs\standards\React Standards.md): ```tsx
+- [Systematic Project Updates](docs\SYSTEMATIC_PROJECT_UPDATES.md): **The Challenge of Comprehensive Changes**
+- [Ring Mcp Logging Monitoring](docs\RING_MCP_LOGGING_MONITORING.md): **Complete Log Flow Documentation for ALL MCP Servers**
+
+## Configuration
+- [Pyproject](pyproject.toml): Python project configuration and dependencies
+- [](.env): Environment variables and configuration
+- [Config](.git\config): Application configuration files
+
+## Optional
+- [License](LICENSE): Project license information

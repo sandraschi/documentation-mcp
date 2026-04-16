@@ -1,0 +1,974 @@
+﻿[
+    {
+        "id":  "advanced-memory-mcp",
+        "name":  "advanced-memory-mcp",
+        "description":  "**Flagship SOTA Research Platform (v1.3.0)** - Enterprise knowledge substrate with RAG, multi-source Intel, and multi-IDE skill management.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/advanced-memory-mcp",
+        "docsPath":  "/docs/projects/advanced-memory-mcp/README.md",
+        "status":  "Gold Standard"
+    },
+    {
+        "id":  "ai-producer-hub",
+        "name":  "ai-producer-hub",
+        "description":  "**AI Music Production Engine (v2.0.0)** - Composite server for autonomous music creation, MIDI orchestration, and live streaming integration.",
+        "type":  "App",
+        "localPath":  "file:///D:/Dev/repos/ai-producer-hub",
+        "docsPath":  "/docs/projects/ai-producer-hub/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "alexa-mcp",
+        "name":  "alexa-mcp",
+        "description":  "**Acoustic bridge for Alexa control (v1.0.0)** using neural TTS (edge-tts) and local STT (Whisper) to command physical Echo devices.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/alexa-mcp",
+        "docsPath":  "/docs/projects/alexa-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "anthropic-skills",
+        "name":  "anthropic-skills",
+        "description":  "Skills are folders of instructions, scripts, and resources that Claude loads dynamically to improve performance on specialized tasks. Skills teach Claude how to complete specific tasks in a repeatable way, whether that\u0027s creating documents with your company\u0027s brand guidelines, analyzing data using your organization\u0027s specific workflows, or automating personal tasks.",
+        "type":  "Skill",
+        "localPath":  "file:///D:/Dev/repos/anthropic-skills",
+        "docsPath":  "/docs/projects/anthropic-skills/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "apple-test",
+        "name":  "apple-test",
+        "description":  "iOS/iPadOS/macOS app development using Cursor IDE with Xcode 26.1 integration, focusing on Apple Intelligence applications.",
+        "type":  "Experiment",
+        "localPath":  "file:///D:/Dev/repos/apple-test",
+        "docsPath":  "/docs/projects/apple-test/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "audiotool-nexus-mcp",
+        "name":  "audiotool-nexus-mcp",
+        "description":  "**Audiotool Cloud DAW Bridge (v0.1.0)** - Real-time musical orchestration and telemetry for Audiotool. Feature-rich SOTA dashboard on port 10900.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/audiotool-nexus-mcp",
+        "docsPath":  "/docs/projects/audiotool-nexus-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "autohotkey-mcp",
+        "name":  "autohotkey-mcp",
+        "description":  "FastMCP 3.1 AHK scriptlets: list/run/stop, running instances, sampling-first generate, prompt resources `ahk://prompts/*`, SPA Chat/Running on **10747**, API **10746**, bridge **10744**, `glama.json`, `justfile`.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/autohotkey-mcp",
+        "docsPath":  "/docs/projects/autohotkey-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "autohotkey-test",
+        "name":  "autohotkey-test",
+        "description":  "A comprehensive collection of AutoHotkey v2 scriptlets with modern web dashboard and development tools.",
+        "type":  "Experiment",
+        "localPath":  "file:///D:/Dev/repos/autohotkey-test",
+        "docsPath":  "/docs/projects/autohotkey-test/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "avatar-mcp",
+        "name":  "avatar-mcp",
+        "description":  "**Avatar Management \u0026 Social VR Hub (v1.2.0)** - State-of-the-art MCP server for VRM avatar management, Unity/VRChat integration, and real-time OSC animation with 16 consolidated portmanteau tools and a high-performance SOTA web dashboard on port 10792.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/avatar-mcp",
+        "docsPath":  "/docs/projects/avatar-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "basic-memory",
+        "name":  "basic-memory",
+        "description":  "Enhanced Version with Mermaid Diagrams \u0026 Extended Tools",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/basic-memory",
+        "docsPath":  "/docs/projects/basic-memory/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "beyondcompare-mcp",
+        "name":  "beyondcompare-mcp",
+        "description":  "Python 3.10+, MCP 3.1.1+, MIT License",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/beyondcompare-mcp",
+        "docsPath":  "/docs/projects/beyondcompare-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "blender-mcp",
+        "name":  "blender-mcp",
+        "description":  "Blender automation via MCP. Claude Desktop integration.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/blender-mcp",
+        "docsPath":  "/docs/projects/blender-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "bookmarks-mcp",
+        "name":  "bookmarks-mcp",
+        "description":  "FastMCP 3.1.1+ compliant MCP server providing a unified `bookmarks` portmanteau tool for CRUD operations, organization, sync, and AI-powered helpers.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/bookmarks-mcp",
+        "docsPath":  "/docs/projects/bookmarks-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "calibre-mcp",
+        "name":  "calibre-mcp",
+        "description":  "**Library Hub (v1.5.0)** - FastMCP 3.1.1+ server with stabilized Import Hub (arXiv, Gutenberg, Anna\u0027s Archive), semantic RAG, and location-aware FTS.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/calibre-mcp",
+        "docsPath":  "/docs/projects/calibre-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "dark-app-factory",
+        "name":  "dark-app-factory",
+        "description":  "**\"Software Factories for the Rest of Us.\"**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/dark-app-factory",
+        "docsPath":  "/docs/projects/dark-app-factory/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "database-operations-mcp",
+        "name":  "database-operations-mcp",
+        "description":  "FastMCP 3.0 MCP server for database operations on Windows, with bookmark management tools.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/database-operations-mcp",
+        "docsPath":  "/docs/projects/database-operations-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "davinci-resolve-mcp",
+        "name":  "davinci-resolve-mcp",
+        "description":  "DaVinci Resolve automation MCP (v0.2.0). FastMCP 3.1.1+.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/davinci-resolve-mcp",
+        "docsPath":  "/docs/projects/davinci-resolve-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "devices-mcp",
+        "name":  "devices-mcp",
+        "description":  "**SOTA Home Security Hub (v1.18.1)** - Unified platform for Tapo, Ring, Nest, and Netatmo devices with real-time AI vision integration.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/devices-mcp",
+        "docsPath":  "/docs/projects/devices-mcp/README.md",
+        "status":  "Gold Standard"
+    },
+    {
+        "id":  "dreame-mcp",
+        "name":  "dreame-mcp",
+        "description":  "**Dreame D20 Pro Plus (v0.2.0)** â€” DreameHome cloud; portmanteau + agentic (SEP-1577); map API `GET /api/v1/map` (JSON, `raw_b64` for fleet). Backend **10894**, dashboard **10895**. Start: `starts/dreame-start.bat`.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/dreame-mcp",
+        "docsPath":  "/docs/projects/dreame-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "directmedia-mcp",
+        "name":  "directmedia-mcp",
+        "description":  "**Digital Library Hub (v1.0.0)** - FastMCP 3.1.1+ server for text extraction from Directmedia Publishing archives.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/directmedia-mcp",
+        "docsPath":  "/docs/projects/directmedia-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "dj-media-hub",
+        "name":  "dj-media-hub",
+        "description":  "**Media Integration Suite (v1.0.0)** - Composite server mounting VirtualDJ and Plex for unlimited AI-assisted playback possibilities.",
+        "type":  "App",
+        "localPath":  "file:///D:/Dev/repos/dj-media-hub",
+        "docsPath":  "/docs/projects/dj-media-hub/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "docker-mcp",
+        "name":  "docker-mcp",
+        "description":  "**Austrian-efficient Docker Hub (v1.0.0)** - Comprehensive container management, orchestration, and logging with SOTA standards.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/docker-mcp",
+        "docsPath":  "/docs/projects/docker-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "edge-bookmark-mcp-server",
+        "name":  "edge-bookmark-mcp-server",
+        "description":  "Edge browser bookmark management via MCP.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/edge-bookmark-mcp-server",
+        "docsPath":  "/docs/projects/edge-bookmark-mcp-server/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "email-mcp",
+        "name":  "email-mcp",
+        "description":  "Multi-service email platform for MCP-compatible clients.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/email-mcp",
+        "docsPath":  "/docs/projects/email-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "fastsearch-mcp",
+        "name":  "fastsearch-mcp",
+        "description":  "Lightning-fast file search for Claude Desktop via direct NTFS Master File Table access â€” no indexing, no caching, no compromises.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/fastsearch-mcp",
+        "docsPath":  "/docs/projects/fastsearch-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "filesystem-mcp",
+        "name":  "filesystem-mcp",
+        "description":  "**SOTA File System Operations (v1.2.0)** - Comprehensive file manipulation, Git, and Docker orchestration.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/filesystem-mcp",
+        "docsPath":  "/docs/projects/filesystem-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "fullstack-builder-script",
+        "name":  "fullstack-builder-script",
+        "description":  "AI-generated PowerShell script that scaffolds a production-ready fullstack application.",
+        "type":  "Experiment",
+        "localPath":  "file:///D:/Dev/repos/fullstack-builder-script",
+        "docsPath":  "/docs/projects/fullstack-builder-script/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "fullstack-demo",
+        "name":  "fullstack-demo",
+        "description":  "A **professional fullstack application** with AI, MCP integration, and comprehensive monitoring.",
+        "type":  "Infrastructure",
+        "localPath":  "file:///D:/Dev/repos/fullstack-demo",
+        "docsPath":  "/docs/projects/fullstack-demo/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "games-app",
+        "name":  "games-app",
+        "description":  "**Playable Suite \u0026 AI-Agentic Platform**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/games-app",
+        "docsPath":  "/docs/projects/games-app/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "glance-mcp",
+        "name":  "glance-mcp",
+        "description":  "**glance-mcp (0.2.0)** â€” RSS/Atom, OPMLâ†’feeds, redirect trace, Open-Meteo, fleet probes; FastMCP 3.1; **10776**/ **10777**.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/glance-mcp",
+        "docsPath":  "/docs/projects/glance-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "gimp-mcp",
+        "name":  "gimp-mcp",
+        "description":  "**Professional GIMP orchestrator (v3.0.0)** with AI image generation and 8 portmanteau tools.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/gimp-mcp",
+        "docsPath":  "/docs/projects/gimp-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "git-github-mcp",
+        "name":  "git-github-mcp",
+        "description":  "FastMCP 3.1.1+ portmanteau server for Git and GitHub operations. Uses `gh` CLI for GitHub; avoids the 40-tool explosion.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/git-github-mcp",
+        "docsPath":  "/docs/projects/git-github-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "gtfs-mcp",
+        "name":  "gtfs-mcp",
+        "description":  "FastMCP 3.1.1+ compliant server for downloading, parsing, and serving GTFS transit data.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/gtfs-mcp",
+        "docsPath":  "/docs/projects/gtfs-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "handbrake-mcp",
+        "name":  "handbrake-mcp",
+        "description":  "**Industrial Transcoding Control Plane (v1.1.1)** - Professional video processing, batch transcode, and real-time telemetry with a SOTA v13.1 dashboard.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/handbrake-mcp",
+        "docsPath":  "/docs/projects/handbrake-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "home-assistant-mcp",
+        "name":  "home-assistant-mcp",
+        "description":  "Home Assistant integration via MCP (v0.2.0). Python 3.10+, MIT.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/home-assistant-mcp",
+        "docsPath":  "/docs/projects/home-assistant-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "hunyuan-worldplay",
+        "name":  "hunyuan-worldplay",
+        "description":  "HunyuanVideo world model experiments.",
+        "type":  "Experiment",
+        "localPath":  "file:///D:/Dev/repos/hunyuan-worldplay",
+        "docsPath":  "/docs/projects/hunyuan-worldplay/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "immich-mcp",
+        "name":  "immich-mcp",
+        "description":  "FastMCP 3.1.1+, Austrian Efficiency, Conversational AI \u0026 Sampling.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/immich-mcp",
+        "docsPath":  "/docs/projects/immich-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "inkscape-mcp",
+        "name":  "inkscape-mcp",
+        "description":  "**Vector Graphics \u0026 AI SVG Generation (v1.0.0)** with 27 core operations and extension support.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/inkscape-mcp",
+        "docsPath":  "/docs/projects/inkscape-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "kyutai-mcp",
+        "name":  "kyutai-mcp",
+        "description":  "**Voice Pipeline MCP (v0.2.0)** â€” FastMCP 3.1; Moshi speech engine; `voice_pipeline` (10 ops: turn, boilerplate, service, proxy); persona-aware WebSocket proxy; Glom-On LLM. Backend **10924**, webapp **10925**, MCP **10926**, proxy **8999**.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/kyutai-mcp",
+        "docsPath":  "/docs/projects/kyutai-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "lewm-mcp",
+        "name":  "lewm-mcp",
+        "description":  "**LeWM-MCP** â€” FastMCP 3.1 bridge to LeWorldModel (JEPA, arXiv:2603.19312): train/infer prep, agentic workflow, skills, glass webapp **10927**/**10928**; upstream [lucas-maes/le-wm](https://github.com/lucas-maes/le-wm).",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/lewm-mcp",
+        "docsPath":  "/docs/projects/lewm-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "llm-txt-mcp",
+        "name":  "llm-txt-mcp",
+        "description":  "Automated generation and management of llms.txt documentation files for AI accessibility.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/llm-txt-mcp",
+        "docsPath":  "/docs/projects/llm-txt-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "local-llm-mcp",
+        "name":  "local-llm-mcp",
+        "description":  "A **production-ready** FastMCP 3.1.1+ compliant server for comprehensive LLM management and integration with **6 working providers** and **5 SOTA portmanteau tools**.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/local-llm-mcp",
+        "docsPath":  "/docs/projects/local-llm-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "mcp-central-docs",
+        "name":  "mcp-central-docs",
+        "description":  "**Private Repository - Internal Documentation Hub** **By FlowEngineer sandraschi** **Last Updated:** 2025-12-17",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/mcp-central-docs",
+        "docsPath":  "/docs/projects/mcp-central-docs/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "mcp-federation-hub",
+        "name":  "mcp-federation-hub",
+        "description":  "80+ server orchestration hub. MIT, Python, Node.js.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/mcp-federation-hub",
+        "docsPath":  "/docs/projects/mcp-federation-hub/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "mcp-server-template",
+        "name":  "mcp-server-template",
+        "description":  "**Generate FastMCP 3.1.1+ compliant servers with stdio transport in seconds**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/mcp-server-template",
+        "docsPath":  "/docs/projects/mcp-server-template/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "mcp-studio",
+        "name":  "mcp-studio",
+        "description":  "**By FlowEngineer sandraschi**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/mcp-studio",
+        "docsPath":  "/docs/projects/mcp-studio/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "meta_mcp",
+        "name":  "meta_mcp",
+        "description":  "**MetaMCP Enterprise** â€” Tool Lab, REST tool catalog, **`meta_dev`** fleet helpers; ports **10718/10719** (see WEBAPP_PORTS).",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/meta_mcp",
+        "docsPath":  "/docs/projects/meta_mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "moltbot-mcp",
+        "name":  "moltbot-mcp",
+        "description":  "MCP server for [Moltbot](https://github.com/moltbot/moltbot) (ClawdBot) Gateway: status, health, send, agent, channels. FastMCP 3.1.1+.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/moltbot-mcp",
+        "docsPath":  "/docs/projects/moltbot-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "monitoring-mcp",
+        "name":  "monitoring-mcp",
+        "description":  "FastMCP 3.1.1+ MCP monitoring and observability server.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/monitoring-mcp",
+        "docsPath":  "/docs/projects/monitoring-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "multi-backup-mcp",
+        "name":  "multi-backup-mcp",
+        "description":  "**Professional backup orchestrator** with Hasleo CLI integration, native repository archival (SOTA pruning), and high-impact Nuclear Backup capabilities.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/multi-backup-mcp",
+        "docsPath":  "/docs/projects/multi-backup-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "myai",
+        "name":  "myai",
+        "description":  "**By FlowEngineer sandraschi**",
+        "type":  "Infrastructure",
+        "localPath":  "file:///D:/Dev/repos/myai",
+        "docsPath":  "/docs/projects/myai/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "myhomeserver",
+        "name":  "myhomeserver",
+        "description":  "A modern, beautiful home automation dashboard built with React, Tailwind CSS, and MCP (Model Context Protocol) integration.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/myhomeserver",
+        "docsPath":  "/docs/projects/myhomeserver/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "myscripts",
+        "name":  "myscripts",
+        "description":  "This repository contains a collection of personal PowerShell scripts.",
+        "type":  "Experiment",
+        "localPath":  "file:///D:/Dev/repos/myscripts",
+        "docsPath":  "/docs/projects/myscripts/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "myvrworlds",
+        "name":  "myvrworlds",
+        "description":  "Beautiful React Tailwind VR Worlds Control Center integrating Avatar MCP, Blender MCP, VRChat MCP, Resonite MCP, OSC MCP, Unity3D MCP with ikubaysan dual-STT AI chatbot architecture.",
+        "type":  "App",
+        "localPath":  "file:///D:/Dev/repos/myvrworlds",
+        "docsPath":  "/docs/projects/myvrworlds/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "mywienerlinien",
+        "name":  "mywienerlinien",
+        "description":  "**Vienna Transit Hub (v2.0.1)** - Live map (port 3079), wienerlinien MCP server (Claude Desktop registered), Webapp dashboard (port 10896). GTFS DB + OGD Realtime V1.4.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/mywienerlinien",
+        "docsPath":  "/docs/projects/mywienerlinien/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "neos-gpt",
+        "name":  "neos-gpt",
+        "description":  "Server to facilitate consumption of the OpenAI API from NeosVR, without exposing API keys in Logix.",
+        "type":  "Experiment",
+        "localPath":  "file:///D:/Dev/repos/neos-gpt",
+        "docsPath":  "/docs/projects/neos-gpt/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "nest-protect-mcp",
+        "name":  "nest-protect-mcp",
+        "description":  "Nest Protect integration via MCP. Python 3.10+, MIT.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/nest-protect-mcp",
+        "docsPath":  "/docs/projects/nest-protect-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "netatmo-weather-mcp",
+        "name":  "netatmo-weather-mcp",
+        "description":  "FastMCP 3.1.1+ Netatmo weather station integration. Python 3.10+, MIT.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/netatmo-weather-mcp",
+        "docsPath":  "/docs/projects/netatmo-weather-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "notepadpp-mcp",
+        "name":  "notepadpp-mcp",
+        "description":  "Notepad++ automation via MCP. FastMCP 3.1.1+, CI/CD pipeline.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/notepadpp-mcp",
+        "docsPath":  "/docs/projects/notepadpp-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "notion-mcp",
+        "name":  "notion-mcp",
+        "description":  "**FastMCP 3.1.1+ Implementation with Austrian Efficiency**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/notion-mcp",
+        "docsPath":  "/docs/projects/notion-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "obs-mcp",
+        "name":  "obs-mcp",
+        "description":  "OBS Studio automation via MCP. FastMCP 3.1.1+. MIT.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/obs-mcp",
+        "docsPath":  "/docs/projects/obs-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "observability-mcp",
+        "name":  "observability-mcp",
+        "description":  "**FastMCP 3.1.1+-powered observability server for monitoring MCP ecosystems**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/observability-mcp",
+        "docsPath":  "/docs/projects/observability-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "obsidian-mcp",
+        "name":  "obsidian-mcp",
+        "description":  "**FastMCP 3.1.1+ server for Obsidian vault knowledge management**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/obsidian-mcp",
+        "docsPath":  "/docs/projects/obsidian-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "ocr-mcp",
+        "name":  "ocr-mcp",
+        "description":  "**FastMCP 3.1** â€” Document OCR with sampling, agentic workflow (SEP-1577), prompts, skills resource; 10+ backends; WIA scanner (Windows).",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/ocr-mcp",
+        "docsPath":  "/docs/projects/ocr-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "onenote-mcp",
+        "name":  "onenote-mcp",
+        "description":  "MCP server for Microsoft OneNote interaction via AI language models.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/onenote-mcp",
+        "docsPath":  "/docs/projects/onenote-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "openclaude-mcp",
+        "name":  "openclaude-mcp",
+        "description":  "**OpenClaude Control Plane (v0.1.1)** â€” Hardened FastMCP 3.2 server for the 2026 Claude Code harness. **v2 Industrial Hardening**: self-healing `start.ps1`, stable shell invocation, and universal interface binding. Zero token cost local inference (Ollama). Backend **10932**, webapp **10933**.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/openclaude-mcp",
+        "docsPath":  "/docs/projects/openclaude-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "openclaw",
+        "name":  "openclaw",
+        "description":  "No description available.",
+        "type":  "Experiment",
+        "localPath":  "file:///D:/Dev/repos/openclaw",
+        "docsPath":  "/docs/projects/openclaw/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "openclaw-molt-mcp",
+        "name":  "openclaw-molt-mcp",
+        "description":  "OpenClaw ecosystem MCP integration. FastMCP 3.1.1+. Alpha.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/openclaw-molt-mcp",
+        "docsPath":  "/docs/projects/openclaw-molt-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "osc-mcp",
+        "name":  "osc-mcp",
+        "description":  "**By FlowEngineer sandraschi**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/osc-mcp",
+        "docsPath":  "/docs/projects/osc-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "pinokio-mcp",
+        "name":  "pinokio-mcp",
+        "description":  "Pinokio app manager automation via MCP. FastMCP 3.1.1+, Python 3.11+, MIT.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/pinokio-mcp",
+        "docsPath":  "/docs/projects/pinokio-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "plex-mcp",
+        "name":  "plex-mcp",
+        "description":  "**Deep Media RAG \u0026 Repair Hub (v2.4.0)** - Industrial-grade recursive indexing (TV/Music), Alsergrund Industrial dashboard, and real-time telemetry.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/plex-mcp",
+        "docsPath":  "/docs/projects/plex-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "pywinauto-mcp",
+        "name":  "pywinauto-mcp",
+        "description":  "**Version 0.3.1**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/pywinauto-mcp",
+        "docsPath":  "/docs/projects/pywinauto-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "qbt-mcp",
+        "name":  "qbt-mcp",
+        "description":  "qBittorrent management via MCP. FastMCP 3.1.1+, Python 3.10+, MIT.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/qbt-mcp",
+        "docsPath":  "/docs/projects/qbt-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "readly-mcp",
+        "name":  "readly-mcp",
+        "description":  "A specialized MCP server for automating reading and scraping tasks on the Readly web platform (`go.readly.com`).",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/readly-mcp",
+        "docsPath":  "/docs/projects/readly-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "reaper-mcp",
+        "name":  "reaper-mcp",
+        "description":  "Reaper DAW automation via MCP. FastMCP 3.1.1+, portmanteau tools.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/reaper-mcp",
+        "docsPath":  "/docs/projects/reaper-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "repomix-mcp",
+        "name":  "repomix-mcp",
+        "description":  "**Pack repositories into AI-friendly formats for comprehensive codebase analysis**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/repomix-mcp",
+        "docsPath":  "/docs/projects/repomix-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "resolume-mcp",
+        "name":  "resolume-mcp",
+        "description":  "**MCP server for Resolume Arena VJ software control and automation - Live video mixing from natural language commands**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/resolume-mcp",
+        "docsPath":  "/docs/projects/resolume-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "resonite-mcp",
+        "name":  "resonite-mcp",
+        "description":  "**FastMCP 3.1.1+ compliant server for natural language control of Resonite social VR platform.**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/resonite-mcp",
+        "docsPath":  "/docs/projects/resonite-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "reversing-mcp",
+        "name":  "reversing-mcp",
+        "description":  "Ghidra-based AI-assisted reverse engineering MCP. FastMCP 3.1.1+, bethington/ghidra-mcp integration.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/reversing-mcp",
+        "docsPath":  "/docs/projects/reversing-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "robofang",
+        "name":  "robofang",
+        "description":  "Fleet supervisor and modular agentic node controller. Hub 10870, bridge 10871, supervisor 10872. Start: start_all.ps1 or start.bat.",
+        "type":  "Infrastructure",
+        "localPath":  "file:///D:/Dev/repos/robofang",
+        "docsPath":  "/docs/projects/robofang/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "ring-mcp",
+        "name":  "ring-mcp",
+        "description":  "**Universal Ring Security Ecosystem Control** - FastMCP 3.1.1+ server for comprehensive Ring device management including doorbells, security cameras, and alarm systems with Austrian precision.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/ring-mcp",
+        "docsPath":  "/docs/projects/ring-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "robotics-mcp",
+        "name":  "robotics-mcp",
+        "description":  "**By FlowEngineer sandraschi**",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/robotics-mcp",
+        "docsPath":  "/docs/projects/robotics-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "robotics-webapp-original",
+        "name":  "robotics-webapp-original",
+        "description":  "PRODUCTION-READY Modern React webapp with enterprise crash protection for controlling physical and virtual robots.",
+        "type":  "App",
+        "localPath":  "file:///D:/Dev/repos/robotics-webapp-original",
+        "docsPath":  "/docs/projects/robotics-webapp-original/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "Rube",
+        "name":  "Rube",
+        "description":  "[Rube](https://rube.app) is a **Model-Context-Protocol (MCP) server** built on the Composio integration platform. 500+ business app integrations.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/Rube",
+        "docsPath":  "/docs/projects/Rube/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "rustdesk-mcp",
+        "name":  "rustdesk-mcp",
+        "description":  "RustDesk remote desktop control via MCP. MIT, Python 3.8+.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/rustdesk-mcp",
+        "docsPath":  "/docs/projects/rustdesk-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "songgeneration-mcp",
+        "name":  "songgeneration-mcp",
+        "description":  "SongGeneration v2 (LeVo 2 / SG2): local open-weight music LM via SongGeneration-Studio; dual-track output.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/songgeneration-mcp",
+        "docsPath":  "/docs/projects/songgeneration-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "suno-mcp",
+        "name":  "suno-mcp",
+        "description":  "Working Suno AI music generation integration via MCP.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/suno-mcp",
+        "docsPath":  "/docs/projects/suno-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "system-admin-mcp",
+        "name":  "system-admin-mcp",
+        "description":  "Windows system administration via MCP. Python 3.8+, MIT.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/system-admin-mcp",
+        "docsPath":  "/docs/projects/system-admin-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "tailscale-mcp",
+        "name":  "tailscale-mcp",
+        "description":  "FastMCP **3.1+**, Tailscale Admin API; **Webapp** **10820/10821**; Partner tailnets; **v2.0.2**.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/tailscale-mcp",
+        "docsPath":  "/docs/projects/tailscale-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "tasshack_dreame_vacuum_ref",
+        "name":  "tasshack_dreame_vacuum_ref",
+        "description":  "Complete app replacement with Home Assistant for Dreame robot vacuums.",
+        "type":  "Experiment",
+        "localPath":  "file:///D:/Dev/repos/tasshack_dreame_vacuum_ref",
+        "docsPath":  "/docs/projects/tasshack_dreame_vacuum_ref/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "unitree-robotics",
+        "name":  "unitree-robotics",
+        "description":  "**Vienna-based open-source robotics project for Unitree humanoid robots**",
+        "type":  "App",
+        "localPath":  "file:///D:/Dev/repos/unitree-robotics",
+        "docsPath":  "/docs/projects/unitree-robotics/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "unity3d-mcp",
+        "name":  "unity3d-mcp",
+        "description":  "**FastMCP 3.1.1+ Compliant** - Comprehensive Unity 3D automation with VRM avatar pipeline and VRChat integration.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/unity3d-mcp",
+        "docsPath":  "/docs/projects/unity3d-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "universal-actuator-mcp",
+        "name":  "universal-actuator-mcp",
+        "description":  "**Federation Gateway (v1.1.0)** - Central discovery and routing hub for the RoboFang fleet. Managed search, telemetry, and milestone tracking across Plex, Calibre, and Immich.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/universal-actuator-mcp",
+        "docsPath":  "/docs/projects/universal-actuator-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "veogen",
+        "name":  "veogen",
+        "description":  "PRODUCTION READY - VeoGen AI-powered video generation platform with full observability. Google Veo AI + Movie Maker capabilities.",
+        "type":  "Infrastructure",
+        "localPath":  "file:///D:/Dev/repos/veogen",
+        "docsPath":  "/docs/projects/veogen/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "vienna-life-assistant",
+        "name":  "vienna-life-assistant",
+        "description":  "Vienna life assistant with AI integration. Python 3.11+, React 18+. Beta.",
+        "type":  "Infrastructure",
+        "localPath":  "file:///D:/Dev/repos/vienna-life-assistant",
+        "docsPath":  "/docs/projects/vienna-life-assistant/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "vienna-live-mcp",
+        "name":  "vienna-live-mcp",
+        "description":  "Vienna live data integration via MCP. FastMCP 3.1.1+, Python 3.11+. Beta.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/vienna-live-mcp",
+        "docsPath":  "/docs/projects/vienna-live-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "virtualdj-mcp",
+        "name":  "virtualdj-mcp",
+        "description":  "**Professional DJ Orchestrator (v1.0.0)** - VirtualDJ automation with 12 portmanteau tools and Austrian-efficient mixing logic.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/virtualdj-mcp",
+        "docsPath":  "/docs/projects/virtualdj-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "virtualization-mcp",
+        "name":  "virtualization-mcp",
+        "description":  "**Enterprise VM Management (v1.2.0)** - FastMCP 3.1 with prompts, skills, Context, and sampling. Web dashboard (10700/10701) with Prompts \u0026 Skills page. VirtualBox \u0026 Hyper-V, 60+ operations.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/virtualization-mcp",
+        "docsPath":  "/docs/projects/virtualization-mcp/README.md",
+        "status":  "Gold Standard"
+    },
+    {
+        "id":  "vr-ai-chatbot",
+        "name":  "vr-ai-chatbot",
+        "description":  "VR AI chatbot with VB-CABLE audio bridge.",
+        "type":  "Experiment",
+        "localPath":  "file:///D:/Dev/repos/vr-ai-chatbot",
+        "docsPath":  "/docs/projects/vr-ai-chatbot/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "vrchat-mcp",
+        "name":  "vrchat-mcp",
+        "description":  "**FastMCP VRChat Controller (v3.1.1+.0+)** - Real-time OSC control for avatars and assets.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/vrchat-mcp",
+        "docsPath":  "/docs/projects/vrchat-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "vroidstudio-mcp",
+        "name":  "vroidstudio-mcp",
+        "description":  "ALPHA STATUS â€” FastMCP 3.1.1+ SOTA Compliant Server for VRoid Studio Automation",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/vroidstudio-mcp",
+        "docsPath":  "/docs/projects/vroidstudio-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "wan-video",
+        "name":  "wan-video",
+        "description":  "Wan video generation experiments.",
+        "type":  "Experiment",
+        "localPath":  "file:///D:/Dev/repos/wan-video",
+        "docsPath":  "/docs/projects/wan-video/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "web-development-mcp",
+        "name":  "web-development-mcp",
+        "description":  "Web development automation via MCP. FastMCP 3.1.1+.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/web-development-mcp",
+        "docsPath":  "/docs/projects/web-development-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "windows-operations-mcp",
+        "name":  "windows-operations-mcp",
+        "description":  "**Windows Systems SOTA (v0.2.0)** - Service management, Event Logs, and Performance Monitoring.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/windows-operations-mcp",
+        "docsPath":  "/docs/projects/windows-operations-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "worldlabs-mcp",
+        "name":  "worldlabs-mcp",
+        "description":  "**World Labs Marble API (v0.3.0)** â€” 12-tool server (text/image/video/multi-image â†’ navigable 3D Gaussian splat worlds). `worldlabs_help` tool (quick/standard/verbose). Full live test scaffold: magic shop, Fallingwater Ã—2, Victorian conservatory, Soviet station. Webapp port 10864 / bridge 10865.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/worldlabs-mcp",
+        "docsPath":  "/docs/projects/worldlabs-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "winrar-mcp",
+        "name":  "winrar-mcp",
+        "description":  "**WinRAR Archive Hub (v0.3.1)** â€” Hardened FastMCP 3.1 orchestrator with modular testing scaffold (`pytest`/`just test`) and RUF006 async safety. SOTA webapp: Repo Archiver (gitignoreâ†’exclusions), Archive Browser, Compression Lab, Jobs. Backend **10762**, frontend **10763**.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/winrar-mcp",
+        "docsPath":  "/docs/projects/winrar-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "xkcd-mcp",
+        "name":  "xkcd-mcp",
+        "description":  "**xkcd (v0.2.0)** â€” official JSON API: `xkcd_latest`, `xkcd_get`, `xkcd_random`, `xkcd_help`; **FastMCP 3.1 Prefab UI**; **10778** / **10779**; no scraping.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/xkcd-mcp",
+        "docsPath":  "/docs/projects/xkcd-mcp/README.md",
+        "status":  "Active"
+    },
+    {
+        "id":  "yahboom-mcp",
+        "name":  "yahboom-mcp",
+        "description":  "**FastMCP 3.1** Yahboom Raspbot v2 ROS 2: portmanteau `yahboom`, `lidar`, `yahboom_agentic_workflow` (SEP-1577 sampling), prompts, skills \u0026 scripts. Dashboard 10892/10893.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/yahboom-mcp",
+        "docsPath":  "/docs/projects/yahboom-mcp/README.md",
+        "status":  "Active"
+    }
+]

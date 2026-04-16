@@ -1,0 +1,169 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.4.0] - 2026-04-09
+
+### Added
+- **Industrial RAG**: Implemented deep-indexing for TV shows (episodes) and music (albums) with recursive library traversal.
+- **Contextual Enrichment**: Content strings now include grandparent (Show/Artist) and parent (Season/Series) metadata for high-fidelity semantic search.
+- **Media Repair Hub**: New premium dashboard for library health, real-time sync telemetry, and maintenance control.
+- **Industrial Dashboard**: "Alsergrund Industrial" design system implemented for the RAG Management and Repair UI.
+- **Enhanced Telemetry**: Real-time progress logs and vector store statistics (row counts) exposed via backend and UI.
+- **Webapp (reservoir 10740/10741)**: Full browser UI with FastAPI backend and Next.js 15 frontend
+  - **Glassmorphism UI**: Backdrop-blur panels, retractable sidebar, topbar
+  - **Logger modal**: Tail of webapp log with level/filter (topbar)
+  - **Help modal**: Tiered help content (basic/intermediate/advanced/expert)
+  - **Local LLM stack**: Ollama/LM Studio/OpenAI-compatible chat (LLM_BASE_URL, LLM_API_KEY)
+  - **Advanced chat**: Personalities, prompt refining via LLM, chat export (MD/JSON)
+  - **Light RAG**: GET /api/rag/context for Plex search context injection
+  - **AI workflows**: POST /api/workflows/run (e.g. search_and_summarize)
+  - **Semantic search**: Keyword search + RAG context for chat
+  - **Movies page**: Pagination (page/limit in URL, offset to backend), card/list view toggle (persisted in localStorage)
+  - **Settings page**: Plex API key and URL, LLM provider (ollama/lmstudio/openai), base URL, API key, default model (from /api/llm/models); persisted via GET/PATCH /api/system/settings and backend data/settings.json (file overrides .env at runtime)
+  - **Start**: webapp/start.ps1 and start.bat; see webapp/SETUP.md
+- **Port reservoir**: Backend 10740, frontend 10741 (mcp-central-docs WEBAPP_PORTS.md)
+
+### Changed
+- **FastMCP 3.2+ Upgrade**: Updated FastMCP dependency from 3.1.0 to 3.2.0 for universal connect pattern support
+- **Documentation**: Updated FastMCP version references throughout README and documentation
+- **Compatibility**: Enhanced support for simultaneous stdio + HTTP access patterns
+
+### Status
+- **Project Status**: ALPHA - Active development, some features incomplete
+- **Known Issues**: Playback control (`plex play`, `plex pause`) is non-functional for ALL clients
+  - GDM clients (PlexAmp): Discoverable but playback commands fail
+  - Non-GDM clients (Plex Web, Plex for Windows): Not controllable via tested API endpoints
+- **See**: [STATUS_2026-01-08.md](STATUS_2026-01-08.md) for detailed status
+
+### Changed
+- Updated project status to ALPHA in README
+- Added alpha status badge and warning notice
+- Next.js frontend pinned to 15.2.0 (webpack dev); turbopack.root set for Next 16 compatibility
+- Backend config loads .env from webapp/backend path (not cwd) so token is found when started from any directory
+- Backend data/ and settings.json in .gitignore (secrets not committed)
+
+### Fixed
+- Client discovery now finds all client types (PlexAmp, Plex Web, Plex for Windows)
+- Multi-source client discovery implementation
+
+### Known Limitations
+- Playback control (`plex play`, `plex pause`) fails for ALL clients
+- GDM clients (PlexAmp): Discoverable via GDM but `plexapi_client.playMedia()` calls fail
+- Non-GDM clients (Plex Web, Plex for Windows): Not controllable via tested API endpoints
+- Server API endpoints tested don't work for any client type
+- Root cause may be API endpoint parameters, authentication, or client state requirements
+
+## [2.1.0] - 2025-11-22
+
+### Added
+- **Portmanteau Tool Architecture**: Complete refactoring from 52+ individual tools to 15 comprehensive portmanteau tools
+- **15 Portmanteau Tools**: Consolidated related operations into unified interfaces
+  - `plex_library` - Library management (12 operations)
+  - `plex_media` - Media operations (5 operations)
+  - `plex_user` - User management (6 operations)
+  - `plex_playlist` - Playlist management (8 operations)
+  - `plex_streaming` - Playback control (10 operations)
+  - `plex_performance` - Performance & quality (13 operations)
+  - `plex_metadata` - Metadata management (7 operations)
+  - `plex_organization` - Library organization (5 operations)
+  - `plex_server` - Server management (6 operations)
+  - `plex_integration` - Third-party integrations (6 operations)
+  - `plex_search` - Advanced search (5 operations)
+  - `plex_reporting` - Analytics & reports (6 operations)
+  - `plex_collections` - Collections management (7 operations)
+  - `plex_quality` - Quality profiles (6 operations)
+  - `plex_help` - Help & discovery (4 operations)
+- **FastMCP 3.1.1++ Compliance**: All tools use Literal types for operation parameters
+- **Comprehensive Docstrings**: Standardized docstrings with PORTMANTEAU PATTERN RATIONALE sections
+- **Structured Error Handling**: AI-friendly error responses with suggestions
+
+### Changed
+- **Tool Count**: Reduced from 52+ individual tools to 15 portmanteau tools (71% reduction)
+- **Tool Registration**: Only portmanteau tools are now loaded by default
+- **Server Architecture**: Simplified tool imports in `server.py`
+- **Documentation**: Updated README and documentation to reflect portmanteau architecture
+
+### Deprecated
+- **Old Individual Tools**: All individual tool files (`tools/library.py`, `tools/media.py`, etc.) are deprecated
+- **API Tools**: `api/vienna.py` tools are deprecated in favor of `plex_integration`
+
+### Fixed
+- **Tool Registration**: Fixed import issues preventing tools from being registered
+- **FastMCP Compliance**: Removed `**kwargs` from tool signatures (not supported by FastMCP)
+- **Error Messages**: Improved error handling with structured responses
+
+### Technical Details
+- **FastMCP Version**: 3.1.1++ with Literal type support
+- **Total Operations**: 106+ operations consolidated into 15 tools
+- **Backward Compatibility**: Old tools remain in codebase but are not loaded by default
+
+## [2.0.0] - 2025-10-10
+
+### Added
+- **MCPB Packaging**: Complete MCPB (MCP Bundle) implementation for one-click Claude Desktop installation
+- **23 Powerful Tools**: Comprehensive Plex Media Server integration with 23 tools across 6 categories
+- **User Configuration**: Interactive setup prompts for Plex URL and authentication token
+- **Professional Documentation**: Complete documentation suite with 21 files and 400+ pages
+- **GLAMA Integration**: Gold Status certification with 85/100 quality score
+- **CI/CD Pipeline**: Automated testing, building, and publishing workflows
+- **Plugin Ecosystem**: Support for 1,400+ Notepad++ plugins (adapted for PlexMCP)
+- **Vienna AI Features**: European content discovery and anime season information
+- **Advanced Error Handling**: Enterprise-grade error management and logging
+
+### Changed
+- **Framework Upgrade**: Migrated from DXT to MCPB packaging format
+- **Tool Count**: Increased from 20 to 23 tools (+15% improvement)
+- **Documentation**: Enhanced from basic to professional level (21 files vs 17)
+- **Quality Score**: Achieved Gold Status (85/100) on GLAMA.ai platform
+- **Testing**: Expanded test suite with comprehensive coverage
+
+### Fixed
+- **Import Issues**: Resolved plexapi dependency and module loading problems
+- **Build Process**: Fixed MCPB CLI integration and packaging workflow
+- **Configuration**: Improved environment variable handling and settings validation
+- **Logging**: Implemented structured logging throughout the application
+
+### Technical Details
+- **Python Version**: >=3.10.0 (tested on 3.10-3.13)
+- **FastMCP**: >=3.1.1+.0 with MCP 3.1.1+.0 compliance
+- **PlexAPI**: >=4.15.0 for Plex Media Server integration
+- **Platforms**: Windows, Linux, macOS support
+- **Package Size**: 5.0 MB (optimized for distribution)
+
+## [1.0.0] - 2025-09-15
+
+### Added
+- Initial Plex Media Server MCP integration
+- Basic media library browsing and search functionality
+- User management and permissions handling
+- Playlist creation and management
+- Playback control for connected clients
+- Server health monitoring and maintenance tools
+
+### Technical Details
+- **Framework**: FastMCP 2.0
+- **Protocol**: MCP 2.0 stdio
+- **Tools**: 20 core tools
+- **Documentation**: Basic setup and usage guides
+
+---
+
+## Types of changes
+- `Added` for new features
+- `Changed` for changes in existing functionality
+- `Deprecated` for soon-to-be removed features
+- `Removed` for now removed features
+- `Fixed` for any bug fixes
+- `Security` in case of vulnerabilities
+
+## Contributing
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## Version History
+- **2.0.0**: Production-ready with MCPB packaging and GLAMA Gold Status
+- **1.0.0**: Initial release with basic Plex Media Server integration
+

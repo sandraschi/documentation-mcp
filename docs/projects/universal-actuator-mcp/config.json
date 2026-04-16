@@ -1,0 +1,176 @@
+{
+    "servers": {
+        "files": {
+            "command": "python",
+            "args": [
+                "-m",
+                "filesystem_mcp"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/filesystem-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/filesystem-mcp",
+            "mappings": {
+                "read_file": "file_ops",
+                "write_file": "file_ops",
+                "edit_file": "file_ops",
+                "file_exists": "file_ops",
+                "get_file_info": "file_ops",
+                "list_directory": "dir_ops",
+                "create_directory": "dir_ops",
+                "remove_directory": "dir_ops",
+                "grep_file": "search_ops",
+                "search_files": "search_ops"
+            }
+        },
+        "system": {
+            "command": "python",
+            "args": [
+                "-m",
+                "windows_operations_mcp.server"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/windows-operations-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/windows-operations-mcp"
+        },
+        "browser": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-playwright"
+            ],
+            "githubUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/playwright"
+        },
+        "blender": {
+            "command": "python",
+            "args": [
+                "-m",
+                "blender_mcp.server"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/blender-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/blender-mcp"
+        },
+        "gimp": {
+            "command": "python",
+            "args": [
+                "-m",
+                "gimp_mcp.server"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/gimp-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/gimp-mcp"
+        },
+        "inkscape": {
+            "command": "python",
+            "args": [
+                "-m",
+                "inkscape_mcp.server"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/inkscape-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/inkscape-mcp"
+        },
+        "knowledge": {
+            "command": "python",
+            "args": [
+                "-m",
+                "advanced_memory.mcp.server"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/advanced-memory-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/advanced-memory-mcp"
+        },
+        "infrastructure": {
+            "command": "python",
+            "args": [
+                "-m",
+                "virtualization_mcp.all_tools_server"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/virtualization-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/virtualization-mcp"
+        },
+        "devices": {
+            "command": "python",
+            "args": [
+                "-m",
+                "devices_mcp.server"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/devices-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/devices-mcp"
+        },
+        "plex": {
+            "command": "python",
+            "args": [
+                "-m",
+                "plex_mcp.server"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/plex-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/plex-mcp"
+        },
+        "calibre": {
+            "command": "python",
+            "args": [
+                "-m",
+                "calibre_mcp.server"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/calibre-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/calibre-mcp"
+        },
+        "robotics": {
+            "command": "python",
+            "args": [
+                "-m",
+                "robotics_mcp.server"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/robotics-mcp/src;D:/Dev/repos/osc-mcp/src;D:/Dev/repos/unity3d-mcp/src;D:/Dev/repos/vrchat-mcp/src;D:/Dev/repos/avatar-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/robotics-mcp"
+        },
+        "meta": {
+            "command": "python",
+            "args": [
+                "-m",
+                "meta_mcp.main"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/meta_mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/meta-mcp"
+        },
+        "immich": {
+            "command": "python",
+            "args": [
+                "-m",
+                "immich_mcp.server"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/immich-mcp/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/immich-mcp"
+        },
+        "consumption": {
+            "command": "python",
+            "args": [
+                "D:/Dev/repos/universal-actuator-mcp/consumption_router.py"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/calibre-mcp/src;D:/Dev/repos/plex-mcp/src;D:/Dev/repos/immich-mcp/src"
+            }
+        }
+    }
+}

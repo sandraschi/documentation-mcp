@@ -83,6 +83,58 @@ export function ChatView() {
         }
     }, [messages])
 
+    // Handle initial query from URL
+    React.useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+        const query = params.get('q')
+        if (query && messages.length === 1 && messages[0].role === 'assistant') {
+            setInput(query)
+            // We'll trigger handleSend manually or just set the input
+            // For a better UX, we'll actually trigger it
+            const triggerSend = async () => {
+                // Wait a tiny bit for the component to be ready
+                await new Promise(r => setTimeout(r, 100))
+                handleSendWithQuery(query)
+            }
+            triggerSend()
+            // Clear the query from URL without refreshing
+            window.history.replaceState({}, '', window.location.pathname)
+        }
+    }, [])
+
+    const handleSendWithQuery = async (queryText: string) => {
+        if (loading) return
+
+        const userMessage = queryText.trim()
+        setMessages(prev => [...prev, { role: 'user', content: userMessage }])
+        setLoading(true)
+
+        try {
+            const body: Record<string, string> = { message: userMessage }
+            if (persona !== 'default') body.persona = persona
+
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            })
+            if (!res.ok) throw new Error("Synthesis failed")
+            const data = await res.json()
+
+            const assistantMessage: Message = {
+                role: 'assistant',
+                content: data.answer,
+                sources: data.sources
+            }
+
+            setMessages(prev => [...prev, assistantMessage])
+        } catch (error) {
+            setMessages(prev => [...prev, { role: 'assistant', content: "I'm sorry, I encountered an error while synthesizing your answer." }])
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <div className="flex-1 flex flex-col min-h-0 container max-w-5xl mx-auto py-4 md:py-6 px-4 md:px-6">
             <div className="mb-4 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-card/30 backdrop-blur-md p-4 rounded-xl border border-primary/10">

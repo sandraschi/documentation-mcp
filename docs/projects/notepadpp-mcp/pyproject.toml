@@ -1,0 +1,153 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "notepadpp-mcp"
+version = "0.1.0"
+description = "MCP Server for Notepad++ automation and control"
+authors = [
+    {name = "Sandra", email = "sandra@example.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Editors",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = ["notepad++", "mcp", "automation", "text-editor", "windows", "fastmcp"]
+dependencies = [
+    "fastmcp>=3.1.0,<4",
+    "psutil>=5.9.0",
+    "pywin32==311 ; sys_platform == 'win32'",
+    "requests>=2.31.0",
+    "structlog>=23.0.0",
+    "pydantic>=2.0.0",
+    "mcp>=1.0.0,<2.0.0",
+    "anyio>=4.0.0,<5.0.0",
+    "ruff>=0.14.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.13.0",
+    "mypy>=1.5.0",
+    "pre-commit>=3.4.0",
+    "build>=0.10.0",
+    "twine>=4.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/sandraschi/notepadpp-mcp"
+Repository = "https://github.com/sandraschi/notepadpp-mcp"
+Issues = "https://github.com/sandraschi/notepadpp-mcp/issues"
+
+[project.scripts]
+notepadpp-mcp = "notepadpp_mcp.server:run"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.md", "*.json", "*.yaml", "*.yml"]
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["notepadpp_mcp"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_errors = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "win32gui",
+    "win32con",
+    "win32api",
+    "win32process",
+    "win32clipboard",
+    "mcp",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["src/notepadpp_mcp/tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --cov=src/notepadpp_mcp --cov-report=term-missing --cov-report=html --cov-report=xml"
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["src/notepadpp_mcp"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "pytest-cov>=7.0.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "S"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
