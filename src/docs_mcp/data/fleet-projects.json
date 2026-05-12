@@ -225,6 +225,15 @@
         "status":  "Active"
     },
     {
+        "id":  "freecad-mcp",
+        "name":  "FreeCAD MCP",
+        "description":  "**CAD to 3D print (v0.3.0)** - Convert STEP assemblies, create primitives, slice with PrusaSlicer, and browse Printables/Thingiverse/GrabCAD marketplaces. TCP bridge for AP214 STEP support, Vite dashboard with Three.js STL viewer.",
+        "type":  "MCP Server",
+        "localPath":  "file:///D:/Dev/repos/freecad-mcp",
+        "docsPath":  "/docs/projects/freecad-mcp/README.md",
+        "status":  "Active"
+    },
+    {
         "id":  "filesystem-mcp",
         "name":  "filesystem-mcp",
         "description":  "**SOTA File System Operations (v1.2.0)** - Comprehensive file manipulation, Git, and Docker orchestration.",
