@@ -40,6 +40,13 @@ class ProcessManager:
             
         return active_procs
 
+    def cleanup_all(self) -> None:
+        """Stop all registered processes."""
+        keys = list(self.registry.keys())
+        for key in keys:
+            self.stop_process(proc_id=key)
+        logger.info(f"Cleaned up {len(keys)} processes")
+
     def stop_process(self, proc_id: str = None, pid: int = None) -> bool:
         """Stop a process by ID or PID using absolute taskkill."""
         target_key = None

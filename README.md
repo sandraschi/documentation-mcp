@@ -1,6 +1,11 @@
 # Documentation MCP Hub (Docs-MCP)
 
-[![FastMCP Version](https://img.shields.io/badge/FastMCP-3.2.0-blue?style=flat-square&logo=python&logoColor=white)](https://github.com/sandraschi/fastmcp) [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) [![Linted with Biome](https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat-square&logo=biome&logoColor=white)](https://biomejs.dev/) [![Built with Just](https://img.shields.io/badge/Built_with-Just-000000?style=flat-square&logo=gnu-bash&logoColor=white)](https://github.com/casey/just)
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
 A technical documentation control plane featuring a Federated RAG engine and an industrial dashboard for the RoboFang ecosystem.
 
@@ -12,26 +17,32 @@ A technical documentation control plane featuring a Federated RAG engine and an 
 
 ## Quick Start
 
+```powershell
+git clone https://github.com/sandraschi/documentation-mcp
+cd documentation-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
 ### 1. Requirements
 - [uv](https://github.com/astral-sh/uv) (Python 3.12+ package manager)
 - Node.js 18+ (for frontend)
-
 ### 2. Environment Setup
-```powershell
 # Sync Python dependencies
 uv sync
-
 # Install frontend dependencies
 cd web_sota
 npm install
 cd ..
-```
-
 ### 3. Execution
 - **Automated Startup**: Run `./start.ps1` or `start.bat`. This handles port clearing, backend initialization, and frontend serving.
 - **Manual Launch**:
-    - Backend: `uv run docs-mcp` (Port 10795)
-    - Frontend: `cd web_sota; npm run dev` (Port 10794)
+- Backend: `uv run docs-mcp` (Port 10795)
+- Frontend: `cd web_sota; npm run dev` (Port 10794)
 
 ## Repository Structure
 

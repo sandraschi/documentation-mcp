@@ -1,9 +1,11 @@
 import logging
+import os
 import traceback
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastmcp import FastMCP
+from fastmcp.server import create_proxy
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
@@ -21,6 +23,18 @@ logger = logging.getLogger("docs_mcp.server")
 
 # 1. Initialize FastMCP
 docs_mcp = FastMCP("Documentation MCP")
+
+# MCP Bridge: ProxyProvider for multi-server federation
+_bridge_urls = os.getenv("MCP_BRIDGE_URLS", "")
+if _bridge_urls:
+    for _url in _bridge_urls.split(","):
+        _url = _url.strip()
+        if _url:
+            try:
+                docs_mcp.add_provider(create_proxy(_url))
+                logger.info("MCP bridge registered: %s", _url)
+            except Exception as e:
+                logger.warning("MCP bridge failed for %s: %s", _url, e)
 
 # 2. Register Modular Components
 rag.register_tools(docs_mcp)
@@ -97,4 +111,5 @@ def main():
 if __name__ == "__main__":
     import uvicorn
     # Use port 10794 as per WEBAPP_PORTS.md
-    uvicorn.run(app, host="0.0.0.0", port=10794)
+    port = int(os.getenv("DOCS_MCP_PORT", "10789"))
+    uvicorn.run(app, host="0.0.0.0", port=port)

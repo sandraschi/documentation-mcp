@@ -50,3 +50,5 @@ src/docs_mcp/data/cache/
 
 # Nested git clones under claude-skills (stale submodule pointers; keep local only)
 not-mcp-related/claude-skills/temp/
+
+_dashboard/
