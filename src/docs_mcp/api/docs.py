@@ -1,10 +1,11 @@
 import logging
 from pathlib import Path
-from fastapi import APIRouter, Request, HTTPException
-from fastapi.responses import JSONResponse
-from docs_mcp.backend.store_registry import get_store
-from docs_mcp.backend.ingestor import ContentIngestor
+
+from fastapi import APIRouter, HTTPException
+
 from docs_mcp.backend.config import config
+from docs_mcp.backend.ingestor import ContentIngestor
+from docs_mcp.backend.store_registry import get_store
 
 logger = logging.getLogger("docs_mcp.api.docs")
 router = APIRouter(prefix="/api")
@@ -38,7 +39,7 @@ async def api_tree():
         docs_root = config.DOCS_ROOT.resolve()
         if not docs_root.exists():
             return []
-        
+
         def build_file_tree(path: Path, root: Path) -> dict:
             item = {
                 "id": str(path.relative_to(root)).replace("\\", "/"),
@@ -69,7 +70,7 @@ async def api_content(path: str):
         target = (docs_root / path).resolve()
         if not target.is_relative_to(docs_root) or not target.is_file():
             raise HTTPException(status_code=403, detail="Access denied or file not found")
-        
+
         with open(target, encoding="utf-8") as f:
             return {"content": f.read()}
     except Exception as e:

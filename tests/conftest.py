@@ -1,6 +1,4 @@
 import os
-
-# Setup Path
 import sys
 from pathlib import Path
 from unittest.mock import MagicMock
@@ -44,8 +42,6 @@ def document_store(test_mode, mock_document_store, tmp_path_factory):
     """Fixture that provides the DocumentStore based on the test mode."""
     if test_mode == "live":
         from docs_mcp.backend.vector_store import DocumentStore
-
-        # For live testing, use a temporary directory for the DB
         test_db_dir = tmp_path_factory.mktemp("test_db")
         os.environ["LANCEDB_URI"] = str(test_db_dir)
         return DocumentStore()
@@ -55,23 +51,20 @@ def document_store(test_mode, mock_document_store, tmp_path_factory):
 
 @pytest.fixture(autouse=True)
 def inject_stores(document_store, mock_memory_store, test_mode):
-    """Automatically inject stores into the server global state for the duration of the test."""
-    import docs_mcp.server as server
+    """Automatically inject stores into the store_registry for the duration of the test."""
+    from docs_mcp.backend import store_registry
 
-    # Backup original
-    orig_store = server._store
-    orig_memory = server._memory_store
+    orig_store = store_registry._store
+    orig_memory = store_registry._memory_store
 
-    # Inject
-    server._store = document_store
+    store_registry._store = document_store
     if test_mode == "mock":
-        server._memory_store = mock_memory_store
+        store_registry._memory_store = mock_memory_store
 
     yield
 
-    # Restore
-    server._store = orig_store
-    server._memory_store = orig_memory
+    store_registry._store = orig_store
+    store_registry._memory_store = orig_memory
 
 
 @pytest.fixture
@@ -81,7 +74,6 @@ def ingestor(test_mode):
 
     ing = ContentIngestor()
     if test_mode == "mock":
-        # Mocking file loading to avoid real FS hits in CI
         ing.load_all_docs = MagicMock(
             return_value=[{"content": "Mock document content", "metadata": {"filename": "mock.md", "type": "docs"}}]
         )

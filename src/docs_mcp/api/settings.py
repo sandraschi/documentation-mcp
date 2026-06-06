@@ -1,7 +1,8 @@
 import logging
-from fastapi import APIRouter, Request, HTTPException
-from fastapi.responses import JSONResponse
-from docs_mcp.backend import settings_store, llm_client
+
+from fastapi import APIRouter, HTTPException, Request
+
+from docs_mcp.backend import llm_client, settings_store
 
 logger = logging.getLogger("docs_mcp.api.settings")
 router = APIRouter(prefix="/api")
@@ -27,13 +28,13 @@ async def api_settings_put(request: Request):
     try:
         body = await request.json()
         current = settings_store.load_settings()
-        
+
         # Masking logic
         if "local_llm_key" in body and (body["local_llm_key"] or "").strip() == "":
             body["local_llm_key"] = current.get("local_llm_key") or ""
         if (body.get("local_llm_key") or "").startswith("****"):
             body["local_llm_key"] = current.get("local_llm_key") or ""
-            
+
         updates = {
             "ollama_url": (body.get("ollama_url") or "").strip(),
             "ollama_model": (body.get("ollama_model") or "").strip(),
@@ -43,10 +44,10 @@ async def api_settings_put(request: Request):
             "lmstudio_model": (body.get("lmstudio_model") or "").strip(),
             "provider": (body.get("provider") or "").strip().lower(),
         }
-        
+
         if updates["provider"] not in ("ollama", "local", "lmstudio", ""):
             updates["provider"] = ""
-            
+
         settings_store.save_settings({**current, **updates})
         return {"success": True}
     except Exception as e:
@@ -62,7 +63,7 @@ async def api_ollama_models(url: str = ""):
             url = (s.get("ollama_url") or "").strip()
         if not url:
             return {"models": [], "message": "Ollama URL missing"}
-            
+
         models, error = await llm_client.list_ollama_models(url)
         return {"models": models, "message": error}
     except Exception as e:
@@ -78,7 +79,7 @@ async def api_lmstudio_models(url: str = ""):
             url = (s.get("lmstudio_url") or "").strip()
         if not url:
             return {"models": [], "message": "LM Studio URL missing"}
-            
+
         models = await llm_client.list_openai_models(url)
         return {"models": models}
     except Exception as e:

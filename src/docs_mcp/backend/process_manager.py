@@ -1,17 +1,16 @@
 import logging
 import subprocess
-import os
 
 logger = logging.getLogger("docs_mcp.backend.process_manager")
 
 class ProcessManager:
     """Singleton-style manager for tracking and controlling background subprocesses."""
-    
+
     _instance = None
-    
+
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(ProcessManager, cls).__new__(cls)
+            cls._instance = super().__new__(cls)
             cls._instance.registry = {}
         return cls._instance
 
@@ -33,11 +32,11 @@ class ProcessManager:
                     "pid": proc.pid,
                     "status": "running"
                 })
-        
+
         for key in to_remove:
             logger.debug(f"Cleaning up dead process {key}")
             del self.registry[key]
-            
+
         return active_procs
 
     def cleanup_all(self) -> None:
@@ -73,7 +72,7 @@ class ProcessManager:
             except Exception as e:
                 logger.error(f"Failed to stop process {target_pid}: {e}")
                 return False
-        
+
         return False
 
 # Global instance for easy import

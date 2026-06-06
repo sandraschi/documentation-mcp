@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from pydantic import BaseModel, Field
@@ -7,7 +8,7 @@ class DocsConfig(BaseModel):
     """Configuration for Docs MCP RAG Backend (Federated Public Edition)"""
 
     # Paths - Unified relative structure
-    # DOCS_ROOT is now where documentation-mcp/docs sits
+    # ROOT is where the repo lives; DOCS_ROOT is what gets indexed (overridable via DOCS_ROOT env)
     ROOT: Path = Field(default_factory=lambda: Path(__file__).parent.parent.parent.parent)
     DOCS_INTERNAL: Path = Field(default_factory=lambda: Path(__file__).parent.parent.parent.parent / "docs")
 
@@ -15,6 +16,9 @@ class DocsConfig(BaseModel):
     ADVANCED_MEMORY_PATH: Path = Field(
         default_factory=lambda: Path(__file__).parent.parent.parent.parent.parent / "advanced-memory-mcp"
     )
+
+    # Extra paths from env: comma-separated, e.g. DOCS_EXTRA_PATHS=D:/Dev/repos/mcp-central-docs
+    EXTRA_PATHS: list[Path] = Field(default_factory=list)
 
     # DB and Cache
     DB_PATH: Path = Field(default_factory=lambda: Path(__file__).parent.parent / "data" / "lancedb")
@@ -31,7 +35,10 @@ class DocsConfig(BaseModel):
 
     @property
     def DOCS_ROOT(self) -> Path:
-        """Compatibility property for legacy internal references."""
+        """Primary RAG root — overridable via DOCS_ROOT env var."""
+        env_root = os.environ.get("DOCS_ROOT", "")
+        if env_root:
+            return Path(env_root)
         return self.DOCS_INTERNAL
 
     @property

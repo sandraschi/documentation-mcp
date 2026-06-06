@@ -129,15 +129,15 @@ class ContentIngestor:
             return []
 
     def load_all_docs(self, extra_paths: list[Path] | None = None) -> list[dict[str, Any]]:
-        """Scans internal docs and federated external roots."""
+        """Scans internal docs, federated external roots, and env-configured paths."""
         all_docs = []
 
-        # 1. Internal Documentation Root (Public)
-        if config.DOCS_INTERNAL.exists():
-            paths = self.glob_markdown(config.DOCS_INTERNAL)
-            logger.info(f"Found {len(paths)} markdown files in internal docs/")
+        # 1. Primary Documentation Root (overridable via DOCS_ROOT env)
+        if config.DOCS_ROOT.exists():
+            paths = self.glob_markdown(config.DOCS_ROOT)
+            logger.info(f"Found {len(paths)} markdown files in DOCS_ROOT ({config.DOCS_ROOT})")
             for p in paths:
-                all_docs.extend(self.process_file(p, config.DOCS_INTERNAL, extra_meta={"type": "core"}))
+                all_docs.extend(self.process_file(p, config.DOCS_ROOT, extra_meta={"type": "core"}))
 
         # 2. Federated: Advanced Memory Knowledge (Optional)
         if config.knowledge_path.exists():
@@ -163,18 +163,20 @@ class ContentIngestor:
                     )
                 )
 
-        # 4. User Provided Custom Paths
+        # 4. Env-configured extra paths (DOCS_EXTRA_PATHS=path1,path2)
+        all_extra = list(config.EXTRA_PATHS)
         if extra_paths:
-            for extra_root in extra_paths:
-                if extra_root.exists() and extra_root.is_dir():
-                    paths = self.glob_markdown(extra_root)
-                    logger.info(f"Found {len(paths)} files in custom path {extra_root}")
-                    for p in paths:
-                        all_docs.extend(
-                            self.process_file(
-                                p, extra_root, extra_meta={"type": "custom", "custom_root": str(extra_root)}
-                            )
+            all_extra.extend(extra_paths)
+        for extra_root in all_extra:
+            if extra_root.exists() and extra_root.is_dir():
+                paths = self.glob_markdown(extra_root)
+                logger.info(f"Found {len(paths)} files in extra path {extra_root}")
+                for p in paths:
+                    all_docs.extend(
+                        self.process_file(
+                            p, extra_root, extra_meta={"type": "custom", "custom_root": str(extra_root)}
                         )
+                    )
 
         logger.info(f"Total: {len(all_docs)} chunks ready for embedding")
         return all_docs

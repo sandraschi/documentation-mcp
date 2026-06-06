@@ -1,10 +1,11 @@
 import logging
-import traceback
+
 from fastmcp import Context, FastMCP
-from docs_mcp.backend.store_registry import get_store
-from docs_mcp.backend.ingestor import ContentIngestor
+
 from docs_mcp.backend import llm_client, settings_store
+from docs_mcp.backend.ingestor import ContentIngestor
 from docs_mcp.backend.llm_client import list_ollama_models, list_openai_models
+from docs_mcp.backend.store_registry import get_store
 from docs_mcp.utils.formatting import _to_markdown
 
 logger = logging.getLogger("docs_mcp.tools.rag")
@@ -46,14 +47,18 @@ def _search_docs_raw(query: str, limit: int = 5) -> dict:
         ],
     }
 
+def search_docs(query: str, limit: int = 5) -> dict:
+    """Perform a semantic search across all indexed documentation."""
+    res = _search_docs_raw(query, limit=limit)
+    return {"result": _to_markdown(res, "search_docs")}
+
+
 def register_tools(mcp: FastMCP):
     """Register RAG-related MCP tools."""
 
-    @mcp.tool()
-    def search_docs(query: str, limit: int = 5) -> dict:
-        """Perform a semantic search across all indexed documentation."""
-        res = _search_docs_raw(query, limit=limit)
-        return {"result": _to_markdown(res, "search_docs")}
+    mcp.tool()(search_docs)
+    mcp.tool()(reindex_docs)
+    mcp.tool()(get_document)
 
     @mcp.tool()
     async def ask_docs(question: str, ctx: Context) -> dict:
@@ -129,7 +134,7 @@ def register_tools(mcp: FastMCP):
             if final_provider and final_model:
                 ctx.report_progress(f"Synthesizing answer via {final_provider} ({final_model})...", 60)
                 messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
-                
+
                 if final_provider == "ollama":
                     answer = await llm_client.chat_ollama(final_url, final_model, messages)
                 else:
@@ -159,67 +164,69 @@ def register_tools(mcp: FastMCP):
             "diagnostic_log": error_log,
         }
 
-    @mcp.tool()
-    async def reindex_docs(ctx: Context) -> dict:
-        """Force a full scan and re-indexing of all documentation sources."""
-        try:
-            ctx.report_progress("Connecting to DocumentStore...", 10)
-            store = get_store()
-            ingestor = ContentIngestor()
-            docs = ingestor.load_all_docs()
 
-            if docs:
-                ctx.report_progress(f"Embedding and indexing {len(docs)} chunks...", 60)
-                store.add_documents(docs)
-                res = {
-                    "success": True,
-                    "operation": "reindex_docs",
-                    "message": f"Documentation synchronized. {len(docs)} chunks indexed.",
-                    "data": {"chunks": len(docs)},
-                }
-                return {"result": _to_markdown(res, "reindex_docs")}
-            return {"success": False, "message": "No docs found."}
-        except Exception as e:
-            return {"success": False, "error": str(e)}
+async def reindex_docs(ctx: Context) -> dict:
+    """Force a full scan and re-indexing of all documentation sources."""
+    try:
+        ctx.report_progress("Connecting to DocumentStore...", 10)
+        store = get_store()
+        ingestor = ContentIngestor()
+        from docs_mcp.backend.config import config as cfg
+        extra = cfg.EXTRA_PATHS if cfg.EXTRA_PATHS else None
+        docs = ingestor.load_all_docs(extra_paths=extra)
 
-    @mcp.tool()
-    def get_document(relative_path: str) -> dict:
-        """Retrieve the full content of a documentation file by its relative path."""
-        try:
-            from docs_mcp.backend.config import config
-            docs_root = config.DOCS_ROOT.resolve()
-            target_path = (docs_root / relative_path).resolve()
-
-            if not target_path.is_relative_to(docs_root):
-                return {
-                    "success": False,
-                    "error": "Access denied",
-                    "message": f"Path '{relative_path}' resolves outside docs root.",
-                }
-
-            if not target_path.exists() or not target_path.is_file():
-                return {
-                    "success": False,
-                    "error": "File not found",
-                    "message": f"No file found at '{relative_path}'.",
-                }
-
-            with open(target_path, encoding="utf-8") as f:
-                content = f.read()
-
-            import datetime
-            stat = target_path.stat()
+        if docs:
+            ctx.report_progress(f"Embedding and indexing {len(docs)} chunks...", 60)
+            store.add_documents(docs)
             res = {
                 "success": True,
-                "operation": "get_document",
-                "message": f"Successfully retrieved '{relative_path}'.",
-                "data": {
-                    "content": content,
-                    "path": str(target_path),
-                    "size": stat.st_size,
-                    "modified": datetime.datetime.fromtimestamp(stat.st_mtime).isoformat(),
-                },
+                "operation": "reindex_docs",
+                "message": f"Documentation synchronized. {len(docs)} chunks indexed.",
+                "data": {"chunks": len(docs)},
             }
-            return {"result": _to_markdown(res, "get_document")}
-        except Exception as e:
-            return {"success": False, "error": str(e)}
+            return {"result": _to_markdown(res, "reindex_docs")}
+        return {"success": False, "message": "No docs found."}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+def get_document(relative_path: str) -> dict:
+    """Retrieve the full content of a documentation file by its relative path."""
+    try:
+        from docs_mcp.backend.config import config
+        docs_root = config.DOCS_ROOT.resolve()
+        target_path = (docs_root / relative_path).resolve()
+
+        if not target_path.is_relative_to(docs_root):
+            return {
+                "success": False,
+                "error": "Access denied",
+                "message": f"Path '{relative_path}' resolves outside docs root.",
+            }
+
+        if not target_path.exists() or not target_path.is_file():
+            return {
+                "success": False,
+                "error": "File not found",
+                "message": f"No file found at '{relative_path}'.",
+            }
+
+        with open(target_path, encoding="utf-8") as f:
+            content = f.read()
+
+        import datetime
+        stat = target_path.stat()
+        res = {
+            "success": True,
+            "operation": "get_document",
+            "message": f"Successfully retrieved '{relative_path}'.",
+            "data": {
+                "content": content,
+                "path": str(target_path),
+                "size": stat.st_size,
+                "modified": datetime.datetime.fromtimestamp(stat.st_mtime).isoformat(),
+            },
+        }
+        return {"result": _to_markdown(res, "get_document")}
+    except Exception as e:
+        return {"success": False, "error": str(e)}

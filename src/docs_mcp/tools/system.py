@@ -1,6 +1,7 @@
 import logging
-from pathlib import Path
+
 from fastmcp import FastMCP
+
 from docs_mcp.backend.config import config
 from docs_mcp.backend.store_registry import get_store
 from docs_mcp.utils.formatting import _to_markdown
@@ -30,10 +31,10 @@ def register_tools(mcp: FastMCP):
     @mcp.tool()
     def server_status() -> dict:
         """Report server and index health, version, and memory summary."""
-        from docs_mcp.backend.store_registry import get_memory_store # Late import to avoid cycles
+        from docs_mcp.backend.store_registry import get_memory_store  # Late import to avoid cycles
         store = get_store()
         memory_store = get_memory_store()
-        
+
         meta = store.get_table_metadata() if hasattr(store, "get_table_metadata") else {}
         sources = store.list_sources() if meta.get("exists") else []
         mem_stats = memory_store.get_stats() if hasattr(memory_store, "get_stats") else {}
@@ -72,7 +73,7 @@ def _build_refactored_help(mcp: FastMCP) -> dict:
     store = get_store()
     meta = store.get_table_metadata() if hasattr(store, "get_table_metadata") else {}
     sources = store.list_sources() if meta.get("exists") else []
-    
+
     # Discovery of doc areas
     doc_areas = []
     if docs_root.is_dir():

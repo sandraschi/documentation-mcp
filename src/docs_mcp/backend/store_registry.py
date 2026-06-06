@@ -1,6 +1,7 @@
 import logging
-from docs_mcp.backend.vector_store import DocumentStore
+
 from docs_mcp.backend.memory_store import MemoryStore
+from docs_mcp.backend.vector_store import DocumentStore
 
 logger = logging.getLogger("docs_mcp.backend.store_registry")
 

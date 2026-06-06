@@ -9,7 +9,7 @@ def test_semantic_accuracy(document_store, test_mode):
 
     # In live mode, we might need a real index. In mock mode, the fixture handles it.
     if test_mode == "live" and not document_store.list_sources():
-        from docs_mcp.server import reindex_docs
+        from docs_mcp.tools.rag import reindex_docs
 
         reindex_docs()
 
@@ -71,7 +71,7 @@ async def test_reindex_lifecycle(test_mode):
     """
     from unittest.mock import MagicMock
 
-    from docs_mcp.server import reindex_docs
+    from docs_mcp.tools.rag import reindex_docs
 
     # reindex_docs is ASYNC and expects ctx: Context
     ctx = MagicMock()

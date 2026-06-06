@@ -1,4 +1,5 @@
 import logging
+
 from fastmcp import FastMCP
 
 logger = logging.getLogger("docs_mcp.tools.prompts")

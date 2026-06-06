@@ -1,8 +1,8 @@
-import logging
 import json
+import logging
 from pathlib import Path
-from fastapi import APIRouter, Request, HTTPException
-from fastapi.responses import JSONResponse
+
+from fastapi import APIRouter, HTTPException
 
 logger = logging.getLogger("docs_mcp.api.skills")
 router = APIRouter(prefix="/api")

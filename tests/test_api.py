@@ -1,14 +1,13 @@
 import pytest
 
-from docs_mcp.server import persistence_recall, search_docs
+from docs_mcp.tools.memory import persistence_recall
+from docs_mcp.tools.rag import search_docs
 
 
 @pytest.mark.asyncio
 async def test_search_docs_tool(test_mode):
     """Verify the search_docs tool returns expected markdown."""
-    # The tool uses get_store(), which we mock-injected in conftest.py
     query = "FastMCP"
-    # search_docs in server.py is SYNC
     result_dict = search_docs(query=query)
     result = result_dict["result"]
 
@@ -24,7 +23,6 @@ async def test_persistence_recall_tool(test_mode):
     namespace = "test-system"
     query = "memory"
 
-    # persistence_recall is SYNC
     result_dict = persistence_recall(namespace=namespace, query=query)
     result = result_dict["result"]
 

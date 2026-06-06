@@ -1,9 +1,10 @@
-import logging
 import json
+import logging
 import subprocess
 from pathlib import Path
-from fastapi import APIRouter, Request, HTTPException
-from fastapi.responses import JSONResponse
+
+from fastapi import APIRouter, HTTPException, Request
+
 from docs_mcp.backend.process_manager import process_manager
 
 logger = logging.getLogger("docs_mcp.api.fleet")
@@ -39,16 +40,16 @@ async def api_launch_app(request: Request):
         body = await request.json()
         cmd = body.get("command")
         id = body.get("id", "app")
-        
+
         if not cmd:
             raise HTTPException(status_code=400, detail="No command provided")
-        
+
         # SOTA v14.0 background launch pattern
         proc = subprocess.Popen(
             ["powershell.exe", "-Command", cmd],
             creationflags=subprocess.CREATE_NEW_CONSOLE if hasattr(subprocess, "CREATE_NEW_CONSOLE") else 0
-        ) # noqa: S603, S607
-        
+        )
+
         process_manager.register(id, proc)
         return {"success": True, "pid": proc.pid}
     except Exception as e:
@@ -71,7 +72,7 @@ async def api_stop_process(request: Request):
         body = await request.json()
         pid = body.get("pid")
         proc_id = body.get("id")
-        
+
         success = process_manager.stop_process(proc_id=proc_id, pid=pid)
         return {"success": success}
     except Exception as e:
