@@ -673,7 +673,7 @@
         {
             "id": "documentation-mcp",
             "label": "Documentation MCP Hub",
-            "port": 10794,
+            "port": 11032,
             "repo_path": "D:/Dev/repos/documentation-mcp",
             "start_command": "powershell ./web_sota/start.ps1",
             "tags": [

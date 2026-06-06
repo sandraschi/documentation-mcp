@@ -1,21 +1,21 @@
 import logging
 import os
-import traceback
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastmcp import FastMCP
-from fastmcp.server import create_proxy
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
+from fastmcp import FastMCP
+from fastmcp.server import create_proxy
+
+from docs_mcp.api import docs, fleet, interaction, settings, skills
+from docs_mcp.backend.process_manager import process_manager
 
 # Modular Imports
-from docs_mcp.backend.store_registry import get_store, get_memory_store, close_stores
-from docs_mcp.backend.process_manager import process_manager
-from docs_mcp.api import docs, fleet, settings, interaction, skills
-from docs_mcp.tools import rag, system, workflows, prompts
+from docs_mcp.backend.store_registry import close_stores, get_memory_store, get_store
+from docs_mcp.tools import memory, prompts, rag, system, workflows
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO)
@@ -41,6 +41,7 @@ rag.register_tools(docs_mcp)
 system.register_tools(docs_mcp)
 workflows.register_tools(docs_mcp)
 prompts.register_tools(docs_mcp)
+memory.register_tools(docs_mcp)
 
 # 3. Lifespan Management
 @asynccontextmanager
@@ -53,9 +54,9 @@ async def lifespan(app: FastAPI):
         get_memory_store()
     except Exception as e:
         logger.error(f"Failed to initialize stores: {e}")
-    
+
     yield
-    
+
     logger.info("🛑 docs-mcp shutting down...")
     # Cleanup background processes
     process_manager.cleanup_all()
@@ -97,7 +98,7 @@ async def serve_spa(path: str):
     requested_file = FRONTEND_DIST / path
     if requested_file.is_file():
         return FileResponse(requested_file)
-    
+
     # Fallback to index.html for SPA routes
     index_path = FRONTEND_DIST / "index.html"
     if index_path.exists():
@@ -110,6 +111,6 @@ def main():
 
 if __name__ == "__main__":
     import uvicorn
-    # Use port 10794 as per WEBAPP_PORTS.md
-    port = int(os.getenv("DOCS_MCP_PORT", "10789"))
+    # Public hub: frontend 11032, backend 11033 (mcp-central-docs keeps 10794/10795)
+    port = int(os.getenv("DOCS_MCP_PORT", "11033"))
     uvicorn.run(app, host="0.0.0.0", port=port)

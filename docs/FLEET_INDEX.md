@@ -24,10 +24,10 @@ Central documentation for all projects: MCP servers, myai, veogen, mywienerlinie
 - **Q&A**: RAG over ingested sources (LanceDB / BGE embeddings).
 - **Verification matrix**: IDE/client compatibility notes.
 - **Tools hub**: Tool listing and execution from the UI.
-- **Ports**: Frontend **10794** (Vite); backend **10795** (Python/docs_mcp). Run `web_sota/start.ps1` from repo root; `/api` is proxied to the backend.
+- **Ports**: Frontend **11032** (Vite); backend **11033** (Python/docs_mcp). Private mcp-central-docs uses **10794/10795**.
 - **MaaS**: Docs MCP can be used as a shared service by other repos (semantic search, get_document, ask_docs, chunk_stats). See **[Docs MCP as MaaS](operations/DOCS_MCP_MAAS.md)** for endpoints and usage.
 
-[Access Dashboard (Local)](http://localhost:10794)
+[Access Dashboard (Local)](http://localhost:11032)
 
 ### Just recipes (local dev)
 

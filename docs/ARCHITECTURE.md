@@ -36,7 +36,7 @@ The registry acts as the source of truth for repository metadata. It tracks:
 - **Deep Research Links**: Connecting project metadata to the AI Assistant.
 
 ### 3. Integrated Dashboard
-The React frontend (Port 10794) is the human entry point. It provides:
+The React frontend (port **11032**) is the human entry point. It provides:
 - **Fleet Dashboard**: Tactical control for starting/stopping MCP servers.
 - **Project Portfolio**: Strategic overview of the repository shipyard.
 - **AI Assistant**: Conversational interface for deep repository audits.

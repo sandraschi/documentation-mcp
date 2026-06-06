@@ -27,6 +27,7 @@
   { "repo": "llm-txt-mcp", "startPath": "web_sota/start.ps1", "port": 10837, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "local-llm-mcp", "startPath": "web_sota/start.ps1", "port": 10833, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "mcp-central-docs", "startPath": "web_sota/start.ps1", "port": 10795, "healthPath": "/health", "timeoutSec": 90 },
+  { "repo": "documentation-mcp", "startPath": "web_sota/start.ps1", "port": 11033, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "meta_mcp", "startPath": "web_sota/start.ps1", "port": 10719, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "moltbot-mcp", "startPath": "web_sota/start.ps1", "port": 10731, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "monitoring-mcp", "startPath": "web_sota/start.ps1", "port": 10851, "healthPath": "/health", "timeoutSec": 90 },

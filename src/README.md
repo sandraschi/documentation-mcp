@@ -28,4 +28,4 @@ Settings are managed in `backend/config.py` and persisted in `backend/settings_s
 ## Development
 - **Dependencies**: Managed via `uv`.
 - **Testing**: Run `uv run pytest` to execute the integration suite.
-- **Port Management**: The backend binds to port **10795** when running as a web service.
+- **Port Management**: Backend **11033**, frontend **11032** (mcp-central-docs private hub: 10794/10795).

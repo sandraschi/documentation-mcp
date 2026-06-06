@@ -31,9 +31,9 @@ The MCP Central Docs (MCD) integrates a dedicated MCP server (`docs_mcp`) for hi
 - **Hybrid Ready**: Architected for future hybrid search (Keyword + Semantic) integration.
 
 ## ðŸŒ Web Stack (Docs MCP Webapp)
-- **Frontend**: Vite/React in `web_sota/`; dev server on port **10794**.
-- **Backend**: Starlette app in `src/docs_mcp/server.py`; uvicorn on port **10795**.
-- **Proxy**: Vite dev server proxies `/api` to `http://127.0.0.1:10795`. Start both via `web_sota/start.ps1` (backend from repo root so `docs_mcp` and paths resolve).
+- **Frontend**: Vite/React in `web_sota/`; dev server on port **11032**.
+- **Backend**: Starlette app in `src/docs_mcp/server.py`; uvicorn on port **11033** (`DOCS_MCP_PORT`).
+- **Proxy**: Vite proxies `/api` → `http://127.0.0.1:11033`. Private mcp-central-docs uses **10794/10795**.
 
 ---
 *Maintained by: Antigravity AI*

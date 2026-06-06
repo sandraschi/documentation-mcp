@@ -78,15 +78,15 @@ web-auto:
 
 # Open webapp in system browser
 docs-open:
-    Start-Process 'http://127.0.0.1:10794/'
+    Start-Process 'http://127.0.0.1:11032/'
 
 # ── Backend ──────────────────────────────────────────────────────────────────
 
-# Start Uvicorn API (Port 10795)
+# Start Uvicorn API (port 11033)
 backend:
     Set-Location '{{justfile_directory()}}'
     $env:PYTHONPATH = '{{justfile_directory()}};{{justfile_directory()}}\src'
-    uv run uvicorn docs_mcp.server:app --host 127.0.0.1 --port 10795 --log-level info
+    uv run uvicorn docs_mcp.server:app --host 127.0.0.1 --port 11033 --log-level info
 
 # ── Transport ────────────────────────────────────────────────────────────────
 

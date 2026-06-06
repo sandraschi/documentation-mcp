@@ -12,7 +12,7 @@ This document tracks the SOTA compliance and functional health of all MCP server
 | **observability-mcp** | 10901/02 | web_sota/ | UP | YES | YES | NO | DONE | OK | OK | Hardened OpenTelemetry and metrics registry. |
 | **devices-mcp** | 10716/17 | webapp/ | UP | YES | YES | YES | DONE | OK | OK | Dark mode UI fixed; Proxy bridge operational. |
 | **email-mcp** | 10812/13 | webapp/ | TBD | TBD | TBD | TBD | PENDING | OK | TBD | Renamed from `web_sota/` → `webapp/`. |
-| **mcp-federation-hub** | 10794/95 | webapp/ | TBD | TBD | TBD | TBD | PENDING | OK | TBD | Renamed from dashboard. |
+| **documentation-mcp** | 11032/33 | web_sota/ | TBD | TBD | TBD | TBD | PENDING | OK | TBD | Public hub; private MCD 10794/95. |
 | **filesystem-mcp** | 10742/43 | webapp/ | TBD | TBD | TBD | TBD | PENDING | OK | TBD | |
 | **windows-operations-mcp** | 10748/49 | webapp/ | TBD | TBD | TBD | TBD | PENDING | OK | TBD | |
 | **alexa-mcp** | 10800/01 | web_sota/ | TBD | TBD | TBD | TBD | PENDING | OK | TBD | |

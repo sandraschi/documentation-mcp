@@ -432,7 +432,7 @@ def generate_html(fleet):
         f.write(final_html)
 
 
-def serve_dashboard(port=10794):
+def serve_dashboard(port=11032):
     os.chdir(Path(HTML_OUTPUT).parent)
     handler = http.server.SimpleHTTPRequestHandler
 

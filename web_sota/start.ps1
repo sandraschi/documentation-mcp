@@ -3,8 +3,8 @@
 #        .\start.ps1 -Automated   headless: start backend, wait, start frontend, wait, open browser, exit
 param([switch]$Automated)
 
-$WebPort = 10794
-$BackendPort = 10795
+$WebPort = 11032
+$BackendPort = 11033
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 
 # 1. Kill any process squatting on the ports

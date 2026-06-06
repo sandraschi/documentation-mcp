@@ -11,8 +11,8 @@ Docs MCP can be used as a **shared service** for the fleet: one running instance
 
 | Environment | Base URL | Notes |
 |-------------|----------|--------|
-| Local (webapp) | `http://localhost:10795` | Backend only; use this when calling from scripts or other repos. |
-| Local (via frontend) | `http://localhost:10794/api` | Vite proxies `/api` → 10795; same backend. |
+| Local (webapp) | `http://localhost:11033` | Backend only (public hub). Private MCD: `10795`. |
+| Local (via frontend) | `http://localhost:11032/api` | Vite proxies `/api` → 11033. |
 | Deployed | `https://<your-host>/api` | Use your deployed backend base URL. |
 
 **Health**: No dedicated `/health` today; `GET /api/tools` returning 200 indicates the service is up.
@@ -35,7 +35,7 @@ These tools are intended for **cross-repo consumption** (standards lookup, seman
 ### List MaaS tools (curated)
 
 ```http
-GET http://localhost:10795/api/maas/tools
+GET http://localhost:11033/api/maas/tools
 ```
 
 Response: JSON array of `{ "name", "description", "parameters" }` for `search_docs`, `get_document`, `ask_docs`, `chunk_stats`.
@@ -43,13 +43,13 @@ Response: JSON array of `{ "name", "description", "parameters" }` for `search_do
 ### List all tools
 
 ```http
-GET http://localhost:10795/api/tools
+GET http://localhost:11033/api/tools
 ```
 
 ### Execute a tool
 
 ```http
-POST http://localhost:10795/api/execute
+POST http://localhost:11033/api/execute
 Content-Type: application/json
 
 {
@@ -76,7 +76,7 @@ Response: `{ "result": "<string or JSON-serialized result>" }`. On error: `{ "er
 
 ```powershell
 $body = @{ name = "search_docs"; arguments = @{ query = "MCP server first-time success"; limit = 3 } } | ConvertTo-Json
-Invoke-RestMethod -Uri "http://localhost:10795/api/execute" -Method POST -Body $body -ContentType "application/json"
+Invoke-RestMethod -Uri "http://localhost:11033/api/execute" -Method POST -Body $body -ContentType "application/json"
 ```
 
 ## Authentication and security
@@ -87,7 +87,7 @@ Invoke-RestMethod -Uri "http://localhost:10795/api/execute" -Method POST -Body $
 
 ## Cursor / IDE configuration
 
-Other repos can call Docs MCP as a **remote HTTP service** from scripts or agents. For Cursor/clients that expect an MCP server over stdio, run docs_mcp in stdio mode in that repo’s config, or use an MCP-to-HTTP bridge that forwards to `http://localhost:10795/api/execute` and `/api/maas/tools`.
+Other repos can call Docs MCP as a **remote HTTP service** from scripts or agents. For Cursor/clients that expect an MCP server over stdio, run docs_mcp in stdio mode in that repo’s config, or use an MCP-to-HTTP bridge that forwards to `http://localhost:11033/api/execute` and `/api/maas/tools` (public hub; private MCD on **10795**).
 
 ## Summary
 
@@ -97,4 +97,4 @@ Other repos can call Docs MCP as a **remote HTTP service** from scripts or agent
 | **Pertinent tools** | `search_docs`, `get_document`, `ask_docs`, `chunk_stats` |
 | **Discovery** | `GET /api/maas/tools` (curated) or `GET /api/tools` (all) |
 | **Execution** | `POST /api/execute` with `name` and `arguments` |
-| **Backend port** | 10795 (local) |
+| **Backend port** | 11033 (public hub); 10795 (private mcp-central-docs) |

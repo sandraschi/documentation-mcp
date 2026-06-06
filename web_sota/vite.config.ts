@@ -11,11 +11,12 @@ export default defineConfig({
         },
     },
     server: {
-        port: 10794,
+            allowedHosts: ['goliath'],
+        port: 11032,
         strictPort: true,
         proxy: {
             '/api': {
-                target: 'http://127.0.0.1:10795',
+                target: 'http://127.0.0.1:11033',
                 changeOrigin: true,
             }
         }

@@ -714,7 +714,7 @@
             "id": "docs-mcp",
             "name": "Documentation MCP Hub (Docs-MCP)",
             "description": "Federated RAG engine and SOTA dashboard for the MCP fleet documentation. Features multi-root discovery across internal docs and Advanced Memory repositories.",
-            "port": 10794,
+            "port": 11033,
             "repo_path": "D:/Dev/repos/documentation-mcp",
             "category": "Knowledge",
             "icon": "Library",

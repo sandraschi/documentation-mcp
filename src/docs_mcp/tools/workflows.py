@@ -1,6 +1,8 @@
 import logging
 from pathlib import Path
+
 from fastmcp import Context, FastMCP
+
 from docs_mcp.utils.formatting import _to_markdown
 
 logger = logging.getLogger("docs_mcp.tools.workflows")
@@ -14,7 +16,7 @@ def register_tools(mcp: FastMCP):
         import subprocess
         repo_root = Path(__file__).resolve().parent.parent.parent.parent
         start_ps1 = repo_root / "web_sota" / "start.ps1"
-        
+
         if not start_ps1.is_file():
             return {"success": False, "message": f"Startup script not found at {start_ps1}"}
 
@@ -23,12 +25,12 @@ def register_tools(mcp: FastMCP):
             subprocess.Popen(
                 ["powershell.exe", "-ExecutionPolicy", "Bypass", "-File", str(start_ps1), "-Automated"],
                 creationflags=subprocess.CREATE_NEW_CONSOLE if hasattr(subprocess, "CREATE_NEW_CONSOLE") else 0
-            ) # noqa: S603, S607
-            
+            )
+
             return {
-                "success": True, 
+                "success": True,
                 "message": "Webapp startup sequence initiated in background.",
-                "url": "http://localhost:10794"
+                "url": "http://localhost:11032"
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -49,7 +51,7 @@ def register_tools(mcp: FastMCP):
                 max_tokens=2000,
             )
             ctx.report_progress("Finalizing research report...", 90)
-            
+
             res = {
                 "success": True,
                 "operation": "agentic_doc_workflow",

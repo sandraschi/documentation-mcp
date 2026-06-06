@@ -44,8 +44,10 @@ cd ..
 ### 3. Execution
 - **Automated Startup**: Run `./start.ps1` or `start.bat`. This handles port clearing, backend initialization, and frontend serving.
 - **Manual Launch**:
-- Backend: `uv run docs-mcp` (Port 10795)
-- Frontend: `cd web_sota; npm run dev` (Port 10794)
+- Backend: `uv run docs-mcp` (port **11033**)
+- Frontend: `cd web_sota; npm run dev` (port **11032**)
+
+**Note:** Private **mcp-central-docs** uses **10794/10795**; this public repo uses **11032/11033** so both can run together.
 
 ## Repository Structure
 

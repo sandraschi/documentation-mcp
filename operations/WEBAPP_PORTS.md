@@ -111,8 +111,8 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10791 | documentation-mcp | Fleet Starts Launcher (ASGI UI) |
 | 10792 | avatar-mcp | Web dashboard frontend |
 | 10793 | avatar-mcp | Web dashboard backend (API) |
-| 10794 | documentation-mcp | Fleet Dashboard |
-| 10795 | documentation-mcp | Fleet Frontend |
+| 11032 | documentation-mcp | Public docs hub frontend (Vite; proxies `/api` → 11033) |
+| 11033 | documentation-mcp | Public docs hub backend (REST `/api/*` + MCP `/mcp`) |
 | 10796 | reaper-mcp | Web dashboard frontend |
 | 10797 | reaper-mcp | Web dashboard backend |
 | 10798 | multi-backup-mcp | Frontend |

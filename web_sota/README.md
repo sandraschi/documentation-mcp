@@ -18,8 +18,10 @@ A professional React-based interface for the Documentation MCP Hub, providing ce
 - **Routing**: Component-based layout with deep-link support for research queries.
 
 ## Ports & Orchestration
-- **Development Port**: **10794**
-- **Production Port**: Served via the Python backend on **10795**.
+- **Development Port**: **11032** (Vite; proxies `/api` → 11033)
+- **Backend Port**: **11033** (Starlette + MCP `/mcp`)
+
+Private **mcp-central-docs** retains **10794/10795**.
 - **Startup Logic**: 
     1. `./start.ps1` clears port squatters.
     2. Backend (Uvicorn/Starlette) initializes the vector store and registry.
