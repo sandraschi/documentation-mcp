@@ -1,4 +1,5 @@
-﻿set windows-shell := ["pwsh.exe", "-NoLogo", "-Command"]
+set windows-shell := ["pwsh.exe", "-NoLogo", "-Command"]
+import 'scripts/just/fleet.just'
 
 # ── Dashboard ─────────────────────────────────────────────────────────────────
 
@@ -109,6 +110,24 @@ fleet-fastmcp:
 
 fleet: fleet-registry fleet-fastmcp
 
+# ── RAG (LanceDB doc index) ───────────────────────────────────────────────────
+
+# Full documentation reindex (CPU)
+rag:
+    @pwsh.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag.ps1
+
+# Full documentation reindex on GPU (after rag-gpu-install)
+rag-gpu:
+    @pwsh.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag-gpu.ps1
+
+# One-time: install fastembed-gpu + onnxruntime-gpu + NVIDIA CUDA 12 runtimes (~1.5 GB)
+rag-gpu-install:
+    @pwsh.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag-gpu-install.ps1
+
+# Revert to CPU onnxruntime stack
+rag-cpu-install:
+    @pwsh.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag-cpu-install.ps1
+
 # ── Docker ───────────────────────────────────────────────────────────────────
 # Check Docker Desktop status
 docker-status:
@@ -132,4 +151,3 @@ readme-hero:
 toolbench-drift:
     Set-Location '{{justfile_directory()}}'
     uv run python toolbench/scripts/report_reference_drift.py
-

@@ -27,7 +27,7 @@ EXCLUDE_DIRS = {
 class ContentIngestor:
     """Crawls and chunks documentation for the VectorStore.
 
-    Federated Edition: Ingests internal /docs and external Advanced Memory roots.
+    Indexes documentation-mcp/docs by default; optional Advanced Memory via DOCS_FEDERATE_MEMORY.
     """
 
     def __init__(self):
@@ -49,6 +49,8 @@ class ContentIngestor:
             for k, v in meta.items():
                 if isinstance(v, list):
                     clean[k] = ", ".join(str(i) for i in v)
+                elif isinstance(v, bool):
+                    clean[k] = v
                 else:
                     clean[k] = str(v)
             return clean, post.content
@@ -139,8 +141,10 @@ class ContentIngestor:
             for p in paths:
                 all_docs.extend(self.process_file(p, config.DOCS_ROOT, extra_meta={"type": "core"}))
 
-        # 2. Federated: Advanced Memory Knowledge (Optional)
-        if config.knowledge_path.exists():
+        # 2. Federated: Advanced Memory (opt-in via env or webapp settings)
+        from .rag_paths import effective_federate_memory
+
+        if effective_federate_memory() and config.knowledge_path.exists():
             paths = self.glob_markdown(config.knowledge_path)
             logger.info(f"Federating {len(paths)} files from advanced-memory/knowledge")
             for p in paths:
@@ -152,8 +156,8 @@ class ContentIngestor:
                     )
                 )
 
-        # 3. Federated: Advanced Memory Notes (Optional)
-        if config.notes_path.exists():
+        # 3. Federated: Advanced Memory Notes (opt-in via env or webapp settings)
+        if effective_federate_memory() and config.notes_path.exists():
             paths = self.glob_markdown(config.notes_path)
             logger.info(f"Federating {len(paths)} files from advanced-memory/notes")
             for p in paths:
