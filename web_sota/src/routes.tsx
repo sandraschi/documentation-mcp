@@ -13,6 +13,8 @@ export type ViewState =
     | "fleet"
     | "logs"
     | "settings"
+    | "api-docs"
+    | "admin"
 
 export const viewToPath: Record<ViewState, string> = {
     dashboard: "/dashboard",
@@ -28,6 +30,8 @@ export const viewToPath: Record<ViewState, string> = {
     fleet: "/fleet",
     logs: "/logs",
     settings: "/settings",
+    "api-docs": "/api-docs",
+    admin: "/admin",
 }
 
 const pathToView: Record<string, ViewState> = {}

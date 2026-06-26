@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Outlet, useLocation, useNavigate, NavLink } from "react-router-dom"
-import { Search as SearchIcon, Home, CircleHelp, BookOpen, Menu, Terminal, MessageSquare, Bot, Send, X as CloseIcon, LayoutGrid, Settings as SettingsIcon, FileSearch, BookMarked, Brain, Shield, FolderOpen, ScrollText, ChevronLeft, ChevronRight } from "lucide-react"
+import { Search as SearchIcon, Home, CircleHelp, BookOpen, Menu, Terminal, MessageSquare, Bot, Send, X as CloseIcon, LayoutGrid, Settings as SettingsIcon, FileSearch, BookMarked, Brain, Shield, FolderOpen, ScrollText, ChevronLeft, ChevronRight, Code2, Activity } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -30,6 +30,8 @@ const navItems: NavItem[] = [
     { title: "Project Portfolio", view: "fleet", icon: FolderOpen },
     { title: "System Logs", view: "logs", icon: ScrollText },
 
+    { title: "API Docs", view: "api-docs", icon: Code2 },
+    { title: "Admin", view: "admin", icon: Activity },
     { title: "Settings", view: "settings", icon: SettingsIcon },
     { title: "Help", view: "help", icon: CircleHelp },
 ]

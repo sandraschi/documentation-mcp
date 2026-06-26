@@ -18,7 +18,19 @@ export default defineConfig({
             '/api': {
                 target: 'http://127.0.0.1:11033',
                 changeOrigin: true,
-            }
+            },
+            '/docs': {
+                target: 'http://127.0.0.1:11033',
+                changeOrigin: true,
+            },
+            '/openapi.json': {
+                target: 'http://127.0.0.1:11033',
+                changeOrigin: true,
+            },
+            '/redoc': {
+                target: 'http://127.0.0.1:11033',
+                changeOrigin: true,
+            },
         }
     }
 })

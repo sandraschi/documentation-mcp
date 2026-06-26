@@ -93,7 +93,7 @@ class BaseVectorStore:
         logger.info(f"Indexed {len(data)} items into LanceDB table '{self.table_name}'.")
         return len(data)
 
-    def search(self, query: str, limit: int = 5, where: str = None) -> list[dict[str, any]]:
+    def search(self, query: str, limit: int = 5, where: str = None, offset: int = 0, source: str = None) -> list[dict[str, any]]:
         if self.table_name not in self.db.table_names():
             logger.warning(f"Table '{self.table_name}' not found.")
             return []
@@ -101,11 +101,12 @@ class BaseVectorStore:
         tbl = self.db.open_table(self.table_name)
         query_embedding = list(self.embedding_model.embed([query]))[0]
 
-        search_req = tbl.search(query_embedding).limit(limit)
+        search_req = tbl.search(query_embedding).limit(limit + offset)
         if where:
             search_req = search_req.where(where)
 
-        return search_req.to_arrow().to_pylist()
+        results = search_req.to_arrow().to_pylist()
+        return results[offset:]
 
     def get_table_metadata(self) -> dict:
         if self.table_name not in self.db.table_names():

@@ -1,4 +1,5 @@
 import logging
+import time
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request
@@ -38,6 +39,28 @@ async def api_status():
     except Exception as e:
         logger.error(f"Error in api_status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/health")
+async def api_health():
+    """Detailed health check for admin dashboard."""
+    store = get_store()
+    memory_store = get_memory_store()
+    meta = store.get_table_metadata() if hasattr(store, "get_table_metadata") else {}
+    sources = store.list_sources() if meta.get("exists") else []
+
+    return {
+        "status": "ok",
+        "server": "Documentation MCP",
+        "version": "1.0.1",
+        "uptime_seconds": int(time.time() - _start_time) if "_start_time" in dir() else 0,
+        "tool_count": 0,  # populated dynamically
+        "providers": {
+            "vector_db": {"status": "ok" if meta.get("exists") else "empty", "chunks": meta.get("row_count", 0), "sources": len(sources)},
+            "memory_store": {"status": "ok" if hasattr(memory_store, "get_stats") else "unavailable"},
+            "llm": {"provider": settings_store.load_settings().get("provider", "none")},
+        },
+    }
 
 @router.post("/chat")
 async def api_chat(request: Request):

@@ -9,11 +9,12 @@ import { Memory } from "@/features/Memory"
 import { Help } from "@/features/Help"
 import { Skills } from "@/features/Skills"
 import { Apps } from "@/features/Apps"
-import { DockerDesktop } from "@/features/DockerDesktop"
 import { Settings } from "@/features/Settings"
 import { ChatView } from "@/features/Chat"
 import { ProjectPortfolio } from "@/features/ProjectPortfolio"
 import { Logs } from "@/features/Logs"
+import { ApiDocs } from "@/features/ApiDocs"
+import { Admin } from "@/features/Admin"
 
 
 
@@ -34,9 +35,8 @@ function App() {
                 <Route path="apps" element={<Apps />} />
                 <Route path="fleet" element={<ProjectPortfolio />} />
                 <Route path="logs" element={<Logs />} />
-
-                <Route path="docker" element={<DockerDesktop />} />
-
+                <Route path="api-docs" element={<ApiDocs />} />
+                <Route path="admin" element={<Admin />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Route>
