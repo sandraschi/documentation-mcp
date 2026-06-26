@@ -1,25 +1,19 @@
 import * as React from "react"
 import { 
     Terminal, 
-    Trash2, 
     RefreshCw, 
     Activity, 
     ShieldAlert, 
-    Database, 
-    Play, 
-    Square, 
-    ChevronRight,
     Search,
-    Filter,
-    ArrowDown
+    ArrowDown,
+    Square
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { API_BASE } from "@/lib/api"
-import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { API_BASE } from "@/lib/api"
 
 interface Process {
     id: string
@@ -30,7 +24,7 @@ interface Process {
 export function Logs() {
     const [logs, setLogs] = React.useState<string[]>([])
     const [processes, setProcesses] = React.useState<Process[]>([])
-    const [loading, setLoading] = React.useState(true)
+    const [, setLoading] = React.useState(true)
     const [autoScroll, setAutoScroll] = React.useState(true)
     const [filter, setFilter] = React.useState("ALL")
     const [search, setSearch] = React.useState("")

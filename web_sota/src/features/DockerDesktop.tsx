@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { AlertCircle, CheckCircle, RefreshCw, Zap, HardDrive, Activity } from 'lucide-react';
 import { API_BASE } from "@/lib/api";
 

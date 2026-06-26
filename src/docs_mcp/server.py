@@ -11,8 +11,8 @@ from fastmcp import FastMCP
 from fastmcp.server import create_proxy
 
 from docs_mcp.api import docs, fleet, interaction, settings, skills
-from docs_mcp.backend.process_manager import process_manager
 from docs_mcp.backend.log_buffer import install_log_buffer
+from docs_mcp.backend.process_manager import process_manager
 
 # Modular Imports
 from docs_mcp.backend.store_registry import close_stores, get_memory_store, get_store

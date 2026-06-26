@@ -16,7 +16,7 @@ interface UserMenuProps {
     onNavigateToSettings?: () => void
 }
 
-export function UserMenu({ onNavigate }: UserMenuProps) {
+export function UserMenu({ onNavigateToSettings }: UserMenuProps) {
     const { user, isAuthenticated, logout } = useAuth()
     const [loginOpen, setLoginOpen] = React.useState(false)
 

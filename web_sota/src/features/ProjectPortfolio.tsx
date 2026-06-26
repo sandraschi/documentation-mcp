@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ExternalLink, HardDrive, Cpu, Database, Brain, Loader2, Search, Filter, Layers, Info, MessageSquare, BookOpen, Star } from "lucide-react"
+import { ExternalLink, HardDrive, Cpu, Database, Brain, Loader2, Search, Filter, Layers, MessageSquare, BookOpen, Star } from "lucide-react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"

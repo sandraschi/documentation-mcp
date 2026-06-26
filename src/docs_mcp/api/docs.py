@@ -1,11 +1,10 @@
 import asyncio
 import json
 import logging
-import time
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException, Query, Request
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Query
 from fastapi.responses import StreamingResponse
 
 from docs_mcp.backend.config import config

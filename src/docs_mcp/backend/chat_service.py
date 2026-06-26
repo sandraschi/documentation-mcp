@@ -2,10 +2,9 @@
 
 import json
 import logging
-import time
 import uuid
 from collections import defaultdict
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
 from docs_mcp.backend import llm_client as lc
 
@@ -44,12 +43,12 @@ async def auto_discover() -> dict[str, bool]:
         models, _ = await lc.list_ollama_models("http://localhost:11434")
         result["ollama"] = len(models) > 0
     except Exception:
-        pass
+        logger.debug("Ollama not detected on port 11434")
     try:
         models, _ = await lc.list_openai_models("http://localhost:1234/v1")
         result["lmstudio"] = len(models) > 0
     except Exception:
-        pass
+        logger.debug("LM Studio not detected on port 1234")
     return result
 
 

@@ -2,8 +2,7 @@
 import logging
 
 from fastmcp import FastMCP
-from prefab_ui.app import PrefabApp
-from prefab_ui.components import Card, CardHeader, CardTitle, CardContent, Text, Metric
+from prefab_ui.components import Card, CardContent, CardHeader, CardTitle, Metric, Text
 
 logger = logging.getLogger("docs_mcp.prefab")
 

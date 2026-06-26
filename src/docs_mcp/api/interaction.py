@@ -1,18 +1,18 @@
 import logging
 import time
-from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 
 from docs_mcp.backend import settings_store
-from docs_mcp.backend.store_registry import get_memory_store, get_store
+from docs_mcp.backend.chat_service import auto_discover, stream_chat
 from docs_mcp.backend.log_buffer import get_log_buffer
-from docs_mcp.backend.chat_service import stream_chat, auto_discover
+from docs_mcp.backend.store_registry import get_memory_store, get_store
 from docs_mcp.tools.rag import _search_docs_raw
 
 logger = logging.getLogger("docs_mcp.api.interaction")
 router = APIRouter(prefix="/api")
+_SERVER_START = time.time()
 
 @router.get("/status")
 async def api_status():
@@ -53,7 +53,7 @@ async def api_health():
         "status": "ok",
         "server": "Documentation MCP",
         "version": "1.0.1",
-        "uptime_seconds": int(time.time() - _start_time) if "_start_time" in dir() else 0,
+        "uptime_seconds": int(time.time() - _SERVER_START),
         "tool_count": 0,  # populated dynamically
         "providers": {
             "vector_db": {"status": "ok" if meta.get("exists") else "empty", "chunks": meta.get("row_count", 0), "sources": len(sources)},

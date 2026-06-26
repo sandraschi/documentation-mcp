@@ -4,7 +4,8 @@ No hardcoded model lists; supports auto-discovery and resilient fallback.
 
 import json
 import logging
-from typing import Any, AsyncGenerator
+from collections.abc import AsyncGenerator
+from typing import Any
 
 import aiohttp
 
@@ -159,7 +160,7 @@ async def stream_ollama(base_url: str, model: str, messages: list[dict[str, str]
                             yield content
                     except json.JSONDecodeError:
                         pass
-    except aiohttp.ClientConnectorError as e:
+    except aiohttp.ClientConnectorError:
         yield f"Error: Could not connect to Ollama at {base_url}"
 
 
@@ -211,5 +212,5 @@ async def stream_openai_compatible(
                                 yield content
                     except json.JSONDecodeError:
                         pass
-    except aiohttp.ClientConnectorError as e:
+    except aiohttp.ClientConnectorError:
         yield f"Error: Could not connect to LLM at {base_url}"
