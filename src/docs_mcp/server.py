@@ -17,6 +17,7 @@ from docs_mcp.backend.log_buffer import install_log_buffer
 # Modular Imports
 from docs_mcp.backend.store_registry import close_stores, get_memory_store, get_store
 from docs_mcp.tools import memory, prompts, rag, system, workflows
+from docs_mcp.tools.prefab_cards import register_prefab_cards
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO)
@@ -43,6 +44,7 @@ system.register_tools(docs_mcp)
 workflows.register_tools(docs_mcp)
 prompts.register_tools(docs_mcp)
 memory.register_tools(docs_mcp)
+register_prefab_cards(docs_mcp)
 
 # 3. Lifespan Management
 @asynccontextmanager
