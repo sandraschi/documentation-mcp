@@ -154,9 +154,9 @@ export function Settings() {
         setReindexLoading(true)
         setReindexMessage(null)
         try {
-            const res = await fetch(API_BASE + "/api/reindex")
+            const res = await fetch(API_BASE + "/api/reindex", { method: "POST", signal: AbortSignal.timeout(10000) })
             const data = await res.json()
-            const msg = data.result?.message ?? data.result?.error ?? data.message ?? (res.ok ? "Reindex completed." : "Reindex failed.")
+            const msg = data.message ?? (res.ok ? "Reindex started in background." : "Reindex failed.")
             setReindexMessage(msg)
         } catch (e) {
             setReindexMessage("Request failed.")

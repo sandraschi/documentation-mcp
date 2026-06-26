@@ -1,7 +1,9 @@
+import asyncio
 import logging
+import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, BackgroundTasks, HTTPException
 
 from docs_mcp.backend.config import config
 from docs_mcp.backend.ingestor import ContentIngestor
@@ -9,6 +11,27 @@ from docs_mcp.backend.store_registry import get_store
 
 logger = logging.getLogger("docs_mcp.api.docs")
 router = APIRouter(prefix="/api")
+
+_reindex_status: dict[str, str] = {}
+
+
+async def _run_reindex(job_id: str) -> None:
+    try:
+        _reindex_status[job_id] = "running"
+        store = get_store()
+        from docs_mcp.backend.rag_paths import effective_extra_paths
+
+        ingestor = ContentIngestor()
+        extra = effective_extra_paths()
+        docs = ingestor.load_all_docs(extra_paths=extra or None)
+        if docs:
+            store.add_documents(docs)
+            _reindex_status[job_id] = f"complete:{len(docs)}"
+        else:
+            _reindex_status[job_id] = "error:no docs found"
+    except Exception as e:
+        logger.error(f"Reindex job {job_id} failed: {e}")
+        _reindex_status[job_id] = f"error:{e}"
 
 @router.get("/search")
 async def api_search(q: str = ""):
@@ -78,19 +101,21 @@ async def api_content(path: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/reindex")
-async def api_reindex():
-    """Trigger manual re-indexing."""
-    try:
-        store = get_store()
-        from docs_mcp.backend.rag_paths import effective_extra_paths
+async def api_reindex(background_tasks: BackgroundTasks):
+    """Trigger manual re-indexing in the background."""
+    job_id = uuid.uuid4().hex[:12]
+    _reindex_status[job_id] = "queued"
+    background_tasks.add_task(_run_reindex, job_id)
+    return {"success": True, "job_id": job_id, "message": "Reindex started in background."}
 
-        ingestor = ContentIngestor()
-        extra = effective_extra_paths()
-        docs = ingestor.load_all_docs(extra_paths=extra or None)
-        if docs:
-            store.add_documents(docs)
-            return {"success": True, "chunks": len(docs)}
-        return {"success": False, "error": "No docs found"}
-    except Exception as e:
-        logger.error(f"Error in api_reindex: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+@router.get("/reindex/{job_id}")
+async def api_reindex_status(job_id: str):
+    """Poll reindex job status."""
+    status = _reindex_status.get(job_id)
+    if status is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+    if status.startswith("complete:"):
+        return {"success": True, "status": "complete", "chunks": int(status.split(":")[1])}
+    if status.startswith("error:"):
+        return {"success": False, "status": "error", "error": status.split(":", 1)[1]}
+    return {"success": True, "status": status}

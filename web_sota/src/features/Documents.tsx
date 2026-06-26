@@ -149,15 +149,15 @@ export function Documents() {
                                 size="sm"
                                 className="w-full h-8 gap-2 text-[11px] font-bold uppercase tracking-widest border-white/5"
                                 disabled={reindexLoading}
-                                onClick={async () => {
-                                    setReindexLoading(true); setReindexMessage(null);
-                                    try {
-                                        const r = await fetch(API_BASE + "/api/reindex");
-                                        const d = await r.json();
-                                        setReindexMessage(d.result?.message ?? d.result?.error ?? d.message ?? (r.ok ? "Done." : "Failed."));
-                                    } catch { setReindexMessage("Request failed."); }
-                                    finally { setReindexLoading(false); }
-                                }}
+                                    onClick={async () => {
+                                        setReindexLoading(true); setReindexMessage(null);
+                                        try {
+                                            const r = await fetch(API_BASE + "/api/reindex", { method: "POST", signal: AbortSignal.timeout(10000) });
+                                            const d = await r.json();
+                                            setReindexMessage(d.message ?? (r.ok ? "Reindex started in background." : "Failed."));
+                                        } catch { setReindexMessage("Could not reach backend."); }
+                                        finally { setReindexLoading(false); }
+                                    }}
                             >
                                 {reindexLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCcw className="w-3 h-3" />}
                                 {reindexLoading ? "Processing" : "Force Reindex"}

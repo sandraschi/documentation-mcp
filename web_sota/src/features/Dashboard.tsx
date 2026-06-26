@@ -105,10 +105,10 @@ export function Dashboard() {
                             System Active
                         </div>
                         <h1 className="text-3xl font-extrabold tracking-tight text-foreground leading-tight">
-                            Project <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">Documents</span>
+                            Documentation <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">Hub</span>
                         </h1>
                         <p className="text-lg text-muted-foreground leading-relaxed">
-                            A unified environment for managing, searching, and synthesizing technical documentation from local and remote repositories.
+                            A unified environment for managing, searching, and synthesizing MCP ecosystem documentation from local and remote repositories.
                         </p>
                     </div>
 
