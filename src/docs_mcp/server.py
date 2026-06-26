@@ -122,7 +122,50 @@ def main():
     docs_mcp.run(transport="stdio")
 
 if __name__ == "__main__":
-    import uvicorn
-    # Public hub: frontend 11032, backend 11033 (mcp-central-docs keeps 10794/10795)
+    import subprocess
+    import time
+
     port = int(os.getenv("DOCS_MCP_PORT", "11033"))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+
+    # Multi-layer zombie kill: image-name, port, UAC-elevated, poll
+    _img_kill = (
+        "Stop-Process -Name 'docs-mcp-backend' -Force -ErrorAction SilentlyContinue; "
+        "Stop-Process -Name 'documentation-mcp-native' -Force -ErrorAction SilentlyContinue; "
+        "Stop-Process -Name 'documentation-mcp-backend' -Force -ErrorAction SilentlyContinue; "
+        "taskkill /F /IM documentation-mcp-backend.exe /T 2>$null; "
+        "taskkill /F /IM documentation-mcp-native.exe /T 2>$null"
+    )
+    _port_kill = (
+        f"Get-NetTCPConnection -LocalPort {port} -ErrorAction SilentlyContinue "
+        f"| ForEach-Object {{ taskkill /F /PID `$_.OwningProcess /T 2>$null }}"
+    )
+    _poll = f"if (Get-NetTCPConnection -LocalPort {port} -ErrorAction SilentlyContinue) {{ 1 }} else {{ 0 }}"
+    _elevated = (
+        f"Start-Process powershell -Verb RunAs -WindowStyle Hidden -ArgumentList "
+        f"'-NoProfile -Command \"Stop-Process -Name documentation-mcp-backend -Force -ErrorAction SilentlyContinue; "
+        f"taskkill /F /IM documentation-mcp-backend.exe /T 2>$null; "
+        f"Get-NetTCPConnection -LocalPort {port} -ErrorAction SilentlyContinue | "
+        f"ForEach-Object {{ taskkill /F /PID `$_.OwningProcess /T 2>$null }}\"'"
+    )
+
+    subprocess.run(["powershell.exe", "-NoProfile", "-Command", _img_kill], capture_output=True)
+    subprocess.run(["powershell.exe", "-NoProfile", "-Command", _port_kill], capture_output=True)
+
+    for i in range(240):
+        r = subprocess.run(
+            ["powershell.exe", "-NoProfile", "-Command", _poll],
+            capture_output=True, text=True
+        )
+        if r.stdout.strip() == "0":
+            break
+
+        if i == 5:
+            subprocess.run(["powershell.exe", "-NoProfile", "-Command", _img_kill], capture_output=True)
+            subprocess.run(["powershell.exe", "-NoProfile", "-Command", _port_kill], capture_output=True)
+        if i == 15:
+            subprocess.run(["powershell.exe", "-NoProfile", "-Command", _elevated], capture_output=True)
+
+        time.sleep(1)
+
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=port, reload=False, reuse_port=True)
