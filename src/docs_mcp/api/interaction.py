@@ -2,10 +2,12 @@ import logging
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import StreamingResponse
 
 from docs_mcp.backend import settings_store
 from docs_mcp.backend.store_registry import get_memory_store, get_store
 from docs_mcp.backend.log_buffer import get_log_buffer
+from docs_mcp.backend.chat_service import stream_chat, auto_discover
 from docs_mcp.tools.rag import _search_docs_raw
 
 logger = logging.getLogger("docs_mcp.api.interaction")
@@ -39,26 +41,45 @@ async def api_status():
 
 @router.post("/chat")
 async def api_chat(request: Request):
-    """Conversational RAG endpoint."""
-    try:
-        body = await request.json()
-        question = (body.get("message") or "").strip()
-        provider = body.get("provider") or settings_store.load_settings().get("provider")
+    """Streaming conversational RAG endpoint (SSE)."""
+    body = await request.json()
+    question = (body.get("message") or "").strip()
+    conversation_id = body.get("conversation_id")
+    persona = body.get("persona", "default")
+    provider = body.get("provider")
+    model = body.get("model")
+    api_key = body.get("api_key")
+    api_url = body.get("api_url")
+    system_prompt_override = body.get("system_prompt")
 
-        if not question:
-            raise HTTPException(status_code=400, detail="No message provided")
+    if not question:
+        raise HTTPException(status_code=400, detail="No message provided")
 
-        search_result = _search_docs_raw(question, limit=5)
-        sources = [r["filename"] for r in (search_result.get("data") or [])]
+    s = settings_store.load_settings()
 
-        # Real logic for chat would depend on configured provider
-        # For this refactor, we maintain the RAG + LLM call structure
-        # (Simplified for brevity, but logically consistent)
-        answer = f"Researching: {question}. Found {len(sources)} sources."
-        return {"answer": answer, "sources": sources}
-    except Exception as e:
-        logger.error(f"Error in api_chat: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    async def event_stream():
+        async for chunk in stream_chat(
+            message=question,
+            conversation_id=conversation_id,
+            persona=persona or "default",
+            provider=provider,
+            model=model,
+            api_key=api_key,
+            api_url=api_url,
+            system_prompt_override=system_prompt_override,
+            search_fn=_search_docs_raw,
+            settings=s,
+        ):
+            yield f"data: {chunk}\n\n"
+        yield "data: {\"type\":\"stream_end\"}\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+@router.get("/auto-discover")
+async def api_auto_discover():
+    """Scan standard ports for running LLM engines."""
+    result = await auto_discover()
+    return result
 
 @router.get("/logs")
 async def api_logs(limit: int = 100):
