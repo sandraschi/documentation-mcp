@@ -4,6 +4,19 @@
 
 > FastMCP 3.1.1+.3+ compatible VRM avatar management and animation server with conversational capabilities, SEP-1577 sampling support, and VRChat OSC integration
 
+## Creative pipeline (v0.4.1+)
+
+Orchestrates VRoid Hub, vroidstudio-mcp, blender-mcp, VTube staging.
+
+| Doc | Path |
+|-----|------|
+| Repo | `avatar-mcp/docs/CREATIVE_PIPELINE.md` |
+| Fleet hub | `mcp-central-docs/docs/avatars/README.md` |
+| What is MMD? | `mcp-central-docs/docs/avatars/MMD_EXPLAINER.md` |
+| Godot | `mcp-central-docs/docs/avatars/GODOT_AND_AVATARS.md` |
+
+Web UI: **http://127.0.0.1:10792/pipeline** | API: **10793**
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://docs.astral.sh/ruff/)

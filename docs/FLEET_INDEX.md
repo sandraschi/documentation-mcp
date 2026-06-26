@@ -10,8 +10,8 @@ Central documentation for all projects: MCP servers, myai, veogen, mywienerlinie
 
 **MCP servers should follow the standards documented here**  first-connection quality, FastMCP 3.1+, webapp ports, and packaging live in the modular docs (not one frozen December 2025 snapshot).
 
-- **Start here:** **[AGENT_PROTOCOLS.md](standards/AGENT_PROTOCOLS.md)**  SOTA_REQUIREMENTS, DEPLOYMENT_STANDARDS, TOOL_DESIGN, WEBAPP_STANDARDS, etc.
-- **First-time success (historical doc, STALE):** [MCP_SERVER_FIRST_TIME_SUCCESS_GUARANTEE.md](standards/MCP_SERVER_FIRST_TIME_SUCCESS_GUARANTEE.md)  ideas still valid; **do not treat code samples as current** without cross-checking FastMCP 3.1+.
+- **Start here:** **[AGENT_PROTOCOLS.md](core/AGENT_PROTOCOLS.md)**  SOTA_REQUIREMENTS, DEPLOYMENT_STANDARDS, TOOL_DESIGN, WEBAPP_STANDARDS, etc.
+- **First-time success (historical doc, STALE):** [MCP_SERVER_FIRST_TIME_SUCCESS_GUARANTEE.md](core/MCP_SERVER_FIRST_TIME_SUCCESS_GUARANTEE.md)  ideas still valid; **do not treat code samples as current** without cross-checking FastMCP 3.1+.
 
 ---
 
@@ -67,11 +67,11 @@ MCD features a built-in LanceDB-powered RAG engine for intelligent documentation
 ### Core standards (v12.0)
 | Doc | Purpose |
 |-----|---------|
-| **[AGENT_PROTOCOLS.md](standards/AGENT_PROTOCOLS.md)** | Primary standards entry point |
+| **[AGENT_PROTOCOLS.md](core/AGENT_PROTOCOLS.md)** | Primary standards entry point |
 | **[toolbench/](toolbench/README.md)** | ToolBench (Arcade) analysis + fleet alignment + per-server improvement notes |
-| **[SOTA_REQUIREMENTS.md](standards/SOTA_REQUIREMENTS.md)** | Core Architecture & FastMCP 3.1 features |
-| **[WEBAPP_STANDARDS.md](standards/WEBAPP_STANDARDS.md)** | UI/UX Blueprint & Port Allocation Hygiene |
-| **[VERIFICATION_STANDARDS.md](standards/VERIFICATION_STANDARDS.md)** | Browser safety & log tail requirements |
+| **[SOTA_REQUIREMENTS.md](core/SOTA_REQUIREMENTS.md)** | Core Architecture & FastMCP 3.1 features |
+| **[WEBAPP_STANDARDS.md](core/WEBAPP_STANDARDS.md)** | UI/UX Blueprint & Port Allocation Hygiene |
+| **[VERIFICATION_STANDARDS.md](core/VERIFICATION_STANDARDS.md)** | Browser safety & log tail requirements |
 | **[BUGS_DEPOT.md](troubleshooting/BUGS_DEPOT.md)** | Centralized Failure Registry (P0-P3) |
 | **[VIBE_OPERATIONS.md](operations/VIBE_OPERATIONS.md)** |  Live Infrastructure Status |
 | **[DEVELOPER_LINGO.md](operations/DEVELOPER_LINGO.md)** | Shared dev shorthand (e.g., smoke test) |
@@ -81,7 +81,7 @@ MCD features a built-in LanceDB-powered RAG engine for intelligent documentation
 | **[DEV_SANDBOX_HARDENING_PROFILE.md](operations/DEV_SANDBOX_HARDENING_PROFILE.md)** | Optional stepwise dev sandbox hardening with rollback and lockout-avoidance guidance |
 | **[HERE_NOW_STATIC_PUBLISHING.md](operations/HERE_NOW_STATIC_PUBLISHING.md)** | Optional **here.now** instant static URLs for agent-built pages (fleet overview, demos); static-only + claim-window caveats |
 | **[STRUCTURE.md](STRUCTURE.md)** | This repo's directory layout |
-| **[GITIGNORE_STANDARDS.md](standards/GITIGNORE_STANDARDS.md)** | **Never commit `node_modules/`, venvs, caches**; VCS recovery |
+| **[GITIGNORE_STANDARDS.md](core/GITIGNORE_STANDARDS.md)** | **Never commit `node_modules/`, venvs, caches**; VCS recovery |
 
 ---
 
@@ -207,7 +207,7 @@ ecosystem/
 - [Zed Integration](ecosystem/zed/README.md) - FOSS agentic IDE
 - [FOSS Extensions](ecosystem/foss-extensions/README.md) - Roo Code, Cline, Continue
 - [Glama Registry](ecosystem/glama/REGISTRY_GUIDE.md) - Publish your server
-- [MCPB Packaging](standards/MCPB_PACKAGING_STANDARDS.md) - Package your server
+- [MCPB Packaging](core/MCPB_PACKAGING_STANDARDS.md) - Package your server
 
 ---
 
@@ -628,8 +628,8 @@ Superseded docs (e.g., legacy FastMCP 2.x migration). **Current:** FastMCP 3.1.
 2. Choose transport: [docs/getting-started/choosing-transport.md](getting-started/choosing-transport.md)
 3. Follow [docs/fastmcp/migration-guide.md](fastmcp/migration-guide.md) - Use FastMCP 3.1+
 4. Use patterns from [docs/patterns/](patterns/)
-5. Repo bar: [PACKAGING_STANDARDS.md](standards/PACKAGING_STANDARDS.md) 5 (**uv**, **justfile**, **`llms.txt` + `llms-full.txt`**, **glama.json**, **`mcpb pack`**)  [integrations/llms-txt-manifest.md](integrations/llms-txt-manifest.md)
-6. MCPB manifest + assets: [MCPB_PACKAGING_STANDARDS.md](standards/MCPB_PACKAGING_STANDARDS.md)
+5. Repo bar: [PACKAGING_STANDARDS.md](core/PACKAGING_STANDARDS.md) 5 (**uv**, **justfile**, **`llms.txt` + `llms-full.txt`**, **glama.json**, **`mcpb pack`**)  [integrations/llms-txt-manifest.md](integrations/llms-txt-manifest.md)
+6. MCPB manifest + assets: [MCPB_PACKAGING_STANDARDS.md](core/MCPB_PACKAGING_STANDARDS.md)
 7. Publish / discovery: [Glama](ecosystem/glama/) (`glama.json`)
 
 ### Docker & Containerization?
@@ -652,15 +652,15 @@ Superseded docs (e.g., legacy FastMCP 2.x migration). **Current:** FastMCP 3.1.
 
 | Standard | Document |
 |----------|----------|
-| Documentation Quality | [standards/STANDARDS.md](standards/STANDARDS.md) |
+| Documentation Quality | [standards/STANDARDS.md](core/STANDARDS.md) |
 | FastMCP 3.1+ | [docs/fastmcp/migration-guide.md](fastmcp/migration-guide.md) |
-| MCPB Packaging | [standards/MCPB_PACKAGING_STANDARDS.md](standards/MCPB_PACKAGING_STANDARDS.md) |
-| Repo build bar (uv, justfile, llms.txt + llms-full.txt, glama, `mcpb pack`) | [standards/PACKAGING_STANDARDS.md](standards/PACKAGING_STANDARDS.md) 5  [integrations/llms-txt-manifest.md](integrations/llms-txt-manifest.md) |
+| MCPB Packaging | [standards/MCPB_PACKAGING_STANDARDS.md](core/MCPB_PACKAGING_STANDARDS.md) |
+| Repo build bar (uv, justfile, llms.txt + llms-full.txt, glama, `mcpb pack`) | [standards/PACKAGING_STANDARDS.md](core/PACKAGING_STANDARDS.md) 5  [integrations/llms-txt-manifest.md](integrations/llms-txt-manifest.md) |
 | Portmanteau Pattern | [patterns/PORTMANTEAU_CONCEPT.md](patterns/PORTMANTEAU_CONCEPT.md) |
 | Orphan Guard | [docs/patterns/MCP_ORPHAN_GUARD_PATTERN.md](patterns/MCP_ORPHAN_GUARD_PATTERN.md) |
 | Docker Builds | [docs/docker/BUILD_OPTIMIZATION.md](docker/BUILD_OPTIMIZATION.md) |
 | Monitoring | [monitoring/MCP_MONITORING_STANDARDS.md](monitoring/MCP_MONITORING_STANDARDS.md) |
-| Justfile SOTA | [standards/JUSTFILE_STANDARDS.md](standards/JUSTFILE_STANDARDS.md)  [integrations/justfile.md](integrations/justfile.md) |
+| Justfile SOTA | [standards/JUSTFILE_STANDARDS.md](core/JUSTFILE_STANDARDS.md)  [integrations/justfile.md](integrations/justfile.md) |
 
 ---
 

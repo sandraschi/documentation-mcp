@@ -1,28 +1,27 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to VRChat MCP will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [14.1.0] - 2026-04-13
 
 ### Added
-- FastMCP 3.1.1++ dual interface implementation (MCP stdio + FastAPI HTTP)
-- `/api/docs` OpenAPI documentation endpoint
-- `/health` health check endpoint
-- Multilevel help system with `get_help()` tool
-- Comprehensive server status tools
-- Tool organization in category subdirectories (avatar/, osc/, npc/, shared/)
-- Example prompt templates in `prompts/` directory
-- Local test scripts for both MCP and FastAPI interfaces
-- Postman collection for API endpoint testing
-- Unit and integration test suites
-- DXT/MCPB workflow with validation and packaging scripts
-- PowerShell test runner with reliability rules
+- Integrated official VRChat REST API (`vrchatapi`) for high-fidelity metadata.
+- Integrated VRChat "Pipeline" (Websocket) for real-time notifications (Invites, Friends).
+- New Portmanteau Tool: `manage_world` (Search, Get Info).
+- New Portmanteau Tool: `manage_economy` (VRChat Credits, Creator Economy products).
+- New Portmanteau Tool: `manage_input` (OSC-simulated Chatbox text and Movement axes).
+- Industrial 2FA Handshake flow in `manage_system(operation="auth_2fa")`.
+- Proactive 60-second caching for REST API compliance.
+- FastMCP 3.2.0 dual interface implementation (MCP stdio + FastAPI HTTP).
+- `/api/docs` OpenAPI documentation endpoint and `/health` check.
+- SOTA Dashboard (React) for real-time telemetry and OSC traffic monitoring.
+- DXT/MCPB industrial packaging workflow.
 
 ### Changed
-- Updated to FastMCP 3.1.1++ framework
+- Updated to FastMCP 2.12+ framework
 - Restructured server.py to be thin (< 150 lines) per production checklist
 - Organized tools into proper category subdirectories
 - Updated CLI to support dual interface modes
@@ -55,12 +54,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Interpolation system for smooth parameter transitions
 
 ### Technical Details
-- FastMCP 3.1.1+ compatible
+- FastMCP 2.10 compatible
 - Python 3.8+ support
 - OSC over UDP for VRChat communication
 - WebSocket-based debug interface
 - Plugin architecture with event system
 - Pydantic models for type safety
-
 
 

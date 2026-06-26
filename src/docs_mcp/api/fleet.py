@@ -26,7 +26,7 @@ async def api_fleet_projects():
     try:
         data_path = Path(__file__).parent.parent / "data" / "fleet-projects.json"
         if data_path.exists():
-            with open(data_path, encoding="utf-8") as f:
+            with open(data_path, encoding="utf-8-sig") as f:
                 return json.load(f)
         raise HTTPException(status_code=404, detail="Fleet projects registry not found")
     except Exception as e:

@@ -86,3 +86,13 @@ Start-Process powershell -ArgumentList "-NoProfile", "-WindowStyle", "Hidden", "
 - **Zero Latency**: The main script can continue or finish without waiting for the webapp to be fully ready.
 - **Resilience**: Eliminates "Connection Refused" errors by only launching the browser once the port is listening.
 - **Background execution**: The `-WindowStyle Hidden` flag prevents extra terminal windows from flashing.
+
+## 6. Unicode (MANDATORY)
+
+**EM DASH is never allowed** in `.ps1`, `.psm1`, `.bat`, or `justfile` - not in comments, not in strings.
+
+Fleet rule and checker: [patterns/unicode_safety.md](./patterns/unicode_safety.md).
+
+```powershell
+powershell.exe -NoProfile -File D:\Dev\repos\mcp-central-docs\scripts\check-unicode-safe.ps1 -RepoPath .
+```

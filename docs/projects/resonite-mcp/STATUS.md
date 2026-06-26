@@ -1,9 +1,23 @@
 ﻿# Resonite MCP Status
 
-**Version**: v0.4.0 (Presence Aware)
-**Status**: ðŸŸ¢ PRODUCTION
-**Last Updated:** 2026-03-08
+**Version**: v1.0.0 (Agent Lab Phase 6)
+**Status**: PRODUCTION — Agent Lab roadmap active
+**Last Updated:** 2026-05-28
 **Source:** `D:\Dev\repos\resonite-mcp`
+
+## Agent Lab
+
+| Phase | Status | Theme |
+|-------|--------|-------|
+| Baseline | done | OSC, ResoniteLink, presence gate, integrations |
+| 1 (0.5.0) | done | `resonite_fleet` handoff, execution_mode, offline E2E |
+| 2 (0.6.0) | done | Webapp Agent Lab, `/api/v1/tool`, live HTTP E2E |
+| 3 (0.7.0) | done | VRM/avatar pipeline, ProtoFlux presets |
+| 4 (0.8.0) | done | Prometheus, Docker, JSON fleet audit logs |
+| 5 (0.9.0) | done | Marble/World Labs batch import, fab art overlays |
+| 6 (1.0.0) | done | Inventory adapter, voice macros, strict fleet E2E CI |
+
+Details: [ROADMAP.md](file:///D:/Dev/repos/resonite-mcp/docs/ROADMAP.md) in repo.
 
 ## Current Status
 
@@ -47,6 +61,33 @@
 
 ## Recent Updates
 
+### v1.0.0 (2026-05-28) — Agent Lab Phase 6
+- Inventory mock/live adapter (`inventory_status`, `RESONITE_INVENTORY_MODE`)
+- `resonite_voice` OSC macro portmanteau + HTTP bridge
+- Strict fleet E2E (`fleet_e2e_strict.py`, CI `--strict-fleet`)
+
+### v0.9.0 (2026-05-28) — Agent Lab Phase 5
+- Marble staging: `list_marble_staging`, `import_worldlabs_batch`, `run_marble_pipeline`
+- Inkscape fab art pull with DXF robotics refs
+- Agent Lab Marble tab on `/agent-tools`
+
+### v0.8.0 (2026-05-28) — Agent Lab Phase 4
+- Prometheus `/metrics` + sidecar 9079, fleet import audit JSON logs
+- Docker/GHCR image, compose monitoring profile (9093/3003/3103)
+
+### v0.7.0 (2026-05-28) — Agent Lab Phase 3
+- VRM fleet ops: `list_vrm_staging`, `import_vrm_batch`, `pull_blender_vrm`, `pull_avatar_vrm`
+- ProtoFlux avatar preset manifests
+- Agent Lab VRM tab on `/agent-tools`
+
+### v0.6.0 (2026-05-28) — Agent Lab Phase 2
+- Webapp `/agent-tools` tabbed UI (runtime, fleet, staging, pipeline)
+- `POST /api/v1/tool` HTTP bridge for `resonite_fleet` and `health_check`
+- Live inkscape → resonite HTTP E2E (`fleet_e2e_live.py`, `--live` smoke)
+
+### v0.5.0 (2026-05-28) — Agent Lab Phase 1
+- `resonite_fleet` portmanteau, execution_mode, offline E2E smoke
+
 ### v0.4.0 (March 8, 2026)
 - âœ… **Presence Detection**: Backend monitors for `Resonite.exe` and Steam registry entries
 - âœ… **Launch Orchestration**: `POST /api/resonite/launch` triggers Steam protocol
@@ -63,25 +104,19 @@
 - âœ… Basic plugin system with OSC and ProtoFlux extensions
 - âœ… HTTP REST API for web-based control
 
+### MCPB packaging
+
+- **Layout:** `mcp-server/` (manifest, prompts, synced `src/`)
+- **Build:** `just mcpb-pack` → `dist/resonite-mcp-v1.0.0.mcpb`
+- **Docs:** [MCPB.md](file:///D:/Dev/repos/resonite-mcp/docs/MCPB.md)
+
 ## Roadmap
 
-### v0.2.0 (Next Release)
-- [ ] Complete inventory management implementation (remove mock responses)
-- [ ] Plugin system dynamic loading
-- [ ] Social interaction tools
-- [ ] Performance monitoring and metrics
+Agent Lab Phases 1–6 complete. See repo [ROADMAP.md](file:///D:/Dev/repos/resonite-mcp/docs/ROADMAP.md).
 
-### v0.3.0
-- [ ] Web dashboard for HTTP mode
-- [ ] Recording and playback of sessions
-- [ ] Advanced ProtoFlux integration
-- [ ] Multi-user session support
+Post-1.0: live fleet E2E, live inventory OSC, MCPB tag releases.
 
-### Future
-- [ ] Resonite cloud API integration
-- [ ] Voice command processing
-- [ ] AR/VR hardware integration
-- [ ] Cross-platform mobile support
+---
 
 ## Integration Status
 
@@ -98,10 +133,10 @@
 - **Transport:** MCP stdio protocol
 
 ### HTTP API
-- **Status:** âœ… Working
-- **Endpoint:** `http://127.0.0.1:8000`
-- **Endpoints:** 25 REST API endpoints
-- **Documentation:** Interactive FastAPI docs at `/docs`
+- **Status:** Working
+- **Endpoint:** `http://127.0.0.1:10979` (Agent Lab backend)
+- **Bridge:** `POST /api/v1/tool` — `resonite_fleet`, `resonite_voice`, `health_check`
+- **Documentation:** FastAPI `/docs` when HTTP mode is running
 
 ## Dependencies
 
@@ -121,14 +156,12 @@
 ## Testing Status
 
 ### Unit Tests
-- **Status:** âš ï¸ Architectural issues
-- **Issue:** Tests designed for direct function calls, but MCP tools use decorators
-- **Coverage:** 16% (core modules only)
-- **Recommendation:** Rewrite tests to use MCP protocol testing
+- **Status:** 52 tests passing (Phases 1–6 + core tools)
+- **Coverage gate:** 55% on core MCP modules (HTTP dashboard excluded)
+- **Fleet E2E:** offline + strict-offline in CI
 
 ### Integration Tests
-- **Status:** âŒ Not implemented
-- **Recommendation:** Add end-to-end MCP protocol tests
+- **Status:** Live HTTP E2E manual (`--live --strict`)
 
 ### Manual Testing
 - **Status:** âœ… Verified working
@@ -187,7 +220,7 @@
 
 ---
 
-**Overall Assessment:** **PRODUCTION READY** for core Resonite integration features. Beta status due to incomplete inventory management, but all essential avatar control, session management, and OSC communication features are fully functional.
+**Overall Assessment:** **PRODUCTION READY** for Agent Lab fleet orchestration (v1.0.0). Live inventory OSC and in-world voice bindings remain validation tasks.
 
 
 

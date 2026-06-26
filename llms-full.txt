@@ -1,0 +1,112 @@
+# Documentation MCP — Full LLM Context
+
+## Overview
+Documentation MCP is a public federated RAG server for the MCP ecosystem. It indexes 
+documentation from this repo's `docs/` directory (the "Golden Set" of MCP ecosystem 
+documentation — standards, rules, patterns, guides) and from configurable external paths. 
+It provides semantic search, LLM-synthesized answers, and agentic research workflows 
+via FastMCP 3.2+ tool registration.
+
+## Architecture
+- **Backend**: FastAPI + FastMCP 3.2+, dual transport (stdio + HTTP)
+- **RAG**: LanceDB vector store with fastembed (BAAI/bge-small-en-v1.5)
+- **Frontend**: React 18 + Vite 5 + TailwindCSS 3 + Framer Motion + Radix UI primitives
+- **Native**: Tauri 2.0 NSIS installer with embedded PyInstaller backend
+- **Ports**: 11032 frontend, 11033 backend
+
+## Server Entry Points
+- `uv run docs-mcp` — starts the MCP server in stdio mode (for Claude Desktop / Cursor)
+- `uv run docs-mcp-ui` — starts the Fleet Starts Launcher (ASGI app on port 10791)
+- `uv run uvicorn docs_mcp.server:app --port 11033` — HTTP mode for webapp
+- `./start.ps1` — full stack launcher (backend + frontend)
+
+## Tools
+### search_docs
+Performs semantic search across all indexed documentation. Returns scored results
+with filename, content snippet, and relative path.
+
+### ask_docs
+Takes a question, searches docs, then synthesizes an answer. Attempts MCP sampling 
+(ctx.sample) first, falls back to local Ollama/LM Studio auto-discovery with 
+priority model selection (qwen2.5 → llama3.2 → phi4 → gemma).
+
+### get_document
+Retrieves the full content of a documentation file by its relative path within the 
+docs root. Enforces path traversal safety.
+
+### reindex_docs
+Forces a full re-scan of all documentation sources, re-chunks, and re-embeds everything.
+Reports chunk count on completion.
+
+### chunk_stats
+Returns index health: source count, embedding model, sources list.
+
+### server_status
+Reports server health, version, chunk count, source count, memory stats.
+
+### docs_help
+Returns structured help: server info, tools by group, doc areas, index summary.
+
+### start_webapp
+Launches the webapp via web_sota/start.ps1 -Automated in background.
+
+### agentic_doc_workflow
+Executes autonomous documentation research via MCP sampling (ctx.sample). Returns 
+a synthesized research report.
+
+### Memory tools
+- persistence_store_memory: Store structured memory in a namespace
+- persistence_recall: Semantic recall from stored memory
+- persistence_compaction_status: Memory density and per-namespace stats
+
+## Prompts
+- docs_expert: System instructions for documentation expert behavior
+- research_workflow: Guidance for using agentic_doc_workflow
+
+## REST API Endpoints
+- GET /api/status — Industrial health endpoint (chunk count, sources, fleet count, provider)
+- GET /api/search?q= — Semantic search
+- GET /api/tree — Documentation file tree
+- GET /api/content?path= — Full file content
+- POST /api/reindex — Trigger reindex
+- GET /api/apps — Fleet apps catalog
+- GET /api/fleet-projects — Fleet project registry
+- POST /api/launch — Launch a fleet app
+- GET /api/processes — List background processes
+- POST /api/processes/stop — Stop a process
+- GET /api/settings — Webapp settings (API key masked)
+- PUT /api/settings — Update settings
+- GET /api/models/ollama — List Ollama models
+- GET /api/models/lmstudio — List LM Studio models
+- GET /api/tools — List MCP tools
+- POST /api/execute — Execute an MCP tool via REST
+- GET /api/chat — Conversational RAG
+- GET /api/logs — Debug logs
+- GET /api/skills — List skills (when available)
+- GET /health — Health check (starts_ui only)
+
+## Environment Variables
+- DOCS_MCP_PORT: Backend port (default 11033)
+- DOCS_HOST: Bind host (default 127.0.0.1)
+- DOCS_LOG_LEVEL: Log level (default info)
+- DOCS_ROOT: Override docs root directory
+- DOCS_EXTRA_PATHS: Comma-separated extra markdown paths
+- DOCS_FEDERATE_MEMORY: Enable advanced-memory-mcp federation (1/true/yes)
+- MCP_BRIDGE_URLS: Comma-separated MCP server HTTP URLs for multi-server federation
+- MCP_TRANSPORT: Transport mode (http/stdio)
+- PORT / MCP_PORT: Alternative port setting (PyInstaller entry point)
+
+## Fleet Integration
+- Ports registered: 11032 (frontend), 11033 (backend) — see operations/WEBAPP_PORTS.md
+- MCPB bundle in mcpb/ directory for Claude Desktop distribution
+- Tauri NSIS installer in native/ directory
+- Fleet discovery: apps catalog, fleet-projects.json registry, process manager
+- Prompts and skills integration via FastMCP 3.2+
+
+## Development
+- Python: uv sync, uv run pytest, uv run ruff check
+- Frontend: cd web_sota; npm install; npm run dev
+- Lint: just lint (ruff + biome)
+- Typecheck: just typecheck (pyright)
+- Test: just test (pytest with coverage)
+- NSIS build: cd native; .\build.ps1

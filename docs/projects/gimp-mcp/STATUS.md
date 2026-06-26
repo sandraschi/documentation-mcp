@@ -1,18 +1,28 @@
 # GIMP MCP -- Project Status
 
-**Last Updated**: 2026-02-15
+**Last Updated**: 2026-05-28
 **Repo**: `D:\Dev\repos\gimp-mcp` | [GitHub](https://github.com/sandraschi/gimp-mcp)
-**Version**: v3.0.0 (Portmanteau Architecture)
-**Python**: 3.10+ | **Build**: Setuptools / MCPB
-**Status**: 🟢 PRODUCTION READY
+**Version**: v4.6.0 (Agent Lab Phase 6 complete)
+**Python**: 3.12+ | **Build**: Setuptools / MCPB / GHCR
+**Status**: PRODUCTION READY — Agent Lab complete (Phases 1–6)
 
 ---
 
 ## What It Is
 
-Professional image editing through Model Context Protocol (MCP) using GIMP. v3.0.0 introduces a surgical consolidation of tools and integrated AI image generation.
+Professional image editing through Model Context Protocol (MCP) using GIMP. Agent Lab v4.6.0 adds PBR pack batch, decal UV sheets, AI refine loops, and CI fleet E2E smoke.
 
-**Core Innovation**: Natural language to professional raster images via Flux-dev/nano-banana integration with automatic GIMP post-processing.
+**Core Innovation**: Fleet texture pipelines (blender → gimp → unity) with live bridge + headless CLI dual mode.
+
+---
+
+## Agent Lab (Phases 1–6 complete)
+
+| Phase | Theme |
+|-------|-------|
+| 1–4 | Bridge, vision, fleet handoff, telemetry/Docker |
+| 5 | Sim art (Gazebo, VRChat, robotics staging) |
+| 6 | PBR packs, decal sheets, Tripo/Rodin handoff, CI E2E |
 
 ---
 

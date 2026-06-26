@@ -5,6 +5,21 @@ All notable changes to Meta MCP will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+> **Canonical changelog:** `D:/Dev/repos/meta_mcp/CHANGELOG.md`
+
+## [Unreleased] - 2026-06-06
+
+### Added
+- **Fleet cold-start probe — Broken\* mode:** UI button **Broken\* (N)** re-runs only repos that failed in the last report. API `broken_only: true` on `POST /api/v1/fleet/startup-probe/run`. Service passes `-BrokenOnly` to `fleet-webapp-start-probe.ps1`.
+
+### Fixed
+- **FleetStartupProbe.tsx:** `runProbe` modes (`single` | `full` | `broken`); broken count from last complete report.
+
+## [Unreleased] - 2026-05-31
+
+### Added
+- **`repo_inspiration` suite** — `inspire_repo_structure`, `inspire_repo_files`, `inspire_repo_patterns` (Python port of [Repomuse](https://www.npmjs.com/package/repomuse), MIT, praveene3127). Fleet doc: [integrations/repo-inspiration.md](../../integrations/repo-inspiration.md).
+
 ## [3.4.0] - 2026-02-21 - Toolchains & Presets ðŸ”—
 
 ### ðŸš€ Major Feature Expansion

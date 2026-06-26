@@ -1,374 +1,214 @@
-# RAG Ecosystem Standards: 2026 State-of-the-Art
-
-## Overview
-Comprehensive guide to Retrieval Augmented Generation (RAG) components in January 2026. Covers vector databases, embedding models, and production deployment strategies.
-
-## 🔍 Vector Database Landscape 2026
-
-### Performance Benchmarks (January 2026)
-
-| Database | Query Latency | Scaling | Cost Efficiency | Best For |
-|----------|---------------|---------|----------------|----------|
-| **Pinecone** | 50-326ms | Enterprise (billions) | High cost | Production managed |
-| **Qdrant** | 2-50ms | Horizontal scaling | Cost-effective | High-performance |
-| **Weaviate** | 50-100ms | Hybrid search | Balanced | Knowledge graphs |
-| **ChromaDB** | 2.58-50ms | Small-mid (<1M) | Free | Prototyping |
-| **LanceDB** | 2-50ms | Serverless / Embedded | Highest | Unified Local RAG |
-| **Milvus** | 2-50ms | Billion-scale | GPU-optimized | Large deployments |
-
-### SOTA Recommendations
-
-#### **Production & Ecosystem Choice: LanceDB**
-```python
-# 2026 Unified RAG Stack (Sandra Standard)
-from docs_mcp.backend.rag_core import BaseVectorStore
-
-store = BaseVectorStore(db_path="/path/to/lancedb", table_name="media_rag")
-store.add_documents(chunks)
-results = store.search(query="icicle murder", limit=5)
-```
-
-**Why LanceDB?**
-- ✅ **Serverless and Embedded** - Zero background processes or containers
-- ✅ **Sub-50ms latency** with out-of-core indexing for large datasets
-- ✅ **FastEmbed integration** - Automatic local embedding without separate inference servers
-- ✅ **Ecosystem Unified** - Same wrapper shared across robofang, Plex, and Calibre
-- ✅ **Multi-modal ready** - Future-proof for images/video integrations
-
-## 🧠 Embedding Models 2026
-
-### Performance Leaderboard (MTEB Benchmark)
-
-| Model | Size | Top-1 Accuracy | Speed | Best For |
-|-------|------|----------------|-------|----------|
-| **e5-small** | 118M | 62% | 14x faster than 7B+ | Efficiency |
-| **llama-embed-nemotron-8b** | 8B | 62% | Balanced | Precision |
-| **Qwen3-Embedding** | 0.6B-8B | 61% | Fast multilingual | Global |
-| **EmbeddingGemma-300M** | 300M | 58% | Edge deployment | Mobile |
-| **gritlm-7b** | 7B | 60% | Large context | Retrieval |
-
-### LLM-Backbone Revolution
-
-**2026 Paradigm Shift:** Traditional BERT-only embeddings (like sentence-transformers) are obsolete. All SOTA models now use **Large Language Model backbones**:
-
-#### **LLM Embedding Architecture**
-```python
-# Modern embedding pipeline (2026)
-from transformers import AutoModel, AutoTokenizer
-
-model = AutoModel.from_pretrained("intfloat/multilingual-e5-small")
-tokenizer = AutoTokenizer.from_pretrained("intfloat/multilingual-e5-small")
-
-# Advanced features now standard:
-# - Matryoshka representation (variable dimensions)
-# - Task-specific adapters (LoRA)
-# - Long context windows (8192+ tokens)
-# - Instruction-aware embeddings
-```
-
-#### **Key Advantages Over BERT-Only**
-- **Better semantic understanding** - LLM reasoning capabilities
-- **Multilingual support** - True cross-language retrieval
-- **Task adaptation** - Fine-tuned for specific use cases
-- **Longer context** - Handle larger documents natively
-
-## 🏗️ Production RAG Stack 2026
-
-### Recommended Architecture
-
-```
-┌─────────────────────────────────────┐
-│         User Query                  │
-└─────────────────┬───────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────┐
-│     Query Processing                │
-│  • Intent analysis                  │
-│  • Query expansion                  │
-│  • Multi-stage retrieval            │
-└─────────────────┬───────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────┐    ┌─────────────────┐
-│   Hybrid Search Engine              │    │  Re-ranking     │
-│  • Semantic (Vector)                │    │  • Cross-encoders│
-│  • Keyword (BM25/SPLADE)            │    │  • LLM-based    │
-│  • Metadata filtering               │    │  • Quality scores│
-└─────────────────┬───────────────────┘    └─────────────────┘
-                  │                              │
-                  └──────────────┬───────────────┘
-                                 │
-                                 ▼
-┌─────────────────────────────────────┐
-│     Context Synthesis               │
-│  • Passage selection                │
-│  • Redundancy removal               │
-│  • Context compression              │
-└─────────────────┬───────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────┐
-│     LLM Generation                  │
-│  • Context injection                │
-│  • Answer generation                │
-│  • Citation & verification          │
-└─────────────────────────────────────┘
-```
-
-### Implementation Example
-
-```python
-# Complete 2026 RAG pipeline
-from qdrant_client import QdrantClient
-from sentence_transformers import SentenceTransformer
-import torch
-
-class ResearchRAG:
-    def __init__(self):
-        # SOTA embedding model
-        self.embedding_model = SentenceTransformer("intfloat/multilingual-e5-small")
-
-        # SOTA vector database
-        self.qdrant = QdrantClient("localhost", port=6333)
-
-        # Hybrid search setup
-        self.setup_hybrid_search()
-
-    def setup_hybrid_search(self):
-        """Configure hybrid semantic + keyword search"""
-        # Vector index for semantic search
-        # BM25/SPLADE for keyword search
-        # Metadata filters for structured queries
-        pass
-
-    async def research_query(self, query: str, sources: list) -> dict:
-        """Multi-source research with 2026 techniques"""
-        # 1. Query expansion using LLM
-        expanded_queries = await self.expand_query(query)
-
-        # 2. Multi-source retrieval
-        results = []
-        for source in sources:
-            if source["type"] == "web":
-                results.extend(await self.web_search(source["query"]))
-            elif source["type"] == "github":
-                results.extend(await self.github_search(source["query"]))
-            elif source["type"] == "arxiv":
-                results.extend(await self.arxiv_search(source["query"]))
-
-        # 3. Vector similarity search
-        embeddings = self.embedding_model.encode(results)
-        vector_results = self.qdrant.search(
-            collection_name="research_docs",
-            query_vector=embeddings,
-            limit=20
-        )
-
-        # 4. Hybrid re-ranking
-        reranked = await self.hybrid_rerank(query, vector_results)
-
-        # 5. LLM synthesis with citations
-        final_answer = await self.synthesize_answer(query, reranked)
-
-        return {
-            "answer": final_answer,
-            "sources": reranked,
-            "confidence": self.calculate_confidence(reranked)
-        }
-```
-
-## 📊 ADN Implementation Status
-
-### Current Stack (February 2026)
-```python
-# ADN Research Stack - Production Ready Mesh
-dependencies = {
-    # ✅ CORRECT: LanceDB for embedded high-performance scale
-    "lancedb": ">=0.5.0",
-
-    # ✅ CORRECT: FastEmbed for zero-server inferences
-    "fastembed": ">=0.2.0",
-
-    # ✅ CORRECT: Async web research
-    "aiohttp": ">=3.9.0"
-}
-```
-
-### Migration Recommendations
-
-#### **Completed Migrations (February 2026)**
-1. **Upgrade Embeddings**: `all-MiniLM-L6-v2` → `FastEmbed / BAAI/bge-small-en-v1.5`
-   - **Impact**: 2-3x better retrieval accuracy natively built into `BaseVectorStore`.
-
-2. **Database Migration**: ChromaDB/Qdrant → LanceDB
-   - **Impact**: Serverless storage across robofang, Plex, and Calibre eliminating infrastructure bloat.
-   - **Result**: Implemented in unified `docs_mcp.backend.rag_core.BaseVectorStore`.
-
-#### **Short-term (Medium Priority)**
-3. **Re-ranking Layer**: Add cross-encoder re-ranking
-   - **Impact**: Improved answer quality
-   - **Effort**: 1 week implementation
-
-#### **Long-term (Low Priority)**
-4. **Multi-modal RAG**: Support for images, code, tables
-5. **Query Routing**: Intelligent source selection
-6. **Personalization**: User-specific result ranking
-
-## 🔧 Configuration Standards
-
-### Vector Database Configuration
-```python
-# LanceDB Production Config (Wrapped via BaseVectorStore)
-lancedb_config = {
-    "table_name": "media_rag",
-    "embedding_model": "BAAI/bge-small-en-v1.5", # Provided by FastEmbed
-    "storage": "local_disk",
-    "indexing": {
-        "type": "IVF_PQ",
-        "num_partitions": 256,
-        "num_sub_vectors": 96
-    }
-}
-```
-
-### Embedding Model Configuration
-```python
-# Modern Embedding Config
-embedding_config = {
-    "model_name": "intfloat/multilingual-e5-small",
-    "max_seq_length": 512,
-    "normalize_embeddings": True,
-    "device": "auto",  # GPU if available
-    "batch_size": 32
-}
-```
-
-## 🚀 Performance Benchmarks
-
-### Latency Targets (2026)
-- **Cold start**: <2 seconds
-- **Query response**: <100ms (p95)
-- **Index update**: <500ms per document
-- **Batch processing**: <10ms per document
-
-### Accuracy Metrics
-- **Top-1 accuracy**: >60% (MTEB standard)
-- **Top-5 accuracy**: >75%
-- **Context relevance**: >85%
-- **Citation accuracy**: >95%
-
-## 📈 Scaling Strategies
-
-### Horizontal Scaling
-```python
-# LanceDB scaling
-# LanceDB uses S3 or local filesystems directly. Scaling is achieved by 
-# concurrent reads on the persistent storage path, without a dedicated vector DB service layer.
-```
-
-### Data Partitioning
-- **Time-based**: Recent vs historical documents
-- **Domain-based**: Academic vs web vs code
-- **User-based**: Personal vs shared knowledge
-- **Language-based**: Multilingual partitioning
-
-## 🛡️ Production Considerations
-
-### Reliability
-- **Redundancy**: Multi-zone deployment
-- **Monitoring**: Latency, throughput, error rates
-- **Backups**: Point-in-time recovery
-- **Rate limiting**: API protection
-
-### Cost Optimization
-- **Quantization**: Reduce vector dimensions (Matryoshka)
-- **Caching**: Query result caching
-- **Batch processing**: Efficient bulk operations
-- **Resource pooling**: Shared infrastructure
-
-## 🔮 Future Roadmap (2026-2027)
-
-### Emerging Technologies
-- **Mixture-of-Experts (MoE)** embeddings for specialized domains
-- **Graph-based retrieval** beyond pure vector similarity
-- **Multi-modal RAG** with vision-language models
-- **Personalized ranking** using user behavior data
-
-### Research Directions
-- **Long-context RAG** beyond current 8K-32K limits
-- **Interactive retrieval** with user feedback loops
-- **Cross-modal reasoning** combining text, code, and visual data
-- **Federated RAG** for privacy-preserving multi-party retrieval
-
-## 💰 Cost Optimization: The Calibre Freemium Revolution
-
-### The Calibre Strategy (2024)
-Calibre ebook server provides "free" AI by using users' **local Ollama installations** - not their own servers!
-
-```python
-# Calibre's genius cost model
-calibre_ai_costs = {
-    "server_infrastructure": "$0.00",     # Users run Ollama locally
-    "api_calls": "$0.00",                 # No external APIs used
-    "scaling_costs": "$0.00",             # Each user scales themselves
-    "maintenance": "$0.00",               # Users update their own Ollama
-    "total_cost_per_user": "~$0.001/hour" # User's electricity only
-}
-```
-
-### ADN Implementation Opportunity
-```python
-# Revolutionary freemium strategy for ADN webapps
-adn_llm_strategy = {
-    "free_tier": {
-        "provider": "User's local Ollama Gemma 3.1B",
-        "cost_to_us": "$0.00",
-        "cost_to_user": "~$0.001/hour electricity",
-        "limitation": "Requires Ollama setup"
-    },
-    "premium_tier": {
-        "provider": "OpenAI GPT-4",
-        "cost_to_us": "$0.02-0.06 per 1K tokens",
-        "cost_to_user": "$20-50/month",
-        "value_prop": "No setup, higher quality, advanced features"
-    }
-}
-```
-
-### Competitive Advantage
-- **Zero marginal cost** per free user
-- **Unlimited usage** on free tier
-- **Clear premium upsell** path
-- **Differentiation** from paid-only competitors
-- **Viral potential** (users love free unlimited AI)
-
-## Implementation Checklist
-
-### ✅ Completed
-- [x] Vector database ecosystem unification (`mcp-central-docs` `BaseVectorStore`)
-- [x] Implementation of LanceDB replacing ChromaDB/Ollama/Qdrant
-- [x] FastEmbed configuration for seamless local embedding inference
-- [x] Cross-media Semantic Search in `calibre-mcp`, `plex-mcp`, and `robofang`
-- [x] **Calibre freemium strategy analysis**
-
-### 🔄 In Progress
-- [ ] Re-ranking implementation
-- [ ] Multi-source integration testing
-- [ ] Performance optimization
-- [ ] **Ollama localhost integration for webapps**
-
-### 📋 Planned
-- [ ] Graph-based retrieval exploration
-- [ ] Multi-modal expansion
-- [ ] Personalization features
-- [ ] Advanced query routing
-- [ ] **User onboarding for Ollama setup**
+---
+title: "Fleet RAG Standard (2026)"
+category: standard
+status: active
+audience: mcp-dev
+skill_candidate: false
+related:
+  - src/docs_mcp/ARCHITECTURE.md
+  - standards/FRONTMATTER_STANDARD.md
+  - standards/LOCAL_LLM_STANDARDS.md
+  - standards/LLM_AND_INSTALL_TIERS.md
+  - standards/WEBAPP_SOTA_STANDARDS.md
+last_updated: 2026-06-01
+---
+
+# Fleet RAG Standard (2026)
+
+**Status:** Active fleet pattern  
+**Canonical implementation:** `mcp-central-docs` → `src/docs_mcp/backend/rag_core.py`  
+**Architecture detail:** [docs_mcp ARCHITECTURE](../src/docs_mcp/ARCHITECTURE.md)
 
 ---
 
-**Last Updated**: January 2026
-**Next Review**: March 2026 (post major model updates)
-**Contact**: Research infrastructure team
+## 1. Purpose
 
-**💡 Key Takeaway**: The Calibre approach transforms AI costs from a business expense into a competitive advantage. Consider implementing for all ADN webapps!
+Define the **default Retrieval-Augmented Generation (RAG) stack** for fleet MCP servers and webapps. Goals:
+
+- **Embedded first** — no separate vector DB service to install or babysit
+- **Local embeddings** — no paid embedding API for baseline search
+- **Shared wrapper** — one `BaseVectorStore` pattern across repos
+- **Agent-friendly metadata** — YAML frontmatter filters in LanceDB
+
+This doc is the **policy**. Implementation lives in `rag_core.py`, `ingestor.py`, and per-repo copies.
+
+---
+
+## 2. Canonical stack (mandatory default)
+
+| Layer | Fleet choice | Notes |
+|-------|--------------|-------|
+| **Vector store** | [LanceDB](https://lancedb.com/) | Disk-backed, embedded, serverless |
+| **Embeddings** | `BAAI/bge-small-en-v1.5` via [FastEmbed](https://github.com/qdrant/fastembed) | 384-dim, MIT, good speed/quality tradeoff |
+| **Chunking** | 1000 chars, 200 overlap | Markdown-aware breaks (`ingestor.py`) |
+| **Default top-k** | 5 | Tune per tool; cap agent payloads |
+| **Synthesis** | Calling LLM (client or `ctx.sample()`) | RAG returns **chunks**, not final answers |
+
+```python
+from docs_mcp.backend.rag_core import BaseVectorStore
+
+store = BaseVectorStore(
+    db_path="/path/to/lancedb",
+    table_name="documents",
+    embedding_model_name="BAAI/bge-small-en-v1.5",
+)
+
+store.add_documents([
+    {
+        "id": "standards/agent-protocols#chunk-0",
+        "content": "...",
+        "metadata": {"category": "standard", "status": "active", "source": "standards/AGENT_PROTOCOLS.md"},
+    }
+])
+
+hits = store.search("FastMCP startup probes", limit=5)
+hits = store.search("active standards only", limit=10, where="metadata.status = 'active'")
+```
+
+**Why LanceDB + bge-small (not Chroma/Qdrant/Pinecone by default):**
+
+- Zero background process — fits naked-PC and Tauri bundle constraints
+- Same pattern in `docs_mcp`, optional RAG in `plex-mcp`, `calibre-mcp`, `myconf`, `tvtropes-mcp`, `obsidian-mcp`
+- Sub-50 ms retrieval at fleet doc scale on local NVMe
+- FastEmbed cache under repo `data/cache/fastembed` (see `config.CACHE_PATH`)
+
+---
+
+## 3. Document contract
+
+Every indexed item MUST include:
+
+| Field | Type | Required | Purpose |
+|-------|------|----------|---------|
+| `id` | string | yes | Stable chunk id (`{path}#chunk-{n}`) |
+| `content` | string | yes | Searchable text |
+| `metadata` | dict | yes | Filters + provenance |
+| `source` | string | recommended | Human-readable path or URI |
+
+**Metadata from frontmatter:** Markdown ingest parses YAML per [FRONTMATTER_STANDARD.md](./FRONTMATTER_STANDARD.md). Store `category`, `status`, `audience`, `skill_candidate`, `last_updated` as filterable LanceDB columns.
+
+**Exclude dirs during crawl:** `node_modules`, `.git`, `.venv`, `junk`, `backup`, `dist`, `__pycache__` (see `ingestor.EXCLUDE_DIRS`).
+
+---
+
+## 4. Pipeline
+
+```
+Ingest                    Index                     Retrieve                 Synthesize
+──────                    ─────                     ────────                 ──────────
+glob .md / folder    →    FastEmbed embed      →    query embed         →    LLM reads chunks
+parse frontmatter         LanceDB table             cosine search            cites sources
+chunk 1000/200 overlap    metadata columns          optional where=          (client-side)
+```
+
+### 4.1 Ingestion
+
+- **MCD hub:** `ContentIngestor` in `ingestor.py`; UI folder ingest → `/api/v1/ingest_folder`
+- **CLI:** `just search`, `just semantic`, `just report` (see [scripts/README.md](../scripts/README.md))
+- **Reindex recipe:** per-repo `just reindex` where applicable (e.g. `obsidian-mcp`)
+
+### 4.2 Retrieval
+
+- Return **raw chunks + scores/distances** to the agent; do not silently substitute a canned answer
+- Apply `where` pre-filters when the tool scope is narrow (e.g. `category = 'standard'`)
+- Keep `limit` modest (5–20) to protect context window
+
+### 4.3 Synthesis
+
+- **Tier A (local):** Ollama / LM Studio — see [LOCAL_LLM_STANDARDS.md](./LOCAL_LLM_STANDARDS.md)
+- **Tier B (cloud):** optional; never required for search-only tools
+- **Install tiers:** never bundle models in MCPB/Tauri — [LLM_AND_INSTALL_TIERS.md](./LLM_AND_INSTALL_TIERS.md)
+
+---
+
+## 5. When to deviate
+
+Use a **managed** vector DB only when embedded LanceDB is insufficient:
+
+| Scenario | Consider |
+|----------|----------|
+| Multi-tenant SaaS, billions of vectors | Qdrant Cloud, Pinecone, Milvus cluster |
+| Strict hybrid BM25 + vector at scale | Weaviate, Elasticsearch + dense vectors |
+| Prototype only, throwaway | Chroma in-memory |
+
+Document the deviation in the repo README and `glama.json` notes. Do **not** introduce a second default stack fleet-wide without updating this standard.
+
+---
+
+## 6. Webapp integration
+
+Repos with a SOTA webapp SHOULD expose:
+
+| Surface | Minimum |
+|---------|---------|
+| **Search page** | Query box + ranked chunks + source links |
+| **Folder ingest** | Pick local path → index into LanceDB (MCD pattern) |
+| **Reindex control** | Operator trigger after doc changes |
+
+See [WEBAPP_SOTA_STANDARDS.md](./WEBAPP_SOTA_STANDARDS.md) § Embedded RAG.
+
+**MCD reference ports:** frontend **10794**, backend **10795** — [WEBAPP_PORTS.md](../operations/WEBAPP_PORTS.md).
+
+---
+
+## 7. Security
+
+- Treat ingested text as **untrusted** at synthesis boundary — [PROMPT_INJECTION_HARDENING.md](./PROMPT_INJECTION_HARDENING.md)
+- Do not index secrets (`.env`, tokens, private keys); extend `EXCLUDE_DIRS` for repo-specific sensitive paths
+- Optional: metadata encryption for LanceDB at rest (MCD changelog — transparent metadata encryption)
+
+---
+
+## 8. Performance targets (fleet)
+
+| Metric | Target |
+|--------|--------|
+| Query latency (p95, local index) | < 100 ms |
+| Cold embed (first query after boot) | < 2 s |
+| Ingest | Batch embed; log progress every N docs |
+
+GPU (RTX 4090): accelerates FastEmbed during bulk ingest; query embed is CPU-fast enough at bge-small scale.
+
+---
+
+## 9. Roadmap (explicit non-goals today)
+
+Not required for fleet compliance until promoted here:
+
+- [ ] Cross-encoder re-ranking layer
+- [ ] Hybrid BM25 + dense (LanceDB hybrid when stable for our scale)
+- [ ] Multimodal blob indexing (images/video segments)
+- [ ] Federated / multi-party RAG
+
+Track experiments in repo-local `docs/` or `STATUS.md`; do not expand this standard with aspirational prose.
+
+---
+
+## 10. Reference repos
+
+| Repo | RAG usage |
+|------|-----------|
+| **mcp-central-docs** | Canonical `BaseVectorStore`, docs MCP tools, web dashboard |
+| **plex-mcp** | Optional LanceDB media metadata |
+| **calibre-mcp** | Library semantic search |
+| **myconf** | Meeting transcripts + insights tables |
+| **tvtropes-mcp** | Trope/work semantic search |
+| **obsidian-mcp** | Vault reindex |
+| **jellyfin-mcp** | `RAGService` for media context |
+
+---
+
+## 11. Checklist (new RAG feature)
+
+- [ ] Uses `BaseVectorStore` or documents why not
+- [ ] Embedding model defaults to `BAAI/bge-small-en-v1.5`
+- [ ] Chunks have stable `id` + `source` + filterable `metadata`
+- [ ] Ingest excludes noise dirs
+- [ ] Search tool returns chunks, not hallucinated summaries
+- [ ] LLM synthesis is optional and tier-aware
+- [ ] Ports registered in `WEBAPP_PORTS.md` if web-facing
+
+---
+
+**Owner:** Sandra Schi  
+**Review:** Quarterly or when embedding model / LanceDB major version changes

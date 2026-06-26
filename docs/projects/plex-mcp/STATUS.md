@@ -1,79 +1,105 @@
-# Plex MCP - Status Report (2026-04-04)
+# plex-mcp — Status
 
-## Overview
-Plex MCP is a flagship media orchestration server providing a high-fidelity bridge between AI agents and Plex Media Server. It features a full portmanteau architecture with 21 specialized tools, comprehensive error handling, and production-ready monitoring.
+**As of:** 2026-04-19
+**Current version:** 2.4.1 (released early April 2026)
+**Status:** Active development, stable for daily use.
 
-## Current Status: **Production Ready (v3.2.0)**
-- **SOTA 2026 Compliance**: 100% (FastMCP 3.2.0+ Universal Connect)
-- **Primary Transport**: STDIO + HTTP Streamable (Ports 10740-10741)
-- **Web Interface**: Port 10741
-- **Monitoring**: Built-in health checks and metrics
+## Current state
 
-## Technical Capabilities
+FastMCP 3.2 server + FastAPI backend + Next.js frontend. Used
+nightly by Sandra against a library of ~50,000+ video items
+(movies, TV, documentaries, misc).
 
-### 21 Portmanteau Toolset
-- `plex_library`: Full lifecycle management for media sections
-- `plex_media`: Unified browse/search/metadata interface
-- `plex_streaming`: Playback orchestration (Current Limitation: Control non-functional on some clients)
-- `plex_performance`: Real-time transcoding and health monitoring
-- `plex_reporting`: Content analytics and usage statistics
-- `plex_integration`: Vienna-specific cultural and anime weeb support
-- `plex_rag`: Neural semantic search with LanceDB backend
-- `plex_search`: Advanced keyword and semantic search
-- `plex_user`: User management and permissions
-- `plex_playlist`: Playlist CRUD operations
-- `plex_metadata`: Metadata enrichment and organization
-- `plex_collections`: Collection management
-- `plex_quality`: Quality control and transcoding settings
-- `plex_help`: Help and discovery system
-- `plex_audio_mgr`: Audio management tools
-- `arr_stack`: Radarr/Sonarr/Lidarr integration
-- `agentic_plex_workflow`: Multi-step agentic workflows
-- `plex_natural_assistant`: Natural language interface
+### Infrastructure
 
-### v3.2.0 Improvements
-- **Enhanced Error Handling**: Comprehensive error handling with structured responses
-- **Production Monitoring**: Health checks, metrics collection, and monitoring endpoints
-- **Fixed Startup Issues**: Resolved critical hanging during server startup
-- **Automated Deployment**: PowerShell deployment script with prerequisites checking
-- **Comprehensive Testing**: Unit and integration test suites
-- **FastMCP 3.2 Compatibility**: Full support for latest FastMCP features
+- **Backend FastAPI:** `http://localhost:10741/api/*`
+- **FastMCP HTTP:** `http://localhost:10741/mcp` (same process)
+- **Frontend Next.js:** `http://localhost:10742`
+- **Plex Media Server:** `http://localhost:32400`
+- **Ollama:** `http://localhost:11434` (default model `gemma3:12b`)
+- **Webapp state DB:** SQLite within plex-mcp workspace
 
-### Known Limitations & Issues
-- **Playback Control**: `plex play/pause` is currently unreliable for non-GDM clients (Plex Web, Windows App)
-- **GDM Discovery**: Background discovery of players like PlexAmp is functional but exhibits high latency in some network segments
-- **Resource Access**: Some MCP client implementations may have issues with resource content parsing
+### Stdio transport
 
-## Infrastructure & Ports
-- **STDIO Transport**: Default for Claude Desktop/MCP clients
-- **HTTP API**: `http://localhost:10740/mcp`
-- **Frontend Dashboard**: `http://localhost:10741`
-- **Health Endpoint**: `resource://plex/health`
-- **Database**: SQLite-driven interaction history and bookmarking
+Launches as stdio MCP from Claude Desktop:
+`uv run plex-mcp-advanced` from `D:/Dev/repos/plex-mcp`.
 
-## Monitoring & Health
-- **Health Checks**: Built-in health monitoring with uptime and success rate tracking
-- **Metrics Collection**: Operation metrics, error tracking, and performance monitoring
-- **Error Logging**: Comprehensive error handling with structured logging
-- **Production Ready**: Suitable for production deployments with monitoring
+## Tool surface
 
-## Recent Updates (v3.2.0)
-- ✅ Fixed server hanging during startup
-- ✅ Updated to FastMCP 3.2.0 with breaking changes handled
-- ✅ Added comprehensive error handling and logging
-- ✅ Implemented health check endpoint and monitoring
-- ✅ Created automated deployment script
-- ✅ Added comprehensive test suite
-- ✅ Updated all documentation
+19 portmanteau tools covering the full Plex operational surface:
+
+- **Library** — `plex_library` (sections, metadata refresh, library lifecycle)
+- **Media** — `plex_media` (browse, search, metadata), `plex_metadata`
+- **Playback** — `plex_streaming` (session control, volume), `plex_performance`
+- **Playlists & users** — `plex_playlist`, `plex_user`
+- **Search** — `plex_search` (keyword), `plex_rag` (LanceDB semantic)
+- **Enrichment** — `plex_media_enrichment` (currently Wikipedia only;
+  project 1 expands to 8+ sources)
+- **Organization** — `plex_organization`, `plex_collections`
+- **Quality** — `plex_quality` (quality profiles)
+- **Server** — `plex_server` (server info, identity)
+- **Reporting** — `plex_reporting` (usage, analytics)
+- **Integration** — `plex_integration` (Tautulli, *arr read-only status)
+- **Natural** — `plex_natural_assistant` (sampling-based)
+- **Agentic** — `agentic_plex_workflow` (multi-step, SEP-1577)
+- **FFmpeg** — `plex_ffmpeg_mgr`, `plex_audio_mgr`
+- **Help** — `plex_help`
+
+## Webapp frontend
+
+Next.js, Tailwind, glassmorphism theme. Pages:
+- `/` — dashboard
+- `/libraries` — section browser
+- `/movies`, `/shows`, `/music` — per-library pages
+- `/search` — keyword + semantic
+- `/chat` — local LLM assistant
+- `/settings` — Plex, LLM, *arr configuration
 
 ## Roadmap
-- [ ] Fix playback control for non-GDM clients
-- [ ] Implement multi-server Plex integration (Remote/Local hybrid)
-- [ ] Enhance RAG context for media recommendations
-- [ ] Add more comprehensive monitoring and alerting
-- [ ] Implement rate limiting and caching strategies
+
+Six projects specced, none yet implemented. See `TODO.md` for
+tracking and `README.md` for orientation. Full specs in
+`D:\Dev\repos\plex-mcp\docs\plans\`.
+
+Ordered by priority:
+1. Deep metadata enrichment (3–4 days)
+2. Subtitle RAG (4–5 days)
+3. Taste modelling (2–3 days)
+4. Mood picker (1–2 days)
+5. Episode intelligence (3–4 days)
+6. Cross-library linking (2 days)
+
+**Recommended order:** 1 → 3 → 4 → 2 → 5 → 6. Enrichment and
+taste modelling produce data that makes everything else smarter;
+mood picker is the daily-use payoff; subtitle RAG is the most
+ambitious and slots in after the foundations.
+
+## Known issues
+
+- **Playback control unreliable** for non-GDM clients (Plex Web,
+  Windows App). GDM discovery works for PlexAmp with latency.
+  Not planned for near-term fix — Plex's client protocol is
+  brittle and the effort isn't justified for the edge case.
+- **RAG coverage thin** at project start (metadata only). The
+  roadmap will change this considerably (subtitle RAG + deep
+  enrichment expand coverage substantially).
+
+## Repositories
+
+- Main: `D:\Dev\repos\plex-mcp`
+- Fleet docs mirror: `D:\Dev\repos\mcp-central-docs\projects\plex-mcp\`
+- GitHub: `https://github.com/sandraschi/plex-mcp`
+
+## Recent releases
+
+- **v2.4.1 (April 2026)** — SOTA 14.1 compliance, webapp
+  modernization, justfile recipes
+- **v2.4.0** — FastMCP 3.2 upgrade, industrialized stack
+- **v2.3.x** — `plex_rag` LanceDB integration, sampling support
+- **v2.2.x** — `plex_media_enrichment` (Wikipedia)
+- **v2.1.x** — Universal Connect (simultaneous stdio + HTTP)
 
 ---
-**Status**: PRODUCTION READY
-**Version**: 3.2.0
-**Last Audit**: 2026-04-04
+
+*Status maintained by Sandra Schipal. Entry authored by Claude Opus 4.7,
+April 2026.*

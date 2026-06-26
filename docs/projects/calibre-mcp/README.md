@@ -1,49 +1,59 @@
-# CalibreMCP — your library, an AI that actually reads the stacks
+# calibre-mcp — Project Hub
 
-**Central index** for fleet discovery. **Source of truth:** [sandraschi/calibre-mcp](https://github.com/sandraschi/calibre-mcp) · **Local clone:** `D:\Dev\repos\calibre-mcp`
+Central index for all calibre-mcp planning and roadmap documentation.
+
+**Repository:** `D:\Dev\repos\calibre-mcp`
+**Current version:** 1.7.0 (2026-04-16)
+**Status:** Active, heavy development
+
+## What it is
+
+FastMCP 3.2 server providing AI-assisted Calibre ebook library management.
+Simultaneous stdio (Claude Desktop, Cursor) + HTTP (webapp on 10720) transport.
+Includes a functional Calibre GUI plugin, a Next.js webapp frontend, LanceDB
+semantic search over metadata and full-text, and deep book research
+synthesising Wikipedia + SF Encyclopedia + TVTropes + Anime News Network +
+Open Library + local library data via local LLM sampling.
+
+Used by Sandra across ~13,000 books in multiple Calibre libraries.
+
+## Where documentation lives
+
+All design specs and roadmap documents live in the repo itself under
+`docs/plans/`. This hub mirrors them for fleet-level discovery.
+
+| Doc                                      | Purpose                               |
+|------------------------------------------|---------------------------------------|
+| `ROADMAP.md` (here)                      | High-level fleet view                 |
+| `TODO.md` (here)                         | Implementation tracking               |
+| `PLUGIN_IDEAS.md` (here)                 | Calibre plugin feature brainstorm     |
+| `VIEWER_EXTENSIBILITY_ANALYSIS.md`       | Honest analysis of Calibre viewer limits |
+| [PROMOTION.md](./PROMOTION.md)           | Goodreads, forums, wrappee etiquette (no AI spam) |
+
+Per-project specs live in the repo:
+
+| Spec                                           | Project              | Effort |
+|-----------------------------------------------|----------------------|--------|
+| `calibre-mcp/docs/plans/ROADMAP.md`           | Strategic overview   | —      |
+| `calibre-mcp/docs/plans/READING_FLOW_INTEGRATION.md` | Reading tracking | 2–3 d  |
+| `calibre-mcp/docs/plans/ANNOTATION_INTELLIGENCE.md` | Highlights import | 3–4 d  |
+| `calibre-mcp/docs/plans/BOOK_OF_THE_DAY.md`   | Daily surfacer       | 1 d    |
+| `calibre-mcp/docs/plans/DUPLICATE_DETECTION.md` | Dupe cleanup       | 1–2 d  |
+| `calibre-mcp/docs/plans/AUDIOBOOK_GENERATOR.md` | Book → M4B         | 5–7 d  |
+
+Agent Skills for AI-assisted implementation:
+
+- `calibre-mcp/.cursor/skills/calibre-mcp-*/SKILL.md` (one per project
+  + orchestrator)
+
+## Linked fleet entries
+
+- `FLEET_INDEX.md` — fleet overview, current version line
+- `calibre-plugins` — sibling workspace for Phase 2 RAG-search plugin
+  development (currently stubs only; features merged into main
+  calibre_plugin instead)
 
 ---
 
-## Why it exists
-
-Thousands of EPUBs and PDFs should not mean a thousand forgotten folders. **CalibreMCP** plugs your Calibre library into the agent era: ask in plain language, search by *meaning* as well as title, jump to a line you half-remember, and let tools chain—libraries, books, viewer, export—without babysitting every click.
-
-It is built for people who treat a digital library as a **working collection**, not a dump.
-
----
-
-## What you get (at a glance)
-
-- **FastMCP 3.1+** — portmanteau tools, sampling, skills, prompts; agentic workflows for multi-step library tasks.
-- **Semantic metadata search** — LanceDB over titles, authors, tags, comments, series (`calibre_metadata_search`).
-- **Full-text that respects Calibre** — uses Calibre’s own FTS index where it matters; optional **phrase locations** (PDF page, EPUB chapter, Calibre viewer “search after open”).
-- **Webapp** — dark UI, semantic search page, chat (Ollama / LM Studio / OpenAI-compatible), logs, stabilized Import Hub.
-- **Smart Import Hub (v1.5.0)** — One-click ingestion from **arXiv**, **Project Gutenberg**, and **Anna's Archive**; includes mirror-aware landing-page detection (CAPTCHA/timers) and manual browser fallback.
-- **MCP Apps (Prefab)** — optional **`show_book_prefab_card`** (after **`query_books`** / `book_id`) and **`show_libraries_prefab_card`** (“Our Calibre” — all libraries + stats; `uv sync --extra apps`). Central fleet doc: [mcp-apps-prefab-ui.md](../../fastmcp/mcp-apps-prefab-ui.md).
-- **Local-first** — direct `metadata.db` + files on disk; RAG indexes live next to your library. No cross-repo vector-store dependency at runtime.
-
----
-
-## Read next (detail docs in this folder)
-
-| Doc | What’s inside |
-|-----|----------------|
-| [SEARCH_RAG_FTS.md](./SEARCH_RAG_FTS.md) | FTS vs semantic RAG, on-disk `lancedb_*` layout, `search_fulltext(resolve_locations)`, HTTP chat. |
-| [CALIBRE_DEBUG_EXPORT_AND_RAG_PLAN.md](./CALIBRE_DEBUG_EXPORT_AND_RAG_PLAN.md) | `calibre-debug` metadata JSON export, curated comments as RAG signal, LanceDB alignment, implementation phases (upstream script in `calibre-mcp/scripts/`). |
-| [CONTENT_SERVER.md](./CONTENT_SERVER.md) | Calibre Content server + **calibredb** remote URLs vs direct `metadata.db` — when remote is enough, when it is not. |
-
-**Upstream (full manual):** [README](https://github.com/sandraschi/calibre-mcp/blob/main/README.md) · [Agentic & RAG](https://github.com/sandraschi/calibre-mcp/blob/main/docs/AGENTIC_AND_RAG.md) · [CHANGELOG](https://github.com/sandraschi/calibre-mcp/blob/main/CHANGELOG.md) · [PRD](https://github.com/sandraschi/calibre-mcp/blob/main/docs/PRD.md)
-
----
-
-## Fleet
-
-| | |
-|--|--|
-| **Webapp ports** | **10720** (backend) · **10721** (frontend) — [WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md) |
-| **Start** | `calibre-mcp\webapp\start.ps1` (from upstream clone) |
-| **Index** | [projects/README.md](../README.md) · [FLEET_INDEX.md](../FLEET_INDEX.md) |
-
----
-
-*Tags: #calibre-mcp #calibre #ebooks #mcp #rag #fleet*
+*Maintained by Sandra Schipal. Architecture and roadmap by Claude Opus 4.7
+(Anthropic), April 2026.*

@@ -2,6 +2,7 @@ import * as React from "react"
 import { BookMarked, Loader2, Copy, Download, ChevronDown, ChevronUp, Info, ExternalLink, Store } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { API_BASE } from "@/lib/api"
 
 type Skill = {
     id: string
@@ -29,8 +30,8 @@ export function Skills() {
 
     React.useEffect(() => {
         Promise.all([
-            fetch("/api/skills").then((res) => res.json()).then((d) => setSkills(Array.isArray(d.skills) ? d.skills : [])),
-            fetch("/api/skill_marketplaces").then((res) => res.json()).then((d) => setMarketplaces(Array.isArray(d.marketplaces) ? d.marketplaces : [])),
+            fetch(API_BASE + "/api/skills").then((res) => res.json()).then((d) => setSkills(Array.isArray(d.skills) ? d.skills : [])),
+            fetch(API_BASE + "/api/skill_marketplaces").then((res) => res.json()).then((d) => setMarketplaces(Array.isArray(d.marketplaces) ? d.marketplaces : [])),
         ]).catch(() => {}).finally(() => setLoading(false))
     }, [])
 

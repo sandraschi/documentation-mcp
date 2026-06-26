@@ -1,36 +1,28 @@
-# docker-mcp
-> > **Purpose**: Comprehensive GitHub configuration guide to avoid hours of trial-and-error setup. > > **Copy this to new MCP repos** to get everything right the first time! --- 1. [Quick Setup Checklis...
+# docker-mcp (fleet index)
+> FastMCP 3.3 Docker MCP — containers, Desktop health, sampling, prefab UI, web_sota 10806/10807, MCPB, Tauri.
+> Canonical repo: D:\Dev\repos\docker-mcp
 
-This project includes automated llms.txt generation for AI accessibility.
+## Fleet docs (this tree)
+- [README](./README.md): Fleet project page — ports, MCPB, Tauri, run commands
+- [STATUS](./STATUS.md): Compliance snapshot 3.3.0
+- [CHANGELOG mirror](./CHANGELOG.md): 3.3.0 uplift summary
 
-## Docs
-- [Readme](docs\github\README.md): > **Purpose**: Comprehensive GitHub configuration guide to avoid hours of trial-and-error setup.
-- [Readme](README.md): [![FastMCP](https://img.shields.io/badge/FastMCP-2.13+-blue)](https://github.com/jlowin/fastmcp)
-- [Readme](docs\glama\README.md): This directory contains documentation related to achieving GLAMA AI Gold standard status for the Adv...
-- [Readme](docs\mcpb-packaging\README.md): **Complete guide to packaging and distributing MCP servers with MCPB**
-- [Complete Setup Guide](docs\github\COMPLETE_SETUP_GUIDE.md): > **6 hours of pain distilled into 30 minutes of setup**
-- [Megatest Location And Cleanup](docs\testing\MEGATEST_LOCATION_AND_CLEANUP.md): Megatest supports **flexible test location** and **configurable cleanup** strategies to balance:
-- [Serena Install And Test](docs\serena\SERENA_INSTALL_AND_TEST.md): **Date:** 2025-10-09
-- [Complete Type Fix Guide](docs\github\COMPLETE_TYPE_FIX_GUIDE.md): > **From 130+ type errors to 0** - The systematic approach that actually works!
-- [Changelog](CHANGELOG.md): All notable changes to this project will be documented in this file.
-- [Mcpjam Guide](docs\MCPJAM-GUIDE.md): This guide explains how to set up and use MCPJam with the Docker MCP server for development and test...
+## Upstream (authoritative)
+- [README](file:///D:/Dev/repos/docker-mcp/README.md)
+- [CHANGELOG](file:///D:/Dev/repos/docker-mcp/CHANGELOG.md)
+- [INSTALL](file:///D:/Dev/repos/docker-mcp/INSTALL.md)
+- [DEVELOPMENT](file:///D:/Dev/repos/docker-mcp/docs/DEVELOPMENT.md)
+- [TOOLS](file:///D:/Dev/repos/docker-mcp/docs/TOOLS.md)
+- [TROUBLESHOOTING](file:///D:/Dev/repos/docker-mcp/docs/TROUBLESHOOTING.md)
 
-## Api
-- [  Init  ](src\dockermcp\api\__init__.py): Api definitions and implementations
-- [Containers](src\dockermcp\api\containers.py): Api definitions and implementations
-- [Service](src\dockermcp\tools\workflows\models\service.py): Models definitions and implementations
-- [  Init  ](src\dockermcp\tools\workflows\models\__init__.py): Models definitions and implementations
-- [  Init  ](src\dockermcp\models\__init__.py): Models definitions and implementations
+## MCPB
+- manifest.json (repo root)
+- assets/prompts/system.md, user.md, examples.json
+- dist/docker-mcp-v3.3.0.mcpb
 
-## Examples
-- [Examples](examples/): Example code and implementations
-
-## Configuration
-- [Pyproject](pyproject.toml): Python project configuration and dependencies
-- [Package](web_sota\package.json): Node.js project configuration and dependencies
-- [Cargo](Cargo.toml): Rust project configuration and dependencies
-- [](.env): Environment variables and configuration
-- [Config](.git\config): Application configuration files
-
-## Optional
-- [Changelog](CHANGELOG.md): Project changelog information
+## Key modules
+- src/dockermcp/mcp_instance.py — singleton FastMCP
+- src/dockermcp/tool_registration.py — tool + fleet surface registration
+- src/dockermcp/fleet_surface.py — prompts, resources, prefab tools
+- src/docker_mcp/web.py — FastAPI bridge
+- src/server.py — web_app for uvicorn / Tauri sidecar

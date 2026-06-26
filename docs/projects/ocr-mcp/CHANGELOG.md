@@ -5,6 +5,30 @@ All notable changes to OCR-MCP will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-05-12
+
+### Added
+- **MinerU2.5-Pro backend** — opendatalab coarse-to-fine doc parsing VLM (1.2B params, April 2026)
+  - HF: `opendatalab/MinerU2.5-Pro-2604-1.2B`, registered as `mineru-2.5`
+- **Backend model status UI** — New `/backends` route in webapp with availability indicators, download/progress/probe UX
+- **Model download REST API** — `/api/models/status`, `/api/models/download/{name}`, `/api/models/download/{name}/progress`
+- **`POST /api/restart`** — Backend restart endpoint; falls back to Vite plugin middleware when backend is dead
+- **"Restart Backend" button** in BackendsPage with auto-refetch after restart
+- **Fleet start script** — `starts/ocr-sota-start.bat` created; starts backend (uvicorn :10859) + frontend (Vite :10858)
+- **`list_backends()`** on `BackendManager` — returns structured dict with per-backend availability and capabilities
+- **18 new unit tests** — model availability, download status, backend listing structure
+- **Vite proxy error suppression** — no more terminal spam when backend temporarily offline
+
+### Fixed
+- **Environment fragility** — Documented `.venv` corruption recovery path; `web_sota/start.ps1` runs `uv sync` before startup
+- **`start.ps1`** — Was starting MCP server instead of web backend; now delegates to `web_sota/start.ps1`
+- **API port mismatch** — `api.ts` base URL defaulted to phantom port 15550; changed to empty string for Vite proxy routing
+- **`web_sota/.env`** — Created with `VITE_API_BASE_URL=` to ensure proxy routing
+- **ScanViewer bitmap alignment** — Full-width scale instead of letterbox; left/right edges now match viewer edges
+- **operate_scanner save** — Scan images now always saved to disk (defaults to `scans/scan_{uuid}.png`) instead of returning in-memory only
+- **scan_batch argument order & persistence** — Fixed parameter swap; batch images now saved to disk
+- **list_backends() crash** — Added missing method (was called by `manage_workflow(list_backends)`)
+
 ## [Unreleased] - 2026-03-16
 
 ### Added

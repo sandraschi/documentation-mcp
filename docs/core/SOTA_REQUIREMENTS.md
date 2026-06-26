@@ -15,23 +15,26 @@ To maintain peer technical contributor status, all MCP servers must adhere to th
 
 ---
 
-## 2. FastMCP 3.1.1+ Standards
+## 2. FastMCP 3.2+ Standards
 
 ### 2.1. Feature Set
 - **Prompts**: Context-aware instruction sets registered via `@mcp.prompt()`.
 - **Resources**: Dynamic data streams via `@mcp.resource()`.
 - **Async Sampling**: Non-blocking tool orchestration using `ctx.sample()`.
 - **Skills Provider**: Ability to register and discover local skill directories.
+- **Vibe Coding XR**: Approved rapid-prototyping workflow for spatial interactions (Gemini + XR Blocks) — **[VIBE_CODING_XR.md](./VIBE_CODING_XR.md)**.
 
-### 2.2. MCP Apps and Prefab UI (Mandatory for Visual Output)
+### 2.2. MCP Apps and Prefab UI (fleet mandatory)
 
-When a server needs **rich cards or layouts inside the chat** (not the standalone webapp on ports **10700–10800**), follow the fleet guide **[MCP Apps, Prefab UI, and FastMCP](../fastmcp/mcp-apps-prefab-ui.md)**:
+**Packaging:** Declare **`prefab-ui>=0.14.0`** in **`[project.dependencies]`** (core dependency) on every Python **`*-mcp`** repo — not only an optional extra. Operators may still set a **per-server env flag** (e.g. `*_PREFAB_APPS=0`) to **skip registering** App tools in CI or headless images; the package remains installable and importable.
 
-- **`@mcp.tool(app=True)`** with **`ToolResult(content=..., structured_content=PrefabApp(...))`**
-- Requirement for **`prefab-ui`** (e.g. **`[project.optional-dependencies] apps`**).
-- **Plain-text fallbacks** are still required for accessibility, but **Prefab UI is now the primary SOTA interface** for all servers returning non-trivial visual data.
+**Tool coverage (MUST):** Any tool whose job is primarily **listing** (collections, search results, directories, inventories), **status** (health, connectivity, readiness), **statistics** (counts, aggregates, dashboards), or **multi-row / multi-field summaries** MUST ship a **Prefab** surface: either a dedicated **`@mcp.tool(app=True)`** (e.g. `show_*_prefab_card`, `*_status_app`) or the same operation returning **`ToolResult`** with **`structured_content=PrefabApp(...)`**, following **[MCP Apps, Prefab UI, and FastMCP](../fastmcp/mcp-apps-prefab-ui.md)** and **[Tool Design §3.3 / §4](./TOOL_DESIGN_STANDARDS.md)**. **Always** set **`content`** to a full plain-text summary for hosts that do not render Apps.
 
-Strategic comparison to standalone webapps: **[prefab-vs-webapps.md](../fastmcp/prefab-vs-webapps.md)**. **Use cases and examples (stats, fleet, health, host UX):** **[mcp-apps-prefab-use-cases-and-examples.md](../fastmcp/mcp-apps-prefab-use-cases-and-examples.md)**.
+**Exceptions** are allowed only when **documented in the repo PRD** (e.g. embedded-only, no chat surface). Single-value or trivially tiny responses may remain dict-only.
+
+**Plain-text fallbacks** remain mandatory for accessibility; Prefab is the **default SOTA** presentation for list/status-class outputs in chat.
+
+Strategic comparison to standalone webapps: **[prefab-vs-webapps.md](../fastmcp/prefab-vs-webapps.md)**. **Use cases and examples:** **[mcp-apps-prefab-use-cases-and-examples.md](../fastmcp/mcp-apps-prefab-use-cases-and-examples.md)**.
 
 ---
 

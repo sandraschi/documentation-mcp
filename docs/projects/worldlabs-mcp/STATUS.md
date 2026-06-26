@@ -1,19 +1,37 @@
-# worldlabs-mcp - Status
+# worldlabs-mcp — Status
 
 **Repository**: [worldlabs-mcp](https://github.com/sandraschi/worldlabs-mcp)
-**FastMCP Version**: v1.2.0 (Stable Simulation)
+**Version**: v0.5.0
+**FastMCP**: 3.2.0
 **Status**: 🟢 PRODUCTION
-**Last Updated**: 2026-02-23
+**Last Updated**: 2026-05-22
 
 ## Overview
 
-MCP server wrapping the [World Labs Marble API](https://docs.worldlabs.ai/api). Generates navigable 3D worlds (Gaussian splats, collision mesh, panorama) from text prompts, images, multi-image sets with azimuth angles, and video. Includes end-to-end local file upload flow.
+MCP server wrapping the [World Labs Marble API](https://docs.worldlabs.ai/api). Generates navigable 3D worlds (Gaussian splats, collision mesh, panorama) from text prompts, images, multi-image sets with azimuth angles, and video. Includes end-to-end local file upload flow, spatial voice agent (TTS), Spark 2.0 streaming viewer, and DCC export pipelines (Blender, Unity3D, Resonite).
+
+## Competition Entry 🏆
+
+**[Marble Adventure](../../docs/games/MARBLE_ADVENTURE.md)** — Godot 4.4 FPS hub + **8 Marble 1.1 worlds** (A–H, alphabetical) opened in the browser. Repo: `competition/marble-adventure/`.
+
+| | |
+|--|--|
+| **itch (draft)** | [sandraschi.itch.io/marble-adventure](https://sandraschi.itch.io/marble-adventure) |
+| **Play** | `just marble-adventure-play` (worldlabs-mcp) |
+| **Ship** | `competition/ship-itch.ps1` → hidden Butler push `sandraschi/marble-adventure:win` |
+| **PRD** | `worldlabs-mcp/docs/PRD_MARBLE_ADVENTURE.md` |
+
+**Shipped:** title screen + Fleet Museum · tour 5/5 + bonus F–H · shape puzzle · architect tokens · fleet terminals · E-key portal notes · layered hub audio · Spark TTS welcome (local mode) · multiline regen prompts · hidden itch build (`0.1.0-prototype`).
+
+**Player access:** default `public_marble` — no World Labs account; UUIDs in `data/portals.json`.
+
+**Entry for the World Labs Marble 1.1 Challenge.**
 
 ## Tool Summary
 
 | Tools | Pattern |
 |-------|---------|
-| 11 | Direct (no portmanteau — API is already flat) |
+| 20 | Direct (no portmanteau — API is already flat) |
 
 ## Tools
 

@@ -46,17 +46,27 @@ ruff format .
 
 ### 1.5. Recommended adjacent tooling (not duplicate linters)
 
-The bar above is **Ruff + (eventually) `ty` + pytest**. These are **optional** layers that pay off on a **Python-heavy + Vite** fleet without turning central docs into a stale “popular repos” list:
+The bar above is **Ruff + (eventually) `ty` + pytest**. These are **optional** layers that pay off on a **Python-heavy + Vite** fleet:
 
 | Area | Tool | When to adopt |
 |------|------|----------------|
 | **Dependency CVEs** | **`pip-audit`** (or equivalent against your lockfile) | **Recommended** in CI: Ruff does not replace vulnerability scanning. |
 | **HTTP-boundary tests** | **`respx`** or **`pytest-httpx`** | When MCP tools call **`httpx`** / external APIs: mock transport instead of hitting the network in unit tests. |
-| **Web dashboard (Vite)** | **`npm run check`** using **Biome** *or* ESLint + Prettier | **Recommended** for repos with `webapp/`: one blocking CI script mirrors “Ruff for Python.” |
+| **Web dashboard (Vite)** | **Biome** (`npm run lint` / `npm run format`) | **Mandatory** for repos with `webapp/`: ESLint+Prettier are retired. See [BIOME_STANDARDS.md](./BIOME_STANDARDS.md). |
 
-Do **not** add container scanners (e.g. Trivy) by default unless the repo ships **images**—see fleet guidance in conversations, not star counts.
+Do **not** add container scanners (e.g. Trivy) by default unless the repo ships **images**.
 
-### 1.6. Style Requirements
+### 1.6. Unicode safety (scripts - mandatory)
+
+**EM DASH is never allowed** in fleet script files (`start.ps1`, `justfile`, `src/`, `webapp/`, etc.). See [patterns/unicode_safety.md](./patterns/unicode_safety.md).
+
+```powershell
+powershell.exe -NoProfile -File D:\Dev\repos\mcp-central-docs\scripts\check-unicode-safe.ps1 -RepoPath .
+```
+
+Recommended: local pre-commit hook (example in unicode_safety.md).
+
+### 1.7. Style Requirements
 - **Modern Types**: Use `dict` instead of `Dict`, `str | None` instead of `Optional[str]`.
 - **Chained Exceptions**: Always use `raise ... from e`.
 - **Unused Variables**: Prefix with `_` if intentional.
@@ -68,8 +78,14 @@ On Windows systems where `ruff` is not on the global `PATH`, use the absolute pa
 - **Path**: `C:\Users\sandr\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe`
 - **Usage**: `& "C:\Users\sandr\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe" check <path>`
 
-## 2. TypeScript/JavaScript Standards
+## 2. TypeScript/JavaScript Standards (Biome)
 
+**Biome** is the MANDATORY toolchain for linting and formatting in TypeScript-based MCP servers and webapps. It replaces ESLint + Prettier entirely. See [BIOME_STANDARDS.md](./BIOME_STANDARDS.md) for the full fleet standard including the canonical `biome.json`, migration notes, and the Ruff/Biome power couple rationale.
+
+### 2.1. Configuration (`biome.json`)
+See [BIOME_STANDARDS.md](./BIOME_STANDARDS.md) for mandated rules and configuration snippets.
+
+### 2.2. Requirements
 - **TypeScript**: Use for all new frontend/backend code.
 - **Interfaces**: Define schemas for all API responses.
 - **Accessibility**: ARIA labels and semantic HTML are mandatory.
@@ -79,13 +95,15 @@ On Windows systems where `ruff` is not on the global `PATH`, use the absolute pa
 
 Zero-tolerance for dead code. If it's not used, it must be removed. If it's complex and misunderstood, request clarification rather than modification.
 
-## 4. Summary bar (Python MCP)
+## 4. Summary bar
 
 | Layer | Tool | Blocking? |
 |-------|------|-----------|
-| Lint + format | **Ruff** | Yes (local + CI + **pre-commit**) |
-| Types | **`ty`** | **No** in CI until clean, then yes |
+| Python lint + format | **Ruff** | Yes (local + CI + **pre-commit**) |
+| Python types | **`ty`** | **No** in CI until clean, then yes |
 | Dependency CVEs | **`pip-audit`** (or lockfile-aware audit) | Recommended in CI |
 | HTTP tests (httpx) | **`respx`** / **pytest-httpx** | When tools call external HTTP |
-| Vite / TS | **Biome** or ESLint+Prettier via **`npm run check`** | Recommended for `webapp/` repos |
+| TS/JS lint + format | **Biome** | Yes — ESLint+Prettier retired (SOTA 14.1+) |
 | LLM docs | **`llms.txt`** + **`llms-full.txt`** (both required) | N/A |
+
+**Last updated:** 2026-04-15

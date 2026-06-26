@@ -1,5 +1,23 @@
 ﻿# Vienna Life Assistant - Status Report
 
+## ViLife `web_sota` (2026-06-05)
+
+**Status:** ACTIVE — FastMCP 3.2 fleet surface  
+**Ports:** Frontend **10988** · Backend+MCP **10922**  
+**Start:** `vienna-life-assistant/web_sota/start.ps1`
+
+| Area | Status |
+|------|--------|
+| MCP `vienna_life` + sampling | Shipped |
+| Chat + Vienna preprompts | Shipped |
+| Skills (6 Vienna SKILL.md) | Shipped |
+| LLM: Ollama / LM Studio / OpenAI + model dropdown | Shipped |
+| Real DB for MCP read tools | Phase 2 |
+
+PRD: `vienna-life-assistant/docs/PRD.md` · Changelog: `[0.2.0]`
+
+---
+
 ## ðŸ“Š Project Overview
 
 **Vienna Life Assistant** is a comprehensive personal life management application with AI chatbot integration, calendar management, expense tracking, shopping lists, and extensive technical documentation.

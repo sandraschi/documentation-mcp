@@ -1,12 +1,13 @@
-# alexa-mcp
-> An MCP server that acts as an acoustic bridge to control an Alexa device. It uses Text-to-Speech (TTS) to issue commands to a physical Alexa device via speakers, and Speech-to-Text (STT) to listen to ...
+# alexa-mcp (MCP Central)
 
-This project includes automated llms.txt generation for AI accessibility.
+> **Alexa MCP** — FastMCP acoustic bridge: neural TTS (edge-tts, miniaudio, sounddevice) to a physical Echo, local STT (faster-whisper) from the mic, **interact** / **speak_command** / **listen** tools, **web_sota** dashboard (ports 10800/10801), persisted playback settings, **TTS shopping guard** for Amazon-shaped purchase lines (env `ALEXA_SHOPPING_GUARD`). Version **0.3.x**. Full changelog and README in the main repo `D:\Dev\repos\alexa-mcp`.
 
-## Docs
-- [Readme](README.md): An MCP server that acts as an acoustic bridge to control an Alexa device. It uses Text-to-Speech (TT...
+## Docs in this folder
 
-## Configuration
-- [Pyproject](pyproject.toml): Python project configuration and dependencies
-- [Package](web_sota\package.json): Node.js project configuration and dependencies
-- [Config](.git\config): Application configuration files
+- [README.md](README.md) — fleet summary, links to canonical repo and CHANGELOG.
+- [STATUS.md](STATUS.md) — status and ports.
+- [CHANGELOG.md](CHANGELOG.md) — short mirror; authoritative file is in the main repo.
+
+## Configuration pointers
+
+- [metadata_sync.json](metadata_sync.json) — id, path, GitHub URL.

@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2026-05-19
+
+### Added
+- Tauri 2.0 native desktop wrapper with PyInstaller sidecar build
+- 
+ative/build-sidecar.ps1, 
+ative/package.json, updated 
+ative/main.rs
+- justfile: uild-sidecar, uild-all, 	auri-dev targets
+
+### Fixed
+- Uvicorn readiness detection in main.rs now checks stderr (where Python logging actually writes)
+
+## [0.4.0] - 2026-05-01
+
+### Added
+- 14 MCP tools (fetch_email_detail, delete_email, mark_email_read, search_emails, remove_service + 9 prior)
+- Draft management, full email detail view, search page, services config page
+- Toast notifications, AI Improve in Compose (style/length/mood)
+- Prompt injection defense (sanitize.py): zero-width/bidi stripping + safety boundary wrapping
+- Live topbar health check, auto-refresh inbox
 ## [0.3.0] - 2026-01-17
 
 ### Added
@@ -99,4 +120,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic service configuration
 - Core email sending and receiving functionality
 - Async operations support
+
 

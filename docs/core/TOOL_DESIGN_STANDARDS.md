@@ -1,33 +1,33 @@
 # Tool Design & Implementation (SOTA)
 
-## 1. The Portmanteau Pattern
+## 1. The Portmanteau Evolution (2026 SOTA)
 
-To prevent "Tool Explosion", tools with related functionality MUST be consolidated into a single "Portmanteau" tool.
+To prevent "Tool Explosion" while maintaining "Searchability," the fleet has moved from **Manual Dispatchers** (Switch-Case) to **Projected Atomic Tools** (Namespacing).
 
-- **Consolidation**: Group by entity (e.g., `adn_content`).
-- **Mode Switching**: Use an `operation` or `mode` parameter.
-- **Discovery**: Ensure the docstring explains all sub-operations.
+- **Legacy Portmanteau**: A single tool function with an `operation` enum. (Deprecated for new work).
+- **SOTA Portmanteau (Projected)**: Atomic tools grouped via FastMCP namespacing (e.g., `mount(namespace="adn_knowledge")`).
+- **Industrial Portmanteau (2026 Improved)**: A high-density switch-case tool using **Strict Discriminated Unions** and **Rationale-First Docstrings**.
+- **Rationale**: While "Projected" tools are preferred for searchability, "Industrial" portmanteaus are MANDATORY for servers exceeding 50+ tools in environments with strict registry limits (Antigravity/Cursor 100-tool cap).
 
-### 1.1 Historical context and current host limits
+### 1.1 The Transform Rule
+For existing legacy portmanteaus, use **FastMCP Transforms** to project individual operations as atomic tools to the host. This provides the best of both worlds: centralized logic and transparent discovery.
 
-Portmanteau-heavy server design was often a practical necessity in early agentic IDE environments where MCP server/tool visibility caps were restrictive (commonly ~50, later ~100 visible tools). In those environments, wide atomic tool surfaces could crowd out other servers.
+### 1.2 The Industrial Portmanteau Standard
+To satisfy static analyzers (ToolBench/Arcade) and LLM planners, the Industrial Portmanteau must follow these 4 pillars:
 
-Current host behavior (notably newer Cursor builds) may allow substantially larger tool surfaces without the same hard cap pressure. Therefore:
+1.  **Strict Discriminated Unions**: Use `Annotated[Union[...], Field(discriminator="operation")]` in the Pydantic models. This ensures the analyzer sees mutually exclusive schemas instead of a "parameter blob."
+2.  **Rationale-First Docstrings**: The docstring MUST begin with a `[RATIONALE]` section explaining the architectural choice for consolidation. This primes the model to treat the tool as a multi-functional controller.
+3.  **Operation Mapping**: Every sub-task MUST be explicitly listed with a 1-line description and its required parameters.
+4.  **High-Fidelity Examples**: Provide 1-3 Python call examples that ground the analyzer in the combined `operation + parameters` pattern.
 
-- Portmanteau is still valid when it improves cohesion and discoverability.
-- Atomic tools are also valid when they materially improve planning, chaining, and schema clarity.
-- Preferred modern pattern: **hybrid surfaces** (portmanteau + atomic), with env/config switches to expose one or both sets per deployment context.
-
-## 2. Docstring Construction ("Gold Standard")
-
-Every SOTA tool MUST follow this order:
+### 2.1 The Docstring Template
+Every SOTA tool MUST follow the **[Docstring SOTA Rules](./rules/docstrings_sota.md)**:
 1.  **Summary**: One-line description.
-2.  **Portmanteau Rationale**: Mandatory justification block.
-3.  **Operations Detail**: Bulleted list of actions and what they do.
-4.  **Args**: Parameter definition with type hints and operation context.
-5.  **Returns**: Description of the structured JSON response.
-6.  **Examples**: Minimal working code snippets.
-7.  **Errors**: Common issues and recovery suggestions.
+2.  **Rationale**: (For Industrial Portmanteaus) The "why" behind the tool.
+3.  **Vanishing Args**: All parameter docs move to `Annotated[T, Field(description="...")]`.
+4.  **## Return Format**: Mandatory JSON schema description.
+5.  **## Examples**: 1-3 high-fidelity Python calls.
+6.  **Notes / Errors**: Use " - " bullets for prerequisites and recovery tips.
 
 ### 2.2. Args Section Formatting
 The `Args` section is the "Schema Bridge." It must be formatted precisely:
@@ -55,12 +55,16 @@ Include a `success` boolean and optional `suggestions` on failure to guide the a
 
 ### 3.3. MCP Apps and `ToolResult` (Prefab / in-chat rich UI)
 
-For **in-conversation** rich UI (cards, images) via FastMCP **MCP Apps**, tools may return **`ToolResult`** with **`structured_content=PrefabApp(...)`** instead of a plain dict. Requirements:
+**Dependency:** **`prefab-ui>=0.14.0`** is a **core** dependency for fleet **`*-mcp`** servers ([SOTA §2.2](./SOTA_REQUIREMENTS.md)).
+
+**Coverage rule:** For tools that primarily **list** items, report **status** / **health**, show **stats** or **dashboards**, or return **tabular** / **multi-section** structured data, you **MUST** provide a Prefab App presentation (dedicated **`@mcp.tool(app=True)`** or **`ToolResult`** with **`PrefabApp`**) in addition to any plain dict/JSON tool — see **[MCP Apps & Prefab UI](../fastmcp/mcp-apps-prefab-ui.md)** §3. **Exceptions** require an explicit **PRD** note.
+
+For **in-conversation** rich UI (cards, images, tables) via FastMCP **MCP Apps**, tools return **`ToolResult`** with **`structured_content=PrefabApp(...)`** where applicable. Requirements:
 
 - **Always** set **`content`** to a readable string summary for hosts that do not render Apps.
-- Follow the fleet **[MCP Apps & Prefab UI](../fastmcp/mcp-apps-prefab-ui.md)** guide: optional **`prefab-ui`** dependency, **`@mcp.tool(app=True)`**, HTML/plain-text handling, **no HTML** in `Text` without stripping.
+- **`@mcp.tool(app=True)`** where the tool is App-first; follow HTML/plain-text handling — **no raw HTML** in **`Text`** without stripping.
 
-Ordinary tools continue to return **dict** / structured JSON per §3.1; App tools are an **additive** pattern.
+Dict/JSON tools remain valid for **thin** responses; list/status-class surfaces **add** Prefab per §3 and the §4 table **Prefab** row.
 
 ---
 
@@ -82,6 +86,7 @@ Fleet tools **MUST** satisfy §2–§3 and the **MUST** rows below. **SHOULD** r
 | **Destructive / high-impact ops** | Deletes, overwrites, sends, money-like, or irreversible actions require **explicit agent-visible guardrails**: `confirm=True`, separate dry-run/preview, or a two-step pattern — documented in Args. | Set MCP **`destructiveHint`** / **`readOnlyHint`** (§8) so hosts can reason about risk. |
 | **Naming** | One **verb-led** `snake_case` name per tool; portmanteau name matches domain (`resolve_timeline`, not `do_stuff`). | Same casing and verb patterns across a server (`list_*`, `get_*`, `set_*`). |
 | **MCP tool annotations** | — | Every tool sets **`annotations=`** on `@mcp.tool()` (§8) with accurate **read-only vs mutating** hints. |
+| **Prefab (list / status / stats)** | Tools in §3.3 **coverage rule** ship a **Prefab App** surface (`ToolResult` + `PrefabApp` or `app=True` tool); **`prefab-ui`** in core deps ([SOTA §2.2](./SOTA_REQUIREMENTS.md)). | Card/table layout matches the dict tool’s fields; document both in skills / `llms-full.txt`. |
 
 ---
 

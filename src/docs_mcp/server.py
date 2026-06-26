@@ -12,6 +12,7 @@ from fastmcp.server import create_proxy
 
 from docs_mcp.api import docs, fleet, interaction, settings, skills
 from docs_mcp.backend.process_manager import process_manager
+from docs_mcp.backend.log_buffer import install_log_buffer
 
 # Modular Imports
 from docs_mcp.backend.store_registry import close_stores, get_memory_store, get_store
@@ -49,6 +50,9 @@ async def lifespan(app: FastAPI):
     """SOTA v14.0 Lifespan: Init stores and ensure background process cleanup."""
     logger.info("🚀 docs-mcp starting up...")
     try:
+        # Install in-memory log buffer
+        install_log_buffer()
+
         # Warm up stores
         get_store()
         get_memory_store()
@@ -72,7 +76,15 @@ app.state.mcp = docs_mcp
 # Add CORS for cross-origin fleet interaction
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://127.0.0.1:11032",
+        "http://localhost:11032",
+        "http://tauri.localhost",
+        "https://tauri.localhost",
+        "tauri://localhost",
+    ],
+    allow_origin_regex=r"https?://tauri\.localhost(:\d+)?",
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )

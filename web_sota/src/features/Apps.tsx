@@ -11,7 +11,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-
+import { API_BASE } from "@/lib/api"
 /** Normalized app item (from catalog: label, whatItIs, whatYouCanDo, startScript; or registry: id, name, description, repo_path). */
 export interface AppItem {
     id: string
@@ -71,7 +71,7 @@ export function Apps() {
         setLaunchMessage(null)
         try {
             if (app.label) {
-                const res = await fetch("/api/apps/launch", {
+                const res = await fetch(API_BASE + "/api/apps/launch", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ label: app.label }),
@@ -86,7 +86,7 @@ export function Apps() {
                     window.open(app.url, "_blank")
                 }
             } else if (app.repoPath) {
-                const res = await fetch("/api/fleet/launch", {
+                const res = await fetch(API_BASE + "/api/fleet/launch", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ repo_path: app.repoPath }),
@@ -112,7 +112,7 @@ export function Apps() {
     }, [])
 
     React.useEffect(() => {
-        fetch("/api/apps")
+        fetch(API_BASE + "/api/apps")
             .then((res) => res.json())
             .then((data: unknown) => {
                 const list = Array.isArray(data)

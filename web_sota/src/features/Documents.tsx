@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import ReactMarkdown from "react-markdown"
 import rehypeHighlight from "rehype-highlight"
-import "highlight.js/styles/github-dark.css" // Import highlight.js styles
+import "highlight.js/styles/github-dark.css"
+import { API_BASE } from "@/lib/api" // Import highlight.js styles
 
 interface DocNode {
     id: string
@@ -34,7 +35,7 @@ export function Documents() {
     React.useEffect(() => {
         const fetchTree = async () => {
             try {
-                const res = await fetch('/api/tree')
+                const res = await fetch(API_BASE + '/api/tree')
                 if (!res.ok) throw new Error("Failed to load documentation tree")
                 const data = await res.json()
                 setDocTree(data)
@@ -109,7 +110,7 @@ export function Documents() {
                             if (!ingestFolder.trim()) return;
                             setIngestLoading(true);
                             try {
-                                const res = await fetch("/api/ingest_folder", {
+                                const res = await fetch(API_BASE + "/api/ingest_folder", {
                                     method: "POST",
                                     headers: { "Content-Type": "application/json" },
                                     body: JSON.stringify({ folder_path: ingestFolder })
@@ -151,7 +152,7 @@ export function Documents() {
                                 onClick={async () => {
                                     setReindexLoading(true); setReindexMessage(null);
                                     try {
-                                        const r = await fetch("/api/reindex");
+                                        const r = await fetch(API_BASE + "/api/reindex");
                                         const d = await r.json();
                                         setReindexMessage(d.result?.message ?? d.result?.error ?? d.message ?? (r.ok ? "Done." : "Failed."));
                                     } catch { setReindexMessage("Request failed."); }

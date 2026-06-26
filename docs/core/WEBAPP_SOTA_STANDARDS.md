@@ -29,6 +29,7 @@ To prevent "runts" (low-quality generated apps), EVERY webapp MUST use:
 - **Animations**: [Framer Motion](https://www.framer.com/motion/) for micro-interactions and smooth transitions.
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand) for lightweight, persistent global state.
 - **Connectivity**: Native [MCP SDK](https://github.com/modelcontextprotocol/sdk) wrapper (SSE or Stdio).
+- **Package Manager & Runner**: [Bun](https://bun.com/) (`bun install` / `bun run`), replacing npm. Lockfile `bun.lock` (text, committed). **Vite stays the dev server/bundler** — Bun does not replace it. Node remains installed as fallback. See [BUN_STANDARDS.md](./BUN_STANDARDS.md) for the two-phase adoption + per-repo migration checklist, and [integrations/bun.md](../integrations/bun.md) for reference.
 
 ---
 
@@ -42,7 +43,8 @@ To prevent "runts" (low-quality generated apps), EVERY webapp MUST use:
 - **Fixed Topbar**: Always visible. Contains:
   - Breadcrumbs or Page Title.
   - Search (Global Tool/Resource Search).
-  - Quick Actions (Toggle Dark Mode, Notification Bell).
+  - Quick Actions (Toggle Dark Mode).
+  - **Emergency Stop (Kill Switch)**: (Conditional) Mandatory for **Audio, Video, and Robotics** fleets. A prominent red button that immediately halts all media/mechanical processes and cancels background timers. *Safety First.*
 
 ### 2. Feedback Systems
 - **Global Logger Modal**: A dedicated view (accessed via shortcut or button) showing real-time MCP JSON-RPC logs, `stderr`, and internal events.
@@ -160,13 +162,14 @@ The **SOTA Standard Kit** is the mandatory "pack" that must be added to all weba
 
 | Component | Standard Implementation |
 | :--- | :--- |
-| **FastMCP 3.1** | Context-aware tools, `run_stdio_async`, and Sampling API support. |
+| **FastMCP 3.2** | Context-aware tools, `run_stdio_async`, Sampling API, GenerativeUI provider (`prefab-ui>=0.14.0`). |
 | **Local LLM Chat** | Built-in chat interface with "Glom On" auto-binding to Ollama. |
 | **Embedded RAG** | **LanceDB** integration for document indexing (Local first). |
 | **Apps Hub** | Dynamic Fleet Discovery of all active apps (filtered by `Projects` registry). |
 | **Sampling Patterns** | Tools must use `ctx.sample()` for autonomous reasoning steps. |
 | **Tools Page** | Standardized `GrokTools` viewer with portmanteau support. |
 | **Skill Page** | When the server exposes skills (FastMCP 3.1), list and display skill content: `GET /api/skills`, `GET /api/skills/{name}`; frontend renders markdown. See [§ V. Skill Page](#v-skill-page-fastmcp-31). |
+| **API Docs Page** | FastAPI servers only: `/api-docs` page with embedded Swagger UI + ReDoc iframe, dark theme override, quick-ref strip, "Open in browser" link. Sidebar entry mandatory. See [§ IX. API Docs Page](#ix-api-docs-page-fastapi-servers-only). |
 | **Help System** | Unified help modal with deep-links to documentation. |
 
 ### Golden Template Lifecycle
@@ -177,5 +180,55 @@ The **SOTA Standard Kit** is the mandatory "pack" that must be added to all weba
 
 ---
 
+## IX. API Docs Page (FastAPI servers only)
+
+For any server using FastAPI, the webapp MUST expose an **API Docs** page that surfaces the auto-generated Swagger UI and ReDoc. This is the primary benefit of choosing FastAPI — don't bury it.
+
+### Requirements
+
+- **Sidebar entry**: `API Docs` link with `Code2` icon, pointing to `/api-docs`. Positioned between Chat and Logs.
+- **`/api-docs` page**: Embeds Swagger UI and ReDoc via iframe, proxied through the frontend dev server (add `/docs`, `/docs/:path*`, `/openapi.json`, `/redoc` rewrites to `next.config.js` or `vite.config.ts`).
+- **Dark theme override**: Inject fleet dark CSS (`#09090b` background, Zinc palette, Amber accents, method colour coding) into the iframe `contentDocument` on load. Graceful fallback if cross-origin blocks injection — always show an "Open in browser" direct link to `http://localhost:{backend_port}/docs`.
+- **View toggle**: Swagger UI (default) ↔ ReDoc — both useful, different reading modes.
+- **Quick-ref strip**: A scrollable row of representative endpoints above the iframe so the shape of the API is visible at a glance without expanding anything.
+- **"Open in browser" link**: Always present — direct URL to backend `/docs`, opens in new tab. This is the escape hatch if the iframe is cramped or the CSS injection fails.
+
+### Proxy rewrites (Next.js)
+
+```js
+// next.config.js
+{ source: '/docs',        destination: 'http://127.0.0.1:{PORT}/docs' },
+{ source: '/docs/:path*', destination: 'http://127.0.0.1:{PORT}/docs/:path*' },
+{ source: '/openapi.json',destination: 'http://127.0.0.1:{PORT}/openapi.json' },
+{ source: '/redoc',       destination: 'http://127.0.0.1:{PORT}/redoc' },
+```
+
+### Proxy rewrites (Vite)
+
+```ts
+// vite.config.ts
+'/docs':        { target: 'http://localhost:{PORT}', changeOrigin: true },
+'/openapi.json':{ target: 'http://localhost:{PORT}', changeOrigin: true },
+'/redoc':       { target: 'http://localhost:{PORT}', changeOrigin: true },
+```
+
+### MCP tool (optional but recommended)
+
+Add a `show_api_docs` or `open_swagger_docs` tool that returns the Swagger URL — useful for Claude to surface it without the user needing to remember the port:
+
+```python
+@mcp.tool()
+async def show_api_docs(ctx: Context) -> dict:
+    """Return the Swagger UI and ReDoc URLs for this server's REST API."""
+    base = f"http://localhost:{cfg.backend_port}"
+    return {"swagger": f"{base}/docs", "redoc": f"{base}/redoc", "openapi": f"{base}/openapi.json"}
+```
+
+### Starlette servers
+
+Starlette has no built-in docs. If a Starlette server grows to the point where docs are useful, that's the signal to migrate to FastAPI — see the decision matrix in `STARLETTE_NO_PYDANTIC_STANDARD.md`. Do not manually wire Swagger into a Starlette app.
+
+---
+
 **Owner:** Sandra Schipal  
-**Last Updated:** 2026-03-04
+**Last Updated:** 2026-05-31

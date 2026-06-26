@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Outlet, useLocation, useNavigate, NavLink } from "react-router-dom"
-import { Search as SearchIcon, Home, CircleHelp, BookOpen, Menu, Terminal, MessageSquare, Bot, Send, X as CloseIcon, LayoutGrid, Settings as SettingsIcon, FileSearch, BookMarked, Brain, Shield, Wrench, FolderOpen, ScrollText } from "lucide-react"
+import { Search as SearchIcon, Home, CircleHelp, BookOpen, Menu, Terminal, MessageSquare, Bot, Send, X as CloseIcon, LayoutGrid, Settings as SettingsIcon, FileSearch, BookMarked, Brain, Shield, FolderOpen, ScrollText, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -9,6 +9,7 @@ import { HelpDialog } from "@/components/help-dialog"
 import { LoggerDialog } from "@/components/logger-dialog"
 import { UserMenu } from "./UserMenu"
 import { useAuth } from "../../contexts/AuthContext"
+import { useZoom } from "../../lib/use-zoom"
 import { pathnameToView, viewToPathname, type ViewState } from "../../routes"
 
 interface NavItem {
@@ -19,7 +20,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
     { title: "Dashboard", view: "dashboard", icon: Home },
-    { title: "Artifacts", view: "documents", icon: BookOpen },
+    { title: "Documents", view: "documents", icon: BookOpen },
     { title: "Semantic Search", view: "semantic", icon: FileSearch },
     { title: "Tools Hub", view: "tools", icon: Terminal },
     { title: "Persistence", view: "memory", icon: Brain },
@@ -29,7 +30,6 @@ const navItems: NavItem[] = [
     { title: "Project Portfolio", view: "fleet", icon: FolderOpen },
     { title: "System Logs", view: "logs", icon: ScrollText },
 
-    { title: "Docker Desktop", view: "docker", icon: Wrench },
     { title: "Settings", view: "settings", icon: SettingsIcon },
     { title: "Help", view: "help", icon: CircleHelp },
 ]
@@ -42,6 +42,7 @@ export function AppLayout() {
     const location = useLocation()
     const navigate = useNavigate()
     const currentView = pathnameToView(location.pathname)
+    useZoom()
 
     
     const cleanupLayers = () => {
@@ -76,6 +77,13 @@ export function AppLayout() {
                         </div>
                         {isSidebarOpen && <span className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">Docs MCP</span>}
                     </NavLink>
+                    <button
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        className="ml-auto flex items-center justify-center rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                        title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                    >
+                        {isSidebarOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                    </button>
                 </div>
 
                 <div className="flex-1 py-6 px-4 space-y-2 overflow-y-auto scrollbar-none">
@@ -113,25 +121,6 @@ export function AppLayout() {
                     </NavLink>
                 </div>
 
-                <div className="p-4 border-t">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        className="w-full flex items-center justify-center hover:bg-accent"
-                        title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
-                    >
-                        {isSidebarOpen ? (
-                           <div className="flex items-center gap-2">
-                               <Terminal className="w-4 h-4 text-muted-foreground mr-1" />
-                               <span className="text-[10px] font-mono uppercase tracking-widest opacity-50">Collapse</span>
-                           </div>
-                        ) : (
-                            <LayoutGrid className="w-5 h-5 text-primary" />
-                        )}
-                    </Button>
-
-                </div>
             </aside>
 
             {/* Main Content */}

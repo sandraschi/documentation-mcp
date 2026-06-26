@@ -16,7 +16,8 @@ Every webapp MUST include:
     - Clears target ports from zombies/squatters (using `Stop-Process` on listeners).
     - Triggers the build (if necessary).
     - Launches both Frontend and Backend substrates.
-    - **Auto-Open Browser**: Launches a non-blocking background polling task to open the default browser only when the Vite frontend is responsive (200 OK), eliminating cold-start "Connection Refused" errors.
+    - **Backend readiness (MANDATORY)**: After spawning the ASGI process, **wait until the backend is actually listening** before starting Vite — e.g. **TCP connect** to the API port, or **`GET /api/v1/health`** (or repo-specific health) when no auth is required. Cold **`uv run`** and heavy imports routinely exceed a fixed sleep; without this step, Vite’s dev proxy logs **`ECONNREFUSED`** to **`127.0.0.1:<backend>`**. Use a bounded wait (e.g. 60–90s) and **exit with a clear error** if the backend never binds (operator checks the uvicorn window). Set **`-WorkingDirectory`** on the backend child to the **repository root** so **`uv run`** resolves the project reliably.
+    - **Auto-Open Browser**: Launches a non-blocking background polling task to open the default browser only when the Vite frontend is responsive (200 OK), eliminating cold-start "Connection Refused" errors **for the HTML shell** (distinct from API readiness above).
 2.  **`start.bat`**: Double-click wrapper for `start.ps1`.
 3.  **`.gitignore`**: Root rules MUST exclude **`node_modules/`** (and nested `**/node_modules/`), local envs, and build caches — see **[GITIGNORE_STANDARDS.md](./GITIGNORE_STANDARDS.md)**. Never commit npm/pnpm dependencies or Vite pre-bundles.
 
@@ -101,6 +102,7 @@ Every SOTA webapp MUST implement the following paths:
 | :--- | :--- | :--- |
 | **`/` (Home)** | Dashboard | Overview of system health, active tasks, and quick-launch cards. |
 | **`/tools`** | MCP Inspector | Dynamic list of server tools, schema visualization, and dry-run execution. |
+| **`/logs`** | Event logs | Live tail, filter/search/sort, export, ring-buffer stats — see [WEBAPP_LOGS_PAGE.md](./WEBAPP_LOGS_PAGE.md). |
 | **`/apps`** | Apps Hub | "Fleet Discovery" using `glama.json`. Navigation to other local MCP services. |
 | **`/help`** | Documentation | Integrated Markdown viewer for project-specific docs and SOTA standards. |
 | **`/settings`** | Configuration | Theme toggles, API keys, and **Local LLM "Glom On"** settings. |
@@ -156,6 +158,7 @@ To prevent recurring UI failures (BUG-002/BUG-003), all components MUST follow t
 ### 6.3. Logger Panel Reliability
 - **Smooth Auto-Scroll**: The Logger panel MUST automatically scroll to the bottom on new entries but allow "User Override" (pause auto-scroll when user manually scrolls up).
 - **Format**: All logs must be timestamped and color-coded by level (`DEBUG`, `INFO`, `SOTA-WARN`, `ERROR`).
+- **Full logs page**: Every webapp MUST also ship a dedicated **`/logs`** page with backend **`/api/logs`** — tail, pagination, filters, export. Spec: [WEBAPP_LOGS_PAGE.md](./WEBAPP_LOGS_PAGE.md).
 
 ---
 

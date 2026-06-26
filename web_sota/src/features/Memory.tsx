@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { API_BASE } from "@/lib/api"
 
 const PERSISTENCE_TOOL_PREFIX = "persistence"
 
@@ -39,7 +40,7 @@ export function Memory() {
     const [toolArgs, setToolArgs] = React.useState<Record<string, Record<string, string>>>({})
 
     React.useEffect(() => {
-        fetch("/api/tools")
+        fetch(API_BASE + "/api/tools")
             .then((res) => res.json())
             .then((data) => {
                 const list = Array.isArray(data) ? data : []
@@ -63,7 +64,7 @@ export function Memory() {
         setExecuting(toolName)
         const args = toolArgs[toolName] ?? {}
         try {
-            const res = await fetch("/api/execute", {
+            const res = await fetch(API_BASE + "/api/execute", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name: toolName, arguments: args }),

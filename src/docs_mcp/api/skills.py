@@ -46,7 +46,7 @@ async def api_skill_marketplaces():
     try:
         data_path = Path(__file__).parent.parent / "data" / "skill_marketplaces.json"
         if data_path.exists():
-            with open(data_path, encoding="utf-8") as f:
+            with open(data_path, encoding="utf-8-sig") as f:
                 return json.load(f)
         return {"marketplaces": []}
     except Exception as e:

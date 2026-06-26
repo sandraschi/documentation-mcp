@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { API_BASE } from "@/lib/api"
 
 export function Settings() {
     const [ollamaUrl, setOllamaUrl] = React.useState("")
@@ -22,10 +23,13 @@ export function Settings() {
     const [saveMessage, setSaveMessage] = React.useState<string | null>(null)
     const [reindexLoading, setReindexLoading] = React.useState(false)
     const [reindexMessage, setReindexMessage] = React.useState<string | null>(null)
+    const [ragExtraPaths, setRagExtraPaths] = React.useState("")
+    const [ragFederateMemory, setRagFederateMemory] = React.useState(false)
+    const [ragDocsRoot, setRagDocsRoot] = React.useState("")
 
     const loadSettings = React.useCallback(async () => {
         try {
-            const res = await fetch("/api/settings")
+            const res = await fetch(API_BASE + "/api/settings")
             if (!res.ok) return
             const data = await res.json()
             const defaultOllamaUrl = "http://localhost:11434"
@@ -39,10 +43,14 @@ export function Settings() {
             setLmstudioUrl(data.lmstudio_url ?? defaultLmstudioUrl)
             setLmstudioModel(data.lmstudio_model ?? "")
             setProvider((data.provider ?? "").toLowerCase())
+            const extraPaths = Array.isArray(data.rag_extra_paths) ? data.rag_extra_paths : []
+            setRagExtraPaths(extraPaths.join("\n"))
+            setRagFederateMemory(Boolean(data.rag_federate_memory))
+            setRagDocsRoot(data.rag?.docs_root ?? "")
 
             // Auto-load model lists so dropdowns are populated (Ollama / LM Studio often run locally)
             setModelsLoading(true)
-            fetch(`/api/ollama/models?url=${encodeURIComponent(oUrl)}`)
+            fetch(`${API_BASE}/api/ollama/models?url=${encodeURIComponent(oUrl)}`)
                 .then((r) => r.json())
                 .then((d) => {
                     const list = Array.isArray(d.models) ? d.models : []
@@ -57,7 +65,7 @@ export function Settings() {
                 .finally(() => setModelsLoading(false))
             if (lUrl) {
                 setLmstudioModelsLoading(true)
-                fetch(`/api/lmstudio/models?url=${encodeURIComponent(lUrl)}`)
+                fetch(`${API_BASE}/api/lmstudio/models?url=${encodeURIComponent(lUrl)}`)
                     .then((r) => r.json())
                     .then((d) => {
                         const list = Array.isArray(d.models) ? d.models : []
@@ -112,7 +120,7 @@ export function Settings() {
         setSaveLoading(true)
         setSaveMessage(null)
         try {
-            const res = await fetch("/api/settings", {
+            const res = await fetch(API_BASE + "/api/settings", {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -123,11 +131,14 @@ export function Settings() {
                     lmstudio_url: lmstudioUrl.trim(),
                     lmstudio_model: lmstudioModel.trim(),
                     provider: provider.trim().toLowerCase(),
+                    rag_extra_paths: ragExtraPaths,
+                    rag_federate_memory: ragFederateMemory,
                 }),
             })
             const data = await res.json()
             if (data.success) {
                 setSaveMessage("Saved.")
+                if (data.rag?.docs_root) setRagDocsRoot(data.rag.docs_root)
                 loadSettings()
             } else {
                 setSaveMessage(data.error ?? "Save failed.")
@@ -143,7 +154,7 @@ export function Settings() {
         setReindexLoading(true)
         setReindexMessage(null)
         try {
-            const res = await fetch("/api/reindex")
+            const res = await fetch(API_BASE + "/api/reindex")
             const data = await res.json()
             const msg = data.result?.message ?? data.result?.error ?? data.message ?? (res.ok ? "Reindex completed." : "Reindex failed.")
             setReindexMessage(msg)
@@ -349,9 +360,32 @@ export function Settings() {
                         <Database className="w-5 h-5" />
                         RAG &amp; indexing
                     </CardTitle>
-                    <CardDescription>Retrigger full documentation reindex. Use after adding new docs or changing structure.</CardDescription>
+                    <CardDescription>
+                        Primary index: <code className="text-xs">{ragDocsRoot || "documentation-mcp/docs"}</code>.
+                        Add extra markdown roots (one absolute path per line), then reindex.
+                    </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                        <span className="text-sm font-medium">Extra RAG paths</span>
+                        <textarea
+                            className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            placeholder={"D:\\Dev\\repos\\some-repo\\docs\nD:\\Dev\\repos\\another-repo\\README.md"}
+                            value={ragExtraPaths}
+                            onChange={(e) => setRagExtraPaths(e.target.value)}
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            Each path is scanned recursively for <code>.md</code> files. Env var <code>DOCS_EXTRA_PATHS</code> is merged at runtime.
+                        </p>
+                    </div>
+                    <label className="flex items-center gap-2 text-sm">
+                        <input
+                            type="checkbox"
+                            checked={ragFederateMemory}
+                            onChange={(e) => setRagFederateMemory(e.target.checked)}
+                        />
+                        Include Advanced Memory (<code>advanced-memory-mcp/knowledge</code> and <code>notes</code>)
+                    </label>
                     <Button
                         onClick={handleReindex}
                         disabled={reindexLoading}

@@ -165,7 +165,7 @@ While basic Tesseract OCR runs on any CPU, advanced SOTA models have specific re
 ## ✨ Complete Feature Suite
 
 ### 🎯 Core OCR Capabilities
-- **7 State-of-the-Art OCR Engines**: Mistral OCR, PaddleOCR-VL-1.5, DeepSeek-OCR-2, olmOCR-2, Qwen2.5-VL, GOT-OCR 2.0, DOTS.OCR (+ PP-OCRv5, EasyOCR, Tesseract legacy)
+- **12 State-of-the-Art OCR Engines**: PaddleOCR-VL-1.5, MinerU2.5-Pro, DeepSeek-OCR-2, olmOCR-2, Mistral OCR, Qwen2.5-VL, GOT-OCR 2.0, DOTS.OCR (+ PP-OCRv5, DeepSeek-OCR, EasyOCR, Tesseract legacy)
 - **Intelligent Backend Selection**: Auto-chooses optimal engine per document type
 - **Multiple Processing Modes**: Text, formatted, layout preservation, fine-grained extraction
 - **Multi-language Support**: 80+ languages across all backends
@@ -247,6 +247,7 @@ OCR-MCP integrates **8 state-of-the-art AI models** for comprehensive document p
 | Model | Text OCR | Tables | Formulas | Handwriting | Multi-lang | VRAM | Speed |
 |-------|----------|--------|----------|-------------|------------|------|-------|
 | **PaddleOCR-VL-1.5** | ✅ | ✅ | ✅ | ✅ | 109 langs | 3.3GB* | Fast |
+| **MinerU2.5-Pro** | ✅ | ✅ | ✅ | ⚠️ | ✅ | ~2.5GB | Fast |
 | **DeepSeek-OCR-2** | ✅ | ✅ | ✅ | ⚠️ | ✅ | ~8GB | Medium |
 | **olmOCR-2** | ✅ | ✅ | ✅ | ⚠️ | ✅ | ~16GB | Slow |
 | Mistral OCR | ✅ | ✅ | ✅ | ✅ | ✅ | 0 (API) | Fast |
@@ -739,7 +740,7 @@ backends:
 
 ### ✅ **Completed Features**
 - **FastMCP 3.1 Integration**: Sampling, agentic workflow tool (SEP-1577), prompts, skills resource, capabilities resource
-- **10 OCR Backends**: PaddleOCR-VL-1.5, DeepSeek-OCR-2, olmOCR-2, Mistral OCR, DeepSeek-OCR, DOTS.OCR, Qwen2.5-VL, GOT-OCR 2.0, EasyOCR, Tesseract
+- **12 OCR Backends**: PaddleOCR-VL-1.5, MinerU2.5-Pro, DeepSeek-OCR-2, olmOCR-2, Mistral OCR, DeepSeek-OCR, DOTS.OCR, Qwen2.5-VL, GOT-OCR 2.0, PP-OCRv5, EasyOCR, Tesseract
 - **Professional React Webapp**: Complete TypeScript frontend with modern UI/UX
 - **Intelligent Backend Selection**: Automatic model routing based on document analysis
 - **Document Processing Pipeline**: Multi-stage OCR with quality assessment

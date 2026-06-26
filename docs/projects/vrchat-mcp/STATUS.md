@@ -1,28 +1,28 @@
-﻿# VRChat MCP -- Project Status
+# VRChat MCP -- Project Status
 
-**Last Updated**: 2026-02-15
+**Last Updated**: 2026-04-13
 **Repo**: `D:\Dev\repos\vrchat-mcp` | [GitHub](https://github.com/sandraschi/vrchat-mcp)
-**Version**: v3.1.1+.0+ (FastMCP)
-**Python**: 3.8+ | **Build**: Setuptools / MCPB
-**Status**: ðŸŸ¢ PRODUCTION READY
+**Version**: v14.1.0 (SOTA Industrial)
+**Python**: 3.12+ | **Build**: UV / MCPB / Just
+**Status**: 🔵 SOTA INDUSTRIAL
 
 ---
 
 ## What It Is
 
-A professional-grade bridge for controlling VRChat avatars and environment assets via the Open Sound Control (OSC) protocol.
+A professional-grade unified control plane for VRChat interactions, combining high-fidelity OSC simulation with official REST API telemetry and real-time Websocket events.
 
-**Capabilities**: Real-time parameter management, avatar swapping, and plugin-based extension system for intelligent NPCs.
+**Capabilities**: Character state management, 2026 Creator Economy tracking, world discovery, and real-time social event monitoring.
 
 ---
 
 ## Architecture
 
-Dual-transport server supporting both high-speed stdio (for AI agents) and FastAPI (for web/third-party integration):
+Industrialized Portmanteau architecture consolidating protocol-level logic into high-utility entry points:
 - **OSC Core**: Bidirectional communication with VRChat (Ports 9000/9001).
-- **Plugin System**: Modular tool registration for custom avatar behaviors.
-- **Parameter Indexing**: Fast lookup of avatar-specific OSC endpoints.
-- **NPC Logic**: Planned integration for conversational agents within VR instances.
+- **REST Client**: Official Web API integration with 60s proactive caching.
+- **Pipeline Websocket**: Real-time event monitoring for invites, friend activity, and social telemetry.
+- **Portmanteau Tools**: Consolidated `manage_*` tools for reduced cognitive load.
 
 ---
 
@@ -30,11 +30,12 @@ Dual-transport server supporting both high-speed stdio (for AI agents) and FastA
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| OSC Transport | Working | Reliable bidirectional message flow |
-| Avatar Control | Working | Parameter get/set operations verified |
-| Plugin Host | Working | Decorator-based extension system |
-| Dual Interface | Working | Simultaneous stdio + FastAPI support |
-| MCPB Packaging | Working | SOTA 2026 compliant bundle |
+| OSC Transport | Working | reliable bidirectional message flow |
+| Avatar Control | Working | Full metadata (OSC + REST enrichment) |
+| World Discovery | Working | REST-backed search and info retrieval |
+| Creator Economy | Working | Credit balance and Udon product tracking |
+| real-time Pipeline | Working | Websocket notifications integrated |
+| MCPB Packaging | Working | SOTA 2026 compliant bundle (v14.1.0) |
 
 ---
 
@@ -42,6 +43,7 @@ Dual-transport server supporting both high-speed stdio (for AI agents) and FastA
 
 | Service | Port | Status |
 |---------|------|--------|
-| Backend | 10762 | Reserved |
-| Frontend | 10763 | Reserved |
-
+| **Backend (MCP)** | `10795` | Reserved/Active |
+| **Web UI (SOTA)** | `10796` | Reserved/Active |
+| **OSC Send** | `9000` | Standard |
+| **OSC Receive** | `9001` | Standard |

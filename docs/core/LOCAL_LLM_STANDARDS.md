@@ -5,7 +5,26 @@
 **Target Hardware**: NVIDIA RTX 4090 (24GB VRAM)
 
 ## 🎯 Strategic Overview
-The 2026 AI landscape is dominated by highly efficient Chinese open-weight models (DeepSeek, Qwen) that rival or exceed GPT-4o in coding tasks. By running these locally, you eliminate token costs, achieve sub-50ms latency, and maintain total data privacy within your Cursor workspace.
+
+**2026 truth table:**
+
+1. **Chinese open-weight** (Qwen, DeepSeek, Kimi, …) — **dominates** local text/code/agentic throughput.
+2. **Google Gemma 4** — **only major US corp** still shipping serious open weights (Apache 2.0, multimodal); Meta’s **Llama 4 cycle failed to hold the line**.
+3. **OpenAI / Anthropic** — **closed** models; cloud **per-token APIs**. Use sparingly for frontier gaps, not as the fleet’s always-on brain.
+
+The local stack is therefore a **two-pole open-weight** design: **Qwen/DeepSeek** for coding, **Gemma 4** for US-licensed multimodal (4090 + Pi 5). Closed APIs are a **paid overlay**, not the substrate.
+
+**Economics:** Marginal cost of an agent hour is ~zero locally vs metered cloud tokens. As Chinese FOSS plus Gemma close **multimodal** gaps, standing subscriptions at **€500–€1,000+/month** per seat need a recurring business justification — see [open-source.md § Local vs cloud](../not-mcp-related/general-ai/models/open-source.md#-local-vs-cloud--why-accountants-and-valuations-should-lose-sleep).
+
+**Long view:** Daily AI belongs on **edge NPUs** (phone, Pi, robot); cloud frontier is **dissertation tier** (novel, thesis, rare Opus-class jobs) — see [Datacenter boom vs edge + FOSS](../not-mcp-related/general-ai/models/open-source.md#datacenter-boom-vs-edge--foss-long-view).
+
+**Fleet note (June 2026):** **Gemma 4 12B** (`gemma4:12b`) is the **multimodal** RTX 4090 daily driver (text + images, encoder-free). **E2B/E4B** are the **multimodal** pair for **Raspberry Pi 5 16 GB** (vision + audio on-device). **Gemma 4 26B** stays the text/agentic ceiling but is **too heavy** for a shared 4090; prefer 12B unless the GPU is dedicated.
+
+| Tier | Hardware | Model | Multimodal |
+| :--- | :--- | :--- | :---: |
+| Desktop intel | RTX 4090 24 GB | `gemma4:12b` | Text + image |
+| Edge brain | **Pi 5 16 GB** | `gemma4:e4b` or `gemma4:e2b` | Text + image + **audio** |
+| Turbo / VRAM save | 4090 or Pi | `gemma4:e2b` | Same stack, smallest footprint |
 
 ---
 
@@ -43,6 +62,42 @@ For a **4090 (24GB)**, avoid 70B models (too slow on CPU) and 7B models (too "du
 *   **Intelligence**: Uses "Chain of Thought" (CoT) to solve complex bugs.
 *   **Behavior**: It will "think" for 5-10 seconds before providing a perfect architectural solution.
 *   **VRAM**: Similar to Qwen 32B.
+
+### 3. Fleet daily driver (4090): `gemma4:12b` — Gemma 4 12B **multimodal** dense
+
+*   **Release**: June 2026 — [Gemma 4 12B developer guide](https://developers.googleblog.com/gemma-4-12b-the-developer-guide/).
+*   **License**: Apache 2.0 (true OSI open source; commercial fine-tune and redistribute).
+*   **Multimodal (critical)**: Encoder-free — **text and images** in one model, one forward pass. Use for screenshots, dashboards, diagrams, UI captures, and doc photos without a separate vision API. Ollama accepts `images: [...]` on the message payload.
+*   **VRAM**: ~8–14 GB quantized on Ollama depending on quant and context — leaves headroom on **24 GB** vs **26B**.
+*   **Why fleet uses it**: Multimodal agentic work on desktop; closes quality gap under **26B** without cold-start pain when the 4090 is shared with the IDE.
+*   **Pull**:
+
+    ```powershell
+    ollama pull gemma4:12b
+    ```
+
+*   **MCD tiers**: Prefer `gemma4:12b` for `ollama_model_intel` / `ollama_model_standard` when vision or quality matters; keep `gemma4:e2b` for turbo-only **text** paths.
+
+### 4. Quality ceiling (dedicated GPU only): `gemma4:26b` — Gemma 4 26B MoE
+
+*   **Intelligence**: Agentic workflows, function calling, multimodal (speech/vision on larger variants).
+*   **Efficiency**: 26B total parameters, ~3.8B active per token (MoE).
+*   **VRAM**: ~17 GB+ resident — **avoid as default** on a shared 4090; use when the machine is inference-focused.
+*   **Speed**: High on a cold GPU; degrades sharply when VRAM is near full (see [STATUS.md](../STATUS.md)).
+
+### 5. Edge / Pi 5 16 GB: `gemma4:e4b`, `gemma4:e2b` — **multimodal on the robot**
+
+*   **Hardware**: **Raspberry Pi 5 with 16 GB RAM** (e.g. Yahboom Raspbot V2) — not theoretical; Google benchmarks and fleet tables target this class.
+*   **Multimodal (critical)**: **Vision + audio + text** on-device (E2B/E4B). Local ASR, camera frames, OCR/UI understanding, tool calling — no cloud hop for perception loops.
+*   **Memory (4-bit, fleet planning)**:
+
+    | Tag | RAM (approx.) | Fits Pi 5 16 GB with ROS? |
+    | :--- | :--- | :---: |
+    | `gemma4:e2b` | &lt;1.5 GB | Yes — lightest multimodal brain |
+    | `gemma4:e4b` | ~5 GB | Yes — better quality, still leaves headroom |
+
+*   **Runtime on Pi**: Prefer **LiteRT-LM** (`pip install litert-lm`) for XNNPack CPU paths; **Ollama** works for simpler ops. See [GEMMA4_EDGE_ON_RASPBOT.md](../robotics/research/GEMMA4_EDGE_ON_RASPBOT.md).
+*   **4090 fallback role**: `gemma4:e4b` also works as turbo tier when 12B is unloaded and desktop VRAM is tight (~9 GB on GPU).
 
 ---
 
@@ -85,7 +140,18 @@ If you use both Qwen (for chat) and DeepSeek (for complex debugging):
 
 ---
 
-## 🏢 Multi-IDE Configuration (2026 Standard)
+## 🔍 Standard 4: Web-Native Dynamic Discovery
+(Updated April 2026)
+
+Static model lists in web applications are strictly deprecated. Fleet-compliant dashboards MUST implement **Proactive Elicitation**.
+
+1. **Auto-Detection**: Scrape `localhost:11434` and `localhost:1234` recursively on dashboard mount.
+2. **Persistence**: Store discovered model names in `localStorage` for cross-session continuity.
+3. **Graceful Fallback**: Handle "Refused Connection" as a "Provider Offline" state rather than a system crash.
+
+---
+
+## 🏗️ Multi-IDE Configuration (2026 Standard)
 
 While Cursor is the primary target, the same 4090 backend can power your entire IDE fleet.
 

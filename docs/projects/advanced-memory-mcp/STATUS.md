@@ -1,16 +1,16 @@
 # Advanced Memory MCP (MemOps) -- Project Status
 
-**Last Updated**: 2026-03-01
+**Last Updated**: 2026-04-27
 **Repo**: `D:\Dev\repos\advanced-memory-mcp` | [GitHub](https://github.com/sandraschi/advanced-memory-mcp)
-**Version**: v1.5.1 (RAG Optimized + Secure)
+**Version**: v1.9.0 (Industrial Portmanteau Standard)
 **Python**: 3.12+ | **Node**: 18+ | **Build**: FastMCP / MCPB
-**Status**: 💎 GOLD STANDARD (Production Ready)
+**Status**: 💎 GOLD STANDARD (SOTA v14.2.0)
 
 ---
 
 ## What It Is
 
-The flagship research-driven knowledge platform of the MCP ecosystem, colloquially known as **MemOps**. Advanced Memory MCP transforms AI assistants into high-performance research agents capable of autonomous information gathering, knowledge synthesis, and multi-IDE skill management.
+The flagship research-driven knowledge platform of the MCP ecosystem, colloquially known as **MemOps**. Optimized for **SOTA v14.1.0 (March 2026)**, it features a complete modular documentation suite and is anchored by **Benny (GSD)** for social/emotional grounding.
 
 **Core Mission**: To provide a professional-grade, materialist knowledge substrate that bridges the gap between raw data and agentic intelligence.
 
@@ -19,13 +19,14 @@ The flagship research-driven knowledge platform of the MCP ecosystem, colloquial
 ## Architecture & Ecosystem
 
 A massive, composite architecture designed for scalability and high-fidelity reasoning:
-- **FastMCP 3.1.1+.4+ Core**: Dual-transport server (stdio/HTTP) with optimized portmanteau tool routing.
+- **FastMCP 3.2 Core**: Native async orchestration with tool sampling and shadow unrolling.
 - **RAG Engine**: LanceDB + FastEmbed (`BAAI/bge-small-en-v1.5`) for semantic vector search and hybrid retrieval.
 - **Multi-Source Research**: Integrated trawlers for GitHub (code), arXiv (science), TV Tropes (narrative patterns), and the open web.
 - **Zettelkasten System**: Bidirectional sync between SQLite and Markdown files with support for permanent notes and knowledge graphs.
 - **Unified Skill Hub**: Automated discovery and management of Claude Skills across Cursor, Windsurf, and Antigravity.
-- **Voice Stack (Audio Soul)**: High-performance Faster-Whisper (STT) and Kokoro (TTS) for natural vocal interaction.
-- **Standalone Web UI**: Premium React dashboard on port **17770** with real-time knowledge visualization.
+- **Industrial Documentation**: Modular `docs/` suite covering Architecture, Usage, Fleet, and Compliance.
+- **Social Anchor**: **Benny (GSD)** integrated as the manual override adjudicator for security and stability.
+- **Standalone Web UI**: Premium React dashboard on port **10704** with real-time knowledge visualization.
 
 ---
 
@@ -39,6 +40,9 @@ A massive, composite architecture designed for scalability and high-fidelity rea
 | **Observability** | 🟢 PRODUCTION | Grafana + Prometheus + Loki Integration |
 | **Semantic Search** | 🟢 PRODUCTION | LanceDB + FastEmbed RAG Implementation |
 | **Voice Interfaces** | 🟢 PRODUCTION | GPU-accelerated STT/TTS (int8/float16) |
+| **Industrial Testing** | 🟢 PRODUCTION | Prefab-based deterministic rehydration |
+| **Arcade Compliance** | 🟢 PRODUCTION | Shadow Unrolling (Static Scanner Path) |
+| **Industrial Portmanteau** | 🟢 PRODUCTION | Rationale-First + Discriminated Unions |
 
 ---
 

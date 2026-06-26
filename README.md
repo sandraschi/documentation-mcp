@@ -13,7 +13,7 @@
 A technical documentation control plane featuring a Federated RAG engine and an industrial dashboard for the RoboFang ecosystem.
 
 ## Core Pillars
-- **Federated RAG**: Semantic search unified across local `/docs` and external sibling repositories (e.g., `advanced-memory-mcp`).
+- **Documentation RAG**: Semantic search over `documentation-mcp/docs` (integrations, standards, patterns, project mirrors). Optional Advanced Memory federation via `DOCS_FEDERATE_MEMORY=1`.
 - **Fleet Registry**: Authoritative index for the 100+ project fleet, managing port allocations and repository metadata.
 - **Port Reservoir**: Registry-driven management of host ports (10700–10800 range) for all ecosystem webapps.
 - **Industrial Dashboard**: A high-density React interface for search, fleet management, and AI-assisted deep research.

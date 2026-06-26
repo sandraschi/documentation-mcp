@@ -1,5 +1,8 @@
 # Vienna Life Assistant
 
+> **Fleet SOTA (2026-06):** Use **`web_sota`** — http://127.0.0.1:10988 (UI) · http://127.0.0.1:10922/mcp (MCP).  
+> LLM providers: Ollama, LM Studio, OpenAI (API key + model dropdown). `vienna-live-mcp` is deprecated.
+
 [![Beta](https://img.shields.io/badge/status-beta-orange.svg)](https://github.com/sandraschi/vienna-life-assistant)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![React](https://img.shields.io/badge/react-18+-61dafb.svg)](https://reactjs.org/)

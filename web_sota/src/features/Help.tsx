@@ -1,60 +1,111 @@
 import { useNavigate } from "react-router-dom"
-import { CircleHelp, Github, ShieldCheck, Zap } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
+import * as React from "react"
+import { BookOpen, MessageSquare, Search, Server, Terminal, FileText, ExternalLink } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { viewToPathname } from "@/routes"
+import { viewToPathname, type ViewState } from "@/routes"
+
+const helpItems: { title: string; desc: string; action: string; path: ViewState; icon: React.ComponentType<{ className?: string }> }[] = [
+  {
+    title: "Search Documentation",
+    desc: "Semantic search across all indexed fleet documentation and standards.",
+    action: "Search",
+    path: "semantic",
+    icon: Search,
+  },
+  {
+    title: "Browse Documents",
+    desc: "Navigate the documentation tree and read full file contents in the browser.",
+    action: "Browse",
+    path: "documents",
+    icon: BookOpen,
+  },
+  {
+    title: "AI Assistant",
+    desc: "Ask natural-language questions. Uses MCP sampling or local LLM fallback.",
+    action: "Chat",
+    path: "chat",
+    icon: MessageSquare,
+  },
+  {
+    title: "Tools Hub",
+    desc: "Explore registered MCP tools, their parameters, and portmanteau operations.",
+    action: "Explore",
+    path: "tools",
+    icon: Terminal,
+  },
+  {
+    title: "Fleet Dashboard",
+    desc: "Discover and launch other MCP fleet webapps across the ecosystem.",
+    action: "Open",
+    path: "apps",
+    icon: Server,
+  },
+]
+
+const faq = [
+  { q: "How do I add my own docs?", a: "Set DOCS_EXTRA_PATHS env var with comma-separated paths, then reindex via the Settings page or the reindex_docs MCP tool." },
+  { q: "No results in search?", a: "Run a reindex first (reindex_docs tool or Settings page). The index is empty until the first scan." },
+  { q: "Where is the server running?", a: "Backend: port 11033. Frontend: port 11032. Both in the fleet 10700-11500 range." },
+  { q: "How do I use the MCP server in Cursor/Claude?", a: "Add mcpServers entry pointing to the backend URL (HTTP mode) or run `uv run docs-mcp` (stdio mode)." },
+  { q: "Can I see the REST API?", a: "The backend exposes /api/search, /api/tree, /api/content, /api/status, etc. No built-in Swagger — hit the endpoints directly." },
+]
 
 export function Help() {
-    const navigate = useNavigate()
-    return (
-        <div className="container max-w-4xl mx-auto py-16 px-6 space-y-12 text-center text-primary-foreground/90">
+  const navigate = useNavigate()
+  return (
+    <div className="flex-1 flex flex-col min-h-0 container max-w-5xl mx-auto py-8 px-6 space-y-8 overflow-y-auto">
+      <div className="space-y-2 shrink-0">
+        <h1 className="text-3xl font-bold tracking-tight">Help & Guide</h1>
+        <p className="text-muted-foreground">Quick reference for using the Documentation MCP webapp and server.</p>
+      </div>
 
-            <div className="space-y-6">
-                <div className="inline-flex items-center justify-center p-4 bg-primary/5 rounded-full mb-4">
-                    <CircleHelp className="w-12 h-12 text-primary" />
-                </div>
-                <h1 className="text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600">
-                    Docs MCP Help
-                </h1>
-                <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                    The integrated hub for knowledge retrieval, standards enforcement, and agentic memory management.
-                </p>
-                <div className="flex justify-center gap-4 pt-4">
-                    <Button variant="default" size="lg" className="rounded-full px-8" onClick={() => navigate(viewToPathname("documents"))}>Documentation</Button>
-                    <Button variant="outline" size="lg" className="rounded-full px-8 gap-2">
-                        <Github className="w-4 h-4" /> GitHub
-                    </Button>
-                </div>
-            </div>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 shrink-0">
+        {helpItems.map((item) => (
+          <Card key={item.path} className="cursor-pointer hover:border-primary/40 transition-colors" onClick={() => navigate(viewToPathname(item.path))}>
+            <CardHeader className="pb-3">
+              <item.icon className="w-6 h-6 text-primary mb-1" />
+              <CardTitle className="text-sm">{item.title}</CardTitle>
+            </CardHeader>
+            <CardContent className="text-xs text-muted-foreground space-y-3">
+              <p>{item.desc}</p>
+              <Button variant="outline" size="sm" className="w-full text-xs gap-1">
+                {item.action} <ExternalLink className="w-3 h-3" />
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
-            <div className="grid md:grid-cols-3 gap-8 text-left mt-20">
-                <Card className="bg-card/50 border-0 shadow-lg">
-                    <CardContent className="pt-6 space-y-2">
-                        <ShieldCheck className="w-8 h-8 text-green-500 mb-2" />
-                        <h3 className="font-bold text-lg text-foreground">Industrial Grade</h3>
-                        <p className="text-sm text-muted-foreground">Rigorous adherence to enterprise-grade web application standards and security protocols.</p>
-                    </CardContent>
-                </Card>
-                <Card className="bg-card/50 border-0 shadow-lg">
-                    <CardContent className="pt-6 space-y-2">
-                        <Zap className="w-8 h-8 text-yellow-500 mb-2" />
-                        <h3 className="font-bold text-lg text-foreground">Super Low Latency</h3>
-                        <p className="text-sm text-muted-foreground">Powered by LanceDB and FastMCP for near-instant vector retrieval.</p>
-                    </CardContent>
-                </Card>
-                <Card className="bg-card/50 border-0 shadow-lg">
-                    <CardContent className="pt-6 space-y-2">
-                        <CircleHelp className="w-8 h-8 text-blue-500 mb-2" />
-                        <h3 className="font-bold text-lg text-foreground">Agent Ready</h3>
-                        <p className="text-sm text-muted-foreground">Designed specifically for LLM function calling and automated context injection.</p>
-                    </CardContent>
-                </Card>
-            </div>
+      <Card className="shrink-0">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <FileText className="w-5 h-5 text-primary" />
+            Frequently Asked Questions
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {faq.map((item, i) => (
+            <details key={i} className="group">
+              <summary className="cursor-pointer text-sm font-medium text-foreground hover:text-primary transition-colors list-none flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-xs text-primary shrink-0">?</span>
+                {item.q}
+              </summary>
+              <p className="mt-2 ml-7 text-sm text-muted-foreground">{item.a}</p>
+            </details>
+          ))}
+        </CardContent>
+      </Card>
 
-            <div className="pt-20 text-sm text-muted-foreground">
-                <p>Version 2.0.0 (January 2026 Build)</p>
-                <p className="mt-2 text-primary-foreground/50">Vienna, Austria</p>
-            </div>
-        </div>
-    )
+      <Card className="shrink-0">
+        <CardHeader>
+          <CardTitle className="text-lg">Keyboard Shortcuts</CardTitle>
+        </CardHeader>
+        <CardContent className="text-sm space-y-2">
+          <div className="flex justify-between border-b pb-2"><kbd className="px-2 py-0.5 rounded bg-muted text-xs font-mono">Ctrl+K</kbd><span className="text-muted-foreground">Open search</span></div>
+          <div className="flex justify-between border-b pb-2"><kbd className="px-2 py-0.5 rounded bg-muted text-xs font-mono">Ctrl+Scroll</kbd><span className="text-muted-foreground">Zoom in/out (0.8x - 3x)</span></div>
+        </CardContent>
+      </Card>
+    </div>
+  )
 }

@@ -1,72 +1,39 @@
-# Alexa MCP Server
+# Alexa MCP (fleet documentation)
 
-An MCP server that acts as an acoustic bridge to control an Alexa device. It uses Text-to-Speech (TTS) to issue commands to a physical Alexa device via speakers, and Speech-to-Text (STT) to listen to Alexa's responses via a microphone.
+**Canonical repository**: [alexa-mcp on GitHub](https://github.com/sandraschi/alexa-mcp) — `D:\Dev\repos\alexa-mcp`  
+**Version** (see upstream `pyproject.toml`): **0.3.x**  
+**Changelog (authoritative)**: [alexa-mcp/CHANGELOG.md](file:///D:/Dev/repos/alexa-mcp/CHANGELOG.md) in the main repo. This folder holds a **short mirror** in [CHANGELOG.md](./CHANGELOG.md).
 
-## Features
-- **Speak Command**: Synthesizes text to speech and plays it (e.g., "Alexa, turn on the lights").
-- **Listen Response**: Records audio from the microphone and transcribes it to text.
-- **Interact**: Combines speaking a command and listening for a response in one tool.
-- **SOTA Tech Stack**:
-  - TTS: `edge-tts` (Neural speech quality, online)
-  - STT: `faster-whisper` (High accuracy, local)
-  - Audio: `sounddevice`
-  - IO: `FastMCP`
+## What it is
 
-## Prerequisites
-- **Hardware**: A computer with Speakers and a Microphone, placed near an Alexa device (Echo Dot, etc.).
-- **Software**: 
-  - Python 3.10+
-  - `ffmpeg` installed and on PATH (required for audio conversion).
+An **acoustic bridge**: agents send text, the host **speaks** it (neural TTS) so a physical **Alexa / Echo** hears it, then a **microphone** captures the reply and **Whisper** transcribes it. No official Alexa control API is required; the “API” is air and sound.
 
-## 🚀 Installation
+## Current stack (high level)
 
-### Prerequisites
-- [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
-- Python 3.12+
+- **MCP**: FastMCP 3.2+ (`interact`, `speak_command`, `listen_for_response`, `docs_help`, prefab tools as configured).
+- **TTS**: `edge-tts` → temp MP3 → **miniaudio** decode → **sounddevice** to a **selectable** output; volume persisted server-side.
+- **STT**: `faster-whisper` (local).
+- **Web**: `web_sota` dashboard (Vite React), API under FastAPI; default dev ports **10800** (frontend) / **10801** (backend) per fleet registry.
+- **Safety**: optional **TTS shopping guard** blocks obvious **Amazon order / buy / cart** phrasing (env `ALEXA_SHOPPING_GUARD`, default on). See upstream README for limits.
 
-### 📦 Quick Start
-Run immediately via `uvx`:
-```bash
-uvx alexa-mcp
+## Quick links
+
+| Doc | Location |
+|-----|----------|
+| Full README | [D:/Dev/repos/alexa-mcp/README.md](file:///D:/Dev/repos/alexa-mcp/README.md) |
+| Changelog | [D:/Dev/repos/alexa-mcp/CHANGELOG.md](file:///D:/Dev/repos/alexa-mcp/CHANGELOG.md) |
+| Project status (this tree) | [STATUS.md](./STATUS.md) |
+| Web ports | [operations/WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md) (alexa-mcp) |
+
+## Run
+
+```text
+# From repo root, after uv sync
+just dev
+# or start web_sota via start.ps1; see upstream README.
 ```
 
-### 🎯 Claude Desktop Integration
-Add to your `claude_desktop_config.json`:
-```json
-"mcpServers": {
-  "alexa-mcp": {
-    "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/alexa-mcp", "run", "alexa-mcp"]
-  }
-}
-```
-## Usage
+## Notes for fleet index consumers
 
-Run the server:
-```bash
-mcp run src/alexa_mcp/server.py
-```
-Or use the MCP CLI / Inspector.
-
-### Tools
-
-- `speak_command(text: str)`: Speaks the given text.
-- `listen_response(duration: int = 10)`: Listens for `duration` seconds and returns transcription.
-- `interact(command: str, wait_for_response: bool = True, timeout: int = 10)`: Speaks "Alexa, {command}" (or just command if it starts with Alexa) and returns the response.
-
-## Troubleshooting
-
-- **Audio Device Error**: Ensure your default input/output devices are correctly set in OS settings or specify device indices in `audio.py` if needed.
-- **FFmpeg missing**: Install FFmpeg (`winget install ffmpeg` on Windows).
-
-
-## 🌐 Webapp Dashboard
-
-This MCP server includes a free, premium web interface for monitoring and control.
-By default, the web dashboard runs on port **10800**.
-*(Assigned ports: **10800** (Web dashboard frontend), **10801** (Web dashboard backend))*
-
-To start the webapp:
-1. Navigate to the `webapp` (or `web`, `frontend`) directory.
-2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
-3. Open `http://localhost:10800` in your browser.
+- **Not** a substitute for Amazon account **voice purchase** and **skill** settings; the bridge is an actuator for whatever Alexa would do if a human spoke the same words.
+- **Web UI auth** is **not** production-hardened; do not expose to the public internet without a gate (VPN / reverse proxy with auth). Documented as roadmap upstream.

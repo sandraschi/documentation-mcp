@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { API_BASE } from "@/lib/api"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
@@ -37,7 +38,7 @@ export function Logs() {
 
     const fetchLogs = React.useCallback(async () => {
         try {
-            const res = await fetch("/api/logs?limit=500")
+            const res = await fetch(API_BASE + "/api/logs?limit=500")
             const data = await res.json()
             if (data.logs) {
                 setLogs(data.logs)
@@ -49,7 +50,7 @@ export function Logs() {
 
     const fetchProcesses = React.useCallback(async () => {
         try {
-            const res = await fetch("/api/processes")
+            const res = await fetch(API_BASE + "/api/processes")
             const data = await res.json()
             if (data.processes) {
                 setProcesses(data.processes)
@@ -61,7 +62,7 @@ export function Logs() {
 
     const killProcess = async (id: string, pid: number) => {
         try {
-            const res = await fetch("/api/processes/stop", {
+            const res = await fetch(API_BASE + "/api/processes/stop", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id, pid })

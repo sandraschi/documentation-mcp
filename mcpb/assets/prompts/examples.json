@@ -1,0 +1,743 @@
+[
+  {
+    "tool": "server_status",
+    "params": {},
+    "description": "Check server and index health"
+  },
+  {
+    "tool": "server_status",
+    "params": {},
+    "description": "Status after operations"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "FastMCP portmanteau pattern",
+      "limit": 5
+    },
+    "description": "Search portmanteau docs"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "How to set up MCP server with uv",
+      "limit": 3
+    },
+    "description": "Search MCP setup docs"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "PowerShell script standards",
+      "limit": 5
+    },
+    "description": "Search PowerShell standards"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "Tauri NSIS building",
+      "limit": 4
+    },
+    "description": "Search Tauri build docs"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "FastAPI vs Starlette decision",
+      "limit": 5
+    },
+    "description": "Search framework decision"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "MCP tool annotations READ_ONLY",
+      "limit": 5
+    },
+    "description": "Search tool annotations"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "React webapp SOTA standards",
+      "limit": 5
+    },
+    "description": "Search React standards"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "Docker compose patterns",
+      "limit": 3
+    },
+    "description": "Search Docker compose"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "PyInstaller spec file",
+      "limit": 5
+    },
+    "description": "Search PyInstaller specs"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "CORS configuration",
+      "limit": 5
+    },
+    "description": "Search CORS docs"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "Git workflow commit messages",
+      "limit": 5
+    },
+    "description": "Search git workflow"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "environment variables MCP server",
+      "limit": 3
+    },
+    "description": "Search env vars"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "batch mutation safety",
+      "limit": 3
+    },
+    "description": "Search batch safety docs"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "NSIS kill hooks",
+      "limit": 5
+    },
+    "description": "Search NSIS hooks"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "error handling MCP",
+      "limit": 5
+    },
+    "description": "Search error handling"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "pagination MCP tools",
+      "limit": 5
+    },
+    "description": "Search pagination"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "dist-info strip PyInstaller",
+      "limit": 3
+    },
+    "description": "Search PyInstaller dist-info"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "tauri embedded backend",
+      "limit": 5
+    },
+    "description": "Search Tauri embedded backend"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "What is the portmanteau tool pattern?"
+    },
+    "description": "Ask about portmanteau pattern"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "How do I set up a new MCP server with FastMCP?"
+    },
+    "description": "Ask about MCP server setup"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "What are the fleet standards for PowerShell scripts?"
+    },
+    "description": "Ask about PowerShell standards"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "How do I build a Tauri NSIS installer?"
+    },
+    "description": "Ask about Tauri builds"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "When should I use Starlette vs FastAPI?"
+    },
+    "description": "Ask about framework choice"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "What tool annotations should I use for MCP tools?"
+    },
+    "description": "Ask about tool annotations"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "What are the React webapp standards?"
+    },
+    "description": "Ask about React standards"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "How do I write tests for MCP servers?"
+    },
+    "description": "Ask about MCP testing"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "What is the Pagination standard for MCP tools?"
+    },
+    "description": "Ask about pagination"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "How do I document MCP tools properly?"
+    },
+    "description": "Ask about documentation"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "What ports are forbidden for webapps?"
+    },
+    "description": "Ask about forbidden ports"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "How do I add Playwright tests to my webapp?"
+    },
+    "description": "Ask about Playwright tests"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "What goes in a CLAUDE.md file?"
+    },
+    "description": "Ask about CLAUDE.md"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "What is the batch size limit for edits?"
+    },
+    "description": "Ask about batch edit rules"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "What are the requirements for a SOTA webapp?"
+    },
+    "description": "Ask about SOTA webapp requirements"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "What is the correct docstring format for SOTA tools?"
+    },
+    "description": "Ask about docstring format"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "How do I use Prefab UI cards in my tools?"
+    },
+    "description": "Ask about Prefab UI"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "What is the fleet standard for building desktop installers?"
+    },
+    "description": "Ask desktop installer standard"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/TOOL_DESIGN_STANDARDS.md"
+    },
+    "description": "Read tool design standards"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/WEBAPP_SOTA_STANDARDS.md"
+    },
+    "description": "Read webapp standards"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/PACKAGING_STANDARDS.md"
+    },
+    "description": "Read packaging standards"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/AGENT_PROTOCOLS.md"
+    },
+    "description": "Read agent protocols"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/rules/tauri_nsis_building.md"
+    },
+    "description": "Read Tauri build docs"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/rules/docstrings_sota.md"
+    },
+    "description": "Read docstring standards"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "operations/WEBAPP_PORTS.md"
+    },
+    "description": "Read port registry"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/rules/workflow_2026.md"
+    },
+    "description": "Read workflow rules"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/rules/playwright_e2e_sota.md"
+    },
+    "description": "Read Playwright e2e standard"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/rules/claude_dot_md_sota.md"
+    },
+    "description": "Read CLAUDE.md standard"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/GIT_REPOSITORY_SAFETY.md"
+    },
+    "description": "Read git safety rules"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/rules/mcp_registration.md"
+    },
+    "description": "Read MCP registration"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/SOTA_REQUIREMENTS.md"
+    },
+    "description": "Read SOTA requirements"
+  },
+  {
+    "tool": "get_document",
+    "params": {
+      "relative_path": "standards/VERIFICATION_STANDARDS.md"
+    },
+    "description": "Read verification standards"
+  },
+  {
+    "tool": "reindex_docs",
+    "params": {},
+    "description": "Full documentation reindex"
+  },
+  {
+    "tool": "chunk_stats",
+    "params": {},
+    "description": "Index statistics"
+  },
+  {
+    "tool": "chunk_stats",
+    "params": {},
+    "description": "Check index after reindex"
+  },
+  {
+    "tool": "docs_help",
+    "params": {},
+    "description": "Structured help overview"
+  },
+  {
+    "tool": "docs_help",
+    "params": {},
+    "description": "Help after reindex"
+  },
+  {
+    "tool": "persistence_store_memory",
+    "params": {
+      "namespace": "email-mcp",
+      "content": "Uses IMAP for inbox. SMTP for outbox. Supports auto-respond rules."
+    },
+    "description": "Store email-mcp info"
+  },
+  {
+    "tool": "persistence_store_memory",
+    "params": {
+      "namespace": "docker-mcp",
+      "content": "Exposes container, image, volume, network operations. FastMCP 3.3 server."
+    },
+    "description": "Store docker-mcp info"
+  },
+  {
+    "tool": "persistence_store_memory",
+    "params": {
+      "namespace": "project-x",
+      "content": "Chose FastAPI with Starlette decision matrix. Port 10812."
+    },
+    "description": "Store project decision"
+  },
+  {
+    "tool": "persistence_store_memory",
+    "params": {
+      "namespace": "project-x",
+      "content": "Using TailwindCSS dark theme. Zustand for state. Lucide for icons."
+    },
+    "description": "Store UI stack decision"
+  },
+  {
+    "tool": "persistence_store_memory",
+    "params": {
+      "namespace": "project-x",
+      "content": "Added Playwright e2e tests. Three spec files."
+    },
+    "description": "Store test decisions"
+  },
+  {
+    "tool": "persistence_store_memory",
+    "params": {
+      "namespace": "calibre-mcp",
+      "content": "Calibre library of 500+ books. Uses calibredb CLI."
+    },
+    "description": "Store Calibre info"
+  },
+  {
+    "tool": "persistence_store_memory",
+    "params": {
+      "namespace": "notes",
+      "content": "Remember to update the CLAUDE.md file after adding new standards"
+    },
+    "description": "Store reminder note"
+  },
+  {
+    "tool": "persistence_store_memory",
+    "params": {
+      "namespace": "fleet-notes",
+      "content": "All 5 repos have been updated with SOTA MCPB prompts"
+    },
+    "description": "Store fleet update note"
+  },
+  {
+    "tool": "persistence_store_memory",
+    "params": {
+      "namespace": "security-research",
+      "content": "MCP security best practices include API key rotation and local-only processing"
+    },
+    "description": "Store security research"
+  },
+  {
+    "tool": "persistence_recall",
+    "params": {
+      "namespace": "project-x",
+      "query": "What UI framework did we choose?",
+      "limit": 5
+    },
+    "description": "Recall UI decision"
+  },
+  {
+    "tool": "persistence_recall",
+    "params": {
+      "namespace": "email-mcp",
+      "query": "How does email work?",
+      "limit": 5
+    },
+    "description": "Recall email-mcp details"
+  },
+  {
+    "tool": "persistence_recall",
+    "params": {
+      "namespace": "project-x",
+      "query": "What port did we pick?",
+      "limit": 5
+    },
+    "description": "Recall port decision"
+  },
+  {
+    "tool": "persistence_recall",
+    "params": {
+      "namespace": "calibre-mcp",
+      "query": "Calibre library tools",
+      "limit": 5
+    },
+    "description": "Recall Calibre info"
+  },
+  {
+    "tool": "persistence_recall",
+    "params": {
+      "namespace": "docker-mcp",
+      "query": "Docker MCP capabilities",
+      "limit": 5
+    },
+    "description": "Recall docker-mcp"
+  },
+  {
+    "tool": "persistence_recall",
+    "params": {
+      "namespace": "notes",
+      "query": "reminder CLAUDE",
+      "limit": 5
+    },
+    "description": "Recall reminder"
+  },
+  {
+    "tool": "persistence_recall",
+    "params": {
+      "namespace": "fleet-notes",
+      "query": "MCPB prompts updated",
+      "limit": 5
+    },
+    "description": "Recall fleet note"
+  },
+  {
+    "tool": "persistence_recall",
+    "params": {
+      "namespace": "project-x",
+      "query": "testing strategy",
+      "limit": 5
+    },
+    "description": "Recall test decisions"
+  },
+  {
+    "tool": "persistence_recall",
+    "params": {
+      "namespace": "security-research",
+      "query": "API key handling",
+      "limit": 5
+    },
+    "description": "Recall security research"
+  },
+  {
+    "tool": "persistence_compaction_status",
+    "params": {},
+    "description": "Memory storage stats"
+  },
+  {
+    "tool": "persistence_compaction_status",
+    "params": {},
+    "description": "Check memory stats"
+  },
+  {
+    "tool": "agentic_doc_workflow",
+    "params": {
+      "workflow_prompt": "Research best practices for MCP server error handling"
+    },
+    "description": "Research error handling"
+  },
+  {
+    "tool": "agentic_doc_workflow",
+    "params": {
+      "workflow_prompt": "Create comprehensive guide to setting up a new fleet MCP server"
+    },
+    "description": "New server setup guide"
+  },
+  {
+    "tool": "agentic_doc_workflow",
+    "params": {
+      "workflow_prompt": "Summarize all standards related to Python coding in the fleet"
+    },
+    "description": "Python standards summary"
+  },
+  {
+    "tool": "start_webapp",
+    "params": {},
+    "description": "Start the web dashboard"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "cursor",
+      "limit": 5
+    },
+    "description": "Cursor releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "zed",
+      "limit": 3
+    },
+    "description": "Zed editor releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "anthropic",
+      "limit": 5
+    },
+    "description": "Anthropic releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "openai",
+      "limit": 5
+    },
+    "description": "OpenAI releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "notion",
+      "limit": 3
+    },
+    "description": "Notion releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "obsidian",
+      "limit": 5
+    },
+    "description": "Obsidian releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "docker",
+      "limit": 3
+    },
+    "description": "Docker releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "vscode",
+      "limit": 5
+    },
+    "description": "VS Code releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "figma",
+      "limit": 3
+    },
+    "description": "Figma releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "tailscale",
+      "limit": 3
+    },
+    "description": "Tailscale releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "windsurf",
+      "limit": 5
+    },
+    "description": "Windsurf releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "claude",
+      "limit": 5
+    },
+    "description": "Claude releases"
+  },
+  {
+    "tool": "query_releasebot",
+    "params": {
+      "product_slug": "raycast",
+      "limit": 3
+    },
+    "description": "Raycast releases"
+  },
+  {
+    "tool": "search_docs",
+    "params": {
+      "query": "MCP server architecture patterns"
+    },
+    "description": "Search architecture docs"
+  },
+  {
+    "tool": "ask_docs",
+    "params": {
+      "question": "How do I create a new MCP tool with FastMCP?"
+    },
+    "description": "Ask about creating tools"
+  },
+  {
+    "tool": "query_releasebot",
+    "description": "Linear releases",
+    "params": {
+      "limit": 3,
+      "product_slug": "linear"
+    }
+  },
+  {
+    "tool": "search_docs",
+    "description": "Search LanceDB docs",
+    "params": {
+      "limit": 5,
+      "query": "LanceDB vector search configuration"
+    }
+  },
+  {
+    "tool": "ask_docs",
+    "description": "Ask about embedding models",
+    "params": {
+      "question": "What models are supported for embeddings?"
+    }
+  },
+  {
+    "tool": "persistence_store_memory",
+    "description": "Store verification entry",
+    "params": {
+      "content": "Final verification entry",
+      "namespace": "doc-mcp-notes"
+    }
+  }
+]

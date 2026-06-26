@@ -1,5 +1,13 @@
 ﻿# Meta MCP - Product Requirements Document
 
+> **Canonical PRD:** `D:/Dev/repos/meta_mcp/PRD.md` (2026-06-06: **Fleet cold-start probe** + **Broken\*** mode; 2026-05-31: **repo_inspiration** suite).
+
+### Fleet Cold-Start Probe (mirror)
+
+- **UI:** `web_sota/src/pages/FleetStartupProbe.tsx` — Test one / Full fleet / **Broken\* (N)**
+- **API:** `broken_only` on `POST /api/v1/fleet/startup-probe/run`
+- **Ops doc:** [FLEET_WEBAPP_PROBE.md](../../docs/operations/FLEET_WEBAPP_PROBE.md)
+
 ## ðŸŽ¯ Product Vision
 
 **Meta MCP** is the ultimate "Argh-Coding" bloop-buster - a comprehensive management platform for MCP (Model Context Protocol) servers that prevents the developer pain points we've all experienced through enhanced response patterns and proactive tooling.

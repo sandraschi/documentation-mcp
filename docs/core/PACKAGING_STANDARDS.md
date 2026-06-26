@@ -1,6 +1,26 @@
 # Packaging & Discovery Standards (SOTA)
 
-## 1. MCPB Packaging (.mcpb)
+## 0. Two-Track Distribution (READ FIRST)
+
+Every fleet server has **two distinct install surfaces** that solve different problems:
+
+| Track | Artifact | Solves | Does NOT solve |
+|---|---|---|---|
+| **Claude Desktop MCP install** | `.mcpb` bundle | Single-click server registration in Claude Desktop; env var prompting; curated directory listing | Python runtime; webapp; scheduler; naked-PC prereqs |
+| **Full app install (webapp + backend)** | `start.bat` + `start.ps1` | Everything — prereqs, deps, ports, webapp, scheduler, browser open | Nothing extra needed |
+
+**Both tracks are mandatory.** They are complementary, not alternatives.
+
+- `.mcpb` is for developer users installing via Claude Desktop. It does not replace `start.bat`.
+- `start.bat` is for running the full stack (Starlette backend + Vite webapp). It does not replace `.mcpb`.
+- For Python servers, `.mcpb` still requires the user to have Python — the single-click promise is partial. Anthropic recommends Node.js for fully self-contained bundles, but FastMCP Python is the fleet standard and we accept this tradeoff.
+- **Steve-class users** (non-dev, naked PC) need `start.bat` with the `Require-Command` pattern from [NAKED_PC_INSTALL_STANDARD.md](./NAKED_PC_INSTALL_STANDARD.md). mcpb alone will not help them.
+
+**What native installers bundle:** MCP server + webapp only. **Never** host apps (Blender, Unity Editor), LLM runtimes (Ollama, vLLM), or model weights. See **[LLM_AND_INSTALL_TIERS.md](./LLM_AND_INSTALL_TIERS.md)** and [tauri_godot_sota.md](./rules/tauri_godot_sota.md).
+
+---
+
+
 
 The official standard for Claude Desktop.
 

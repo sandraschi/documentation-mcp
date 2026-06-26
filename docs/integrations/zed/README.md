@@ -14,7 +14,10 @@ Complete overview of the expanded Zed MCP ecosystem:
 - Intelligent entry point detection and automated extension generation
 - Path to Zed registry submission with quality assurance pipeline
 
-### [ZED_LATEST_RESEARCH_APR_2026.md](ZED_LATEST_RESEARCH_APR_2026.md) 🚀 **Latest Research (April 2026)**
+### [CHANGELOG_DIGEST_MAY_JUN_2026.md](../../ecosystem/zed/CHANGELOG_DIGEST_MAY_JUN_2026.md) 🚀 **Changelog Digest (May–Jun 2026)**
+Fleet summary for Zed 1.3.5–1.4.4: Skills, AGENTS.md, Terminal Threads, MCP OAuth, $0 Ollama/LM Studio vs OpenRouter.
+
+### [ZED_LATEST_RESEARCH_APR_2026.md](ZED_LATEST_RESEARCH_APR_2026.md) **Research (April 2026)**
 Detailed analysis of the April 2026 releases (0.230.x):
 - Latest release telemetry (0.230.2)
 - New features: Top-down streaming, native devcontainers, and Git Graph v2

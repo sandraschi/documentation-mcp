@@ -275,7 +275,29 @@ CONTRIBUTING.md
 CHANGELOG.md
 ```
 
-### Automated Repository Maintenance
+### Dependabot (Required, Judicious)
+
+Dependabot must be enabled on every repo, but configured to avoid spam and
+provide a **~2-week defer window** — the primary defense against freshly
+published supply chain attacks (malicious packages that are pulled within days
+of release and removed after discovery).
+
+#### Principles
+
+1. **GitHub Advisory Database is mandatory** — every repo must use
+   `dependency-review-action` (or equivalent) that checks all dependency changes
+   against the Advisory Database before merge. This is non-negotiable: the
+   accelerated CVE-to-exploit cycle from LLM-generated attacks means reactive
+   scanning is the only defense at ingestion time.
+2. **Monthly cadence for version bumps** — natural ~30 day delay gives the
+   advisory database time to surface malicious packages before a PR opens.
+3. **Security updates bypass the defer** — GitHub's automated security
+   advisories are separate from version updates and trigger immediately.
+4. **Low PR limit** — no more than 3-5 open PRs at once. Batch or ignore the
+   rest until next cycle.
+
+#### Configuration
+
 ```yaml
 # .github/dependabot.yml
 version: 2
@@ -283,14 +305,54 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"         # ~30 day defer; not daily, not weekly
     open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 3
 ```
+
+#### Supply Chain CI Gate
+
+```yaml
+# .github/workflows/dependency-review.yml
+name: Dependency Review
+on: [pull_request]
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
+```
+
+This checks every PR (including Dependabot PRs) against the GitHub Advisory
+Database. Combined with the monthly schedule, a malicious package published
+today and opened as a Dependabot PR next month will likely already have a
+known advisory.
+
+#### Exemptions
+
+Occasional manual dependency bumps for strategic upgrades are fine and expected.
+Dependabot is for routine maintenance, not the only update mechanism.
 
 ## Security Standards
 

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea"
+import { API_BASE } from "@/lib/api"
 
 interface Message {
     role: 'user' | 'assistant'
@@ -44,7 +45,7 @@ export function ChatView() {
             if (persona !== 'default') body.persona = persona
             if (systemPromptOverride.trim()) body.system_prompt = systemPromptOverride.trim()
 
-            const res = await fetch('/api/chat', {
+            const res = await fetch(API_BASE + '/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
@@ -113,7 +114,7 @@ export function ChatView() {
             const body: Record<string, string> = { message: userMessage }
             if (persona !== 'default') body.persona = persona
 
-            const res = await fetch('/api/chat', {
+            const res = await fetch(API_BASE + '/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)

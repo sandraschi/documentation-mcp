@@ -1,7 +1,7 @@
 ﻿# ðŸ  Home Security MCP Platform
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.20.0-blue.svg)](https://github.com/sandraschi/devices-mcp/releases)
+[![Version](https://img.shields.io/badge/version-1.21.1-blue.svg)](https://github.com/sandraschi/devices-mcp/releases)
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![MCP Version](https://img.shields.io/badge/MCP-3.1.1+.1-blue)](https://mcp-standard.org)

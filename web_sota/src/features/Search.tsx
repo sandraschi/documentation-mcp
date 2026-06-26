@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
+import { API_BASE } from "@/lib/api"
 
 interface SearchResult {
     id: number | string
@@ -147,7 +148,7 @@ export function SearchView() {
         if (source !== 'docs') return // Only support syncing docs natively for now
         setSyncing(true)
         try {
-            const res = await fetch('/api/reindex')
+            const res = await fetch(API_BASE + '/api/reindex')
             await res.json()
         } catch (err) {
             console.error("Sync failed:", err)
@@ -327,7 +328,7 @@ export function SearchView() {
             {!query && !error && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto">
                     {[
-                        { icon: FileText, title: "Docs Search", desc: "Instantly retrieve protocols from mcp-central-docs." },
+                        { icon: FileText, title: "Docs Search", desc: "Semantic search across documentation-mcp docs." },
                         { icon: Film, title: "Media RAG", desc: "Semantically search plots, themes, and subtitles across Plex." },
                         { icon: BookOpen, title: "Deep Library", desc: "Query Calibre books by concepts and metaphors." }
                     ].map((feature, i) => (

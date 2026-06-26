@@ -1,48 +1,15 @@
-# Changelog
+# Docker MCP — MCP Central mirror
 
-All notable changes to this project will be documented in this file.
+**Authoritative changelog**: `D:\Dev\repos\docker-mcp\CHANGELOG.md`.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [3.3.0] — 2026-06-02 (fleet SOTA uplift)
 
-## [Unreleased]
+- **FastMCP 3.3** with sampling handler (Ollama/LM Studio), `on_duplicate=replace`, prefab-ui cards.
+- **Fleet surface**: MCP prompts, `resource://docker-mcp/skills`, `docker_containers_card`, `docker_desktop_status_card`, `docker_system_info_card`.
+- **Web**: `/logs` (ring buffer API), settings with LLM provider/model glom; `start.ps1` requires `/api/health` 200.
+- **MCPB**: Root `manifest.json` v0.2; removed legacy `mcpb/` directory; `.mcpbignore` slim pack.
+- **Tauri**: Full `just build-native` pipeline (web_sota + PyInstaller sidecar + bundle).
+- **Import fix**: `docker_context.py` + `tool_registration.py` (no circular init).
+- **Tests**: `tests/test_web_bridge.py` for health/logs API.
 
-### Added
-
-- GitHub Actions CI/CD workflow for automated testing and deployment
-- Dockerfile for containerizing the application
-- docker-compose.yml for local development with monitoring stack
-- Comprehensive documentation for CI/CD and deployment
-- Automated release process with semantic versioning
-- Code coverage reporting with Codecov
-- Health check endpoint at `/health`
-- Interactive API documentation at `/docs` and `/redoc`
-- Structured JSON logging for all application logs
-- Test infrastructure with unit, integration, and e2e test directories
-- Comprehensive logging tests
-
-### Changed
-
-- Moved all test files from repo root to dedicated tests directory
-- Updated project structure for better organization
-- Improved error handling and logging
-- Updated dependencies to latest versions
-- Enhanced documentation with deployment instructions
-- Optimized Docker image for production use
-
-### Fixed
-
-- Fixed import errors in test files
-- Addressed linting issues in the codebase
-- Resolved dependency conflicts
-- Fixed test assertions to match actual implementation
-- JSON parsing errors in client logs by ensuring all logs are properly formatted
-- Deprecation warnings for datetime.utcnow()
-
-## [0.1.0] - 2025-09-11 - Initial Release
-
-### Features
-
-- Initial project setup
-- Basic Docker MCP server implementation
-- Container management tools
+For full history (including Docker Desktop tools), read the canonical [CHANGELOG.md](file:///D:/Dev/repos/docker-mcp/CHANGELOG.md).

@@ -13,6 +13,7 @@ import {
     DialogTitle,
     DialogFooter,
 } from "@/components/ui/dialog"
+import { API_BASE } from "@/lib/api"
 
 interface Tool {
     name: string
@@ -54,7 +55,7 @@ export function ToolsHub() {
     const [toolArgs, setToolArgs] = React.useState<Record<string, Record<string, string>>>({})
 
     React.useEffect(() => {
-        fetch('/api/tools')
+        fetch(API_BASE + '/api/tools')
             .then(res => res.json())
             .then(data => {
                 setTools(Array.isArray(data) ? data : [])
@@ -77,7 +78,7 @@ export function ToolsHub() {
         setExecuting(toolName)
         const args = toolArgs[toolName] ?? {}
         try {
-            const res = await fetch('/api/execute', {
+            const res = await fetch(API_BASE + '/api/execute', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: toolName, arguments: args })

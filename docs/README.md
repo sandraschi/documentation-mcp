@@ -1,26 +1,47 @@
 # Documentation Library
 
-This directory serves as the static source for the Documentation MCP Hub. It contains the "Golden Set" of protocols, standards, and ecosystem guides.
+Self-contained RAG corpus for **documentation-mcp**. Synced from the private fleet hub (`mcp-central-docs`); the server indexes **`documentation-mcp/docs`** by default.
 
 ## Content Structure
 
-### 1. [Standards](./standards/)
-Defines the authoritative protocols for the RoboFang ecosystem:
-- **`AGENT_PROTOCOLS.md`**: Behavioral and communication standards for AI agents.
-- **`SOTA_REQUIREMENTS.md`**: Technical standards for industrial-grade repositories.
+| Area | Purpose |
+|------|---------|
+| [`core/`](./core/) | Fleet standards (agent protocols, FastMCP, webapp, quality) |
+| [`projects/`](./projects/) | Per-repo README, STATUS, CHANGELOG, PRD mirrors |
+| [`integrations/`](./integrations/) | External tools and fleet service integration guides |
+| [`patterns/`](./patterns/) | Reusable MCP architecture patterns |
+| [`operations/`](./operations/) | Ports, bootstrap, fleet control plane |
+| [`ecosystem/`](./ecosystem/) | IDE and agent-platform research |
+| [`fastmcp/`](./fastmcp/) | FastMCP 3.x feature reference |
+| [`robotics/`](./robotics/) | Yahboom, digital twin, hardware bringup |
+| [`getting-started/`](./getting-started/) | Onboarding |
+| [`guides/`](./guides/) | Procedural workflows |
+| [`safety/`](./safety/) | High-risk server safety protocols |
+| [`mcp-technical/`](./mcp-technical/) | MCP protocol technical notes |
+| [`troubleshooting/`](./troubleshooting/) | Fleet debugging playbooks |
+| [`architecture/`](./architecture/) | System architecture references |
+| [`pico/`](./pico/) | Pico 4 / WebXR teleop |
+| [`deployment/`](./deployment/) | Deployment patterns |
+| [`monitoring/`](./monitoring/) | Observability |
+| [`skills/`](./skills/) | Fleet skill documentation |
+| [`research/`](./research/) | Public research notes |
+| [`adn-notes/`](./adn-notes/) | Advanced Memory / ADN notes |
 
-### 2. [Operations](./operations/)
-Infrastructure and lifecycle documentation:
-- **`WEBAPP_PORTS.md`**: Port allocation registry.
-- **`BOOTSTRAP.md`**: Environment initialization procedures.
+**Not copied:** `docs-private`, `scratch`, `politics`, archives, session logs, `.bak` files.
 
-### 3. [Guides](./guides/)
-Procedural documentation for common workflows:
-- **`MCP_DEVELOPMENT.md`**: Guide for building FastMCP servers.
-- **`FLEET_MANAGEMENT.md`**: Handling multi-repo orchestration.
+## RAG indexing
+
+| Setting | Where |
+|---------|--------|
+| Primary root | `documentation-mcp/docs` (`DOCS_ROOT` overrides) |
+| Extra paths | Webapp **Settings → Extra RAG paths**, or `DOCS_EXTRA_PATHS` env |
+| Advanced Memory | Settings checkbox or `DOCS_FEDERATE_MEMORY=1` |
+
+After changes, run **Reindex** in the webapp or call `reindex_docs`.
 
 ## Contribution
-To add new documentation:
-1. Create a markdown file in the appropriate subdirectory.
-2. Ensure the file contains structured YAML frontmatter (Title, Date, Category).
-3. Run `npm run reindex` (or trigger via UI) to update the semantic search index.
+
+1. Add markdown under the appropriate subdirectory.
+2. Use YAML frontmatter where applicable.
+3. Prefer relative links within `docs/`.
+4. Reindex so semantic search picks up changes.

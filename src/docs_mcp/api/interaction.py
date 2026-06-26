@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException, Request
 
 from docs_mcp.backend import settings_store
 from docs_mcp.backend.store_registry import get_memory_store, get_store
+from docs_mcp.backend.log_buffer import get_log_buffer
 from docs_mcp.tools.rag import _search_docs_raw
 
 logger = logging.getLogger("docs_mcp.api.interaction")
@@ -61,15 +62,15 @@ async def api_chat(request: Request):
 
 @router.get("/logs")
 async def api_logs(limit: int = 100):
-    """Serve debug logs."""
+    """Serve recent log entries from the in-memory ring buffer."""
     try:
-        log_path = Path("debug.log")
-        if not log_path.exists():
-            return {"logs": ["Log file not found."]}
-
-        with open(log_path, encoding="utf-8") as f:
-            lines = f.readlines()
-            return {"logs": lines[-limit:]}
+        buf = get_log_buffer()
+        if buf is None:
+            return {"logs": ["Log buffer not initialized. Server may still be starting."], "source": "buffer"}
+        lines = buf.get_logs(limit=limit)
+        if not lines:
+            return {"logs": ["No log entries captured yet. Activity will appear here as tools are called."], "source": "buffer"}
+        return {"logs": lines, "source": "buffer"}
     except Exception as e:
         logger.error(f"Error serving logs: {e}")
         raise HTTPException(status_code=500, detail=str(e))

@@ -1,9 +1,9 @@
 # FastMCP 3.x Fleet Upgrade Strategy
 
-**Date:** 2026-04-03 (updated)
-**Original trigger:** FastMCP 3.0 GA released February 18, 2026
-**Fleet standard:** `fastmcp>=3.2.0` (April 2026 SOTA)
-**Status:** docs-mcp on 3.2 ✅ | unity3d-mcp on 3.2 ✅ | Remaining fleet: SOTA Bash in progress
+**Date:** 2026-06-06 (updated)  
+**Original trigger:** FastMCP 3.0 GA released February 18, 2026  
+**Fleet standard:** `fastmcp>=3.4.2,<4` (June 2026 SOTA) — minimum **3.2.0** until batch bump completes  
+**Status:** docs-mcp on 3.2 ✅ | unity3d-mcp on 3.2 ✅ | Remaining fleet: SOTA Bash in progress | **3.4 docs:** [../fastmcp/3.4-features.md](../fastmcp/3.4-features.md)
 
 ---
 
@@ -38,12 +38,22 @@ FastMCP 3.0.2
                (Python DSL → React UI), SearchTools, MultiAuth,
                PropelAuth, lazy imports
     │
-    └──► FastMCP 3.2.0 (Mar 30 2026) ← FLEET STANDARD
+    └──► FastMCP 3.2.0 (Mar 30 2026)
          Adds: GenerativeUI provider (prefab-ui 0.14.0),
                `fastmcp dev apps` browser preview command
          Fixes: SSRF path traversal (GHSA-vv7q-7jx5-f767),
                 skill download path traversal,
                 PyJWT CVE-2026-32597, OAuthProxy scopes
+    │
+    └──► FastMCP 3.3.x (May 2026)
+         Adds: fastmcp-slim, AzureB2CProvider, run_in_thread=False,
+               OAuth proxy hardening, OTEL list instrumentation
+    │
+    └──► FastMCP 3.4.2 (Jun 2026) ← FLEET TARGET
+         Adds: fastmcp-remote, ToolResult(is_error=),
+               fastmcp_access_token_expiry_seconds, Code Mode safe defaults
+         Breaking: proxy initialize forwarded upstream (fail-loud bridges)
+         Fixes: starlette>=1.0.1 (CVE-2026-48710), Clerk JWT headers (3.4.2)
 ```
 
 **Key point:** The "official Anthropic" FastMCP is version 1.0, frozen in the `mcp` SDK.
@@ -52,19 +62,21 @@ the de facto standard (70% of all MCP servers, 1M downloads/day).
 
 ---
 
-## Fleet Standard: `fastmcp>=3.2.0`
+## Fleet Standard: `fastmcp>=3.4.2,<4`
 
-All servers' `pyproject.toml` must have:
+All servers' `pyproject.toml` should target:
 
 ```toml
 [project]
 dependencies = [
-    "fastmcp>=3.2.0",
+    "fastmcp>=3.4.2,<4",
     # ... other deps
 ]
 ```
 
-**Do NOT** pin an upper bound like `<3.3.0` unless you have a specific reason — the 3.x line
+Until the fleet batch bump completes, **`>=3.2.0`** remains the documented minimum. Prioritize **3.4.2** for any server using proxies, OAuth HTTP transport, CodeMode, or Clerk-style JWTs.
+
+**Do NOT** pin an upper bound like `<3.5.0` unless you have a specific reason — the 3.x line
 has been stable and upper-bound pinning creates unnecessary maintenance overhead.
 
 ---
@@ -145,17 +157,33 @@ No breaking changes from 3.1.x.
 | PyJWT CVE-2026-32597 | Security fix | JWT validation bypass |
 | OAuthProxy scopes | Bug fix | Scopes not forwarded correctly |
 
-**All servers should be on 3.2.0 for the security fixes alone.**
+**All servers should be on 3.2.0 for the security fixes alone.** Target **3.4.2** for proxy, OAuth, and Starlette CVE fixes.
 
 To use GenerativeUI:
 ```toml
 dependencies = [
-    "fastmcp>=3.2.0",
+    "fastmcp>=3.4.2,<4",
     "prefab-ui>=0.14.0",  # only if using GenerativeUI
 ]
 ```
 
 ---
+
+## What Changed in 3.4 — Remote Control (June 2026)
+
+Full guide: [../fastmcp/3.4-features.md](../fastmcp/3.4-features.md)
+
+| Change | Type | Detail |
+|---|---|---|
+| **`fastmcp-remote`** | Feature | stdio bridge to HTTP MCP servers; OAuth auto for HTTPS |
+| **Proxy `initialize` forward** | **Breaking** | Bridges fail at handshake if upstream missing or misconfigured |
+| **`ToolResult(is_error=True)`** | Feature | Structured tool errors without raising |
+| **`fastmcp_access_token_expiry_seconds`** | Feature | OAuth proxy tokens survive idle beyond short upstream TTL |
+| **Code Mode defaults** | Security | 30s / 100MB sandbox; 50 tool calls per execute |
+| **starlette>=1.0.1** | Security (3.4.1) | CVE-2026-48710 |
+| **JWT private headers** | Fix (3.4.2) | Clerk and similar providers |
+
+**All HTTP/OAuth servers should plan for 3.4.1+.** Proxy-heavy servers should adopt 3.4.0+ behavior and remove silent bridge registration errors.
 
 ## New Pattern: Startup Connectivity Probes (3.1+ lifespan)
 

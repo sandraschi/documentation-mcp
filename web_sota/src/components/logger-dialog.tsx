@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Terminal, RefreshCcw, Loader2, Trash2, ShieldAlert } from "lucide-react"
+import { API_BASE } from "@/lib/api"
 
 export function LoggerDialog() {
     const [logs, setLogs] = React.useState<string[]>([])
@@ -19,7 +20,7 @@ export function LoggerDialog() {
     const fetchLogs = async () => {
         setLoading(true)
         try {
-            const res = await fetch('/api/logs')
+            const res = await fetch(API_BASE + '/api/logs')
             if (!res.ok) throw new Error("Logger offline")
             const data = await res.json()
             setLogs(data.logs || [])

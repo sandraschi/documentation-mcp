@@ -26,8 +26,8 @@ graph TD
 
 ## Core Components
 
-### 1. Federated RAG Engine
-The RAG engine utilizes **LanceDB** to index a unified documentation space. It performs cross-repository discovery by probing for sibling paths (e.g., `../advanced-memory-mcp`). This allows agents to retrieve context from across the entire workspace without manual source selection.
+### 1. Documentation RAG Engine
+The RAG engine uses **LanceDB** to index `documentation-mcp/docs` — standards, integrations, patterns, operations, and project mirrors. Optional `DOCS_FEDERATE_MEMORY=1` can add Advanced Memory knowledge; the private `mcp-central-docs` tree is not indexed unless explicitly added via `DOCS_EXTRA_PATHS`.
 
 ### 2. Fleet Registry Service
 The registry acts as the source of truth for repository metadata. It tracks:

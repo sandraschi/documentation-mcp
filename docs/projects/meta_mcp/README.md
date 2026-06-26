@@ -15,6 +15,10 @@ Registered in [operations/WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md):
 
 Set `PORT` / `HOST` when running `uv run meta-mcp` to match fleet.
 
+## Recent platform notes (2026-05)
+
+- **`repo_inspiration` suite** — `inspire_repo_structure`, `inspire_repo_files`, `inspire_repo_patterns` for public GitHub study (native port of [Repomuse](https://www.npmjs.com/package/repomuse), MIT, praveene3127). See [integrations/repo-inspiration.md](../../integrations/repo-inspiration.md) and repo [docs/tools/repo-inspiration.md](file:///D:/Dev/repos/meta_mcp/docs/tools/repo-inspiration.md).
+
 ## Recent platform notes (2026-03)
 
 - **Tool Lab** (`web_sota`): Sidebar page — pick any registered tool, JSON Schema form or raw JSON, run via **`POST /api/v1/tools/execute`**.

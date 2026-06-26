@@ -421,10 +421,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 3. Ask: **"What can you do with VirtualBox?"**
 4. Start managing VMs with natural language!
 
-**Manage VirtualBox VMs effortlessly through Claude Desktop!** ðŸš€
+**Manage VirtualBox VMs effortlessly through Claude Desktop!**
+
+### Related: Docker Sandbox (2026)
+
+Docker Desktop v0.12+ ships `docker sandbox` and `docker agent` (cagent) commands for AI agent sandboxing. See full comparison in [sandboxing technologies spec](../../virtualization-mcp/docs/specifications/sandboxing_technologies.md).
 
 
-## ðŸŒ Webapp Dashboard
+
+## Webapp Dashboard
 
 This MCP server includes a free, premium web interface for monitoring and control.
 By default, the web dashboard runs on port **10700**.

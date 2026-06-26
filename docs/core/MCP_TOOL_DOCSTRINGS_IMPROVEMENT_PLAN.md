@@ -1,8 +1,9 @@
 # MCP Tool Docstrings Improvement Plan
-
-**Status**: Draft (planning)  
-**Scope**: Fleet MCP servers, especially portmanteau tools  
-**Problem**: In Cursor's docstring UI, tool docs are hard to use: a poorly formatted "Args" block and a "Parameters" block where each parameter shows "no description" (duplicative and unhelpful).
+2: 
+3: **Status**: Standardized (2026-04-27)
+4: **Scope**: Fleet-wide SOTA MCP servers
+5: **Reference**: [TOOL_DESIGN_STANDARDS.md §1.2](./TOOL_DESIGN_STANDARDS.md#12-the-industrial-portmanteau-standard)
+6: **Outcome**: Finalized the "Industrial Portmanteau" pattern to resolve IDE tool limits and static analysis friction.
 
 ---
 

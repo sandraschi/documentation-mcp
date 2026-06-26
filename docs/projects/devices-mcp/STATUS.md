@@ -1,8 +1,8 @@
 # Devices MCP -- Project Status (Unified Home Portmanteau)
 
-**Last Updated**: 2026-02-15
+**Last Updated**: 2026-05-25
 **Repo**: `D:\Dev\repos\devices-mcp` | [GitHub](https://github.com/sandraschi/devices-mcp)
-**Version**: v1.18.1 (SOTA 2026)
+**Version**: v1.21.1 (SOTA 2026)
 **Python**: 3.10+ | **Frontend**: React 19 / Vite 7
 **Status**: 🟠 BETA (Active Deployment)
 

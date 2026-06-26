@@ -1,0 +1,24 @@
+{
+  "manifest_version": "0.2",
+  "name": "documentation-mcp",
+  "version": "1.0.1",
+  "description": "Public MCP Documentation Server - Federated RAG for the MCP ecosystem",
+  "author": { "name": "sandraschi" },
+  "server": {
+    "type": "python",
+    "entry_point": "run_server.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run","--directory","${PWD}","run_server.py"],
+      "env": {
+        "PYTHONPATH": "${PWD}/src",
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  },
+  "tools": [
+    { "name": "persistence_store_memory", "description": "persistence_store_memory" },
+    { "name": "ask_docs", "description": "ask_docs" },
+    { "name": "agentic_doc_workflow", "description": "agentic_doc_workflow" }
+  ]
+}

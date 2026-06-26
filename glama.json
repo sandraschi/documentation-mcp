@@ -1,0 +1,27 @@
+{
+  "$schema": "https://glama.ai/schema/mcp-server/v1.json",
+  "name": "documentation-mcp",
+  "description": "Public MCP Documentation Server — Federated RAG for the MCP ecosystem. Semantic search, LLM-synthesized answers, and agentic research workflows across fleet-wide documentation.",
+  "version": "1.0.1",
+  "repository": "https://github.com/sandraschi/documentation-mcp",
+  "license": "MIT",
+  "tags": ["documentation", "rag", "search", "semantic", "research"],
+  "tools": [
+    "search_docs",
+    "ask_docs",
+    "get_document",
+    "reindex_docs",
+    "chunk_stats",
+    "server_status",
+    "docs_help",
+    "start_webapp",
+    "agentic_doc_workflow",
+    "persistence_store_memory",
+    "persistence_recall",
+    "persistence_compaction_status"
+  ],
+  "prompts": ["docs_expert", "research_workflow"],
+  "runtime": "python",
+  "transport": ["stdio", "http"],
+  "entrypoint": "uv run docs-mcp"
+}

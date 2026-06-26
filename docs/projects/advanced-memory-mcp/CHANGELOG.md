@@ -1,11 +1,23 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to Advanced Memory MCP will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.5.0] - Semantic Research (RAG) & Performance Surge (2026-02-27)
+## [1.9.0] - Industrial Portmanteau Standard (2026-04-27)
+9: 
+10: ### 💎 **Industrial Portmanteau (Standardized)**
+11: 
+12: #### Changed - Core Documentation Engine
+13: - **Rationale-First Docstrings**: All 12 core tool groups (`audio`, `inbox`, `skills`, `zettel`, `nav`, `notes`, `search`, `knowledge`, `project`, `system`, `mcp`, `typora`) now feature `[RATIONALE]` blocks as the first entry in their docstrings. This provides agentic IDEs with the architectural justification for consolidated toolsets.
+14: - **Discriminated Union Schema**: Migrated all tool schemas to use `Annotated[Union[...], Field(discriminator="operation")]`. This ensures 100% static scannability for tools like Toolbench and resolves mutual exclusivity ambiguities for LLM routers.
+15: - **High-Fidelity Examples**: Expanded the `[EXAMPLES]` section of every tool with valid JSON/Python snippets covering edge cases and complex multi-parameter operations.
+16: - **Operation Mapping**: Standardized the `[SUPPORTED OPERATIONS]` list to include short descriptions and parameter requirements, improving the "solve rate" for zero-shot tool selection.
+17: 
+18: ---
+19: 
+20: ## [1.5.0] - Semantic Research (RAG) & Performance Surge (2026-02-27)
 
 ### ðŸš€ **Semantic Intelligence (RAG)**
 

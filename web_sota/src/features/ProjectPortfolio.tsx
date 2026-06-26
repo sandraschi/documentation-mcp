@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { useNavigate } from "react-router-dom"
+import { API_BASE } from "@/lib/api"
 
 export interface FleetProject {
     id: string
@@ -25,7 +26,7 @@ export function ProjectPortfolio() {
     const navigate = useNavigate()
 
     React.useEffect(() => {
-        fetch("/api/fleet/projects")
+        fetch(API_BASE + "/api/fleet-projects")
             .then((res) => res.json())
             .then((data) => {
                 setProjects(data)
@@ -98,7 +99,7 @@ export function ProjectPortfolio() {
                         </h1>
 
                         <p className="text-muted-foreground text-lg max-w-2xl">
-                            Interactive index of the 100+ active repositories in the RoboFang ecosystem.
+                             Interactive index of the 100+ active repositories in the MCP Fleet ecosystem.
                             High-fidelity orchestration for industrial agentic workflows.
                         </p>
                     </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, CheckCircle, RefreshCw, Zap, HardDrive, Activity } from 'lucide-react';
+import { API_BASE } from "@/lib/api";
 
 interface DockerStatus {
   daemon_healthy: boolean;
@@ -29,7 +30,7 @@ export function DockerDesktop() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/mcp/tool', {
+      const response = await fetch(API_BASE + '/api/mcp/tool', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -50,7 +51,7 @@ export function DockerDesktop() {
     setLoading(true);
     setError(null);
     try {
-      await fetch('/api/mcp/tool', {
+      await fetch(API_BASE + '/api/mcp/tool', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -70,7 +71,7 @@ export function DockerDesktop() {
     setLoading(true);
     setError(null);
     try {
-      await fetch('/api/mcp/tool', {
+      await fetch(API_BASE + '/api/mcp/tool', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

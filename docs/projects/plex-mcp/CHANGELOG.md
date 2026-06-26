@@ -47,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backend data/ and settings.json in .gitignore (secrets not committed)
 
 ### Fixed
+- **Webapp Backend**: Fixed "Unknown error" on Libraries page caused by unhandled FastMCP 3.2 `ToolResult` objects in the MCP client.
 - Client discovery now finds all client types (PlexAmp, Plex Web, Plex for Windows)
 - Multi-source client discovery implementation
 

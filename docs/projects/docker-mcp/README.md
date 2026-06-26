@@ -1,353 +1,70 @@
-﻿# DockerMCP
+﻿# Docker MCP (fleet documentation)
 
-## FastMCP 3.1.1++ server for comprehensive Docker operations with Austrian efficiency
+**Canonical repository**: [docker-mcp on GitHub](https://github.com/sandraschi/docker-mcp) — `D:\Dev\repos\docker-mcp`  
+**Version** (see upstream `pyproject.toml`): **3.3.0**  
+**Changelog (authoritative)**: [docker-mcp/CHANGELOG.md](file:///D:/Dev/repos/docker-mcp/CHANGELOG.md). Short mirror: [CHANGELOG.md](./CHANGELOG.md).
 
-[![FastMCP](https://img.shields.io/badge/FastMCP-3.1.1++-blue)](https://github.com/jlowin/fastmcp)
-[![Python](https://img.shields.io/badge/Python-3.8+-green)](https://python.org)
-[![Docker](https://img.shields.io/badge/Docker-âœ“-blue)](https://www.docker.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI/CD](https://github.com/sandraschi/dockermcp/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/sandraschi/dockermcp/actions)
-[![Docker Image](https://img.shields.io/docker/pulls/sandraschi/dockermcp)](https://hub.docker.com/r/sandraschi/dockermcp)
-[![codecov](https://codecov.io/gh/sandraschi/dockermcp/branch/main/graph/badge.svg?token=YOUR-TOKEN)](https://codecov.io/gh/sandraschi/dockermcp)
-[![Austrian Efficiency](https://img.shields.io/badge/Austrian-Efficiency-red)](https://en.wikipedia.org/wiki/Austrian_school)
+## What it is
 
-*Vienna-style Docker management with FastMCP 3.1.1++ - \
-because your containers deserve Sachertorte-level precision.*
+FastMCP **3.3** control plane for **Docker Desktop** and the engine: containers, images, networks, volumes, compose-style workflows, daemon hang detection/recovery, **prefab UI** cards, **MCP sampling** (Ollama / LM Studio), and an optional **Tauri** desktop shell bundling the web dashboard.
 
-## ðŸš€ Features
+## Current stack (high level)
 
-### ðŸ“Š Monitoring Stack
+| Layer | Detail |
+|-------|--------|
+| **MCP** | FastMCP 3.3 (`fastmcp>=3.3,<4`), stdio + HTTP; `on_duplicate=replace` |
+| **Fleet surface** | Prompts, `resource://docker-mcp/skills`, prefab tools (`docker_*_card`) |
+| **Agentic** | `agentic_container_workflow` (SEP-1577 sampling when client supports it) |
+| **Web** | `web_sota` — Vite React; **10806** frontend, **10807** API (`start.ps1` waits for `/api/health`) |
+| **Pages** | Dashboard, containers, images, tools, chat, **Event logs** (`/logs`), settings (LLM glom-on) |
+| **MCPB** | Root `manifest.json` + `assets/prompts/` + `.mcpbignore` → `dist/docker-mcp-v3.3.0.mcpb` |
+| **Native** | Tauri 2 + PyInstaller sidecar `docker-mcp-backend` (NSIS/MSI under `native/target/release/bundle/`) |
 
-DockerMCP includes a comprehensive monitoring stack with the following components:
+Legacy **`mcpb/`** subfolder was removed (2026-06); pack only from repo root.
 
-- **Prometheus**: Metrics collection and alerting (Port: 9091)
-- **Grafana**: Visualization and dashboards (Port: 3001)
-- **Loki**: Log aggregation (Port: 3101)
-- **Promtail**: Log collection
-- **cAdvisor**: Container metrics (Port: 8082)
-- **Node Exporter**: Host metrics (Port: 9100)
-- **Redis**: Caching and metrics storage (Port: 6379)
+## Quick links
 
-To start the monitoring stack:
+| Doc | Location |
+|-----|----------|
+| Full README | [D:/Dev/repos/docker-mcp/README.md](file:///D:/Dev/repos/docker-mcp/README.md) |
+| Install | [D:/Dev/repos/docker-mcp/INSTALL.md](file:///D:/Dev/repos/docker-mcp/INSTALL.md) |
+| Development / MCPB / Tauri | [D:/Dev/repos/docker-mcp/docs/DEVELOPMENT.md](file:///D:/Dev/repos/docker-mcp/docs/DEVELOPMENT.md) |
+| Tools | [D:/Dev/repos/docker-mcp/docs/TOOLS.md](file:///D:/Dev/repos/docker-mcp/docs/TOOLS.md) |
+| Troubleshooting | [D:/Dev/repos/docker-mcp/docs/TROUBLESHOOTING.md](file:///D:/Dev/repos/docker-mcp/docs/TROUBLESHOOTING.md) |
+| Web ports | [operations/WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md) |
+| MCPB standards | [standards/MCPB_PACKAGING_STANDARDS.md](../../standards/MCPB_PACKAGING_STANDARDS.md) |
+| Project status | [STATUS.md](./STATUS.md) |
 
-```bash
-cd monitoring
-docker-compose -f docker-compose-monitoring.yml up -d
-```
-
-Access the monitoring interfaces:
-
-- **Grafana**: [http://localhost:3001](http://localhost:3001) \
-  (admin/admin)
-- **Prometheus**: \
-  [http://localhost:9091](http://localhost:9091)
-- **Loki**: \
-  [http://localhost:3101](http://localhost:3101)
-- **cAdvisor**: \
-  [http://localhost:8082](http://localhost:8082)
-
-### ðŸ§ª Testing
-
-DockerMCP uses a comprehensive testing strategy with the following structure:
-
-```text
-tests/
-â”œâ”€â”€ unit/           # Unit tests for individual components
-â”œâ”€â”€ integration/    # Integration tests for component interactions
-â””â”€â”€ e2e/            # End-to-end tests for complete workflows
-```
-
-To run the tests:
-
-```bash
-# Run all tests
-pytest tests/
-
-# Run unit tests only
-pytest tests/unit/
-
-# Run with coverage report
-pytest --cov=src tests/
-```
-
-### ðŸ“ Logging
-
-DockerMCP uses structured JSON logging for better observability:
-
-- All logs are emitted as JSON for easy parsing and analysis
-- Includes context information (correlation IDs, request IDs)
-- Configurable log levels and output formats
-- Automatic log rotation for file output
-
-### State Management (Powered by FastMCP 3.1.1+.3)
-
-DockerMCP leverages FastMCP 3.1.1+.3's built-in state management system \
-for all its stateful operations. This provides several key benefits:
-
-- **No External Dependencies**: No Redis or other external services required
-- **Consistent State**: All state is managed within the FastMCP runtime
-- **TTL Support**: Automatic expiration of temporary state
-- **Request Isolation**: Clean separation between different client sessions
-- **Efficient Storage**: Optimized for minimal memory footprint
-
-#### Key State Management Features
-
-- Session persistence across requests
-- Automatic cleanup of stale data
-- Thread-safe operations
-- Built-in caching for improved performance
-
-### Core Docker Operations
-
-- **Container Management**: Create, start, stop, restart, and remove containers
-- **Image Handling**: Pull, list, tag, and remove Docker images
-- **Network Operations**: Manage Docker networks and connections
-- **Volume Management**: Handle Docker volumes and storage
-- **System Monitoring**: Get Docker system info, version, and disk usage
-
-### Austrian Efficiency Add-ons
-
-- **Docker Watchdog**: Automatic monitoring and recovery \
-  of Docker daemon
-- **Stack Health Checks**: One-command status \
-  of all your stacks
-- **Problem Detection**: Find and diagnose issues \
-  before they become problems
-- **Intelligent Recovery**: Automated fixes for \
-  common Docker issues
-- **Maintenance Tips**: Proactive suggestions for keeping your \
-  Docker environment clean
-- **Cross-Platform Support**: Works on both Windows and Linux systems
-
-## ðŸš¨ Docker Watchdog
-
-### Features
-
-- **Automatic Recovery**: Automatically restarts Docker daemon if it becomes unresponsive
-- **Cross-Platform**: Works on both Windows and Linux systems
-- **Configurable**: Adjust check intervals and retry attempts
-- **Detailed Logging**: Comprehensive logs for troubleshooting
-- **Service Integration**: Runs as a system service (systemd/Linux, Windows Service/Windows)
-
-## ðŸš€ Installation
-
-### Prerequisites
-- [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
-- Python 3.12+
-
-### ðŸ“¦ Quick Start
-Run immediately via `uvx`:
-```bash
-uvx docker-mcp
-```
-
-### ðŸŽ¯ Claude Desktop Integration
-Add to your `claude_desktop_config.json`:
-```json
-"mcpServers": {
-  "docker-mcp": {
-    "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/docker-mcp", "run", "docker-mcp"]
-  }
-}
-```
-#### Windows
+## Run
 
 ```powershell
-# Run as Administrator
-Set-ExecutionPolicy Bypass -Scope Process -Force
-.\install\docker-watchdog.ps1
+cd D:\Dev\repos\docker-mcp
+uv sync
+.\start.ps1
 ```
 
-#### Linux
+MCP stdio: `just run` or `uv run python -m dockermcp`.
 
-```bash
-# Install as systemd service
-sudo cp install/docker-watchdog.service /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable --now docker-watchdog
-```
+## Claude Desktop (MCPB)
 
-### Logs
-
-- **Windows**: `docker_watchdog.log` in the installation directory
-- **Linux**: `journalctl -u docker-watchdog -f`
-
-## ðŸ”„ CI/CD Pipeline
-
-DockerMCP uses GitHub Actions for CI/CD with the following workflows:
-
-1. **Test**: Runs on every push and pull request
-   - Unit tests
-   - Integration tests
-   - Code coverage reporting
-
-2. **Build and Push**: Runs on push to main and tags
-   - Builds Docker image
-   - Pushes to Docker Hub
-   - Tags with version, branch, and commit SHA
-
-3. **Release**: Creates GitHub releases for tags
-   - Generates release notes from CHANGELOG.md
-   - Creates GitHub release with artifacts
-
-### Environment Variables
-
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| `DOCKERHUB_USERNAME` | Docker Hub username | Yes | - |
-| `DOCKERHUB_TOKEN` | Docker Hub access token | Yes | - |
-| `CODECOV_TOKEN` | Codecov upload token | No | - |
-
-## ðŸ— Project Structure
-
-```text
-dockermcp/
-â”œâ”€â”€ src/
-â”‚   â””â”€â”€ dockermcp/
-â”‚       â”œâ”€â”€ api/                 # API endpoints and routes
-â”‚       â”œâ”€â”€ core/                # Core Docker operations
-â”‚       â”‚   â”œâ”€â”€ containers.py    # Container management
-â”‚       â”‚   â”œâ”€â”€ images.py        # Image handling
-â”‚       â”‚   â”œâ”€â”€ networks.py      # Network management
-â”‚       â”‚   â”œâ”€â”€ system.py        # System operations
-â”‚       â”‚   â””â”€â”€ volumes.py       # Volume management
-â”‚       â”‚
-â”‚       â”œâ”€â”€ models/              # Data models and schemas
-â”‚       â”œâ”€â”€ tools/               # FastMCP 3.1.1+.3 compatible tools
-â”‚       â”‚   â”œâ”€â”€ compose/         # Docker Compose tools
-â”‚       â”‚   â”œâ”€â”€ containers/      # Container management tools
-â”‚       â”‚   â”œâ”€â”€ images/          # Image management tools
-â”‚       â”‚   â”œâ”€â”€ networks/        # Network management tools
-â”‚       â”‚   â”œâ”€â”€ system/          # System management tools
-â”‚       â”‚   â”œâ”€â”€ volumes/         # Volume management tools
-â”‚       â”‚   â””â”€â”€ workflow/        # Workflow automation tools
-â”‚       â”‚
-â”‚       â””â”€â”€ utils/               # Utility functions
-â”‚           â”œâ”€â”€ json_utils.py    # JSON handling utilities
-â”‚           â””â”€â”€ process_utils.py # Process management utilities
-â”‚
-â”œâ”€â”€ tests/                      # Test suite
-â”œâ”€â”€ docs/                       # Documentation
-â””â”€â”€ examples/                   # Usage examples
-```
-
-## ðŸš€ Quick Start
-
-### Using Docker (Recommended)
-
-```bash
-docker run -d \
-  --name dockermcp \
-  -p 8000:8000 \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  sandraschi/dockermcp:latest
-```
-
-### Using Docker Compose
-
-```bash
-git clone https://github.com/sandraschi/dockermcp.git
-cd dockermcp
-docker-compose up -d
-```
-
-## ðŸš€ Installation
-
-### Prerequisites
-- [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
-- Python 3.12+
-
-### ðŸ“¦ Quick Start
-Run immediately via `uvx`:
-```bash
-uvx docker-mcp
-```
-
-### ðŸŽ¯ Claude Desktop Integration
-Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
   "docker-mcp": {
-    "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/docker-mcp", "run", "docker-mcp"]
+    "command": "python",
+    "args": ["-m", "dockermcp"],
+    "env": {
+      "PYTHONPATH": "D:/Dev/repos/docker-mcp/src",
+      "PYTHONUNBUFFERED": "1"
+    }
   }
 }
 ```
-### Prerequisites
 
-- Python 3.8+
-- Docker Engine 20.10.0+
-- FastMCP 3.1.1++ (handles all state management internally)
+Or install `docker-mcp-v3.3.0.mcpb` from releases (manifest uses the same `python -m dockermcp` entry).
 
-### From Source
+## Notes for fleet index consumers
 
-```bash
-git clone https://github.com/sandraschi/dockermcp.git
-cd dockermcp
-uv pip install -e .
-```
-
-## ðŸ›  Usage
-
-### Starting the Server
-
-```bash
-# Using Python
-python -m dockermcp
-
-# Using Docker
-docker run -d \
-  -p 8000:8000 \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  sandraschi/dockermcp
-```
-
-### API Endpoints
-
-- `GET /health` - Health check endpoint to verify service status
-- `GET /docs` - Interactive API documentation \
-  (Swagger UI)
-- `GET /redoc` - Alternative API documentation with \
-  [ReDoc](https://github.com/Redocly/redoc)
-
-### Example: List Containers
-
-```python
-from fastmcp import MCPClient
-
-client = MCPClient("http://localhost:8000")
-containers = client.list_containers()
-print(containers)
-```
-
-## ðŸ§© DXT Package
-
-DockerMCP is available as a DXT package for easy integration with Claude Desktop:
-
-1. Build the DXT package:
-
-   ```bash
-   python -m dxt build
-   ```
-
-2. Install the resulting `.dxt` file through Claude Desktop
-
-## ðŸ“š Documentation
-
-Full documentation is available at [GitHub Wiki](https://github.com/sandraschi/dockermcp/wiki).
-
-## ðŸ¤ Contributing
-
-Contributions are welcome! Please read our \
-[Contributing Guidelines](CONTRIBUTING.md) for details.
-
-## ðŸ“„ License
-
-This project is licensed under the MIT License - \
-see the [LICENSE](LICENSE) file for details.
-
----
-
-*"In Vienna, even the containers run on time."* - Probably not Gustav Mahler
-
+- **Category**: Infra  
+- **Ports**: 10806 (UI), 10807 (API) — do not repurpose without updating [WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md) and registries.  
+- Requires a working Docker socket; tools degrade gracefully when the daemon is down.  
+- Desktop recovery tools are **Windows-oriented** (Docker Desktop); Linux engine paths use socket checks.

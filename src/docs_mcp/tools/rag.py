@@ -10,6 +10,9 @@ from docs_mcp.utils.formatting import _to_markdown
 
 logger = logging.getLogger("docs_mcp.tools.rag")
 
+_READ_ONLY = {"readonly": True}
+_MUTATING = {}
+
 def _search_docs_raw(query: str, limit: int = 5) -> dict:
     """Internal search helper returning a plain dict (not markdown)."""
     store = get_store()
@@ -48,7 +51,20 @@ def _search_docs_raw(query: str, limit: int = 5) -> dict:
     }
 
 def search_docs(query: str, limit: int = 5) -> dict:
-    """Perform a semantic search across all indexed documentation."""
+    """Perform a semantic search across all indexed documentation.
+
+    Searches the LanceDB vector store for documentation chunks matching the
+    query. Returns scored results with filename, content, and relative path.
+
+    ## Return Format
+    {"success": bool, "operation": "search_docs", "query": str, "message": str,
+     "data": [{"filename": str, "score": float, "content": str, "relative_path": str}],
+     "next_steps": [str]}
+
+    ## Examples
+    - search_docs(query="FastMCP portmanteau pattern", limit=5)
+    - search_docs(query="Playwright e2e standards", limit=10)
+    """
     res = _search_docs_raw(query, limit=limit)
     return {"result": _to_markdown(res, "search_docs")}
 
@@ -56,13 +72,26 @@ def search_docs(query: str, limit: int = 5) -> dict:
 def register_tools(mcp: FastMCP):
     """Register RAG-related MCP tools."""
 
-    mcp.tool()(search_docs)
-    mcp.tool()(reindex_docs)
-    mcp.tool()(get_document)
+    mcp.tool(annotations=_READ_ONLY, version="1.0.1")(search_docs)
+    mcp.tool(annotations=_MUTATING, version="1.0.1")(reindex_docs)
+    mcp.tool(annotations=_READ_ONLY, version="1.0.1")(get_document)
 
-    @mcp.tool()
+    @mcp.tool(annotations=_READ_ONLY, version="1.0.1")
     async def ask_docs(question: str, ctx: Context) -> dict:
-        """Ask a complex question about the documentation and get a synthesized answer."""
+        """Ask a complex question about the documentation and get a synthesized answer.
+
+        First performs semantic search, then attempts host-side MCP sampling
+        (ctx.sample) for synthesis. Falls back to local Ollama or LM Studio
+        auto-discovery with priority model selection.
+
+        ## Return Format
+        {"success": bool, "operation": "ask_docs", "question": str, "message": str,
+         "data": {"answer": str, "sources": [str]}, "next_steps": [str]}
+
+        ## Examples
+        - ask_docs(question="How do I set up Playwright e2e tests?")
+        - ask_docs(question="What is the fleet port range for webapps?")
+        """
         search_result = _search_docs_raw(question, limit=10)
         if not search_result["success"]:
             return {"result": search_result["message"]}
@@ -166,14 +195,26 @@ def register_tools(mcp: FastMCP):
 
 
 async def reindex_docs(ctx: Context) -> dict:
-    """Force a full scan and re-indexing of all documentation sources."""
+    """Force a full scan and re-indexing of all documentation sources.
+
+    Rescans the docs root and all configured extra paths, re-chunks content,
+    and re-embeds everything in the LanceDB vector store.
+
+    ## Return Format
+    {"success": bool, "operation": "reindex_docs", "message": str,
+     "data": {"chunks": int}}
+
+    ## Examples
+    - reindex_docs()
+    """
     try:
         ctx.report_progress("Connecting to DocumentStore...", 10)
         store = get_store()
         ingestor = ContentIngestor()
-        from docs_mcp.backend.config import config as cfg
-        extra = cfg.EXTRA_PATHS if cfg.EXTRA_PATHS else None
-        docs = ingestor.load_all_docs(extra_paths=extra)
+        from docs_mcp.backend.rag_paths import effective_extra_paths
+
+        extra = effective_extra_paths()
+        docs = ingestor.load_all_docs(extra_paths=extra or None)
 
         if docs:
             ctx.report_progress(f"Embedding and indexing {len(docs)} chunks...", 60)
@@ -191,7 +232,19 @@ async def reindex_docs(ctx: Context) -> dict:
 
 
 def get_document(relative_path: str) -> dict:
-    """Retrieve the full content of a documentation file by its relative path."""
+    """Retrieve the full content of a documentation file by its relative path.
+
+    Resolves the path relative to DOCS_ROOT with safety checks preventing
+    path-traversal outside the docs root.
+
+    ## Return Format
+    {"success": bool, "operation": "get_document", "message": str,
+     "data": {"content": str, "path": str, "size": int, "modified": str}}
+
+    ## Examples
+    - get_document(relative_path="standards/rules/playwright_e2e_sota.md")
+    - get_document(relative_path="troubleshooting/BUGS_DEPOT.md")
+    """
     try:
         from docs_mcp.backend.config import config
         docs_root = config.DOCS_ROOT.resolve()

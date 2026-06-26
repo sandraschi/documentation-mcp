@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea"
+import { API_BASE } from "@/lib/api"
 
 interface SearchResult {
     id: number | string
@@ -28,7 +29,7 @@ export function SemanticSearchView() {
         setError(null)
         setSubmitted(true)
         try {
-            const res = await fetch(`/api/search?q=${encodeURIComponent(query.trim())}`)
+            const res = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(query.trim())}`)
             if (!res.ok) throw new Error(res.statusText)
             const data = await res.json()
             setResults((Array.isArray(data) ? data : []).map((r: any) => ({
@@ -49,7 +50,7 @@ export function SemanticSearchView() {
     const handleReindex = async () => {
         setSyncing(true)
         try {
-            await fetch("/api/reindex")
+            await fetch(API_BASE + "/api/reindex")
         } finally {
             setSyncing(false)
         }

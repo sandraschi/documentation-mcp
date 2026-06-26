@@ -3,6 +3,7 @@ import { CheckCircle2, XCircle, AlertCircle, Info, Loader2 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { API_BASE } from "@/lib/api"
 
 type Column = { id: string; label: string }
 type Client = { name: string; status: string; features: Record<string, string> }
@@ -26,7 +27,7 @@ export function VerificationMatrix() {
         let cancelled = false
         setLoading(true)
         setError(null)
-        fetch("/api/verification_matrix")
+        fetch(API_BASE + "/api/verification_matrix")
             .then((res) => {
                 if (!res.ok) throw new Error(res.status === 404 ? "Matrix data not found" : `HTTP ${res.status}`)
                 return res.json()
