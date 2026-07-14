@@ -38,7 +38,7 @@ async def api_skills():
         return {"skills": skills}
     except Exception as e:
         logger.error(f"Error listing skills: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.get("/skill_marketplaces")
 async def api_skill_marketplaces():
@@ -51,4 +51,4 @@ async def api_skill_marketplaces():
         return {"marketplaces": []}
     except Exception as e:
         logger.error(f"Error in api_skill_marketplaces: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e

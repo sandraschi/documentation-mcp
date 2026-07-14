@@ -50,7 +50,7 @@ export function Settings() {
 
             // Auto-load model lists so dropdowns are populated (Ollama / LM Studio often run locally)
             setModelsLoading(true)
-            fetch(`${API_BASE}/api/ollama/models?url=${encodeURIComponent(oUrl)}`)
+            fetch(`${API_BASE}/api/models/ollama?url=${encodeURIComponent(oUrl)}`)
                 .then((r) => r.json())
                 .then((d) => {
                     const list = Array.isArray(d.models) ? d.models : []
@@ -65,7 +65,7 @@ export function Settings() {
                 .finally(() => setModelsLoading(false))
             if (lUrl) {
                 setLmstudioModelsLoading(true)
-                fetch(`${API_BASE}/api/lmstudio/models?url=${encodeURIComponent(lUrl)}`)
+                fetch(`${API_BASE}/api/models/lmstudio?url=${encodeURIComponent(lUrl)}`)
                     .then((r) => r.json())
                     .then((d) => {
                         const list = Array.isArray(d.models) ? d.models : []
@@ -88,7 +88,7 @@ export function Settings() {
         const url = (overrideUrl ?? ollamaUrl ?? "").trim()
         setModelsLoading(true)
         try {
-            const res = await fetch(url ? `/api/ollama/models?url=${encodeURIComponent(url)}` : "/api/ollama/models")
+            const res = await fetch(url ? `${API_BASE}/api/models/ollama?url=${encodeURIComponent(url)}` : `${API_BASE}/api/models/ollama`)
             const data = await res.json()
             const list = Array.isArray(data.models) ? data.models : []
             setOllamaModels(list)
@@ -104,7 +104,7 @@ export function Settings() {
         const url = (overrideUrl ?? lmstudioUrl ?? "").trim()
         setLmstudioModelsLoading(true)
         try {
-            const res = await fetch(url ? `/api/lmstudio/models?url=${encodeURIComponent(url)}` : "/api/lmstudio/models")
+            const res = await fetch(url ? `${API_BASE}/api/models/lmstudio?url=${encodeURIComponent(url)}` : `${API_BASE}/api/models/lmstudio`)
             const data = await res.json()
             const list = Array.isArray(data.models) ? data.models : []
             setLmstudioModels(list)

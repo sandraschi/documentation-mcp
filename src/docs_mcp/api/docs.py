@@ -88,7 +88,7 @@ async def api_search(
         }
     except Exception as e:
         logger.error(f"Error in api_search: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 def _fts_fallback(query: str, limit: int = 10, offset: int = 0) -> list[dict]:
@@ -130,7 +130,7 @@ async def api_search_sources():
         return {"sources": sources}
     except Exception as e:
         logger.error(f"Error listing sources: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.get("/tree")
 async def api_tree():
@@ -160,7 +160,7 @@ async def api_tree():
         return tree.get("children", [])
     except Exception as e:
         logger.error(f"Error in api_tree: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.get("/content")
 async def api_content(path: str):
@@ -175,7 +175,7 @@ async def api_content(path: str):
             return {"content": f.read()}
     except Exception as e:
         logger.error(f"Error in api_content: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.post("/reindex")
 async def api_reindex(background_tasks: BackgroundTasks):

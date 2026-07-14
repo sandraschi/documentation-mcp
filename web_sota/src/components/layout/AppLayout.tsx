@@ -10,6 +10,7 @@ import { LoggerDialog } from "@/components/logger-dialog"
 import { UserMenu } from "./UserMenu"
 import { useAuth } from "../../contexts/AuthContext"
 import { useZoom } from "../../lib/use-zoom"
+import { useAppStore } from "../../lib/store"
 import { pathnameToView, viewToPathname, type ViewState } from "../../routes"
 
 interface NavItem {
@@ -38,12 +39,13 @@ const navItems: NavItem[] = [
 
 
 export function AppLayout() {
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
     const [chatOpen, setChatOpen] = React.useState(false)
     const { user } = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
     const currentView = pathnameToView(location.pathname)
+    const isSidebarOpen = useAppStore((s) => s.sidebarOpen)
+    const setSidebarOpen = useAppStore((s) => s.setSidebarOpen)
     useZoom()
 
     
@@ -80,7 +82,7 @@ export function AppLayout() {
                         {isSidebarOpen && <span className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">Docs MCP</span>}
                     </NavLink>
                     <button
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        onClick={() => setSidebarOpen(!isSidebarOpen)}
                         className="ml-auto flex items-center justify-center rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                         title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
                     >

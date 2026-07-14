@@ -75,17 +75,18 @@ app = FastAPI(title="Documentation MCP Control Plane", lifespan=lifespan)
 # Store MCP instance in state for API handlers
 app.state.mcp = docs_mcp
 
-# Add CORS for cross-origin fleet interaction
+# Add CORS for cross-origin fleet interaction (SOTA 2026 fleet standard)
+_cors_regex = r"https?://(?:[a-zA-Z0-9-]+\.ts\.net|.*?\.tail-[a-f0-9]+\.ts\.net|tauri\.localhost|localhost|127\.0\.0\.1|192\.168\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|100\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?$|^tauri://localhost$"
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://127.0.0.1:11032",
         "http://localhost:11032",
+        "tauri://localhost",
         "http://tauri.localhost",
         "https://tauri.localhost",
-        "tauri://localhost",
     ],
-    allow_origin_regex=r"https?://tauri\.localhost(:\d+)?",
+    allow_origin_regex=_cors_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

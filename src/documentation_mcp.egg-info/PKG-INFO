@@ -24,7 +24,7 @@ Classifier: Framework :: FastMCP :: Portmanteau
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: fastmcp<4,>=3.2.0
+Requires-Dist: fastmcp<4,>=3.4.2
 Requires-Dist: python-dotenv>=1.0.0
 Requires-Dist: pydantic>=2.0.0
 Requires-Dist: aiohttp>=3.9.0

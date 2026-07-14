@@ -1,0 +1,6 @@
+{
+  "name": "documentation-mcp",
+  "version": "1.0.1",
+  "description": "Documentation MCP server with RAG search across fleet standards",
+  "hooks": "../hooks/hooks.json"
+}

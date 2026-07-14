@@ -14,6 +14,27 @@ logger = logging.getLogger("docs_mcp.api.interaction")
 router = APIRouter(prefix="/api")
 _SERVER_START = time.time()
 
+@router.get("/v1/diagnostics")
+async def api_v1_diagnostics(request: Request):
+    """Diagnostics endpoint for CUA-NSIS smoke testing."""
+    tool_count = 0
+    if hasattr(request.app.state, "mcp"):
+        try:
+            tools = await request.app.state.mcp.list_tools()
+            tool_count = len(tools)
+        except Exception:
+            logger.warning("Could not list tools for diagnostics")
+    return {
+        "status": "ok",
+        "server": "Documentation MCP",
+        "version": "1.0.1",
+        "uptime_seconds": int(time.time() - _SERVER_START),
+        "tool_count": tool_count,
+        "tools": [{"name": t.name} for t in (await request.app.state.mcp.list_tools())] if tool_count else [],
+        "system": {"windows": True},
+        "errors": [],
+    }
+
 @router.get("/status")
 async def api_status():
     """Industrial status endpoint for health monitoring."""
@@ -38,25 +59,38 @@ async def api_status():
         }
     except Exception as e:
         logger.error(f"Error in api_status: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @router.get("/health")
-async def api_health():
+async def api_health(request: Request = None):
     """Detailed health check for admin dashboard."""
     store = get_store()
     memory_store = get_memory_store()
     meta = store.get_table_metadata() if hasattr(store, "get_table_metadata") else {}
     sources = store.list_sources() if meta.get("exists") else []
 
+    tool_count = 0
+    if request and hasattr(request.app, "state") and hasattr(request.app.state, "mcp"):
+        try:
+            mcp = request.app.state.mcp
+            tools = await mcp.list_tools()
+            tool_count = len(tools)
+        except Exception:
+            logger.warning("Could not list tools for health")
+
     return {
         "status": "ok",
         "server": "Documentation MCP",
         "version": "1.0.1",
         "uptime_seconds": int(time.time() - _SERVER_START),
-        "tool_count": 0,  # populated dynamically
+        "tool_count": tool_count,
         "providers": {
-            "vector_db": {"status": "ok" if meta.get("exists") else "empty", "chunks": meta.get("row_count", 0), "sources": len(sources)},
+            "vector_db": {
+            "status": "ok" if meta.get("exists") else "empty",
+            "chunks": meta.get("row_count", 0),
+            "sources": len(sources),
+        },
             "memory_store": {"status": "ok" if hasattr(memory_store, "get_stats") else "unavailable"},
             "llm": {"provider": settings_store.load_settings().get("provider", "none")},
         },
@@ -113,28 +147,31 @@ async def api_logs(limit: int = 100):
             return {"logs": ["Log buffer not initialized. Server may still be starting."], "source": "buffer"}
         lines = buf.get_logs(limit=limit)
         if not lines:
-            return {"logs": ["No log entries captured yet. Activity will appear here as tools are called."], "source": "buffer"}
+            return {
+                "logs": ["No log entries captured yet. Activity will appear here as tools are called."],
+                "source": "buffer",
+            }
         return {"logs": lines, "source": "buffer"}
     except Exception as e:
         logger.error(f"Error serving logs: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.get("/tools")
 async def api_tools(request: Request):
     """List all registered MCP tools."""
     try:
         mcp = request.app.state.mcp
-        tools = []
-        for name, tool in mcp._tool_manager.list_tools().items():
-            tools.append({
-                "name": name,
-                "description": tool.description or "",
-                "parameters": tool.parameters.get("properties", {}) if tool.parameters else {}
-            })
-        return {"tools": tools}
+        tools = await mcp.list_tools()
+        return {
+            "tools": [{
+                "name": t.name,
+                "description": t.description or "",
+                "parameters": t.parameters.get("properties", {}) if t.parameters else {}
+            } for t in tools]
+        }
     except Exception as e:
         logger.error(f"Error listing tools: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.post("/execute")
 async def api_execute_tool(request: Request):
@@ -152,4 +189,4 @@ async def api_execute_tool(request: Request):
         return {"result": result}
     except Exception as e:
         logger.error(f"Error executing tool {tool_name}: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e

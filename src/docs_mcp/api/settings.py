@@ -22,7 +22,7 @@ async def api_settings_get():
         return s
     except Exception as e:
         logger.error(f"Error in api_settings_get: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.put("/settings")
 async def api_settings_put(request: Request):
@@ -64,7 +64,7 @@ async def api_settings_put(request: Request):
         return {"success": True, "rag": rag_sources_summary()}
     except Exception as e:
         logger.error(f"Error in api_settings_put: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.get("/models/ollama")
 async def api_ollama_models(url: str = ""):
@@ -80,7 +80,7 @@ async def api_ollama_models(url: str = ""):
         return {"models": models, "message": error}
     except Exception as e:
         logger.error(f"Error in api_ollama_models: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.get("/models/lmstudio")
 async def api_lmstudio_models(url: str = ""):
@@ -92,8 +92,8 @@ async def api_lmstudio_models(url: str = ""):
         if not url:
             return {"models": [], "message": "LM Studio URL missing"}
 
-        models = await llm_client.list_openai_models(url)
-        return {"models": models}
+        models, error = await llm_client.list_openai_models(url)
+        return {"models": models, "message": error}
     except Exception as e:
         logger.error(f"Error in api_lmstudio_models: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e

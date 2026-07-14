@@ -18,7 +18,7 @@ async def api_apps():
         return APPS_CATALOG
     except Exception as e:
         logger.error(f"Error in api_apps: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.get("/fleet-projects")
 async def api_fleet_projects():
@@ -31,7 +31,7 @@ async def api_fleet_projects():
         raise HTTPException(status_code=404, detail="Fleet projects registry not found")
     except Exception as e:
         logger.error(f"Error in api_fleet_projects: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.post("/launch")
 async def api_launch_app(request: Request):
@@ -54,7 +54,7 @@ async def api_launch_app(request: Request):
         return {"success": True, "pid": proc.pid}
     except Exception as e:
         logger.error(f"Error launching app: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.get("/processes")
 async def api_processes():
@@ -63,7 +63,7 @@ async def api_processes():
         return {"processes": process_manager.list_active()}
     except Exception as e:
         logger.error(f"Error listing processes: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @router.post("/processes/stop")
 async def api_stop_process(request: Request):
@@ -77,4 +77,4 @@ async def api_stop_process(request: Request):
         return {"success": success}
     except Exception as e:
         logger.error(f"Error stopping process: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e

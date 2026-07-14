@@ -32,6 +32,7 @@ src/docs_mcp/starts_ui/__init__.py
 src/docs_mcp/starts_ui/asgi.py
 src/docs_mcp/tools/__init__.py
 src/docs_mcp/tools/memory.py
+src/docs_mcp/tools/prefab_cards.py
 src/docs_mcp/tools/prompts.py
 src/docs_mcp/tools/rag.py
 src/docs_mcp/tools/system.py

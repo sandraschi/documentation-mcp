@@ -1,0 +1,10 @@
+assess-fix run: 2026-07-14
+Repo: documentation-mcp
+Version: 1.0.1
+
+Fixes applied:
+1. CORS regex expanded to fleet standard (Tailscale *.ts.net, LAN IPs 192.168.x.x/10.x.x.x, CGNAT 100.x.x.x)
+2. Created .opencode/skills/documentation-expert/SKILL.md (was missing)
+3. FastMCP version OK (fastmcp>=3.4.2,<4)
+4. ruff check --fix applied (41 remaining pre-existing warnings: E501 line-too-long, S603/S606 subprocess, RUF013 implicit-optional, etc.)
+5. mcpb pack created: dist/documentation-mcp-v1.0.1.mcpb (391.3 MB)

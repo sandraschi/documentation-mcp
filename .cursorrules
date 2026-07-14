@@ -1,0 +1,10 @@
+## Session Context (Documentation MCP)
+
+You have access to a documentation server with semantic search, ingestion, and RAG across the fleet's standards, patterns, and troubleshooting docs.
+
+**Before starting work:**
+1. Search the docs index: search_docs(query="<topic>", limit=5)
+2. Check server status and available tools: server_status()
+
+**At end of work:**
+- Ingest any new/modified docs if the repo was updated: reindex_docs()
