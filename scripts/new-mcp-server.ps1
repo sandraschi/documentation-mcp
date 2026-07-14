@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 <#
-⚠️ DEPRECATED - This script has been moved to SOTA location ⚠️
+âš ï¸ DEPRECATED - This script has been moved to SOTA location âš ï¸
 
 NEW LOCATION: sota-scripts/mcp-server-builder/new-mcp-server.ps1
 MIGRATION: This script has been moved to the State-of-the-Art scripts directory
@@ -11,21 +11,21 @@ Use the new location instead: sota-scripts/mcp-server-builder/new-mcp-server.ps1
 For enhanced builder with AI assistance: sota-scripts/mcp-server-builder/new-mcp-server-enhanced.ps1
 
 .SYNOPSIS
-    🏗️ SOTA MCP Server Repository Builder - Complete Repo Generator
+    ðŸ-ï¸ SOTA MCP Server Repository Builder - Complete Repo Generator
     
 .DESCRIPTION
     Builds a production-ready MCP server repository with ALL modern conveniences:
     
-    ✅ Complete folder structure (src/, docs/, tests/, scripts/, assets/)
-    ✅ Portmanteau tooling template (consolidated tools pattern)
-    ✅ Basic required tools (help, status, multilevel support)
-    ✅ Test scaffold with actual working tests
-    ✅ MCPB packaging (manifest, assets, requirements)
-    ✅ Documentation from central docs templates
-    ✅ All SOTA scripts (backup, standards checker)
-    ✅ Repo root essentials (pyproject.toml, .gitignore, .cursorrules)
-    ✅ GitHub workflows (CI/CD)
-    ✅ Modern tooling (ruff, uv, pytest)
+    âœ… Complete folder structure (src/, docs/, tests/, scripts/, assets/)
+    âœ… Portmanteau tooling template (consolidated tools pattern)
+    âœ… Basic required tools (help, status, multilevel support)
+    âœ… Test scaffold with actual working tests
+    âœ… MCPB packaging (manifest, assets, requirements)
+    âœ… Documentation from central docs templates
+    âœ… All SOTA scripts (backup, standards checker)
+    âœ… Repo root essentials (pyproject.toml, .gitignore, .cursorrules)
+    âœ… GitHub workflows (CI/CD)
+    âœ… Modern tooling (ruff, uv, pytest)
     
     NO AI NEEDED - Just run and get a world-class MCP server repo!
     
@@ -77,11 +77,11 @@ if (-not $normalizedName.EndsWith("-mcp")) {
 $pythonPackage = $normalizedName -replace '-', '_'
 $repoPath = Join-Path $OutputPath $normalizedName
 
-Write-Host "`n╔═══════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║      🏗️ SOTA MCP Server Repository Builder 🏗️        ║" -ForegroundColor Cyan
-Write-Host "╚═══════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
+Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+Write-Host "â•‘      ðŸ-ï¸ SOTA MCP Server Repository Builder ðŸ-ï¸        â•‘" -ForegroundColor Cyan
+Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Cyan
 
-Write-Host "📋 Configuration:" -ForegroundColor Yellow
+Write-Host "ðŸ“‹ Configuration:" -ForegroundColor Yellow
 Write-Host "  Server Name:     $normalizedName" -ForegroundColor White
 Write-Host "  Python Package:  $pythonPackage" -ForegroundColor White
 Write-Host "  Description:     $Description" -ForegroundColor White
@@ -91,19 +91,19 @@ Write-Host ""
 
 # Check if repo already exists
 if (Test-Path $repoPath) {
-    Write-Host "❌ Error: Repository already exists at $repoPath" -ForegroundColor Red
+    Write-Host "âŒ Error: Repository already exists at $repoPath" -ForegroundColor Red
     Write-Host "   Delete it first or choose a different name" -ForegroundColor Yellow
     exit 1
 }
 
 $centralDocs = "D:\Dev\repos\mcp-central-docs"
 if (-not (Test-Path $centralDocs)) {
-    Write-Host "❌ Error: Central docs not found at $centralDocs" -ForegroundColor Red
+    Write-Host "âŒ Error: Central docs not found at $centralDocs" -ForegroundColor Red
     exit 1
 }
 
 # Create repo
-Write-Host "🏗️ Creating repository structure..." -ForegroundColor Cyan
+Write-Host "ðŸ-ï¸ Creating repository structure..." -ForegroundColor Cyan
 New-Item -ItemType Directory -Path $repoPath -Force | Out-Null
 Set-Location $repoPath
 
@@ -111,7 +111,7 @@ Set-Location $repoPath
 # 1. FOLDER STRUCTURE
 # ============================================================================
 
-Write-Host "`n📁 Creating folder structure..." -ForegroundColor Yellow
+Write-Host "`nðŸ“ Creating folder structure..." -ForegroundColor Yellow
 
 $folders = @(
     "src/$pythonPackage",
@@ -137,14 +137,14 @@ $folders = @(
 
 foreach ($folder in $folders) {
     New-Item -ItemType Directory -Path $folder -Force | Out-Null
-    Write-Host "  ✅ $folder/" -ForegroundColor Green
+    Write-Host "  âœ… $folder/" -ForegroundColor Green
 }
 
 # ============================================================================
 # 2. PYPROJECT.TOML (Modern Python Config)
 # ============================================================================
 
-Write-Host "`n📦 Creating pyproject.toml..." -ForegroundColor Yellow
+Write-Host "`nðŸ“¦ Creating pyproject.toml..." -ForegroundColor Yellow
 
 $pyprojectToml = @"
 [project]
@@ -196,13 +196,13 @@ $normalizedName = "$pythonPackage.__main__:main"
 "@
 
 Set-Content -Path "pyproject.toml" -Value $pyprojectToml -Encoding UTF8
-Write-Host "  ✅ pyproject.toml" -ForegroundColor Green
+Write-Host "  âœ… pyproject.toml" -ForegroundColor Green
 
 # ============================================================================
 # 3. REQUIREMENTS FILES
 # ============================================================================
 
-Write-Host "`n📦 Creating requirements files..." -ForegroundColor Yellow
+Write-Host "`nðŸ“¦ Creating requirements files..." -ForegroundColor Yellow
 
 $requirements = @"
 fastmcp>=2.14.1,<2.15.0
@@ -218,14 +218,14 @@ ruff>=0.3.0
 
 Set-Content -Path "requirements.txt" -Value $requirements -Encoding UTF8
 Set-Content -Path "requirements-dev.txt" -Value $requirementsDev -Encoding UTF8
-Write-Host "  ✅ requirements.txt" -ForegroundColor Green
-Write-Host "  ✅ requirements-dev.txt" -ForegroundColor Green
+Write-Host "  âœ… requirements.txt" -ForegroundColor Green
+Write-Host "  âœ… requirements-dev.txt" -ForegroundColor Green
 
 # ============================================================================
 # 4. SOURCE CODE STRUCTURE
 # ============================================================================
 
-Write-Host "`n🐍 Creating source code structure..." -ForegroundColor Yellow
+Write-Host "`nðŸ Creating source code structure..." -ForegroundColor Yellow
 
 # __init__.py files
 $initFiles = @(
@@ -254,13 +254,13 @@ __author__ = '$Author'
 "@
 
 Set-Content -Path "src/$pythonPackage/__init__.py" -Value $mainInit -Encoding UTF8
-Write-Host "  ✅ Package __init__.py files" -ForegroundColor Green
+Write-Host "  âœ… Package __init__.py files" -ForegroundColor Green
 
 # ============================================================================
 # 5. PORTMANTEAU TOOLS TEMPLATE
 # ============================================================================
 
-Write-Host "`n🛠️ Creating portmanteau tools template..." -ForegroundColor Yellow
+Write-Host "`nðŸ› ï¸ Creating portmanteau tools template..." -ForegroundColor Yellow
 
 $toolsInit = @"
 '''MCP tools for $normalizedName.
@@ -408,9 +408,9 @@ async def status(level: str = 'basic', focus: str | None = None) -> str:
     status_report = f'''# $normalizedName Status - Level: {level}
 
 ## System Status
-✅ Server running
-✅ Version: 0.1.0
-✅ Configuration: Valid
+âœ… Server running
+âœ… Version: 0.1.0
+âœ… Configuration: Valid
 
 ## Tools Available
 - help (multilevel help)
@@ -418,7 +418,7 @@ async def status(level: str = 'basic', focus: str | None = None) -> str:
 - resource_manager (main operations)
 
 ## Health Checks
-✅ All systems operational
+âœ… All systems operational
 '''
     
     return status_report
@@ -499,15 +499,15 @@ async def resource_manager(
 
 Set-Content -Path "src/$pythonPackage/tools/resource_manager.py" -Value $resourceManager -Encoding UTF8
 
-Write-Host "  ✅ help.py (multilevel help system)" -ForegroundColor Green
-Write-Host "  ✅ status.py (diagnostics)" -ForegroundColor Green
-Write-Host "  ✅ resource_manager.py (portmanteau template)" -ForegroundColor Green
+Write-Host "  âœ… help.py (multilevel help system)" -ForegroundColor Green
+Write-Host "  âœ… status.py (diagnostics)" -ForegroundColor Green
+Write-Host "  âœ… resource_manager.py (portmanteau template)" -ForegroundColor Green
 
 # ============================================================================
 # 6. MAIN SERVER FILE
 # ============================================================================
 
-Write-Host "`n🚀 Creating server entry point..." -ForegroundColor Yellow
+Write-Host "`nðŸš€ Creating server entry point..." -ForegroundColor Yellow
 
 $mainPy = @"
 '''Main entry point for $normalizedName MCP server.'''
@@ -528,13 +528,13 @@ if __name__ == '__main__':
 "@
 
 Set-Content -Path "src/$pythonPackage/__main__.py" -Value $mainPy -Encoding UTF8
-Write-Host "  ✅ __main__.py" -ForegroundColor Green
+Write-Host "  âœ… __main__.py" -ForegroundColor Green
 
 # ============================================================================
 # 7. TEST SCAFFOLD
 # ============================================================================
 
-Write-Host "`n🧪 Creating test scaffold..." -ForegroundColor Yellow
+Write-Host "`nðŸ§ª Creating test scaffold..." -ForegroundColor Yellow
 
 # Basic test
 $testBasic = @"
@@ -588,14 +588,14 @@ def test_tool_imports():
 
 Set-Content -Path "tests/tools/test_tools.py" -Value $testTools -Encoding UTF8
 
-Write-Host "  ✅ test_basic.py" -ForegroundColor Green
-Write-Host "  ✅ test_tools.py" -ForegroundColor Green
+Write-Host "  âœ… test_basic.py" -ForegroundColor Green
+Write-Host "  âœ… test_tools.py" -ForegroundColor Green
 
 # ============================================================================
 # 8. GITIGNORE
 # ============================================================================
 
-Write-Host "`n🚫 Creating .gitignore..." -ForegroundColor Yellow
+Write-Host "`nðŸš« Creating .gitignore..." -ForegroundColor Yellow
 
 $gitignore = @"
 # Python
@@ -666,13 +666,13 @@ Thumbs.db
 "@
 
 Set-Content -Path ".gitignore" -Value $gitignore -Encoding UTF8
-Write-Host "  ✅ .gitignore" -ForegroundColor Green
+Write-Host "  âœ… .gitignore" -ForegroundColor Green
 
 # ============================================================================
 # 9. GITHUB WORKFLOWS
 # ============================================================================
 
-Write-Host "`n⚙️ Creating GitHub workflows..." -ForegroundColor Yellow
+Write-Host "`nâš™ï¸ Creating GitHub workflows..." -ForegroundColor Yellow
 
 New-Item -ItemType Directory -Path ".github/workflows" -Force | Out-Null
 
@@ -750,14 +750,14 @@ jobs:
 
 Set-Content -Path ".github/workflows/release.yml" -Value $releaseWorkflow -Encoding UTF8
 
-Write-Host "  ✅ .github/workflows/ci.yml" -ForegroundColor Green
-Write-Host "  ✅ .github/workflows/release.yml" -ForegroundColor Green
+Write-Host "  âœ… .github/workflows/ci.yml" -ForegroundColor Green
+Write-Host "  âœ… .github/workflows/release.yml" -ForegroundColor Green
 
 # ============================================================================
 # 10. DOCUMENTATION FROM TEMPLATES
 # ============================================================================
 
-Write-Host "`n📚 Copying documentation from central docs..." -ForegroundColor Yellow
+Write-Host "`nðŸ“š Copying documentation from central docs..." -ForegroundColor Yellow
 
 # Copy templates if they exist
 $docTemplates = @{
@@ -779,7 +779,7 @@ foreach ($template in $docTemplates.Keys) {
         $content = $content -replace '\{YEAR\}', (Get-Date).Year
         
         Set-Content -Path $destPath -Value $content -Encoding UTF8
-        Write-Host "  ✅ $destPath (from template)" -ForegroundColor Green
+        Write-Host "  âœ… $destPath (from template)" -ForegroundColor Green
     }
 }
 
@@ -860,14 +860,14 @@ $Author
 **Date:** $(Get-Date -Format "yyyy-MM-dd")
 "@
     Set-Content -Path "README.md" -Value $readme -Encoding UTF8
-    Write-Host "  ✅ README.md (generated)" -ForegroundColor Green
+    Write-Host "  âœ… README.md (generated)" -ForegroundColor Green
 }
 
 # ============================================================================
 # 11. MCPB PACKAGING
 # ============================================================================
 
-Write-Host "`n📦 Creating MCPB package structure..." -ForegroundColor Yellow
+Write-Host "`nðŸ“¦ Creating MCPB package structure..." -ForegroundColor Yellow
 
 $manifest = @"
 {
@@ -937,16 +937,16 @@ $iconSvg = @"
 Set-Content -Path "assets/icon.svg" -Value $iconSvg -Encoding UTF8
 Copy-Item "assets/icon.svg" "mcpb/assets/icon.svg" -Force
 
-Write-Host "  ✅ manifest.json" -ForegroundColor Green
-Write-Host "  ✅ mcpb/ structure" -ForegroundColor Green
-Write-Host "  ✅ assets/prompts/" -ForegroundColor Green
-Write-Host "  ✅ assets/icon.svg" -ForegroundColor Green
+Write-Host "  âœ… manifest.json" -ForegroundColor Green
+Write-Host "  âœ… mcpb/ structure" -ForegroundColor Green
+Write-Host "  âœ… assets/prompts/" -ForegroundColor Green
+Write-Host "  âœ… assets/icon.svg" -ForegroundColor Green
 
 # ============================================================================
 # 12. COPY SOTA SCRIPTS
 # ============================================================================
 
-Write-Host "`n🎯 Copying SOTA scripts..." -ForegroundColor Yellow
+Write-Host "`nðŸŽ¯ Copying SOTA scripts..." -ForegroundColor Yellow
 
 $sotaScripts = @(
     "backup-repo.ps1",
@@ -957,7 +957,7 @@ foreach ($script in $sotaScripts) {
     $sourcePath = Join-Path $centralDocs "templates/scripts/$script"
     if (Test-Path $sourcePath) {
         Copy-Item $sourcePath "scripts/$script" -Force
-        Write-Host "  ✅ scripts/$script" -ForegroundColor Green
+        Write-Host "  âœ… scripts/$script" -ForegroundColor Green
     }
 }
 
@@ -965,7 +965,7 @@ foreach ($script in $sotaScripts) {
 # 13. CHANGELOG
 # ============================================================================
 
-Write-Host "`n📝 Creating CHANGELOG..." -ForegroundColor Yellow
+Write-Host "`nðŸ“ Creating CHANGELOG..." -ForegroundColor Yellow
 
 $changelog = @"
 # Changelog
@@ -1001,13 +1001,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 "@
 
 Set-Content -Path "CHANGELOG.md" -Value $changelog -Encoding UTF8
-Write-Host "  ✅ CHANGELOG.md" -ForegroundColor Green
+Write-Host "  âœ… CHANGELOG.md" -ForegroundColor Green
 
 # ============================================================================
 # 14. LICENSE
 # ============================================================================
 
-Write-Host "`n⚖️ Creating LICENSE..." -ForegroundColor Yellow
+Write-Host "`nâš-ï¸ Creating LICENSE..." -ForegroundColor Yellow
 
 $license = @"
 MIT License
@@ -1034,14 +1034,14 @@ SOFTWARE.
 "@
 
 Set-Content -Path "LICENSE" -Value $license -Encoding UTF8
-Write-Host "  ✅ LICENSE" -ForegroundColor Green
+Write-Host "  âœ… LICENSE" -ForegroundColor Green
 
 # ============================================================================
 # 15. INITIALIZE GIT
 # ============================================================================
 
 if (-not $SkipGitInit) {
-    Write-Host "`n🔧 Initializing git repository..." -ForegroundColor Yellow
+    Write-Host "`nðŸ”§ Initializing git repository..." -ForegroundColor Yellow
     
     git init -q
     git add -A
@@ -1051,15 +1051,15 @@ Generated by: mcp-central-docs SOTA builder
 Date: $(Get-Date -Format "yyyy-MM-dd")
 
 Includes:
-✅ Complete folder structure
-✅ Portmanteau tools (help, status, resource_manager)
-✅ Test scaffold with working tests
-✅ MCPB packaging
-✅ GitHub CI/CD workflows
-✅ SOTA scripts (backup, standards checker)
-✅ Modern tooling (ruff, uv, pytest)
-✅ Complete documentation
-✅ .cursorrules with Rule #1
+âœ… Complete folder structure
+âœ… Portmanteau tools (help, status, resource_manager)
+âœ… Test scaffold with working tests
+âœ… MCPB packaging
+âœ… GitHub CI/CD workflows
+âœ… SOTA scripts (backup, standards checker)
+âœ… Modern tooling (ruff, uv, pytest)
+âœ… Complete documentation
+âœ… .cursorrules with Rule #1
 
 Standards:
 - FastMCP 2.12+ compliant
@@ -1069,15 +1069,15 @@ Standards:
 
 Ready for: development, testing, release!" -q
     
-    Write-Host "  ✅ Git repository initialized" -ForegroundColor Green
-    Write-Host "  ✅ Initial commit created" -ForegroundColor Green
+    Write-Host "  âœ… Git repository initialized" -ForegroundColor Green
+    Write-Host "  âœ… Initial commit created" -ForegroundColor Green
 }
 
 # ============================================================================
 # 16. CREATE DEVELOPMENT GUIDE
 # ============================================================================
 
-Write-Host "`n📖 Creating development guide..." -ForegroundColor Yellow
+Write-Host "`nðŸ“- Creating development guide..." -ForegroundColor Yellow
 
 $devGuide = @"
 # Development Guide - $normalizedName
@@ -1086,7 +1086,7 @@ $devGuide = @"
 
 ---
 
-## 🚀 Quick Start
+## ðŸš€ Quick Start
 
 ### Setup Development Environment
 
@@ -1129,7 +1129,7 @@ uv run ruff format .
 
 ---
 
-## 🛠️ Customizing Your MCP Server
+## ðŸ› ï¸ Customizing Your MCP Server
 
 ### 1. Customize resource_manager.py
 
@@ -1183,7 +1183,7 @@ async def test_your_tool():
 
 ---
 
-## 📦 Building MCPB Package
+## ðŸ“¦ Building MCPB Package
 
 \`\`\`bash
 # Update version in pyproject.toml
@@ -1198,7 +1198,7 @@ async def test_your_tool():
 
 ---
 
-## 🔍 Standards Checking
+## ðŸ” Standards Checking
 
 \`\`\`bash
 # Run standards checker
@@ -1214,7 +1214,7 @@ cat docs/repository-analysis-*.md
 
 ---
 
-## 📚 References
+## ðŸ“š References
 
 - **Central Docs:** D:\Dev\repos\mcp-central-docs\
 - **Standards:** mcp-central-docs/STANDARDS.md
@@ -1228,32 +1228,32 @@ cat docs/repository-analysis-*.md
 "@
 
 Set-Content -Path "docs/development/DEVELOPMENT_GUIDE.md" -Value $devGuide -Encoding UTF8
-Write-Host "  ✅ docs/development/DEVELOPMENT_GUIDE.md" -ForegroundColor Green
+Write-Host "  âœ… docs/development/DEVELOPMENT_GUIDE.md" -ForegroundColor Green
 
 # ============================================================================
 # FINAL SUMMARY
 # ============================================================================
 
-Write-Host "`n╔═══════════════════════════════════════════════════════════╗" -ForegroundColor Magenta
-Write-Host "║            🎉 Repository Created! 🎉                   ║" -ForegroundColor Magenta
-Write-Host "╚═══════════════════════════════════════════════════════════╝`n" -ForegroundColor Magenta
+Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Magenta
+Write-Host "â•‘            ðŸŽ‰ Repository Created! ðŸŽ‰                   â•‘" -ForegroundColor Magenta
+Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Magenta
 
-Write-Host "✅ Created: $normalizedName" -ForegroundColor Green
-Write-Host "📁 Location: $repoPath`n" -ForegroundColor White
+Write-Host "âœ… Created: $normalizedName" -ForegroundColor Green
+Write-Host "ðŸ“ Location: $repoPath`n" -ForegroundColor White
 
-Write-Host "📦 What Was Created:" -ForegroundColor Cyan
-Write-Host "  ✅ Complete folder structure (src/, tests/, docs/, scripts/)" -ForegroundColor Green
-Write-Host "  ✅ 3 portmanteau tools (help, status, resource_manager)" -ForegroundColor Green
-Write-Host "  ✅ Test scaffold with working tests" -ForegroundColor Green
-Write-Host "  ✅ MCPB packaging structure" -ForegroundColor Green
-Write-Host "  ✅ GitHub CI/CD workflows" -ForegroundColor Green
-Write-Host "  ✅ 2 SOTA scripts (backup, standards checker)" -ForegroundColor Green
-Write-Host "  ✅ Modern tooling (pyproject.toml, ruff, uv)" -ForegroundColor Green
-Write-Host "  ✅ Documentation (README, CONTRIBUTING, CHANGELOG)" -ForegroundColor Green
-Write-Host "  ✅ .gitignore, .cursorrules, LICENSE" -ForegroundColor Green
+Write-Host "ðŸ“¦ What Was Created:" -ForegroundColor Cyan
+Write-Host "  âœ… Complete folder structure (src/, tests/, docs/, scripts/)" -ForegroundColor Green
+Write-Host "  âœ… 3 portmanteau tools (help, status, resource_manager)" -ForegroundColor Green
+Write-Host "  âœ… Test scaffold with working tests" -ForegroundColor Green
+Write-Host "  âœ… MCPB packaging structure" -ForegroundColor Green
+Write-Host "  âœ… GitHub CI/CD workflows" -ForegroundColor Green
+Write-Host "  âœ… 2 SOTA scripts (backup, standards checker)" -ForegroundColor Green
+Write-Host "  âœ… Modern tooling (pyproject.toml, ruff, uv)" -ForegroundColor Green
+Write-Host "  âœ… Documentation (README, CONTRIBUTING, CHANGELOG)" -ForegroundColor Green
+Write-Host "  âœ… .gitignore, .cursorrules, LICENSE" -ForegroundColor Green
 Write-Host ""
 
-Write-Host "🚀 Next Steps:" -ForegroundColor Yellow
+Write-Host "ðŸš€ Next Steps:" -ForegroundColor Yellow
 Write-Host "  1. cd $repoPath" -ForegroundColor White
 Write-Host "  2. uv venv && uv pip install -e '.[dev]'" -ForegroundColor White
 Write-Host "  3. uv run pytest -v  # Run tests" -ForegroundColor White
@@ -1261,12 +1261,12 @@ Write-Host "  4. Customize src/$pythonPackage/tools/resource_manager.py" -Foregr
 Write-Host "  5. .\scripts\check-repo-standards.ps1  # Verify standards" -ForegroundColor White
 Write-Host ""
 
-Write-Host "📚 Documentation:" -ForegroundColor Cyan
+Write-Host "ðŸ“š Documentation:" -ForegroundColor Cyan
 Write-Host "  - README.md - Getting started" -ForegroundColor White
 Write-Host "  - docs/development/DEVELOPMENT_GUIDE.md - Developer guide" -ForegroundColor White
 Write-Host "  - .cursorrules - Cursor AI rules (with Rule #1!)" -ForegroundColor White
 Write-Host ""
 
-Write-Host "✅ Repository is ready for development!" -ForegroundColor Green
+Write-Host "âœ… Repository is ready for development!" -ForegroundColor Green
 Write-Host ""
 

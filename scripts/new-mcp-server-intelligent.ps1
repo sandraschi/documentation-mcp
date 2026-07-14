@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 <#
-⚠️ DEPRECATED - This script has been moved to SOTA location ⚠️
+âš ï¸ DEPRECATED - This script has been moved to SOTA location âš ï¸
 
 NEW LOCATION: sota-scripts/intelligent-builder/new-mcp-server-intelligent.ps1
 MIGRATION: This script has been moved to the State-of-the-Art scripts directory
@@ -10,7 +10,7 @@ Use the new location instead: sota-scripts/intelligent-builder/new-mcp-server-in
 For enhanced builder with AI assistance: sota-scripts/mcp-server-builder/new-mcp-server-enhanced.ps1
 
 .SYNOPSIS
-    🧠 Intelligent MCP Server Builder - Two-Phase Automated Generation
+    ðŸ§  Intelligent MCP Server Builder - Two-Phase Automated Generation
     
 .DESCRIPTION
     Phase 1: Analyze target application (wrappee) via web search
@@ -27,11 +27,11 @@ For enhanced builder with AI assistance: sota-scripts/mcp-server-builder/new-mcp
     - Customizes documentation for the wrappee
     
     Handles all types of applications:
-    ✅ CLI tools (easy - direct wrapping)
-    ✅ REST APIs (easy - HTTP calls)
-    ✅ Text-based apps like HandBrake (medium - CLI automation)
-    ✅ GUI apps like GIMP (hard - Windows automation + screenshots)
-    ✅ Recalcitrant apps (very hard - pywinauto + OCR + DOM analysis)
+    âœ… CLI tools (easy - direct wrapping)
+    âœ… REST APIs (easy - HTTP calls)
+    âœ… Text-based apps like HandBrake (medium - CLI automation)
+    âœ… GUI apps like GIMP (hard - Windows automation + screenshots)
+    âœ… Recalcitrant apps (very hard - pywinauto + OCR + DOM analysis)
     
 .PARAMETER Wrappee
     Name of the application to wrap (e.g., "HandBrake", "GIMP", "VLC")
@@ -73,20 +73,20 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "`n╔═══════════════════════════════════════════════════════════╗" -ForegroundColor Magenta
-Write-Host "║    🧠 Intelligent MCP Server Builder (2-Phase) 🧠      ║" -ForegroundColor Magenta
-Write-Host "╚═══════════════════════════════════════════════════════════╝`n" -ForegroundColor Magenta
+Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Magenta
+Write-Host "â•‘    ðŸ§  Intelligent MCP Server Builder (2-Phase) ðŸ§       â•‘" -ForegroundColor Magenta
+Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Magenta
 
-Write-Host "🎯 Target Application: $Wrappee" -ForegroundColor Cyan
+Write-Host "ðŸŽ¯ Target Application: $Wrappee" -ForegroundColor Cyan
 Write-Host ""
 
 # ============================================================================
 # PHASE 1: RESEARCH & ANALYSIS
 # ============================================================================
 
-Write-Host "╔═══════════════════════════════════════════════════════════╗" -ForegroundColor Yellow
-Write-Host "║              PHASE 1: Wrappee Analysis 📊              ║" -ForegroundColor Yellow
-Write-Host "╚═══════════════════════════════════════════════════════════╝`n" -ForegroundColor Yellow
+Write-Host "â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Yellow
+Write-Host "â•‘              PHASE 1: Wrappee Analysis ðŸ“Š              â•‘" -ForegroundColor Yellow
+Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Yellow
 
 $analysis = @{
     Name = $Wrappee
@@ -103,7 +103,7 @@ $analysis = @{
 }
 
 if (-not $SkipResearch) {
-    Write-Host "🔍 Researching $Wrappee..." -ForegroundColor Cyan
+    Write-Host "ðŸ” Researching $Wrappee..." -ForegroundColor Cyan
     Write-Host "   (In production, this would web search for CLI/API info)" -ForegroundColor Gray
     Write-Host ""
     
@@ -246,7 +246,7 @@ if (-not $SkipResearch) {
     
     # Check knowledge base
     if ($knownApps.ContainsKey($Wrappee)) {
-        Write-Host "  ✅ Found in knowledge base!" -ForegroundColor Green
+        Write-Host "  âœ… Found in knowledge base!" -ForegroundColor Green
         $appInfo = $knownApps[$Wrappee]
         
         $analysis.Type = $appInfo.Type
@@ -268,7 +268,7 @@ if (-not $SkipResearch) {
         }
         
     } else {
-        Write-Host "  ℹ️  Not in knowledge base - would web search in production" -ForegroundColor Yellow
+        Write-Host "  â„¹ï¸  Not in knowledge base - would web search in production" -ForegroundColor Yellow
         Write-Host "     For now, using generic template" -ForegroundColor Gray
         
         # Generic analysis for unknown apps
@@ -282,7 +282,7 @@ if (-not $SkipResearch) {
         )
     }
 } else {
-    Write-Host "  ⏭️  Skipping research (using cached knowledge)" -ForegroundColor Gray
+    Write-Host "  â­ï¸  Skipping research (using cached knowledge)" -ForegroundColor Gray
 }
 
 Write-Host ""
@@ -291,25 +291,25 @@ Write-Host ""
 # DISPLAY ANALYSIS
 # ============================================================================
 
-Write-Host "📊 Wrappee Analysis Results:" -ForegroundColor Cyan
+Write-Host "ðŸ“Š Wrappee Analysis Results:" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  Application:  $Wrappee" -ForegroundColor White
 Write-Host "  Type:         $($analysis.Type)" -ForegroundColor White
-Write-Host "  CLI:          $(if($analysis.CLI){'✅ Yes'}else{'❌ No'})" -ForegroundColor $(if($analysis.CLI){'Green'}else{'Red'})
-Write-Host "  API:          $(if($analysis.API){'✅ Yes'}else{'❌ No'})" -ForegroundColor $(if($analysis.API){'Green'}else{'Red'})
-Write-Host "  Text-Based:   $(if($analysis.TextBased){'✅ Yes'}else{'❌ No'})" -ForegroundColor $(if($analysis.TextBased){'Green'}else{'Gray'})
-Write-Host "  GUI:          $(if($analysis.GUI){'✅ Yes'}else{'❌ No'})" -ForegroundColor $(if($analysis.GUI){'Yellow'}else{'Gray'})
+Write-Host "  CLI:          $(if($analysis.CLI){'âœ… Yes'}else{'âŒ No'})" -ForegroundColor $(if($analysis.CLI){'Green'}else{'Red'})
+Write-Host "  API:          $(if($analysis.API){'âœ… Yes'}else{'âŒ No'})" -ForegroundColor $(if($analysis.API){'Green'}else{'Red'})
+Write-Host "  Text-Based:   $(if($analysis.TextBased){'âœ… Yes'}else{'âŒ No'})" -ForegroundColor $(if($analysis.TextBased){'Green'}else{'Gray'})
+Write-Host "  GUI:          $(if($analysis.GUI){'âœ… Yes'}else{'âŒ No'})" -ForegroundColor $(if($analysis.GUI){'Yellow'}else{'Gray'})
 Write-Host "  Difficulty:   $($analysis.Difficulty)" -ForegroundColor White
 Write-Host "  Suitability:  $($analysis.Suitability)" -ForegroundColor $(if($analysis.Difficulty -eq 'Easy'){'Green'}elseif($analysis.Difficulty -eq 'Medium'){'Yellow'}else{'Red'})
 Write-Host ""
 
 if ($analysis.Recommendation) {
-    Write-Host "💡 Recommendation: $($analysis.Recommendation)" -ForegroundColor Yellow
+    Write-Host "ðŸ’¡ Recommendation: $($analysis.Recommendation)" -ForegroundColor Yellow
     Write-Host ""
 }
 
 if ($analysis.Capabilities.Count -gt 0) {
-    Write-Host "🎯 Key Capabilities:" -ForegroundColor Cyan
+    Write-Host "ðŸŽ¯ Key Capabilities:" -ForegroundColor Cyan
     foreach ($cap in $analysis.Capabilities) {
         Write-Host "  - $cap" -ForegroundColor White
     }
@@ -323,7 +323,7 @@ if ($analysis.Capabilities.Count -gt 0) {
 $suitable = $analysis.Difficulty -in @("Easy", "Medium") -or $analysis.CLI -or $analysis.API
 
 if (-not $suitable -and -not $Force) {
-    Write-Host "⚠️  WARNING: $Wrappee may be challenging to wrap" -ForegroundColor Yellow
+    Write-Host "âš ï¸  WARNING: $Wrappee may be challenging to wrap" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "   Difficulty: $($analysis.Difficulty)" -ForegroundColor Red
     Write-Host "   Reason: $($analysis.Suitability)" -ForegroundColor Red
@@ -343,7 +343,7 @@ if (-not $suitable -and -not $Force) {
 }
 
 if ($Force) {
-    Write-Host "🔨 FORCE MODE: Building anyway with Windows automation plan" -ForegroundColor Yellow
+    Write-Host "ðŸ”¨ FORCE MODE: Building anyway with Windows automation plan" -ForegroundColor Yellow
     $analysis.Recommendation = "Use pywinauto for GUI automation + screenshot analysis"
     Write-Host ""
 }
@@ -352,7 +352,7 @@ if ($Force) {
 # GENERATE TOOLS PLAN
 # ============================================================================
 
-Write-Host "🛠️  Generating tools plan..." -ForegroundColor Cyan
+Write-Host "ðŸ› ï¸  Generating tools plan..." -ForegroundColor Cyan
 Write-Host ""
 
 if ($analysis.Tools.Count -eq 0) {
@@ -363,7 +363,7 @@ if ($analysis.Tools.Count -eq 0) {
     )
 }
 
-Write-Host "📋 Recommended Portmanteau Tools ($($analysis.Tools.Count)):" -ForegroundColor Yellow
+Write-Host "ðŸ“‹ Recommended Portmanteau Tools ($($analysis.Tools.Count)):" -ForegroundColor Yellow
 foreach ($tool in $analysis.Tools) {
     Write-Host ""
     Write-Host "  Tool: $($tool.Name)" -ForegroundColor Cyan
@@ -375,11 +375,11 @@ Write-Host ""
 # USER CONFIRMATION
 # ============================================================================
 
-Write-Host "╔═══════════════════════════════════════════════════════════╗" -ForegroundColor Green
-Write-Host "║              Ready to Build MCP Server! 🚀             ║" -ForegroundColor Green
-Write-Host "╚═══════════════════════════════════════════════════════════╝`n" -ForegroundColor Green
+Write-Host "â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Green
+Write-Host "â•‘              Ready to Build MCP Server! ðŸš€             â•‘" -ForegroundColor Green
+Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Green
 
-Write-Host "📦 Will create: $Wrappee-mcp" -ForegroundColor Cyan
+Write-Host "ðŸ“¦ Will create: $Wrappee-mcp" -ForegroundColor Cyan
 Write-Host "   Type: $($analysis.Type)" -ForegroundColor White
 Write-Host "   Wrapping: $(if($analysis.CLI){'CLI'}elseif($analysis.API){'API'}else{'Windows Automation'})" -ForegroundColor White
 Write-Host "   Tools: $($analysis.Tools.Count) portmanteau tools" -ForegroundColor White
@@ -388,7 +388,7 @@ Write-Host ""
 
 $confirm = Read-Host "Proceed with build? (y/n)"
 if ($confirm -ne 'y') {
-    Write-Host "❌ Build cancelled" -ForegroundColor Red
+    Write-Host "âŒ Build cancelled" -ForegroundColor Red
     exit 0
 }
 
@@ -396,9 +396,9 @@ if ($confirm -ne 'y') {
 # PHASE 2: BUILD MCP SERVER
 # ============================================================================
 
-Write-Host "`n╔═══════════════════════════════════════════════════════════╗" -ForegroundColor Magenta
-Write-Host "║          PHASE 2: Building MCP Server 🏗️              ║" -ForegroundColor Magenta
-Write-Host "╚═══════════════════════════════════════════════════════════╝`n" -ForegroundColor Magenta
+Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Magenta
+Write-Host "â•‘          PHASE 2: Building MCP Server ðŸ-ï¸              â•‘" -ForegroundColor Magenta
+Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Magenta
 
 $serverName = $Wrappee.ToLower() -replace '[^a-z0-9-]', '-' -replace '--+', '-'
 if (-not $serverName.EndsWith("-mcp")) {
@@ -407,12 +407,12 @@ if (-not $serverName.EndsWith("-mcp")) {
 
 $description = "$($analysis.Type) MCP server for $Wrappee"
 
-Write-Host "🚀 Calling base SOTA builder..." -ForegroundColor Cyan
+Write-Host "ðŸš€ Calling base SOTA builder..." -ForegroundColor Cyan
 
 # Call base builder
 $baseBuilder = Join-Path $PSScriptRoot "new-mcp-server.ps1"
 if (-not (Test-Path $baseBuilder)) {
-    Write-Host "❌ Error: Base builder not found: $baseBuilder" -ForegroundColor Red
+    Write-Host "âŒ Error: Base builder not found: $baseBuilder" -ForegroundColor Red
     exit 1
 }
 
@@ -425,7 +425,7 @@ if (-not (Test-Path $baseBuilder)) {
 $repoPath = Join-Path $OutputPath $serverName
 Set-Location $repoPath
 
-Write-Host "`n🎨 Customizing with domain-specific tools..." -ForegroundColor Cyan
+Write-Host "`nðŸŽ¨ Customizing with domain-specific tools..." -ForegroundColor Cyan
 
 $pythonPackage = $serverName -replace '-', '_'
 
@@ -434,7 +434,7 @@ foreach ($toolDef in $analysis.Tools) {
     $toolName = $toolDef.Name
     $operations = $toolDef.Ops
     
-    Write-Host "  📝 Generating $toolName.py..." -ForegroundColor Yellow
+    Write-Host "  ðŸ“ Generating $toolName.py..." -ForegroundColor Yellow
     
     # Build Literal type string
     $literalOps = ($operations | ForEach-Object { "'$_'" }) -join ', '
@@ -500,11 +500,11 @@ $(foreach ($op in $operations[0..2]) {"        # $op`n        $toolName('$op', p
 "@
     
     Set-Content -Path "src/$pythonPackage/tools/$toolName.py" -Value $toolCode -Encoding UTF8
-    Write-Host "    ✅ Created $toolName.py with $($operations.Count) operations" -ForegroundColor Green
+    Write-Host "    âœ… Created $toolName.py with $($operations.Count) operations" -ForegroundColor Green
 }
 
 # Update tools __init__.py
-Write-Host "  📝 Updating tools/__init__.py..." -ForegroundColor Yellow
+Write-Host "  ðŸ“ Updating tools/__init__.py..." -ForegroundColor Yellow
 
 $toolImports = ($analysis.Tools | ForEach-Object { "from .$($_.Name) import $($_.Name)" }) -join "`n"
 $toolExports = ($analysis.Tools | ForEach-Object { "    '$($_.Name)'," }) -join "`n"
@@ -534,13 +534,13 @@ $toolExports
 "@
 
 Set-Content -Path "src/$pythonPackage/tools/__init__.py" -Value $toolsInit -Encoding UTF8
-Write-Host "    ✅ Updated __init__.py with $($analysis.Tools.Count) custom tools" -ForegroundColor Green
+Write-Host "    âœ… Updated __init__.py with $($analysis.Tools.Count) custom tools" -ForegroundColor Green
 
 # ============================================================================
 # PHASE 2C: ADD WRAPPEE-SPECIFIC DOCUMENTATION
 # ============================================================================
 
-Write-Host "`n📚 Adding wrappee-specific documentation..." -ForegroundColor Cyan
+Write-Host "`nðŸ“š Adding wrappee-specific documentation..." -ForegroundColor Cyan
 
 $wrappeeGuide = @"
 # $Wrappee Integration Guide
@@ -551,7 +551,7 @@ $wrappeeGuide = @"
 
 ---
 
-## 🎯 What This MCP Server Does
+## ðŸŽ¯ What This MCP Server Does
 
 Provides MCP protocol access to $Wrappee capabilities:
 
@@ -559,7 +559,7 @@ $($analysis.Capabilities | ForEach-Object { "- $_" } | Out-String)
 
 ---
 
-## 🔧 Wrapping Method
+## ðŸ”§ Wrapping Method
 
 **Primary:** $($analysis.Recommendation)
 
@@ -580,7 +580,7 @@ $(if ($analysis.API) {@"
 
 ---
 
-## 🛠️ Available Tools
+## ðŸ› ï¸ Available Tools
 
 $($analysis.Tools | ForEach-Object { @"
 ### $($_.Name)
@@ -598,7 +598,7 @@ $($_.Name)('$($_.Ops[0])', parameters={...})
 
 "@ } | Out-String)
 
-## 📦 Installation
+## ðŸ“¦ Installation
 
 ### Prerequisites
 - $Wrappee must be installed
@@ -612,7 +612,7 @@ uv pip install $serverName
 
 ---
 
-## ⚙️ Configuration
+## âš™ï¸ Configuration
 
 Add to Claude Desktop config:
 
@@ -629,7 +629,7 @@ Add to Claude Desktop config:
 
 ---
 
-## 🔍 Implementation Status
+## ðŸ” Implementation Status
 
 **Current Status:** Scaffold generated, implementation needed
 
@@ -642,7 +642,7 @@ Add to Claude Desktop config:
 
 ---
 
-## 📚 References
+## ðŸ“š References
 
 - **$Wrappee Documentation:** [Search for official docs]
 - **MCP Standards:** D:\Dev\repos\mcp-central-docs\STANDARDS.md
@@ -656,14 +656,14 @@ Add to Claude Desktop config:
 "@
 
 Set-Content -Path "docs/$Wrappee-INTEGRATION.md" -Value $wrappeeGuide -Encoding UTF8
-Write-Host "  ✅ docs/$Wrappee-INTEGRATION.md" -ForegroundColor Green
+Write-Host "  âœ… docs/$Wrappee-INTEGRATION.md" -ForegroundColor Green
 
 # Update README with wrappee info
 if (Test-Path "README.md") {
     $readme = Get-Content "README.md" -Raw
     $wrappeeSection = @"
 
-## 🎯 About $Wrappee
+## ðŸŽ¯ About $Wrappee
 
 **Type:** $($analysis.Type)  
 **Wrapping:** $($analysis.Recommendation)  
@@ -678,30 +678,30 @@ See [docs/$Wrappee-INTEGRATION.md]($Wrappee-INTEGRATION.md) for complete integra
 "@
     $readme = $readme -replace '(## Quick Start)', "$wrappeeSection`n`$1"
     Set-Content -Path "README.md" -Value $readme -Encoding UTF8
-    Write-Host "  ✅ Updated README.md with $Wrappee info" -ForegroundColor Green
+    Write-Host "  âœ… Updated README.md with $Wrappee info" -ForegroundColor Green
 }
 
 # ============================================================================
 # FINAL SUMMARY
 # ============================================================================
 
-Write-Host "`n╔═══════════════════════════════════════════════════════════╗" -ForegroundColor Magenta
-Write-Host "║          🎉 Intelligent Build Complete! 🎉             ║" -ForegroundColor Magenta
-Write-Host "╚═══════════════════════════════════════════════════════════╝`n" -ForegroundColor Magenta
+Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Magenta
+Write-Host "â•‘          ðŸŽ‰ Intelligent Build Complete! ðŸŽ‰             â•‘" -ForegroundColor Magenta
+Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Magenta
 
-Write-Host "✅ Created: $serverName" -ForegroundColor Green
-Write-Host "📁 Location: $repoPath" -ForegroundColor White
+Write-Host "âœ… Created: $serverName" -ForegroundColor Green
+Write-Host "ðŸ“ Location: $repoPath" -ForegroundColor White
 Write-Host ""
 
-Write-Host "📦 What Was Built:" -ForegroundColor Cyan
-Write-Host "  ✅ Base SOTA scaffold (9.8/10 quality)" -ForegroundColor Green
-Write-Host "  ✅ $($analysis.Tools.Count) domain-specific portmanteau tools" -ForegroundColor Green
-Write-Host "  ✅ $Wrappee integration guide" -ForegroundColor Green
-Write-Host "  ✅ Wrapping method: $($analysis.Recommendation)" -ForegroundColor Green
-Write-Host "  ✅ Total tools: $(3 + $analysis.Tools.Count) (3 base + $($analysis.Tools.Count) custom)" -ForegroundColor Green
+Write-Host "ðŸ“¦ What Was Built:" -ForegroundColor Cyan
+Write-Host "  âœ… Base SOTA scaffold (9.8/10 quality)" -ForegroundColor Green
+Write-Host "  âœ… $($analysis.Tools.Count) domain-specific portmanteau tools" -ForegroundColor Green
+Write-Host "  âœ… $Wrappee integration guide" -ForegroundColor Green
+Write-Host "  âœ… Wrapping method: $($analysis.Recommendation)" -ForegroundColor Green
+Write-Host "  âœ… Total tools: $(3 + $analysis.Tools.Count) (3 base + $($analysis.Tools.Count) custom)" -ForegroundColor Green
 Write-Host ""
 
-Write-Host "🎯 Generated Tools:" -ForegroundColor Yellow
+Write-Host "ðŸŽ¯ Generated Tools:" -ForegroundColor Yellow
 Write-Host "  Base Tools (3):" -ForegroundColor White
 Write-Host "    - help (multilevel)" -ForegroundColor Gray
 Write-Host "    - status (diagnostics)" -ForegroundColor Gray
@@ -713,7 +713,7 @@ foreach ($tool in $analysis.Tools) {
 }
 Write-Host ""
 
-Write-Host "🚀 Next Steps:" -ForegroundColor Yellow
+Write-Host "ðŸš€ Next Steps:" -ForegroundColor Yellow
 Write-Host "  1. cd $repoPath" -ForegroundColor White
 Write-Host "  2. uv venv && uv pip install -e '.[dev]'" -ForegroundColor White
 Write-Host "  3. Review: docs/$Wrappee-INTEGRATION.md" -ForegroundColor White
@@ -722,7 +722,7 @@ Write-Host "  5. Test: uv run pytest -v" -ForegroundColor White
 Write-Host "  6. Verify: .\scripts\check-repo-standards.ps1" -ForegroundColor White
 Write-Host ""
 
-Write-Host "💡 Implementation Priority:" -ForegroundColor Cyan
+Write-Host "ðŸ’¡ Implementation Priority:" -ForegroundColor Cyan
 foreach ($tool in $analysis.Tools) {
     Write-Host "  1. Implement $($tool.Name).$($tool.Ops[0])() - Most common operation" -ForegroundColor White
 }
@@ -731,7 +731,7 @@ Write-Host "  3. Write comprehensive tests" -ForegroundColor White
 Write-Host "  4. Test with actual $Wrappee installation" -ForegroundColor White
 Write-Host ""
 
-Write-Host "✅ Intelligent MCP server scaffold ready!" -ForegroundColor Green
+Write-Host "âœ… Intelligent MCP server scaffold ready!" -ForegroundColor Green
 Write-Host "   Customize the TODOs and you'll have a perfect $Wrappee MCP server!" -ForegroundColor Green
 Write-Host ""
 
@@ -748,13 +748,13 @@ $buildReport = @"
 
 ---
 
-## 📊 Wrappee Analysis
+## ðŸ“Š Wrappee Analysis
 
 - **Type:** $($analysis.Type)
-- **CLI Available:** $(if($analysis.CLI){'✅ Yes'}else{'❌ No'})
-- **API Available:** $(if($analysis.API){'✅ Yes'}else{'❌ No'})
-- **Text-Based:** $(if($analysis.TextBased){'✅ Yes'}else{'❌ No'})
-- **GUI:** $(if($analysis.GUI){'⚠️ Yes'}else{'❌ No'})
+- **CLI Available:** $(if($analysis.CLI){'âœ… Yes'}else{'âŒ No'})
+- **API Available:** $(if($analysis.API){'âœ… Yes'}else{'âŒ No'})
+- **Text-Based:** $(if($analysis.TextBased){'âœ… Yes'}else{'âŒ No'})
+- **GUI:** $(if($analysis.GUI){'âš ï¸ Yes'}else{'âŒ No'})
 - **Difficulty:** $($analysis.Difficulty)
 - **Suitability:** $($analysis.Suitability)
 
@@ -762,7 +762,7 @@ $buildReport = @"
 
 ---
 
-## 🛠️ Generated Tools ($($analysis.Tools.Count + 3))
+## ðŸ› ï¸ Generated Tools ($($analysis.Tools.Count + 3))
 
 ### Base Tools (3)
 1. **help** - Multilevel help system
@@ -774,7 +774,7 @@ $($analysis.Tools | ForEach-Object { $i = 1; "$(($i++)). **$($_.Name)** - $($_.O
 
 ---
 
-## ✅ Next Steps
+## âœ… Next Steps
 
 1. **Review Integration Guide:** docs/$Wrappee-INTEGRATION.md
 2. **Implement Tools:** Search for TODO in src/$pythonPackage/tools/
@@ -790,6 +790,6 @@ $($analysis.Tools | ForEach-Object { $i = 1; "$(($i++)). **$($_.Name)** - $($_.O
 "@
 
 Set-Content -Path "docs-private/INTELLIGENT_BUILD_REPORT.md" -Value $buildReport -Encoding UTF8
-Write-Host "📄 Build report saved: docs-private/INTELLIGENT_BUILD_REPORT.md" -ForegroundColor Cyan
+Write-Host "ðŸ“„ Build report saved: docs-private/INTELLIGENT_BUILD_REPORT.md" -ForegroundColor Cyan
 Write-Host ""
 

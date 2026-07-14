@@ -173,7 +173,7 @@ function Show-RepositoryList {
             $private = if ($repo.isPrivate) { "[Private]" } else { "[Public]" }
             $archived = if ($repo.isArchived) { "[Archived]" } else { "" }
             
-            Write-Host ("  {0,-35} {1,-15} ⭐{2,-5} {3} {4}" -f $repo.name, $lang, $stars, $private, $archived)
+            Write-Host ("  {0,-35} {1,-15} â­{2,-5} {3} {4}" -f $repo.name, $lang, $stars, $private, $archived)
             if ($repo.description) {
                 Write-Host ("    {0}" -f $repo.description) -ForegroundColor DarkGray
             }
@@ -229,7 +229,7 @@ function Analyze-Repositories {
     Write-Host "Top Repositories by Stars:" -ForegroundColor Green
     $topRepos = $Repos | Sort-Object stargazerCount -Descending | Select-Object -First 10
     foreach ($repo in $topRepos) {
-        Write-Host ("  ⭐{0,-5} {1}" -f $repo.stargazerCount, $repo.name)
+        Write-Host ("  â­{0,-5} {1}" -f $repo.stargazerCount, $repo.name)
     }
 }
 
@@ -256,14 +256,14 @@ function New-OrganizationPlan {
 **Generated:** $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 **Total Repositories:** $($Repos.Count)
 
-## 📊 Current State
+## ðŸ“Š Current State
 
 - **Total Repositories:** $($Repos.Count)
 - **MCP Servers:** $($categories['MCP'].Count)
 - **Tools:** $($categories['Tools'].Count)
 - **Projects:** $($categories['Projects'].Count)
 
-## 🎯 Organization Strategy
+## ðŸŽ¯ Organization Strategy
 
 ### Option 1: Create GitHub Organization for MCP Servers
 
@@ -291,30 +291,30 @@ $($categories['MCP'] | ForEach-Object { "- [$($_.name)]($($_.url))" } | Out-Stri
 - `automation` - Automation tools
 - `windows` - Windows-specific tools
 
-## 📋 Repository Categories
+## ðŸ“‹ Repository Categories
 
 ### MCP Servers ($($categories['MCP'].Count))
 
 $($categories['MCP'] | ForEach-Object { 
     $lang = if ($_.primaryLanguage) { $_.primaryLanguage.name } else { "N/A" }
-    "- **[$($_.name)]($($_.url))** - $($_.description) (⭐$($_.stargazerCount), $lang)"
+    "- **[$($_.name)]($($_.url))** - $($_.description) (â­$($_.stargazerCount), $lang)"
 } | Out-String)
 
 ### Tools ($($categories['Tools'].Count))
 
 $($categories['Tools'] | ForEach-Object { 
     $lang = if ($_.primaryLanguage) { $_.primaryLanguage.name } else { "N/A" }
-    "- **[$($_.name)]($($_.url))** - $($_.description) (⭐$($_.stargazerCount), $lang)"
+    "- **[$($_.name)]($($_.url))** - $($_.description) (â­$($_.stargazerCount), $lang)"
 } | Out-String)
 
 ### Projects ($($categories['Projects'].Count))
 
 $($categories['Projects'] | ForEach-Object { 
     $lang = if ($_.primaryLanguage) { $_.primaryLanguage.name } else { "N/A" }
-    "- **[$($_.name)]($($_.url))** - $($_.description) (⭐$($_.stargazerCount), $lang)"
+    "- **[$($_.name)]($($_.url))** - $($_.description) (â­$($_.stargazerCount), $lang)"
 } | Out-String)
 
-## 🚀 Recommended Actions
+## ðŸš€ Recommended Actions
 
 1. **Create GitHub Organization** (if transferring MCP servers)
    ```powershell
@@ -335,7 +335,7 @@ $($categories['Projects'] | ForEach-Object {
 4. **Create Organization README**
    - If creating organization, add README.md to organization profile
 
-## 📝 Next Steps
+## ðŸ“ Next Steps
 
 1. Review this plan
 2. Decide on organization strategy
@@ -461,19 +461,19 @@ function Scan-LocalDirectories {
     }
     
     # Display results
-    Write-Host "📊 Summary" -ForegroundColor Green
+    Write-Host "ðŸ“Š Summary" -ForegroundColor Green
     Write-Host ("  Total Directories: {0}" -f $directories.Count)
-    Write-Host ("  ✅ Has Git + GitHub: {0}" -f $results.HasGitHub.Count) -ForegroundColor Green
-    Write-Host ("  ⚠️  Has Git (no GitHub): {0}" -f $results.HasGit.Count) -ForegroundColor Yellow
-    Write-Host ("  ❌ No Git: {0}" -f $results.NoGit.Count) -ForegroundColor Red
+    Write-Host ("  âœ… Has Git + GitHub: {0}" -f $results.HasGitHub.Count) -ForegroundColor Green
+    Write-Host ("  âš ï¸  Has Git (no GitHub): {0}" -f $results.HasGit.Count) -ForegroundColor Yellow
+    Write-Host ("  âŒ No Git: {0}" -f $results.NoGit.Count) -ForegroundColor Red
     Write-Host ""
     
     # Has Git + GitHub
     if ($results.HasGitHub.Count -gt 0) {
-        Write-Host "✅ Has Git + GitHub Remote ($($results.HasGitHub.Count))" -ForegroundColor Green
+        Write-Host "âœ… Has Git + GitHub Remote ($($results.HasGitHub.Count))" -ForegroundColor Green
         Write-Host ("-" * 80) -ForegroundColor DarkGray
         foreach ($item in $results.HasGitHub | Sort-Object Name) {
-            $onGitHub = if ($item.OnGitHub) { "✓" } else { "✗" }
+            $onGitHub = if ($item.OnGitHub) { "âœ“" } else { "âœ-" }
             Write-Host ("  {0,-35} {1} {2}" -f $item.Name, $onGitHub, $item.Remote) -ForegroundColor White
         }
         Write-Host ""
@@ -481,7 +481,7 @@ function Scan-LocalDirectories {
     
     # Has Git but no GitHub
     if ($results.HasGit.Count -gt 0) {
-        Write-Host "⚠️  Has Git but No GitHub Remote ($($results.HasGit.Count))" -ForegroundColor Yellow
+        Write-Host "âš ï¸  Has Git but No GitHub Remote ($($results.HasGit.Count))" -ForegroundColor Yellow
         Write-Host ("-" * 80) -ForegroundColor DarkGray
         foreach ($item in $results.HasGit | Sort-Object Name) {
             $remote = if ($item.Remote) { $item.Remote } else { "(no remote)" }
@@ -492,7 +492,7 @@ function Scan-LocalDirectories {
     
     # No Git
     if ($results.NoGit.Count -gt 0) {
-        Write-Host "❌ No Git Repository ($($results.NoGit.Count))" -ForegroundColor Red
+        Write-Host "âŒ No Git Repository ($($results.NoGit.Count))" -ForegroundColor Red
         Write-Host ("-" * 80) -ForegroundColor DarkGray
         foreach ($item in $results.NoGit | Sort-Object Name) {
             Write-Host ("  {0}" -f $item.Name) -ForegroundColor DarkGray
@@ -502,7 +502,7 @@ function Scan-LocalDirectories {
     
     # Local repos not on GitHub
     if ($results.LocalNotGitHub.Count -gt 0) {
-        Write-Host "📤 Local Git Repos Not on GitHub ($($results.LocalNotGitHub.Count))" -ForegroundColor Cyan
+        Write-Host "ðŸ“¤ Local Git Repos Not on GitHub ($($results.LocalNotGitHub.Count))" -ForegroundColor Cyan
         Write-Host ("-" * 80) -ForegroundColor DarkGray
         foreach ($item in $results.LocalNotGitHub | Sort-Object Name) {
             Write-Host ("  {0,-35} {1}" -f $item.Name, $item.Remote) -ForegroundColor Cyan
@@ -512,7 +512,7 @@ function Scan-LocalDirectories {
     
     # GitHub repos not local
     if ($results.GitHubNotLocal.Count -gt 0) {
-        Write-Host "📥 GitHub Repos Not in Local ($($results.GitHubNotLocal.Count))" -ForegroundColor Magenta
+        Write-Host "ðŸ“¥ GitHub Repos Not in Local ($($results.GitHubNotLocal.Count))" -ForegroundColor Magenta
         Write-Host ("-" * 80) -ForegroundColor DarkGray
         foreach ($repo in $results.GitHubNotLocal) {
             Write-Host ("  {0}" -f $repo) -ForegroundColor Magenta
@@ -651,30 +651,30 @@ try {
 ## Summary
 
 - **Total Directories:** $($scanResults.HasGitHub.Count + $scanResults.HasGit.Count + $scanResults.NoGit.Count)
-- **✅ Has Git + GitHub:** $($scanResults.HasGitHub.Count)
-- **⚠️ Has Git (no GitHub):** $($scanResults.HasGit.Count)
-- **❌ No Git:** $($scanResults.NoGit.Count)
+- **âœ… Has Git + GitHub:** $($scanResults.HasGitHub.Count)
+- **âš ï¸ Has Git (no GitHub):** $($scanResults.HasGit.Count)
+- **âŒ No Git:** $($scanResults.NoGit.Count)
 
-## ✅ Has Git + GitHub Remote
+## âœ… Has Git + GitHub Remote
 
 $($scanResults.HasGitHub | ForEach-Object { "- **$($_.Name)** - $($_.Remote)" } | Out-String)
 
-## ⚠️ Has Git but No GitHub Remote
+## âš ï¸ Has Git but No GitHub Remote
 
 $($scanResults.HasGit | ForEach-Object { 
     $remote = if ($_.Remote) { $_.Remote } else { "(no remote)" }
     "- **$($_.Name)** - $remote"
 } | Out-String)
 
-## ❌ No Git Repository
+## âŒ No Git Repository
 
 $($scanResults.NoGit | ForEach-Object { "- **$($_.Name)**" } | Out-String)
 
-## 📤 Local Git Repos Not on GitHub
+## ðŸ“¤ Local Git Repos Not on GitHub
 
 $($scanResults.LocalNotGitHub | ForEach-Object { "- **$($_.Name)** - $($_.Remote)" } | Out-String)
 
-## 📥 GitHub Repos Not in Local
+## ðŸ“¥ GitHub Repos Not in Local
 
 $($scanResults.GitHubNotLocal | ForEach-Object { "- **$_**" } | Out-String)
 

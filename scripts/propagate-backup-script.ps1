@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 <#
-⚠️ DEPRECATED - This script has been moved to SOTA location ⚠️
+âš ï¸ DEPRECATED - This script has been moved to SOTA location âš ï¸
 
 NEW LOCATION: sota-scripts/propagation-tools/propagate-backup-script.ps1
 MIGRATION: This script has been moved to the State-of-the-Art scripts directory
@@ -28,19 +28,19 @@ param(
     [switch]$DryRun = $false
 )
 
-Write-Host "`n╔═══════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║     📦 SOTA Script Propagation: backup-repo.ps1 📦     ║" -ForegroundColor Cyan
-Write-Host "╚═══════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
+Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+Write-Host "â•‘     ðŸ“¦ SOTA Script Propagation: backup-repo.ps1 ðŸ“¦     â•‘" -ForegroundColor Cyan
+Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Cyan
 
 # Source script
 $sourceScript = Join-Path $PSScriptRoot "..\templates\scripts\backup-repo.ps1"
 
 if (-not (Test-Path $sourceScript)) {
-    Write-Host "❌ Error: Source script not found: $sourceScript" -ForegroundColor Red
+    Write-Host "âŒ Error: Source script not found: $sourceScript" -ForegroundColor Red
     exit 1
 }
 
-Write-Host "📋 Source: $sourceScript" -ForegroundColor White
+Write-Host "ðŸ“‹ Source: $sourceScript" -ForegroundColor White
 Write-Host ""
 
 # Find all repositories (excluding junk/external and hidden folders)
@@ -50,7 +50,7 @@ $mcpRepos = Get-ChildItem -Path $reposRoot -Directory | Where-Object {
     $_.Name -notmatch $excludePattern -and $_.Name -notmatch '^\.'
 } | Sort-Object Name
 
-Write-Host "🎯 Found $($mcpRepos.Count) repositories to evaluate`n" -ForegroundColor Green
+Write-Host "ðŸŽ¯ Found $($mcpRepos.Count) repositories to evaluate`n" -ForegroundColor Green
 
 $updated = 0
 $skipped = 0
@@ -70,7 +70,7 @@ foreach ($repo in $mcpRepos) {
         else {
             New-Item -ItemType Directory -Path $scriptsDir -Force | Out-Null
             Copy-Item $sourceScript $targetScript -Force
-            Write-Host "  ✅ Created scripts/ and copied: $($repo.Name)" -ForegroundColor Green
+            Write-Host "  âœ… Created scripts/ and copied: $($repo.Name)" -ForegroundColor Green
             $created++
         }
         continue
@@ -83,7 +83,7 @@ foreach ($repo in $mcpRepos) {
         $targetHash = (Get-FileHash $targetScript -Algorithm MD5).Hash
         
         if ($sourceHash -eq $targetHash) {
-            Write-Host "  ⏭️  Already up-to-date: $($repo.Name)" -ForegroundColor Gray
+            Write-Host "  â­ï¸  Already up-to-date: $($repo.Name)" -ForegroundColor Gray
             $skipped++
         }
         else {
@@ -92,7 +92,7 @@ foreach ($repo in $mcpRepos) {
             }
             else {
                 Copy-Item $sourceScript $targetScript -Force
-                Write-Host "  ✅ Updated: $($repo.Name)" -ForegroundColor Green
+                Write-Host "  âœ… Updated: $($repo.Name)" -ForegroundColor Green
                 $updated++
             }
         }
@@ -103,21 +103,21 @@ foreach ($repo in $mcpRepos) {
         }
         else {
             Copy-Item $sourceScript $targetScript -Force
-            Write-Host "  ✅ Copied to: $($repo.Name)" -ForegroundColor Green
+            Write-Host "  âœ… Copied to: $($repo.Name)" -ForegroundColor Green
             $created++
         }
     }
 }
 
-Write-Host "`n╔═══════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║              📦 Propagation Complete! 📦               ║" -ForegroundColor Cyan
-Write-Host "╚═══════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
+Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+Write-Host "â•‘              ðŸ“¦ Propagation Complete! ðŸ“¦               â•‘" -ForegroundColor Cyan
+Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Cyan
 
 if ($DryRun) {
-    Write-Host "🔍 DRY RUN MODE - No changes made`n" -ForegroundColor Yellow
+    Write-Host "ðŸ” DRY RUN MODE - No changes made`n" -ForegroundColor Yellow
 }
 
-Write-Host "📊 Summary:" -ForegroundColor White
+Write-Host "ðŸ“Š Summary:" -ForegroundColor White
 Write-Host "  Total repos:      $($mcpRepos.Count)" -ForegroundColor White
 Write-Host "  Updated:          $updated" -ForegroundColor Green
 Write-Host "  Newly created:    $created" -ForegroundColor Cyan
@@ -125,9 +125,9 @@ Write-Host "  Already current:  $skipped" -ForegroundColor Gray
 Write-Host ""
 
 if (-not $DryRun -and ($updated -gt 0 -or $created -gt 0)) {
-    Write-Host "✅ Done! Updated $(($updated + $created)) repositories" -ForegroundColor Green
+    Write-Host "âœ… Done! Updated $(($updated + $created)) repositories" -ForegroundColor Green
     Write-Host ""
-    Write-Host "💡 Next steps:" -ForegroundColor Yellow
+    Write-Host "ðŸ’¡ Next steps:" -ForegroundColor Yellow
     Write-Host "  1. Test backup script in one repo: .\scripts\backup-repo.ps1" -ForegroundColor White
     Write-Host "  2. Commit changes to affected repos if satisfied" -ForegroundColor White
 }
