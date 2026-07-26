@@ -1,4 +1,4 @@
-﻿# Local LLM MCP - Product Requirements Document
+# Local LLM MCP - Product Requirements Document
 
 ## 1. Overview
 
@@ -38,7 +38,7 @@ Local LLM MCP Server is a **comprehensive, enterprise-grade Model Control Protoc
 
 | Category           | Details                                                                 |
 |--------------------|-------------------------------------------------------------------------|
-| **Framework**      | FastMCP 3.1.1+.1+ (SOTA Compliant)                                       |
+| **Framework**      | FastMCP 2.14.1+ (SOTA Compliant)                                       |
 | **Backend**        | vLLM 0.10.1.1 + Multiple Providers                                      |
 | **Tools**          | 31 Specialized Tools (10 Portmanteau + 10 Help + 4 GPU + 7 Core)       |
 | **API**            | Stdio (MCP) + HTTP/WebSocket (Testing/Monitoring)                       |
@@ -51,14 +51,14 @@ Local LLM MCP Server is a **comprehensive, enterprise-grade Model Control Protoc
 
 | Provider | Status | Features |
 |----------|--------|----------|
-| **Ollama** | âœ… Full | Local models, automatic management |
-| **LM Studio** | âœ… Full | Local inference, model switching |
-| **vLLM** | âœ… Full | High-performance, continuous batching |
-| **OpenAI** | âœ… Full | GPT-4, GPT-4o, embeddings |
-| **Anthropic** | âœ… Full | Claude models, function calling |
-| **Gemini** | âœ… Full | Gemini 1.5/3.0 Flash, Vertex AI integration |
-| **Hugging Face** | âœ… Full | Gated models (FLUX), datasets, repositories |
-| **Perplexity** | âœ… Basic | AI search and reasoning |
+| **Ollama** | ✅ Full | Local models, automatic management |
+| **LM Studio** | ✅ Full + LM Link | Local inference, model switching, remote peer discovery over Tailscale mesh |
+| **vLLM** | ✅ Full | High-performance, continuous batching |
+| **OpenAI** | ✅ Full | GPT-4, GPT-4o, embeddings |
+| **Anthropic** | ✅ Full | Claude models, function calling |
+| **Gemini** | ✅ Full | Gemini 1.5/3.0 Flash, Vertex AI integration |
+| **Hugging Face** | ✅ Full | Gated models (FLUX), datasets, repositories |
+| **Perplexity** | ✅ Basic | AI search and reasoning |
 
 ### 2.4 Tool Categories
 
@@ -69,13 +69,13 @@ Local LLM MCP Server is a **comprehensive, enterprise-grade Model Control Protoc
 - **`llm_multimodal_tool`** - Image analysis and generation
 - **`llm_finetuning_tool`** - LoRA, Sparse, DoRA training
 - **`llm_ollama_tool`** - Ollama model operations
-- **`llm_lmstudio_tool`** - LM Studio model operations
+- **`llm_lmstudio_tool`** - LM Studio model operations + LM Link peer discovery
 - **`llm_vllm_tool`** - vLLM high-performance inference
 - **`llm_huggingface_tool`** - Gated models (FLUX) and datasets
 - **`llm_google_cloud_tool`** - Gemini 3 Flash and Vertex AI
 
 #### Help System (10 Tools)
-- 5-level documentation (Names â†’ Expert Details)
+- 5-level documentation (Names → Expert Details)
 - Workflow guides and best practices
 - Performance optimization strategies
 - Troubleshooting and issue resolution
@@ -92,69 +92,69 @@ Local LLM MCP Server is a **comprehensive, enterprise-grade Model Control Protoc
 ### 3.1 Comprehensive System Architecture
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                              MCP CLIENTS                                        â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚
-â”‚  â”‚ Claude Desktop  â”‚  â”‚ Custom Apps     â”‚  â”‚ Web Interfaces  â”‚  â”‚ Dev Tools   â”‚  â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                                      â”‚
-                                      â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                        FASTMCP 3.1.1+.1+ SERVER                                  â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                 â”‚
-â”‚  â”‚   Stdio MCP     â”‚  â”‚   HTTP/WS API   â”‚  â”‚   Tool Router    â”‚                 â”‚
-â”‚  â”‚   Interface     â”‚  â”‚   Interface     â”‚  â”‚                 â”‚                 â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                 â”‚
-â”‚         â”‚                       â”‚                       â”‚                       â”‚
-â”‚         â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-â”‚                                 â”‚                       â”‚
-â”‚                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”          â”‚
-â”‚                    â”‚    PORTMANTEAU TOOLS    â”‚          â”‚
-â”‚                    â”‚   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚          â”‚
-â”‚                    â”‚   â”‚ Health & System â”‚   â”‚          â”‚
-â”‚                    â”‚   â”‚ GPU Management  â”‚   â”‚          â”‚
-â”‚                    â”‚   â”‚ Model Operationsâ”‚   â”‚          â”‚
-â”‚                    â”‚   â”‚ Text Generation â”‚   â”‚          â”‚
-â”‚                    â”‚   â”‚ Fine-tuning     â”‚   â”‚          â”‚
-â”‚                    â”‚   â”‚ Multimodal      â”‚   â”‚          â”‚
-â”‚                    â”‚   â”‚ Provider Tools  â”‚   â”‚          â”‚
-â”‚                    â”‚   â”‚ Help System     â”‚   â”‚          â”‚
-â”‚                    â”‚   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚          â”‚
-â”‚                    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜          â”‚
-â”‚                                 â”‚                       â”‚
-â”‚                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”          â”‚
-â”‚                    â”‚   PROVIDER FACTORY      â”‚          â”‚
-â”‚                    â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    â”‚          â”‚
-â”‚                    â”‚  â”‚ Ollama          â”‚    â”‚          â”‚
-â”‚                    â”‚  â”‚ LM Studio       â”‚    â”‚          â”‚
-â”‚                    â”‚  â”‚ vLLM            â”‚    â”‚          â”‚
-â”‚                    â”‚  â”‚ OpenAI          â”‚    â”‚          â”‚
-â”‚                    â”‚  â”‚ Anthropic       â”‚    â”‚          â”‚
-â”‚                    â”‚  â”‚ Gemini          â”‚    â”‚          â”‚
-â”‚                    â”‚  â”‚ Hugging Face    â”‚    â”‚          â”‚
-â”‚                    â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    â”‚          â”‚
-â”‚                    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜          â”‚
-â”‚                                 â”‚                       â”‚
-â”‚                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”          â”‚
-â”‚                    â”‚   MODEL SERVING LAYER   â”‚          â”‚
-â”‚                    â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    â”‚          â”‚
-â”‚                    â”‚  â”‚ Local Models    â”‚    â”‚          â”‚
-â”‚                    â”‚  â”‚ Cloud APIs      â”‚    â”‚          â”‚
-â”‚                    â”‚  â”‚ GPU Management  â”‚    â”‚          â”‚
-â”‚                    â”‚  â”‚ Memory Opt.     â”‚    â”‚          â”‚
-â”‚                    â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    â”‚          â”‚
-â”‚                    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜          â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                                      â”‚
-                                      â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                          INFRASTRUCTURE LAYER                                  â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚
-â”‚  â”‚ Docker/K8s     â”‚  â”‚ GPU Resources    â”‚  â”‚ Model Storage   â”‚  â”‚ Monitoring  â”‚  â”‚
-â”‚  â”‚ Orchestration  â”‚  â”‚ (RTX 4090)      â”‚  â”‚ (Local/Cloud)    â”‚  â”‚ Stack        â”‚  â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              MCP CLIENTS                                        │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────┐  │
+│  │ Claude Desktop  │  │ Custom Apps     │  │ Web Interfaces  │  │ Dev Tools   │  │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘  └─────────────┘  │
+└─────────────────────────────────────┬─────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                        FASTMCP 2.14.1+ SERVER                                  │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                 │
+│  │   Stdio MCP     │  │   HTTP/WS API   │  │   Tool Router    │                 │
+│  │   Interface     │  │   Interface     │  │                 │                 │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘                 │
+│         │                       │                       │                       │
+│         └───────────────────────┼───────────────────────┼───────────────────────┘
+│                                 │                       │
+│                    ┌────────────▼────────────┐          │
+│                    │    PORTMANTEAU TOOLS    │          │
+│                    │   ┌─────────────────┐   │          │
+│                    │   │ Health & System │   │          │
+│                    │   │ GPU Management  │   │          │
+│                    │   │ Model Operations│   │          │
+│                    │   │ Text Generation │   │          │
+│                    │   │ Fine-tuning     │   │          │
+│                    │   │ Multimodal      │   │          │
+│                    │   │ Provider Tools  │   │          │
+│                    │   │ Help System     │   │          │
+│                    │   └─────────────────┘   │          │
+│                    └─────────────────────────┘          │
+│                                 │                       │
+│                    ┌────────────▼────────────┐          │
+│                    │   PROVIDER FACTORY      │          │
+│                    │  ┌─────────────────┐    │          │
+│                    │  │ Ollama          │    │          │
+│                    │  │ LM Studio       │    │          │
+│                    │  │ vLLM            │    │          │
+│                    │  │ OpenAI          │    │          │
+│                    │  │ Anthropic       │    │          │
+│                    │  │ Gemini          │    │          │
+│                    │  │ Hugging Face    │    │          │
+│                    │  └─────────────────┘    │          │
+│                    └─────────────────────────┘          │
+│                                 │                       │
+│                    ┌────────────▼────────────┐          │
+│                    │   MODEL SERVING LAYER   │          │
+│                    │  ┌─────────────────┐    │          │
+│                    │  │ Local Models    │    │          │
+│                    │  │ Cloud APIs      │    │          │
+│                    │  │ GPU Management  │    │          │
+│                    │  │ Memory Opt.     │    │          │
+│                    │  └─────────────────┘    │          │
+│                    └─────────────────────────┘          │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                          INFRASTRUCTURE LAYER                                  │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────┐  │
+│  │ Docker/K8s     │  │ GPU Resources    │  │ Model Storage   │  │ Monitoring  │  │
+│  │ Orchestration  │  │ (RTX 4090)      │  │ (Local/Cloud)    │  │ Stack        │  │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘  └─────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 3.2 Portmanteau Architecture Pattern
@@ -165,7 +165,7 @@ The **Portmanteau Pattern** is a SOTA (State-of-the-Art) design that consolidate
 - **Tool Count Reduction**: 31 tools instead of 100+ individual operations
 - **Improved UX**: Logical grouping of related functionality
 - **Better Discoverability**: Clear categorization and consistent naming
-- **SOTA Compliance**: FastMCP 3.1.1++ recommended architecture
+- **SOTA Compliance**: FastMCP 2.13+ recommended architecture
 - **Maintainability**: Centralized operation logic per domain
 
 #### Portmanteau Categories:
@@ -180,9 +180,9 @@ The **Portmanteau Pattern** is a SOTA (State-of-the-Art) design that consolidate
 
 #### Provider Factory Pattern:
 ```
-Provider Factory â†’ Provider Instances â†’ Portmanteau Tools
-       â†“               â†“                      â†“
-Configuration â†’ Authentication â†’ Operation Dispatch
+Provider Factory → Provider Instances → Portmanteau Tools
+       ↓               ↓                      ↓
+Configuration → Authentication → Operation Dispatch
 ```
 
 #### Supported Provider Matrix:
@@ -217,34 +217,34 @@ Configuration â†’ Authentication â†’ Operation Dispatch
 
 #### RTX 4090 Optimization Stack:
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                    GPU MEMORY MANAGEMENT                     â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚
-â”‚  â”‚ Memory Monitor  â”‚  â”‚ Fragmentation  â”‚  â”‚ Thermal     â”‚   â”‚
-â”‚  â”‚ & Tracking     â”‚  â”‚ Prevention      â”‚  â”‚ Management  â”‚   â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚
-â”‚           â”‚                       â”‚                       â”‚   â”‚
-â”‚           â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”˜
-â”‚                                   â”‚                       â”‚
-â”‚                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”          â”‚
-â”‚                    â”‚   INTELLIGENT CLEANUP       â”‚          â”‚
-â”‚                    â”‚   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚          â”‚
-â”‚                    â”‚   â”‚ Defragmentation     â”‚   â”‚          â”‚
-â”‚                    â”‚   â”‚ Memory Optimization â”‚   â”‚          â”‚
-â”‚                    â”‚   â”‚ Thermal Control     â”‚   â”‚          â”‚
-â”‚                    â”‚   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚          â”‚
-â”‚                    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜          â”‚
-â”‚                                   â”‚                          â”‚
-â”‚                    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”          â”‚
-â”‚                    â”‚      RTX 4090 SPECIFIC      â”‚          â”‚
-â”‚                    â”‚   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚          â”‚
-â”‚                    â”‚   â”‚ Fragmentation Algo  â”‚   â”‚          â”‚
-â”‚                    â”‚   â”‚ Memory Layout Opt   â”‚   â”‚          â”‚
-â”‚                    â”‚   â”‚ Thermal Profiles    â”‚   â”‚          â”‚
-â”‚                    â”‚   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚          â”‚
-â”‚                    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜          â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+┌─────────────────────────────────────────────────────────────┐
+│                    GPU MEMORY MANAGEMENT                     │
+├─────────────────────────────────────────────────────────────┤
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────┐   │
+│  │ Memory Monitor  │  │ Fragmentation  │  │ Thermal     │   │
+│  │ & Tracking     │  │ Prevention      │  │ Management  │   │
+│  └─────────────────┘  └─────────────────┘  └─────────────┘   │
+│           │                       │                       │   │
+│           └───────────────────────┼───────────────────────┼───┘
+│                                   │                       │
+│                    ┌──────────────▼──────────────┐          │
+│                    │   INTELLIGENT CLEANUP       │          │
+│                    │   ┌─────────────────────┐   │          │
+│                    │   │ Defragmentation     │   │          │
+│                    │   │ Memory Optimization │   │          │
+│                    │   │ Thermal Control     │   │          │
+│                    │   └─────────────────────┘   │          │
+│                    └─────────────────────────────┘          │
+│                                   │                          │
+│                    ┌──────────────▼──────────────┐          │
+│                    │      RTX 4090 SPECIFIC      │          │
+│                    │   ┌─────────────────────┐   │          │
+│                    │   │ Fragmentation Algo  │   │          │
+│                    │   │ Memory Layout Opt   │   │          │
+│                    │   │ Thermal Profiles    │   │          │
+│                    │   └─────────────────────┘   │          │
+│                    └─────────────────────────────┘          │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 #### Key Optimizations:
@@ -258,13 +258,13 @@ Configuration â†’ Authentication â†’ Operation Dispatch
 #### 5-Level Documentation Hierarchy:
 ```
 Level 0: Tool Names Only
-    â†“ Progressive Disclosure
+    ↓ Progressive Disclosure
 Level 1: Basic Descriptions + Parameters
-    â†“ Add Usage Examples
+    ↓ Add Usage Examples
 Level 2: Workflows + Usage Patterns + Examples
-    â†“ Add Performance & Integration
+    ↓ Add Performance & Integration
 Level 3: Advanced Config + Troubleshooting + Common Issues
-    â†“ Expert Technical Details
+    ↓ Expert Technical Details
 Level 4: Architecture Notes + Advanced Troubleshooting + Deep Technical
 ```
 
@@ -384,7 +384,7 @@ LLM_MCP_LOG_LEVEL=INFO
 | Component | Requirement | Purpose |
 |-----------|-------------|---------|
 | **Python** | 3.10+ | Runtime environment |
-| **FastMCP** | 3.1.1+.1+ | MCP framework |
+| **FastMCP** | 2.14.1+ | MCP framework |
 | **PyTorch** | 2.4.0+ | ML framework |
 | **Transformers** | 4.44.0+ | Model loading |
 | **GPU** | RTX 30/40 series | Model acceleration |
@@ -541,47 +541,47 @@ for prompt in prompts:
 
 ## 6. Roadmap & Development Phases
 
-### âœ… **Completed Phases**
+### ✅ **Completed Phases**
 
 #### Phase 1: Core MCP Foundation (Q3-Q4 2024)
-- âœ… FastMCP 3.1.1++ server implementation
-- âœ… Dual interface architecture (Stdio + HTTP/WebSocket)
-- âœ… Multi-provider support (Ollama, LM Studio, vLLM)
-- âœ… Basic portmanteau tool architecture
-- âœ… GPU management and monitoring
-- âœ… Docker containerization
+- ✅ FastMCP 2.12+ server implementation
+- ✅ Dual interface architecture (Stdio + HTTP/WebSocket)
+- ✅ Multi-provider support (Ollama, LM Studio, vLLM)
+- ✅ Basic portmanteau tool architecture
+- ✅ GPU management and monitoring
+- ✅ Docker containerization
 
 #### Phase 2: Enterprise Features & Cloud Integration (Q1 2025)
-- âœ… **31 specialized tools** (up from 20)
-- âœ… **10 portmanteau tools** with consolidated operations
-- âœ… **Google Cloud integration** (Gemini 3 Flash, Vertex AI)
-- âœ… **Hugging Face gated models** (FLUX, Black Forest Labs)
-- âœ… **Extensive multilevel help system** (10 help tools)
-- âœ… **Advanced GPU optimization** (RTX 4090 fragmentation prevention)
-- âœ… **Environment variable configuration** for all providers
+- ✅ **31 specialized tools** (up from 20)
+- ✅ **10 portmanteau tools** with consolidated operations
+- ✅ **Google Cloud integration** (Gemini 3 Flash, Vertex AI)
+- ✅ **Hugging Face gated models** (FLUX, Black Forest Labs)
+- ✅ **Extensive multilevel help system** (10 help tools)
+- ✅ **Advanced GPU optimization** (RTX 4090 fragmentation prevention)
+- ✅ **Environment variable configuration** for all providers
 
 #### Phase 3: Advanced Features & Optimization (Q2-Q3 2025)
-- âœ… **SOTA compliance** (FastMCP 3.1.1+.1+)
-- âœ… **Structured logging** with Unicode safety
-- âœ… **Performance monitoring** and optimization
-- âœ… **MCPB packaging** for Claude Desktop
-- âœ… **Comprehensive documentation** and examples
+- ✅ **SOTA compliance** (FastMCP 2.14.1+)
+- ✅ **Structured logging** with Unicode safety
+- ✅ **Performance monitoring** and optimization
+- ✅ **MCPB packaging** for Claude Desktop
+- ✅ **Comprehensive documentation** and examples
 
-### ðŸš§ **Current Development (Q4 2025)**
+### 🚧 **Current Development (Q4 2025)**
 
 #### Performance & Scalability
-- ðŸ”„ Multi-GPU support optimization
-- ðŸ”„ Advanced caching strategies
-- ðŸ”„ Memory management improvements
-- ðŸ”„ Streaming response optimization
+- 🔄 Multi-GPU support optimization
+- 🔄 Advanced caching strategies
+- 🔄 Memory management improvements
+- 🔄 Streaming response optimization
 
 #### Enterprise Integration
-- ðŸ”„ Kubernetes operator development
-- ðŸ”„ Advanced monitoring stack
-- ðŸ”„ API rate limiting and quotas
-- ðŸ”„ Audit logging and compliance
+- 🔄 Kubernetes operator development
+- 🔄 Advanced monitoring stack
+- 🔄 API rate limiting and quotas
+- 🔄 Audit logging and compliance
 
-### ðŸ”® **Future Roadmap (2026)**
+### 🔮 **Future Roadmap (2026)**
 
 #### Phase 4: Production Scaling (Q1-Q2 2026)
 - [ ] Auto-scaling with Kubernetes HPA
@@ -610,27 +610,27 @@ for prompt in prompts:
 
 | Component | Version | Status | Support Level |
 |-----------|---------|--------|----------------|
-| **FastMCP** | 3.1.1+.1+ | âœ… Current | Full Support |
-| **Python** | 3.10+ | âœ… LTS | Full Support |
-| **PyTorch** | 2.4.0+ | âœ… Current | Full Support |
-| **CUDA** | 11.8+ | âœ… Current | Full Support |
-| **Docker** | 24.0+ | âœ… Current | Full Support |
-| **Kubernetes** | 1.27+ | âœ… Current | Enterprise |
+| **FastMCP** | 2.14.1+ | ✅ Current | Full Support |
+| **Python** | 3.10+ | ✅ LTS | Full Support |
+| **PyTorch** | 2.4.0+ | ✅ Current | Full Support |
+| **CUDA** | 11.8+ | ✅ Current | Full Support |
+| **Docker** | 24.0+ | ✅ Current | Full Support |
+| **Kubernetes** | 1.27+ | ✅ Current | Enterprise |
 
 ### 7.2 Security & Compliance
 
 #### Security Features:
-- âœ… Process-level isolation for MCP interface
-- âœ… Environment variable credential management
-- âœ… No persistent credential storage
-- âœ… Secure API key handling
-- âœ… Input validation and sanitization
+- ✅ Process-level isolation for MCP interface
+- ✅ Environment variable credential management
+- ✅ No persistent credential storage
+- ✅ Secure API key handling
+- ✅ Input validation and sanitization
 
 #### Compliance:
-- âœ… GDPR compliance for data handling
-- âœ… SOC 2 compatible logging
-- âœ… Enterprise-grade authentication patterns
-- âœ… Audit trail capabilities
+- ✅ GDPR compliance for data handling
+- ✅ SOC 2 compatible logging
+- ✅ Enterprise-grade authentication patterns
+- ✅ Audit trail capabilities
 
 ### 7.3 Performance Benchmarks
 
@@ -650,7 +650,7 @@ for prompt in prompts:
 ### 8.1 Development Guidelines
 
 #### Code Standards:
-- **FastMCP 3.1.1+.1+** compliance required
+- **FastMCP 2.14.1+** compliance required
 - **Portmanteau pattern** for tool consolidation
 - **Type hints** and comprehensive documentation
 - **Async/await** patterns for performance
@@ -717,7 +717,6 @@ For enterprise support, custom integrations, or consulting services:
 
 ---
 
-**Built with â¤ï¸ following SOTA MCP standards and enterprise best practices**
+**Built with ❤️ following SOTA MCP standards and enterprise best practices**
 
 *Last Updated: January 2026* | *Version: 1.0.0* | *31 Tools, 10 Providers, Production Ready*
-

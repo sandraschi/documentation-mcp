@@ -1,7 +1,7 @@
 # FastMCP Skills & Prompts: Expert Guidance
 
 **Last Updated:** 2026-04-22
-**Standard:** FastMCP 3.2.0 (GA)
+**Standard:** FastMCP 3.4.2 (originally written for 3.2.0 — prompts/skills API unchanged)
 
 FastMCP 3.2 provides standardized mechanisms for delivering **Expert Guidance** to AI agents. By decoupling instructions from the client, we ensure consistent behavior across Claude Desktop, Cursor, and custom orchestrators.
 

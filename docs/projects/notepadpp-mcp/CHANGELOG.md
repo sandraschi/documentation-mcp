@@ -1,4 +1,4 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Industrial Startup Script**: Root `start.ps1` with `-Headless`, `-BackendOnly`, and `-NoBrowser` support.
+- **Improved Port Handling**: Automatic TCP squatter termination and health-check polling.
 - Plugin ecosystem integration tools (4 new tools)
 - Display fix tools for invisible text and theme issues (2 new tools)
 - `discover_plugins()` - Discover available plugins from official Notepad++ Plugin List
@@ -64,8 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Features
 - Windows-specific Notepad++ automation
-- FastMCP 3.1.1+ compliance
+- FastMCP 2.12 compliance
 - Comprehensive tool set for file manipulation
 - Type checking and code quality tools
 - Pre-commit hooks configuration
-

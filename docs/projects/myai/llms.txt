@@ -1,0 +1,30 @@
+# myai
+> The Tefal OptiGrill is a smart indoor electric grill designed to deliver perfect grilling results for a wide variety of foods, from steaks and burgers to fish, vegetables, and sandwiches. Using advanc...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](docs\Hardware\Miscellaneous\Tefal Optigrill\README.md): The Tefal OptiGrill is a smart indoor electric grill designed to deliver perfect grilling results fo...
+- [Readme](docs\Hardware\Miscellaneous\Netatmo Weather Station\README.md): The Netatmo Smart Home Weather Station is a connected device that provides real-time monitoring of i...
+- [Readme](docs\AI\local_ai\README.md): This document provides an in-depth analysis of the most relevant local AI model providers as of 2025...
+- [Readme](docs\Flows\research\2025-05-01_trump-muskox-duo-infernale\README.md): This research flow explores the hypothesis that Donald Trump and "Elon Muskox" could act as a destru...
+- [Readme](docs\Hardware\Miscellaneous\TV Boxes\README.md): Android TV Boxes are compact set-top devices that run the Android operating system, transforming any...
+- [Readme Universal Scripts](docs\README_Universal_Scripts.md): These scripts prevent and fix Basic Memory sync performance disasters across all your repositories.
+- [Readme](docs\Hardware\Cameras\Tapo Cameras\README.md): TP-Link Tapo Cameras are a family of affordable, high-quality smart security cameras designed for ho...
+- [Ms Ai Toolkit Vscode](docs\Flows\research\2025-05-05_ms-ai-toolkit-vscode\ms-ai-toolkit-vscode.html.README.txt): Documentation for ms-ai-toolkit-vscode.html.README
+- [Readme](docs\Subprojects\Homecontrol\README.md): The HomeControl Dashboard is a unified web-based interface for monitoring and controlling smart devi...
+- [Readme](docs\Flows\research\2025-05-01_fungal-pathogens-extinction\README.md): This research flow investigates the rise of fungal pathogens affecting plants and animals, with exam...
+
+## Examples
+- [Examples](examples/): Example code and implementations
+- [Calibre Fork Pr Sample](docs\Subprojects\calibre_fork_pr_sample.md): Sample usage and code samples
+
+## Configuration
+- [Pyproject](pyproject.toml): Python project configuration and dependencies
+- [Package](package.json): Node.js project configuration and dependencies
+- [](.env): Environment variables and configuration
+- [Config](.git\config): Application configuration files
+
+## Optional
+- [Changelog](docs\CHANGELOG.md): Project changelog information
+- [Contributing](docs\CONTRIBUTING.md): Project contributing information

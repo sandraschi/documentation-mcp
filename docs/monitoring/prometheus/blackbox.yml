@@ -1,0 +1,14 @@
+modules:
+  http_2xx:
+    prober: http
+    timeout: 8s
+    http:
+      valid_status_codes: [200, 204]
+      preferred_ip_protocol: ip4
+
+  http_post_2xx:
+    prober: http
+    timeout: 8s
+    http:
+      method: POST
+      valid_status_codes: [200, 204]

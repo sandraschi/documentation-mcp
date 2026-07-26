@@ -1,150 +1,177 @@
 # MCP Federation Hub
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/)
-[![Node.js](https://img.shields.io/badge/node.js-20+-green.svg)](https://nodejs.org/)
-[![FastMCP](https://img.shields.io/badge/FastMCP-3.0.2-blue.svg)](https://github.com/PrefectHQ/fastmcp)
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://biomejs.dev"><img src="https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat-square&logo=biome&logoColor=white" alt="Biome"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-**Unified SOTA orchestration layer for MCP (Model Context Protocol) server ecosystems**
 
-The MCP Federation Hub provides a centralized way to discover, manage, and interact with multiple MCP servers. It federates existing MCP server repositories, providing unified dashboards, intelligence telemetry, and a secure playground for tool execution.
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-## 🏗️ Architecture
+A local orchestration layer for managing 78+ MCP servers across 14 categories. Provides a unified dashboard, health monitoring, tool execution, supervisor auto-restart, and hub-to-hub mesh peering.
 
-```
-MCP Federation Hub
-├── 📊 Unified Dashboard (React/Vite) - Port 10701
-│   ├── Apps Hub & Launcher
-│   ├── Security & Bastion Monitoring
-│   ├── Intelligence & Hardware Telemetry
-│   ├── Tools Playground
-│   └── SOTA Premium UI
-│
-├── 🔀 Federation Bridge (FastAPI/FastMCP 3.0) - Port 10700
-│   ├── Intelligent request routing
-│   ├── Standardized health monitoring
-│   ├── Sampling & orchestration
-│   └── App launching integration
-│
-└── 📦 MCPB Package Standard
-    ├── manifest.json
-    ├── mcpb.json
-    └── prompts/
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.13+ (managed by `uv`)
-- Node.js 20+
-- [uv](https://github.com/astral-sh/uv) installed
-
-### Installation
-
-```powershell
-# Clone the federation hub
-git clone https://github.com/sandraschi/mcp-federation-hub.git
-cd mcp-federation-hub
-
-# Initialize Backend (FastMCP 3.0)
-cd bridge
-uv sync
-uv run main.py
-
-# Initialize Dashboard (SOTA UI)
-cd ../webapp
-npm install
-npm run dev
-```
-
-### Access Points
-- **Unified Dashboard**: http://localhost:10701
-- **Federation API**: http://localhost:10700
-- **Redoc Documentation**: http://localhost:10700/redoc
-
-## ✨ SOTA Premium Interface
-
-The Federation Hub has been completely redesigned with a **Neon Slate** visual identity, optimized for high-performance orchestration.
-
-- **Immersive Glassmorphism**: High-contrast cards with `backdrop-blur-2xl` and subtle glow effects.
-- **Advanced Telemetry**: Real-time data visualization using `recharts` for GPU load and fleet latency.
-- **Retractable Navigation**: Sidebar with icon-only mode and smooth width transitions.
-- **Neural Audio Handshake**: Integrated **Lyria 3** synaptic audio sync via procedural Web Audio synthesis for interactive feedback.
-- **Fluid Motion**: Page-level entry/exit animations and micro-interactions via `framer-motion`.
-
-## 🛠️ Feature Suite (10-Page Suite)
-
-### 📊 Dashboard
-High-density telemetry overview focusing on the health of the entire federation.
-
-### 🚀 Apps Hub
-Real-time fleet discovery and application launcher. Directly triggers `start.bat` for registered webapps.
-
-### 🛡️ Security Command
-Comprehensive monitoring of authentication logs, threat levels, and secure bastion status.
-
-### 🎶 Neural Audio Staging
-Real-time "Lyria 3" audio synthesis engine staging interactive jingles for synaptic handshakes.
-
-### 🧠 Intelligence Hub
-Hardware-level telemetry focusing on RTX 4090 performance and LLM inference thread monitoring. Includes experimental **Nano Banana** cognitive mapping.
-
-### 🧪 Tools Lab
-Premium interactive environment to exercise MCP tools with live schema introspection and result visualization.
-
-### 🌐 Fleet Servers
-Manage and monitor federated MCP nodes across the global substrate with tunnel controls.
-
-### 🛸 Phase 5/6 Orchestration
-Escalated command level with active **FTL Data Bus** and **Mind Uploading** (84.2% neural sync).
-
-### 📋 Hub Health
-Global node health overview with resource distribution charts and uptime registries.
-
-### 🗺️ Worlds
-Immersive environment simulation hub for managing virtual orchestration spaces.
-
-## 🛠️ Project Structure
+## Architecture
 
 ```
 mcp-federation-hub/
-├── bridge/                      # Federation bridge (FastAPI + FastMCP 3.0)
-│   ├── app/                    # Application source
-│   ├── pyproject.toml          # Uv dependency management
-│   └── .env                    # Environment configuration
-│
-├── webapp/                      # Unified dashboard (React + Vite)
-│   ├── src/                    # Premium UI components & pages
-│   ├── tsconfig.json           # Path alias configuration
-│   └── tailwind.config.ts      # Premium design system
-│
-├── mcpb/                        # Standardized MCPB packaging
-│   ├── manifest.json           # Package metadata
-│   ├── mcpb.json               # Build configuration
-│   └── prompts/                # Shared prompt library
-│
-└── federation-config.json       # Authoritative server registry
+ bridge/          FastAPI + FastMCP 3.0  port 10857
+    server registry (federation-config.json)
+    health polling for all registered servers
+    tool call routing (local MCP + remote hub peers)
+    peer mesh (HTTPS + Bearer token, invite-link based)
+    webapp launcher (start.bat / start.ps1)
+
+ webapp/          React + Vite dashboard  port 10856
+     Dashboard    federation overview, quick links
+     Servers      MCP server list and status
+     Peers        hub-to-hub mesh management
+     Health       per-server health polling
+     Tools        MCP tool playground (call tools directly)
+     Apps         webapp registry and launcher
+     Config       federation-config.json viewer/editor
+     Categories   server groupings
+     Local AI     GPU telemetry + Ollama/LM Studio model list
+     Security     peer token status, session log, intrusion log
+     Logs         bridge process log viewer
 ```
 
-## 🧪 Testing & Validation
+## Quick Start
 
-```bash
-# Backend Quality (Ruff)
+```powershell
+git clone https://github.com/sandraschi/mcp-federation-hub
+cd mcp-federation-hub
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+### Prerequisites
+- Python 3.13+ with [uv](https://github.com/astral-sh/uv)
+- Node.js 20+
+### Run
+Clone the repo first, then from the **repository root**:
+git clone https://github.com/sandraschi/mcp-federation-hub.git
+Set-Location mcp-federation-hub
+# Bridge (port 10857)
 cd bridge
-uv run ruff check .
-
-# Frontend Build
+uv sync
+uv run uvicorn app.main:app --host 0.0.0.0 --port 10857 --reload
+# Dashboard (port 10856)
 cd webapp
-npm run build
+npm install
+npm run dev
+Or use the included `start.ps1` / `start.bat` in each folder.
+### Access
+- Dashboard: http://localhost:10856
+- Bridge API: http://localhost:10857
+- API docs: http://localhost:10857/redoc
+
+## Configuration
+
+Edit `federation-config.json` in the repo root to register MCP servers:
+
+```json
+{
+  "federation": {
+    "name": "My Hub",
+    "ports": { "bridge": 10857, "dashboard": 10856 }
+  },
+  "servers": {
+    "my-server": {
+      "id": "my-server",
+      "name": "My MCP Server",
+      "category": "tools",
+      "tier": "local",
+      "mcp_endpoint": "http://localhost:8100/mcp",
+      "health_endpoint": "http://localhost:8100/health"
+    }
+  },
+  "categories": {
+    "tools": ["my-server"]
+  }
+}
 ```
 
-## 📚 Documentation
-- [PRD.md](PRD.md) - Product Requirements & Vision
-- [CHANGELOG.md](CHANGELOG.md) - Version history and recent upgrades
-- [AGENT_PROTOCOLS.md](file:///D:/Dev/repos/mcp-central-docs/standards/AGENT_PROTOCOLS.md) - Autoritative SOTA Protocols
+The bridge reloads this on restart. The dashboard Config page shows the live server list from the bridge.
 
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Peer Mesh
 
----
-**Federating the future of MCP ecosystems with SOTA intelligence.** 🏠🤖✨
+Hub-to-hub peering lets you connect multiple federation hub instances:
+
+```
+GET  /api/v1/peers/me           get this hub's invite link
+POST /api/v1/peers              add a remote hub by URL + token
+GET  /api/v1/peers              list peers with live status
+DELETE /api/v1/peers/{id}       remove a peer
+POST /api/v1/peers/invoke       invoke a tool on this hub (requires Bearer token)
+```
+
+Use HTTPS for encrypted hub-to-hub links. Set `PEER_TOKEN` env var to require authentication for incoming peer invocations.
+
+## API Reference
+
+See [docs/API.md](docs/API.md) or http://localhost:10857/redoc for full endpoint docs.
+
+Key endpoints:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/health` | Bridge health |
+| GET | `/api/v1/servers` | All registered servers |
+| GET | `/api/v1/servers/{id}/health` | Health of one server |
+| GET | `/api/v1/federation/health` | Health of all servers |
+| POST | `/api/v1/tools/call` | Route a tool call |
+| GET | `/api/v1/apps` | Registered webapps |
+| POST | `/api/v1/apps/{id}/launch` | Launch a webapp |
+| GET | `/api/v1/ai/providers` | Available AI providers |
+
+## Project Structure
+
+```
+bridge/
+  app/
+    main.py        FastAPI app, routes, FederationManager
+    peers.py       peer mesh logic
+    ai_service.py  AI-powered routing (optional)
+    sampling.py    FastMCP sampling integration
+
+webapp/
+  src/
+    pages/         one file per page
+    components/    layout (Header, Sidebar)
+    services/      api.ts (bridge client)
+
+mcpb/              MCPB packaging metadata
+docs/              Architecture, API, Peers reference
+federation-config.json   server registry (edit this)
+```
+
+## Development
+
+```powershell
+# Backend lint
+cd bridge; uv run ruff check .
+
+# Frontend build
+cd webapp; npm run build
+```
+
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
+## License
+MIT

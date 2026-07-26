@@ -23,9 +23,7 @@ class DocsConfig(BaseModel):
     DOCS_INTERNAL: Path = Field(default_factory=lambda: _repo_root() / "docs")
 
     # Optional federated sibling (off unless DOCS_FEDERATE_MEMORY=1)
-    ADVANCED_MEMORY_PATH: Path = Field(
-        default_factory=lambda: _repo_root().parent / "advanced-memory-mcp"
-    )
+    ADVANCED_MEMORY_PATH: Path = Field(default_factory=lambda: _repo_root().parent / "advanced-memory-mcp")
 
     # Optional extra markdown roots from DOCS_EXTRA_PATHS (comma-separated absolute paths)
     EXTRA_PATHS: list[Path] = Field(default_factory=list)

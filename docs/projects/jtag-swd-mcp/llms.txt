@@ -1,0 +1,4 @@
+# jtag-swd-mcp
+
+Tools: jtag_device, jtag_run, jtag_help
+Ports: 11009/11019

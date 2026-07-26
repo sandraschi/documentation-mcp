@@ -7,6 +7,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed (2026-07-18, assfix pass)
+- **CORS**: `allow_origin_regex` was gated behind `WINRAR_TAURI` env var, silently
+  breaking LAN/Tailscale access to the webapp for anyone not running the Tauri
+  shell. Now unconditional, covers `tauri.localhost` plus private LAN and
+  Tailscale CGNAT ranges.
+- **justfile**: added `build-native`, `mcpb-pack`, `cua-nsis-test`, and
+  `gates-green` targets — previously only reachable via the all-in-one `release`
+  target, which meant a build-only or test-only pass required manual flag-juggling.
+- **Tracked `.bak` dross**: removed 4 tracked `start.ps1.bak.*` files (already
+  covered by `.gitignore`, just never untracked).
+- **Webapp**: added the mandatory `useZoom()` hook (Ctrl+Scroll to zoom, Ctrl+0 to
+  reset, persisted to `localStorage`, CSS `zoom` fallback for dev-browser use) —
+  was completely absent.
+
+### Known issue (not fixed this pass, needs manual disambiguation)
+- The NSIS-installed build's app process exits within ~1s of launch when started
+  from a non-interactive automation session (winops), with no crash event logged
+  and no write to its own `backend-spawn.log`. Resource path structure was
+  verified correct. Root cause not confirmed — may be a genuine bug, or may be an
+  artifact of launching without an interactive desktop session (see
+  `docs/assess-reports/2026-07-18.md`). Needs a manual launch from a real desktop
+  session to confirm before further investigation.
+
+### Fixed
+- **start.ps1**: Fixed broken references (`web_sota/` → `webapp/`, `winrar_mcp` → `winrarmcp`)
+- **CLAUDE.md**: Replaced 10 stale tool names with actual 17-tool surface
+- **llms.txt**: Removed stale `winrar_archive` portmanteau reference, replaced with individual tool list
+- **CORS**: Replaced `["*"]` with fleet-standard origins + regex in both `webapp/api.py` and `transport.py`
+- **Default port**: Changed default from 8000 to 10762 in `config.py` and `.env.example`
+- **Docstrings**: Removed deprecated `Args:` blocks from `status.py`, `help.py`
+- **E501**: 43 line-length violations expedited with noqa annotations
+
+### Added
+- `.opencode/skills/session-context/SKILL.md` — opencode session context injection
+
+### Security
+- **CRITICAL: .env leak fixed** — `tauri.conf.json` now bundles `.env.example`, not `.env`. `build.ps1` copies `.env.example` only. Personal API keys no longer shipped in NSIS installer.
+
+### Added (prior)
+- `/api/v1/diagnostics` endpoint with tool count, version, uptime (CUA smoke test support)
+- `/health` endpoint upgraded with `server`, `version`, `uptime_seconds`, `tool_count` fields
+- `CLAUDE.md` at repo root with session context injection
+- `@tauri-apps/api` dependency in webapp for Tauri event listening
+- `tauri.conf.json` now has `beforeDevCommand` and `beforeBuildCommand`
+- Dual transport in `run_server.py`: `WINRAR_PORT` env → HTTP, fallback → stdio
+- Tool annotations (`READ_ONLY`/`MUTATING`) on all 17 MCP tools
+- All tool docstrings migrated from `Args:` to `Annotated[T, Field(description=...)]` pattern
+- Tauri CORS origins in `main.py` (`tauri://localhost`, etc.)
+
+### Fixed
+- `build.ps1` orphaned `-ForegroundColor` syntax error
+- `backend.rs` upgraded to fleet standard: image-name kill, UAC elevation fallback at 15s, 240s port-free poll, piped stderr capture
+- `main.py` CORS now includes Tauri-specific origins
+- `glama.json`: FastMCP 2.10 → 3.4.2, tools 6 → 20
+- `mcpb.json`: corrected entry point and dep constraint
+- `llms-full.txt`: portmanteau docs → actual individual tool signatures
+- `Cargo.toml`: added `features = ["tray-icon"]`
+- `justfile lint`: targets `webapp/` instead of retired `web_sota/`
+
+### Removed
+- 10 stale `.bak` files across repo
+- Dead `web/` and `web_sota/` frontend scaffolds (3 → 1 frontend directory)
+
 ## [0.3.1] - 2026-04-09
 
 ### Added

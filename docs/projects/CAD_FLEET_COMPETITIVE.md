@@ -83,4 +83,4 @@ No commercial MCP competitor offers this **2D plan → 3D CFD → social VR / ro
 - [freecad-mcp README](file:///D:/Dev/repos/freecad-mcp/README.md)
 - [qcad-mcp README](file:///D:/Dev/repos/qcad-mcp/README.md)
 - [Digital twin pipeline](file:///D:/Dev/repos/mcp-central-docs/docs/robotics/DIGITAL_TWIN_PIPELINE.md)
-- [tauri_godot_sota.md](file:///D:/Dev/repos/mcp-central-docs/standards/rules/tauri_godot_sota.md)
+- [tauri_nsis_building.md](file:///D:/Dev/repos/mcp-central-docs/standards/rules/tauri_nsis_building.md)

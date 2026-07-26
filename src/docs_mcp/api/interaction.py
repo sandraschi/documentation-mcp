@@ -14,6 +14,7 @@ logger = logging.getLogger("docs_mcp.api.interaction")
 router = APIRouter(prefix="/api")
 _SERVER_START = time.time()
 
+
 @router.get("/v1/diagnostics")
 async def api_v1_diagnostics(request: Request):
     """Diagnostics endpoint for CUA-NSIS smoke testing."""
@@ -35,11 +36,13 @@ async def api_v1_diagnostics(request: Request):
         "errors": [],
     }
 
+
 @router.get("/status")
 async def api_status():
     """Industrial status endpoint for health monitoring."""
     try:
         from docs_mcp.backend.apps_catalog import APPS_CATALOG
+
         store = get_store()
         memory_store = get_memory_store()
         settings = settings_store.load_settings()
@@ -87,14 +90,15 @@ async def api_health(request: Request = None):
         "tool_count": tool_count,
         "providers": {
             "vector_db": {
-            "status": "ok" if meta.get("exists") else "empty",
-            "chunks": meta.get("row_count", 0),
-            "sources": len(sources),
-        },
+                "status": "ok" if meta.get("exists") else "empty",
+                "chunks": meta.get("row_count", 0),
+                "sources": len(sources),
+            },
             "memory_store": {"status": "ok" if hasattr(memory_store, "get_stats") else "unavailable"},
             "llm": {"provider": settings_store.load_settings().get("provider", "none")},
         },
     }
+
 
 @router.post("/chat")
 async def api_chat(request: Request):
@@ -128,15 +132,17 @@ async def api_chat(request: Request):
             settings=s,
         ):
             yield f"data: {chunk}\n\n"
-        yield "data: {\"type\":\"stream_end\"}\n\n"
+        yield 'data: {"type":"stream_end"}\n\n'
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")
+
 
 @router.get("/auto-discover")
 async def api_auto_discover():
     """Scan standard ports for running LLM engines."""
     result = await auto_discover()
     return result
+
 
 @router.get("/logs")
 async def api_logs(limit: int = 100):
@@ -156,6 +162,7 @@ async def api_logs(limit: int = 100):
         logger.error(f"Error serving logs: {e}")
         raise HTTPException(status_code=500, detail=str(e)) from e
 
+
 @router.get("/tools")
 async def api_tools(request: Request):
     """List all registered MCP tools."""
@@ -163,15 +170,19 @@ async def api_tools(request: Request):
         mcp = request.app.state.mcp
         tools = await mcp.list_tools()
         return {
-            "tools": [{
-                "name": t.name,
-                "description": t.description or "",
-                "parameters": t.parameters.get("properties", {}) if t.parameters else {}
-            } for t in tools]
+            "tools": [
+                {
+                    "name": t.name,
+                    "description": t.description or "",
+                    "parameters": t.parameters.get("properties", {}) if t.parameters else {},
+                }
+                for t in tools
+            ]
         }
     except Exception as e:
         logger.error(f"Error listing tools: {e}")
         raise HTTPException(status_code=500, detail=str(e)) from e
+
 
 @router.post("/execute")
 async def api_execute_tool(request: Request):

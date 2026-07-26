@@ -1,220 +1,146 @@
-# teleoperator-mcp — fleet index
+# Teleoperator MCP
 
+WebXR teleoperation gateway for the MCP fleet: stream VR pose from **Pico 4** or **Meta Quest** to Goliath, drive fleet robots (Boomy first), and evolve toward **dual-mode telesupervision** (human teleop ↔ autonomous policy with human veto). Video return via LiveKit (v1.5).
 
+<p align="center">
+  <a href="https://github.com/sandraschi/teleoperator-mcp/actions"><img src="https://img.shields.io/badge/CI-GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white" alt="CI"></a>
+  <a href="https://github.com/jlowin/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP 3.2"></a>
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.12+"></a>
+  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-6-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 6"></a>
+  <a href="https://threejs.org/"><img src="https://img.shields.io/badge/Three.js-WebXR-000000?style=flat-square&logo=three.js&logoColor=white" alt="Three.js WebXR"></a>
+  <a href="https://tailscale.com/"><img src="https://img.shields.io/badge/Tailscale-Serve-242424?style=flat-square&logo=tailscale&logoColor=white" alt="Tailscale Serve"></a>
+  <img src="https://img.shields.io/badge/status-alpha-f59e0b?style=flat-square" alt="status alpha">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT License"></a>
+</p>
 
-**Source repo:** `D:\Dev\repos\teleoperator-mcp`  
-
-**Status:** Active · Milestone 1 (Boomy + Pico/Quest WebXR) · **Virtual twins** (vBoomy / Resonite) in progress  
-
-**Role:** First fleet project that makes the Pico 4 worth powering on — VR teleop to Yahboom Raspbot v2 **or Resonite vBot** via browser, no native headset app.
-
-
-
-**Last updated:** 2026-06-04
-
-
-
----
-
-
-
-## One-line summary
-
-
-
-Thin gateway: **WebXR webapp on the headset** (pose @ 30 Hz over WebSocket) + **MCP on Goliath** (session config, status — not on the hot path) + **yahboom-mcp** downstream to Boomy + **LiveKit** video return (separate pipe, port 15580).
-
-
+**New here?** Read the **[glossary](docs/GLOSSARY.md)** for LeRobot, VLA, arbiter, and other terms used in the docs.
 
 ---
 
+## What this is
 
+Two surfaces, two latency classes, one gateway — plus a **separate video pipe** (LiveKit):
 
-## Ports (Goliath)
+| Surface | Role | Latency |
+|---------|------|---------|
+| **Webapp (WebXR)** | VR client on Pico / Meta — pose, HUD, video | ~30 Hz WebSocket + ~15 FPS WebRTC |
+| **MCP server** | Supervisor tools — status, configure, estop, mode, LiveKit publisher | seconds |
+| **Robot adapter** | Maps standard commands to yahboom-mcp REST (Boomy today) | same hot path |
 
+**Confused by ports?** Start with **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** (control vs video explained simply).
 
+Pose **never** traverses MCP tool calls. The webapp **is** the VR client, not a separate admin dashboard.
 
-| Port | Service |
+Target architecture (arbiter, per-group authority, LeRobot logging, VLA producers): **[docs/DUAL_MODE_ARCHITECTURE.md](docs/DUAL_MODE_ARCHITECTURE.md)**.
 
-|------|---------|
+---
 
-| **10900** | Vite webapp — SOTA Iron Shell (React) + WebXR entry |
+## Documentation
 
-| **10901** | FastAPI backend + WebSocket `/ws/teleop` + `/api/logs` |
+| Doc | Contents |
+|-----|----------|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | **Two-pipe map** (control vs video), ports, module index |
+| [docs/GLOSSARY.md](docs/GLOSSARY.md) | **LeRobot, VLA, arbiter, WebXR**, fleet terms |
+| [docs/LIVEKIT.md](docs/LIVEKIT.md) | **Video return** — setup, env vars, troubleshooting |
+| [docs/LEROBOT.md](docs/LEROBOT.md) | Session recording (JSONL episodes) |
+| [docs/PRD.md](docs/PRD.md) | v1 product spec |
+| [docs/WEBXR.md](docs/WEBXR.md) | In-repo VR client (no Pico SDK) |
+| [docs/TAILSCALE_VIEWERS.md](docs/TAILSCALE_VIEWERS.md) | **Pico / Meta + Tailscale** — setup and pitfalls |
+| [docs/HTTPS.md](docs/HTTPS.md) | Tailscale Serve on Goliath |
+| [docs/BRINGUP.md](docs/BRINGUP.md) | Milestone 1 hardware checklist |
+| [docs/STACK.md](docs/STACK.md) | Full technology stack |
+| [docs/TODO.md](docs/TODO.md) | Milestone plan |
+| [CHANGELOG.md](CHANGELOG.md) | Release notes |
 
-| **10892** | yahboom-mcp (robot REST) |
+---
 
-| **15580** | myconf LiveKit SFU (headset WebRTC video) |
-
-
-
-**Start (fleet standard):** `webapp\start.bat` or `webapp\start.bat -WithTailscaleServe`  
-
-**Pico M1 detached:** `scripts\m1-up.ps1`
-
-
-
-After backend up, start video publisher (once per session):
-
-
+## Quick start
 
 ```powershell
-
-Invoke-RestMethod -Method Post http://127.0.0.1:10901/api/v1/livekit/publisher/start
-
+git clone https://github.com/sandraschi/teleoperator-mcp
+cd teleoperator-mcp
+just bootstrap
+.\webapp\start.bat -WithTailscaleServe    # fleet standard (backend + Vite + Serve)
+# or Pico M1 helper (detached windows):
+.\scripts\m1-up.ps1
 ```
 
-
-
-Or webapp **Tools → teleop_livekit_publisher_start → Dry run**.
-
-
+Headset URL: `https://goliath.<your-tailnet>.ts.net/` → **Enter VR**.
 
 ---
 
+## Stack (v0.2)
 
+| Layer | Technology | Port |
+|-------|------------|------|
+| Webapp | Vite 6 + React (Iron Shell) + Three.js WebXR | 10900 |
+| Backend | FastAPI + FastMCP + WebSocket | 10901 |
+| Adapter | `BoomyAdapter` → [yahboom-mcp](https://github.com/sandraschi/yahboom-mcp) | 10892 |
+| Video | [myconf](https://github.com/sandraschi/myconf) LiveKit + Goliath publisher | 15580 |
 
-## Webapp (SOTA 2026-06)
-
-
-
-Fleet [WEBAPP_STANDARDS](../../standards/WEBAPP_STANDARDS.md) compliant:
-
-
-
-| Route | Purpose |
-
-|-------|---------|
-
-| `/` (Home) | Health dashboard, Enter VR |
-
-| `/tools` | MCP dry-run inspector |
-
-| `/logs` | Event log tail + export |
-
-| `/apps` | Fleet discovery |
-
-| `/settings` | Local LLM glom-on |
-
-| `/help` | Pico / teleop quick start |
-
-
-
-API: `GET /api/capabilities`, `GET /api/logs*`. Launcher: `webapp/start.ps1` (Windows `cmd /c npm` fix).
-
-**CI:** GitHub Actions on `windows-latest` — `pytest` + `npm run check` (see repo `.github/workflows/ci.yml`).
-
-
+```
+  Pico / Meta Quest (Tailscale + Browser)
+     |  HTTPS/WSS pose (:10900 → :10901)
+     |  WebRTC video (:15580 LiveKit)
+     v
+  Goliath: teleoperator-mcp + LiveKit publisher
+     |
+     v
+  Boomy Pi: yahboom-mcp → /cmd_vel, PTZ, camera /stream
+```
 
 ---
 
+## MCP tools
 
-
-## Pico 4 path
-
-
-
-1. Sideload **Tailscale** — [pico-tailscale-setup](../../pico-tailscale-setup/)
-
-2. Goliath: `webapp\start.bat -WithTailscaleServe`
-
-3. Sign in on Pico with **same Microsoft account as Goliath**
-
-4. Pico Browser → `https://goliath.<tailnet>.ts.net/` → **Enter VR**
-
-
-
-**MCD docs:** [pico/WEBXR.md](../pico/WEBXR.md) · [pico/REVIVE_CHECKLIST.md](../pico/REVIVE_CHECKLIST.md)
-
-
+| Tool | Status |
+|------|--------|
+| `teleop_status` | shipped |
+| `teleop_configure` | shipped |
+| `teleop_estop` | shipped |
+| `teleop_set_mode` | shipped (M3) |
+| `teleop_takeover` | shipped (M3) |
+| `teleop_set_gaze` | shipped (PTZ bench / head-follow prep) |
+| `teleop_gaze_center` | shipped |
+| `teleop_livekit_status` | shipped (M5) |
+| `teleop_livekit_publisher_start` / `_stop` | shipped (M5) |
+| `teleop_task_dispatch` | planned |
 
 ---
 
+## Tailscale on viewers
 
+**No fundamental problem** — install Tailscale on Pico or Meta Quest, same tailnet as Goliath, open the `https://*.ts.net` URL. Headsets do not talk to Boomy's LAN IP; Goliath bridges via yahboom-mcp.
 
-## Upstream documentation
-
-
-
-| Doc | Topic |
-
-|-----|-------|
-
-| [CHANGELOG.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/CHANGELOG.md) | Release notes (2026-06-04 SOTA webapp) |
-
-| [LIVEKIT.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/LIVEKIT.md) | Video pipe + STUN troubleshooting |
-
-| [TAILSCALE_VIEWERS.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/TAILSCALE_VIEWERS.md) | Headset VPN pitfalls |
-
-| [PRD.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/PRD.md) | Requirements |
-
-| [ARCHITECTURE.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/ARCHITECTURE.md) | System design |
-
-| [WEBXR.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/WEBXR.md) | Client stack (in-repo) |
-
-| [HTTPS.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/HTTPS.md) | Tailscale Serve |
-
-| [BRINGUP.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/BRINGUP.md) | M1 bench checklist |
-
-| [DUAL_MODE_ARCHITECTURE.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/DUAL_MODE_ARCHITECTURE.md) | Long-term telesupervision |
-
-| [TODO.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/TODO.md) | Milestones |
-
-| [VIRTUAL_TWINS_FLEET.md](VIRTUAL_TWINS_FLEET.md) | **Cross-repo** vBot + LeRobot fleet index |
-
-| [LEROBOT.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/LEROBOT.md) | JSONL capture + parquet export |
-
-| [VIRTUAL_TWINS.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/VIRTUAL_TWINS.md) | vBoomy / Resonite loop |
-
-| [VBOT_CREATIVE_TWINS.md](https://github.com/sandraschi/teleoperator-mcp/blob/main/docs/VBOT_CREATIVE_TWINS.md) | Mechazilla, kaiju, creative vBots |
-
-
-
-Local paths mirror upstream under `teleoperator-mcp/docs/`.
-
-
+Details and troubleshooting: **[docs/TAILSCALE_VIEWERS.md](docs/TAILSCALE_VIEWERS.md)**.
 
 ---
 
+## Roadmap
 
-
-## Fleet integrations
-
-
-
-| Project | Link |
-
-|---------|------|
-
-| yahboom-mcp | [../yahboom-mcp/README.md](../yahboom-mcp/README.md) |
-
-| robotics-mcp | [../robotics-mcp/README.md](../robotics-mcp/README.md) — vbot OSC gateway |
-
-| resonite-mcp | [../resonite-mcp/README.md](../resonite-mcp/README.md) — ProtoFlux receiver |
-
-| bumi-mcp | [../bumi-mcp/README.md](../bumi-mcp/README.md) |
-
-| tailscale-mcp | [../tailscale-mcp/README.md](../tailscale-mcp/README.md) |
-
-| Pico 4 hub | [../pico/README.md](../pico/README.md) |
-
-| myconf LiveKit | `D:\Dev\repos\myconf` (port 15580) |
-
-| Robotics standard | [../../standards/YAHBOOM_ROBOTICS_STANDARD.md](../../standards/YAHBOOM_ROBOTICS_STANDARD.md) |
-
-
+| Phase | Scope | Status |
+|-------|-------|--------|
+| v0.1 | WebXR pose, safety, MCP estop | done |
+| M1 | Boomy + headset hardware bring-up | in progress |
+| M2 | Robot adapter + `ProducerCommand` | **adapter layer shipped** |
+| M3 | Arbiter + AUTO stub | **shipped** (headset squeeze test pending M1) |
+| M4 | LeRobot JSONL session logging | **shipped** |
+| M5 | LiveKit video return | **shipped** (headset + latency sign-off pending) |
 
 ---
 
+## Development
 
+```powershell
+just lint
+just test
+just ci      # same gates as GitHub Actions (Windows)
+just serve
+just web
+```
 
-## Live URL (Sandras lab)
+---
 
+## License
 
-
-`https://goliath.tailfab45.ts.net/` — confirm with `tailscale serve status` on Goliath.
-
-
-
-**2026-06-04 bench:** LiveKit STUN config fixed in myconf; publisher verified on Goliath; Pico tailnet + first VR session in progress (drive pending Boomy ROS).
-
+MIT

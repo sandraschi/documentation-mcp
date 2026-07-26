@@ -212,8 +212,8 @@ pub fn spawn_backend(app: AppHandle, state: &BackendProcess) -> Result<String, S
         .env(ENV_PORT, BACKEND_PORT.to_string())
         .env(ENV_HOST, "127.0.0.1")
         .env(ENV_TAURI, "1")
-        .stdout(Stdio::null())
-        .stderr(Stdio::null());
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped());
 
     #[cfg(windows)]
     {
@@ -226,7 +226,18 @@ pub fn spawn_backend(app: AppHandle, state: &BackendProcess) -> Result<String, S
         .spawn()
         .map_err(|e| format!("Failed to spawn {}: {e}", backend_path.display()))?;
 
+    let stdout = child.stdout.take();
+    let stderr = child.stderr.take();
     state.0.lock().unwrap().replace(child);
+
+    if let Some(out) = stdout {
+        let handle = app.clone();
+        thread::spawn(move || watch_backend_stream(out, handle));
+    }
+    if let Some(err) = stderr {
+        let handle = app.clone();
+        thread::spawn(move || watch_backend_stream(err, handle));
+    }
 
     let addr = SocketAddr::from_str(&format!("127.0.0.1:{BACKEND_PORT}")).unwrap();
     let app_health = app.clone();

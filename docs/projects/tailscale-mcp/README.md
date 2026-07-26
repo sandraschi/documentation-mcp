@@ -1,17 +1,164 @@
-# Tailscale MCP — central index
+# Tailscale MCP
 
-Mirror for MCP Central Docs discovery. **Source of truth:** [sandraschi/tailscale-mcp](https://github.com/sandraschi/tailscale-mcp) · **v2.0.2** · clone `D:\Dev\repos\tailscale-mcp` · [`metadata_sync.json`](./metadata_sync.json)
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-| Upstream doc | Link |
-|--------------|------|
-| README (overview + doc map) | [README.md](https://github.com/sandraschi/tailscale-mcp/blob/main/README.md) |
-| Install | [INSTALL.md](https://github.com/sandraschi/tailscale-mcp/blob/main/docs/INSTALL.md) |
-| What is Tailscale? | [WHAT_IS_TAILSCALE.md](https://github.com/sandraschi/tailscale-mcp/blob/main/docs/WHAT_IS_TAILSCALE.md) |
-| PRD · WEBAPP · Index | [PRD](https://github.com/sandraschi/tailscale-mcp/blob/main/docs/PRD.md) · [WEBAPP](https://github.com/sandraschi/tailscale-mcp/blob/main/docs/WEBAPP.md) · [DOCUMENTATION_INDEX](https://github.com/sandraschi/tailscale-mcp/blob/main/docs/DOCUMENTATION_INDEX.md) |
-| Changelog | [CHANGELOG](https://github.com/sandraschi/tailscale-mcp/blob/main/CHANGELOG.md) |
+**Operate your tailnet from the AI tools you already use.** Tailscale MCP is a [FastMCP 3.1.0+](https://github.com/pydantic/fastmcp) server that exposes the [**Tailscale Admin API**](https://tailscale.com/api) to assistants and automation: devices, DNS, services, monitoring, Funnel, Taildrop-related flows, and more  through a **small set of portmanteau tools** (many operations each, so your client does not drown in hundreds of tiny tool names). Optional **SEP-1577** agentic workflows (`run_agentic_tailnet_workflow`) let a capable host run multi-step flows when **sampling** is configured. An optional **Webapp** (Vite/React) gives humans a glass-style dashboard: **My tailnet** topology, **Partner tailnets** insights, help, and connection status.
 
-**Mirror only:** [PRD.md](./PRD.md) · [CHANGELOG.md](./CHANGELOG.md)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![FastMCP 3.1.0+](https://img.shields.io/badge/FastMCP-3.1+-green.svg)](https://github.com/pydantic/fastmcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-**Ports:** **10820** / **10821** · [WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md) · start `tailscale-mcp\web_sota\start.ps1`
+Repository: **[github.com/sandraschi/tailscale-mcp](https://github.com/sandraschi/tailscale-mcp)**
 
-**Fleet:** [projects/README.md](../README.md) · [FLEET_INDEX.md](../FLEET_INDEX.md)
+---
+
+## Why this exists
+
+If you manage a **Tailscale tailnet**, you already use the admin console and the official API. This project turns that surface into **MCP tools** so **Cursor, Claude Desktop, Antigravity**, or any MCP-capable client can list devices, inspect DNS, drive automation, and answer questions about your network **with structured responses** (success flags, errors, hints) instead of ad-hoc shell scripts.
+
+You stay on the **Admin API** contract: the authoritative reference remains [**Tailscales API docs**](https://tailscale.com/api). The MCP server adds opinionated grouping, persistence for certain flows, optional **LLM sampling** for multi-step tasks, and an optional **browser UI** for quick visual checks.
+
+---
+
+## What you get
+
+### MCP tools (portmanteau pattern)
+
+Instead of dozens of one-off tools, operations are grouped into verb-led domains such as **`manage_tailnet_devices`**, **`manage_tailnet_network`**, **`monitor_tailnet`**, **`manage_taildrop`**, **`manage_funnel`**, and more (security, automation, reporting, integrations, etc.). Each tool takes an **`operation`** argument  similar in spirit to other fleet servers that avoid tool explosion. MCP names are verb-first; the redundant `tailscale_` prefix is not used because this server is Tailscale-only.
+
+Coverage includes **device and user management**, **MagicDNS and network policies**, **Tailscale Services (TailVIPs)** where exposed, **monitoring and metrics**, **Funnel** and **Taildrop**-related flows (with CLI integration where applicable), plus **help**, **status**, and **partner tailnet** summaries for orgs that share tailnets with partners.
+
+The full matrix of tools and operations lives in **[docs/TAILSCALE_MCP_PORTMANTEAU_TOOLS.md](docs/TAILSCALE_MCP_PORTMANTEAU_TOOLS.md)** (see the doc index for any additional reference material).
+
+### Agentic workflows (optional)
+
+For multi-step automation, **`run_agentic_tailnet_workflow`** uses **FastMCP sampling** (SEP-1577). You can point the server at a **local OpenAI-compatible** endpoint (for example Ollama) via `TAILSCALE_SAMPLING_*`, or let the **host** run the LLM with `TAILSCALE_SAMPLING_USE_CLIENT_LLM=1`. Details and safety notes are in **[docs/PRD.md](docs/PRD.md)**.
+
+### Webapp (optional)
+
+The **Webapp** under `web_sota/` is a React/Vite front end with a dark, glass-style layout. Highlights:
+
+- **My tailnet**  visualize your network (Mermaid topology from `get_tailnet_status`, plus a decorative **Orbit** view).
+- **Partner tailnets**  summary of **members vs shared users** and devices grouped by login, aligned with the **`summarize_partner_tailnets`** tool.
+- **Help**  environment and sampling variables, linked from the shell.
+
+Ports for this repo follow the fleet **adjacency** convention (**10820** frontend / **10821** backend by default); see **[docs/WEBAPP.md](docs/WEBAPP.md)** and `web_sota/start.ps1`.
+
+### LM Link (Tailscale + LM Studio)
+
+The **`get_lm_link`** tool provides operational control over [LM Link](https://lmstudio.ai/docs/lmlink) — the Tailscale + LM Studio partnership (Feb 2026) that creates an encrypted mesh for remote local LLMs:
+
+| Operation | CLI equivalent | Description |
+|-----------|---------------|-------------|
+| `status` | `lms link status --json` | Live peers, loaded models, link state |
+| `enable` / `disable` | `lms link enable/disable` | Toggle LM Link on/off |
+| `set_device_name` | `lms link set-device-name` | Rename this device on the link |
+| `set_preferred_device` | `lms link set-preferred-device` | Route model requests to a preferred peer |
+| `info` / `readiness` | (static / Tailscale API) | Setup docs and tailnet connectivity check |
+
+The **LM Link webapp page** (`/lm-link`) shows a live dashboard with peer lists,
+loaded model badges, device rename, and preferred device selection. Requires the
+`lms` CLI (bundled with LM Studio or via `curl -fsSL https://lmstudio.ai/install.sh | bash`).
+
+**Cross-repo**: For model-level management, see [local-llm-mcp](https://github.com/sandraschi/local-llm-mcp)
+which also probes LM Link status for its provider health dashboard.
+
+### Persistence and observability
+
+**DiskStore** (FastMCP 3.1.0) holds durable state for funnels, transfers, and preferences across restarts  see **[docs/STORAGE_BACKENDS.md](docs/STORAGE_BACKENDS.md)**. Optional **Prometheus / Grafana / Loki**-style stacks are documented under **[docs/monitoring/](docs/monitoring/README.md)** if you want full observability on your own infrastructure.
+
+### Skills for agents
+
+When present, **`skills/TAILSCALE_EXPERT.md`** is exposed as **`resource://tailscale/skills`** so clients can load operator-focused guidance alongside tools.
+
+---
+
+## Who it is for
+
+- **Platform engineers** wiring tailnet changes into IDEs and automation.
+- **Operators** who want a quick dashboard plus MCP for deeper queries.
+- **Agents** (with appropriate allowlists) that should plan multi-step API work instead of one-shot guesses.
+
+---
+
+## Requirements
+
+You need a **Tailscale API key** with access to your tailnet and the **tailnet name** the key is scoped to:
+
+| Variable | Role |
+|----------|------|
+| `TAILSCALE_API_KEY` | Bearer token from the [admin console](https://login.tailscale.com/admin/settings/keys) |
+| `TAILSCALE_TAILNET` | Your tailnet identifier (as shown in the console / API) |
+
+Optional variables for sampling, HTTP transport, and logging are documented in **[docs/PRD.md](docs/PRD.md)** and **`.env.example`**.
+
+If you are new to Tailscale itself, read **[docs/WHAT_IS_TAILSCALE.md](docs/WHAT_IS_TAILSCALE.md)** first  it explains **tailnet vs Admin API vs client** in plain language.
+
+---
+
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/tailscale-mcp
+cd tailscale-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+
+
+## Install (quick)
+
+Full options (Claude Desktop JSON, Docker, Webapp) are in **[docs/INSTALL.md](docs/INSTALL.md)**. Minimal path with **[uv](https://docs.astral.sh/uv/)**:
+
+```bash
+git clone https://github.com/sandraschi/tailscale-mcp.git
+cd tailscale-mcp
+uv sync
+uv run tailscale-mcp
+```
+
+Set `TAILSCALE_API_KEY` and `TAILSCALE_TAILNET` in your environment or `.env` before starting.
+
+---
+
+## Documentation map
+
+| Topic | Document |
+|--------|----------|
+| Install, env, clients, Webapp | [docs/INSTALL.md](docs/INSTALL.md) |
+| Tailscale concepts | [docs/WHAT_IS_TAILSCALE.md](docs/WHAT_IS_TAILSCALE.md) |
+| **Funnel / Taildrop / Services / Peer Relays — what each does, when to use it** | **[docs/FEATURES.md](docs/FEATURES.md)** |
+| Product scope and sampling | [docs/PRD.md](docs/PRD.md) |
+| Webapp routes and ports | [docs/WEBAPP.md](docs/WEBAPP.md) |
+| Architecture | [docs/ARCHITECTURE_AND_DESIGN.md](docs/ARCHITECTURE_AND_DESIGN.md) |
+| Portmanteau tools (deep dive) | [docs/TAILSCALE_MCP_PORTMANTEAU_TOOLS.md](docs/TAILSCALE_MCP_PORTMANTEAU_TOOLS.md) |
+| Everything else | [docs/DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md) |
+| Contributing (uv, Ruff, tests) | [CONTRIBUTING.md](CONTRIBUTING.md) |
+
+---
+
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
+## License
+
+MIT  see [LICENSE](LICENSE).

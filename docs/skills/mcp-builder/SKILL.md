@@ -35,9 +35,9 @@ Load this skill when the task involves any of:
 
 ## FASTMCP 3.2.4 — CANONICAL PATTERNS
 
-### SOTA as of 2026-05-04
+### SOTA as of 2026-07-17
 ```
-fastmcp>=3.2.4
+fastmcp>=3.4.4,<4
 ```
 
 Key 3.2 additions over 3.1:
@@ -254,7 +254,7 @@ name = "repo-name-mcp"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
-    "fastmcp>=3.2.4",
+    "fastmcp>=3.4.4,<4",
     "starlette>=1.0.0",
     "uvicorn[standard]>=0.30.0",
     "httpx>=0.27.0",
@@ -275,7 +275,7 @@ When writing Dockerfiles for MCP containers:
 FROM python:3.12-slim
 
 WORKDIR /app
-RUN pip install --no-cache-dir fastmcp>=3.2.4 starlette>=1.0.0 uvicorn[standard]>=0.30.0
+RUN pip install --no-cache-dir fastmcp>=3.4.4,<4 starlette>=1.0.0 uvicorn[standard]>=0.30.0
 
 # Non-root user (security standard — uid 65530+, one per container)
 RUN adduser --disabled-password --gecos "" --uid 65530 mcp

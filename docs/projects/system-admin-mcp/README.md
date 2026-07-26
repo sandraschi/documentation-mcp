@@ -1,272 +1,141 @@
-﻿# System Admin MCP
+# System Admin MCP
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-A FastMCP 3.1.1++ compatible MCP service for elevated system administration tasks.
 
-## Features
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-- **File Recovery**: Recover deleted files from NTFS volumes
-- **Security Management**: Manage file and folder permissions
-- **Volume Maintenance**: Perform disk maintenance operations
-- **System Diagnostics**: Collect system information and diagnostics
+**Windows system administration, through AI.** File recovery, security, disk maintenance, diagnostics, services, processes — all accessible via MCP (Claude Desktop, Cursor, etc.) and a React web dashboard.
 
-## Prerequisites
+> **⚠️ Administrator privileges required.** Disk operations, service management, file recovery, and permission changes need elevation. Run your terminal as Administrator before starting the server.
 
-- Windows 10/11 or Windows Server 2016+
-- Python 3.8+
-- Administrator privileges (for elevated operations)
+```json
+# Claude Desktop — right-click → Run as Administrator, then:
+"mcpServers": { "system-admin-mcp": { "command": "uvx", "args": ["system-admin-mcp"] } }
+```
 
-## ðŸš€ Installation
+---
 
-### Prerequisites
-- [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
-- Python 3.12+
+## Quick Start
 
-### ðŸ“¦ Quick Start
-Run immediately via `uvx`:
-```bash
+```powershell
+git clone https://github.com/sandraschi/system-admin-mcp
+cd system-admin-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+# Run terminal AS ADMINISTRATOR first, then:
 uvx system-admin-mcp
-```
+See [Quickstart](docs/quickstart.md) for full setup.
 
-### ðŸŽ¯ Claude Desktop Integration
-Add to your `claude_desktop_config.json`:
-```json
-"mcpServers": {
-  "system-admin-mcp": {
-    "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/system-admin-mcp", "run", "system-admin-mcp"]
-  }
-}
-```
-### Option 1: For Cursor IDE
+## What You Can Do
 
-**Important:** Cursor uses system Python. Install dependencies in the Python that Cursor uses:
+| Area | Operations |
+|------|-----------|
+| **System Health** | CPU/RAM/disk metrics, event logs, hardware inventory, installed software |
+| **File Recovery** | Scan NTFS MFT, recover deleted files, validate integrity |
+| **Security** | View/set/audit NTFS permissions, take ownership, network port audit |
+| **Disks** | SMART health, defrag (HDD), TRIM (SSD), cleanup, folder size analysis |
+| **Services** | List/start/stop, change startup type, paginated |
+| **Processes** | List/sort/analyze/kill, paginated, sortable by CPU/Memory/Name/PID |
+| **Startup & Taskbar** | Manage startup programs, toggle autohide, find blockers |
+| **Agentic** | Let AI autonomously diagnose and fix issues (SEP-1577 sampling) |
 
-```powershell
-cd d:\Dev\repos\system-admin-mcp
-python -m uv pip install -e .[dev]
-```
+All operations go through a single `system_admin` tool — one tool, 40+ operations.
 
-See `CURSOR_SETUP.md` for detailed Cursor configuration instructions.
+---
 
-### Option 2: For Claude Desktop / General Development
+## FastMCP 3.2 Capabilities
 
-1. Clone the repository:
+| Feature | What it provides |
+|---------|-----------------|
+| **`ctx.sample()`** (SEP-1577) | Server-side LLM calls for autonomous diagnosis. Tools `agentic_system_workflow` and `autonomous_system_troubleshooter` use `ctx.sample()` to orchestrate multi-step diagnostics without client round-trips — the server borrows the client LLM to interpret system data and recommend actions. |
+| **Prompts** (4 templates) | Registered via `@mcp.prompt()`: `system_diagnostics_expert`, `security_hardening_expert`, `system_troubleshooter`, `volume_maintenance_expert`. Each has parameterized focus modes (e.g. performance vs events, ownership vs audit). Clients inject them as system instructions. |
+| **Skills** (`skill://`) | `SkillsDirectoryProvider` exposes `skill://system-admin-expert/SKILL.md` — a portable expertise document with safe-mode patterns, diagnostic sequences, and SEP-1577 workflow recipes. Discoverable via `resources/list`. |
+| **Prefab UI** (4 cards) | `@mcp.tool(app=True)` tools returning `ToolResult` with `structured_content=PrefabApp(...)`: `system_health_card` (CPU/RAM/disk), `top_processes_card` (sorted by CPU/memory), `list_services_card` (filtered services), `volume_status_card` (all volumes with bar charts). Rendered natively by capable hosts (Claude Desktop side-panel). |
+| **CodeMode** | BM25 discovery for agentic tool selection. Enabled via `--agentic` flag. |
+| **SkillsDirectoryProvider** | Registers `skill://` resources from `skills/` directory. |
+| **Dual transport** | stdio (default for Claude Desktop) + streamable-http (`MCP_TRANSPORT=http`). |
 
-   ```powershell
-   git clone https://github.com/your-username/system-admin-mcp.git
-   cd system-admin-mcp
-   ```
+---
 
-2. Create and activate a virtual environment:
+## Web Dashboard
 
-   ```powershell
-   python -m venv .venv
-   .venv\Scripts\activate
-   ```
-
-3. Install dependencies:
-
-   ```powershell
-   uv pip install -e .[dev]
-   ```
-
-### Option 3: For Claude Desktop Configuration
-
-Add to `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "system-admin-mcp": {
-      "command": "python",
-      "args": ["-m", "system_admin_mcp.__main__"],
-      "env": {
-        "PYTHONPATH": "D:/Dev/repos/system-admin-mcp/src",
-        "PYTHONUNBUFFERED": "1"
-      }
-    }
-  }
-}
-```
-
-**Note:** Some JSON linters object to `cwd` parameter. Using `-m` module execution with `PYTHONPATH` avoids this issue.
-
-## Usage
-
-### Running the MCP Server
+A 14-page React SPA on ports **10860** (frontend) / **10861** (backend):
 
 ```powershell
-# Run in development mode
-python -m system_admin_mcp
+just web              # Backend API
+just web-frontend     # Frontend dev server
 ```
 
-### Building the DXT Package
+Pages: Dashboard, Status, Processes (paginated, sortable), Services (paginated), Volumes, File Owner, File Recovery, Logs, Tools, Apps, Elevated, Chat, Settings, Help.
 
-```powershell
-# Build the package
-python -m build
+---
 
-# The DXT package will be created in the dist/ directory
+## Justfile Commands
+
+| Command | What it does |
+|---------|-------------|
+| `just dev` | Start MCP server (Claude Desktop) |
+| `just serve` | Start MCP via HTTP |
+| `just test` | Run tests |
+| `just lint` | Check code quality (ruff + biome) |
+| `just fix` | Auto-fix everything |
+| `just mcpb-pack` | Build MCPB bundle |
+| `just build` | Install dependencies |
+| `just web` | Start FastAPI backend on 10861 |
+| `just web-frontend` | Start Vite frontend on 10860 |
+
+---
+
+## Project Map
+
+```
+├── AGENTS.md           # Instructions for AI agents
+├── justfile            # Task runner (SOTA Industrial Dashboard)
+├── pyproject.toml      # Python project config (FastMCP 3.2)
+├── src/system_admin_mcp/
+│   ├── app.py          # FastMCP instance + lifespan (skills, prefabs)
+│   ├── server.py       # FastAPI backend (20+ REST endpoints)
+│   ├── transport.py    # stdio / streamable-http dual transport
+│   ├── prompts.py      # 4 @mcp.prompt() templates
+│   ├── tools/
+│   │   ├── portmanteau.py          # system_admin (40+ ops dispatcher)
+│   │   ├── implementations.py      # File recovery, ACLs, disk, WMI
+│   │   ├── services_and_tasks.py   # Services, processes, startup, taskbar
+│   │   ├── agentic_system_workflow.py  # ctx.sample() workflows
+│   │   ├── monitoring.py           # Watchdog file watcher
+│   │   ├── system_ops.py           # Standalone tools
+│   │   └── prefab/                 # 4 Prefab UI cards
+│   ├── elevated_service/           # Named-pipe elevated bridge
+│   └── user_bridge/                # Service communication client
+├── web_sota/           # React 19 + Vite dashboard
+├── mcpb/               # MCPB packaging (v0.2 manifest)
+├── skills/             # skill://system-admin-expert/SKILL.md
+└── tests/              # Pytest suite
 ```
 
-## Development
+---
 
-### Code Style
+## Docs
 
-This project uses:
+| Document | For |
+|----------|-----|
+| [Quickstart](docs/quickstart.md) | End users — install, configure, run |
+| [API Reference](docs/api/README.md) | Developers — REST endpoints |
+| [Development](docs/development/README.md) | Contributors — hacking on the server |
+| [AGENTS.md](AGENTS.md) | AI agents — architecture & patterns |
 
-- Black for code formatting
-- isort for import sorting
-- mypy for type checking
-- pylint for code quality
+---
 
-Run the following to format and check the code:
-
-```powershell
-# Format code
-black src tests
-isort src tests
-
-# Run linters
-pylint src tests
-mypy src tests
-```
-
-### Testing
-
-```powershell
-# Run tests
-pytest
-
-# Run with coverage report
-pytest --cov=system_admin_mcp --cov-report=html
-```
-
-## ðŸš€ Installation
-
-### Prerequisites
-- [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
-- Python 3.12+
-
-### ðŸ“¦ Quick Start
-Run immediately via `uvx`:
-```bash
-uvx system-admin-mcp
-```
-
-### ðŸŽ¯ Claude Desktop Integration
-Add to your `claude_desktop_config.json`:
-```json
-"mcpServers": {
-  "system-admin-mcp": {
-    "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/system-admin-mcp", "run", "system-admin-mcp"]
-  }
-}
-```
-## ðŸš€ Installation
-
-### Prerequisites
-- [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
-- Python 3.12+
-
-### ðŸ“¦ Quick Start
-Run immediately via `uvx`:
-```bash
-uvx system-admin-mcp
-```
-
-### ðŸŽ¯ Claude Desktop Integration
-Add to your `claude_desktop_config.json`:
-```json
-"mcpServers": {
-  "system-admin-mcp": {
-    "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/system-admin-mcp", "run", "system-admin-mcp"]
-  }
-}
-```
-### Alternative: Disable Without Uninstalling
-
-If you want to temporarily disable the bridge without uninstalling:
-
-```powershell
-# Disable the bridge
-.\scripts\disable_bridge.ps1
-
-# Re-enable later if needed
-.\scripts\disable_bridge.ps1 -Revert
-```
-
-### Manual Cleanup (if needed)
-
-If the uninstall script fails, you may need to manually remove:
-
-1. Service registration:
-   ```powershell
-   sc.exe delete SystemAdminMCP
-   ```
-
-2. Installation directory:
-
-   ```text
-   %ProgramFiles%\System Admin MCP
-   ```
-
-3. Application data:
-
-   ```text
-   %LOCALAPPDATA%\SystemAdminMCP
-   ```
-
-## Troubleshooting
-
-### Bridge Shows as Disabled
-
-If the bridge is disabled but you want to re-enable it:
-
-1. Run the disable script with the `-Revert` flag:
-
-   ```powershell
-   .\scripts\disable_bridge.ps1 -Revert
-   ```
-
-2. Restart your MCP client
-
-### Service Fails to Start
-
-1. Check the Windows Event Log for errors
-2. Verify the service account has necessary permissions
-3. Check if the named pipe is accessible:
-
-   ```powershell
-   Test-Path "\\.\pipe\SystemAdminMCP"
-   ```
-
-## Security Considerations
-
-- The service runs with elevated privileges
-- All operations are logged to `%LOCALAPPDATA%\SystemAdminMCP\Logs`
-- The named pipe is secured to only allow local connections
-- Sensitive operations require explicit user confirmation
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-
-## ðŸŒ Webapp Dashboard
-
-This MCP server includes a free, premium web interface for monitoring and control.
-By default, the web dashboard runs on port **10860**.
-*(Assigned ports: **10860** (Web dashboard frontend), **10861** (Web dashboard backend (API)))*
-
-To start the webapp:
-1. Navigate to the `webapp` (or `web`, `frontend`) directory.
-2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
-3. Open `http://localhost:10860` in your browser.
-
+Built by [Sandra Schipal](https://github.com/sandraschi) in Vienna. MIT.

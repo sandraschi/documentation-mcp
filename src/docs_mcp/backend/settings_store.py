@@ -27,6 +27,7 @@ ALLOWED_KEYS = {
     "rag_federate_memory",
 }
 
+
 def _settings_path() -> Path:
     return config.DB_PATH.parent / SETTINGS_FILENAME
 

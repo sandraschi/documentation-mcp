@@ -1,121 +1,67 @@
-# FastMCP 3.4: The Industrial SOTA Suite (2026)
+# FastMCP Fleet Reference
 
-**Fleet Baseline:** `fastmcp>=3.4.2,<4` (June 2026) — minimum **3.2.0** until fleet bump completes; target **3.4.2** for remote bridge, proxy hardening, and security floor.
+> Central index of all FastMCP-related documentation in mcp-central-docs.
 
-**Latest release notes:** [3.4-features.md](3.4-features.md) (Remote Control, `fastmcp-remote`, returnable errors). Prior GA: [3.2-features.md](3.2-features.md).
+## Releases & Changelog
 
-This directory contains the authoritative documentation for the FastMCP stack used across the Antigravity fleet. All guides have been industrialized to reflect the **GA Standard**, moving beyond experimental 3.1 proposals.
+| Doc | What |
+|-----|------|
+| [CHANGELOG.md](CHANGELOG.md) | Per-release changelog with fleet recommendations and known problems |
+| [HISTORY_OF_FASTMCP.md](HISTORY_OF_FASTMCP.md) | Full version history from 2.x to 3.5 |
+| [fleet-upgrade-strategy-3.5.md](fleet-upgrade-strategy-3.5.md) | Fleet upgrade roadmap for FastMCP 3.5 caching, storage, and breaking changes |
 
----
+## Version-Specific Features
 
-## 1. Core Documentation Suite
+| Doc | Covers |
+|-----|--------|
+| [3.2-features.md](3.2-features.md) | FastMCP 3.2 GA — providers, transforms, CodeMode, Prefab UI, prompts, skills |
+| [3.4-features.md](3.4-features.md) | FastMCP 3.4 — remote bridge, fail-loud proxies, returnable errors |
+| [3.5-features.md](3.5-features.md) | FastMCP 3.5 — pluggable storage, response caching middleware, Azure/HF OAuth, SDK pinning |
+| [fastmcp-32-fleet-capability-map.md](fastmcp-32-fleet-capability-map.md) | Capability ladder from baseline to autonomous orchestration |
 
-| Topic | Guide | Key Standards |
-|---|---|---|
-| **Foundations** | **[tool-documentation.md](tool-documentation.md)** | 3-4-100, Vanishing Args (`Annotated`), Task=True. |
-| **Persistence** | **[persistent-storage.md](persistent-storage.md)** | Async state, Probes, and DiskStore standards. |
-| **Grouping** | **[portmanteau-v2-managed-namespaces.md](portmanteau-v2-managed-namespaces.md)** | Managed Namespaces (`mount`) for Arcade/Glama. |
-| **Discovery** | **[codemode-discovery.md](codemode-discovery.md)** | Staged tool discovery for 50+ tool catalogs. |
-| **Autonomy** | **[agentic-sampling.md](agentic-sampling.md)** | `ctx.sample()` and meta-tool orchestration (SEP-1577). |
-| **Visualization** | **[generative-ui-prefabs.md](generative-ui-prefabs.md)** | Python DSL -> React cards and table Prefabs. |
-| **Composition** | **[providers-and-transforms.md](providers-and-transforms.md)** | Sourcing from Filesystem, OpenAPI, and Proxy. |
-| **Federation** | **[mcp-bridge-fleet-patterns.md](mcp-bridge-fleet-patterns.md)** | ProxyProvider fleet pairings, multi-hop, troubleshooting. |
-| **Remote (3.4)** | **[3.4-features.md](3.4-features.md)** | `fastmcp-remote`, fail-loud proxies, `ToolResult(is_error=)`, OAuth idle tokens. |
-| **Guidance** | **[skills-and-prompts.md](skills-and-prompts.md)** | Reusable system prompts and portable `skill://` packs. |
+## Architecture & Patterns
 
----
+| Doc | What |
+|-----|------|
+| [advanced-patterns.md](advanced-patterns.md) | Advanced server patterns |
+| [agentic-sampling.md](agentic-sampling.md) | Sampling via `ctx.sample()` |
+| [mcp-bridge-fleet-patterns.md](mcp-bridge-fleet-patterns.md) | HTTP daemon + stdio proxy pattern |
+| [persistent-storage.md](persistent-storage.md) | Stateful server patterns (SQLite, LanceDB) |
+| [providers-and-transforms.md](providers-and-transforms.md) | Provider system + transforms (CodeMode) |
 
-## 2. Decision Support
+## Prefab UI
 
-- **[fastmcp-32-fleet-capability-map.md](fastmcp-32-fleet-capability-map.md)**: **Authoritative Decision Matrix**. Use this to decide which 3.2 features your server requires (and which to avoid).
-- **[migration-guide.md](migration-guide.md)**: Step-by-step path from 2.x through 3.2 to **3.4.2**.
-- **[3.4-features.md](3.4-features.md)**: Remote bridge, proxy breaking change, returnable tool errors, 3.4.x patch notes.
+| Doc | What |
+|-----|------|
+| [generative-ui-prefabs.md](generative-ui-prefabs.md) | Prefab UI components |
+| [mcp-apps-prefab-ui.md](mcp-apps-prefab-ui.md) | MCP Apps + Prefab integration |
+| [mcp-apps-prefab-use-cases-and-examples.md](mcp-apps-prefab-use-cases-and-examples.md) | Use cases and examples |
+| [update-mcp-server-for-prefabs.md](update-mcp-server-for-prefabs.md) | Migration guide for adding Prefabs |
 
----
+## CodeMode
 
-## 3. High-Fidelity RAG Guidance
+| Doc | What |
+|-----|------|
+| [codemode-discovery.md](codemode-discovery.md) | BM25-based code discovery via CodeMode |
 
-When using these docs for RAG or agentic synthesis, prioritize files based on the **3.2 SOTA Hierarchy**:
-1.  **Fundamental Rules**: `tool-documentation.md` (3-4-100 rule is absolute).
-2.  **Architectural Layout**: `portmanteau-v2-managed-namespaces.md`.
-3.  **Specific Features**: Individual guide based on the capability ladder.
+## Standards References
 
----
+| Doc | What |
+|-----|------|
+| `standards/mcp_registration.md` | Tool registration, CodeMode, Pydantic v2 |
+| `standards/SOTA_REQUIREMENTS.md` | FastMCP 3.4+ SOTA requirements |
+| `standards/TOOL_DESIGN_STANDARDS.md` | Portmanteau, Prefab, annotations, pagination |
+| `standards/rules/docstrings_sota.md` | Docstring SOTA protocol |
+| `standards/fastmcp-3.2-concurrency.md` | Concurrency patterns for FastMCP 3.2 |
+| `standards/fastmcp-3.2-startup-probes.md` | Startup probe patterns |
+| `status/fastmcp-3.2-upgrade-status.md` | Fleet upgrade tracking |
+| `guides/fastmcp-3.2-prefabs-providers-revolution.md` | Prefabs and providers deep dive |
 
-## 🚀 Quick Start
+## Known Problems / Pitfalls
 
-### 1. Install
-```powershell
-pip install "fastmcp>=3.4.2"
-```
-
-### 2. Create Server
-```python
-from fastmcp import FastMCP
-
-# Initialize server
-mcp = FastMCP("My Server")
-
-# Add a tool (following 3-4-100 rule)
-@mcp.tool()
-async def greet_user(name: str) -> str:
-    """Greet the user.
-    
-    Returns a personalized greeting in plain text.
-    """
-    return f"Hello, {name}!"
-
-# Run it (Stdio default)
-if __name__ == "__main__":
-    mcp.run()
-```
-
-### 3. Test & Develop
-```powershell
-# Development loop with auto-reload
-fastmcp dev server.py
-
-# Inspect rich UI cards (GenerativeUI)
-fastmcp dev apps server.py
-```
-
----
-
-## 🔧 Core Pillars of 3.2
-
-### 1. Background Tasks (`task=True`)
-Run long operations (migrations, watchers) without blocking the client.
-```python
-@mcp.tool(task=True)
-async def start_reindex(ctx: Context):
-    await do_heavy_work()
-    return "Complete"
-```
-
-### 2. GenerativeUI (Prefab)
-Return rich cards, tables, and buttons directly into the chat.
-```python
-from prefab_ui import PrefabApp, Card
-return ToolResult(content="...", structured_content=PrefabApp(root=Card(...)))
-```
-
-### 3. Async State Persistence
-Remember user context across server and OS restarts.
-```python
-await ctx.set_state("theme", "dark")
-```
-
----
-
-## 🎯 Pro-Tips for Fleet Maintainers
-
-- **Use CodeMode**: If your server has >15 tools, enable CodeMode in the constructor to save tokens.
-- **Portmanteau Transforms**: Use `mount(namespace="...")` to organize tools semantically.
-- **Annotated Args**: Move parameter descriptions into `Annotated[T, Field(description="...")]` to keep docstrings lean.
-
----
-
-## References
-- [Official FastMCP Changelog](https://gofastmcp.com/changelog)
-- [MCP Protocol Spec](https://modelcontextprotocol.io/)
-- [TOOL_DESIGN_STANDARDS.md](../standards/TOOL_DESIGN_STANDARDS.md)
+| Issue | Doc |
+|-------|-----|
+| `run_http_async()` drops CORSMiddleware | `standards/CORS_STANDARD.md` |
+| 3.4.3 Host/Origin guard broke deployments | [CHANGELOG.md](CHANGELOG.md) |
+| PyInstaller + PYZ archive unreliable | `standards/rules/tauri_nsis_building.md` |
+| `--mode` flag not stripped before transport argparser | `patterns/TAURI_PRODUCTION_PITFALLS.md` |

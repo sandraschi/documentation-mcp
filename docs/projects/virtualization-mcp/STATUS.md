@@ -1,8 +1,8 @@
 # Virtualization MCP -- Project Status
 
-**Last Updated**: 2026-03-05
+**Last Updated**: 2026-06-21 (logs, help, LLMs, self-healing, Hyper-V Gen2 VM fix)
 **Repo**: `D:\Dev\repos\virtualization-mcp` | [GitHub](https://github.com/sandraschi/virtualization-mcp)
-**Version**: v1.2.0 (FastMCP 3.1, SOTA 2026)
+**Version**: v1.3.0 (FastMCP 3.2, SOTA 2026)
 **Python**: 3.10+ | **VirtualBox**: 7.0+
 **Status**: 🟢 PRODUCTION READY
 
@@ -10,9 +10,29 @@
 
 ## What It Is
 
-Professional-grade VirtualBox management through the Model Context Protocol. `virtualization-mcp` brings full hypervisor orchestration to Claude Desktop, allowing for natural language control of virtual machines, networking, and storage.
+Professional-grade VirtualBox and Hyper-V management through the Model Context Protocol. `virtualization-mcp` brings full hypervisor orchestration to Claude Desktop, allowing for natural language control of virtual machines, networking, and storage.
 
 **Core Mission**: To provide a seamless, AI-native interface for complex virtualization workflows.
+
+### Webapp, Logs, Help & 6-Way LLMs (2026-06-21)
+
+| Surface | State | Notes |
+|---------|-------|-------|
+| System Logs Viewer | Green | `GET /api/v1/logs` reads and filters logs; scroll-to-bottom & levels in UI |
+| Help FAQ & Docs | Green | `GET /api/v1/help` serves FAQs; Webapp Help terminal integrates guide |
+| 6-Way LLM Selector | Green | Concurrent support for Ollama, LM Studio, OpenAI, DeepSeek, Anthropic, Gemini |
+| Port Self-Healing | Green | Startup/save validation corrects Ollama/LM Studio port collisions automatically |
+| Hyper-V Gen2 UEFI | Green | Omits `-BootDevice` parameter for Gen2 UEFI VMs to resolve PowerShell failures |
+
+### Fleet cold-install probe (2026-06-07)
+
+| Surface | State | Notes |
+|---------|-------|-------|
+| Consumer Windows Sandbox | Green | `Launch-ConsumerSandbox.ps1`, `Setup-ConsumerSandbox.ps1` — naked install baseline |
+| `POST /api/v1/fleet/install-script` | Partial | Generates clone/install PS; needs INSTALL.md / uv alignment |
+| Fleet cold-install orchestration | Planned | meta_mcp triggers; see [FLEET_COLD_INSTALL_PROBE.md](../../docs/operations/FLEET_COLD_INSTALL_PROBE.md) |
+
+**Rule:** Use **consumer** sandbox only for naked install tests — not dev-infra bringup ([NAKED_INSTALL_TESTING.md](../../standards/NAKED_INSTALL_TESTING.md)).
 
 ---
 

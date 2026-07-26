@@ -38,13 +38,14 @@ keywords = [
     "google", "nest-api", "device-control", "monitoring"
 ]
 dependencies = [
-    # Core MCP framework
-    "fastmcp>=3.1.0,<4",
+    # Core MCP framework (3.2: Apps, Generative UI, Security)
+    "fastmcp>=3.4.4,<4",
     "pydantic>=2.0.0,<3.0.0",
+    "psutil>=5.9.0",
     # HTTP and networking
     "aiohttp>=3.8.0,<4.0.0",
     "httpx>=0.24.0,<1.0.0",
-    "websockets>=11.0.0,<12.0.0",
+    "websockets>=11.0.0",
     # Web framework (for potential future REST API)
     "fastapi>=0.95.0,<1.0.0",
     "uvicorn[standard]>=0.21.0,<1.0.0",
@@ -57,6 +58,7 @@ dependencies = [
     "structlog>=23.1.0,<24.0.0",
     # Type hints support
     "typing-extensions>=4.5.0,<5.0.0",
+    "prefab-ui>=0.14.0",
 ]
 
 [project.urls]
@@ -124,30 +126,6 @@ where = ["src"]
 include = ["nest_protect_mcp"]
 exclude = ["tests", "tests.*"]
 
-[tool.ruff]
-target-version = "py310"
-line-length = 88
-
-[tool.ruff.lint]
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "C90", # mccabe complexity
-    "B",   # flake8-bugbear
-    "UP",  # pyupgrade
-    "RUF"  # ruff-specific rules
-]
-ignore = [
-    "E203",  # whitespace before ':' (conflicts with black)
-    "E501"   # line too long (handled by black)
-]
-
-[tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]  # unused imports in __init__
-"tests/*" = ["S101"]     # use of assert in tests
-
 [tool.black]
 line-length = 88
 target-version = ["py38"]
@@ -179,3 +157,25 @@ warn_unreachable = true
 [[tool.mypy.overrides]]
 module = ["aiohttp.*", "fastapi.*", "pydantic.*"]
 ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S105"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning:pydantic",
+]

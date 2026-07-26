@@ -1,142 +1,110 @@
-# blender-mcp — Blender 3D MCP Server (fleet note)
+# Blender MCP — AI-Powered Blender Automation
 
-**Upstream repo:** `D:\Dev\repos\blender-mcp`
+Control Blender with natural language through MCP. Tell Claude to create a steampunk robot
+with glowing eyes and watch it build in Blender.
 
-**FastMCP 3.2** — Agentic Blender automation: **48+ portmanteau tools**, **195+ operations**, live GUI bridge, vision loops, AI mesh generation, sculpt, GeoNodes, async jobs, validation/batch, Prometheus telemetry, Docker/GHCR.
+<p align="center">
+  <a href="https://github.com/sandraschi/blender-mcp"><img src="https://img.shields.io/github/stars/sandraschi/blender-mcp?style=flat-square" alt="Stars"></a>
+  <a href="https://github.com/sandraschi/blender-mcp/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-| Item | Details |
-|------|---------|
-| **Repo** | `D:\Dev\repos\blender-mcp` |
-| **Version** | **v0.10.0** |
-| **Ports** | Backend **10849**, Frontend **10848** (Vite proxies `/mcp` → 10849) |
-| **Start** | `start.ps1` from repo root |
-| **Depends on** | Blender 4.x+ |
-| **Container** | `ghcr.io/sandraschi/blender-mcp:latest` |
+## How it runs
 
-## Agent Lab tools (Phases 1–5)
+| Mode | Host app | When |
+|------|----------|------|
+| **Headless (default)** | `blender --background` subprocess | Batch export, CI, agents without a display; VSE, geonodes, most mesh ops |
+| **Live GUI (optional)** | Blender + [bridge addon](docs/blender_bridge_addon.py) | Watch the agent build; viewport screenshots; sculpt with live feedback |
+| **Per-tool override** | `prefer_session=False` | Batch jobs force headless even if bridge is connected |
 
-| Tool | Focus | Notes |
-|------|-------|-------|
-| `blender_render` | `screenshot_viewport`, `render_multi_angle` | Agent vision feedback |
-| `blender_vision_refine` | `review_bundle` | Multi-capture review pack |
-| `blender_shaders` | Material node graphs | create/connect nodes |
-| `blender_compositor` | Post FX | enable, glow, nodes |
-| `blender_mesh` | Edit ops | extrude, inset, bevel, subdivide, join |
-| `blender_sculpt` | Sculpt mode | brushes, dynotopo, remesh |
-| `blender_geonodes` | Procedural geometry | groups, modifiers |
-| `blender_ai_generate` | Tripo / Rodin / Hunyuan | API keys in env |
-| `blender_jobs` | Async queue | submit/list/status |
-| `blender_validation` | Geometry audit | manifold, validate_geometry |
-| `blender_batch` | Folder batch | resize, convert |
-| `blender_api_docs` | bpy lookup | reduce hallucination |
-| `blender_session` | Live GUI bridge | + `docs/blender_bridge_addon.py` |
+**You do not need to open Blender’s UI** for most MCP tools — the server spawns headless Blender automatically and falls back from live session when no bridge is connected.
 
-Observability: Prometheus `/metrics`, JSON logs for Loki — see repo `docs/MONITORING.md`, `docs/DOCKER.md`.
+Install [Blender](https://www.blender.org/download/) separately; it is never bundled. Override path with `BLENDER_EXECUTABLE`.
 
-## Tools (by discipline)
+> **Watch or batch** — Most tools run headless Blender. Use `blender_session` start + enable the bridge addon only if you want the viewport to update live while the agent works. See [INSTALL.md](INSTALL.md#live-blender-gui-session-bridge).
 
-| Discipline | Tool | Ops | Description |
-|------------|------|-----|-------------|
-| **3D Modeling** | `blender_mesh` | 30+ | Primitives, edit, boolean, custom furniture |
-| | `blender_transform` | 10+ | Move, rotate, scale, snap, origin, join |
-| | `blender_modifiers` | 12+ | Subdivision, mirror, array, boolean, solidify |
-| | `blender_selection` | 8+ | Select by name, type, material, hierarchy |
-| | `blender_sculpt` | 10+ | Sculpt mode, brushes, dynotopo, remesh |
-| | `blender_geonodes` | 8+ | Geometry Nodes groups and modifiers |
-| **Appearance** | `blender_material` | 15+ | PBR, emission, glass, toon, principled |
-| | `blender_shaders` | 8+ | Shader node graph |
-| | `blender_compositor` | 6+ | Compositor nodes and effects |
-| | `blender_textures` | 10+ | Image, procedural, noise, voronoi, UV |
-| | `blender_uv` | 5+ | Unwrap, project, reset |
-| | `blender_shapekeys` | 4+ | List, set, create, keyframe shape keys |
-| **Animation** | `blender_animation` | 21 | Keyframes, playback, actions, baking, NLA |
-| | `blender_rigging` | 12 | Armature, bones, IK, VRM humanoid |
-| | `blender_particles` | 5+ | Create, bake particle systems |
-| | `blender_grease_pencil` | 12+ | GP create, draw, animate, convert |
-| **Lighting** | `blender_lighting` | 8+ | Sun, point, spot, area, HDRI, three-point |
-| | `blender_camera` | 8+ | Create, set active, lens, DOF, alignment |
-| **Physics** | `blender_physics` | 10+ | Rigid body, soft body, cloth, fluid, forces |
-| **Rendering** | `blender_render` | 8+ | Preview, turntable, viewport capture, multi-angle |
-| | `blender_export` | 10+ | FBX, GLB, OBJ, Unity, VR, Resonite |
-| **2D / Video** | `blender_vse` | 30+ | Clips, effects, text, transitions |
-| **Splats** | `blender_splatting` | 6+ | Import, crop, collision mesh, export |
-| **AI / Agent** | `blender_ai_generate` | 4+ | External mesh backends |
-| | `blender_vision_refine` | 3+ | Review bundles for agents |
-| | `construct_*` | 5+ | AI-aided CSG construction |
-| | `generate_blender_script` | 1 | LLM script generation |
-| **Ops** | `blender_jobs` | 4+ | Async script queue |
-| | `blender_validation` | 6+ | Mesh validation |
-| | `blender_batch` | 6+ | Batch image/mesh ops |
-| **System** | `blender_status` | 1 | Health check |
-| | `blender_session` | 5+ | Session + live bridge |
-| | `blender_help` | 1 | Tool/operation discovery |
-| | `blender_api_docs` | 2+ | bpy API reference |
+## Hands-in / Hands-out
 
-## Webapp Pages
+| Direction | Artifacts | Notes |
+|-----------|-----------|-------|
+| **Hands-in** | Natural-language scene prompts | Agent instructions; `blender_ai_*` script generation |
+| **Hands-in** | `.blend`, image refs, mesh files | Webapp upload or tool params |
+| **Hands-in** | Rodin / Tripo / Hunyuan mesh URLs | `blender_ai_generate` and related tools |
+| **Hands-in** | Inline `bpy` scripts | `blender_script_execute`, handler-backed tools |
+| **Hands-out** | `.glb`, `.gltf`, `.fbx`, `.obj`, `.usd` | `blender_export` — **headless** |
+| **Hands-out** | `.vrm`, VRChat-ready avatars | Export + validation pipeline — **headless** |
+| **Hands-out** | `.blend` (saved scene) | After agent edit session — headless or live bridge |
+| **Hands-out** | Viewport PNG, MP4 (VSE), Gaussian splats | `blender_render`, `blender_vse`, splat tools — **headless** |
 
-| Route | Page | Description |
-|-------|------|-------------|
-| `/` | Scene Explorer | 3D scene tree, hierarchy |
-| `/construct` | Construct | AI construction tool |
-| `/constructor` | AI Constructor | Conversational 3D creation |
-| `/materials` | Material Store | PBR material browser |
-| `/mesh` | Mesh/Collider/Splat | Mesh tools + Gaussian splats |
-| **`/agent-tools`** | **Agent Tools** | **Vision, shaders, sculpt, geonodes, AI, jobs, validation, telemetry** |
-| `/repository` | Repository | Asset library |
-| `/addons` | Addons | Blender addon manager |
-| `/chat` | Chat | AI assistant |
-| `/grease-pencil` | Grease Pencil | 2D drawing in 3D |
-| `/animation-2d` | 2D Animation | Timeline, onion skin |
-| `/storyboard` | Storyboard | Shot management |
-| `/vr` | VR Pipeline | VRM avatar + VRChat/Resonite/Unity |
-| `/scripts` | Script Console | Blender Python console |
-| `/video` | Video Editor | VSE timeline |
-| `/help` | Help & Reference | Agent Lab + discipline tabs |
-| `/status` | Status & Logs | Server health + logs |
-| `/apps` | App Hub | Fleet cards |
-| `/settings` | Settings | Config |
+### Fleet pipelines (downstream)
 
-## Fleet pipeline role
+| Downstream MCP | Takes from blender-mcp |
+|----------------|------------------------|
+| [godot-mcp](https://github.com/sandraschi/godot-mcp) | `.glb` / `.gltf` game assets |
+| [vrchat-mcp](https://github.com/sandraschi/vrchat-mcp) | `.vrm` after validation |
+| [tahoma2d-mcp](https://github.com/sandraschi/tahoma2d-mcp) | Rendered image sequences / GP output |
+| [freecad-mcp](https://github.com/sandraschi/freecad-mcp) | `.step` via intermediate export |
+| [unity3d-mcp](https://github.com/sandraschi/unity3d-mcp) | `.fbx` / `.glb` for Unity import |
 
-```text
-blender-mcp (authoring, vision, export GLB/VRM)
-        │
-        ├── unity3d-mcp (Unity scenes, VRChat SDK, builds)
-        ├── resonite-mcp (world injection, ResoniteLink, OSC)
-        ├── godot-mcp (2D/3D game import)
-        └── tahoma2d-mcp (2D render from GP output)
-```
+## Features
 
-## MCP Client Config
+- **Natural-language 3D creation** — scenes, meshes, materials, lighting, animation
+- **Live GUI bridge** — watch the agent build in Blender while you chat
+- **48+ MCP tools** — mesh edit, sculpt, geonodes, compositor, VSE, export (GLB, VRM, VRChat, Unity)
+- **Generative AI hooks** — Rodin/Tripo/Hunyuan mesh generation and vision refine
+- **Webapp dashboard** — scene explorer, agent lab, materials, mesh/splat pipeline
+- **Fleet-ready** — FastMCP 3.2, `.mcpb` packaging, Prometheus metrics, optional Docker
 
-```json
-{
-  "mcpServers": {
-    "blender-mcp": {
-      "command": "uv",
-      "args": ["--directory", "D:/Dev/repos/blender-mcp", "run", "blender-mcp"]
-    }
-  }
-}
-```
+## Quick Install
 
-HTTP MCP (webapp + bridge): `uv run python -m blender_mcp.cli --http --port 10849`
+1. Download **`blender-mcp-*.mcpb`** from [Releases](https://github.com/sandraschi/blender-mcp/releases/latest)
+2. Drag it into **Claude Desktop**
 
-## justfile targets
+Done. Install [Blender](https://www.blender.org/download/) separately if you have not already.
 
-| Target | Purpose |
-|--------|---------|
-| `lint` / `fix` | Ruff + Biome |
-| `test` | pytest |
-| `serve` | MCP server in stdio mode |
-| `mcpb-pack` | Pack for MCPB distribution |
+Other methods (npx mcpb, manual config, developer setup): **[INSTALL.md](INSTALL.md)**
 
-## See Also
+## What You Can Do
 
-- [integrations/blender-mcp.md](../../integrations/blender-mcp.md) — fleet vs PyPI stack
-- [WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md) — fleet port matrix
-- [FLEET_INDEX.md](../FLEET_INDEX.md) — one-line fleet table entry
-- [COMPETITIVE_ANALYSIS](https://github.com/sandraschi/blender-mcp/blob/main/docs/COMPETITIVE_ANALYSIS.md) — upstream repo
-- [unity3d-mcp](../unity3d-mcp/README.md) — downstream game/VR pipeline
-- [godot-mcp](../godot-mcp/README.md) — 2D game asset consumer
-- [tahoma2d-mcp](../tahoma2d-mcp/README.md) — fleet 2D animation compositor
+Try these in Claude Desktop after install:
+
+> Create a red cube on a gray floor with a sun lamp and render a viewport screenshot.
+
+> Build a simple chair with wood material and export as GLB.
+
+> Start a live Blender session and add a sphere with a metallic blue shader.
+
+## Documentation
+
+| Doc | Contents |
+|-----|----------|
+| [Installation](INSTALL.md) | All install methods, prerequisites, bridge setup |
+| [Configuration](docs/CONFIGURATION.md) | Env vars, Claude Desktop `env` block |
+| [Tool Reference](docs/FEATURES.md) | Capabilities and tool catalog |
+| [Development](docs/DEVELOPMENT.md) | Contributing, `just`, lint, build |
+| [Troubleshooting](docs/TROUBLESHOOTING.md) | Common errors and fixes |
+| [Architecture](docs/ARCHITECTURE.md) | System design |
+| [Roadmap](docs/ROADMAP.md) | Planned improvements |
+| [Monitoring](docs/MONITORING.md) | Prometheus / Grafana / Loki |
+| [Docker](docs/DOCKER.md) | Optional container deploy |
+
+Extended guides: [docs/DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md)
+
+## Webapp and Native App
+
+**Dashboard** (optional): `.\start.ps1` → http://localhost:10848 — see [INSTALL.md](INSTALL.md#webapp-dashboard-optional).
+
+**Tauri desktop installer** (~15 MB, no Python required): `just build-native` — see [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
+
+## Requirements
+
+- **Claude Desktop** (or any MCP client for manual config)
+- **Blender 3.0+** — installed separately, never bundled; override with `BLENDER_EXECUTABLE`
+- **LLM (optional)** — Ollama, LM Studio, or cloud API for script generation; see [INSTALL.md](INSTALL.md)
+- **OS:** Windows, macOS, Linux
+- **Python 3.12+** — only for Options C/D (clone-from-source)
+
+## License
+
+MIT — [FlowEngineer sandraschi](https://github.com/sandraschi). Free for personal and commercial use.

@@ -1,0 +1,11 @@
+id = "avatarmcp"
+name = "AvatarMCP"
+version = "1.1.0"
+schema_version = 1
+authors = ["Sandra Schipal <sandraschipal@gmail.com>"]
+description = "FastMCP 2.14.3 compatible VRM avatar management with VRChat OSC integration and agentic sampling workflows."
+repository = "https://github.com/sandraschi/avatarmcp"
+
+[context_servers.avatar-server]
+name = "AvatarMCP"
+description = "VRM avatar control, animation, OSC communication, Unity integration, and agentic sampling workflows"

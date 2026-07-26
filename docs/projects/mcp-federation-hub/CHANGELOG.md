@@ -2,6 +2,89 @@
 
 All notable changes to the MCP Federation Hub will be documented in this file.
 
+## [1.6.0] - 2026-05-25
+
+### Added
+- **Fleet bootstrap with tier priority**: `_bootstrap_fleet()` in `health_monitor.py` proactively starts all supervised servers after the grace period, sorted by tier (core→gold→showcase→creative→infrastructure→utility). Inter-launch delay varies by tier (0.2s for core, 1.5s for utility). Configurable via `federation-config.json` `bootstrap_priority` override field.
+- **`core` tier**: New highest-priority tier (priority 0, 0.2s delay). Used by yahboom-mcp.
+- **Socket-based health checks**: Replaced httpx with raw `asyncio.open_connection()` for health probes — httpx `timeout` parameter doesn't enforce on this Python 3.13/Windows setup, causing 30-120s hangs per probe.
+- **Port registry backend resolution**: `_build_backend_port_map()` parses `WEBAPP_PORTS.md` to resolve backend ports (vs frontend `web_interface` ports). Used by both `_extract_port()` and `_health_probe_urls()` so health checks hit the actual running backend.
+- **`GET /api/v1/config` endpoint**: Returns the current federation config for the Bootstrap Config UI.
+- **Bootstrap Config panel** in Servers page: Collapsible UI with checkboxes, Check All / Uncheck All, tier presets (Gold, Gold+Showcase, Creative+Infra, All), and Save button. Persists `supervised` field via `POST /api/v1/config/save`.
+- **Dashboard drilldown**: Stat cards and server rows now navigate to Servers/Health pages on click.
+
+### Fixed
+- **Lifespan blocking bridge startup**: `init_services()` in the lifespan hook imported `sampling.py` which creates `FastMCP("federation-sampling")` at module level, hanging forever. Moved to background thread pool with 30s timeout — server boots immediately regardless.
+- **Zombie process lock**: 100+ orphaned Python processes from timed-out `uv run` commands competed for uv locks, causing every shell command to hang. `Start-Process` cleanup kills all stale PIDs on boot.
+- **`$pid` automatic variable shadowing**: `webapp/start.ps1`, `bridge/service-wrapper.ps1`, `fleet-agent-mcp/start.ps1` used `$pid` as a local variable, overwriting PowerShell's read-only `$pid` (current process ID). Renamed to `$zp`.
+- **NSSM service wrapper double-spawn**: Old wrapper ran `Start-Process pwsh start.ps1` which re-spawned itself hidden, causing the wrapper's `Wait-Process` to return immediately on the first (short-lived) child. NSSM saw the service exit and entered a restart death spiral. Rewritten to run uvicorn directly with zombie retry loop.
+- **Zombie kill cross-user**: `Get-NetTCPConnection` doesn't show processes from other user sessions (e.g., SYSTEM-owned NSSM processes). Replaced with `netstat -ano` which works cross-user in all start scripts and wrappers.
+- **Windows PowerShell 5.1 parse error**: LF-only line endings caused PS 5.1 to fail on `finally` blocks. Files now use CRLF. Also removed em-dash characters (U+2014) that PS 5.1 can't handle.
+- **Fleet-agent start.ps1 crash**: `Get-CimInstance Win32_Process` requires admin rights and failed with `$ErrorActionPreference="Stop"`. Replaced with `netstat` + `taskkill`.
+- **Dashboard tool detail panel**: Tools page now shows full parameter schemas, return formats, and examples in a detail modal on click.
+
+### Changed
+- `federation-config.json`: Added `supervised: false` to meta-mcp, pinokio-mcp, tapo-mcp (no repos). Added `bootstrap_priority: 2` to plex-mcp, calibre-mcp. Added fleet-agent-mcp with `supervised: true`, `repo_path`. Total: 76 servers, 12 categories.
+- `install-service.ps1`: Updated wrapper template to generate the retry-loop, direct-uvicorn wrapper instead of the old double-spawn pattern.
+- `bridge/start.ps1`: Zombie kill uses `netstat` instead of `Get-NetTCPConnection` for cross-user reliability.
+- Webapp Dashboard: Stat cards navigate to `/servers` or `/health`; server rows in unreachable/healthy panels navigate to `/servers`. Bootstrap Config panel added to Servers page.
+- Health check timeout: `_poll_once` gather timeout is 120s (was 30s). httpx clients removed entirely in favor of TCP socket checks.
+
+### Added
+- **Four new fleet servers registered**: `godot-mcp` (10992/10993), `freecad-mcp` (10944/10945), `qcad-mcp` (10966/10967), `yahboom-mcp` (10892/10893). New "engineering" category.
+- **Fleet exchange depot**: `D:\Dev\repos\_exchange\` with subdirectories for cad/, models/, cfd/, avatars/, robots/. Documented convention for cross-server file handoff.
+- **Total servers**: 74 → 78 registered. Categories: +1 (engineering).
+
+### Changed
+- `federation-config.json` server count 74 → 78. Creative category: +godot-mcp, +qcad-mcp. Robotics: +yahboom-mcp. Engineering: new with freecad-mcp.
+
+## [1.4.0] - 2026-05-08
+
+### Added
+- **Fleet Supervisor**: Auto-restart supervised servers on 3 consecutive health failures with exponential backoff (60s → 120s → 240s → 300s cap). See `bridge/app/health_monitor.py` → `_supervisor_on_health()`.
+- **Supervisor API**: `GET /api/v1/supervisor/status`, `POST /api/v1/supervisor/{id}/pause|resume`. Per-server state (failures, restart attempts, backoff timer, restart history, paused flag).
+- **Resource gates**: RAM gate (<90%), fleet proc count gate (<60). CPU gate intentionally omitted (uv run startup spikes transiently to 100%). Max 1 concurrent restart.
+- **Health check MCP fallback**: If standard health endpoints (`/health`, `/api/health`, `/api/status`, `/`) don't respond, probes the MCP `tools/list` JSON-RPC endpoint as a liveness signal.
+- **Already-healthy guard**: Before restarting, the supervisor probes the server's health endpoint. If already healthy (port open + responding), the restart is skipped — no double-start or zombie kill.
+- **Zombie port kill**: Before starting, `stop_server_by_port()` kills processes listening on the target port (async netstat, avoids blocking the event loop).
+- **VIRTUAL_ENV isolation**: Child start.ps1 processes spawned by the supervisor run with `VIRTUAL_ENV` cleared, preventing uv environment mismatches ("does not match project environment path" warnings).
+- **NSSM Windows service**: `bridge/install-service.ps1` registers `mcp-federation-hub` as an auto-start Windows service via NSSM. Survives reboots. Also creates `bridge/service-wrapper.ps1`.
+- **Start script migration tool**: `bridge/migrate-stdio-to-http.ps1` converts IDE MCP configs from stdio `"command"` to HTTP `"url"` transport for fleet-supervised servers. Backs up originals with timestamps.
+- **Start script patcher**: `bridge/patch-start-ps1.ps1` adds `$SkipFrontend = $Headless` + `if (-not $SkipFrontend) { return }` guard to 117 fleet start.ps1 files. Backs up each file. Ensures `start.ps1 -Headless` (supervisor mode) skips Vite frontend startup.
+- **`-NoExit` fix**: arxiv-mcp and winrar-mcp start.ps1 files patched to add `-NoExit` to PowerShell `Start-Process` calls, keeping backend error windows open on crash instead of vanishing silently.
+- Two new fleet servers registered: `speech-mcp` (10908/10909) and `onenote-mcp` (10906/10907).
+- `bridge/AGENTS.md` with architecture diagram, supervisor timeline, API reference, and operational commands.
+
+### Fixed
+- **Circular import**: `main.py` → `sampling.py` → `main.py` resolved with lazy getter `_get_federation_manager()` in sampling.py.
+- **Hanging imports**: `openai` (config sync), `httpx` (network probe), `fastmcp.sampling` all hang at module level. Moved to lazy imports — `sampling` and `ai_service` are now initialized in `init_services()` called from the lifespan hook, AFTER the health endpoint is serving.
+- **Event loop blocking**: `stop_server_by_port()` used sync `subprocess.run(netstat)` blocking the uvicorn event loop. Rewritten to use `asyncio.create_subprocess_exec`.
+- **First poll delay**: `_monitor_loop` now sleeps 5s before the first poll, giving the health endpoint time to start responding.
+- **Port leak**: Bridge restarts can leave orphaned TCP connections in LISTEN state on Windows. This requires a reboot to fully clear.
+
+### Changed
+- `start_server()` now uses start.ps1 as primary launch mechanism (no more auto-detection of Python modules). The start.ps1 `-Headless` flag plus the `$SkipFrontend` patch ensures only the Python backend starts.
+- Supervisor concurrency reduced from 5 to 1 (parallel `uv run` imports are CPU-heavy).
+- Grace period: 120s after hub startup before failure counting begins.
+- `federation-config.json`: added `supervised` (bool), `headless` (bool), `start_cmd` (string, optional) fields per server. Added entries for speech-mcp and onenote-mcp.
+- `WEBAPP_PORTS.md`: added speech-mcp (10908/10909) and onenote-mcp (10906/10907) port registrations.
+
+## [1.3.0] - 2026-03-14
+
+### Added
+- **Mesh (peers)**: Hub-to-hub connectivity. Add remote hubs by URL or invite link; tool calls can target a peer (forwarded over HTTPS with optional Bearer token). See [docs/PEERS_AND_MESH.md](docs/PEERS_AND_MESH.md).
+- **Peers API**: `GET/POST/DELETE /api/v1/peers`, `GET /api/v1/peers/me`, `POST /api/v1/peers/invoke`. Persisted in `bridge/peers.json` (`my_token`, `public_url`, `remote_hubs`).
+- **Peers page**: Invite link (copy), add remote hub (paste invite or URL + token), list peers with online/offline and encrypted badge. Sidebar entry under "Peers".
+- **Security page (revamp)**: Live data from bridge: PEER_TOKEN status, hub encryption (HTTPS/HTTP), remote peers count and list with "Manage →" link to Peers. Invite link and peer token copy. Security posture notes (bridge port, dashboard exposure, peer invoke auth, config save, hub-to-hub HTTPS).
+- **Docs**: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/API.md](docs/API.md), [docs/PEERS_AND_MESH.md](docs/PEERS_AND_MESH.md), [docs/README.md](docs/README.md). Full endpoint reference, peer module function reference, and concepts.
+- **MCP Central entry**: [mcp-central-docs/projects/federation-mcp/](https://github.com/sandraschi/mcp-central-docs/tree/main/projects/federation-mcp) with README and projects index row.
+
+### Changed
+- **Start script**: `webapp/start.ps1` runs the bridge from `bridge/` with `app.main:app` (fixes `ModuleNotFoundError: mcp_federation_hub`). Backend started via `uv run python -m uvicorn app.main:app` from `bridge/` with `WorkingDirectory` set to bridge root.
+- **Bridge**: FederationManager merges remote hub peers into server list (category `peers`). Tool calls to a peer use `POST {base_url}/api/v1/peers/invoke` with Bearer token. CORS extended for dashboard origin (10856).
+- **Default API URL**: Webapp `VITE_API_URL` default set to `http://localhost:10857` (bridge port).
+- **README**: Ports 10856/10857, Peers in architecture, documentation section with links to docs/, WEBAPP_OVERVIEW, and MCP Central entry.
+
 ## [1.2.0] - 2026-02-28
 
 ### Added

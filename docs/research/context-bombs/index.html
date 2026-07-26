@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Context Bombs — Fleet Research</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        fleet: { 900: '#09090b', 800: '#18181b', 700: '#27272a', 600: '#3f3f46', 500: '#52525b', 400: '#a1a1aa', 300: '#d4d4d8', 200: '#e4e4e7', 100: '#f4f4f5' }
+      }
+    }
+  }
+}
+document.documentElement.classList.add('dark')
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+body { font-family: 'Inter', sans-serif; }
+code, pre { font-family: 'JetBrains Mono', monospace; }
+.bomb-card { transition: transform 0.1s, box-shadow 0.1s; }
+.bomb-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+</style>
+</head>
+<body class="bg-fleet-900 text-fleet-200 min-h-screen">
+<div class="max-w-5xl mx-auto px-6 py-12">
+
+<!-- Header -->
+<div class="mb-12">
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-2xl">&#9889;</span>
+    <h1 class="text-3xl font-bold text-white tracking-tight">Context Bombs</h1>
+  </div>
+  <p class="text-fleet-400 text-lg mb-2">Guardrail triggering as a security primitive &mdash; fleet research, July 2026</p>
+  <div class="flex flex-wrap gap-2 text-xs">
+    <span class="bg-fleet-700 px-2.5 py-1 rounded-full text-amber-400">Tracebit</span>
+    <span class="bg-fleet-700 px-2.5 py-1 rounded-full text-sky-400">anti-scraper</span>
+    <span class="bg-fleet-700 px-2.5 py-1 rounded-full text-emerald-400">scout model</span>
+    <span class="bg-fleet-700 px-2.5 py-1 rounded-full text-red-400">supply chain</span>
+    <span class="bg-fleet-700 px-2.5 py-1 rounded-full text-purple-400">sentinel convention</span>
+  </div>
+</div>
+
+<!-- Stats row -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+  <div class="bomb-card bg-fleet-800 rounded-xl p-5 border border-fleet-700">
+    <div class="text-2xl font-bold text-white">5</div>
+    <div class="text-fleet-400 text-sm">models tested</div>
+  </div>
+  <div class="bomb-card bg-fleet-800 rounded-xl p-5 border border-fleet-700">
+    <div class="text-2xl font-bold text-white">90%</div>
+    <div class="text-fleet-400 text-sm">avg. success reduction</div>
+  </div>
+  <div class="bomb-card bg-fleet-800 rounded-xl p-5 border border-fleet-700">
+    <div class="text-2xl font-bold text-white">4</div>
+    <div class="text-fleet-400 text-sm">attack vectors documented</div>
+  </div>
+  <div class="bomb-card bg-fleet-800 rounded-xl p-5 border border-fleet-700">
+    <div class="text-2xl font-bold text-white">3</div>
+    <div class="text-fleet-400 text-sm">research documents</div>
+  </div>
+</div>
+
+<!-- Documents -->
+<h2 class="text-xl font-semibold text-white mb-6">Research Documents</h2>
+<div class="grid gap-4 mb-12">
+  <a href="../../standards/threats/CONTEXT_BOMBS.md" class="bomb-card block bg-fleet-800 rounded-xl p-6 border border-fleet-700 hover:border-amber-700/50">
+    <div class="flex items-start justify-between">
+      <div>
+        <h3 class="font-semibold text-white text-lg">CONTEXT_BOMBS.md</h3>
+        <p class="text-fleet-400 text-sm mt-1">Full research document &mdash; Tracebit analysis, honeypot lineage, scout countermeasure, sentinel convention, 10 open questions, research TODO</p>
+      </div>
+      <span class="text-fleet-500 text-sm shrink-0 ml-4">105+ lines</span>
+    </div>
+  </a>
+  <a href="../../standards/threats/MCP_SERVER_SUPPLY_CHAIN.md" class="bomb-card block bg-fleet-800 rounded-xl p-6 border border-fleet-700 hover:border-sky-700/50">
+    <div class="flex items-start justify-between">
+      <div>
+        <h3 class="font-semibold text-white text-lg">MCP_SERVER_SUPPLY_CHAIN.md</h3>
+        <p class="text-fleet-400 text-sm mt-1">Supply chain threat analysis &mdash; find&rarr;clone&rarr;install pipeline, 4 attack vectors, permission manifest proposal, pre-install audit checklist</p>
+      </div>
+      <span class="text-fleet-500 text-sm shrink-0 ml-4">~100 lines</span>
+    </div>
+  </a>
+  <a href="../../standards/threats/CONTEXT_BOMBS_HN_DRAFT.md" class="bomb-card block bg-fleet-800 rounded-xl p-6 border border-fleet-700 hover:border-emerald-700/50">
+    <div class="flex items-start justify-between">
+      <div>
+        <h3 class="font-semibold text-white text-lg">CONTEXT_BOMBS_HN_DRAFT.md</h3>
+        <p class="text-fleet-400 text-sm mt-1">Hacker News post draft &mdash; pitch, findings, scout countermeasure, discussion questions</p>
+      </div>
+      <span class="text-fleet-500 text-sm shrink-0 ml-4">~40 lines</span>
+    </div>
+  </a>
+</div>
+
+<!-- Key Concepts -->
+<h2 class="text-xl font-semibold text-white mb-6">Key Concepts</h2>
+<div class="grid md:grid-cols-2 gap-4 mb-12">
+  <div class="bomb-card bg-fleet-800 rounded-xl p-5 border border-fleet-700">
+    <div class="text-amber-400 font-medium text-sm mb-1">&#9654; Context Bomb</div>
+    <div class="text-fleet-300 text-sm">A short string that triggers safety guardrails in AI agents, planted in decoy resources or public content.</div>
+  </div>
+  <div class="bomb-card bg-fleet-800 rounded-xl p-5 border border-fleet-700">
+    <div class="text-sky-400 font-medium text-sm mb-1">&#9654; Scout Model</div>
+    <div class="text-fleet-300 text-sm">A model with a different guardrail profile that reads content first and detects bombs by being immune to them.</div>
+  </div>
+  <div class="bomb-card bg-fleet-800 rounded-xl p-5 border border-fleet-700">
+    <div class="text-emerald-400 font-medium text-sm mb-1">&#9654; Sentinel Convention</div>
+    <div class="text-fleet-300 text-sm">Dotfiles (<code>.ai-readiness</code>, <code>.nopublish</code>) that signal intent to cooperative agents and terminate adversarial ones.</div>
+  </div>
+  <div class="bomb-card bg-fleet-800 rounded-xl p-5 border border-fleet-700">
+    <div class="text-red-400 font-medium text-sm mb-1">&#9654; Permission Manifest</div>
+    <div class="text-fleet-300 text-sm">Declaring filesystem/network/shell scope per MCP server &mdash; the missing permission model for the MCP ecosystem.</div>
+  </div>
+</div>
+
+<!-- Model impact table -->
+<h2 class="text-xl font-semibold text-white mb-4">Model Impact</h2>
+<div class="overflow-x-auto mb-12">
+  <table class="w-full text-sm bg-fleet-800 rounded-xl border border-fleet-700">
+    <thead>
+      <tr class="border-b border-fleet-700 text-fleet-400 text-left">
+        <th class="px-4 py-3 font-medium">Model</th>
+        <th class="px-4 py-3 font-medium">Baseline (any path)</th>
+        <th class="px-4 py-3 font-medium">With Bomb</th>
+        <th class="px-4 py-3 font-medium">Triggered by</th>
+      </tr>
+    </thead>
+    <tbody class="text-fleet-300">
+      <tr class="border-b border-fleet-700/50"><td class="px-4 py-3 text-white">Opus 4.8</td><td class="px-4 py-3">93% admin</td><td class="px-4 py-3"><span class="text-red-400">0%</span></td><td class="px-4 py-3">bio-safety (en)</td></tr>
+      <tr class="border-b border-fleet-700/50"><td class="px-4 py-3 text-white">Gemini 3.1 Pro</td><td class="px-4 py-3">90% any path</td><td class="px-4 py-3"><span class="text-red-400">0%</span></td><td class="px-4 py-3">bio-safety (en)</td></tr>
+      <tr class="border-b border-fleet-700/50"><td class="px-4 py-3 text-white">GLM 5.2</td><td class="px-4 py-3">64% admin</td><td class="px-4 py-3"><span class="text-red-400">6%</span></td><td class="px-4 py-3">Chinese politics (zh)</td></tr>
+      <tr class="border-b border-fleet-700/50"><td class="px-4 py-3 text-white">DeepSeek V4 Pro</td><td class="px-4 py-3">100% any path</td><td class="px-4 py-3"><span class="text-red-400">13%</span></td><td class="px-4 py-3">Chinese politics (zh)</td></tr>
+      <tr><td class="px-4 py-3 text-white">Kimi K2.6</td><td class="px-4 py-3">80% any path</td><td class="px-4 py-3"><span class="text-red-400">22%</span></td><td class="px-4 py-3">Chinese politics (zh)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Scout pairing -->
+<h2 class="text-xl font-semibold text-white mb-4">Scout Model Pairings</h2>
+<div class="overflow-x-auto mb-12">
+  <table class="w-full text-sm bg-fleet-800 rounded-xl border border-fleet-700">
+    <thead>
+      <tr class="border-b border-fleet-700 text-fleet-400 text-left">
+        <th class="px-4 py-3 font-medium">Bomb type</th>
+        <th class="px-4 py-3 font-medium">Scout (immune)</th>
+        <th class="px-4 py-3 font-medium">Protects</th>
+      </tr>
+    </thead>
+    <tbody class="text-fleet-300">
+      <tr class="border-b border-fleet-700/50"><td class="px-4 py-3 text-white">Chinese political</td><td class="px-4 py-3">Opus / Gemini</td><td class="px-4 py-3">DeepSeek</td></tr>
+      <tr class="border-b border-fleet-700/50"><td class="px-4 py-3 text-white">Bio-safety</td><td class="px-4 py-3">DeepSeek / GLM</td><td class="px-4 py-3">Opus</td></tr>
+      <tr class="border-b border-fleet-700/50"><td class="px-4 py-3 text-white">Both</td><td class="px-4 py-3">Local uncensored</td><td class="px-4 py-3">Everyone</td></tr>
+      <tr><td class="px-4 py-3 text-white">Unknown</td><td class="px-4 py-3">Qwen 2.5 7B &rarr; Opus (fallback)</td><td class="px-4 py-3">All (two orthogonal scouts)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Meta -->
+<div class="border-t border-fleet-700 pt-6 text-fleet-500 text-xs">
+  <p>Session notes: 2026-07-15 &middot; Tracebit research &middot; fleet security working documents</p>
+  <p class="mt-1">Source files in <code>standards/threats/</code> and <code>patterns/</code></p>
+</div>
+
+</div>
+</body>
+</html>

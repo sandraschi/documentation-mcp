@@ -1,16 +1,16 @@
-﻿# Changelog
+# Changelog
 
 ## [2.2.0] - 2025-12-02 - Complete MCP Server Lifecycle Management (CRUD)
 
 ### Added
-- **ðŸ—ï¸ CREATE: Server Scaffolding** - Generate new SOTA-compliant MCP servers from scratch
-- **ðŸ“ UPDATE: Server Enhancement** - Add missing SOTA components to existing servers
-- **ðŸ—‘ï¸ DELETE: Server Removal** - Safely delete test/throwaway servers with safety checks
-- **ðŸ“š Complete Documentation Templates** - MCP standards, MCPB standards, client rulebooks
-- **ðŸ”§ Full Project Scaffold** - Git, CI/CD, tests, scripts, docs folder structure
+- **🏗️ CREATE: Server Scaffolding** - Generate new SOTA-compliant MCP servers from scratch
+- **📝 UPDATE: Server Enhancement** - Add missing SOTA components to existing servers
+- **🗑️ DELETE: Server Removal** - Safely delete test/throwaway servers with safety checks
+- **📚 Complete Documentation Templates** - MCP standards, MCPB standards, client rulebooks
+- **🔧 Full Project Scaffold** - Git, CI/CD, tests, scripts, docs folder structure
 
 ### Server Scaffolding Features
-- **SOTA-Compliant by Default**: All new servers meet FastMCP 3.1.1+.1 standards
+- **SOTA-Compliant by Default**: All new servers meet FastMCP 2.13.1 standards
 - **Complete Structure**: src/, tests/, docs/, scripts/, .github/workflows/
 - **Help & Status Tools**: Pre-generated SOTA-required tools
 - **CI/CD Ready**: GitHub Actions workflow with ruff + pytest
@@ -31,7 +31,7 @@
 - **Force Mode**: Skip safety checks when needed
 
 ### Documentation Templates
-- **MCP Server Standards**: FastMCP 3.1.1++ requirements and best practices
+- **MCP Server Standards**: FastMCP 2.13+ requirements and best practices
 - **MCPB Standards**: Packaging and distribution guidelines
 - **Client Rulebooks**: Integration guides for Claude Desktop, Cursor IDE, Windsurf, Cline
 
@@ -44,11 +44,11 @@
 ## [2.1.0] - 2025-12-02 - Enhanced Runt Analyzer & Persistence
 
 ### Added
-- **ðŸ“Š Rule-Based SOTA Analyzer** - Declarative rule system replacing hardcoded criteria
-- **ðŸ’¾ Scan Result Caching** - File-based persistence to avoid re-scanning on every request
-- **ðŸ“ Markdown Report Format** - Human-readable markdown output for scan results
-- **ðŸ” Comprehensive Repo Details** - Structured JSON with full repository information for AI consumption
-- **âš™ï¸ Cache Management** - Configurable TTL, cache clearing, and statistics
+- **📊 Rule-Based SOTA Analyzer** - Declarative rule system replacing hardcoded criteria
+- **💾 Scan Result Caching** - File-based persistence to avoid re-scanning on every request
+- **📝 Markdown Report Format** - Human-readable markdown output for scan results
+- **🔍 Comprehensive Repo Details** - Structured JSON with full repository information for AI consumption
+- **⚙️ Cache Management** - Configurable TTL, cache clearing, and statistics
 
 ### Runt Analyzer Improvements
 - **Rule-Based Architecture**: Declarative rule definitions with categories (VERSION, TOOLS, STRUCTURE, QUALITY, TESTING, CI_CD, DOCUMENTATION)
@@ -83,12 +83,12 @@
 ## [2.0.0] - 2025-12-04 - Preprompt Management System
 
 ### Added
-- **ðŸŽ­ Preprompt Management** - Dynamic AI personality system with SQLite storage
-- **ðŸ¤– AI Refine Generator** - Type concept â†’ AI generates elaborate preprompt in 60 seconds
-- **ðŸ“ Import from .md** - Upload markdown files as preprompts
-- **ðŸ’¾ SQLite Database** - Persistent storage with full CRUD operations
-- **ðŸŽ¨ Dynamic Dropdown** - Load unlimited personalities without code changes
-- **ðŸ´â€â˜ ï¸ Creative Personalities** - 7 preprompts including AI-generated "Coin Collector" and "Long John Silver, Pirate"
+- **🎭 Preprompt Management** - Dynamic AI personality system with SQLite storage
+- **🤖 AI Refine Generator** - Type concept → AI generates elaborate preprompt in 60 seconds
+- **📁 Import from .md** - Upload markdown files as preprompts
+- **💾 SQLite Database** - Persistent storage with full CRUD operations
+- **🎨 Dynamic Dropdown** - Load unlimited personalities without code changes
+- **🏴‍☠️ Creative Personalities** - 7 preprompts including AI-generated "Coin Collector" and "Long John Silver, Pirate"
 
 ### Preprompt Features
 - AI-assisted generation using local Ollama LLM (14g model tested)
@@ -103,7 +103,7 @@
 - `GET /api/ai/preprompts` - List all preprompts
 - `POST /api/preprompts/add` - Add new preprompt
 - `POST /api/preprompts/import` - Import from markdown
-- `POST /api/preprompts/ai-refine` - AI-generate preprompt (ðŸŒŸ star feature!)
+- `POST /api/preprompts/ai-refine` - AI-generate preprompt (🌟 star feature!)
 - `GET /api/preprompts/{id}` - Get specific preprompt
 - `PUT /api/preprompts/{id}` - Update preprompt
 - `DELETE /api/preprompts/{id}` - Delete preprompt
@@ -125,7 +125,7 @@
 ## [1.1.0] - 2025-11-29 - AI Assistant with Tools
 
 ### Added
-- **ðŸ¤– AI Assistant Tab** - Chat with Ollama for intelligent MCP analysis
+- **🤖 AI Assistant Tab** - Chat with Ollama for intelligent MCP analysis
 - **Ollama model dropdown** - Auto-detects loaded models with sizes
 - **File reading** - AI can read any file in `D:/Dev/repos`
 - **Directory browsing** - AI can list folder contents
@@ -133,10 +133,10 @@
 - **Repo context** - Include full repo list in AI context
 
 ### AI Assistant Features
-- ðŸ› ï¸ AI Tools panel: file path input, web search input, repo list toggle
-- âš¡ Quick prompts: Analyze runts, Suggest portmanteaus, Review naming, etc.
-- ðŸ“‹ Context sidebar: Shows repo count, tool count, SOTA/runt stats
-- âš™ï¸ Model selector: Dropdown with all Ollama models + refresh button
+- 🛠️ AI Tools panel: file path input, web search input, repo list toggle
+- ⚡ Quick prompts: Analyze runts, Suggest portmanteaus, Review naming, etc.
+- 📋 Context sidebar: Shows repo count, tool count, SOTA/runt stats
+- ⚙️ Model selector: Dropdown with all Ollama models + refresh button
 - Real-time thinking indicators with tool usage display
 
 ### API Endpoints
@@ -157,15 +157,15 @@
 - Live activity log with real-time updates
 - Stats dashboard: Clients, Repos, Tools, SOTA count
 - Repository health breakdown: SOTA/Improvable/Runts
-- Zoo classification with animal emojis (ðŸ˜ Jumbo â†’ ðŸ¿ï¸ Chipmunk)
+- Zoo classification with animal emojis (🐘 Jumbo → 🐿️ Chipmunk)
 
 ### Dashboard Features
-- ðŸ“Š Overview: Stats + client discovery + repo health
-- ðŸ”Œ MCP Clients: All discovered server configs with connect buttons
-- ðŸ“¦ Repositories: Filterable repo grid with detail modals
-- ðŸ”§ Tools: Tool explorer with live connection support
-- ðŸ’» Console: Tool execution console with parameter input
-- ðŸ¤– AI Assistant: Ollama-powered chat with file/web access
+- 📊 Overview: Stats + client discovery + repo health
+- 🔌 MCP Clients: All discovered server configs with connect buttons
+- 📦 Repositories: Filterable repo grid with detail modals
+- 🔧 Tools: Tool explorer with live connection support
+- 💻 Console: Tool execution console with parameter input
+- 🤖 AI Assistant: Ollama-powered chat with file/web access
 
 ## [0.2.1] - 2025-11-29 - Detail Modal Redesign
 
@@ -173,9 +173,9 @@
 - **Redesigned detail modal** with comprehensive repo analysis:
   - 6-stat header row: FastMCP version, Portmanteaus, Operations, Individual tools, CI/CD, Zoo Class
   - Structure badge row: src/, tests/, scripts/, tools/, portmanteau presence indicators
-  - Side-by-side Issues (ðŸš¨) and Recommendations (ðŸ’¡) panels
+  - Side-by-side Issues (🚨) and Recommendations (💡) panels
   - Collapsible README preview with full content
-  - Organized tool list: Portmanteau section (ðŸ“¦) with operations, Individual section (ðŸ”¹)
+  - Organized tool list: Portmanteau section (📦) with operations, Individual section (🔹)
   - Each tool shows name, file path, and expandable docstring
 - Better visual hierarchy with color-coded status badges
 - Improved contrast and readability
@@ -191,11 +191,11 @@
   - Tool list with docstrings (collapsible)
   - Portmanteau vs Individual tool classification
   - Operations count within portmanteaus
-- Zoo classification system: ðŸ˜ Jumbo, ðŸ¦ Large, ðŸ¦Š Medium, ðŸ° Small, ðŸ¿ï¸ Chipmunk
-- Status classification: âœ… SOTA, âš ï¸ Improvable, ðŸ› Runt, ðŸ’€ Critical
+- Zoo classification system: 🐘 Jumbo, 🦁 Large, 🦊 Medium, 🐰 Small, 🐿️ Chipmunk
+- Status classification: ✅ SOTA, ⚠️ Improvable, 🐛 Runt, 💀 Critical
 
 ### Analysis Criteria
-- FastMCP version check (< 3.1.1+ = runt, 3.1.1+-3.1.1+ = improvable)
+- FastMCP version check (< 2.10 = runt, 2.10-2.11 = improvable)
 - Project structure validation: `src/`, `tests/`, `scripts/`, `tools/`
 - CI/CD workflow presence
 - Tool registration pattern detection (decorator vs non-conforming)
@@ -210,10 +210,9 @@
 ## [0.1.0] - 2025-08-08 - Initial Release
 
 ### Added
-- Initial project setup with FastAPI and FastMCP 3.1.1+ integration
+- Initial project setup with FastAPI and FastMCP 2.11 integration
 - Basic server management UI
 - Stdio transport implementation
 - CI/CD pipeline with GitHub Actions
 - Automated release process
 - Development tooling and pre-commit hooks
-

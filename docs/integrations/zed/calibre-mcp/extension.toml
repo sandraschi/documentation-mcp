@@ -1,0 +1,11 @@
+id = "calibre-mcp"
+name = "Calibre MCP"
+version = "0.1.0"
+schema_version = 1
+authors = ["Sandra Schipal <sandraschipal@gmail.com>"]
+description = "Ebook library management and conversion MCP server for Calibre integration"
+repository = "https://github.com/sandraschi/calibre-mcp"
+
+[context_servers.calibre-mcp]
+name = "Calibre MCP"
+description = "Ebook library management, format conversion, and metadata operations"

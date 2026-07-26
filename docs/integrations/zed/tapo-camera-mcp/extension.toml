@@ -1,0 +1,11 @@
+id = "tapo-camera-mcp"
+name = "Tapo Camera MCP"
+version = "0.1.0"
+schema_version = 1
+authors = ["Sandra Schipal <sandraschipal@gmail.com>"]
+description = "Smart home security camera control MCP server for TP-Link Tapo cameras"
+repository = "https://github.com/sandraschi/tapo-camera-mcp"
+
+[context_servers.tapo-camera-mcp]
+name = "Tapo Camera MCP"
+description = "Smart camera control, video streaming, motion detection, and security monitoring"

@@ -1,0 +1,60 @@
+# Windows Operations MCP (SOTA v14.1.0) Gold Standard
+
+A specialized Windows system orchestration platform and High-Fidelity Data Surgery Hub built with FastMCP 3.2.0. Stabilized for industrial use (April 2026).
+
+## 🪟 Specialized Windows Control Plane
+Industrial-grade tools for native Windows hardening and introspection.
+
+### 1. Registry Management (`windows_registry`)
+- **Safe Mode**: Automatic backups to `backups/registry/` before any write/delete.
+- **Operations**: Read, write, delete, list, export, import.
+
+### 2. Local Account Security (`windows_accounts`)
+- **Users**: List, add, remove, and password management.
+- **Groups**: Comprehensive membership control for PoLP enforcement.
+- **Audit**: Group membership enumeration for security introspection.
+
+### 4. Networking & Perimeter (`windows_network`)
+- **Firewall**: Native rules management (`netsh advfirewall`).
+- **Diag**: DNS flushing and native IP/adapter introspection.
+
+### 5. Environment Surgery (`windows_environment`)
+- **Persistence**: Permanent User/System variable management.
+- **Broadcast**: System-wide synchronization via `WM_SETTINGCHANGE`.
+
+### 6. App & Package Management (`windows_apps`)
+- **Bloatware**: Listing and removal of AppX/Store packages.
+
+### 3. Automation & Introspection (`windows_automation`)
+- **Tasks**: Lifecycle management for `schtasks.exe`.
+- **WMI**: Deep hardware/OS introspection via structured WMI queries.
+
+### 4. Service Lifecycle (`windows_services`)
+- **Logic**: Control and monitor native Windows services.
+
+## 🧪 High-Fidelity Data Surgery
+Refined tools for complex configuration and artifact manipulation.
+
+### 1. JSON Surgery (`json_operations`)
+- **Patching**: Recursive deep-merging of configuration files.
+- **Validation**: Schema-aware verification of JSON integrity.
+- **Extraction**: Fuzzy JSON extraction from unstructured text/logs.
+
+### 2. Archive Management (`archive_management`)
+- **Format**: ZIP, TAR, and specialized Windows Cabinet (`.cab`) expansion.
+- **Exclusion**: Pattern-based creation with robust filtering logic.
+
+## 🛰️ Agentic Intelligence
+Autonomous orchestration via FastMCP 3.2+ patterns.
+
+### 1. Agentic Orchestration (`agentic_operations`)
+- **SEP-1577 Sampling**: Mission-critical decision-making via `ctx.sample()`.
+- **Workflows**: Hardening Mission, Autonomous Troubleshooter.
+
+### 2. Expert Prefabs (`prompts.py`)
+- **Wizards**: Registry Wizard, PowerShell Scaffold, Account Security Audit, Forensic Data Surgery.
+
+## 🛠️ Connectivity
+- **Backend Hub**: Port 10748 (uv run python)
+- **Fleet Dashboard**: Port 10749 (Premium Vite UI)
+- **Skill**: skill://windows-expert

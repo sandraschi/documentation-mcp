@@ -1,15 +1,36 @@
-﻿# LLM.txt MCP Server
+# LLM.txt MCP Server
+
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
 > Automated generation and management of llms.txt documentation files for AI accessibility
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![FastMCP](https://img.shields.io/badge/FastMCP-3.1.1+.0+-green.svg)](https://github.com/jlowin/fastmcp)
+[![FastMCP](https://img.shields.io/badge/FastMCP-2.12.0+-green.svg)](https://github.com/jlowin/fastmcp)
 [![Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 The LLM.txt MCP Server provides comprehensive tools for generating, validating, and managing `llms.txt` files that make project documentation accessible to AI systems. Built with FastMCP for seamless integration with Claude Desktop and other MCP-compatible clients.
 
-## ðŸš€ Features
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/llm-txt-mcp
+cd llm-txt-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+
+##  Features
 
 - **Automated Generation**: Scan project directories and auto-generate structured llms.txt files
 - **Multi-Language Support**: Detect and handle Python, TypeScript, React, FastAPI, Rust, Go, and more
@@ -19,25 +40,25 @@ The LLM.txt MCP Server provides comprehensive tools for generating, validating, 
 - **Context Conversion**: Convert llms.txt to XML/JSON formats optimized for LLM consumption
 - **Git Integration**: Leverage git repository information for enhanced project analysis
 
-## ðŸ“‹ Requirements
+##  Requirements
 
 - Python 3.11 or higher
-- FastMCP 3.1.1+.0+
+- FastMCP 3.1.0+
 - Git (optional, for enhanced project analysis)
 
-## ðŸš€ Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx llm-txt-mcp
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -55,19 +76,19 @@ cd llm-txt-mcp
 uv pip install -e .
 ```
 
-## ðŸš€ Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx llm-txt-mcp
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -77,7 +98,7 @@ Add to your `claude_desktop_config.json`:
   }
 }
 ```
-## âš™ï¸ Configuration
+##  Configuration
 
 ### Claude Desktop Integration (Recommended)
 
@@ -115,7 +136,7 @@ python scripts/run_server.py --stdio  # For Claude Desktop
 python scripts/run_server.py --host 127.0.0.1 --port 8000  # For HTTP
 ```
 
-## ðŸ”§ Available Tools
+##  Available Tools
 
 ### Core Generation Tools
 
@@ -201,7 +222,7 @@ Analyze repository for AI accessibility and provide comprehensive recommendation
 - `include_analysis` (boolean, optional): Include detailed file-by-file analysis
 - `output_format` (string, optional): Output format ("text", "json", "markdown")
 
-## ðŸ“š Usage Examples
+##  Usage Examples
 
 ### Generate llms.txt for a Python Project
 
@@ -211,8 +232,12 @@ generate_llms_txt(project_path="/home/user/my-python-app")
 ```
 
 This will create:
-- `llms.txt` - Main documentation index
-- `llms-full.txt` - Complete content inclusion
+- `llms.txt` — fleet-style index (links to `llms-full.txt`, capped doc list)
+- `llms-full.txt` — curated excerpts (secrets/paths sanitized; no debug dumps)
+
+**Quality mode** (default `quality_mode=true`) skips `node_modules`, `.git`, lockfiles,
+`debug_output.txt`, megatest guides, and `.env`. Set `quality_mode=false` only if you
+need the legacy verbose dump behavior.
 
 ### Validate and Update Existing Documentation
 
@@ -261,16 +286,16 @@ scan_project_structure(project_path="/home/user/my-project")
 generate_from_template(project_path="/home/user/my-project", template_name="python")
 ```
 
-## ðŸ“ Generated File Structure
+##  Generated File Structure
 
 The tool generates structured documentation:
 
 ```
 your-project/
-â”œâ”€â”€ llms.txt              # Main documentation index
-â”œâ”€â”€ llms-full.txt         # Complete content inclusion
-â”œâ”€â”€ llms.ctx.xml          # XML context (if converted)
-â””â”€â”€ llms.ctx.json         # JSON context (if converted)
+ llms.txt              # Main documentation index
+ llms-full.txt         # Complete content inclusion
+ llms.ctx.xml          # XML context (if converted)
+ llms.ctx.json         # JSON context (if converted)
 ```
 
 ### Example llms.txt Output
@@ -302,7 +327,7 @@ your-project/
 - [Contributing](CONTRIBUTING.md): Guidelines for contributors
 ```
 
-## ðŸŽ¯ Project Type Detection
+##  Project Type Detection
 
 Automatically detects project types based on key files:
 
@@ -316,7 +341,7 @@ Automatically detects project types based on key files:
 | **Go** | `go.mod`, `go.sum`, `main.go` | API, Examples |
 | **Generic** | Any other structure | Docs, Examples, Optional |
 
-## ðŸ” Smart Documentation Discovery
+##  Smart Documentation Discovery
 
 The system intelligently categorizes documentation:
 
@@ -326,7 +351,7 @@ The system intelligently categorizes documentation:
 - **Configuration**: Project configs, environment files, settings
 - **Optional**: Changelog, contributing guidelines, license info
 
-## ðŸ§ª Development
+##  Development
 
 ### Running Tests
 
@@ -359,12 +384,12 @@ python -m llm_txt_mcp.server
 python -c "from llm_txt_mcp.service import LLMTextService; print('Service loaded')"
 ```
 
-## ðŸ¤ Contributing
+##  Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feature/-feature`)
+3. Commit your changes (`git commit -m 'Add  feature'`)
+4. Push to the branch (`git push origin feature/-feature`)
 5. Open a Pull Request
 
 ### Development Guidelines
@@ -374,27 +399,38 @@ python -c "from llm_txt_mcp.service import LLMTextService; print('Service loaded
 - Update documentation as needed
 - Ensure all tests pass before submitting
 
-## ðŸ“„ License
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## ðŸ™ Acknowledgments
+##  Acknowledgments
 
 - Built with [FastMCP](https://github.com/jlowin/fastmcp) for seamless MCP integration
 - Inspired by the growing need for AI-accessible documentation
 - Thanks to the Anthropic team for the MCP specification
 
-## ðŸ”— Related Projects
+##  Related Projects
 
 - [FastMCP](https://github.com/jlowin/fastmcp) - Fast Model Context Protocol implementation
 - [llms.txt specification](https://llms-txt.org/) - The standard for AI-readable documentation
 
 ---
 
-**Made with â¤ï¸ for the AI development community**
+**Made with  for the AI development community**
 
 
-## ðŸŒ Webapp Dashboard
+##  Webapp Dashboard
 
 This MCP server includes a free, premium web interface for monitoring and control.
 By default, the web dashboard runs on port **10836**.
@@ -404,4 +440,3 @@ To start the webapp:
 1. Navigate to the `webapp` (or `web`, `frontend`) directory.
 2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
 3. Open `http://localhost:10836` in your browser.
-

@@ -1,135 +1,125 @@
-﻿# AutoHotkey v2 Scriptlets Collection
+# autohotkey-test
 
-**AutoHotkey (AHK)** is a free, open-source **Windows automation language** for **hotkeys**, **hotstrings**, **mouse/keyboard** automation, **window** control, **files**, **COM**, **HTTP**, and small **GUIs**. **v2** is the current syntax (classes, clearer scoping). Install the runtime from [autohotkey.com](https://www.autohotkey.com/).
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-This repo is a **scriptlet collection** + dashboard; canonical source may live at `sandraschi/autohotkey-test` â€” see sibling checkout for port and launcher details.
 
-## ðŸš€ Quick Start
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-### Launch Dashboard
+**AutoHotkey v2 scriptlet depot** — 80+ `.ahk` scripts plus a local HTTP bridge for list/run/stop from [autohotkey-mcp](../autohotkey-mcp).
+
+## Quick Start
+
 ```powershell
-# Start the bridge server
-.\ScriptletCOMBridge.ahk
-
-# Or run the launcher scriptlet
-.\scriptlet_launcher_v2.ahk
+git clone https://github.com/sandraschi/autohotkey-test
+cd autohotkey-test
+just
 ```
 
-The web interface will be available at `http://localhost:8765/`
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
 
-### Available Scriptlets
+### Manual Setup
 
-Navigate through 74+ scriptlets (âš ï¸ **Note**: Repository health improved to **FAIR** - Latest bugbash results: 29 succeeded, 0 crashed, 45 timed out):
-- **Games**: Snake, Tetris, Sudoku, Chess (with Stockfish), Pong, Pac-Man, Q*bert, Frogger
-- **Development**: Git Assistant, Code Formatter, AI Code Assistant
-- **Productivity**: Clipboard Manager, Window Snapping, Volume Control
-- **MCP Integration**: Ollama Chatbot, MCP Config Manager, MCP Server Scaffolding Tool, MCP Development Tools
-- **System**: System Monitor, Security Guide, Help System
+If you don't have `just` installed:
+# Fleet-standard start (kills port zombie, starts bridge, opens dashboard)
+.\start.bat
+# Or directly:
+.\start_dashboard.ps1
+Dashboard opens at **`http://127.0.0.1:10744/dashboard`**.
 
-### Key Files
+## What's Here
 
-- `ScriptletCOMBridge.ahk` - HTTP bridge server for web dashboard
-- `launcher_enhanced.html` - Modern web-based scriptlet launcher  
-- `scriptlet_launcher_v2.ahk` - Native GUI launcher
-- `RunScriptlet.bat` - Execute individual scriptlets
-- `scriptlets/` - 75+ scriptlets organized by category
+| Path | Description |
+|------|-------------|
+| `ScriptletCOMBridge.ahk` | HTTP server on **10744** — `/scriptlets`, `/run/:name`, `/stop/:name`, `/dashboard` |
+| `scriptlets/` | 80+ AHK v2 scripts by category |
+| `scriptlets/ai_generated/` | Sandbox for MCP-generated scripts — review before promoting |
+| `scriptlet_launcher_v2.ahk` | Native GUI launcher |
+| `utils/linter_headless.ahk` | Headless static analyzer with `--fix` mode |
+| `utils/batch_debugger.ps1` | Batch syntax checker |
+| `docs/` | Syntax reference, migration guides, bugbash reports |
+| `stockfish.exe` | Chess engine (for `chess_stockfish.ahk`) |
+| `justfile` | `lint-ahk`, `lint-fix`, `lint-one`, `kill-ahk`, `dash`, `start` |
 
-### Development Tools
+## Widgets
 
-- `utils/linter.ahk` - AutoHotkey v2 static analyzer
-- `utils/batch_debugger.ps1` - Batch syntax checking
-- `utils/compatibility_scanner.ahk` - v1â†’v2 migration scanner
+| Widget | Hotkey | What |
+|--------|--------|------|
+| `ipad_scroll_widget.ahk` | — | ▲△▽▼/Top/End buttons + Play game menu. For RustDesk iPad. |
+| `ollama_chatbot_v3.ahk` | Ctrl+Alt+O | 4 personalities, model ComboBox, session persistence, dark GUI |
+| `ahk_launcher.ahk` | Ctrl+Alt+A | Searchable script list with favorites, Run button |
+| `word_games.ahk` | Ctrl+Alt+G | Tabbed Wordle / Anagrams / Hangman. Physical keyboard input, cheat solver. |
+| `classic_pong.ahk` | Ctrl+Alt+P | GDI+ arcade game with vector graphics (green paddles, white ball). |
 
-### IDE Support
+## Scriptlet Categories
 
-**AutoHotkey++ Cursor Extension** - Enhanced AutoHotkey v2 support for Cursor IDE:
-- Full IntelliSense and autocomplete for AutoHotkey v2
-- Real-time syntax checking and error detection
-- Code formatting and refactoring tools
-- Integrated debugging support
-- Syntax highlighting optimized for v2
+- **games** — Snake, Tetris, Sudoku, Chess (Stockfish), Pong, Pac-Man, Frogger, Q*bert, Wordle, Anagrams, Hangman
+- **productivity** — Clipboard manager, window snapping, volume, quick notes
+- **system** — System monitor, security guide, window helpers
+- **development** — Git assistant, code formatter, MCP scaffolding, AHK linter
+- **chat** — Ollama chatbot v3 with personalities
+- **fun** — Pranks, sounds, corporate comedy
+- **hotkeys** — Remaps and shortcut layers
+- **ai_generated** — Scripts generated via `autohotkey-mcp generate_scriptlet`
 
-Install the AutoHotkey++ extension from the Cursor extensions marketplace for the best development experience.
+## Health
 
-### MCP Server Scaffolding
+77 scriptlets, **0 lint errors** (2026-07-05). `just lint-ahk` to verify.
 
-The **MCP Server Scaffolding Tool** (`scriptlets/mcp_server_scaffolding.ahk`) generates complete, production-ready MCP servers:
+- All scripts pass `linter_headless.ahk` with zero errors
+- 6 shipped widgets running simultaneously from depot
+- `just lint-fix` auto-applies mechanical v1→v2 fixes with `.bak` backup
+- See `standards/rules/autohotkey_v2_standard.md` for fleet AHK v2 conventions
 
-**Features:**
-- FastMCP 3.1.1++ compatibility with stdio transport
-- Standard tools included: `help()`, `status()`, `ping()`
-- Organized project structure with `src/tools/` modules
-- Build scripts in `mcpb/` directory
-- Ready-to-use Claude Desktop integration
+## Arcade Games
 
-**Usage**: Press `Ctrl+Alt+M` or `F9` to launch, or run:
-```powershell
-AutoHotkey.exe '/ErrorStdOut' scriptlets\mcp_server_scaffolding.ahk
+13 playable arcade games in `scriptlets/`. GDI+ rendering in classic_pong. ASCII grid rendering in tetris, frogger, pacman, qbert. All use `HotIf`-scoped hotkeys (no global key stealing). Access via bridge at `http://127.0.0.1:10744/dashboard`.
+
+| Game | Rendering | Controls |
+|------|-----------|----------|
+| Classic Pong | GDI+ (paddles, ball, net) | W/S or arrows, Space=Start |
+| Tetris | ASCII (green on black) | Arrows, Up=Rotate, Space=Drop |
+| Frogger | ASCII (green on black) | Arrows |
+| Pac-Man | ASCII (yellow on black) | Arrow keys |
+| Q*bert | ASCII (green on black) | Arrows |
+| Sudoku | Edit grid | Click + type |
+| Chess | Full board UI | Click to move, Stockfish AI |
+| Word Games | Tabbed UI | Physical keyboard: type, Backspace, Enter |
+
+### Hotkey Fixes (2026-07-05)
+All games now use `HotIf`-scoped hotkeys instead of global guards. Keys pass through to other apps when the game window isn't focused. Previously, bare letter hotkeys (W/S/A/D, arrows) were consumed globally regardless of window state.
+
+## Integration with autohotkey-mcp
+
+`autohotkey-mcp` reads this depot directly:
+
+```
+AUTOHOTKEY_SCRIPT_DEPOT=D:\Dev\repos\autohotkey-test
+AUTOHOTKEY_BRIDGE_URL=http://127.0.0.1:10744
 ```
 
-See [docs/MCP_Server_Scaffolding_Guide.md](docs/MCP_Server_Scaffolding_Guide.md) for complete documentation.
+When the bridge is running, `list_scriptlets` / `run_scriptlet` / `stop_scriptlet`
+go through it. When it's not, autohotkey-mcp scans `scriptlets/` directly and
+launches AHK via subprocess.
 
-## ðŸ”’ Security
+## Port
 
-**Warning**: AutoHotkey can access and control all parts of your computer. Only run trusted scripts and review code before execution.
+`10744` — ScriptletCOMBridge HTTP server. Registered in `mcp-central-docs/operations/WEBAPP_PORTS.md`.
 
-See `scriptlets/security_guide_pro.ahk` for complete safety guide.
+## Requirements
 
-## ðŸ“š Documentation
-
-- `docs/AutoHotkey_v2_Syntax_Reference.md` - Complete v2 syntax guide
-- `docs/AutoHotkey_Debugging_Guide.md` - Debugging techniques
-- `docs/AutoHotkey_v2_Modulo_Migration_Guide.md` - Migration from v1 to v2
-- `docs/REPOSITORY_HEALTH_IMPROVEMENT_PLAN.md` â­ - Action plan to fix failing scriptlets and improve health
-
-## ðŸŽ® Games
-
-All games are functional implementations:
-- **Chess** (`chess_stockfish.ahk`) - Full chess game with Stockfish engine
-- **Snake** (`mini_games_collection.ahk`) - Classic snake game
-- **Sudoku** (`sudoku.ahk`) - Working Sudoku puzzle
-- **Tetris**, **Pong**, **Pac-Man**, **Q*bert**, **Frogger** - Available via launcher
-
-## âš™ï¸ Requirements
-
-- AutoHotkey v2.0+
-- PowerShell 5.0+
+- AutoHotkey v2.0+ — [autohotkey.com](https://www.autohotkey.com/)
 - Windows 10/11
+- PowerShell 5+
 
-## ðŸ“ Project Structure
+## Security
 
-```
-autohotkey-test/
-â”œâ”€â”€ ScriptletCOMBridge.ahk    # HTTP bridge server
-â”œâ”€â”€ launcher_enhanced.html     # Web dashboard
-â”œâ”€â”€ scriptlets/                # 84 scriptlets
-â”œâ”€â”€ utils/                     # Development tools
-â”œâ”€â”€ docs/                      # Documentation
-â”œâ”€â”€ junk/                      # Archive/temp files
-â””â”€â”€ stockfish.exe             # Chess engine
-```
+AHK scripts have full desktop access. Only run trusted scripts. Review `ai_generated/` output before executing.
 
-## ðŸ”§ Scriptlet Categories
+## License
 
-- **Games**: Mini games collection, classic arcade games (Snake, Tetris, Sudoku, Chess, Pong, Pac-Man, Q*bert, Frogger)
-- **Productivity**: Clipboard, window management, automation tools
-- **Development**: Git, code formatting, MCP tools
-- **System**: Monitoring, security, helpers
-- **Utilities**: Various utility scripts
-
-**Note**: See [docs/BUGBASH_RESULTS.md](docs/BUGBASH_RESULTS.md) for latest bugbash comparison and [docs/Repository_Status_Report.md](docs/Repository_Status_Report.md) for detailed analysis.
-
-## ðŸ“œ License
-
-Licensed under MIT License - see LICENSE file for details.
-
-## ðŸ‘¤ Author
-
-Sandra - AutoHotkey v2 enthusiast and developer
-
----
-
-**Status**: 75+ scriptlets | AutoHotkey v2 compatible | Web dashboard available  
-**Repository Health**: âš ï¸ **POOR** - See [Repository Status Report](docs/Repository_Status_Report.md) for details
-
-
+MIT

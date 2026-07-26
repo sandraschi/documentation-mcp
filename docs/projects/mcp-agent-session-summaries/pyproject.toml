@@ -1,0 +1,9 @@
+[project]
+name = "mcp-agent-session-summaries"
+version = "0.1.0"
+description = "Let your OpenCode coding agent document sessions as markdown — design decisions, task logs, architecture notes, and more"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+]

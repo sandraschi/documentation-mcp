@@ -1,0 +1,20 @@
+# fleet-public-relations-mcp
+
+Private MCP server for fleet PR outreach.
+- [README.md](README.md) — full docs
+- [llms-full.txt](llms-full.txt) — complete tool + API + skills reference
+- [INSTALL.md](INSTALL.md) — setup
+
+## Tools
+- `register_thread(url, repo_id)` — start monitoring a thread
+- `get_active_threads()` — list monitored URLs
+- `scan_threads_now()` — force scraper + evaluator run
+- `get_pr_dashboard()` — feedback summary stats
+- `show_pr_dashboard_card()` — Prefab UI card
+- `fleet_pr_help()` — help and usage
+- `fleet_pr_shutdown()` — graceful shutdown
+
+## Config
+See `.env.example` for all env vars. LLM evaluator uses `FLEET_PR_SAMPLING_BASE_URL` (defaults to Ollama on localhost:11434).
+## Ports
+Backend: 11094 | Frontend: 11095

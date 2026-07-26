@@ -1,0 +1,2 @@
+# ToolBench assessment scraper (optional; docs repo only)
+playwright>=1.49.0

@@ -1,8 +1,32 @@
 # Repomix MCP Server
 
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
 **Pack repositories into AI-friendly formats for comprehensive codebase analysis**
 
 A Model Context Protocol (MCP) server that integrates [Repomix](https://repomix.com/) to provide AI assistants with powerful repository analysis capabilities.
+
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/repomix-mcp
+cd repomix-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
 
 ## Features
 
@@ -19,19 +43,19 @@ A Model Context Protocol (MCP) server that integrates [Repomix](https://repomix.
 - **Node.js 18+** (for Repomix)
 - **Repomix**: Install globally with `npm install -g repomix`
 
-## 🚀 Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### 📦 Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx repomix-mcp
 ```
 
-### 🎯 Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -41,19 +65,19 @@ Add to your `claude_desktop_config.json`:
   }
 }
 ```
-## 🚀 Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### 📦 Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx repomix-mcp
 ```
 
-### 🎯 Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -214,16 +238,16 @@ mypy src/
 
 ```
 repomix-mcp/
-├── src/repomix_mcp/
-│   ├── server.py          # Main FastMCP server
-│   ├── __init__.py        # Package initialization
-│   └── cli.py             # Command-line interface
-├── mcpb/
-│   ├── manifest.json      # MCP server manifest
-│   └── mcpb.json         # Build configuration
-├── tests/                 # Test suite
-├── docs/                  # Documentation
-└── docker-compose.yml     # Docker setup
+ src/repomix_mcp/
+    server.py          # Main FastMCP server
+    __init__.py        # Package initialization
+    cli.py             # Command-line interface
+ mcpb/
+    manifest.json      # MCP server manifest
+    mcpb.json         # Build configuration
+ tests/                 # Test suite
+ docs/                  # Documentation
+ docker-compose.yml     # Docker setup
 ```
 
 ## API Reference
@@ -269,6 +293,17 @@ All tools return structured responses with `success` boolean and contextual `mes
 4. Ensure all tests pass
 5. Submit a pull request
 
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
 ## License
 
 MIT License - see LICENSE file for details.
@@ -276,5 +311,5 @@ MIT License - see LICENSE file for details.
 ## Acknowledgments
 
 - [Repomix](https://repomix.com/) by Yamadashy for the core repository packing technology
-- [FastMCP](https://fastmcp.com/) for the MCP framework
+- [FastMCP](https://FastMCP 3.1.0com/) for the MCP framework
 - [Anthropic](https://anthropic.com/) for the Model Context Protocol specification

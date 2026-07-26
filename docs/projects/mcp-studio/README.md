@@ -1,9 +1,19 @@
-﻿# MCP Studio
+# MCP Studio
+
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
 **By FlowEngineer sandraschi**
 
 [![Beta](https://img.shields.io/badge/Status-Beta-orange.svg)](README.md#-beta-status)
-[![FastMCP 3.1.1+.1](https://img.shields.io/badge/FastMCP-3.1.1+.1-green.svg)](https://github.com/jlowin/fastmcp)
+[![FastMCP 3.1.0](https://img.shields.io/badge/FastMCP-3.3-green.svg)](https://github.com/jlowin/fastmcp)
 [![CI](https://img.shields.io/badge/CI-Passing-brightgreen.svg)](https://github.com/sandraschi/mcp-studio/actions)
 [![Dual Architecture](https://img.shields.io/badge/Architecture-Dual-orange.svg)](README.md#-what-is-mcp-studio)
 
@@ -12,27 +22,41 @@
 [![Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.116.1-009688.svg?logo=fastapi)](https://fastapi.tiangolo.com/)
 
-ðŸŽ¯ **Mission Control for the MCP Zoo** ðŸ¦ðŸ˜ðŸ¦’
+ **Mission Control for the MCP Zoo** 
 
-> âš ï¸ **Beta Software**: MCP Studio is currently in **beta**. Features may be incomplete, APIs may change, and there may be bugs. Use at your own risk. See [Beta Status](#-beta-status) below for details.
+>  **Beta Software**: MCP Studio is currently in **beta**. Features may be incomplete, APIs may change, and there may be bugs. Use at your own risk. See [Beta Status](#-beta-status) below for details.
 
-**Dual-Architecture Platform**: A **web-based management dashboard** (FastAPI frontend) and an **MCP server** (FastMCP 3.1.1+.1) for managing MCP servers.
+**Dual-Architecture Platform**: A **web-based management dashboard** (FastAPI frontend) and an **MCP server** (FastMCP 3.1.0) for managing MCP servers.
 
-**ðŸ—ï¸ This repository contains:**
+** This repository contains:**
 - **Web Dashboard**: FastAPI-based interface for MCP server management (work in progress)
-- **MCP Server**: FastMCP 3.1.1+.1 server providing tools to other MCP clients (Claude Desktop, etc.)
+- **MCP Server**: FastMCP 3.1.0 server providing tools to other MCP clients (Claude Desktop, etc.)
 - **Dual Purpose**: Can be used as a web app OR as an MCP server, or both simultaneously
 
-## âš ï¸ **Beta Status**
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/mcp-studio
+cd mcp-studio
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+
+##  **Beta Status**
 
 MCP Studio is currently in **beta**. This means:
 
-- âœ… Core functionality is working but may have bugs
-- âš ï¸ Features may be incomplete or change without notice
-- ðŸ”„ APIs and configuration formats may change in future versions
-- ðŸ› Some edge cases may not be handled properly
-- ðŸ“ Documentation may be incomplete or outdated
-- ðŸš§ UI/UX is still being refined
+-  Core functionality is working but may have bugs
+-  Features may be incomplete or change without notice
+-  APIs and configuration formats may change in future versions
+-  Some edge cases may not be handled properly
+-  Documentation may be incomplete or outdated
+-  UI/UX is still being refined
 
 **Before using in production:**
 - Test thoroughly in your environment
@@ -40,17 +64,17 @@ MCP Studio is currently in **beta**. This means:
 - Report issues on GitHub
 - Expect breaking changes in future releases
 
-## ðŸ†• **What's New (v0.3.0-beta)**
+##  **What's New (v0.3.0-beta)**
 
-### ðŸŽ¯ **Enhanced Working Sets** - MAJOR UPDATE!
+###  **Enhanced Working Sets** - MAJOR UPDATE!
 Purpose-built MCP server configurations for specific workflows:
 
-#### **ðŸ“º Media Consumption Set**
+#### ** Media Consumption Set**
 - **Calibre MCP** - Ebook library management
 - **Plex MCP** - Media streaming server
 - **Immich MCP** - Photo collection browsing
 
-#### **ðŸ¤– Robotics & 3D Development Set**
+#### ** Robotics & 3D Development Set**
 - **Robotics MCP** - Robot control and monitoring
 - **Avatar MCP** - 3D avatar management
 - **Unity3D MCP** - Unity game engine integration
@@ -64,31 +88,31 @@ Purpose-built MCP server configurations for specific workflows:
 - **Visual status indicators** for current active set
 - **Preview functionality** before switching
 
-### ðŸ”§ **Client Configuration Management** - NEW!
+###  **Client Configuration Management** - NEW!
 Three powerful tools for managing MCP client configurations:
 - **`discover_clients`** - Discover all MCP clients (Claude Desktop, Cursor IDE, Windsurf, etc.) and their configured servers
 - **`get_client_config`** - Read configuration for any MCP client
 - **`set_client_config`** - Update client configurations with automatic backup support
 
-Perfect for managing multiple MCP clients and their server configurations from a single interface.
+ for managing multiple MCP clients and their server configurations from a single interface.
 
-## ðŸ†• **Previous Updates (v0.2.1-beta)**
+##  **Previous Updates (v0.2.1-beta)**
 
-### ðŸ” **Enhanced Runt Analyzer** - Rule-Based SOTA Analysis
-- **ðŸ“Š Rule-Based System**: Declarative rule definitions replacing hardcoded criteria
-- **ðŸ’¾ Smart Caching**: File-based persistence to avoid re-scanning (default: 1 hour TTL)
-- **ðŸ“ Markdown Reports**: Human-readable markdown output for scan results
-- **ðŸ” Detailed Output**: Structured JSON with repo information for analysis
-- **âš™ï¸ Cache Management**: Configurable TTL, cache clearing, and statistics
+###  **Enhanced Runt Analyzer** - Rule-Based SOTA Analysis
+- ** Rule-Based System**: Declarative rule definitions replacing hardcoded criteria
+- ** Smart Caching**: File-based persistence to avoid re-scanning (default: 1 hour TTL)
+- ** Markdown Reports**: Human-readable markdown output for scan results
+- ** Detailed Output**: Structured JSON with repo information for analysis
+- ** Cache Management**: Configurable TTL, cache clearing, and statistics
 
-### ðŸ” **Runt Analyzer** - SOTA Compliance Dashboard
+###  **Runt Analyzer** - SOTA Compliance Dashboard
 Scan `D:/Dev/repos` and instantly identify which MCP repos need work:
-- ðŸ”´ **Red** = Critical runts (FastMCP outdated, no CI, no tests)
-- ðŸŸ  **Orange** = Needs improvement (warnings, minor issues)
-- ðŸŸ¢ **Green** = SOTA compliant (all checks pass)
+-  **Red** = Critical runts (FastMCP outdated, no CI, no tests)
+-  **Orange** = Needs improvement (warnings, minor issues)
+-  **Green** = SOTA compliant (all checks pass)
 
 **Checks performed:**
-- FastMCP version (3.1.1++ required)
+- FastMCP version (2.12+ required)
 - Portmanteau refactor (if >15 tools)
 - CI/CD workflow presence
 - Ruff linting configuration
@@ -99,24 +123,24 @@ Scan `D:/Dev/repos` and instantly identify which MCP repos need work:
 - Logging vs print statements
 - Error handling quality
 
-### ðŸŽ›ï¸ **Tool Groups** - Smart Activate/Deactivate
+###  **Tool Groups** - Smart Activate/Deactivate
 Like Cursor's MCP activation, but with predefined workflow groups:
 
 | Group | Servers | Use Case |
 |-------|---------|----------|
-| ðŸŽµ Audio Production | virtualdj, reaper, ableton | DJ & DAW workflows |
-| ðŸŽ¬ Video Production | davinci-resolve, premiere | Video editing |
-| ðŸ  Smart Home | tapo, hue, ring, nest | Home automation |
-| ðŸ“º Media | plex, jellyfin, spotify | Media libraries |
-| ðŸ“š Knowledge | advanced-memory, obsidian | Note-taking |
-| ðŸ’» Development | github, gitlab, docker | Coding |
-| ðŸš‡ Transit | vienna-transit, weather | Location services |
-| ðŸ’¬ Communication | gmail, calendar, slack | Productivity |
-| ðŸŒ Web | browser, puppeteer | Web automation |
+|  Audio Production | virtualdj, reaper, ableton | DJ & DAW workflows |
+|  Video Production | davinci-resolve, premiere | Video editing |
+|  Smart Home | tapo, hue, ring, nest | Home automation |
+|  Media | plex, jellyfin, spotify | Media libraries |
+|  Knowledge | advanced-memory, obsidian | Note-taking |
+|  Development | github, gitlab, docker | Coding |
+|  Transit | vienna-transit, weather | Location services |
+|  Communication | gmail, calendar, slack | Productivity |
+|  Web | browser, puppeteer | Web automation |
 
 **Context Budget:** When LLM is added, only active group tools load into context!
 
-### ðŸ§ª **Smoke Test** - No-LLM Server Testing
+###  **Smoke Test** - No-LLM Server Testing
 Bare minimum connectivity test for all MCP servers:
 1. Spawn via stdio
 2. Initialize connection
@@ -126,78 +150,78 @@ Bare minimum connectivity test for all MCP servers:
 
 **No LLM required** - just validates servers are alive!
 
-### ðŸŽ­ **Preprompt Management** - AI Personality System (NEW!)
+###  **Preprompt Management** - AI Personality System (NEW!)
 Create infinite AI assistant personalities with dynamic storage and AI-assisted generation:
 
 **Features:**
-- ðŸ’¾ **SQLite Storage**: Persistent preprompt library with metadata
-- ðŸ¤– **AI Refine**: Type "coin collector" â†’ AI generates elaborate personality in 60 seconds
-- ðŸ“ **Import .md Files**: Upload markdown files as preprompts
-- ðŸŽ¨ **Dynamic Dropdown**: Load unlimited personalities without code changes
-- ðŸ´â€â˜ ï¸ **Creative Personalities**: Pirate, Butterfly, Zen Master, Aussie Coder, and more!
+-  **SQLite Storage**: Persistent preprompt library with metadata
+-  **AI Refine**: Type "coin collector"  AI generates elaborate personality in 60 seconds
+-  **Import .md Files**: Upload markdown files as preprompts
+-  **Dynamic Dropdown**: Load unlimited personalities without code changes
+-  **Creative Personalities**: Pirate, Butterfly, Zen Master, Aussie Coder, and more!
 
 **Demo Workflow:**
 ```
 User types: "coin collector"
-       â†“
-Clicks: "ðŸ¤– AI Refine"
-       â†“
+       
+Clicks: " AI Refine"
+       
 14g LLM generates: "You are a numismatic enthusiast helping with MCP servers!
                     You see code patterns like rare coins..."
-       â†“
-Auto-saves with: ðŸª™ emoji
-       â†“
+       
+Auto-saves with:  emoji
+       
 Appears in dropdown immediately!
 ```
 
-**Perfect for demos** - generate new personalities on-the-fly!
+** for demos** - generate new personalities on-the-fly!
 
-## ðŸš€ **What is MCP Studio?**
+##  **What is MCP Studio?**
 
 MCP Studio is the **central hub** for managing your entire MCP infrastructure. It's a **dual-architecture platform** that provides both:
 
-1. **ðŸŒ Web Dashboard** (FastAPI + React): Visual interface for browsing, testing, and managing MCP servers
-2. **âš¡ MCP Server** (FastMCP 3.1.1+.1): Provides 12 powerful tools to other MCP clients like Claude Desktop
+1. ** Web Dashboard** (FastAPI + React): Visual interface for browsing, testing, and managing MCP servers
+2. ** MCP Server** (FastMCP 3.1.0): Provides 12 powerful tools to other MCP clients like Claude Desktop
 
 **Use it as:**
 - A standalone web application for MCP server management
 - An MCP server integrated into Claude Desktop or other MCP clients
 - Both simultaneously (web UI + MCP server tools)
 
-### **Dual Architecture** ðŸ—ï¸
+### **Dual Architecture** 
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    stdio     â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    HTTP/WS    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚  Claude Desktop â”‚ â†----------â†’ â”‚   MCP Studio     â”‚ â†----------â†’ â”‚   Web Browser   â”‚
-â”‚  (MCP Client)   â”‚   JSON-RPC   â”‚   (MCP Server)   â”‚   REST API    â”‚   (Frontend UI) â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜              â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜               â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+    stdio         HTTP/WS    
+  Claude Desktop  ----------    MCP Studio      ----------    Web Browser   
+  (MCP Client)      JSON-RPC      (MCP Server)      REST API       (Frontend UI) 
+                             
 ```
 
-## âœ¨ **Key Features**
+##  **Key Features**
 
-### **ðŸŽ¯ Working Sets Switcher** (New!)
+### ** Working Sets Switcher** (New!)
 One-click switching between focused MCP server configurations for different workflows:
 
-- **ðŸ› ï¸ Development Work**: GitHub, Docker, Playwright, coding tools (10 servers)
-- **ðŸŽ¨ Media & Creative**: Blender, Immich, Plex, creative tools (10 servers)
-- **ðŸ“ž Communication**: Microsoft 365, productivity tools (9 servers)
-- **ðŸ¤– Automation**: VirtualBox, PyWinAuto, system automation (10 servers)
-- **ðŸŽ® Entertainment**: Media consumption, personal tools (8 servers)
+- ** Development Work**: GitHub, Docker, Playwright, coding tools (10 servers)
+- ** Media & Creative**: Blender, Immich, Plex, creative tools (10 servers)
+- ** Communication**: Microsoft 365, productivity tools (9 servers)
+- ** Automation**: VirtualBox, PyWinAuto, system automation (10 servers)
+- ** Entertainment**: Media consumption, personal tools (8 servers)
 
 **Safety Features:**
-- âœ… Automatic backups before every switch
-- âœ… Preview mode showing exact changes
-- âœ… Config validation and compatibility checks
-- âœ… One-click restoration from any backup
+-  Automatic backups before every switch
+-  Preview mode showing exact changes
+-  Config validation and compatibility checks
+-  One-click restoration from any backup
 
-### **ðŸ“Š MCP Server Management**
+### ** MCP Server Management**
 - **Server Discovery**: Automatically discovers and lists all available MCP servers
 - **Health Monitoring**: Real-time status, performance metrics, and health checks
 - **Tool Explorer**: Browse, search, and categorize tools across all servers
 - **Schema Visualization**: Interactive display of tool schemas and parameters
 - **Test Console**: Live testing interface for MCP tools with parameter forms
 
-### **âš¡ FastMCP 3.1.1+.1 Integration**
+### ** FastMCP 3.1.0 Integration**
 - **Stdio Transport**: Bidirectional communication over stdin/stdout
 - **Type Safety**: Pydantic validation for tool parameters
 - **Async-First**: Built on Python asyncio
@@ -205,19 +229,19 @@ One-click switching between focused MCP server configurations for different work
 - **MCP Studio Tools**: Server lifecycle management tools
 - **Tool Discovery**: Connect to multiple MCP servers
 
-### **ðŸ”„ Server Lifecycle Management**
+### ** Server Lifecycle Management**
 - **Create**: Generate SOTA-compliant servers with all required components
 - **Read**: Repository analysis and scanning
 - **Update**: Add missing SOTA components automatically
 - **Delete**: Safe removal with backup and safety checks
 
-### **ðŸŽ¨ Web Interface** (Beta)
+### ** Web Interface** (Beta)
 - **Real-time Updates**: WebSocket support (experimental)
 - **Responsive Design**: Basic mobile support
 - **UI**: Template-based interface with Tailwind CSS
 - **Interactive Components**: Basic forms and navigation
 
-## ðŸ“¦ Packaging & Distribution
+##  Packaging & Distribution
 
 This repository is SOTA 2026 compliant and uses the officially validated `@anthropic-ai/mcpb` workflow for distribution.
 
@@ -228,33 +252,33 @@ To generate a `.mcpb` distribution bundle with complete source code and automate
 mcpb pack . dist/mcp-studio.mcpb
 ```
 
-## ðŸŽ¯ **Use Cases**
+##  **Use Cases**
 
-### **For Developers** ðŸ‘¨â€ðŸ’»
+### **For Developers** 
 - **MCP Server Development**: Test and debug MCP servers during development
 - **Tool Discovery**: Explore available tools across multiple MCP servers
 - **Integration Testing**: Validate MCP integrations before deployment
 - **Performance Monitoring**: Track MCP server performance and health
 
-### **For End Users** ðŸ‘¤
+### **For End Users** 
 - **Workflow Optimization**: Switch between focused tool sets for different tasks
 - **Tool Management**: Organize and access AI tools through intuitive interface
 - **System Administration**: Monitor and manage MCP infrastructure
 - **Configuration Management**: Safely manage complex MCP configurations
 
-## ðŸš€ Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx mcp-studio
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -295,7 +319,7 @@ Add to your `claude_desktop_config.json`:
    pip install -e ".[dev]"
    ```
 
-## ðŸš€ **Usage**
+##  **Usage**
 
 ### **Docker Deployment** (Beta - Use with Caution)
 
@@ -361,7 +385,7 @@ Add to your Claude Desktop configuration (`~/.config/claude/claude_desktop_confi
 }
 ```
 
-## ðŸ”§ **Working Sets Configuration**
+##  **Working Sets Configuration**
 
 ### **Using Working Sets**
 1. Open MCP Studio web interface
@@ -378,7 +402,7 @@ Create your own working set templates by adding JSON files to the `templates/` d
   "name": "My Custom Set",
   "id": "custom_set",
   "description": "Custom tools for my specific workflow",
-  "icon": "ðŸŽ¯",
+  "icon": "",
   "category": "Custom",
   "servers": [
     {
@@ -395,39 +419,39 @@ Create your own working set templates by adding JSON files to the `templates/` d
 }
 ```
 
-## ðŸ—ï¸ **Project Structure**
+##  **Project Structure**
 
 ```
 mcp-studio/
-â”œâ”€â”€ src/
-â”‚   â””â”€â”€ mcp_studio/
-â”‚       â”œâ”€â”€ app/                    # FastAPI web application
-â”‚       â”‚   â”œâ”€â”€ api/               # API routes and endpoints
-â”‚       â”‚   â”œâ”€â”€ core/              # Core application logic
-â”‚       â”‚   â”œâ”€â”€ models/            # Pydantic data models
-â”‚       â”‚   â””â”€â”€ services/          # Business logic services
-â”‚       â”œâ”€â”€ components/            # React UI components
-â”‚       â”‚   â””â”€â”€ WorkingSetSwitcher.tsx
-â”‚       â”œâ”€â”€ working_sets/          # Working sets management
-â”‚       â”‚   â””â”€â”€ manager.py         # Working set manager
-â”‚       â”œâ”€â”€ api/                   # Working sets API
-â”‚       â”‚   â””â”€â”€ working_sets.py    # FastAPI endpoints
-â”‚       â”œâ”€â”€ static/               # Static web assets
-â”‚       â”œâ”€â”€ templates/            # HTML templates
-â”‚       â””â”€â”€ main.py              # Application entry point
-â”œâ”€â”€ templates/                    # Working set definitions
-â”‚   â”œâ”€â”€ dev_work.json            # Development working set
-â”‚   â”œâ”€â”€ media_work.json          # Media/creative working set
-â”‚   â”œâ”€â”€ communication.json       # Communication working set
-â”‚   â”œâ”€â”€ automation.json          # Automation working set
-â”‚   â””â”€â”€ entertainment.json       # Entertainment working set
-â”œâ”€â”€ tests/                       # Test files
-â”œâ”€â”€ simple_test.py              # Quick functionality test
-â”œâ”€â”€ pyproject.toml              # Project metadata
-â””â”€â”€ README.md                   # This file
+ src/
+    mcp_studio/
+        app/                    # FastAPI web application
+           api/               # API routes and endpoints
+           core/              # Core application logic
+           models/            # Pydantic data models
+           services/          # Business logic services
+        components/            # React UI components
+           WorkingSetSwitcher.tsx
+        working_sets/          # Working sets management
+           manager.py         # Working set manager
+        api/                   # Working sets API
+           working_sets.py    # FastAPI endpoints
+        static/               # Static web assets
+        templates/            # HTML templates
+        main.py              # Application entry point
+ templates/                    # Working set definitions
+    dev_work.json            # Development working set
+    media_work.json          # Media/creative working set
+    communication.json       # Communication working set
+    automation.json          # Automation working set
+    entertainment.json       # Entertainment working set
+ tests/                       # Test files
+ simple_test.py              # Quick functionality test
+ pyproject.toml              # Project metadata
+ README.md                   # This file
 ```
 
-## ðŸ§ª **Testing**
+##  **Testing**
 
 ### **Quick Test**
 ```bash
@@ -452,7 +476,7 @@ pytest tests/test_working_sets.py
 2. **Test MCP Server**: Connect from Claude Desktop and verify tools work
 3. **Test API**: Use the interactive API docs at `/api/docs`
 
-## ðŸ”’ **Security & Safety**
+##  **Security & Safety**
 
 ### **Working Sets Safety**
 - **Automatic Backups**: Every configuration change creates a timestamped backup
@@ -466,7 +490,7 @@ pytest tests/test_working_sets.py
 - **Error Handling**: Error handling and recovery
 - **Audit Logging**: Detailed logs of all operations
 
-## ðŸ› ï¸ **Development**
+##  **Development**
 
 ### **Development Mode**
 ```bash
@@ -498,19 +522,19 @@ if __name__ == "__main__":
 3. Update working set templates in `templates/`
 4. The working sets will automatically include your new server
 
-## ðŸ“š **Documentation**
+##  **Documentation**
 
 - **API Documentation**: Available at `/api/docs` when running
 - **MCP Protocol**: [Model Context Protocol Specification](https://modelcontextprotocol.io)
 - **FastMCP**: [FastMCP Documentation](https://github.com/jlowin/fastmcp)
 - **FastAPI**: [FastAPI Documentation](https://fastapi.tiangolo.com)
 
-## ðŸ¤ **Contributing**
+##  **Contributing**
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feature/-feature`)
+3. Commit your changes (`git commit -m 'Add  feature'`)
+4. Push to the branch (`git push origin feature/-feature`)
 5. Open a Pull Request
 
 ### **Development Setup**
@@ -529,32 +553,42 @@ pre-commit install
 pytest
 ```
 
-## ðŸŽ‰ **What Makes MCP Studio Different**
+##  **What Makes MCP Studio Different**
 
-### **ðŸŽ¯ Management Tool for MCP**
-MCP Studio aims to be a useful management tool for the MCP ecosystem. It provides a web interface and MCP server tools to help organize and manage MCP servers. ðŸ¦
+### ** Management Tool for MCP**
+MCP Studio aims to be a useful management tool for the MCP ecosystem. It provides a web interface and MCP server tools to help organize and manage MCP servers. 
 
-### **âš¡ Built on Solid Foundations**
-Built on **FastMCP 3.1.1+.1** and **FastAPI** for reliable performance and developer-friendly APIs.
+### ** Built on Solid Foundations**
+Built on **FastMCP 3.1.0** and **FastAPI** for reliable performance and developer-friendly APIs.
 
-### **ðŸ”§ Workflow Optimization**
+### ** Workflow Optimization**
 The **Working Sets** feature helps organize MCP servers into focused configurations for different workflows.
 
-### **ðŸš€ Future-Ready**
+### ** Future-Ready**
 Designed for the rapidly evolving AI landscape with support for **MCPB packaging**, **authentication**, and **enterprise deployment**.
 
-## ðŸ“„ **License**
+##  **License**
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## ðŸ™ **Acknowledgments**
+##  **Acknowledgments**
 
 - **FastMCP** by Jonathan Lowin - The foundation that makes this possible
-- **FastAPI** by SebastiÃ¡n Ramirez - Excellent web framework
+- **FastAPI** by Sebastin Ramirez - Excellent web framework
 - **Anthropic** - For the Model Context Protocol specification
-- **The MCP Zoo** ðŸ¦ðŸ˜ðŸ¦’ - For building amazing tools and servers
+- **The MCP Zoo**  - For building  tools and servers
 
 ---
 
-**MCP Studio** - Your mission control for the MCP Zoo! ðŸ¦ðŸ˜ðŸ¦’ðŸš€
+**MCP Studio** - Your mission control for the MCP Zoo!
 
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.

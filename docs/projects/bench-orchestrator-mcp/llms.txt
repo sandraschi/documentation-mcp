@@ -1,0 +1,4 @@
+# bench-orchestrator-mcp
+
+Tools: bench_device, bench_run, bench_help
+Ports: 11036/11037

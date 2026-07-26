@@ -22,7 +22,10 @@ classifiers = [
 ]
 keywords = ["directmedia", "mcp", "publishing", "bibliothek", "media", "fastmcp"]
 dependencies = [
-    "fastmcp>=3.1.0,<4",
+    "fastmcp>=3.4.4,<4",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "prefab-ui>=0.14.0",
     "pydantic>=2.0.0",
     "ruff>=0.15.2",
 ]
@@ -40,14 +43,6 @@ directmedia-mcp = "directmedia_mcp.server:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.ruff]
-line-length = 100
-target-version = "py310"
-
-[tool.ruff.lint]
-select = ["E", "F", "W", "C90", "I", "N", "UP", "YTT", "S", "BLE", "FBT", "B", "A", "COM", "C4", "DTZ", "T10", "DJ", "EM", "EXE", "FA", "ISC", "ICN", "G", "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SLOT", "SIM", "TID", "TCH", "INT", "ARG", "PTH", "ERA", "PD", "PGH", "PL", "TRY", "FLY", "NPY", "AIR", "PERF", "FURB", "LOG", "RUF"]
-ignore = ["S101", "S104", "COM812", "ISC001"]
-
 [tool.mypy]
 python_version = "3.10"
 warn_return_any = true
@@ -63,4 +58,14 @@ warn_no_return = true
 warn_unreachable = true
 strict_equality = true
 
+[tool.ruff]
+line-length = 120
+target-version = "py312"
 
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

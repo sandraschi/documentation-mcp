@@ -1,0 +1,27 @@
+# Documentation MCP
+
+Public MCP Documentation Server — Federated RAG for the MCP ecosystem.
+Indexes and searches fleet-wide documentation with semantic vector retrieval.
+
+- README: https://github.com/sandraschi/documentation-mcp/blob/master/README.md
+- Full docs: llms-full.txt
+- Fleet standards: https://github.com/sandraschi/mcp-central-docs
+- Webapp: http://localhost:11032 (frontend), http://localhost:11033 (backend)
+- Ports: 11032 frontend, 11033 backend (fleet registry)
+- Stack: Python 3.13+, FastMCP 3.2+, FastAPI, React/Vite, TailwindCSS, LanceDB RAG
+- Tauri 2.0 native: NSIS installer with embedded PyInstaller backend
+
+## Key Tools
+- search_docs: Semantic search across indexed documentation
+- ask_docs: Synthesized answers via LLM sampling with fallback to local models
+- get_document: Retrieves full content of a documentation file by path
+- reindex_docs: Forces full re-scan and re-indexing of all docs
+- chunk_stats: Index health metrics
+- server_status: Server health, version, and memory summary
+- start_webapp: Launches the webapp automatically
+- agentic_doc_workflow: Autonomous research workflows via MCP sampling
+
+## Entry Points
+- uv run docs-mcp → stdio MCP server
+- uv run uvicorn docs_mcp.server:app → HTTP server
+- ./start.ps1 → full stack (backend + frontend + auto-open browser)

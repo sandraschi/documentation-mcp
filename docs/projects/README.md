@@ -1,7 +1,7 @@
-﻿# Project Documentation Index
+# Project Documentation Index
 
 **Purpose:** Central documentation for all major projects
-**Last Updated:** 2026-05-30 — fritz-coworker pilot + libreoffice-mcp Phase 0–3
+**Last Updated:** 2026-06-17 — publish tier: **mandatory IN** after update ([PUBLISH_UPDATE_CHECKLIST.md](../../PUBLISH_UPDATE_CHECKLIST.md))
 
 ---
 
@@ -14,7 +14,12 @@
 | [myai](./myai/) | Dual-mode AI microservices platform | Fullstack SaaS | Production-Ready |
 | [veogen](./veogen/) | AI Video Generator | Fullstack SaaS | Production-Ready |
 | [mywienerlinien](./mywienerlinien/) | Vienna Transit Tracker | Fullstack + MCP | Production-Ready |
-| [devices-mcp](./devices-mcp/) | Smart Home MCP Platform (v1.8.0) | MCP Server + Dashboard | Production-Ready |
+| [devices-mcp](./devices-mcp/) | Home IoT MCP + dashboard + Tauri desktop (**10717**); Fritz `GET /api/fleet/priority` | MCP Server + Dashboard | **Beta (v1.21.5)** |
+| [aiwatcher-mcp](./aiwatcher-mcp/) | AI news distillation, fleet ingest, Intel Hub digest publish (**10946/10947**) | MCP Server + Webapp | **0.1.8** |
+| [fleet-agent-mcp](./fleet-agent-mcp.md) | Fritz self-evolving agent; coworker + Intel Hub **11027** (**10996/10997**) | MCP Server + Webapp | **0.2.1-pre** |
+| [fritz-coworker](./fritz-coworker/) | Poor Man's Viktor orchestration plan + pilot flows | Agent program | **0.2.1-pre** |
+| [cursor-mcp](./cursor-mcp/) | Cursor platform API — spend guardrails, cloud agents, inbox (**11000**) | MCP Server | **0.2.0** |
+| [meta_mcp](./meta_mcp/) | Fleet orchestrator, probes, builders, repo inspiration (**10718/10719**) | MCP Server + Dashboard | **0.3.0** |
 | [plexmcp](./plexmcp/) | Plex Media Server MCP (FastMCP 3.1+, webapp 10740/10741, [PRD](./plexmcp/PRD.md)) | MCP Server + Webapp | Alpha |
 | [notion-mcp](./notion-mcp/) | Notion Knowledge & RAG Orchestrator (FastMCP 3.1) | MCP Server + Dashboard | **2026** |
 | [resonite-mcp](./resonite-mcp/) | Resonite Social VR MCP (31 tools) | MCP Server | Production-Ready (v0.4.0) |
@@ -28,7 +33,7 @@
 | [dark-app-factory](./dark-app-factory/) | Generative factory / build pipeline | Factory Engine | **2026** |
 | [autohotkey](./autohotkey/) | AutoHotkey v2 scripts & migration | Special Case | Active Development |
 | [autohotkey-mcp](./autohotkey-mcp/) | AutoHotkey scriptlets MCP (FastMCP 3.1, SPA 10747, Glama metadata) | MCP Server | Active |
-| [obsidianmcp](./obsidianmcp/) | Obsidian Vault Knowledge Management | MCP Server | Production-Ready |
+| [obsidian-mcp](./obsidian-mcp/) | Obsidian Vault Knowledge Management | MCP Server + Webapp | Beta |
 | [obs-mcp](./obs-mcp/) | OBS Studio Automation (20 portmanteau) | MCP Server | Production-Ready |
 | [nest-protect-mcp](./nest-protect-mcp/) | Google Nest Protect Smart Home (20 portmanteau) | MCP Server | Production-Ready |
 | [unity3d-mcp](./unity3d-mcp/) | Unity 3D Automation + VRM Pipeline | MCP Server | Production-Ready |
@@ -39,28 +44,41 @@
 | [robofang](./robofang/) | Fleet supervisor: hub 10870, bridge 10871, supervisor 10872. start_all.ps1/start.bat; install-to-register-to-launch, fleet cards. | Infrastructure | Active |
 | [federation-mcp](./federation-mcp/) | MCP Federation Hub: one API + dashboard for many MCP servers; mesh (peers) with invite links and encrypted hub-to-hub. Bridge 10857, dashboard 10856. | MCP Platform | Active |
 | [robotics-mcp](./robotics-mcp/) | Unified Robotics Control (Physical + Virtual) | Composite MCP | Production-Ready (Beta) |
+| [ittybitty](./ittybitty/) | **ittybitty** — AI narrated video MCP (short + 3–15 min); videographer rules; **11054/11055**; package `videogen-mcp` | MCP Server + Tauri | **0.1.0 MVP** |
 | [bumi-mcp](./bumi-mcp/) | Noetix Bumi humanoid MCP; FastMCP 3.1, webapp **10774/10775**, virtual twin map | MCP Server + Dashboard | **0.1.0** |
 | [calibre-mcp](./calibre-mcp/) | Calibre library MCP â€” metadata RAG, FTS phrase jump, webapp **10720/10721** | MCP Server + Dashboard | Active |
 | [chitchat](./chitchat/) | Conversation starters, archive, and fleet docs crosslink. 64 curated topics, 4 MCP tools. Backend **10974**, frontend **10975**. FastMCP 3.2. | MCP Server + Webapp | **0.1.0** |
-| [fritz-coworker](./fritz-coworker/) | Poor Man's Viktor: Fritz orchestrates fleet MCP for scheduled pulses, inbox/day prep, docs audits, PDF deliverables, PR shipping. Agent: [fleet-agent-mcp](./fleet-agent-mcp.md) **10996**. [CHANGELOG](./fritz-coworker/CHANGELOG.md) | Agent plan + pilot | **0.2.0-pre** |
+| [fritz-coworker](./fritz-coworker/) | Poor Man's Viktor: pulses, inbox/day prep, devices watch, Intel Hub **11027**, urgent alerts. Agent: [fleet-agent-mcp](./fleet-agent-mcp.md) **10996**. [CHANGELOG](./fritz-coworker/CHANGELOG.md) | Agent plan + pilot | **0.2.1-pre** |
 | [libreoffice-mcp](./libreoffice-mcp/) | Headless LO convert + ODT merge + webapp PDF preview; ports **10981/10983**. FOSS office layer for Fritz coworker flows. [CHANGELOG](./libreoffice-mcp/CHANGELOG.md) | MCP Server + Webapp | **0.1.0** |
 | **[apple/](./apple/)** | **CalFolio** iPad app + fleet iOS ideation — [CALFOLIO.md](./apple/CALFOLIO.md), [EPUB_READER.md](./apple/EPUB_READER.md), [IOS_PUBLISHING.md](./apple/IOS_PUBLISHING.md) | iPad app (SwiftUI) | **Pre-scaffold** |
-| [games-app](./games-app/) | Web-based Games Collection (60+ games) | Web App | Production-Ready |
+| [games-app](./games-app/) | 150+ games, AI engines (Stockfish/KataGo/YaneuraOu), Japanese learning, FastMCP 3.2, Tauri 2.0 desktop, P2P multiplayer | MCP Server + Webapp + Tauri | Active (v2.5.1) |
 | [getbooks-mcp](./getbooks-mcp/) | Multiâ€“safe-source book discovery (Gutenberg, Open Library, IA, â€¦) â€” **not** Annaâ€™s Archive | MCP Server | **Planned** (design only) |
 | [antigravity-cli-mcp](./antigravity-cli-mcp.md) | Cursor ↔ `agy` CLI MCP bridge — goal/subagent/skills/MCP introspection; **not** SDK (token cost) | MCP Bridge | **Planned** (design only) |
+| [agy-fleet-mcp](./agy-fleet-mcp/) | Antigravity MCP **config sync** — Cursor↔Gemini diff/sync/validate, tool budget ~50; **10825** HTTP `/mcp`; **not** PyPI agy-mcp | MCP Server | **0.1.0** |
 | [glance-mcp](./glance-mcp/) | RSS/Atom, OPMLâ†’feeds, redirect trace, Open-Meteo, fleet probes (FastMCP 3.1, **10776** / **10777**) | MCP Server | **0.2.0** |
 | [godot-mcp](./godot-mcp/) | Godot 4 engine control; TCP bridge **9080**; 14 Godot + 6 itch tools; `just ship` + **`/ship`** UI; [AI & indie essay](./godot-mcp/AI_AND_INDIE_GAMES.md); [Little game guide](./godot-mcp/LITTLE_GAME_GUIDE.md) | MCP Server + Dashboard | **0.2.1** |
 | [steam-mcp](./steam-mcp/) | Valve Steam portmanteau MCP — profile, library, stats, store, workshop; Ask Steam chat + tool console; **11020/11021** | MCP Server + Dashboard | **0.2.0** |
 | [xkcd-mcp](./xkcd-mcp/) | xkcd official JSON API only â€” current / by_number / random (FastMCP 3.1, **10778** / **10779**) | MCP Server | **0.1.0** |
 | **arxiv-mcp** | arXiv research MCP + dashboard (FastMCP 3.1, **10770** / **10771**); dual transport; [CHANGELOG](https://github.com/sandraschi/arxiv-mcp/blob/main/CHANGELOG.md) | MCP Server + Dashboard | **0.3.1** |
+| [notebooklm-fleet-mcp](./notebooklm-fleet-mcp/) | NotebookLM fleet wrapper over notebooklm-mcp-cli (`nlm`); arXiv ingest, repo tags, glass **10783** / **10784**; [PRD](./notebooklm-fleet-mcp/PRD.md) | MCP Server + Dashboard | **0.1.0** |
 | [openclaw](./openclaw/) | Personal AI Assistant Platform (Gateway + Channels + Skills) | Platform | Production (Security audit Feb 2026) |
-| [discord-mcp](./discord-mcp/) | Discord REST bridge: FastMCP 3.1, sampling, skills, agentic workflow; backend **10756** + dashboard **10757**, MCP **`/mcp`** | MCP Server + Dashboard | **2026** |
+| [discord-mcp](./discord-mcp/) | Discord REST bridge: FastMCP 3.2, 36 ops, sampling, skills, agentic workflow; backend **10756** + dashboard **10757**, MCP **`/mcp`** | MCP Server + Dashboard | **2026** |
 | [openmanus-mcp](./openmanus-mcp/) | OpenManus FOSS bridge: FastMCP 3.1 stdio + FastAPI **10768** + Vite **10769** + fleet onboard; beta **0.1.0b1** | MCP Server + Dashboard | **Beta** |
 | [tailscale-mcp](./tailscale-mcp/) | Tailscale Admin API; **Webapp** â€” My tailnet + Partner tailnets; **2.0.2**; [PRD index](./tailscale-mcp/PRD.md) | MCP Server + Dashboard | Active |
-| [myconf](./myconf/) | AG-Visio: Self-hosted video conferencing + AI voice agent | Fullstack + MCP | Active Development |
+| [teleconference-mcp](./teleconference-mcp/) | Teleconference MCP: AI-powered video conferencing + LiveKit + voice agent | Fullstack + MCP | Active Development |
 | [analysis](./analysis/) | **MetaMCP fleet scans** — runt/SOTA + multidim exports (`FLEET_*_LATEST.md`, `runs/`) | Published reports | Auto-updated |
+| [fleet-cold-install](./fleet-cold-install/) | **Fleet cold-install probe** — meta_mcp + virtualization-mcp; naked Windows INSTALL.md batch test; [TODO](./fleet-cold-install/TODO.md) | Cross-repo program | **Scaffold** |
+| [diffusion-llm-mcp](./diffusion-llm-mcp/) | dLLM / DiffusionGemma fleet MCP; ports **10834/10835**; complements local-llm-mcp | MCP Server | **Phase 0 docs** |
+| [diffusiongemma](./diffusiongemma/) | dLLM assessment archive (HLE, Goliath, catch-them-all) — not the code repo | Research / assessment | **June 2026** |
+| [local-llm-mcp](./local-llm-mcp/) | AR local LLM MCP (Ollama, LM Studio, vLLM); ports **10832/10833** | MCP Server | Production |
+| **quicknotes-mcp** | VB6 QuickNotes rebuild: React + FastAPI + SQLite; topic notes editor, converter, import/export; ports **11058/11059** | Nostalgia Rebuild | Active |
+| **musicpaint-mcp** | VB6 MusicPaint rebuild: synchronized classical music + painting slideshow; 11,916 audio tracks, 8,178 paintings, 1,351 painters, ticketing; ports **11070/11071** | Nostalgia Rebuild | Active |
+| **quicknotes (original)** | VB6 topic-based notes app by ASM (~2004); 56 topics migrated; sits inside MusicPaint as `modQuickNotes` | VB6 Archive | Preserved |
+| **musicpaint (original)** | "Kammerherr" (~2004); 100+ forms, 70+ modules, 30+ classes; BASS audio, LeadTools imaging, DAO/ADO database, ticketing; code review shows 2,734 procedures | VB6 Archive | Preserved |
 
 ---
+
+**Publish note:** Full `projects/` tree is **mandatory IN** public `sandraschi-collected-docs` after update pass — [PUBLISH_UPDATE_CHECKLIST.md](../PUBLISH_UPDATE_CHECKLIST.md) · **P0 table:** [ACTIVE_PROJECTS_UPDATE_TABLE.md](./ACTIVE_PROJECTS_UPDATE_TABLE.md)
 
 ## Project Structure Convention
 
@@ -102,15 +120,15 @@ Each project folder contains:
 - **Workflows:** plex_to_deck, multi_deck_plex_load, record_mix_to_plex
 - **Status:** Active (Nov 28, 2025)
 
-### myconf (AG-Visio / Teams++)
-- **Source Repo:** `D:\Dev\repos\myconf`
+### Teleconference MCP
+- **Source Repo:** `D:\Dev\repos\myconf` (renamed to `teleconference-mcp`)
 - **Web UI:** http://localhost:10886 | **Health:** http://localhost:10886/health | **Meetings:** http://localhost:10886/meetings | **Test:** http://localhost:10886/test
-- **Type:** Self-hosted video conferencing + AI voice agent; Turborepo monorepo (Python + TypeScript)
-- **Version:** 2.1.0 — screen sharing, recording, background blur, scheduling UI, mobile responsive
-- **Key Tech:** LiveKit WebRTC, Next.js 16, React 19, livekit-agents (Python), Ollama/Whisper/Piper/Silero
-- **MCP Servers:** conferencing-mcp (port 10720, 20+ tools), remoting-mcp (port 10725, input injection + screen publish)
-- **Tests:** 44 Python (pytest) + 27 frontend (vitest) + 13 E2E (Playwright)
-- **Docs:** [README](./myconf/README.md) | [STATUS](./myconf/STATUS.md) | [LiveKit integration](../../integrations/livekit/)
+- **Type:** Self-hosted AI-powered video conferencing; LiveKit WebRTC + voice agent
+- **Version:** 0.1.0 — 30+ MCP tools, scheduling UI, screen sharing, recording, remote desktop
+- **Key Tech:** LiveKit WebRTC, Next.js 16, FastMCP 3.4+, livekit-agents (Python), Ollama/Whisper
+- **MCP Servers:** conferencing-mcp (port 10720, 25 tools), remoting-mcp (port 10725, 8 tools)
+- **Tests:** 95 Python (pytest) + 27 frontend (vitest) + 22 E2E (Playwright)
+- **Docs:** [README](./teleconference-mcp/README.md) | [STATUS](./teleconference-mcp/STATUS.md) | [LiveKit integration](../../integrations/livekit/)
 
 ### federation-mcp (MCP Federation Hub)
 - **Source Repo:** `D:\Dev\repos\mcp-federation-hub`
@@ -177,27 +195,20 @@ Each project folder contains:
 - **Grafana:** http://localhost:3140
 - **Key Tech:** FastAPI, GTFS, PostgreSQL, WebSocket
 
-### devices-mcp (v1.8.0 - Stability Enhanced)
-- **Dashboard:** http://localhost:7777
-- **MCP Server:** 16 portmanteau tools via FastMCP 3.1.1+.0
-- **Key Tech:** FastAPI, Docker, Prometheus/Loki/Grafana, phue, pyatmo, tapo
-- **NEW v1.8.0:**
-  - ðŸ’ª **Stability System:** Dependency validator + connection supervisor + 3-level alerting
-  - ðŸ“Š **Monitoring:** Prometheus metrics + Loki logs + Grafana ready
-  - ðŸ¥ **Health Dashboard:** Real-time device connection status
-  - ðŸš¨ **Alerts Dashboard:** Info/warning/alarm message center
-- **Features:**
-  - ðŸ’¡ **Lighting:** Philips Hue (18 lights, 6 groups, 11 scenes)
-  - âš¡ **Energy:** 3 Tapo P115 plugs (318W total, real-time monitoring)
-  - ðŸŒ¤ï¸ **Weather:** Netatmo dual-line graphs (main + bathroom modules)
-  - ðŸ“¹ **Cameras:** 2 Tapo C200 ONVIF + USB webcam
-  - ðŸ”” **Ring:** Doorbell WebRTC live view + 2-way talk
-  - ðŸŒ¤ï¸ **Weather:** Netatmo indoor + Vienna external (Open-Meteo)
-  - âš¡ **Energy:** Tapo P115 smart plugs
-  - ðŸ’¬ **Chatbot:** 10 personalities, auto model loading
-  - ðŸ³ **Kitchen:** Appliance dashboard
-  - ðŸ¤– **Robots:** Planned integrations
-- **Status:** Production-Ready v1.4.0 (Nov 26, 2025)
+### devices-mcp (v1.21.5 — Beta)
+- **Dashboard:** http://127.0.0.1:10717/app/
+- **MCP:** FastMCP 3.2 portmanteau tools (stdio/HTTP)
+- **Legs:** MCP server · web-sota dashboard · Tauri desktop installer
+- **Devices:** Tapo, Hue, Ring, Nest (HA), Shelly, Netatmo, USB cams
+- **Fleet:** `GET /api/fleet/priority` — Fritz home-safety watch
+- **Docs:** [devices-mcp/README.md](./devices-mcp/README.md)
+
+### aiwatcher-mcp (v0.1.8)
+- **Backend:** http://127.0.0.1:10946 · **Frontend:** http://127.0.0.1:10947
+- **Intel Hub:** digest HTML → :11027 — see [aiwatcher-mcp/README.md](./aiwatcher-mcp/README.md)
+
+### fleet-agent-mcp / Fritz (v0.2.1-pre)
+- **Ports:** 10996 / 10997 / **Intel Hub 11027** — [fleet-agent-mcp.md](./fleet-agent-mcp.md)
 
 ### resonite-mcp (v0.4.0 - Presence Aware)
 - **Source Repo:** `D:\Dev\repos\resonite-mcp`

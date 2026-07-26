@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "winrar-mcp"
-version = "0.1.0"  # Beta - Windows WinRAR integration with FastMCP 3.1+
-description = "WinRAR MCP - FastMCP 3.1+ server for Windows WinRAR archive operations (Beta)"
+version = "0.3.1"  # Hardened - Windows WinRAR integration with FastMCP 3.1
+description = "WinRAR MCP - FastMCP 3.1 server for Windows WinRAR archive operations (Beta)"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
@@ -36,7 +36,7 @@ keywords = [
 ]
 
 dependencies = [
-    "fastmcp>=3.1.0,<4",
+    "fastmcp>=3.4.4,<4",
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
     "python-dotenv>=0.21.0",
@@ -52,6 +52,10 @@ dependencies = [
     "mypy>=1.0.0",
     "pylint>=2.12.0",
     "ruff>=0.15.2",
+    "prefab-ui>=0.14.0",
+    "opentelemetry-api>=1.28.0",
+    "opentelemetry-sdk>=1.28.0",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.28.0",
 ]
 
 [project.optional-dependencies]
@@ -81,16 +85,43 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.ruff]
-line-length = 100
-target-version = "py38"
-
-[tool.ruff.lint]
-select = ["E", "F", "I", "N", "W", "UP", "B", "C4", "SIM"]
-ignore = ["E501"]
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
 asyncio_mode = "auto"
 
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.coverage.run]
+source = ["src/winrarmcp"]
+omit = ["*/tests/*", "*/test_*.py"]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.21.0",
+]

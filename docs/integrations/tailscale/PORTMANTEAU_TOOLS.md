@@ -1,584 +1,127 @@
-# Tailscale Portmanteau Tools
+# Tailscale MCP — Portmanteau Tools (Fleet Reference)
 
-**Date:** October 23, 2025  
-**Purpose:** Portmanteau tools documentation for Tailscale MCP integration
+**Refreshed:** 2026-06-20, against `tailscale-mcp` `src/tailscalemcp/tools/` directly. Previous version of this page (dated October 2025) described tool names like `tailscale_device`, `tailscale_security(operation="scan")`, and a generic `OperationRouter`/`TailscaleWorkflowComposer` pattern that don't exist anywhere in the actual codebase — that content has been replaced entirely rather than patched, since it would have been faster to write fiction around the real tools than to untangle which parts of the old page were salvageable.
 
----
-
-## 🎯 **Overview**
-
-This document provides comprehensive documentation for the Tailscale portmanteau tools architecture, which consolidates multiple related operations into powerful, easy-to-use tools.
+For *what each Tailscale feature does* (Funnel vs. Taildrop vs. Services vs. Peer Relays), see [`tailscale-mcp/docs/FEATURES.md`](https://github.com/sandraschi/tailscale-mcp/blob/main/docs/FEATURES.md). This page covers *how the MCP tool surface is shaped* — the portmanteau pattern itself and the real operation enums.
 
 ---
 
-## 🔧 **Portmanteau Tools Architecture**
+## The actual pattern
 
-### **1. Design Philosophy**
-
-The portmanteau tools pattern consolidates related functionality into single, powerful tools that use an `operation` parameter to specify the action. This approach:
-
-- **Reduces Tool Explosion**: Prevents having dozens of individual tools
-- **Improves Usability**: Provides a consistent interface across all operations
-- **Enhances Maintainability**: Centralizes related functionality
-- **Follows MCP Best Practices**: Aligns with patterns used in other MCP servers
-
-### **2. Tool Structure**
-
-Each portmanteau tool follows this structure:
+Every tool takes an `operation: Literal[...]` parameter (a closed enum, not a free string — FastMCP 3.1+ derives the JSON Schema from the type annotation, so clients see the full set of valid values, not just prose). The enum source of truth is `src/tailscalemcp/tools/_tool_types.py`. A response always includes an `"operation"` key echoing back which sub-operation ran, plus operation-specific payload keys.
 
 ```python
-@mcp.tool()
-async def tool_name(operation: str, **kwargs) -> Dict[str, Any]:
-    """
-    Tool description.
-    
-    Args:
-        operation: The operation to perform
-        **kwargs: Additional operation-specific parameters
-    """
+# Real shape, from device_tool.py
+@ctx.mcp.tool(name=MANAGE_TAILNET_DEVICES)
+async def tailscale_device(
+    operation: DeviceOperation,   # Literal["list", "get", "authorize", ...]
+    device_id: str | None = None,
+    name: str | None = None,
+    # ... every parameter any operation in this domain might need
+) -> dict[str, Any]:
     try:
-        if operation == "operation1":
-            # Implementation for operation1
-            pass
-        elif operation == "operation2":
-            # Implementation for operation2
-            pass
+        if operation == "list":
+            ...
+        elif operation == "get":
+            ...
+        # ...
         else:
-            return {"status": "error", "message": "Invalid operation"}
-    
+            raise TailscaleMCPError(f"Unknown operation: {operation}")
     except Exception as e:
-        return {"status": "error", "message": str(e)}
+        # See the auth-error-recovery note below
+        ...
 ```
+
+Real tool function names are internal (`tailscale_device`, `tailscale_network`, etc.) — the **MCP name** exposed to clients is set via `@ctx.mcp.tool(name=...)` from constants in `mcp_tool_names.py`, and is verb-first without a redundant `tailscale_` prefix (the server is Tailscale-only, so the prefix would be noise). Don't write code or prompts assuming the Python function name is also the MCP tool name — they differ on purpose.
+
+## Real operation enums by domain
+
+Pulled directly from `_tool_types.py` — these are the actual `Literal[...]` values, not approximations.
+
+### `manage_tailnet_devices` — `DeviceOperation`
+`list`, `get`, `authorize`, `rename`, `tag`, `delete`, `search`, `stats`, `exit_node`, `subnet_router`, `user_list`, `user_details`, `auth_key_list`, `auth_key_create`, `auth_key_revoke`
+
+### `manage_tailnet_network` — `NetworkOperation`
+`dns_config`, `magic_dns`, `dns_record`, `resolve`, `search_domain`, `policy`, `stats`, `cache`, `services_list`, `services_get`, `services_create`, `services_update`, `services_delete`
+
+(Note: Tailscale Services live inside this tool, not a separate one — easy to miss if you're looking for a `manage_services` tool that doesn't exist.)
+
+### `monitor_tailnet` — `MonitorOperation`
+`status`, `metrics`, `prometheus`, `topology`, `health`, `dashboard`, `export`
+
+### `manage_taildrop` — `FileOperation`
+`send`, `receive`, `list`, `cancel`, `status`, `stats`, `cleanup`
+
+### `manage_funnel` — `FunnelOperation`
+`funnel_enable`, `funnel_disable`, `funnel_status`, `funnel_list`, `funnel_certificate_info`
+
+### `run_tailnet_security` — `SecurityOperation`
+`audit` — that's the only one. The old page's `scan`, `compliance`, `threat_detect`, `ip_block`, `quarantine` operations were invented; the Tailscale Admin API has no endpoints for those, and the real tool's own docstring says so explicitly: *"Tailscale's Admin API provides no security scanning, compliance, quarantine, alert, or threat detection endpoints."*
+
+### `run_tailnet_automation` — `AutomationOperation`
+`workflow_create`, `workflow_execute`, `workflow_schedule`, `workflow_list`, `workflow_delete`, `script_execute`, `script_template`, `batch`, `dry_run`
+
+### `manage_tailnet_backups` — `BackupOperation`
+`backup_create`, `backup_restore`, `backup_schedule`, `backup_list`, `backup_delete`, `backup_test`, `restore_test`, `recovery_plan`
+
+### `analyze_tailnet_performance` — `PerformanceOperation`
+`latency`, `bandwidth`, `optimize`, `baseline`, `capacity`, `utilization`, `scaling`, `threshold`
+
+### `generate_tailnet_reports` — `ReportingOperation`
+`generate`, `usage`, `custom`, `schedule`, `export`, `analytics`, `behavior`, `security`, `template`
+
+### `manage_tailnet_integrations` — `IntegrationOperation`
+`webhook_create`, `webhook_test`, `webhook_list`, `webhook_delete`, `slack`, `discord`, `pagerduty`, `datadog`, `test`
+
+### `manage_tailnet_invites` — device/user invite operations
+Device: `list`, `create`, `get`, `delete`, `resend`, `accept`. User: `list`, `create`, `get`, `delete`, `resend` (no `accept` for user invites).
+
+### `manage_posture_attributes` — `PostureAttributeOperation`
+`get`, `set`, `delete`, `batch_update`
+
+### `manage_device_keys` — `DeviceKeyOperation`
+`expire`, `update_key_expiry`, `set_ip`
+
+### `manage_tailnet_logging` — `LoggingOperation`
+`configuration_audit_logs`, `network_flow_logs`, `stream_status`, `stream_config_get`, `stream_config_set`
+
+### `manage_tailnet_webhooks` — `WebhookOperation`
+`list`, `create`, `get`, `update`, `delete`, `rotate_secret`
+
+### `manage_tailnet_settings` / `manage_tailnet_contacts`
+Both just `get` / `update`.
+
+## Real usage examples
+
+```python
+# List online devices only
+manage_tailnet_devices(operation="list", online_only=True)
+
+# Check Funnel status
+manage_funnel(operation="funnel_status")
+
+# Run a security audit on one device
+run_tailnet_security(operation="audit", device_id="device-id-here")
+
+# Get tailnet status with a Mermaid topology diagram
+get_tailnet_status(component="overview", include_mermaid_diagram=True)
+
+# SEP-1577 agentic workflow — server picks tools and executes them
+run_agentic_tailnet_workflow(
+    workflow_prompt="List all offline devices and check if any have pending posture issues",
+    available_tools=["manage_tailnet_devices", "manage_posture_attributes"],
+    max_iterations=5,
+)
+```
+
+## Auth-error recovery (worth knowing if a tool 401s)
+
+Every tool module's exception boundary distinguishes two causes of an HTTP 401 rather than collapsing them into a flat "Invalid API key" string: a genuinely bad/expired key, versus a long-running server process holding a stale key it cached at startup (the more common case in practice — see [`TRAPS_AND_PITFALLS.md` §6](../../standards/TRAPS_AND_PITFALLS.md#6-stale-in-process-api-credentials-surfacing-as-a-flat-invalid-api-key-error)). The response's `details.recovery_options` field tells you which is more likely and what to do about it, rather than making you guess.
+
+## Where the real registration wiring lives
+
+`src/tailscalemcp/tools/portmanteau_tools.py`'s `TailscalePortmanteauTools._register_tools()` calls every `register_*_tool(ctx)` function — that's the actual list of what's live, useful to check if this page or `mcp_tool_names.py` ever drift apart again.
 
 ---
 
-## 📊 **Available Portmanteau Tools**
-
-### **1. tailscale_device**
-
-**Purpose**: Device and user management operations
-
-**Operations**:
-- `list`: List all devices
-- `get`: Get specific device details
-- `authorize`: Authorize a device
-- `revoke`: Revoke device authorization
-- `rename`: Rename a device
-- `tag`: Update device tags
-- `ssh_access`: Configure SSH access
-- `exit_node`: Configure exit node
-- `subnet_router`: Configure subnet router
-
-**Example Usage**:
-```python
-# List all devices
-result = await tailscale_device(operation="list")
-
-# Get specific device
-result = await tailscale_device(operation="get", device_id="device_123")
-
-# Authorize device
-result = await tailscale_device(operation="authorize", device_id="device_123")
-
-# Rename device
-result = await tailscale_device(operation="rename", device_id="device_123", name="new_name")
-
-# Update device tags
-result = await tailscale_device(operation="tag", device_id="device_123", tags=["tag:server", "tag:production"])
-```
-
-### **2. tailscale_network**
-
-**Purpose**: DNS and network management operations
-
-**Operations**:
-- `dns_config`: Get DNS configuration
-- `acl_config`: Get ACL configuration
-- `routes`: Get network routes
-- `dns_records`: Get DNS records
-- `magic_dns`: Configure MagicDNS
-- `custom_dns`: Configure custom DNS
-
-**Example Usage**:
-```python
-# Get DNS configuration
-result = await tailscale_network(operation="dns_config")
-
-# Get ACL configuration
-result = await tailscale_network(operation="acl_config")
-
-# Configure MagicDNS
-result = await tailscale_network(operation="magic_dns", enabled=True)
-
-# Configure custom DNS
-result = await tailscale_network(operation="custom_dns", nameservers=["8.8.8.8", "8.8.4.4"])
-```
-
-### **3. tailscale_monitor**
-
-**Purpose**: Monitoring and metrics operations
-
-**Operations**:
-- `status`: Get network status
-- `metrics`: Get network metrics
-- `topology`: Get network topology
-- `health`: Get network health
-- `grafana_dashboard`: Generate Grafana dashboard
-
-**Example Usage**:
-```python
-# Get network status
-result = await tailscale_monitor(operation="status")
-
-# Get network metrics
-result = await tailscale_monitor(operation="metrics")
-
-# Generate Grafana dashboard
-result = await tailscale_monitor(operation="grafana_dashboard", dashboard_type="overview")
-```
-
-### **4. tailscale_file**
-
-**Purpose**: Taildrop file sharing operations
-
-**Operations**:
-- `send`: Send file via Taildrop
-- `receive`: Receive file via Taildrop
-- `list`: List available files
-- `status`: Get transfer status
-- `stats`: Get transfer statistics
-
-**Example Usage**:
-```python
-# Send file
-result = await tailscale_file(operation="send", device_id="device_123", filename="example.txt", content="file content")
-
-# Receive file
-result = await tailscale_file(operation="receive", device_id="device_123", filename="example.txt")
-
-# List files
-result = await tailscale_file(operation="list", device_id="device_123")
-```
-
-### **5. tailscale_security**
-
-**Purpose**: Security and compliance operations
-
-**Operations**:
-- `scan`: Perform security scan
-- `compliance`: Perform compliance check
-- `audit`: Perform security audit
-- `threat_detect`: Perform threat detection
-- `ip_block`: Block IP address
-- `quarantine`: Quarantine device
-
-**Example Usage**:
-```python
-# Perform security scan
-result = await tailscale_security(operation="scan", device_id="device_123")
-
-# Perform compliance check
-result = await tailscale_security(operation="compliance", device_id="device_123")
-
-# Block IP address
-result = await tailscale_security(operation="ip_block", ip_address="192.168.1.100")
-```
-
----
-
-## 🔗 **Integration Patterns**
-
-### **1. Tool Registration**
-
-#### **Basic Tool Registration**
-```python
-from fastmcp import FastMCP
-
-class TailscalePortmanteauTools:
-    def __init__(self, api_key: str, tailnet: str):
-        self.api_key = api_key
-        self.tailnet = tailnet
-        self.mcp = FastMCP("tailscale-mcp")
-        self._setup_tools()
-    
-    def _setup_tools(self):
-        """Setup all portmanteau tools."""
-        
-        @self.mcp.tool()
-        async def tailscale_device(operation: str, **kwargs) -> Dict[str, Any]:
-            """Device management operations."""
-            # Implementation
-            pass
-        
-        @self.mcp.tool()
-        async def tailscale_network(operation: str, **kwargs) -> Dict[str, Any]:
-            """Network management operations."""
-            # Implementation
-            pass
-        
-        @self.mcp.tool()
-        async def tailscale_monitor(operation: str, **kwargs) -> Dict[str, Any]:
-            """Monitoring operations."""
-            # Implementation
-            pass
-        
-        @self.mcp.tool()
-        async def tailscale_file(operation: str, **kwargs) -> Dict[str, Any]:
-            """File sharing operations."""
-            # Implementation
-            pass
-        
-        @self.mcp.tool()
-        async def tailscale_security(operation: str, **kwargs) -> Dict[str, Any]:
-            """Security operations."""
-            # Implementation
-            pass
-```
-
-### **2. Operation Routing**
-
-#### **Operation Router Pattern**
-```python
-class OperationRouter:
-    def __init__(self):
-        self.operations = {}
-    
-    def register_operation(self, tool_name: str, operation: str, handler: callable):
-        """Register operation handler."""
-        if tool_name not in self.operations:
-            self.operations[tool_name] = {}
-        self.operations[tool_name][operation] = handler
-    
-    async def route_operation(self, tool_name: str, operation: str, **kwargs) -> Dict[str, Any]:
-        """Route operation to appropriate handler."""
-        if tool_name not in self.operations:
-            return {"status": "error", "message": f"Unknown tool: {tool_name}"}
-        
-        if operation not in self.operations[tool_name]:
-            return {"status": "error", "message": f"Unknown operation: {operation}"}
-        
-        try:
-            handler = self.operations[tool_name][operation]
-            result = await handler(**kwargs)
-            return {"status": "success", "data": result}
-        except Exception as e:
-            return {"status": "error", "message": str(e)}
-
-# Usage
-router = OperationRouter()
-
-# Register operations
-router.register_operation("tailscale_device", "list", list_devices_handler)
-router.register_operation("tailscale_device", "get", get_device_handler)
-router.register_operation("tailscale_device", "authorize", authorize_device_handler)
-
-# Route operations
-result = await router.route_operation("tailscale_device", "list")
-```
-
-### **3. Parameter Validation**
-
-#### **Parameter Validator Pattern**
-```python
-from pydantic import BaseModel, validator
-from typing import Dict, Any, List, Optional
-
-class TailscaleDeviceValidator(BaseModel):
-    operation: str
-    device_id: Optional[str] = None
-    name: Optional[str] = None
-    tags: Optional[List[str]] = None
-    
-    @validator('operation')
-    def validate_operation(cls, v):
-        valid_operations = ["list", "get", "authorize", "revoke", "rename", "tag"]
-        if v not in valid_operations:
-            raise ValueError(f"Invalid operation. Must be one of: {valid_operations}")
-        return v
-    
-    @validator('device_id')
-    def validate_device_id(cls, v):
-        if v and len(v) < 5:
-            raise ValueError("Device ID must be at least 5 characters")
-        return v
-    
-    @validator('name')
-    def validate_name(cls, v):
-        if v and len(v) < 2:
-            raise ValueError("Device name must be at least 2 characters")
-        return v
-    
-    @validator('tags')
-    def validate_tags(cls, v):
-        if v:
-            for tag in v:
-                if not tag.startswith("tag:"):
-                    raise ValueError("Tags must start with 'tag:'")
-        return v
-
-# Usage
-validator = TailscaleDeviceValidator()
-
-try:
-    validated_params = validator(**parameters)
-    # Use validated parameters
-except Exception as e:
-    return {"status": "error", "message": str(e)}
-```
-
----
-
-## 📊 **Tool Usage Examples**
-
-### **1. Device Management Workflow**
-
-```python
-async def device_management_workflow():
-    """Example device management workflow."""
-    
-    # List all devices
-    devices_result = await tailscale_device(operation="list")
-    if devices_result["status"] != "success":
-        return {"status": "error", "message": "Failed to list devices"}
-    
-    devices = devices_result["data"]
-    
-    # Check for unauthorized devices
-    unauthorized_devices = [d for d in devices if not d.get("authorized", False)]
-    
-    for device in unauthorized_devices:
-        # Authorize device
-        auth_result = await tailscale_device(
-            operation="authorize",
-            device_id=device["id"]
-        )
-        
-        if auth_result["status"] == "success":
-            print(f"Authorized device: {device['name']}")
-        else:
-            print(f"Failed to authorize device: {device['name']}")
-    
-    # Apply tags to devices
-    for device in devices:
-        if device.get("os") == "linux":
-            tag_result = await tailscale_device(
-                operation="tag",
-                device_id=device["id"],
-                tags=["tag:linux", "tag:server"]
-            )
-            
-            if tag_result["status"] == "success":
-                print(f"Applied tags to device: {device['name']}")
-    
-    return {"status": "success", "message": "Device management workflow completed"}
-```
-
-### **2. Network Monitoring Workflow**
-
-```python
-async def network_monitoring_workflow():
-    """Example network monitoring workflow."""
-    
-    # Get network status
-    status_result = await tailscale_monitor(operation="status")
-    if status_result["status"] != "success":
-        return {"status": "error", "message": "Failed to get network status"}
-    
-    status = status_result["data"]
-    print(f"Network Status: {status['total_devices']} total devices, {status['online_devices']} online")
-    
-    # Get network metrics
-    metrics_result = await tailscale_monitor(operation="metrics")
-    if metrics_result["status"] != "success":
-        return {"status": "error", "message": "Failed to get network metrics"}
-    
-    metrics = metrics_result["data"]
-    print(f"Network Metrics: {metrics['device_count']} devices, {metrics['online_count']} online")
-    
-    # Get network health
-    health_result = await tailscale_monitor(operation="health")
-    if health_result["status"] != "success":
-        return {"status": "error", "message": "Failed to get network health"}
-    
-    health = health_result["data"]
-    print(f"Network Health Score: {health['health_score']}")
-    
-    # Generate Grafana dashboard
-    dashboard_result = await tailscale_monitor(
-        operation="grafana_dashboard",
-        dashboard_type="comprehensive"
-    )
-    
-    if dashboard_result["status"] == "success":
-        print("Grafana dashboard generated successfully")
-    
-    return {"status": "success", "message": "Network monitoring workflow completed"}
-```
-
-### **3. Security Workflow**
-
-```python
-async def security_workflow():
-    """Example security workflow."""
-    
-    # Get all devices
-    devices_result = await tailscale_device(operation="list")
-    if devices_result["status"] != "success":
-        return {"status": "error", "message": "Failed to list devices"}
-    
-    devices = devices_result["data"]
-    
-    # Perform security scan on each device
-    for device in devices:
-        scan_result = await tailscale_security(
-            operation="scan",
-            device_id=device["id"]
-        )
-        
-        if scan_result["status"] == "success":
-            print(f"Security scan completed for device: {device['name']}")
-        else:
-            print(f"Security scan failed for device: {device['name']}")
-    
-    # Perform compliance check
-    compliance_result = await tailscale_security(operation="compliance")
-    if compliance_result["status"] == "success":
-        print("Compliance check completed")
-    
-    # Perform security audit
-    audit_result = await tailscale_security(operation="audit")
-    if audit_result["status"] == "success":
-        print("Security audit completed")
-    
-    return {"status": "success", "message": "Security workflow completed"}
-```
-
----
-
-## 🔧 **Advanced Patterns**
-
-### **1. Tool Composition**
-
-#### **Composing Multiple Tools**
-```python
-class TailscaleWorkflowComposer:
-    def __init__(self, tailscale_tools):
-        self.tailscale_tools = tailscale_tools
-    
-    async def compose_device_workflow(self, device_id: str) -> Dict[str, Any]:
-        """Compose device workflow using multiple tools."""
-        try:
-            # Get device details
-            device_result = await self.tailscale_tools.tailscale_device(
-                operation="get",
-                device_id=device_id
-            )
-            
-            if device_result["status"] != "success":
-                return {"status": "error", "message": "Failed to get device details"}
-            
-            device = device_result["data"]
-            
-            # Perform security scan
-            scan_result = await self.tailscale_tools.tailscale_security(
-                operation="scan",
-                device_id=device_id
-            )
-            
-            # Get network status
-            status_result = await self.tailscale_tools.tailscale_monitor(operation="status")
-            
-            return {
-                "status": "success",
-                "data": {
-                    "device": device,
-                    "security_scan": scan_result,
-                    "network_status": status_result
-                }
-            }
-        
-        except Exception as e:
-            return {"status": "error", "message": str(e)}
-```
-
-### **2. Tool Chaining**
-
-#### **Chaining Tool Operations**
-```python
-class TailscaleToolChain:
-    def __init__(self, tailscale_tools):
-        self.tailscale_tools = tailscale_tools
-        self.chain = []
-    
-    def add_operation(self, tool_name: str, operation: str, **kwargs):
-        """Add operation to chain."""
-        self.chain.append({
-            "tool_name": tool_name,
-            "operation": operation,
-            "parameters": kwargs
-        })
-        return self
-    
-    async def execute_chain(self) -> List[Dict[str, Any]]:
-        """Execute all operations in chain."""
-        results = []
-        
-        for operation in self.chain:
-            try:
-                tool_name = operation["tool_name"]
-                op = operation["operation"]
-                params = operation["parameters"]
-                
-                if tool_name == "tailscale_device":
-                    result = await self.tailscale_tools.tailscale_device(op, **params)
-                elif tool_name == "tailscale_network":
-                    result = await self.tailscale_tools.tailscale_network(op, **params)
-                elif tool_name == "tailscale_monitor":
-                    result = await self.tailscale_tools.tailscale_monitor(op, **params)
-                elif tool_name == "tailscale_file":
-                    result = await self.tailscale_tools.tailscale_file(op, **params)
-                elif tool_name == "tailscale_security":
-                    result = await self.tailscale_tools.tailscale_security(op, **params)
-                else:
-                    result = {"status": "error", "message": f"Unknown tool: {tool_name}"}
-                
-                results.append(result)
-                
-                # Stop chain if operation fails
-                if result["status"] != "success":
-                    break
-            
-            except Exception as e:
-                results.append({"status": "error", "message": str(e)})
-                break
-        
-        return results
-
-# Usage
-chain = TailscaleToolChain(tailscale_tools)
-results = await chain.add_operation("tailscale_device", "list") \
-                     .add_operation("tailscale_monitor", "status") \
-                     .add_operation("tailscale_security", "audit") \
-                     .execute_chain()
-```
-
----
-
-## 📚 **Summary**
-
-The Tailscale portmanteau tools architecture provides:
-
-- **Consolidated Functionality**: Multiple operations in single tools
-- **Consistent Interface**: Uniform parameter structure across all tools
-- **Improved Usability**: Easy-to-use tool interface
-- **Enhanced Maintainability**: Centralized related functionality
-- **MCP Best Practices**: Follows established MCP patterns
-
-This architecture ensures robust, scalable, and maintainable Tailscale MCP integrations across all repositories.
-
----
-
-**Status**: ✅ Active  
-**Last Updated**: October 23, 2025  
-**Version**: 1.0.0  
-**Purpose**: Portmanteau tools documentation for Tailscale MCP integration
+*This page intentionally does not include generic "how to build a portmanteau tool" tutorial content (validator patterns, tool composition classes, generic router patterns) — that belongs in [`TOOL_DESIGN_STANDARDS.md`](../../standards/TOOL_DESIGN_STANDARDS.md) as a fleet-wide pattern, not duplicated per-integration with invented examples.*

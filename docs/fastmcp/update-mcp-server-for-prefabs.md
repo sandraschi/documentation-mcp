@@ -7,7 +7,7 @@
 
 ## 1. Decide
 
-- Prefab is **in-chat rich UI**, not a replacement for a fleet **webapp** (ports **10700–10800**). See [prefab-vs-webapps.md](./prefab-vs-webapps.md).
+- Prefab is **in-chat rich UI**, not a replacement for a fleet **webapp** (ports **10700–10800**). See [prefab-vs-webapps.md](../archive/fastmcp/prefab-vs-webapps.md).
 - Every App tool must still return useful **plain text** via `ToolResult.content` for hosts that ignore Apps.
 - **List / status / stats** tools **must** gain a Prefab surface — [SOTA §2.2](../standards/SOTA_REQUIREMENTS.md#22-mcp-apps-and-prefab-ui-fleet-mandatory), [mcp-apps-prefab-ui.md §3.2](./mcp-apps-prefab-ui.md#32-list--status--stats-tools-mandatory-coverage).
 

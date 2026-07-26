@@ -1,142 +1,85 @@
-# Godot MCP (fleet project page)
+# Godot MCP
 
-**Repo:** `D:/Dev/repos/godot-mcp`  
-**Canonical docs (next to code):** `godot-mcp/docs/` — update **both** when ports, bridge protocol, or `just` recipes change.
+<p align="center">
+  <img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square" alt="Just">
+  <img src="https://img.shields.io/badge/Python-3.13-3776AB?style=flat-square" alt="Python">
+  <img src="https://img.shields.io/badge/FastMCP-3.4-7c5cfc?style=flat-square" alt="FastMCP">
+  <img src="https://img.shields.io/badge/tier-T3--desktop-7c5cfc?style=flat-square" alt="Release Tier">
+</p>
 
-## One-line summary
+AI-driven Godot 4 control via MCP — scene manipulation, 3D import, GPU particles,
+procedural textures, HTML5 export. **Deterministic playtesting**: freeze the game
+clock, inject analog/joypad/mouse input, step frame-by-step until a condition is
+met, read live game state as structured JSON. **Game Builder**: describe a game
+in natural language and get playable GDScript + export. Publish to itch.io and
+Steam. 95+ tools, 77 tests, NSIS desktop installer.
 
-FastMCP **3.2** server for **Godot 4** engine control: TCP bridge on **9080**, REST/MCP on **10993**, Vite dashboard on **10992**. Imports STL/GLB/OBJ, CFD velocity fields, GPU particles, HTML5 export, **itch.io Butler shipping**. **AI Game Builder** — prompt → Marble worlds → Godot scene → GDScript → HTML5. Fleet endpoint for qcad → freecad → FluidX3D and blender → godot pipelines.
+---
 
-## Ports
-
-| Port | Role |
-|------|------|
-| **10993** | Backend (FastAPI + FastMCP dual mode) |
-| **10992** | Web dashboard (`web_sota`) |
-| **9080** | GDScript `mcp_bridge.gd` TCP server (separate Godot process) |
-
-Env: `GODOT_HOST`, `GODOT_PORT`, `GODOT_PATH`, `MCP_BRIDGE_URLS`, `BUTLER_API_KEY`, `ITCH_TARGET`, `BUTLER_PATH`, `ITCH_CHANNEL_WEB`, `ITCH_CHANNEL_WIN`, `GODOT_EXPORT_GAME`, `FLEET_EXCHANGE_ROOT`, `WORLDLABS_BRIDGE_URL`, `WORLDLABS_WEB_URL`, `STEAM_MCP_URL`, `STEAM_APP_ID`, `STEAM_DEPOT_ID`, `STEAM_USERNAME`, `STEAMCMD_PATH`.
-
-## Start (development)
-
-```powershell
-cd D:\Dev\repos\godot-mcp
-just bootstrap
-just serve              # MCP + REST (10993)
-just godot-bridge       # headless bridge (9080) — required for engine tools
-just bridge-test        # smoke: godot_status via REST
-just web                # dashboard (10992)
-```
-
-Web UI: `http://127.0.0.1:10992` — health: `http://127.0.0.1:10993/api/v1/status` — **Ship:** `http://127.0.0.1:10992/ship`
-
-**Startup warning** `Connection refused at 127.0.0.1:9080` is normal if the bridge is not up yet; connect succeeds on first tool call after `just godot-bridge`. **itch ship tools do not need the bridge.**
-
-## Sample games
-
-Cloned under `samples/` (official demos, Heart Platformer, procedural, skelerealms):
+## Quick Install
 
 ```powershell
-just demo-list
-just demo-run heart       # default — Godot 4.0 project
-just demo-run platformer  # official 2D demo (4.4-patched animations)
+git clone https://github.com/sandraschi/godot-mcp
+cd godot-mcp
+just bootstrap       # install deps
+just serve           # start server (10993)
+just web             # open dashboard (10992)
 ```
 
-First run auto-imports assets (`--import`). See `samples/README.md`.
+See [INSTALL.md](INSTALL.md) for all options (MCPB, dev setup, naked PC).
 
-## Export & ship to itch.io
+---
+
+## Features
+
+- **Game Builder** — `design_game` -> `generate_game_logic` -> `generate_game_tests` -> `generate_dialogue` -> export. Validated with gdlint + godot --check-only, auto-repaired by LLM. [Tutorial](docs/game-builder-tutorial.md)
+- **Procedural textures** — `godot_generate_procedural_texture`: gradient, noise, checker, solid. No external assets needed.
+- **Deterministic playtesting** — freeze game clock, step frame-by-step, step-until GDScript condition, analog/joypad/mouse/text input injection. Three-phase implementation inspired by satelliteoflove/godot-mcp.
+- **Structured game state** — `godot_state_digest` reads live node state as JSON via `_mcp_state()` convention or auto-collected properties. Cheaper than full scene tree dump.
+- **Engine control** — 30 bridge tools: import STL/GLB/OBJ, particles, cameras, lighting, animation, viewport capture, input simulation, scene node management.
+- **Animation keyframe editor** — query tracks down to individual keyframes, insert/remove keys, set interpolation.
+- **TileMap/GridMap editing** — read and write cell data directly (bypasses base64 `.tscn` serialization).
+- **Performance profiler** — 14 engine metrics with auto-sampling and spike detection (>2 stddev).
+- **Mesh validation** — scan for NaN vertices, degenerate triangles, zero normals.
+- **3D Gaussian Splat import** — import `.ply` and `.spz` files with a custom billboarded Gaussian shader (per-splat scale, SH DC color).
+- **Publishing** — `itch_ops` and `steam_ops` portmanteaus for itch.io Butler and SteamPipe. Cross-repo fleet pipeline.
+- **GDScript validation** — two-pass (gdlint style + godot compile) with LLM repair. 
+- **Plugin ecosystem** — 7 community plugins installable from the `/plugins` page.
+- **LLM detection** — auto GPU probe, model recommendation by VRAM tier. Default `gemma4:12b`.
+- **Sample game** — [Vibecoder Runner](samples/vibecode-runner/) with 10 AI-themed enemy types.
+
+## What You Can Do
 
 ```powershell
-just install-export-templates          # once per Godot version
-just little-game-export web dodge
-just ship web dodge                    # export + Butler preview + push
-just itch-status
+just gb-demo "A 2D runner where you collect stars and avoid spikes"
+just bridge-test                          # check engine connection
+just demo-run vibecode                    # play sample game
+just gb-preview                           # preview latest HTML5 export
 ```
 
-Requires `BUTLER_API_KEY` + `ITCH_TARGET=user/game`. Dashboard: **`/ship`**. Canonical: `godot-mcp/docs/ship-to-itch.md`.
+## Documentation
 
-## Export & ship to Steam (partner)
+| Doc | Contents |
+|-----|----------|
+| [Installation](INSTALL.md) | All install methods |
+| [Configuration](docs/CONFIGURATION.md) | Env vars, settings |
+| [Tool Reference](docs/TOOLS.md) | All 90+ MCP tools |
+| [Playtesting Spec](docs/SPEC_DETERMINISTIC_PLAYTESTING.md) | Deterministic playtesting architecture |
+| [Demo Scripts](demos/) | Playtesting, profiling, scene inspection, splat import demos |
+| [Game Builder Tutorial](docs/game-builder-tutorial.md) | Prompt-to-game walkthrough |
+| [Godot Ecosystem](docs/godot-ecosystem.md) | Plugins, gdtoolkit, fleet pipeline |
+| [Troubleshooting](docs/TROUBLESHOOTING.md) | Common issues |
+| [API Reference](docs/api.md) | REST endpoints |
+| [Development](docs/DEVELOPMENT.md) | Contributing, local setup |
 
-**No free playground** — requires Steamworks partner account + **$100 Steam Direct** per game. Use itch for runt prototypes.
+## Requirements
 
-```powershell
-# steam-mcp on :11020, then:
-$env:STEAM_APP_ID = "1234560"
-$env:STEAM_DEPOT_ID = "1234561"
-$env:STEAM_USERNAME = "partner_login"
-$env:STEAMCMD_PATH = "D:\Tools\steamcmd\steamcmd.exe"
-$env:STEAM_MCP_URL = "http://127.0.0.1:11020"
-just steam-ship-beta game=dodge dry_run=true
-```
+- **Godot 4.4+** (for engine bridge tools) — `just install-godot` or [godotengine.org](https://godotengine.org)
+- **Python 3.13+** + **uv** — `winget install astral-sh.uv`
+- **Bun** — `winget install oven-sh.bun`
+- **Ollama** (optional, for game builder) — `winget install Ollama.Ollama` then `ollama pull gemma4:12b`
+- **Rust** (optional, for NSIS build) — `rustup.rs`
 
-Dashboard: **`/ship-steam`**. Canonical: [STEAM_PUBLISHING.md](../../docs/gamedev/STEAM_PUBLISHING.md) · `godot-mcp/docs/ship-to-steam.md`.
+## License
 
-Test on Steam via **beta branch + your App ID** (not Spacewar/480). Developer comp keys from Steamworks.
-
-## Fleet maker pipeline (World Labs / exchange)
-
-```powershell
-just fleet-status
-just fleet-worldlabs-info YOUR_WORLD_ID
-just fleet-worldlabs-import YOUR_WORLD_ID LevelMesh   # needs godot-bridge + worldlabs on 10865
-```
-
-Assessment: `godot-mcp/docs/FLEET_ASSESSMENT.md` · MCD: [FLEET_ASSESSMENT.md](FLEET_ASSESSMENT.md)
-
-MCD distribution guides: [docs/gamedev/README.md](../../docs/gamedev/README.md).
-
-## REST (fleet automation)
-
-- `GET /api/v1/status` — service + `godot.ws_connected` + `itch` + **`fleet`**
-- `POST /api/v1/control/tool` — run MCP tools over HTTP (Godot + itch + fleet + workflows)
-- `GET/POST /api/v1/itch/*` — export, push-preview, push, ship
-- `GET/POST /api/v1/fleet/*` — exchange status, World Labs mesh/splat staging, import
-- `GET /api/v1/logs/stream` — SSE log tail
-
-## MCP
-
-- **14** Godot bridge tools (status, import STL/GLB/OBJ, velocity, particles, materials, lights, camera, export, scene tree, config, headless verify)
-- **6** itch ship tools (`itch_status`, `godot_export_release`, `itch_push_preview`, `itch_push`, `itch_latest_version`, `ship_to_itch`)
-- **7** Steam ship tools (`steam_status`, `steam_stage_build`, `ship_to_steam_*`, …) via steam-mcp
-- **6** fleet pipeline tools (`fleet_exchange_status`, `fleet_import_from_exchange`, `fleet_worldlabs_get_world`, `fleet_worldlabs_stage_mesh`, `fleet_worldlabs_stage_splat`, `fleet_worldlabs_import_mesh`)
-- Workflows `ship_web_itch`, `ship_windows_steam_beta`, `ship_windows_steam_release`
-- Bridge client: `godot_mcp.services.godot_bridge`
-- Ship module: `godot_mcp.itch`
-- Fleet module: `godot_mcp.fleet`
-- Skill: `skill://godot-mcp/SKILL.md`
-
-## Tests
-
-```powershell
-just check    # lint + typecheck + pytest
-just doctor   # godot, python, node, ports
-just test-match itch
-```
-
-## Little game (not indie dev)
-
-Study repos, AI + MCP workflow, Windows/iOS distribution: **[LITTLE_GAME_GUIDE.md](./LITTLE_GAME_GUIDE.md)** (canonical: `godot-mcp/docs/little-game-guide.md`).
-
-**Philosophy:** **[AI_AND_INDIE_GAMES.md](./AI_AND_INDIE_GAMES.md)** — AI speed vs indie craft (canonical: `godot-mcp/docs/ai-and-indie-games.md`).
-
-## Game Builder (v0.3.0)
-
-New `src/godot_mcp/game_builder/` module — 6 MCP tools for AI-native game creation:
-
-```
-prompt → design_game() → GamePlan → generate_game_worlds() → compose_game_scene() → generate_game_logic() → export_and_ship()
-```
-
-Or `build_game("a cyberpunk endless runner")` for the full pipeline. Calls worldlabs-mcp for Marble world generation, Godot TCP bridge for scene composition, LLM sampling for GDScript generation, and `ship_to_itch` for deployment.
-
-Spec: `docs/SPEC_GAME_BUILDER.md`.
-
-## Related fleet files
-
-- [PRD](./PRD.md) — product requirements index
-- [Ship to itch (repo doc)](file:///D:/Dev/repos/godot-mcp/docs/ship-to-itch.md)
-- `mcp-central-docs/docs/gamedev/` — itch.io + Steam guides
-- `mcp-central-docs/operations/WEBAPP_PORTS.md` — **10992** / **10993**
-- `mcp-central-docs/operations/fleet-registry.json` — `godot-mcp` entry
-- `mcp-central-docs/standards/rules/tauri_godot_sota.md` — Tauri + Godot fleet pattern
-- `mcp-central-docs/standards/JUSTFILE_RECIPES.md` — export/ship recipes
+MIT — see [LICENSE](LICENSE).

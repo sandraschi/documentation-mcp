@@ -177,9 +177,7 @@ class ContentIngestor:
                 logger.info(f"Found {len(paths)} files in extra path {extra_root}")
                 for p in paths:
                     all_docs.extend(
-                        self.process_file(
-                            p, extra_root, extra_meta={"type": "custom", "custom_root": str(extra_root)}
-                        )
+                        self.process_file(p, extra_root, extra_meta={"type": "custom", "custom_root": str(extra_root)})
                     )
 
         logger.info(f"Total: {len(all_docs)} chunks ready for embedding")

@@ -1,0 +1,17 @@
+# travelprep-mcp
+
+> Trip preparation MCP server: Airbnb + Booking.com search (subprocess-wrapped, no paid API keys) plus free-source destination info (Wikipedia, Wikivoyage, Open-Meteo, REST Countries).
+
+## Tools
+
+- `stays(operation, provider, ...)` -- search or get details for Airbnb/Booking.com listings
+- `hotel_extras(operation, ...)` -- Booking.com-only extras: find_hotels, compare, check_availability, reviews, price_calendar
+- `destination(operation, place, forecast_days)` -- overview / weather / practical info for a place
+- `account(operation)` -- Booking.com account: login, trips, wishlist, rewards
+
+## Links
+
+- Repo: https://github.com/sandraschi/travelprep-mcp
+- README: https://github.com/sandraschi/travelprep-mcp/blob/main/README.md
+- Full reference: https://github.com/sandraschi/travelprep-mcp/blob/main/llms-full.txt
+- Install: https://github.com/sandraschi/travelprep-mcp/blob/main/INSTALL.md

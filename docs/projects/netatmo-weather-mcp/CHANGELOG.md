@@ -1,18 +1,54 @@
-﻿# Changelog
+
+## [Unreleased] — 2026-06-14
+
+### Added
+- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
+- PyInstaller frozen backend embedded in NSIS installer
+- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
+- `just cua-nsis-test` recipe
+- Tauri CORS: `tauri://localhost` origins for WebView API access
+- `GET /api/v1/diagnostics` endpoint for CUA verification
+# Changelog
 
 All notable changes to the Netatmo Weather MCP Server will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Industrial Startup Script**: Root `start.ps1` with `-Headless`, `-BackendOnly`, and `-NoBrowser` support.
+- **Improved Port Handling**: Automatic TCP squatter termination and health-check polling.
+- **Webapp backend (FastAPI):** `web_app.py` exposes REST API for the React frontend: `GET /api/health`, `GET /api/stations`, `GET /api/stations/{id}`, `GET /api/stations/{id}/status`, `GET /api/weather/current?station_id=...`, `GET /api/config/credentials`, `POST /api/config/credentials`.
+- **Credentials in Settings:** Netatmo client ID, client secret, username, and password can be entered and saved in the webapp Settings page; stored in backend memory for the session (alternatively use env vars).
+- **Webapp UI:** Dashboard (health, station count, current weather from API), Stations page (list and current readings), Trends placeholder, Chat placeholder, Settings (backend URL and Netatmo credentials).
+- **Onboarding page:** Get started flow at `/onboarding` (and sidebar link) with steps: create app at dev.netatmo.com, enter credentials in Settings, then use Dashboard. Dashboard error banner links to onboarding when backend or credentials fail.
+
+### Changed
+- **FastMCP 3.1:** Dependency upgraded from `fastmcp>=2.14.5` to `fastmcp>=3.1` (fleet standard). Removed `description` kwarg from `FastMCP()` (not supported in 3.1). Server and transport docstrings updated to FastMCP 3.1.
+- **Webapp overhaul:** Removed robotics/control/visualizer content; webapp is Netatmo-only and wired to the FastAPI backend. Sidebar branding set to "Netatmo Weather".
+- **start.ps1:** Backend runs with `uv run --project $ProjectRoot uvicorn netatmo_weather_mcp.web_app:app` (CWD = web_sota), aligned with fleet backend start pattern. Ports: frontend 10822, backend 10823.
+- **WeatherMonitoringTools:** Optional `credentials` argument so the web backend can pass UI-provided credentials instead of env only.
+
+### Fixed
+- Webapp had no backend connection and showed placeholder robotics UI; backend and frontend are now connected with a proper API client and error messaging when the backend is down.
+- **ConfigurationError:** `netatmo_client.py` now imports `ConfigurationError` from `.exceptions` so missing-credentials errors return a proper message instead of "name 'ConfigurationError' is not defined" (502).
+
+### Documentation
+- README: Webapp section (start, onboarding, pages, stations-from-cloud, backend API). Architecture tree updated with `web_app.py` and `web_sota/`. Config table extended with `WEBAPP_ORIGIN` and `VITE_API_URL`. Credentials documented for both env and Settings UI.
+- CHANGELOG: Onboarding page, ConfigurationError fix, and doc updates recorded.
+
+---
+
 ## [1.0.0] - 2026-01-21
 
-### ðŸŽ‰ Initial Release
+### 🎉 Initial Release
 
-**FastMCP 3.1.1+.3 Compliant AI-Powered Weather Monitoring Server**
+**FastMCP 2.14.3 Compliant AI-Powered Weather Monitoring Server**
 
-#### âœ¨ Added
-- **Complete FastMCP 3.1.1+.3 Implementation**
+#### ✨ Added
+- **Complete FastMCP 2.14.3 Implementation**
   - Conversational tool returns with contextual guidance
   - Sampling method support for AI workflows
   - Enhanced response patterns for rich AI dialogue
@@ -51,28 +87,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Docker and cloud-native deployment support
   - Extensive configuration management
 
-#### ðŸ—ï¸ Architecture
+#### 🏗️ Architecture
 - Modular design with clear separation of concerns
 - Async/await patterns throughout for performance
 - Comprehensive type hints and documentation
 - Extensive error handling with custom exceptions
 - Configurable caching and rate limiting
 
-#### ðŸ“Š Data Processing
+#### 📊 Data Processing
 - Real-time weather data processing
 - Historical data analysis and aggregation
 - AI-powered pattern recognition
 - Statistical trend analysis
 - Predictive modeling with scikit-learn integration
 
-#### ðŸ”§ Developer Experience
+#### 🔧 Developer Experience
 - Comprehensive test suite with pytest
 - Code formatting with ruff
 - Type checking with mypy
 - Development scripts and automation
 - Extensive documentation and examples
 
-#### ðŸš€ Deployment
+#### 🚀 Deployment
 - Docker containerization
 - Kubernetes-ready configurations
 - CI/CD pipeline with GitHub Actions
@@ -83,19 +119,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Types of Changes
 
-- `ðŸŽ‰ Added` for new features
-- `ðŸ”§ Changed` for changes in existing functionality
-- `ðŸš¨ Deprecated` for soon-to-be removed features
-- `âœ‚ï¸ Removed` for now removed features
-- `ðŸ› Fixed` for any bug fixes
-- `ðŸ”’ Security` in case of vulnerabilities
+- `🎉 Added` for new features
+- `🔧 Changed` for changes in existing functionality
+- `🚨 Deprecated` for soon-to-be removed features
+- `✂️ Removed` for now removed features
+- `🐛 Fixed` for any bug fixes
+- `🔒 Security` in case of vulnerabilities
 
 ---
 
 ## Development Roadmap
 
 ### Planned for v1.1.0
-- [ ] Web dashboard integration
+- [x] Web dashboard integration (web_sota + FastAPI backend)
 - [ ] Additional weather APIs (OpenWeatherMap, Weather Underground)
 - [ ] Machine learning model improvements
 - [ ] Advanced anomaly detection algorithms
@@ -128,4 +164,3 @@ Special thanks to:
 ---
 
 *For the latest updates, see the [GitHub repository](https://github.com/sandra/netatmo-weather-mcp).*"
-

@@ -27,6 +27,7 @@ def register_tools(mcp: FastMCP):
         - start_webapp()
         """
         import subprocess
+
         repo_root = Path(__file__).resolve().parent.parent.parent.parent
         start_ps1 = repo_root / "web_sota" / "start.ps1"
 

@@ -1,0 +1,14 @@
+{
+    "product_name": "{PRODUCT_NAME}",
+    "install_dir": "%LOCALAPPDATA%\\{PRODUCT_NAME}",
+    "operator_exe": "{REPO}-native.exe",
+    "backend_process_names": ["{REPO}-native", "{REPO}-backend"],
+    "backend_port": {BACKEND_PORT},
+    "health_path": "/health",
+    "diagnostics_path": "/api/v1/diagnostics",
+    "feature_smoke_path": "/api/v1/system/info",
+    "window_title_re": "{WINDOW_TITLE_RE}",
+    "nsis_glob": "native/target/release/bundle/nsis/{PRODUCT_NAME}_*_x64-setup.exe",
+    "bridge_ok_text": "REST bridge reachable",
+    "uninstall_registry_filter": "*{PRODUCT_NAME}*"
+}

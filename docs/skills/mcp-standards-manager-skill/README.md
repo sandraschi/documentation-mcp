@@ -36,7 +36,7 @@ standards update-versions --version 2.14.3
 
 - Claude Desktop with skills support
 - MCP repositories with proper structure
-- FastMCP 2.14.3+ compatible servers
+- FastMCP 3.2+ compatible servers
 
 ## License
 

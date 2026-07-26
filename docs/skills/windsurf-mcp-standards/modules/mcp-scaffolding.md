@@ -62,7 +62,7 @@ if __name__ == "__main__":
 ## Initial Setup Checklist
 
 ### 1. Package Configuration
-- [ ] `pyproject.toml` with FastMCP 2.14.3+ dependency
+- [ ] `pyproject.toml` with FastMCP 3.2+ dependency
 - [ ] Proper package metadata and keywords
 - [ ] Development dependencies (pytest, ruff, mypy)
 

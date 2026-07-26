@@ -34,7 +34,7 @@ pip --version
 ### Step 1: Install FastMCP
 
 ```powershell
-pip install "fastmcp>=3.1.0"
+pip install "fastmcp>=3.4.4"
 ```
 
 ### Step 2: Create Your First Server
@@ -240,7 +240,7 @@ This creates a complete server with:
 
 ```powershell
 # Upgrade FastMCP
-pip install --upgrade "fastmcp>=3.1.0"
+pip install --upgrade "fastmcp>=3.4.4"
 
 # Check installation
 python -c "import fastmcp; print(fastmcp.__version__)"

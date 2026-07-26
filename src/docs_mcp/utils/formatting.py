@@ -3,6 +3,7 @@ import logging
 
 logger = logging.getLogger("docs_mcp.utils.formatting")
 
+
 def _to_markdown(data: dict, operation: str) -> str:
     """Universal formatter to convert tool-specific dicts into high-fidelity Markdown."""
     if not data or not data.get("success"):

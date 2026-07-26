@@ -1,31 +1,16 @@
-# Status: Universal Actuator Hub
+# Status — universal-actuator-mcp
 
-**Version:** 1.1.0 (Stable)
-**Last Checked:** 2026-03-29
-**Deployment:** Production Fleet (Port 10744/10745)
-
----
-
-## Technical Health Metrics
-
-| Metric | Status | Notes |
-|--------|--------|-------|
-| **MCP SSE** | ✅ UP | Port 10745 |
-| **REST API** | ✅ UP | Port 10745 |
-| **Next.js frontend** | ✅ UP | Port 10744 (SOTA Glass Mode) |
-| **Fleet Discoverability** | ✅ ACTIVE | Glom-on range 10700-10800 |
-| **Dependency Health** | ✅ STABLE | Python 3.12, FastMCP 3.1 |
-
-## Recent Milestones
-
-- **2026-03-29**: Structural refactor from `backend/` → `src/` (SOTA package standards).
-- **2026-03-29**: Network re-allocation (10744 Frontend / 10745 Backend).
-- **2026-03-29**: Fleet registration and central document creation.
-
-## Active Technical Debt
-
-- [ ] **Auth Layer**: Basic token-based security for `/launch` API.
-- [ ] **Cache TTL**: Tune `glom_on` cache duration for large fleets.
-
----
-*Operational Report | RoboFang Systems*
+| Component | Status | Notes |
+|-----------|--------|-------|
+| MCP tools (14) | ✅ Working | universal_actuator, status, search_federated, rag_*, glom_on, fleet_telemetry, milestones, agentic_workflow, shutdown |
+| Fleet manager | ✅ Working | Subprocess orchestration for 15+ servers |
+| Federation aggregator | ✅ Working | Parallel SSE/stdio search across 5 nodes |
+| LanceDB RAG | ✅ Working | 384-dim vectors, semantic search |
+| Agentic workflows | ✅ Working | Plan→Execute→Audit via ctx.sample() |
+| Activity log | ✅ Working | 2000-entry ring buffer |
+| REST API | ✅ Working | health, telemetry, logs, library, chat |
+| Webapp | ✅ Working | React 19, 13 pages, federation graph |
+| CORS | ✅ Fixed | Proper origins + regex (was `["*"]`) |
+| Tauri/NSIS | ✅ Ready | .env→.env.example fixed |
+| Tests | ✅ Working | 28 tests across 7 files |
+| CI/CD | ❌ Missing | No .github/workflows/ |

@@ -1,35 +1,55 @@
 # Immich MCP Server
 
-**FastMCP 3.1.1+.3+** | **Austrian Efficiency** | **Conversational AI & Sampling**
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.4-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-Efficient Immich photo library management through the MCP (Model Context Protocol). Built with Austrian efficiency principles: simple, reliable, and effective.
 
-> **✅ Status**: Fully operational with Immich v2.4.0+ (API migration completed), FastMCP 3.1.1+.3+, Cursor MCP integration working, conversational AI and sampling capabilities
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
+**Industrialized FastMCP 3.4** | **Austrian Efficiency** | **Conversational AI & Sampling**
+
+Efficient Immich photo library management through the MCP (Model Context Protocol). Simple, reliable, effective.
+
+> **Status**: [SOTA v13.1] Operational with Immich v2.x and v3.0.0+, FastMCP 3.4 parity, Biome-stabilized, conversational AI and sampling.
 
 ## Quick Start
 
+```powershell
+git clone https://github.com/sandraschi/immich-mcp
+cd immich-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
 ### 1. Prerequisites
-
 - Python 3.11+
-- [Immich server](https://immich.app/) v2.4.0+ running and accessible
-  - ✅ **Immich v2.4.0+**: Full compatibility (search-based API)
-  - ✅ **Immich v2.3.1**: Full compatibility
-  - ✅ **Immich v2.2.0+**: OCR search support
-- Immich API key (get from Administration → API Keys)
+- [Immich server](https://immich.app/) running and accessible
+-  **Immich v3.0.0+**: Full compatibility (Zod-validation, restructured upload/album payloads)
+-  **Immich v2.4.0+**: Full compatibility (search-based API)
+-  **Immich v2.2.0+**: OCR search support
+- Immich API key (get from Administration  API Keys)
 
-## 🚀 Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### 📦 Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx immich-mcp
 ```
 
-### 🎯 Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -39,7 +59,7 @@ Add to your `claude_desktop_config.json`:
   }
 }
 ```
-#### **Option 1: PyPI Package Install (Recommended)** ⭐
+#### **Option 1: PyPI Package Install (Recommended)** 
 
 **Simple pip installation - no repository cloning required!**
 
@@ -63,27 +83,27 @@ pip install immich-mcp
 ```
 
 **Advantages:**
-- ✅ **Universal compatibility** - Works with any MCP client
-- ✅ **Simple installation** - Just one pip command
-- ✅ **Always up-to-date** - Install latest version directly
-- ✅ **No repository cloning** - Clean, minimal setup
-- ✅ **Easy updates** - `pip install --upgrade immich-mcp`
+-  **Universal compatibility** - Works with any MCP client
+-  **Simple installation** - Just one pip command
+-  **Always up-to-date** - Install latest version directly
+-  **No repository cloning** - Clean, minimal setup
+-  **Easy updates** - `pip install --upgrade immich-mcp`
 
 ---
 
-## 🚀 Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### 📦 Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx immich-mcp
 ```
 
-### 🎯 Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -106,7 +126,7 @@ Immich supports multiple LLM providers for advanced AI capabilities including sm
 
 #### **LLM Configuration in Immich**
 
-Configure LLM settings in Immich Administration → Settings → Machine Learning:
+Configure LLM settings in Immich Administration  Settings  Machine Learning:
 
 ```yaml
 # Example LLM configuration
@@ -140,7 +160,7 @@ IMMICH_LLM_API_KEY=your_key_here  # if using cloud provider
 
 #### **LLM Performance Tips**
 
-- **Local Models (Ollama)**: Best for privacy, works offline
+- **Local Models (Ollama)**:  for privacy, works offline
 - **Cloud Models**: Higher accuracy, requires API key
 - **Model Size**: Larger models = better results but slower processing
 - **Batch Processing**: Enable for bulk photo analysis
@@ -178,29 +198,29 @@ ImmichMCP is configured in your user profile: `~/.cursor/mcp.json` (typically `C
 
 #### **Troubleshooting Cursor Integration**
 
-**✅ "Immich MCP server started successfully"**
-- Server should appear in Cursor's Output tab → "MCP" panel
+** "Immich MCP server started successfully"**
+- Server should appear in Cursor's Output tab  "MCP" panel
 - Look for the startup banner with Austrian efficiency message
 - Check for "Starting MCP server 'ImmichMCP'" in logs
 
-**❌ "Immich MCP server not found in output"**
-- Check Cursor's Output tab → "MCP" panel
+** "Immich MCP server not found in output"**
+- Check Cursor's Output tab  "MCP" panel
 - Look for error messages in the log
 - Verify MCP configuration in `~/.cursor/mcp.json` (`C:\Users\%USERNAME%\.cursor\mcp.json` on Windows)
 - Ensure environment variables are set: `IMMICH_SERVER_URL` and `IMMICH_API_KEY`
 - Try restarting Cursor after configuration changes
 
-**❌ "Connection failed" or "API key invalid"**
+** "Connection failed" or "API key invalid"**
 - Verify Immich server is running on the configured URL (`http://213.47.34.131:2283`)
-- Check API key in Immich settings → Account → API Keys
+- Check API key in Immich settings  Account  API Keys
 - Test connection manually: `curl -H "x-api-key: eCWNLTQZ7UwAVgbQmtGl0Q8AMEjeuddHy1BVCTWRtNA" http://213.47.34.131:2283/api/auth/status`
 
-**❌ "Import errors" or "Module not found"**
+** "Import errors" or "Module not found"**
 - Ensure you're using Python 3.11+
 - Install dependencies: `uv pip install -r requirements.txt`
 - Check PYTHONPATH in Cursor MCP configuration (`D:/Dev/repos/immich-mcp/src`)
 
-**❌ "Environment variable issues"**
+** "Environment variable issues"**
 - Cursor MCP configuration should override .env file settings
 - Verify the env block in `~/.cursor/mcp.json` contains correct values
 
@@ -252,17 +272,17 @@ For Claude Desktop integration, use the MCPB package.
 ImmichMCP has been updated for full compatibility with Immich v2.4.0+ which uses a search-based API architecture:
 
 ### Key Changes in Immich v2.4.0
-- **Asset Discovery**: `GET /api/assets` → `POST /api/search/metadata`
+- **Asset Discovery**: `GET /api/assets`  `POST /api/search/metadata`
 - **Individual Assets**: `GET /api/assets/:id` no longer available
 - **Server Info**: `GET /api/server-info` endpoint removed
 - **Search Architecture**: All asset access now goes through search endpoints
 
 ### ImmichMCP Adaptations
-- ✅ **Search-based asset listing** using `/api/search/metadata`
-- ✅ **Fallback asset access** via search with specific queries
-- ✅ **Server detection** without `/server-info` dependency
-- ✅ **Backward compatibility** maintained for older Immich versions
-- ✅ **Comprehensive testing** with automated compatibility checks
+-  **Search-based asset listing** using `/api/search/metadata`
+-  **Fallback asset access** via search with specific queries
+-  **Server detection** without `/server-info` dependency
+-  **Backward compatibility** maintained for older Immich versions
+-  **Comprehensive testing** with automated compatibility checks
 
 ### Testing Compatibility
 Run the built-in test harness to verify your Immich server compatibility:
@@ -326,8 +346,39 @@ python tests/test_harness_v240.py
 4. **Server Health**
    - Check Immich server status
    - Verify API connectivity
+   - View version information
 
-### 🗂️ Library Management (External Folders Solution)
+   Example:
+   ```bash
+   Check server health
+   ```
+
+5. **Download Photo to Temp** (`download_photo_to_temp`)
+   - Download original asset files to local temp directory
+   - Acts as a bridge for local image editors (like GIMP)
+
+   Example:
+   ```bash
+   Download photo ID abc123 to a temporary file
+   ```
+
+6. **Sync Metadata to EXIF** (`sync_metadata_to_exif`)
+   - Sync description, GPS coordinates, and date/time from Immich back into local image EXIF tags
+
+   Example:
+   ```bash
+   Sync metadata of photo abc123 to local file edited.jpg
+   ```
+
+7. **Detect Similar Photos** (`detect_similar_photos`)
+   - Retrieve clusters of duplicates/visually similar photos from Immich's ML engine with suggested keep IDs
+
+   Example:
+   ```bash
+   Detect all similar and duplicate photos in my library
+   ```
+
+###  Library Management (External Folders Solution)
 
 ImmichMCP solves the "unwieldy external folder management" problem with comprehensive library management tools:
 
@@ -349,7 +400,7 @@ Add location "D:/Photos/Vacation/2026" to library "Vacations"
 Scan library "Vacations" with refresh modified files
 ```
 
-### 👥 Multi-User Support
+###  Multi-User Support
 
 Full multi-user Immich support for shared installations:
 
@@ -376,12 +427,6 @@ List user libraries
 # Switch back to admin user
 Switch to user "sandra"
 ```
-   - View version information
-
-   Example:
-   ```bash
-   Check server health
-   ```
 
 ## Architecture
 
@@ -389,28 +434,28 @@ Switch to user "sandra"
 
 ```
 immichmcp/
-├── .env.example        # Environment template
-├── .gitignore         # Git exclusions
-├── README.md          # This file
-├── src/
-│   └── immich_mcp/
-│       └── server.py  # Main server file
-├── requirements.txt   # Python dependencies
-└── tests/             # Test suite (coming soon)
+ .env.example        # Environment template
+ .gitignore         # Git exclusions
+ README.md          # This file
+ src/
+    immich_mcp/
+        server.py  # Main server file
+ requirements.txt   # Python dependencies
+ tests/             # Test suite (coming soon)
 ```
 
-## 🔄 Dual Transport Support
+##  Dual Transport Support
 
 ImmichMCP supports **dual transport modes** for different integration scenarios:
 
-### 📡 Stdio Mode (MCP Protocol)
+###  Stdio Mode (MCP Protocol)
 **For Claude Desktop integration:**
 ```bash
 python -m immich_mcp.server
 # Runs MCP server over stdio for AI assistant integration
 ```
 
-### 🌐 HTTP Mode (REST API)
+###  HTTP Mode (REST API)
 **For Immich++ and other applications:**
 ```bash
 python run_http_server.py --transport http --port 8000
@@ -430,13 +475,13 @@ python run_http_server.py --transport http --port 8000
 
 ### Integration Benefits
 
-**🤝 With Immich++:**
+** With Immich++:**
 - **Tool Reuse**: Immich++ calls MCP tools via HTTP
-- **Automatic Fallback**: MCP proxy fails → Direct API
+- **Automatic Fallback**: MCP proxy fails  Direct API
 - **Single Source of Truth**: Centralized Immich API logic
 - **Future-Proof**: MCP updates benefit Immich++ automatically
 
-**🤖 With Claude Desktop:**
+** With Claude Desktop:**
 - **Native MCP Support**: Full protocol compliance
 - **Conversational Access**: All tools via AI chat
 - **Optimized Performance**: Streamlined for AI workflows
@@ -453,10 +498,10 @@ python run_http_server.py --transport http --port 8000
 | `IMMICH_API_KEY` | Yes | Your Immich API key | - |
 | `LOG_LEVEL` | No | Logging level (DEBUG, INFO, WARNING, ERROR) | `INFO` |
 |----------|----------|-------------|---------|
-| `IMMICH_URL` | ✅ | Immich server URL | - |
-| `IMMICH_API_KEY` | ✅ | API key from Immich | - |
-| `MCP_SERVER_NAME` | ❌ | Server display name | `"Immich Photo Management MCP 📸"` |
-| `LOG_LEVEL` | ❌ | Logging verbosity | `INFO` |
+| `IMMICH_URL` |  | Immich server URL | - |
+| `IMMICH_API_KEY` |  | API key from Immich | - |
+| `MCP_SERVER_NAME` |  | Server display name | `"Immich Photo Management MCP "` |
+| `LOG_LEVEL` |  | Logging verbosity | `INFO` |
 
 ### Advanced Configuration
 
@@ -470,7 +515,7 @@ See `docs/Configuration.md` for detailed setup including:
 - OCR language model configuration (v2.3.0+)
 - Multilingual OCR settings
 
-## 🧪 Testing
+##  Testing
 
 ### Run Unit Tests
 
@@ -495,7 +540,7 @@ python tests/integration_tests.py
 - **Coverage**: >90% of core functionality
 - **Real workflow validation**: End-to-end photo management
 
-## 🔍 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -503,7 +548,7 @@ python tests/integration_tests.py
 
 ```bash
 # Test connection
-python -c "from immich.manager import ImmichManager; print('✅ OK' if ImmichManager('http://localhost:2283', 'your_key').test_connection() else '❌ Failed')"
+python -c "from immich.manager import ImmichManager; print(' OK' if ImmichManager('http://localhost:2283', 'your_key').test_connection() else ' Failed')"
 ```
 
 **Upload Issues:**
@@ -520,7 +565,7 @@ python -c "from immich.manager import ImmichManager; print('✅ OK' if ImmichMan
 
 For detailed troubleshooting: `docs/Troubleshooting.md`
 
-## 🇦🇹 Austrian Context Features
+##  Austrian Context Features
 
 ### Direct Communication
 
@@ -530,7 +575,7 @@ For detailed troubleshooting: `docs/Troubleshooting.md`
 
 ### Budget Awareness
 
-- Optimized for ~€100/month AI tools usage
+- Optimized for ~100/month AI tools usage
 - Bandwidth optimization options
 - Efficient API call patterns
 
@@ -538,7 +583,7 @@ For detailed troubleshooting: `docs/Troubleshooting.md`
 
 - Europe/Vienna timezone support
 - DD.MM.YYYY date format
-- German language character support (ä, ö, ü, ß)
+- German language character support (, , , )
 
 ### Rapid Development
 
@@ -546,7 +591,7 @@ For detailed troubleshooting: `docs/Troubleshooting.md`
 - Realistic AI-assisted development timelines
 - Practical Austrian efficiency throughout
 
-## 📊 Performance
+##  Performance
 
 ### Austrian Efficiency Metrics
 
@@ -562,7 +607,7 @@ For detailed troubleshooting: `docs/Troubleshooting.md`
 - **Bandwidth optimization**: Austrian budget consideration
 - **Batch operations**: Efficient bulk processing
 
-## 🤝 Contributing
+##  Contributing
 
 1. **Follow Austrian efficiency principles**
 2. **Write working code, not stubs**
@@ -584,21 +629,32 @@ python -m black immich/ tests/
 python -m isort immich/ tests/
 ```
 
-## 📄 License
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
+##  License
 
 [Your chosen license - typically MIT for MCP servers]
 
-## 🔗 Related Projects
+##  Related Projects
 
 - **[Immich](https://immich.app/)**: Self-hosted photo and video backup solution
 - **[FastMCP](https://github.com/jlowin/fastmcp)**: Framework for building MCP servers
 - **[MCP Protocol](https://spec.modelcontextprotocol.io/)**: Model Context Protocol specification
 
-## ⚠️ API Migration Notes
+##  API Migration Notes
 
 ### Immich v2.4.0 Compatibility Status
 
-**Status:** ⚠️ **REQUIRES MIGRATION**  
+**Status:**  **REQUIRES MIGRATION**  
 **Issue:** Immich v2.4.0 changed from direct REST API to search-based asset access  
 **Impact:** Current ImmichMCP version will fail with "Invalid API key" or 404 errors  
 **Affected:** All asset listing and retrieval operations
@@ -634,68 +690,68 @@ For Immich v2.4.0, use [Immich++](https://github.com/sandraschi/immich-plus) whi
 
 | Immich Version | ImmichMCP Status | Notes |
 |----------------|------------------|-------|
-| **v2.4.0** | ⚠️ **Broken** | API migration required |
-| **v2.3.1** | ✅ **Working** | Full compatibility |
-| **v2.2.0** | ✅ **Working** | OCR search support |
-| **v2.0.0** | ✅ **Working** | Basic operations |
+| **v2.4.0** |  **Broken** | API migration required |
+| **v2.3.1** |  **Working** | Full compatibility |
+| **v2.2.0** |  **Working** | OCR search support |
+| **v2.0.0** |  **Working** | Basic operations |
 
 ---
 
-## 📝 Changelog
+##  Changelog
 
-### v1.4.0 (2025-12-18) - Dual Transport Architecture 🌐
+### v1.4.0 (2025-12-18) - Dual Transport Architecture 
 
-- ✅ **Dual transport implemented** - MCP stdio + HTTP REST API support
-- ✅ **HTTP REST API endpoints** - All 15+ MCP tools available via HTTP
-- ✅ **Immich++ integration** - Seamless integration with web frontend
-- ✅ **CORS support** - Web client access enabled
-- ✅ **Comprehensive API documentation** - All endpoints documented
-- ✅ **Automatic fallback support** - Immich++ can use MCP or direct API
+-  **Dual transport implemented** - MCP stdio + HTTP REST API support
+-  **HTTP REST API endpoints** - All 15+ MCP tools available via HTTP
+-  **Immich++ integration** - Seamless integration with web frontend
+-  **CORS support** - Web client access enabled
+-  **Comprehensive API documentation** - All endpoints documented
+-  **Automatic fallback support** - Immich++ can use MCP or direct API
 
-### v1.3.0 (2025-12-18) - API Migration Discovery ⚠️
+### v1.3.0 (2025-12-18) - API Migration Discovery 
 
-- ⚠️ **Immich v2.4.0 compatibility issue discovered** - Major API architecture change
-- ⚠️ **Search-based asset access** - New `/api/search/metadata` endpoint required
-- ⚠️ **Direct asset endpoints removed** - `/api/assets` and `/api/assets/:id` no longer exist
-- 📚 **Migration documentation added** - Comprehensive API change analysis
-- 🔄 **Alternative solution available** - Immich++ updated for v2.4.0 compatibility
+-  **Immich v2.4.0 compatibility issue discovered** - Major API architecture change
+-  **Search-based asset access** - New `/api/search/metadata` endpoint required
+-  **Direct asset endpoints removed** - `/api/assets` and `/api/assets/:id` no longer exist
+-  **Migration documentation added** - Comprehensive API change analysis
+-  **Alternative solution available** - Immich++ updated for v2.4.0 compatibility
 
 ### v1.2.0 (2025-12-18)
 
-- ✅ **Immich v2.3.1+ compatibility** - Full support for latest stable release
-- ✅ **Enhanced multilingual OCR** - Support for Greek, Korean, Russian, Belarusian, Ukrainian, Thai, Latin script languages
-- ✅ **OCR bounding boxes** - Precise text location coordinates for highlighting
-- ✅ **Advanced OCR tools** - New `get_ocr_data` tool with bounding box support
-- ✅ **Language-specific OCR models** - Choose optimal models for different languages
-- ✅ **Improved version detection** - Automatic detection of v2.3.x features and capabilities
+-  **Immich v2.3.1+ compatibility** - Full support for latest stable release
+-  **Enhanced multilingual OCR** - Support for Greek, Korean, Russian, Belarusian, Ukrainian, Thai, Latin script languages
+-  **OCR bounding boxes** - Precise text location coordinates for highlighting
+-  **Advanced OCR tools** - New `get_ocr_data` tool with bounding box support
+-  **Language-specific OCR models** - Choose optimal models for different languages
+-  **Improved version detection** - Automatic detection of v2.3.x features and capabilities
 
 ### v1.1.0 (2025-01-27)
 
-- ✅ **Immich v2.0.0+ compatibility** - Full support for stable Immich v2.0.0+
-- ✅ **OCR search support** - Text extraction search for Immich v2.2.0+
-- ✅ **Enhanced error handling** - Improved v2.0.0+ API error messages
-- ✅ **Version detection** - Automatic detection of Immich v2.0.0+ and OCR capabilities
+-  **Immich v2.0.0+ compatibility** - Full support for stable Immich v2.0.0+
+-  **OCR search support** - Text extraction search for Immich v2.2.0+
+-  **Enhanced error handling** - Improved v2.0.0+ API error messages
+-  **Version detection** - Automatic detection of Immich v2.0.0+ and OCR capabilities
 
 ### v1.0.0 (2025-07-22)
 
-- ✅ **Initial FastMCP 2.0 implementation**
-- ✅ **15 comprehensive photo management tools**
-- ✅ **Austrian efficiency optimization**
-- ✅ **Complete documentation and testing**
-- ✅ **Vienna-specific localization support**
+-  **Initial FastMCP 3.1 implementation**
+-  **15 comprehensive photo management tools**
+-  **Austrian efficiency optimization**
+-  **Complete documentation and testing**
+-  **Vienna-specific localization support**
 
 ---
 
-**Built with Austrian efficiency** 🇦🇹 | **Working solutions in hours, not days** ⚡ | **Sin temor y sin esperanza** 💪
+**Built with Austrian efficiency**  | **Working solutions in hours, not days**  | **Sin temor y sin esperanza** 
 
 
-## 🌐 Webapp Dashboard
+##  Webapp Dashboard
 
 This MCP server includes a free, premium web interface for monitoring and control.
-By default, the web dashboard runs on port **10838**.
-*(Assigned ports: **10838** (Web dashboard frontend), **10839** (Web dashboard backend (API)))*
+By default, the web dashboard runs on port **10795**.
+*(Assigned ports: **10795** (Web dashboard frontend), **10794** (Web dashboard backend (API)))*
 
 To start the webapp:
-1. Navigate to the `webapp` (or `web`, `frontend`) directory.
+1. Navigate to the `web_sota` directory.
 2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
-3. Open `http://localhost:10838` in your browser.
+3. Open `http://localhost:10795` in your browser.

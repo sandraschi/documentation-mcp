@@ -1,148 +1,173 @@
 # aiwatcher-mcp
 
-**Type:** MCP Server + Webapp  
-**Status:** Active — Production-Capable  
-**Version:** 0.1.0 (pyproject) / 0.2.0 (feature track)  
-**Ports:** Backend **10946** / Frontend **10947**  
-**Repo:** `D:\Dev\repos\aiwatcher-mcp`  
-**GitHub:** https://github.com/sandraschi/aiwatcher-mcp  
-**Glama:** https://glama.ai/mcp/servers?query=sandraschi  
-**Last assessed:** 2026-05-01
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://biomejs.dev"><img src="https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat-square&logo=biome&logoColor=white" alt="Biome"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
----
 
-## Description
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-Personal AI news intelligence system. Polls RSS/Atom feeds, arXiv, Gmail (Alpha Signal newsletters), and Readly magazines; scores items with Claude or local LLMs (Ollama/LM Studio); fires voice wake-ups via speechops for urgency ≥ 8.5; delivers a daily HTML digest to Sandra and Steve by email. Interest bundles allow multiple scoring personas on the same ingestion pipeline.
+**AI news ingestion, distillation, and alert system.**
 
-The fleet's situational awareness layer — compresses the firehose of AI tooling news into what actually matters for the fleet, portfolio, and daily decisions.
+The `aiwatcher-mcp` is a FastMCP 3.2-compliant fleet server that acts as a central intelligence node. It polls 10+ AI news sources (RSS/Atom, Gmail, ArXiv, and Readly), scores every item with Claude using a customized "Sandra" persona, generates beautiful HTML digests for daily consumption, and fires cross-fleet TTS wake-ups for breaking events.
 
----
+## Features
 
-## Architecture
+- **Multi-Source Ingestion**: RSS/Atom feeds, Gmail newsletters (Alpha Signal), ArXiv papers, Readly magazines
+- **Interest Bundles**: Per-topic distillation (e.g. "Sandra's AI Research", "Robotics", "Vienna") with custom system prompts
+- **Claude Distillation**: Every item scored for Relevance (0-10) and Urgency (0-10) with multi-provider support (Anthropic, Ollama, LM Studio)
+- **Feed Discovery**: LLM-elicited feed URLs are probed and verified before use; broken feeds auto-heal via fallback URL probing
+- **Cross-Feed Dedup**: Title + summary fuzzy match (`difflib`, 85%, 48h)
+- **Feed Quality Decay**: Flags low-signal feeds (30d avg urgency)
+- **Fleet Event Journal**: `ingest_fleet_event` for PRs, missions, fleet activity
+- **Tag Trends**: `get_tag_trends` / `GET /api/trends`
+- **Portfolio Watch**: Keyword list boosts urgency during distillation
+- **Digest Cache**: TTL avoids repeat LLM calls (`DIGEST_CACHE_TTL_MINUTES`)
+- **Prometheus**: `GET /metrics` for fleet monitoring
+- **Fritz Integration**: Office Day Prep pulls `get_top_items` from aiwatcher
+- **Bundle Health**: Per-bundle metrics — items scored, avg urgency, top tags, feed contributions
+- **OPML Import**: Import curated feeds from Feedly, Inoreader, etc.
+- **Cross-Fleet Alerting**: `robofang` (Council bridge) + `speechops` (TTS wake-up) for items exceeding urgency threshold
+- **Email & Calibre Archival**: Daily HTML digest via `email-mcp`, archived to Calibre via `calibre-mcp`
+- **Current AI Stack Gap Map**: `currentai` portmanteau tool — fetch product openness/maturity data from currentai-org/os-ai-map, store versioned snapshots, diff changes, flag fleet-dependency concentration risk
+- **Intel Reports Hub**: Daily digest HTML published to shared fleet hub (`INTEL_REPORTS_HUB_URL`, port **11027**) for iPad/Tailscale reading
+- **Web App & Prefab UI**: Standalone React/Vite dashboard + FastMCP Prefab UI card
 
-```
-APScheduler (5 background jobs, UTC)
-  ├── poll_all_feeds()    30m  — RSS/Atom/arXiv/Gmail/Readly
-  ├── distill_items()      6h  — LLM scoring (relevance + urgency 0-10)
-  ├── process_alerts()  04:55  — robofang + speechops TTS for urgency ≥ 8.5
-  ├── generate_digest() 06:00  — HTML email → Sandra + Steve + Calibre
-  └── expire_old_items() 03:00 — retention (default 90d, keep urgency ≥ 8.5)
+## Documentation
 
-Ingestion: feedparser (RSS/Atom) + arXiv-mcp + Gmail-mcp + readly-mcp
-Distillation: Anthropic | Ollama | LM Studio (OpenAI-compat)
-Storage: SQLite + FTS5 (BM25) + WAL + cross-feed dedup (difflib 0.85/48h)
-Transport: FastMCP MCP + Starlette REST (dual, same process, port 10946)
-```
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md): Deep dive into system flows, pipelines, and the SQLite schema.
+- [API.md](docs/API.md): MCP tools / prompts / resources + HTTP REST index (`/api/capabilities` for live tool names).
+- [PRD.md](docs/PRD.md): Product requirements and roadmap.
+- [ASSESSMENT.md](ASSESSMENT.md): Code assessment (updated 2026-06-03)
+- [TODO.md](TODO.md): Action items and progress tracking
+- [SPEC_0.2.md](SPEC_0.2.md): v0.2 implementation plan
 
----
-
-## MCP Tools (20)
-
-| Tool | Purpose |
-|------|---------|
-| `poll_feeds` | Manually trigger feed poll |
-| `distill_pending` | Run LLM scoring on-demand |
-| `check_alerts` | Fire alert pipeline on-demand |
-| `generate_digest` | Preview/regenerate digest |
-| `send_digest_now` | Force-send outside schedule |
-| `get_top_items` | Top scored items by urgency |
-| `get_feeds_list` | List feeds with health status |
-| `add_feed` | Add RSS/Atom feed |
-| `get_feed_health` | Degraded/disabled feed report |
-| `search_items` | FTS5 full-text search |
-| `get_digest_history` | List persisted digests |
-| `expire_old_items` | Manual retention trigger |
-| `get_bundles_list` | List scoring bundles (SQLite) |
-| `list_fleet_bundles` | List bundles (MCD JSON) |
-| `create_bundle_from_topic` | LLM-elicit + create bundle |
-| `update_fleet_bundle` | Edit bundle config |
-| `link_feed_to_bundle` | Associate feed with bundle |
-| `get_bundle_health` | Per-bundle stats + top tags |
-| `find_feeds_for_topic` | Discover + verify real feeds |
-| `import_opml` | Bulk import from OPML XML |
-
-Prompts: `breaking_news_brief`, `portfolio_impact_analysis`  
-Resources: `aiwatcher://feeds/list`, `aiwatcher://stats`  
-Prefab UI: `show_dashboard_card`
-
----
-
-## Start
+## Quick Start
 
 ```powershell
-.\start.bat        # or start.ps1
-# Manual:
-uv run -m aiwatcher_mcp.api   # backend + MCP :10946
-cd webapp && npm run dev       # frontend :10947
+git clone https://github.com/sandraschi/aiwatcher-mcp
+cd aiwatcher-mcp
+just
 ```
 
+This opens an interactive dashboard showing all available commands. Run `just install` to install dependencies, then `just start` (or `just backend` / `just frontend` separately).
+
+### Manual Setup
+
+If you don't have `just` installed:
+
+```powershell
+git clone https://github.com/sandraschi/aiwatcher-mcp
+cd aiwatcher-mcp
+copy .env.example .env
+# Edit .env and set ANTHROPIC_API_KEY
+.\start.ps1
+```
+
+### Startup Options (`start.ps1`)
+
+- **`-Headless`** — re-launch in a hidden window (see script header).
+- **`-BackendOnly`** — Python API only (no Vite); skips frontend `npm install`.
+- **`-NoBrowser`** — do not open the browser when the frontend is ready.
+- **`SKIP_SYNC=1`** — skip `uv sync` (useful when another process holds the venv).
+
+`start.ps1` uses **`uv`** for Python deps and resolves **`npm.cmd`** next to **`node.exe`** so installs work with nvm/scoop-style shims.
+
+## Fleet Configuration (Claude Desktop)
+
+```json
+{
+  "mcpServers": {
+    "aiwatcher-mcp": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "aiwatcher_mcp.server"],
+      "cwd": "C:\\path\\to\\aiwatcher-mcp"
+    }
+  }
+}
+```
+
+## Key Environment Variables (`.env`)
+
+| Variable | Default | Notes |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | — | **Required** for scoring + digest generation |
+| `LLM_PROVIDER` | anthropic | anthropic, ollama, or lmstudio |
+| `LLM_BASE_URL` | — | Custom base URL for OpenAI-compatible providers |
+| `ALERT_THRESHOLD` | 8.5 | Urgency score threshold for TTS wake-up |
+| `ALERT_HOUR_UTC` | 4 | Time (UTC) to trigger the morning alert |
+| `ROBOFANG_ENABLED` | true | Push breaking alerts to `robofang` |
+| `EMAIL_ENABLED` | false | Send digest to Sandra + Steve via `email-mcp` |
+| `CALIBRE_ENABLED` | false | Archive digests to `calibre-mcp` |
+| `GMAIL_ENABLED` | false | Parse newsletters from Gmail |
+| `ARXIV_ENABLED` | false | Ingest latest papers (`ARXIV_MCP_URL` default **10770**) |
+| `READLY_ENABLED` | false | Readly (blocked on upstream MCP tool) |
+| `AIWATCHER_API_KEY` | — | Optional REST auth on `/api/*` (exempt: health, `/mcp`). When set, mirror on `ARXIV_MCP_AIWATCHER_API_KEY` and `VLA_AIWATCHER_API_KEY` |
+| `VLA_MCP_ENABLED` | true | Probe vla-mcp pipeline liveness (`VLA_MCP_URL` default **11024**) |
+| `DIGEST_CACHE_TTL_MINUTES` | 60 | Reuse recent digest without LLM |
+| `just seed-feeds` | — | Baseline RSS if feeds table empty |
+
+## Fleet Integrations & Ports
+
+| Service | Port | Description |
+|---|---|---|
+| **aiwatcher Backend** | `10946` | Starlette REST + MCP HTTP at **`/mcp`** (`python -m aiwatcher_mcp.api`) |
+| **aiwatcher Frontend** | `10947` | Vite/React Web App |
+| **robofang** | `10871` | Breaking event POSTs to Council bridge |
+| **speechops** | `10895` | TTS wake-up HTTP API |
+| **email-mcp** | `10812` | Digest delivery mechanism |
+| **calibre-mcp** | `10720` | Digest archival to eBook library |
+| **arxiv-mcp** | `10770` | ArXiv paper ingestion + code-hunt fleet push |
+| **vla-mcp** | `11024` | VLA robotics pipeline fleet push + liveness probe |
+| **fleet-agent-mcp** | `10996` | Fritz — calls aiwatcher in Day Prep |
+| **readly-mcp** | `10863` | Magazine article ingestion (optional) |
+
+## Testing
+
+```powershell
+just test          # pytest (unit/integration)
+just e2e           # Playwright — starts backend :10946 + Vite :10947, runs webapp/e2e
+```
+
+First-time e2e setup (from repo root):
+
+```powershell
+uv sync
+Set-Location webapp
+npm install
+npx playwright install chromium
+npm run test:e2e
+```
+
+Fleet-wide UI audit (optional, `mcp-central-docs` script): `just e2e-fleet-audit`.
+
+## MCP Tools
+
+Authoritative tool names and counts come from the running server (**`GET /api/capabilities`** → `tool_surface.atomic_tools`). Typical built-ins include:
+
+| Tool | Category |
+|------|----------|
+| `poll_feeds` | Ingestion |
+| `distill_pending` | Distillation |
+| `check_alerts` | Alerting |
+| `generate_digest` / `send_digest_now` | Delivery |
+| `get_top_items` / `search_items` | Discovery |
+| `get_feeds_list` / `add_feed` / `get_feed_health` | Feeds |
+| `get_bundles_list` / `create_bundle_from_topic` / `link_feed_to_bundle` | Bundles |
+| `list_fleet_bundles` / `update_fleet_bundle` | Fleet bundles |
+| `get_bundle_health` / `find_feeds_for_topic` | Bundles + discovery |
+| `import_opml` | Import |
+| `ingest_fleet_event` / `get_tag_trends` | Fleet journal + trends |
+| `get_digest_history` / `expire_old_items` | Maintenance |
+| `scrubber_reload` | Spam / scrubber |
+| `show_dashboard_card` | Prefab UI (when enabled) |
+
+Extra tools may appear when **`MCP_BRIDGE_URLS`** is set (proxied remote tools).
+
 ---
 
-## Configuration (`.env`)
-
-Key settings:
-
-| Var | Default | Notes |
-|-----|---------|-------|
-| `LLM_PROVIDER` | `anthropic` | `anthropic` / `ollama` / `lmstudio` |
-| `DISTILLATION_MODEL` | `claude-3-5-sonnet-latest` | Any model on provider |
-| `ALERT_THRESHOLD` | `8.5` | Urgency score to trigger TTS wake-up |
-| `FEED_POLL_INTERVAL_MINUTES` | `30` | Feed polling cadence |
-| `EMAIL_ENABLED` | `false` | Enable digest email delivery |
-| `ROBOFANG_ENABLED` | `true` | Robofang Council alert integration |
-| `CALIBRE_ENABLED` | `false` | Archive digests to Calibre library |
-
----
-
-## Fleet Integrations
-
-| Integration | Status | Notes |
-|-------------|--------|-------|
-| speechops | Active | TTS wake-ups via `/api/v1/tts`, SAPI5 fallback |
-| robofang | Active | Breaking news events via `/api/v1/events` |
-| email-mcp | Optional | Digest delivery; SMTP fallback |
-| calibre-mcp | Optional | Archive digests as ebooks |
-| arxiv-mcp | Optional | cs.AI/cs.LG/cs.RO ingestion |
-| gmail-mcp | Optional | Alpha Signal newsletter parsing |
-| readly-mcp | Optional | Magazine article ingestion |
-
----
-
-## Known Issues (as of 2026-05-01)
-
-See `ASSESSMENT.md` for full detail.
-
-**P1:**
-- `.env` may be git-tracked — contains secrets, must verify `git rm --cached .env`
-- `GET /api/env` returns raw API keys + SMTP password in cleartext — no auth guard
-- `/api/capabilities` reports 11 tools, actual count is 20
-
-**P2:**
-- No pagination on `/api/items`
-- `sent_calibre` DB column is dead code
-- OPML import logic duplicated between `server.py` and `api.py`
-- `speechops_backend_url` default points at own port (10946) — wrong
-- `validate_distillation_model()` fires live API call on every startup
-
----
-
-## Stack
-
-| Component | Version |
-|-----------|---------|
-| Python | ≥3.11 |
-| fastmcp | ≥3.2.0 |
-| starlette | ≥0.46.0 |
-| apscheduler | ≥3.10.4 |
-| aiosqlite | ≥0.20.0 |
-| anthropic | ≥0.52.0 |
-| feedparser | ≥6.0.11 |
-| React | 18.x |
-| Vite + Tailwind + Zustand + TanStack Query | current |
-
----
-
-## Tags
-
-`[aiwatcher-mcp, fastmcp, news-ingestion, distillation, alerting, scheduling, sqlite, active, webapp]`
+*Fleet server — Sandra Schipal · **aiwatcher-mcp** `0.1.6` (see `pyproject.toml` / `_version.py`)*

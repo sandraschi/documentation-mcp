@@ -1,4 +1,5 @@
 """Prefab UI card builders for documentation-mcp."""
+
 import logging
 
 from fastmcp import FastMCP
@@ -58,12 +59,14 @@ def register_prefab_cards(mcp: FastMCP):
         for r in results:
             distance = r.get("_distance", 0.0)
             score = max(0.0, 1.0 - distance)
-            items.append({
-                "title": r["metadata"].get("filename", "unknown"),
-                "score": f"{score:.2f}",
-                "path": r["metadata"].get("relative_path", ""),
-                "snippet": r["content"][:300],
-            })
+            items.append(
+                {
+                    "title": r["metadata"].get("filename", "unknown"),
+                    "score": f"{score:.2f}",
+                    "path": r["metadata"].get("relative_path", ""),
+                    "snippet": r["content"][:300],
+                }
+            )
 
         if not items:
             with Card(css_class="max-w-lg") as card:

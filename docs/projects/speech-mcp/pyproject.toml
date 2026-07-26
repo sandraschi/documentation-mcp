@@ -1,0 +1,78 @@
+[project]
+name = "speech-mcp"
+version = "0.6.3"
+description = "FastMCP 3.2 speech gateway: FunASR local STT, Gemini Live/TTS, Hume, ElevenLabs, wake word, RAG. MCP + React webapp."
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=3.4.4,<4",
+    "hume>=0.7.0",
+    "elevenlabs>=0.2.0",
+    "pyaudio>=0.2.14",
+    "websockets",
+    "python-dotenv",
+    "pydantic>=2.0.0",
+    "fastapi",
+    "uvicorn[standard]",
+    "pyttsx3",
+    "anyio",
+    "lancedb>=0.5.0",
+    "fastembed>=0.2.0",
+    "pyarrow>=15.0.0",
+    "prometheus-client>=0.19.0",
+    "python-osc",
+    "prefab-ui>=0.14.0",
+    "google-genai>=1.0.0",
+    "openwakeword>=0.4.0",
+]
+
+[project.optional-dependencies]
+funasr = [
+    "funasr>=1.3.3",
+    "modelscope>=1.18.0",
+    "soundfile>=0.12.0",
+    "numpy>=1.26.0",
+    "torchaudio>=2.2.0",
+    "fastapi",
+    "uvicorn[standard]",
+    "python-multipart",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.20.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "ruff",
+]
+
+[project.scripts]
+speech-mcp = "speech_mcp.server:main"
+speech-mcp-webapp = "speech_mcp.webapp:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/speech_mcp"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008", "S110"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["."]
+testpaths = ["tests"]
+markers = [
+    "live: marks tests requiring live API keys or hardware (deselect with '-m \"not live\"')",
+]

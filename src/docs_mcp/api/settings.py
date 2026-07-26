@@ -8,6 +8,7 @@ from docs_mcp.backend.rag_paths import rag_sources_summary
 logger = logging.getLogger("docs_mcp.api.settings")
 router = APIRouter(prefix="/api")
 
+
 @router.get("/settings")
 async def api_settings_get():
     """Return current webapp settings. API key is masked."""
@@ -23,6 +24,7 @@ async def api_settings_get():
     except Exception as e:
         logger.error(f"Error in api_settings_get: {e}")
         raise HTTPException(status_code=500, detail=str(e)) from e
+
 
 @router.put("/settings")
 async def api_settings_put(request: Request):
@@ -56,15 +58,14 @@ async def api_settings_put(request: Request):
             if isinstance(raw_paths, list):
                 updates["rag_extra_paths"] = [str(p).strip() for p in raw_paths if str(p).strip()]
             else:
-                updates["rag_extra_paths"] = [
-                    line.strip() for line in str(raw_paths).splitlines() if line.strip()
-                ]
+                updates["rag_extra_paths"] = [line.strip() for line in str(raw_paths).splitlines() if line.strip()]
 
         settings_store.save_settings({**current, **updates})
         return {"success": True, "rag": rag_sources_summary()}
     except Exception as e:
         logger.error(f"Error in api_settings_put: {e}")
         raise HTTPException(status_code=500, detail=str(e)) from e
+
 
 @router.get("/models/ollama")
 async def api_ollama_models(url: str = ""):
@@ -81,6 +82,7 @@ async def api_ollama_models(url: str = ""):
     except Exception as e:
         logger.error(f"Error in api_ollama_models: {e}")
         raise HTTPException(status_code=500, detail=str(e)) from e
+
 
 @router.get("/models/lmstudio")
 async def api_lmstudio_models(url: str = ""):

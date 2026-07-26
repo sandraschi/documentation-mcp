@@ -1,0 +1,57 @@
+[project]
+name = "dreame-mcp"
+version = "0.2.0"
+description = "FastMCP 3.2.0 MCP server and webapp for Dreame robot vacuums via DreameHome cloud"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=3.4.4,<4",
+    "httpx>=0.27.0",
+    "pydantic>=2.0.0",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.23.0",
+    "structlog>=23.0.0",
+    # DreameHome cloud protocol deps (from tasshack dreame-vacuum)
+    "requests>=2.31.0",
+    "paho-mqtt>=1.6.1",
+    "pycryptodome>=3.20.0",
+    "numpy>=1.26.0",
+    "Pillow>=10.0.0",
+    "cryptography>=42.0.0",
+    "py-mini-racer>=0.6.0",
+    "python-dotenv>=1.2.2",
+    "python-miio>=0.5.12",
+    "zeroconf>=0.32,<0.140",  # python-miio needs ServiceListener (removed in 0.140+)
+    "prefab-ui>=0.14.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dreame_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = ["live: tests requiring real Dreame hoover (--live or DREAME_LIVE=1)"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "ruff>=0.15.9",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

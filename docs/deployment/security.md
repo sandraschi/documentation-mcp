@@ -310,7 +310,7 @@ sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 - **reversing-mcp** - Ghidra and free reverse engineering tools
 - **ocr-mcp** - Document analysis in isolated environment
 - **calibre-mcp** - Safe e-book processing
-- **pywinauto-mcp** - UI automation for analysis tools
+- **windows-computer-use-mcp** - UI automation for analysis tools
 
 ---
 

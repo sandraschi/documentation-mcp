@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "inkscape-mcp"
-version = "1.2.0b0"
-description = "FastMCP 2.14.3+ server for professional vector graphics and SVG editing using Inkscape - portmanteau architecture"
+version = "2.6.0"
+description = "MCP server for Inkscape-backed SVG and vector operations (FastMCP 3.2.0+)"
 readme = "README.md"
 authors = [
     {name = "Sandra Schipal", email = "sandra@sandraschi.dev"},
@@ -30,32 +30,31 @@ classifiers = [
 ]
 
 dependencies = [
-    # Core FastMCP dependencies - upgraded to 2.14.3+
-    "fastmcp>=3.1.0,<4",
+    # Core FastMCP dependencies
+    "fastmcp>=3.4.4,<4",
+    "prefab-ui>=0.14.0",
     "pydantic>=2.0.0,<3.0.0",
     "typing-extensions>=4.5.0,<5.0.0",
-    
     # Image processing
     "pillow>=10.0.0,<12.0.0",
     "numpy>=1.24.0,<3.0.0",
-    
     # Process management and system utilities
     "psutil>=5.9.0,<7.0.0",
     "python-dotenv>=1.0.0,<2.0.0",
-    
     # File handling and validation
     "python-magic>=0.4.27,<1.0.0; platform_system!='Windows'",
     "python-magic-bin>=0.4.14,<1.0.0; platform_system=='Windows'",
     "filetype>=1.2.0,<2.0.0",
-    
     # Configuration and utilities
     "pyyaml>=6.0.0,<7.0.0",
     "python-dateutil>=2.8.2,<3.0.0",
     "click>=8.1.3,<9.0.0",
-    
+    "loguru>=0.7.0",
     # Async utilities
     "anyio>=4.5.0,<5.0.0",
-    "httpx>=0.27.0,<1.0.0"
+    "httpx>=0.27.0,<1.0.0",
+    # Inkscape extension API — required for plugins/ scripts
+    "inkex>=1.2.0",
 ]
 
 [project.urls]
@@ -70,10 +69,8 @@ Changelog = "https://github.com/sandraschi/inkscape-mcp/blob/main/CHANGELOG.md"
 
 
 
-# Tool definitions for MCPB and other tool managers
-
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pytest>=8.0.0",
     "pytest-cov>=4.1.0",
     "pytest-asyncio>=0.23.0",
@@ -85,6 +82,7 @@ dev-dependencies = [
     "twine>=5.0.0",
     "bandit>=1.7.0",
     "safety>=3.0.0",
+    "pyinstaller>=6.21.0",
 ]
 
 # PyPI Publishing Configuration
@@ -96,23 +94,6 @@ allow-direct-references = true
 
 [tool.hatch.version]
 path = "src/inkscape_mcp/__init__.py"
-
-[tool.ruff]
-target-version = "py312"
-line-length = 100
-
-[tool.ruff.lint]
-select = [
-    "F", "E", "W", "I", "N", "UP", "B", "C4", "ARG", "PTH", "ERA"
-]
-ignore = ["E501"]
-
-[tool.ruff.lint.flake8-bugbear]
-extend-immutable-calls = ["fastmcp.FastMCP"]
-
-[tool.ruff.lint.isort]
-force-single-line = true
-known-first-party = ["inkscape_mcp"]
 
 [tool.mypy]
 python_version = "3.10"
@@ -135,6 +116,10 @@ http = [
     "fastapi>=0.95.0,<1.0.0",
     "uvicorn[standard]>=0.22.0,<1.0.0",
     "httpx>=0.24.0,<1.0.0"
+]
+
+monitoring = [
+    "prometheus-client>=0.20.0,<1.0.0",
 ]
 
 dev = [
@@ -205,84 +190,20 @@ all = [
 [tool.fastmcp]
 name = "inkscape-mcp"
 display_name = "Inkscape MCP Server"
-version = "1.2.0b0"
-description = "FastMCP 2.14.3+ server for professional vector graphics using Inkscape - portmanteau architecture"
+version = "2.6.0"
+description = "Inkscape MCP server (FastMCP 3.2.0+), portmanteau tools"
 entry_point = "inkscape_mcp.main:main"
 architecture = "portmanteau"
 
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+exclude = ["src/inkscape_mcp/tools_legacy"]
 
-# Core Vector File Tools
-[[tool.dxt.tools]]
-name = "load_vector"
-description = "Load a vector file and return metadata"
-category = "files"
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
 
-[[tool.dxt.tools]]
-name = "save_vector"
-description = "Save processed vector to specified format"
-category = "files"
-
-[[tool.dxt.tools]]
-name = "get_vector_info"
-description = "Extract comprehensive vector metadata"
-category = "files"
-
-[[tool.dxt.tools]]
-name = "convert_vector"
-description = "Convert vector between different formats"
-category = "files"
-
-# Transform Tools
-[[tool.dxt.tools]]
-name = "scale_vector"
-description = "Scale vector with path preservation"
-category = "transform"
-
-[[tool.dxt.tools]]
-name = "crop_canvas"
-description = "Crop canvas to specified rectangle"
-category = "transform"
-
-[[tool.dxt.tools]]
-name = "rotate_vector"
-description = "Rotate vector by specified degrees"
-category = "transform"
-
-# Color Adjustment Tools
-[[tool.dxt.tools]]
-name = "adjust_fill_stroke"
-description = "Adjust fill and stroke colors"
-category = "color"
-
-[[tool.dxt.tools]]
-name = "apply_gradient"
-description = "Apply professional gradient mappings"
-category = "color"
-
-# Filter Tools
-[[tool.dxt.tools]]
-name = "apply_path_simplify"
-description = "Simplify complex paths to reduce nodes"
-category = "filters"
-
-[[tool.dxt.tools]]
-name = "vectorize_raster"
-description = "Trace raster image to vector paths"
-category = "filters"
-
-# Batch Processing Tools
-[[tool.dxt.tools]]
-name = "batch_render"
-description = "Render multiple vectors to rasters (PNG/JPG)"
-category = "batch"
-
-[[tool.dxt.tools]]
-name = "batch_optimize"
-description = "Optimize multiple SVGs for web use"
-category = "batch"
-
-[tool.dxt.config]
-log_level = "INFO"
-max_workers = 4
-request_timeout = 60.0
-inkscape_timeout = 30.0
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

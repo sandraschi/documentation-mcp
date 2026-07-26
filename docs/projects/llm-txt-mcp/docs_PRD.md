@@ -1,4 +1,4 @@
-﻿# Product Requirements Document (PRD)
+# Product Requirements Document (PRD)
 # LLM.txt MCP Server
 
 **Version:** 1.0  
@@ -182,7 +182,7 @@ Provide developers with effortless tools to make their projects AI-accessible, r
 
 ### Technology Stack
 - **Language:** Python 3.10+
-- **Framework:** FastMCP 3.1.1+.0+
+- **Framework:** FastMCP 2.12.0+
 - **Protocol:** Model Context Protocol (MCP)
 - **Transport:** Stdio (primary), HTTP (development)
 - **Code Quality:** Ruff 0.14.5, MyPy 1.0+
@@ -211,19 +211,19 @@ Provide developers with effortless tools to make their projects AI-accessible, r
 ### Data Flow
 ```
 User Request (MCP Client)
-    â†“
+    ↓
 FastMCP Server (stdio/HTTP)
-    â†“
+    ↓
 Tool Router
-    â†“
+    ↓
 Service Layer (LLMTextService)
-    â†“
+    ↓
 Generator/Validator/Analyzer
-    â†“
+    ↓
 File System Operations
-    â†“
+    ↓
 Response (structured JSON)
-    â†“
+    ↓
 MCP Client
 ```
 
@@ -303,32 +303,32 @@ MCP Client
 ## Development Roadmap
 
 ### Phase 1: MVP (Completed)
-- âœ… Core generation engine
-- âœ… MCP server implementation
-- âœ… Basic validation
-- âœ… Claude Desktop integration
-- âœ… Python 3.10+ support
-- âœ… Ruff integration
+- ✅ Core generation engine
+- ✅ MCP server implementation
+- ✅ Basic validation
+- ✅ Claude Desktop integration
+- ✅ Python 3.10+ support
+- ✅ Ruff integration
 
 ### Phase 2: Enhancement (Current)
-- ðŸ”„ Comprehensive testing suite
-- ðŸ”„ Template system
-- ðŸ”„ Repository analysis
-- ðŸ”„ Documentation improvements
-- ðŸ”„ Type safety improvements (MyPy)
+- 🔄 Comprehensive testing suite
+- 🔄 Template system
+- 🔄 Repository analysis
+- 🔄 Documentation improvements
+- 🔄 Type safety improvements (MyPy)
 
 ### Phase 3: Advanced Features (Planned)
-- â³ Multi-language support (beyond English)
-- â³ Custom plugin system
-- â³ CI/CD integration
-- â³ Web UI for configuration
-- â³ Analytics and usage tracking
+- ⏳ Multi-language support (beyond English)
+- ⏳ Custom plugin system
+- ⏳ CI/CD integration
+- ⏳ Web UI for configuration
+- ⏳ Analytics and usage tracking
 
 ### Phase 4: Ecosystem (Future)
-- â³ IDE extensions (VS Code, JetBrains)
-- â³ GitHub Action
-- â³ Pre-commit hooks
-- â³ Community template marketplace
+- ⏳ IDE extensions (VS Code, JetBrains)
+- ⏳ GitHub Action
+- ⏳ Pre-commit hooks
+- ⏳ Community template marketplace
 
 ---
 
@@ -390,6 +390,5 @@ MCP Client
   - v1.0 (2025-11-19): Initial PRD creation
 - **Approvals:** Sandra Schipal (Author/Owner)
 - **Next Review:** 2025-12-19
-
 
 

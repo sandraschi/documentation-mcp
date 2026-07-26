@@ -2,10 +2,10 @@
 project: fleet-agent-mcp
 status: active
 priority: high
-tags: [agent, self-evolving, state-machine, flowforge, pulse, memory, identity, teleport, kagura, fastmcp]
+tags: [agent, self-evolving, state-machine, flowforge, pulse, memory, identity, teleport, kagura, fastmcp, harness, mechanical-gates, opc]
 created: 2026-05-19
-updated: 2026-05-30
-ports: [10996, 10997]
+updated: 2026-07-01
+ports: [10996, 10997, 11027]
 repo: D:\Dev\repos\fleet-agent-mcp
 inspiration: https://github.com/kagura-agent
 ---
@@ -13,6 +13,8 @@ inspiration: https://github.com/kagura-agent
 # fleet-agent-mcp — Self-Evolving AI Agent
 
 **Inspired by [kagura-agent](https://github.com/kagura-agent)** — a self-evolving AI agent born 2026-03-10 that merged 887+ PRs across 52 repos, built its own workflow engine, task system, wiki, social network, and contribution pipeline.
+
+**Mechanical gates inspired by [OPC](https://github.com/iamtouchskyer/opc) (One Person Company, 173★)** — a Claude Code skill that proved "the agent that builds never evaluates." OPC's `opc-harness synthesize` computes verdicts by code (emoji severity counting, file ref validation) rather than LLM judgment. We ported the mechanical gate engine pattern to Python at `src/fleet_agent/harness/gate_engine.py` — see the [Harness — Mechanical Gate Engine](#harness--mechanical-gate-engine) section below.
 
 fleet-agent-mcp brings the same architecture to the fleet ecosystem, running on FastMCP 3.2 (Python) instead of OpenClaw (TypeScript).
 
@@ -22,7 +24,7 @@ fleet-agent-mcp brings the same architecture to the fleet ecosystem, running on 
 
 ## Status
 
-`active — v0.2.0-pre: 42 tools, 13 subsystems, coworker pilot, state machine, fleet_bridge (19 servers)`
+`active — v0.2.1-pre: 69 tools, 15 subsystems, Intel Hub (11027), coworker + home-safety watch, fleet_bridge (20 servers incl. devices)`
 
 | Component | Status |
 |---|---|
@@ -32,8 +34,12 @@ fleet-agent-mcp brings the same architecture to the fleet ecosystem, running on 
 | Identity system | done — SOUL.md, NORTH_STAR.md, USER.md, cascading override |
 | Teleport (soul migration) | done — pack/unpack/inspect `.soul` archives |
 | Heartbeat (wake-up) | done — checks workflow → task → idle suggestions |
-| **Coworker (Poor Man's Viktor)** | **pilot** — 9 MCP tools, 7 scheduled flows — [fritz-coworker](./fritz-coworker/README.md) |
-| Fleet bridge | done — 19 server aliases incl. email, libreoffice, notion, onenote |
+| **Harness — Mechanical Gate Engine** | **done** — `harness/gate_engine.py`: deterministic verdict synthesis, criteria lint, review independence, oscillation detection, tier coverage |
+| **Coworker (Poor Man's Viktor)** | **pilot** — 11 MCP tools, 9 scheduled flows — [fritz-coworker](./fritz-coworker/README.md) |
+| **Intel Reports Hub** | **done** — port 11027, publish/list, iPad/Tailscale — `docs/INTEL_REPORTS_HUB.md` |
+| **AIWatcher ingest** | **done** — auto after Pulse/Day Prep; `aiwatcher_push_event` |
+| **Urgent notifications** | **done** — email + cursor inbox on degradation / home safety |
+| Fleet bridge | done — 20 server aliases incl. email, libreoffice, devices, notion, onenote |
 | Dashboard (webapp) | active — port 10997 (Vite + React) |
 
 ## Architecture
@@ -46,6 +52,10 @@ fleet-agent-mcp/
 ├── src/fleet_agent/
 │   ├── server.py                     # FastMCP 3.2 entry point (HTTP + stdio)
 │   ├── config.py                     # Pydantic-settings
+│   │
+│   ├── harness/                      # Mechanical Gate Engine (OPC-derived)
+│   │   └── gate_engine.py            # synthesize(), lint_criteria(), independence check,
+│   │                                   oscillation detection, tier coverage
 │   │
 │   ├── engine/                       # Core engine layer
 │   │   ├── state_machine.py          # FSM: register, start, status, next, reset
@@ -64,11 +74,17 @@ fleet-agent-mcp/
 │   │   ├── codegen.py                # 3 tools: generate, write, edit
 │   │   ├── github.py                 # 9 tools: PR lifecycle
 │   │   ├── contribute.py             # 1 tool: autonomous contribution
-│   │   ├── coworker.py               # 9 tools: scheduled office + fleet flows
+│   │   ├── coworker.py               # 11 tools: scheduled office + fleet flows
+│   │   ├── intel_hub.py              # 3 tools: publish, list, aiwatcher_push_event
+│   │   ├── voice.py                  # 1 tool: route_voice_command
 │   │   └── evolution_log.py          # 3 tools: record, list, stats
 │   │
+│   ├── intel_hub/                    # Shared HTML reports (:11027)
 │   ├── coworker/                     # Coworker flow runners + recurrence
 │   │   ├── fleet_pulse.py            # Morning fleet health report
+│   │   ├── devices_watch.py          # devices-mcp priority poll (5m)
+│   │   ├── aiwatcher_ingest.py       # Fritz → AIWatcher fleet events
+│   │   ├── urgent_notify.py          # Email + cursor inbox on thresholds
 │   │   ├── weekly_report_pdf.py      # MD → PDF via libreoffice-mcp
 │   │   ├── board_pack.py             # Monthly ODT board pack
 │   │   └── artifact_pack.py          # Weekly artifact batch PDF
@@ -119,15 +135,17 @@ Three roles, one agent:
 
 This is the key insight from kagura-agent: the agent doesn't decide what to do — the workflow YAML does. The agent coordinates execution.
 
-## MCP Tools (42)
+## MCP Tools (69)
 
-### Coworker — Scheduled flows (9 tools)
+### Coworker — Scheduled flows (11 tools)
 
 | Tool | Default schedule (Europe/Vienna) |
 |------|----------------------------------|
 | `coworker_fleet_pulse` | Daily `07:00` |
 | `coworker_inbox_briefing` | Weekdays `wd:08:00` |
 | `coworker_day_prep` | Weekdays `wd:08:30` |
+| `coworker_devices_watch` | Every `5m` — kitchen temp, CO, Ring |
+| `coworker_cursor_spend_watch` | Every `2h` |
 | `coworker_docs_drift` | Sunday `sun:10:00` |
 | `coworker_weekly_report_pdf` | Friday `fri:17:00` |
 | `coworker_board_pack` | Monthly `d1:09:00` |
@@ -135,7 +153,33 @@ This is the key insight from kagura-agent: the agent doesn't decide what to do �
 | `coworker_list_flows` | — |
 | `coworker_bootstrap` | Seeds pulse tasks on boot |
 
-See [fritz-coworker](./fritz-coworker/README.md) and [libreoffice-mcp](./libreoffice-mcp/README.md) for PDF/ODT deliverables.
+### Harness — Mechanical Gate Engine (standalone library)
+
+| Export | Purpose | OPC origin |
+|--------|---------|------------|
+| `synthesize(evals, tier)` | Deterministic verdict: 🔴→FAIL, 🟡→ITERATE, all clear→PASS | `opc-harness synthesize` |
+| `lint_criteria(text)` | Mechanical acceptance criteria lint before pipeline starts | `opc-harness criteria-lint` |
+| `check_independence(evals)` | Require ≥2 independent evals, reject identical content | Review independence guard |
+| `detect_oscillation(current, previous)` | A→B→A feedback loop detection | Oscillation detection |
+| `check_tier_coverage(artifacts, tier)` | Polished demands screenshots; delightful demands tests | Quality tier checks |
+
+Zero LLM dependency — all verdicts computed by code. Import pattern:
+```python
+from fleet_agent.harness import synthesize, lint_criteria
+verdict = synthesize(evals)
+if verdict.verdict == "FAIL":
+    ...
+```
+
+### Intel Hub (3 tools)
+
+| Tool | Purpose |
+|------|---------|
+| `intel_reports_publish` | HTML report → hub :11027 |
+| `intel_reports_list` | Catalog |
+| `aiwatcher_push_event` | Fleet Events feed |
+
+See [fritz-coworker](./fritz-coworker/README.md), [intel-reports-hub](../patterns/intel-reports-hub.md), [libreoffice-mcp](./libreoffice-mcp/README.md).
 
 ### FlowForge — State Machine (9 tools)
 - `workflow_define` / `workflow_autodiscover` — Register workflows
@@ -187,6 +231,7 @@ See [fritz-coworker](./fritz-coworker/README.md) and [libreoffice-mcp](./libreof
 |---|---|---|
 | Backend (FastMCP HTTP) | 10996 | HTTP + MCP Streamable HTTP |
 | Frontend (webapp) | 10997 | Vite + React dashboard |
+| Intel Reports Hub | 11027 | HTML index + `POST /api/reports/publish` |
 
 ## Quick Start
 
@@ -218,9 +263,52 @@ Override by creating `~/.fleet-agent/identity/SOUL.md` etc. — personal identit
 4. **Persistence > Context**: SQLite state survives restarts. Markdown knowledge survives context resets.
 5. **Sub-agent isolation**: Main session = dispatch + bookkeeping. Sub-agents = actual work.
 
+### Mechanical Gates — The Zero-Trust Axiom (OPC-derived)
+
+> **The agent that builds never evaluates. Every critical output must have an independent verification path. Verdicts are computed by code, not by asking an LLM whether a finding is "important enough."**
+
+The gate engine (`src/fleet_agent/harness/gate_engine.py`) replaces LLM-as-judge with deterministic rules:
+
+| Layer | What it does | LLM-free? |
+|-------|-------------|-----------|
+| **L0 — Zero Trust** | Decision axiom: every critical output needs independent verification | Never needs LLM |
+| **L1 — Shape Agent** | Persona setting, anti-pattern tables, mandatory output structure in agent prompts | Guides LLM |
+| **L2 — Agent Flow** | Separation of concerns, context isolation (fresh agents, no session reuse) | Coordinates LLMs |
+| **L3 — Deterministic Enforcement** | Severity counting, verdict rules, oscillation diff, file-finding evidence checks | **Pure code** |
+
+**Verdict rules (from OPC):**
+- Any 🔴 (critical) → **FAIL** — pipeline blocks, changes required
+- Any 🟡 (warning) → **ITERATE** — address before proceeding
+- All 🔵/LGTM → **PASS** — gate opens
+- Any ⛔ → **BLOCKED** — hard stop, cannot proceed
+
+No LLM gets to decide whether a finding "matters." The code does.
+
+## Comparison with OPC (One Person Company)
+
+[OPC](https://github.com/iamtouchskyer/opc) (173★, MIT) is a Claude Code skill with 16 specialist agents and a digraph-based pipeline with code-enforced quality gates. We adopted its mechanical gate concepts rather than the full stack.
+
+| Concept | OPC (Claude Code) | Fritz (fleet-agent-mcp) |
+|---------|-------------------|------------------------|
+| Runtime | Claude Code skill (shell/JS, slash commands) | FastMCP 3.2 (Python, MCP protocol) |
+| Pipeline | `opc-harness` digraph with file-based state | FlowForge state machine (YAML + SQLite) |
+| **Mechanical gates** | `opc-harness synthesize` — emoji severity → verdict | **`harness/gate_engine.py`** — `synthesize()`, deterministic, zero LLM |
+| **Criteria lint** | `opc-harness criteria-lint` — pre-init mechanical DoD check | **`lint_criteria()`** — portable Python, usable anywhere |
+| **Review independence** | ≥2 eval files, identical content rejected | **`check_independence()`** — same logic, MCP-aware |
+| **Oscillation detection** | A↔B pattern over 4-6 ticks | **`detect_oscillation()`** — same pattern |
+| Flow templates | JSON with `contextSchema`, `softEvidence`, `unitHandlers` | YAML (v0.2.x); **planned**: JSON + schema validation in v0.2.2 |
+| Cross-server coordination | None (single-process skill) | Fleet bridge to 27 MCP servers |
+| Scheduled execution | `opc-harness` cron (survives restart) | Heartbeat cron (60s) + coworker (9 scheduled flows) |
+| State persistence | File-based `.harness/` directory | SQLite (10 tables, WAL mode) |
+| Distribution | `npm install -g @touchskyer/opc` | `uv sync` + NSIS installer (Tauri 2.0) |
+
+**What OPC does better:** Mechanical gate enforcement is more deeply integrated into its pipeline. Every node type has distinct gate rules. Brief → Build → Review → Test-Design → Test-Execute → Gate is a well-tested flow template with 100+ test files.
+
+**What we do better:** Cross-server orchestration (27 fleet servers), scheduled coworker flows, SQLite persistence, identity system with SOUL.md + evolution log, Tauri native desktop wrapper, dual transport (stdio + HTTP).
+
 ## Comparison with kagura-agent
 
-| Component | Kagura | Lumen (fleet-agent) |
+| Component | Kagura | Fritz (fleet-agent) |
 |---|---|---|
 | Runtime | OpenClaw (TS/Node, 373k stars) | FastMCP 3.2 (Python) |
 | State machine | flowforge (npm, 124 commits) | built-in (YAML + SQLite, ~300 lines) |
@@ -232,11 +320,27 @@ Override by creating `~/.fleet-agent/identity/SOUL.md` etc. — personal identit
 
 ## Roadmap
 
-### v0.2.0-pre (current)
-- [x] **Coworker pilot** — 9 tools, 7 scheduled flows, libreoffice-mcp integration
-- [x] Fleet bridge expanded to 19 servers (office: email, libreoffice, notion, onenote)
+### v0.2.1-pre (current)
+- [x] **Harness — Mechanical Gate Engine** — `harness/gate_engine.py` (OPC-derived)
+- [x] **Intel Reports Hub** — :11027, Fritz + AIWatcher publish, iPad/Tailscale
+- [x] **Fritz → AIWatcher ingest** + urgent email + cursor inbox
+- [x] **devices_watch** — polls devices-mcp `/api/fleet/priority`
+- [x] Coworker expanded — 11 tools, 9 scheduled flows
+- [x] Fleet bridge — 20 servers (incl. devices)
+
+### v0.2.2 (upcoming — Harness integration)
+- [ ] **Gate-aware `workflow_next()`** — review nodes call `synthesize()` before advancing
+- [ ] **`gate_evaluate` MCP tool** — expose `synthesize()` as a tool for external callers
+- [ ] **`criteria_lint` MCP tool** — expose `lint_criteria()` as pre-flight gate
+- [ ] **Criteria lint in `workflow_start()`** — block start if acceptance criteria fail lint
+- [ ] **Review independence enforcement** — `workflow_next()` checks ≥2 evals before advancing
+- [ ] **Oscillation detection** — detect A→B→A loops in consecutive gate rounds, surface warning
+- [ ] **Tier coverage enforcement** — execute nodes in polished/delightful flows require screenshots
+- [ ] **JSON flow templates** — extend `workflow_loader.py` beyond YAML to support OPC-style validated JSON flow schemas
+
+### v0.2.0-pre
+- [x] **Coworker pilot** — libreoffice-mcp PDF/ODT deliverables
 - [x] Webapp dashboard (10997)
-- [x] 45 pytest tests
 
 ### v0.2.0 (remaining)
 - [ ] Heartbeat → `workflow_start('coworker')` auto-dispatch
@@ -258,7 +362,7 @@ Override by creating `~/.fleet-agent/identity/SOUL.md` etc. — personal identit
 - [FastMCP 3.2 Tool Registration](file:///D:/Dev/repos/mcp-central-docs/standards/rules/mcp_registration.md)
 - [Docstring SOTA](file:///D:/Dev/repos/mcp-central-docs/standards/rules/docstrings_sota.md)
 - [Webapp Ports](file:///D:/Dev/repos/mcp-central-docs/operations/WEBAPP_PORTS.md)
-- [PowerShell Guardrails](file:///D:/Dev/repos/mcp-central-docs/standards/rules/powershell_sota.md)
+- [PowerShell Guardrails](file:///D:/Dev/repos/mcp-central-docs/standards/rules/powershell-script-standards.md)
 
 ## Credits
 

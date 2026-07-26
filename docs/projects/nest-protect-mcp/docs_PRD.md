@@ -1,4 +1,4 @@
-﻿# Nest Protect MCP - Product Requirements Document
+# Nest Protect MCP - Product Requirements Document
 
 ## 1. Overview
 
@@ -48,7 +48,7 @@ The Nest Protect MCP Server provides a unified interface to monitor and control 
 
 ### 3.1 System Requirements
 - **Python 3.9+** (3.9, 3.10, 3.11, 3.12, 3.13 supported)
-- **FastMCP 3.1.1+.0+** with full protocol compliance
+- **FastMCP 2.13.0+** with full protocol compliance
 - **Google Cloud Project** with Smart Device Management API enabled
 - **Network access** to Nest API endpoints (HTTPS)
 - **4GB RAM minimum** for production deployments
@@ -250,4 +250,3 @@ The Nest Protect MCP Server provides a unified interface to monitor and control 
 *Document Version: 2.0.0*
 *Last Updated: 2025-10-01*
 *Previous Version: 1.0.0 (2025-03-15)*
-

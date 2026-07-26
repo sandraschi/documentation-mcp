@@ -41,7 +41,7 @@ CodeMode is implemented as a **Transform** in FastMCP.
 ### Basic Setup
 ```python
 from fastmcp import FastMCP
-from fastmcp.transforms import CodeMode
+from fastmcp.experimental.transforms.code_mode import CodeMode
 
 mcp = FastMCP("IndustrialServer")
 mcp.add_transform(CodeMode())

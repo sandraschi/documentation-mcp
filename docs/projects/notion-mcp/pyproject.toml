@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "notion-mcp"
-version = "1.0.0"
-description = "FastMCP server for comprehensive Notion workspace management"
+version = "1.2.0"
+description = "FastMCP 3.1.0 server for comprehensive Notion workspace management and RAG"
 authors = [
     {name = "Sandra", email = "sandra@example.com"}
 ]
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.12"
-keywords = ["mcp", "notion", "workspace", "fastmcp", "productivity"]
+keywords = ["mcp", "notion", "workspace", "fastmcp", "rag", "lancedb"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -23,20 +23,34 @@ classifiers = [
 ]
 
 dependencies = [
-    "fastmcp>=3.1.0,<4",
-    "notion-client>=2.2.0",
+    "fastmcp>=3.4.4,<4",
+    "notion-client>=2.2.1",
+    "httpx>=0.28.0",
+    "lancedb>=0.17.0",
+    "tantivy>=0.22.0",
+    "sentence-transformers>=3.0.0",
+    "fastapi>=0.111.0",
+    "uvicorn>=0.30.0",
+    "structlog>=24.0.0",
     "python-dotenv>=1.0.0",
+    "pyyaml>=6.0.0",
     "pydantic>=2.0.0",
-    "aiohttp>=3.8.0",
-    "pyyaml>=6.0",
-    "requests>=2.31.0",
-    "python-dateutil>=2.8.0",
+    "pydantic-settings>=2.0.0",
+    "pytz>=2024.1",
     "typing-extensions>=4.0.0",
-    "structlog>=23.0.0",
-    "ruff>=0.15.2",
+    "prefab-ui>=0.14.0",
 ]
 
 [project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0"
+]
+
+[dependency-groups]
 dev = [
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
@@ -58,15 +72,11 @@ py-modules = ["server"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["notion*"]
+include = ["notion_mcp*"]
 
 [tool.black]
 line-length = 100
 target-version = ["py311"]
-
-[tool.ruff]
-line-length = 100
-target-version = "py311"
 
 [tool.mypy]
 python_version = "3.11"
@@ -74,3 +84,14 @@ strict = false
 warn_return_any = true
 warn_unused_configs = true
 
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

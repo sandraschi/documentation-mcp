@@ -1,209 +1,104 @@
-# kyutai-mcp 🎤
+[![FastMCP Version](https://img.shields.io/badge/FastMCP-3.1+-blue?style=flat-square&logo=python&logoColor=white)](https://github.com/sandraschi/fastmcp) [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) [![Linted with Biome](https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat-square&logo=biome&logoColor=white)](https://biomejs.dev/) [![Built with Just](https://img.shields.io/badge/Built_with-Just-000000?style=flat-square&logo=gnu-bash&logoColor=white)](https://github.com/casey/just)
 
-[![FastMCP](https://img.shields.io/badge/FastMCP-3.1+-blue)](https://github.com/jlowin/fastmcp)
-[![Python](https://img.shields.io/badge/Python-3.12+-green)](https://python.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Status](https://img.shields.io/badge/Status-Active-brightgreen)](#)
+<div align="center">
 
-> **Voice Pipeline MCP Server** — Real-time speech orchestration with Kyutai Moshi, persona-aware proxy, and agentic briefings.
+# kyutai-mcp
 
-**Repo**: [D:/Dev/repos/kyutai-mcp](file:///D:/Dev/repos/kyutai-mcp)
-**Version**: 0.2.0
-**Framework**: FastMCP 3.1+
-**Changelog**: [CHANGELOG.md](file:///D:/Dev/repos/kyutai-mcp/CHANGELOG.md)
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://biomejs.dev"><img src="https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat-square&logo=biome&logoColor=white" alt="Biome"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
----
 
-## Overview
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-kyutai-mcp wraps [Kyutai Moshi](https://github.com/kyutai-labs/moshi) — a real-time, full-duplex speech foundation model — into a fleet-standard MCP server with a staged voice pipeline, persona-aware WebSocket proxy, and premium SOTA webapp.
+### Run **Kyutai Moshi** locally. Drive it from a **glass dashboard**, and plug the same surface into your **agent stack** via **FastMCP**.
 
-### Architecture
+[Quick start](#quick-start)  [Web UI](#web-dashboard)  [Technical docs](docs/)
 
-```
-MCP Client / Agent
-    │
-    ├─► voice_pipeline (10 operations)
-    │   ├─ turn / speak_boilerplate          ← staged LLM pipeline
-    │   ├─ service_status/start/stop         ← Moshi process supervisor
-    │   ├─ session_history                   ← turn replay
-    │   └─ proxy_status/start/stop/transcript ← persona proxy control
-    │
-    ├─► moshi_ops (4 operations)
-    │   ├─ status / local_viability
-    │   └─ references / recommend_runtime
-    │
-    └─► Persona Proxy (port 8999)
-        Client ──WS──► Proxy ──WS──► Moshi (8998)
-                         │
-                         ├─ relay audio (transparent)
-                         ├─ tap 0x02 text tokens → transcript
-                         └─ persona callback → local LLM → inject
-```
+FastMCP **3.1+**  stdio + HTTP `/mcp`  web **10924** / **10925**  MCP HTTP **10926**
 
----
-
-## Ports
-
-| Service | Port | Type |
-|---------|------|------|
-| Backend (FastAPI) | **10924** | REST API |
-| Frontend (Vite) | **10925** | Webapp |
-| MCP (HTTP) | **10926** | MCP transport |
-| Moshi (upstream) | **8998** | WebSocket |
-| Persona Proxy | **8999** | WebSocket |
-
----
-
-## MCP Tools
-
-### `voice_pipeline` — Voice orchestration portmanteau
-
-| Operation | Description |
-|-----------|-------------|
-| `turn` | Staged voice turn: quick-ack → intent → research → deep synthesis |
-| `speak_boilerplate` | Agentic briefing: weather, world_news, ai_news, stock_market |
-| `service_status` | Check Moshi process + HTTP health probe |
-| `service_start` | Start supervised Moshi process |
-| `service_stop` | Stop Moshi process |
-| `session_history` | List sessions or replay turns |
-| `proxy_status` | Check persona proxy health |
-| `proxy_start` | Launch proxy on port 8999 |
-| `proxy_stop` | Stop persona proxy |
-| `proxy_transcript` | Fetch captured transcript from proxy session |
-
-### `moshi_ops` — Hardware & runtime advisory
-
-| Operation | Description |
-|-----------|-------------|
-| `status` | Server and Moshi-oriented status |
-| `local_viability` | Environment hints for local runs |
-| `references` | Pointers to upstream docs/repos |
-| `recommend_runtime` | Runtime guidance (GPU, VRAM, drivers) |
-
----
-
-## Persona Proxy
-
-The WebSocket proxy sits transparently between clients and Moshi:
-
-1. **Audio pass-through** — All `0x01` audio frames relay unmodified (zero latency impact).
-2. **Text token tapping** — Moshi's inner monologue `0x02` tokens are captured into per-session transcripts.
-3. **Persona injection** — When `?persona=<system_prompt>` query param is set, each sentence boundary triggers a local LLM call (Glom-On: Ollama/LM Studio). The augmented response is injected back as a `0x02` text annotation.
-4. **Rate limiting** — Persona callbacks are throttled to 1 per 5 seconds to prevent flooding.
-
----
-
-## Voice Pipeline Stages
-
-```
-User utterance
-    │
-    ├─ 1. Quick Ack (fast local model, <200ms)
-    │
-    ├─ 2. Intent Resolution
-    │      weather │ world_news │ ai_news │ stock_market │ general
-    │
-    ├─ 3. Agentic Research (for data-heavy intents)
-    │      Open-Meteo │ BBC RSS │ AI News RSS │ Yahoo Finance
-    │
-    ├─ 4. Deep Reasoner Synthesis (spoken final answer)
-    │
-    └─ 5. TTS-ready output
-```
-
----
-
-## Glom-On (Local LLM)
-
-Auto-discovers local providers:
-
-| Provider | Probe URL | Condition |
-|----------|-----------|-----------|
-| Ollama | `http://127.0.0.1:11434/api/tags` | HTTP 200, non-empty `models` |
-| LM Studio | `http://127.0.0.1:1234/v1/models` | HTTP 200, `data` array |
-
-Routing: `provider=auto` picks Ollama if healthy, else LM Studio.
-
----
-
-## Robofang Integration
-
-kyutai-mcp is registered as the **Kyutai Voice Hand** in the Robofang fleet:
-
-- **Fleet manifest**: potassium score 9.5
-- **Bridge**: `robofang_voice` MCP tool → REST relay to `http://127.0.0.1:10924`
-- **Operations**: speak, status, start_service, stop_service
+</div>
 
 ---
 
 ## Quick Start
 
 ```powershell
-# Clone and install
-cd D:\Dev\repos\kyutai-mcp
-uv sync
+git clone https://github.com/sandraschi/kyutai-mcp
+cd kyutai-mcp
+just
+```
 
-# Start webapp (backend + frontend)
-cd webapp
-powershell -ExecutionPolicy Bypass -File .\start.ps1
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
 
-# MCP stdio transport
+### Manual Setup
+
+If you don't have `just` installed:
+
+## Web dashboard
+
+Standard pages: **Home**, **Actions**, **Tools** (ops + MCP catalog), **Apps** (Glama / manifest), **Moshi** (and `/talk`), **Status**, **Chat**, **Logger**, **Settings**, **Help**.
+
+The in-app **Help** page is the full operator manual (routes, Glom-On, APIs, troubleshooting).
+
+---
+
+## MCP server (stdio)
+
+```powershell
 uv run python -m kyutai_mcp
 ```
 
-### Client wiring
-
-**Stdio:**
-```json
-{
-  "mcpServers": {
-    "kyutai-mcp": {
-      "command": "uv",
-      "args": ["--directory", "D:/Dev/repos/kyutai-mcp", "run", "python", "-m", "kyutai_mcp"]
-    }
-  }
-}
-```
-
-**HTTP:** `http://127.0.0.1:10926/mcp`
+Wire this in Cursor/your client as a stdio MCP server. See [docs/MCP.md](docs/MCP.md).
 
 ---
 
-## Discovery
+## Technical documentation
 
-- **Catalog**: `GET /api/mcp/catalog`
-- **Glama**: `glama.json` at repo root; `GET /api/discovery/glama`
-- **Well-known**: `GET /.well-known/mcp/manifest.json`
-
----
-
-## Environment Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `KYUTAI_BACKEND_URL` | `http://127.0.0.1:10924` | Backend REST API |
-| `MOSHI_WS_URL` | `ws://127.0.0.1:8998/api/chat` | Upstream Moshi WebSocket |
-| `MOSHI_PROXY_HOST` | `127.0.0.1` | Proxy bind host |
-| `MOSHI_PROXY_PORT` | `8999` | Proxy bind port |
+| Doc | Contents |
+|-----|----------|
+| [docs/WEBAPP.md](docs/WEBAPP.md) | Ports, routes, stack, build |
+| [docs/MCP.md](docs/MCP.md) | Tools, transports, discovery |
+| [docs/MOSHI_SERVICE.md](docs/MOSHI_SERVICE.md) | Upstream Moshi process, HTTP probe |
+| [docs/GLOM.md](docs/GLOM.md) | Local LLM attach (Ollama / LM Studio) |
+| [docs/VOICE_WORKFLOWS.md](docs/VOICE_WORKFLOWS.md) | Staged voice orchestration, prompts, examples, agentic boilerplates |
 
 ---
 
-## Known Limitations
 
-- **GPU scheduling**: Moshi and Ollama compete for VRAM on single-GPU systems. Future: resource scheduler.
-- **Windows support**: Upstream Moshi lacks official Windows support (requires working `nvcc`/Rust).
-- **In-memory state**: Sessions and transcripts are in-memory; restart clears history.
+## Related: speech-mcp (cloud voice)
+
+**[speech-mcp](https://github.com/sandraschi/speech-mcp)** is the cloud counterpart to this project. Where kyutai-mcp runs Moshi locally on your GPU, speech-mcp connects to cloud speech APIs.
+
+| | kyutai-mcp (this repo) | speech-mcp |
+|---|---|---|
+| Engine | Moshi (Kyutai, open-source) | Gemini Live, Gemini TTS, Hume, ElevenLabs |
+| Runs on | Local GPU (RTX 4090, CUDA) | Cloud APIs |
+| Privacy | Fully offline | Cloud |
+| Latency | Low (local) | Sub-second (Gemini Live) |
+| Voice quality | Good | Very good to highest |
+| Voice cloning | No | Yes (ElevenLabs IVC) |
+| Multilingual | Limited | 100+ languages (Gemini TTS) |
+| Cost | Free after hardware | API usage costs |
+
+Use kyutai-mcp when privacy or offline operation matters. Use speech-mcp when voice quality, multilingual coverage, or voice cloning is the priority. Both expose the same portmanteau MCP tool pattern and can be run simultaneously on different ports.
 
 ---
 
-## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [MCP.md](file:///D:/Dev/repos/kyutai-mcp/docs/MCP.md) | FastMCP server, tools, discovery |
-| [VOICE_WORKFLOWS.md](file:///D:/Dev/repos/kyutai-mcp/docs/VOICE_WORKFLOWS.md) | Staged voice pipeline, persona proxy |
-| [MOSHI_SERVICE.md](file:///D:/Dev/repos/kyutai-mcp/docs/MOSHI_SERVICE.md) | Upstream Moshi configuration |
-| [GLOM.md](file:///D:/Dev/repos/kyutai-mcp/docs/GLOM.md) | Local LLM integration |
-| [WEBAPP.md](file:///D:/Dev/repos/kyutai-mcp/docs/WEBAPP.md) | Frontend/backend layout |
-| [CHANGELOG.md](file:///D:/Dev/repos/kyutai-mcp/CHANGELOG.md) | Version history |
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
+## License
+
+See repository `LICENSE` if present; Kyutai/Moshi upstream has its own licenseconsult [Kyutai Moshi](https://github.com/kyutai-labs/moshi) for model and server terms.

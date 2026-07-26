@@ -1,142 +1,125 @@
-# KiCad MCP — Project Page
+# KiCad MCP
 
-**Status**: Active development — hybrid IPC path landed in v0.3.0  
-**Version**: 0.3.0  
-**Updated**: 2026-05-29  
-**Repo**: `D:\Dev\repos\kicad-mcp`  
-**GitHub**: `https://github.com/sandraschi/kicad-mcp`  
-**Fleet docs**: `D:\Dev\repos\mcp-central-docs\projects\kicad-mcp\`
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.12+](https://img.shields.io/badge/Python-3.12+-blue.svg)](pyproject.toml)
+[![KiCad 10+ / 11 nightly IPC](https://img.shields.io/badge/KiCad-hybrid%2010%2B%2F11-orange.svg)](docs/NIGHTLY_HEADLESS.md)
+[![GitHub last commit](https://img.shields.io/github/last-commit/sandraschi/kicad-mcp)](https://github.com/sandraschi/kicad-mcp)
 
-## What It Is
+AI-driven PCB/schematic design automation via **FastMCP 3.2**.
+39 MCP tools across 6 categories — component inspection, DRC/ERC, BOM generation,
+manufacturing export (Gerber, STEP, IPC-2581, ODB++), 3D visualization (GLB, VRML),
+pick-and-place, library search, marketplace (GitHub/Kitspace/SnapEDA), and **live PCB
+board editing** (place components, route tracks, add vias, set board outline, save).
 
-KiCad MCP is a FastMCP 3.2 server for AI-driven PCB/schematic automation on KiCad EDA.
-It exposes **39 MCP tools** across 6 categories for inspection, manufacturing export,
-and live board editing.
+## How it runs
 
-As of **v0.3.0**, the server supports a **hybrid KiCad install** on Windows:
+| Mode | Host app | When |
+|------|----------|------|
+| **Export lane (default)** | Stable `kicad-cli` (KiCad 10.x), no pcbnew window | Gerber, STEP, GLB, DRC/ERC, BOM, schematic exports, library CLI |
+| **Headless CRUD** | KiCad 11 nightly `kicad-cli api-server` + `kicad-python` | Load/save board, tracks, vias — no GUI |
+| **Legacy TCP CRUD (optional)** | KiCad 10 GUI + `kc_bridge.py` on port 11018 | Fallback when nightly IPC unavailable; footprint placement |
+| **Export-only** | Stable CLI only | CRUD tools return guidance if no IPC/TCP backend |
 
-| Lane | KiCad | Binary env | Purpose |
-|------|-------|------------|---------|
-| **Export** | 10.0.x stable | `KICAD_CLI_PATH` | Gerber, STEP, DRC/ERC, BOM, library CLI, schematic exports |
-| **CRUD** | 11.x dev nightly | `KICAD_IPC_CLI_PATH` | Headless PCB load/save, tracks, vias via `kicad-cli api-server` + `kicad-python` |
-| **Legacy fallback** | 10 GUI | TCP :11018 | `kc_bridge.py` SWIG bridge when nightly/IPC unavailable |
+**You do not need to open KiCad’s pcbnew window** for exports, DRC, Gerber, or STEP — the server calls stable `kicad-cli` subprocesses automatically. PCB editing uses either headless IPC (11 nightly) or the legacy GUI bridge.
 
-See **[HYBRID_INSTALL.md](./HYBRID_INSTALL.md)** (fleet mirror of repo `docs/NIGHTLY_HEADLESS.md`).
+Install [KiCad](https://www.kicad.org/download/) separately (hybrid 10.x + optional 11 nightly); it is never bundled. Full setup: [docs/NIGHTLY_HEADLESS.md](docs/NIGHTLY_HEADLESS.md).
 
-## Execution Architecture (v0.3.0)
-
-```
-MCP / REST tool call
-    │
-    ├─ Export / DRC / ERC / library / schematic CLI
-    │      └─ stable kicad-cli subprocess (10.x)
-    │
-    └─ PCB CRUD (load, info, tracks, vias, save, outline)
-           ├─ IPC headless (11 nightly + kipy)     ← preferred in auto mode
-           ├─ TCP kc_bridge (KiCad 10 GUI)       ← legacy fallback
-           └─ none (export-only; CRUD tools error with guidance)
-```
-
-Backend selection env: `KICAD_MCP_CRUD_BACKEND=auto|ipc|tcp|none`.
-
-## Key Infrastructure
-
-| Component | Port | Technology |
-|-----------|------|------------|
-| Backend | 11016 | FastAPI + FastMCP 3.2 |
-| Frontend | 11017 | Vite 6 + React 19 + Tailwind 3.4 |
-| KiCad Bridge (legacy) | 11018 | TCP JSON-RPC (pcbnew SWIG in GUI) |
-| IPC api-server | ephemeral | Child of nightly `kicad-cli` (headless) |
-
-## Tool Surface
-
-| Category | Count | Tools |
-|----------|-------|-------|
-| PCB | 17 | load, info, list components/nets/tracks, get component, DRC, export (STEP/Gerber/POS/DXF/SVG/PDF/VRML/GLB/IPC-2581/ODB++), place component, add track/via, save, set board outline |
-| Schematic | 8 | load, info, ERC, export (netlist/BOM/PDF/SVG/DXF) |
-| BOM | 1 | grouped JSON/CSV generation |
-| Library | 6 | list/search footprints/symbols, fp/sym SVG export |
-| Marketplace | 5 | search GitHub/Kitspace/SnapEDA, download, find parts |
-| System | 2 | status, supported commands |
-
-CRUD tools (place, track, via, save, outline) require `crud_backend` of `ipc` or `tcp`.
-Read/export tools work on stable CLI alone.
-
-## Cursor MCP Configuration
-
-Active entry in `C:\Users\sandr\.cursor\mcp.json` (2026-05-29):
-
-```json
-"kicad-mcp": {
-  "command": "C:/Users/sandr/.local/bin/uv.exe",
-  "args": [
-    "--directory", "D:/Dev/repos/kicad-mcp",
-    "run", "--extra", "ipc",
-    "python", "-m", "kicad_mcp.server", "--mode", "stdio"
-  ],
-  "cwd": "D:/Dev/repos/kicad-mcp",
-  "env": {
-    "PYTHONUNBUFFERED": "1",
-    "FASTMCP_BANNER": "0",
-    "FASTMCP_UPDATE_CHECK": "0",
-    "KICAD_CLI_PATH": "C:/Program Files/KiCad/10.0/bin/kicad-cli.exe",
-    "KICAD_IPC_CLI_PATH": "C:/Program Files/KiCad/11.0/bin/kicad-cli.exe",
-    "KICAD_MCP_CRUD_BACKEND": "auto",
-    "KICAD_MCP_IPC_ENABLED": "auto"
-  }
-}
-```
-
-Fleet canonical copy: `mcp-central-docs/operations/MASTER_MCP_CONFIG.json` (`kicad-mcp` key).
-
-**Before CRUD works:** install KiCad 11 nightly, run `uv sync --extra ipc`, verify with:
+> **Headless by default for manufacturing** — DRC, Gerber, STEP, and BOM run on stable `KICAD_CLI_PATH` with no GUI. CRUD picks `ipc` → `tcp` → `none` at startup (`KICAD_MCP_CRUD_BACKEND=auto|ipc|tcp|none`). Probe: `uv run python -m kicad_mcp.scripts.probe_ipc_headless`.
 
 ```powershell
-Set-Location D:\Dev\repos\kicad-mcp
+uv sync --extra ipc
 uv run python -m kicad_mcp.scripts.probe_ipc_headless
 ```
 
-On Sandra's machine (2026-05-29): stable **10.0.3** detected; IPC nightly **not yet installed** — export lane works; `crud_backend` will be `none` until nightly + kipy are present.
+## Hands-in / Hands-out
 
-## Webapp Frontend
+| Direction | Artifacts | Notes |
+|-----------|-----------|-------|
+| **Hands-in** | `.kicad_pcb`, `.kicad_sch` | Webapp upload or `pcb_load` / `sch_load` — copies land in `%TEMP%\kicad_mcp_work\uploads\` |
+| **Hands-in** | Footprint/symbol refs, net names | Tool params; marketplace downloads via `marketplace_*` |
+| **Hands-out** | Gerber, ODB++, IPC-2581, pick-and-place CSV | `pcb_export_*` — **headless** (stable CLI) |
+| **Hands-out** | STEP, GLB, VRML, DXF, SVG, PDF | 3D/mechanical handoff — **headless** |
+| **Hands-out** | DRC/ERC JSON, grouped BOM (JSON/CSV) | `pcb_drc`, `sch_erc`, `bom_generate` — **headless** |
+| **Hands-out** | Modified `.kicad_pcb` | `pcb_save` after CRUD — IPC headless or TCP bridge |
 
-9 pages: Dashboard (hybrid status KPIs), PCB (+ 3D GLB), Schematic (+ SVG), BOM,
-Library, Marketplace, Files, Demo (12-step pipeline), Status.
+### Fleet pipelines (downstream)
 
-## Fleet Standards Compliance
+| Downstream MCP | Takes from kicad-mcp |
+|----------------|----------------------|
+| [freecad-mcp](https://github.com/sandraschi/freecad-mcp) | STEP board / enclosure models |
+| [chip-design-mcp](https://github.com/sandraschi/chip-design-mcp) | Netlists, BOM, layout metadata |
+| Fabrication | Gerber, ODB++, IPC-2581, POS files |
 
-| Standard | Status |
-|----------|--------|
-| Port allocation (10700-11500) | ✅ 11016/17/18 registered |
-| Hybrid KiCad documented | ✅ NIGHTLY_HEADLESS + fleet HYBRID_INSTALL |
-| MASTER_MCP_CONFIG entry | ✅ v0.3.0 hybrid env |
-| Playwright e2e tests | ✅ 12 tests |
-| pytest unit tests | ✅ 14 tests (incl. install + router) |
-| FastMCP 3.2 + stdio | ✅ |
-| Optional ipc extra | ✅ kicad-python |
-| llms.txt | ✅ updated v0.3.0 |
+## Quick Start
 
-## KiCad Version Support (updated 2026-05-29)
+```powershell
+just bootstrap
+just serve
+# Open http://localhost:11017
+```
 
-| KiCad | kicad-cli export | pcbnew SWIG | IPC (GUI) | Headless IPC (api-server) | kicad-mcp lane |
-|-------|------------------|-------------|-----------|---------------------------|----------------|
-| 10.0.x stable | ✅ production | ✅ deprecated | ✅ | ❌ | **Export default** |
-| 11.x nightly | ✅ experimental | ❌ removed | ✅ | ✅ | **CRUD default (when installed)** |
-| 11.0 stable (~Jan 2027) | ✅ | ❌ | ✅ | ✅ | Target production CRUD |
+## Table of Contents
 
-## Related Fleet Projects
+- [How it runs](#how-it-runs) · [Hands-in / Hands-out](#hands-in--hands-out)
+- [Setup & Configuration](docs/SETUP.md)
+- [Tool Catalog (all 39 tools)](docs/TOOLS.md)
+- [REST + MCP API Reference](docs/API.md)
+- [Architecture Deep-Dive](docs/ARCHITECTURE.md)
+- [Hybrid nightly + headless IPC](docs/NIGHTLY_HEADLESS.md) — KiCad 10 stable exports + 11 nightly CRUD
+- [KiCad Scripting & API Reference](docs/KICAD_API.md)
+- [KiCad Plugin Ecosystem](docs/KICAD_PLUGINS.md)
+- [Contributing](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
 
-- **freecad-mcp** — enclosure design from STEP exports
-- **qcad-mcp** — DXF/STL mechanical path
-- **chip-design-mcp** — broader EDA/CAD orchestration (see chip_design_cad_sota.md)
+## Tools Overview
 
-## Documentation Index
+| Category | Count | Tools |
+|----------|-------|-------|
+| **PCB** | 17 | load, info, inspect, DRC, export (STEP/Gerber/POS/DXF/SVG/PDF/VRML/GLB/IPC-2581/ODB++), place component, add track/via, save, set board outline |
+| **Schematic** | 8 | load, info, ERC, export (netlist/BOM/PDF/SVG/DXF) |
+| **BOM** | 1 | generate (grouped JSON/CSV) |
+| **Library** | 6 | list/search footprints/symbols, export SVG |
+| **Marketplace** | 5 | search (GitHub/Kitspace/SnapEDA), download, find parts |
+| **System** | 2 | status, supported commands |
 
-| Doc | Location |
-|-----|----------|
-| Hybrid install (detailed) | `kicad-mcp/docs/NIGHTLY_HEADLESS.md` |
-| Fleet hybrid mirror | [HYBRID_INSTALL.md](./HYBRID_INSTALL.md) |
-| Cursor MCP | [CURSOR_MCP.md](./CURSOR_MCP.md) |
-| Status | [STATUS.md](./STATUS.md) |
-| Changelog | [CHANGELOG.md](./CHANGELOG.md) |
-| PRD | [PRD.md](./PRD.md) |
+## KiCad vs Professional EDA Tools
+
+KiCad is **production-grade**, used by CERN and Raspberry Pi. It covers ~90%
+of Altium Designer's capability at zero cost.
+
+| Capability | KiCad (Free) | Altium ($8k/yr) | Allegro ($20k/yr) |
+|------------|:------------:|:----------------:|:-----------------:|
+| Multi-layer PCB | ✅ 32 layers | ✅ | ✅ |
+| Push-and-shove routing | ✅ | ✅ | ✅ |
+| Differential pairs | ✅ | ✅ | ✅ |
+| Length tuning | ✅ manual | ✅ auto | ✅ auto |
+| 3D viewer | ✅ STEP/GLB | ✅ | ✅ |
+| Gerber/ODB++/IPC-2581 | ✅ | ✅ | ✅ |
+| Python scripting | ✅ deep pcbnew | ✅ limited | ✅ SKILL |
+| **Price** | **Free** | **$8,000/yr** | **$20,000/yr** |
+
+**Why KiCad wins for MCP**: No other EDA tool has `kicad-cli`. Altium
+has no headless CLI. Allegro's SKILL needs a license. KiCad is the
+**only** EDA tool that can be fully driven by an LLM.
+
+See [docs/KICAD_API.md](docs/KICAD_API.md) for the full comparison.
+
+## Plugin Ecosystem
+
+KiCad has a rich plugin system (PCM, Action Plugins, IPC Plugins) and
+a wide third-party ecosystem: KiBot (CI/CD), KiKit (panelization),
+InteractiveHtmlBom, KiCost, KiField, and more.
+
+See [docs/KICAD_PLUGINS.md](docs/KICAD_PLUGINS.md) for the full catalog.
+
+## Ports
+
+| Port | Service |
+|------|---------|
+| 11016 | Backend (FastAPI + FastMCP) |
+| 11017 | Frontend (Vite dev) |
+| 11018 | KiCad TCP bridge (internal) |
+
+## License
+
+MIT © 2026 Sandra Schipal. See [LICENSE](LICENSE).

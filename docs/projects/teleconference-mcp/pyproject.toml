@@ -1,0 +1,58 @@
+[project]
+name = "myconf"
+version = "2.2.0"
+description = "AG-Visio / Teams++ — AI-powered video conferencing with voice assistant and remote desktop"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=3.1.0,<4",
+    "livekit>=1.0.0",
+    "livekit-api>=1.0.0",
+    "livekit-agents>=1.0.0",
+    "livekit-plugins-openai>=0.9.0",
+    "lancedb>=0.17.0",
+    "fastembed>=0.4.0",
+    "pywinctl>=0.0.43",
+    "pynput>=1.7.6",
+    "pywin32>=306",
+    "mss>=9.0.1",
+    "aiohttp>=3.9.0",
+    "ollama>=0.4.0",
+    "redis>=5.0.0",
+    "python-dotenv>=1.0.0",
+    "psutil>=5.9.0",
+    "numpy>=1.24.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-mock>=3.12.0",
+    "coverage>=7.4.0",
+    "ruff>=0.1.0",
+    "mypy>=1.8.0",
+    "bandit>=1.7.0",
+    "safety>=3.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests", "apps/agent/tests"]
+python_files = "test_*.py"

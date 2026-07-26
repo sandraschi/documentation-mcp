@@ -1,127 +1,66 @@
-# Inkscape MCP Server
+# Inkscape MCP — AI-powered vector graphics
 
-Professional vector graphics and SVG operations for AI agents through the Model Context Protocol.
+AI agents create, edit, layer, animate, and export SVG files using Inkscape. Works as an MCP server (stdio/HTTP), Claude Desktop `.mcpb` bundle, webapp dashboard, or Windows desktop app.
 
-[![CI/CD](https://img.shields.io/github/actions/workflow/status/sandraschi/inkscape-mcp/ci.yml)](https://github.com/sandraschi/inkscape-mcp/actions)
-[![PyPI](https://img.shields.io/pypi/v/inkscape-mcp)](https://pypi.org/project/inkscape-mcp/)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue)](https://www.python.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+## Preview
 
-## Overview
+| Dashboard | Animation Studio | Layer Manager |
+|-----------|-----------------|---------------|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Animation Studio](docs/screenshots/animation-studio.png) | ![Layer Manager](docs/screenshots/layer-manager.png) |
 
-Provides AI agents with comprehensive vector graphics capabilities including AI-powered SVG generation, professional vector operations, and Inkscape extension ecosystem access.
+*Animated SVG presets render live in the browser — no Inkscape CLI needed.*
 
-## Key Features
+## How it runs
 
-- **AI SVG Generation**: Natural language to professional vector graphics
-- **27 Vector Operations**: Complete suite across 6 categories
-- **Extension Ecosystem**: Access to 200+ Inkscape extensions
-- **Cross-platform**: Windows, macOS, Linux support
-- **Production Ready**: Comprehensive error handling and validation
+| Mode | Inkscape | When |
+|------|----------|------|
+| **Headless (default)** | CLI via `inkscape --actions` | Batch processing, export, validation, fleet pipelines |
+| **Live GUI (optional)** | Open Inkscape manually + `--active-window` | Interactive editing with agent co-pilot |
 
-## Quick Start
+> **Headless by default** — no GUI needed for most operations.
 
-```bash
-# Install
-pip install inkscape-mcp
+## Features
+- Create and edit SVG files (shapes, text, paths, booleans)
+- Layer management — list, create, rename, hide, lock, reorder
+- SMIL animation — bounce, fade, slide, rotate, pulse, shake presets
+- Live Path Effects — bend, roughen, envelope, spiro, power stroke
+- Export to PNG, PDF, EPS, DXF
+- Fleet pipeline — hand off to GIMP, Blender, Unity, Resonite
+- LPEs, text operations, object inspection, hands-in control
 
-# Run
-inkscape-mcp --help
-```
+## Quick Install
+
+**Claude Desktop:** download the `.mcpb` from [Releases](https://github.com/sandraschi/inkscape-mcp/releases) and drag it onto Claude.
+
+**Windows desktop app:** download the NSIS installer from [Releases](https://github.com/sandraschi/inkscape-mcp/releases) and run it.
+
+**Manual:** `git clone`, `uv sync`, `just serve`. See [INSTALL.md](INSTALL.md) for all methods.
+
+## What You Can Do
+
+> "Create a bouncing circle animation with a pink fill and 2-second duration, then export as PNG."
+
+> "List all layers in my SVG, hide the background layer, and rename the top layer to 'Hero'."
+
+> "Convert this text element to paths, then apply a roughen LPE with medium intensity."
 
 ## Documentation
 
-- [Installation](INSTALL.md) - Setup and configuration
-- [Usage](docs/USAGE.md) - Getting started guide
-- [Features](docs/FEATURES.md) - Complete feature overview
-- [API Reference](docs/API.md) - Tool specifications
-- [Architecture](docs/ARCHITECTURE.md) - Technical details
-- [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
+| Doc | Contents |
+|-----|----------|
+| [Installation](INSTALL.md) | All install methods, prerequisites |
+| [Configuration](docs/CONFIGURATION.md) | Env vars, Ollama, Tauri desktop mode |
+| [Tool Reference](docs/TOOLS.md) | All 17 tools, 60+ operations |
+| [Development](docs/DEVELOPMENT.md) | Contributing, local setup, building |
+| [Troubleshooting](docs/TROUBLESHOOTING.md) | Common issues |
 
-## MCP Integration
+## Requirements
 
-### Claude Desktop
-
-Add to your `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "inkscape-mcp": {
-      "command": "inkscape-mcp",
-      "args": []
-    }
-  }
-}
-```
-
-### Windsurf
-
-Add to your `windsurf_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "inkscape-mcp": {
-      "command": "uvx",
-      "args": ["inkscape-mcp"]
-    }
-  }
-}
-```
-
-## Development
-
-```bash
-# Clone repository
-git clone https://github.com/sandraschi/inkscape-mcp.git
-cd inkscape-mcp
-
-# Install development dependencies
-pip install -e ".[dev]"
-
-# Run tests
-pytest
-
-# Build package
-python -m build
-```
+- **Windows**, macOS, or Linux
+- **Inkscape 1.0+** (1.2+ recommended for Actions API)
+- **Python 3.12+** with [uv](https://docs.astral.sh/uv/)
+- Optional: Ollama for AI-assisted SVG generation
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
-
-## 🚀 Installation
-
-### Prerequisites
-- [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
-- Python 3.12+
-
-### 📦 Quick Start
-Run immediately via `uvx`:
-```bash
-uvx inkscape-mcp
-```
-
-### 🎯 Claude Desktop Integration
-Add to your `claude_desktop_config.json`:
-```json
-"mcpServers": {
-  "inkscape-mcp": {
-    "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/inkscape-mcp", "run", "inkscape-mcp"]
-  }
-}
-```
-
-
-## 🌐 Webapp Dashboard
-
-This MCP server includes a free, premium web interface for monitoring and control.
-By default, the web dashboard runs on port **10846**.
-*(Assigned ports: **10846** (Web dashboard frontend), **10847** (Web dashboard backend (API)))*
-
-To start the webapp:
-1. Navigate to the `webapp` (or `web`, `frontend`) directory.
-2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
-3. Open `http://localhost:10846` in your browser.
+MIT — see [LICENSE.md](LICENSE.md).

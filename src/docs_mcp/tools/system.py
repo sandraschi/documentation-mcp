@@ -57,6 +57,7 @@ def register_tools(mcp: FastMCP):
         - server_status()
         """
         from docs_mcp.backend.store_registry import get_memory_store
+
         store = get_store()
         memory_store = get_memory_store()
 

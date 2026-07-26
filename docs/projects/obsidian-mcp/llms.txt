@@ -1,0 +1,36 @@
+# obsidian-mcp
+
+> FastMCP 3.2 Obsidian vault MCP with gateway (10915), Vite dashboard (10890), LanceDB RAG, and optional Obsidian plugin bridge.
+
+## Docs
+
+- README.md: overview, tools, quick start
+- INSTALL.md: uv/just install paths
+- PRD.md: product scope and architecture
+- CHANGELOG.md: release history
+- AGENTS.md: agent quick reference
+- mcp-server/README.md: MCPB bundle layout
+
+## Ports
+
+- Backend gateway: 10915 (`obsidian_mcp.gateway:app`)
+- Frontend dashboard: 10890 (`web_sota/`)
+- Health: GET /health
+
+## Start
+
+- `start.bat` or `web_sota/start.ps1` (fleet launcher)
+- `just mcpb-pack` for Claude Desktop bundle
+
+## Key paths
+
+- MCP: src/obsidian_mcp/server.py
+- Gateway: src/obsidian_mcp/gateway.py
+- Webapp: web_sota/src/
+- MCPB: mcp-server/manifest.json, scripts/build-mcpb.ps1
+- Plugin: plugin/
+
+## Tests
+
+- Python: uv run pytest
+- Web: cd web_sota; npm run lint; npm run test; npm run test:e2e

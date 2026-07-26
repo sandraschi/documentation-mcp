@@ -1,7 +1,7 @@
 # FastMCP Providers & Transforms: Server Composition
 
 **Last Updated:** 2026-04-21
-**Standard:** FastMCP 3.2.0 (GA)
+**Standard:** FastMCP 3.4.2 (originally written for 3.2.0)
 
 FastMCP 3.2 moves away from purely manual registration towards **Declarative Composition**. Using **Providers** (sources) and **Transforms** (middleware), you can assemble complex servers from multiple sources without duplicating code.
 

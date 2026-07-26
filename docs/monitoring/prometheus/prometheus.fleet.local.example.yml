@@ -1,0 +1,10 @@
+# Copy to prometheus.fleet.local.yml (gitignored) for machine-specific scrape targets.
+# Merged automatically by scripts/merge-prometheus-config.ps1
+
+  - job_name: my-custom-mcp
+    static_configs:
+      - targets: ["host.docker.internal:19999"]
+        labels:
+          app: my-custom-mcp
+    metrics_path: /metrics
+    scrape_interval: 30s

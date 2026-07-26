@@ -6,11 +6,15 @@ This document outlines the standard CLI toolset integrated into the MCP developm
 
 ### [uv](https://github.com/astral-sh/uv)
 - **Description**: Extremely fast Python package and project manager, written in Rust.
-- **Role**: Primary dependency manager. Used for scaffolding libraries and managing virtual environments with zero overhead.
+- **Role**: Primary dependency manager. Used for scaffolding libraries and managing virtual environments with zero overhead. Also manages Python versions — no separate Python install needed.
 
 ### [gh (GitHub CLI)](https://github.com/cli/cli)
 - **Description**: The official command-line interface for GitHub.
 - **Role**: Orchestrates repository lifecycle, CI/CD monitoring, and issue/PR management directly from the terminal.
+
+### [just](https://github.com/casey/just)
+- **Description**: A command runner for project-specific tasks, similar to Make but simpler.
+- **Role**: Every MCP repo ships a `justfile` with common recipes — `just serve`, `just test`, `just lint`, `just mcpb-pack`.
 
 ## Search & Discovery
 
@@ -50,8 +54,73 @@ This document outlines the standard CLI toolset integrated into the MCP developm
 - **Description**: A modern, maintained replacement for `ls`.
 - **Role**: Visual directory exploration with Git integration and enhanced metadata display.
 
+## Code Quality
+
+### [ruff](https://github.com/astral-sh/ruff)
+- **Description**: An extremely fast Python linter and formatter, written in Rust.
+- **Role**: Fleet-wide Python linting standard. All Python MCP repos use ruff (line-length 120). Install via `uv tool install ruff`.
+
+### [biome](https://github.com/biomejs/biome)
+- **Description**: A fast linter and formatter for JavaScript, TypeScript, JSX, CSS, and JSON.
+- **Role**: Fleet-wide frontend linting standard. All webapp repos use biome for formatting + linting.
+
+## Runtime
+
+### [Node.js](https://nodejs.org/)
+- **Description**: JavaScript runtime for frontend tooling.
+- **Role**: Required for Vite dev servers, Biome, and npm-based MCPB packaging in webapp repos.
+
 ---
-**Standard Installation (Windows)**:
+
+## Full Bootstrap (New PC)
+
+Run this in PowerShell 5.1 to install everything:
+
+```powershell
+# Standard CLI toolset
+winget install sharkdp.fd jqlang.jq sharkdp.bat dandavison.delta junegunn.fzf XAMPPRocky.tokei eza-community.eza BurntSushi.ripgrep.MSVC
+
+# Build & runtime tools
+winget install Casey.Just GitHub.cli OpenJS.NodeJS
+
+# Global Python tools
+uv tool install ruff
+```
+
+## PATH Setup
+
+After installation, ensure these directories are in your **User PATH**:
+
+| Directory | Contains |
+|-----------|----------|
+| `C:\Program Files\nodejs` | `node.exe`, `npm.cmd` |
+| `C:\Program Files\GitHub CLI` | `gh.exe` |
+| `%APPDATA%\npm` | Global npm binaries (`biome`, etc.) |
+| `%USERPROFILE%\.local\bin` | `ruff` (uv tool installs) |
+
+## Verification
+
+```powershell
+uv --version
+gh --version | Select-Object -First 1
+rg --version | Select-Object -First 1
+fd --version
+fzf --version
+jq --version
+bat --version
+tokei --version
+delta --version
+eza --version
+just --version
+ruff --version
+biome --version
+node --version
+```
+
+## Standard Installation (Windows)
+
 ```powershell
 winget install sharkdp.fd jqlang.jq sharkdp.bat dandavison.delta junegunn.fzf XAMPPRocky.tokei eza-community.eza BurntSushi.ripgrep.MSVC
 ```
+
+See `standards/NAKED_PC_INSTALL_STANDARD.md` for the per-repo `start.ps1` expectations on fresh machines.

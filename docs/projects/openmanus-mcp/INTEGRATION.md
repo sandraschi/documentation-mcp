@@ -31,10 +31,10 @@ Typical **desktop automation** stack:
 | Server | Role |
 |--------|------|
 | **OpenManus** | Planning, tool choice, local LLM |
-| **pywinauto-mcp** | Win32 UI automation — **uniquely dangerous**; see **[PYWINAUTO_MCP_SAFETY.md](../../patterns/PYWINAUTO_MCP_SAFETY.md)** § *OpenManus, openmanus-mcp, OpenClaw, Manus-class* |
+| **windows-computer-use-mcp** | Win32 UI automation — **uniquely dangerous**; see **[PYWINAUTO_MCP_SAFETY.md](../../patterns/PYWINAUTO_MCP_SAFETY.md)** § *OpenManus, openmanus-mcp, OpenClaw, Manus-class* |
 | **ocr-mcp** / others | Capture, ops |
 
-**Warning:** **OpenManus + openmanus-mcp + pywinauto-mcp** + anything **OpenClaw / Manus-class** is **multiplicative** risk (sampling, long loops, OS-wide input). Add **virtualization-mcp** for Sandbox/VM; use **pywinauto** `docs/SAFETY.md` env limits.
+**Warning:** **OpenManus + openmanus-mcp + windows-computer-use-mcp** + anything **OpenClaw / Manus-class** is **multiplicative** risk (sampling, long loops, OS-wide input). Add **virtualization-mcp** for Sandbox/VM; use **pywinauto** `docs/SAFETY.md` env limits.
 
 Wire via **OpenManus** `mcp.json`, **not** by merging tools into openmanus-mcp. Pattern: **[FLEET_COMPUTER_USE_MCP.md](../../patterns/FLEET_COMPUTER_USE_MCP.md)**.
 

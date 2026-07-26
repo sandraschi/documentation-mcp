@@ -159,7 +159,7 @@ Each row is a **candidate** `@mcp.tool(app=True)` with a **`PrefabApp`** card or
 ## 6. Related
 
 - [mcp-apps-prefab-ui.md](./mcp-apps-prefab-ui.md) — implementation standard  
-- [prefab-vs-webapps.md](./prefab-vs-webapps.md) — when to use standalone webapp instead  
+- [prefab-vs-webapps.md](../archive/fastmcp/prefab-vs-webapps.md) — when to use standalone webapp instead  
 - [../standards/TOOL_DESIGN_STANDARDS.md](../standards/TOOL_DESIGN_STANDARDS.md) — §3.3 `ToolResult`
 
 ---

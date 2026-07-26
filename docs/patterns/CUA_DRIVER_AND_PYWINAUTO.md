@@ -1,4 +1,4 @@
-# Cua Driver and pywinauto-mcp
+# Cua Driver and windows-computer-use-mcp (formerly pywinauto-mcp)
 
 **Status:** Architecture pattern  
 **Last updated:** 2026-06-01  

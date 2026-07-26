@@ -1,4 +1,4 @@
-﻿# CalibreMCP - Product Requirements Document
+# CalibreMCP - Product Requirements Document
 
 ## Overview
 CalibreMCP is a FastMCP 3.1 server that provides comprehensive e-book library management capabilities through Claude Desktop. This document outlines the requirements for the AI-powered tools, series management, and stabilized ingestion features.
@@ -34,8 +34,8 @@ CalibreMCP is a FastMCP 3.1 server that provides comprehensive e-book library ma
 - Support for large libraries (100,000+ books)
 
 ### 1.4 Full-text search (Calibre FTS) and phrase locations
-- **Calibre index:** `full-text-search.db` (FTS5) beside `metadata.db`; content table `books_text` joined to `books_fts` on `books_text.id = books_fts.rowid` (virtual table has no `book` column â€” see `utils/fts_utils.py`).
-- **Tool:** `search_fulltext` â€” phrase/word search in book body; optional **`resolve_locations=True`** returns character offsets in indexed text, PDF page (PyMuPDF), EPUB spine href, and Calibre **`ebook-viewer --open-at search:â€¦`** hints for jumping to a quote (e.g. stage directions).
+- **Calibre index:** `full-text-search.db` (FTS5) beside `metadata.db`; content table `books_text` joined to `books_fts` on `books_text.id = books_fts.rowid` (virtual table has no `book` column — see `utils/fts_utils.py`).
+- **Tool:** `search_fulltext` — phrase/word search in book body; optional **`resolve_locations=True`** returns character offsets in indexed text, PDF page (PyMuPDF), EPUB spine href, and Calibre **`ebook-viewer --open-at search:…`** hints for jumping to a quote (e.g. stage directions).
 - **Complement semantic RAG:** use Calibre FTS / `search_fulltext` for exact phrases; use metadata RAG (`calibre_metadata_search`) or chunk RAG (`rag_retrieve`) for meaning-based queries. Prefer **both** when the user query mixes quote-finding and conceptual discovery.
 
 ## 2. AI-Powered Tools
@@ -147,7 +147,7 @@ interface SearchResponse {
 - scikit-learn
 - numpy
 - pydantic
-- fastmcp>=3.1.1+.4
+- fastmcp>=2.0
 
 ### 4.2 Performance
 - Sub-second response times for typical searches
@@ -261,15 +261,16 @@ interface SearchResponse {
 - FastMCP 3.1 agentic workflows and tool loading fixes
 - Enhanced 3-column webapp book modal and SOTA UI refinements
 
-## 10. MCP Apps (Prefab) â€” rich cards (2026)
+## 10. MCP Apps (Prefab) — rich cards (2026)
 
-- **Purpose:** Optional Prefab tools for capable MCP hosts (e.g. Claude Desktop)
-- **Install:** `uv sync --extra apps` (pulls `prefab-ui`). `CALIBRE_PREFAB_APPS=0` disables tool registration.
-- **Implementation:** FastMCP `@mcp.tool(app=True)`, `ToolResult` + `PrefabApp`; strip HTML from comments for display.
+- **Purpose:** Optional Prefab tools for capable MCP hosts (e.g. Claude Desktop): **`show_book_prefab_card(book_id)`** — **title, authors, series, tags, cover, plain synopsis**; **`show_libraries_prefab_card()`** — **Our Calibre** overview (all discovered libraries, book counts, size, active flag, paths).
+- **Install:** **`uv sync --extra apps`** (pulls **`prefab-ui`**). **`CALIBRE_PREFAB_APPS=0`** disables tool registration.
+- **Implementation:** FastMCP **`@mcp.tool(app=True)`**, **`ToolResult`** + **`PrefabApp`**; Calibre **comments** may contain HTML — strip for display; **one `Text` node per line/paragraph** where layout matters.
+- **Fallback:** Hosts without App rendering receive **`content`** text; server must not require Prefab for core library operations.
+- **Documentation:** `docs/mcp-technical/MCP_APPS_PREFAB.md`; fleet standard [mcp-apps-prefab-ui.md](https://github.com/sandraschi/mcp-central-docs/blob/master/fastmcp/mcp-apps-prefab-ui.md) (MCP Central Docs).
 
 ## 11. License
 MIT License
-
 ## 12. Automated Book Ingestion & Source Hardening (v1.5.0)
 
 ### 12.1 Unified Import Hub
@@ -295,4 +296,3 @@ MIT License
 ### 12.4 Metadata Post-Processing
 - **Tag Injection**: All imported books should be tagged with `automated-import` and the source name (e.g., `arxiv`).
 - **Conflict Resolution**: Logic to check for existing MD5s/Titles before initiating a new remote download.
-

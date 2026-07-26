@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tiny-mcp-servers"
+version = "0.1.0"
+description = "Minimal single-file MCP servers — one concern each"
+requires-python = ">=3.11"
+dependencies = ["fastmcp>=3.4.4,<4"]
+
+[project.optional-dependencies]
+qr = ["qrcode[pil]>=7.4"]
+clipboard = ["pyperclip>=1.8"]
+weather = ["httpx>=0.27"]
+units = ["pint>=0.23"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tiny_mcp"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.21",
+]

@@ -1,37 +1,75 @@
-﻿# Changelog
+
+## [Unreleased] — 2026-07-06
+
+### Added
+- **LM Link operational control**: `get_lm_link` tool upgraded from static docs stub to full operational surface
+  - `status`: Live peer list, loaded models, link state via `lms link status --json`
+  - `enable`/`disable`: Programmatic LM Link on/off via `lms link enable/disable`
+  - `set_device_name`: Rename this device on the link
+  - `set_preferred_device`: Route model requests to a preferred remote peer
+  - `info`/`readiness`: Setup docs + Tailscale connectivity check (existing, enhanced)
+  - Uses `asyncio.create_subprocess_exec` with binary auto-discovery
+- **LM Link Prefab UI card**: `show_lm_link_card` (`@mcp.tool(app=True)`) renders LM Link
+  peers, their loaded models, and link state as a rich in-chat Prefab card. Falls back
+  to plain text when Prefab rendering is unavailable.
+- **LM Link webapp dashboard**: `/lm-link` page rewritten from static docs to live control panel
+  - Real-time peer list with loaded model badges and preferred device indicators
+  - Enable/disable toggle, device name editor, peer-specific "Make preferred" buttons
+  - data-testid coverage for CUA/Playwright targeting
+
+### Changed
+- `LmLinkOperation` extended from `["info", "readiness"]` to 7-operation enum
+- Added `prefab-ui>=0.14.0` to project dependencies
+
+## [Unreleased] — 2026-06-14
+
+### Added
+- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
+- PyInstaller frozen backend embedded in NSIS installer
+- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
+- `just cua-nsis-test` recipe
+- Tauri CORS: `tauri://localhost` origins for WebView API access
+- `GET /api/v1/diagnostics` endpoint for CUA verification
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-> **Source of truth:** [CHANGELOG.md in tailscale-mcp](https://github.com/sandraschi/tailscale-mcp/blob/main/CHANGELOG.md). The sections below are a **mirror**; edit upstream in `D:\Dev\repos\tailscale-mcp\CHANGELOG.md`.
+## [2.1.0] - 2026-03-24
 
-## [2.0.2] - 2026-03-22
+### Changed (breaking)
 
-### Added
-- **`tailscale_partner_tailnets`** MCP tool; Admin API **`GET /users`**; **`Device.user`**; web **`/partner-tailnets`**.
-- Tests: `tests/unit/test_partner_grouping.py`.
-
-### Changed
-- Version metadata **2.0.2**.
-
-## [2.0.1] - 2026-03-22
+- **MCP tool names** are **verb-first** and no longer use the redundant `tailscale_` prefix (this server is Tailscale-only). Implemented via FastMCP `@mcp.tool(name=...)` in each module; canonical strings live in [`src/tailscalemcp/tools/mcp_tool_names.py`](src/tailscalemcp/tools/mcp_tool_names.py). Authoritative names: `manage_tailnet_devices`, `configure_tailnet_network`, `monitor_tailnet_activity`, `manage_tailnet_files`, `configure_tailnet_funnel`, `manage_tailnet_security`, `automate_tailnet_tasks`, `backup_tailnet_config`, `optimize_tailnet_performance`, `generate_tailnet_reports`, `integrate_tailnet_services`, `get_tailnet_help`, `get_tailnet_status`, `manage_tailnet_keys`, and `run_agentic_tailnet_workflow`.
+- **Help / webapp / manifest** updated to match. **Clients** (IDE configs, automation) must call tools by the new names.
 
 ### Added
-- **My tailnet** (`/my-tailnet`), Mermaid + Orbit; **docs/PRD.md**, **docs/WEBAPP.md**; MCPB manifest refresh.
+
+- **`_tool_types.py`** — `Literal` enums and bounded `Annotated` fields for ToolBench-friendly JSON Schema (see MCP Central Docs `toolbench/improvements/tailscale-mcp.md`).
+
+## [2.1.1] - 2026-04-02
 
 ### Changed
-- Version **2.0.1**; `tailscale_status` version from `tailscalemcp.version`.
+- **Documentation Overhaul**: Systematically refactored all project documentation to align with v2.1.0 portmanteau tool naming standards. 
+- **Aligned Files**: `DETAILED_STATUS_REPORT.md`, `COMPLETE_DOCUMENTATION_STRUCTURE.md`, `ORGANIZATION_SUMMARY.md`, `TAILSCALE_MCP_EXPANSION_PLAN.md`, `SAMPLE_STATUS_RESPONSE.md`, `REPOSITORY_ASSESSMENT.md`, `windsurf_assessment.md`, `PRD.md`, `NEXT_STEPS.md`, `PHASE1_COMPLETION_SUMMARY.md`, `REFACTORING_PLAN.md`, `ZED_INTEGRATION.md`, and `STATUS_TOOL_USAGE.md`.
+- **Global Audit**: Conducted a global `grep` audit to eliminate legacy `tailscale_` tool references across the `docs/` directory.
 
 ## [Unreleased]
 
 ### Changed
-- **Central mirror:** [README.md](README.md) is now a short fleet index; long-form content remains in the [upstream repo](https://github.com/sandraschi/tailscale-mcp/blob/main/README.md).
+- **Documentation:** Root [README.md](README.md) includes an **overview** and **doc map**; detailed install is [docs/INSTALL.md](docs/INSTALL.md); [docs/WHAT_IS_TAILSCALE.md](docs/WHAT_IS_TAILSCALE.md) explains Tailscale vs Admin API. [docs/DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md) updated. [CONTRIBUTING.md](CONTRIBUTING.md) aligned with **uv** (Poetry removed). [pyproject.toml](pyproject.toml) `project.urls` point to **sandraschi/tailscale-mcp**.
+- **Documentation:** README stack tightened again — compact tables, shorter [INSTALL](docs/INSTALL.md) / [WHAT_IS_TAILSCALE](docs/WHAT_IS_TAILSCALE.md), leaner [DOCUMENTATION_INDEX](docs/DOCUMENTATION_INDEX.md) top + dev/MCP sections. MCP Central Docs `projects/tailscale-mcp/README.md` mirror reduced to one table + ports.
+- **Documentation:** [README.md](README.md) expanded into a **reader-friendly overview** (why / what / who / requirements / quick install) while keeping deep detail in linked docs.
 
 ### Added
+- **SEP-1577 sampling with tools**: `run_agentic_tailnet_workflow` runs multi-step flows via `context.sample_step` (FastMCP 3.1+). `run_agentic_tailnet_workflow_sampling` is a deprecated alias with the same parameters. Replaces the previous mock-only sampling paths.
+- **Server-side sampling handler**: `TailscaleSamplingHandler` — OpenAI-compatible `chat/completions` (default Ollama at `TAILSCALE_SAMPLING_BASE_URL`). Optional `TAILSCALE_SAMPLING_USE_CLIENT_LLM=1` uses host sampling with the handler as fallback.
+- **MCP resource `resource://tailscale/skills`**: Loads `skills/TAILSCALE_EXPERT.md` when present (agent guidance for tools and sampling).
+- **Help page** on the Webapp (`/help`): Credentials, `.env`, and sampling environment variables; links from the sidebar and header.
+- **`get_help` topic `sampling`**: Structured help for agentic workflows and env vars (see also `get_help(topic="sampling")`).
 - **Tailscale Funnel Support**: Complete Funnel integration for exposing local services to public internet
-  - New `tailscale_funnel` portmanteau tool with 5 operations (enable, disable, status, list, certificate_info)
+  - New `manage_funnel` portmanteau tool with 5 operations (enable, disable, status, list, certificate_info)
   - Automatic TLS certificate management via Tailscale Funnel
   - Secure HTTPS access to local services without complex configuration
   - Full integration with Tailscale CLI for Funnel operations
@@ -59,7 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed duplication between Args and Parameters sections
   - Flexible formatting: one line for simple params, 2-3 lines for enums/complex structures
   - All docstrings now properly formatted for Claude to understand portmanteau tool usage
-- **Status Tool Enhancement**: Extended `tailscale_status` to show MCP server capabilities
+- **Status Tool Enhancement**: Extended `get_tailnet_status` to show MCP server capabilities
   - Shows tool, prompt, and resource counts at basic level
   - Shows names/URIs at intermediate level
   - Shows full details at advanced/diagnostic levels
@@ -97,7 +135,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Mobile Monitoring Integration**: Mobile infrastructure monitoring with RebootX app for iPad
 
 ### Changed
-- **Upgraded to FastMCP 3.1.1+**: Latest version with improved performance and features
+- **Contributor docs**: [CONTRIBUTING.md](CONTRIBUTING.md) — code style is **Ruff** (`ruff check`, `ruff format`) and **mypy**; **Black** and **isort** removed from [`.pre-commit-config.yaml`](.pre-commit-config.yaml) (Ruff handles lint, import sorting, and format).
+- **`.env.example`**: Documented sampling variables and clarified that copying to **`.env`** (gitignored) is the supported way to supply credentials for real API testing. (Renamed from `env.example` to match common convention.)
+- **`get_help` / `_helpers`**: Overview and new **`topic=sampling`** content for SEP-1577, env vars, and `resource://tailscale/skills`.
+- **Dependencies**: PEP 735 `[dependency-groups] dev` + `[tool.uv] default-groups = ["dev"]` so `uv sync` installs pytest/ruff/mypy; Ruff/mypy targets **3.12**.
+- **README**: Badges and copy aligned with the repo (FastMCP **3.1+**, Python **3.12+**); added **Tailscale API (upstream)** with links to the interactive API docs and trust credentials.
+- **Device model + webapp**: Fixed `Device.from_api_response` parsing of `addresses` when the API returns a **list of IP strings** (real v2 shape); Devices page now shows API error **detail/hint**, optional **credential banner** via `GET /api/v1/status`, and maps `id` / `addresses`. Settings links to **tailscale.com/api** and Keys; CORS extended for Vite default port.
+- **Upgraded to FastMCP 3.1+**: Current supported line (see `pyproject.toml`); older 2.x references removed from docs and source comments.
 - **Enhanced Logging**: Structured logging with JSON format for better analysis
 - **Improved Documentation**: Added comprehensive monitoring documentation
 - **Updated Dependencies**: Latest versions of all monitoring components
@@ -107,6 +151,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Metrics Collection**: Improved Prometheus metrics collection and export
 - **Dashboard Configuration**: Fixed dashboard provisioning and data source configuration
 - **Docker Configuration**: Improved Docker Compose setup and configuration
+
+## [2.0.2] - 2026-03-22
+
+### Added
+- **`summarize_partner_tailnets`** MCP tool: `summary` (members vs `type=shared` users, devices-by-login, hints), `users_list`, `user_get`, `devices_by_login`.
+- **Admin API `GET /users`**: `TailscaleAPIClient.list_users` / `get_user`; **`Device`** parses node owner `user`; **`device_management.list_users`** / **`get_user_details`** implemented. `manage_tailnet_devices` `user_list` accepts optional `user_type` and `user_role_filter`.
+- **Web** `/partner-tailnets`: counts, Mermaid overview, JSON panels.
+- **Tests**: `tests/unit/test_partner_grouping.py`.
+
+### Changed
+- **Version** metadata to **2.0.2** (package, manifest, extension, User-Agent).
+
+## [2.0.1] - 2026-03-22
+
+### Added
+- **My tailnet** (`/my-tailnet`, `Webapp`): Visual tailnet view with two modes — **Mermaid** diagram from `get_tailnet_status` with `include_mermaid_diagram: true` (or a flowchart fallback from `manage_tailnet_devices` list), and **Orbit (CSS 3D)** — decorative rotating device ring (not geographic). Route is lazy-loaded; **mermaid** is a dependency of the web app.
+- **Documentation**: [docs/PRD.md](docs/PRD.md) (product requirements), [docs/WEBAPP.md](docs/WEBAPP.md) (SOTA dashboard routes and behavior).
+- **MCPB manifest**: Version **2.0.1** with updated descriptions (SOTA UI, `get_tailnet_status` Mermaid); **[tool.mcpb]** in `pyproject.toml` aligned with repository author/URLs.
+
+### Changed
+- **Version**: Python package, MCP server, User-Agent, and bundled **`manifest.json`** / **`extension.toml`** set to **2.0.1**.
+- **`get_tailnet_status` helpers**: Reported `system.version` reads from **`tailscalemcp.version`** (same value as `__version__`), avoiding a hardcoded string and import cycles.
 
 ## [2.0.0] - 2024-01-01
 
@@ -141,7 +207,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release of Tailscale MCP
-- FastMCP 3.1.1+ compliant server implementation
+- FastMCP 3.1+ compliant server implementation (historical releases used FastMCP 2.x)
 - Support for basic Tailscale device management
 - Comprehensive documentation and examples
 

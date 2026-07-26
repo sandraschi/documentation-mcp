@@ -1,39 +1,82 @@
 # Vienna Life Assistant
 
-> **Fleet SOTA (2026-06):** Use **`web_sota`** — http://127.0.0.1:10988 (UI) · http://127.0.0.1:10922/mcp (MCP).  
-> LLM providers: Ollama, LM Studio, OpenAI (API key + model dropdown). `vienna-live-mcp` is deprecated.
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.4.4-7c5cfc?style=flat-square" alt="FastMCP"></a>
+  <a href="https://playwright.dev"><img src="https://img.shields.io/badge/Playwright-Chromium-45ba4b?style=flat-square&logo=playwright&logoColor=white" alt="Playwright"></a>
+</p>
 
-[![Beta](https://img.shields.io/badge/status-beta-orange.svg)](https://github.com/sandraschi/vienna-life-assistant)
-[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
-[![React](https://img.shields.io/badge/react-18+-61dafb.svg)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/typescript-5+-3178c6.svg)](https://www.typescriptlang.org/)
-[![FastAPI](https://img.shields.io/badge/fastapi-0.109+-009688.svg)](https://fastapi.tiangolo.com/)
-[![Material--UI](https://img.shields.io/badge/material--ui-5+-007acc.svg)](https://mui.com/)
-[![SQLite](https://img.shields.io/badge/sqlite-3-003b57.svg)](https://sqlite.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Timestamp**: 2025-12-15  
-**Status**: Beta Version 🚧  
-**Version**: 3.0-beta - AI-Powered Life Management
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-A beautiful, modern personal life management app with **AI chatbot**, calendar, todos, expenses, shopping, and comprehensive technical documentation - integrated with your entire digital ecosystem via MCP servers and powered by Celery background task processing.
+**Timestamp**: 2026-07-22  
+**Status**: Active development (web_sota v0.1.0)  
+**Version**: 3.0-beta
 
-## 🎯 What It Does
+Vienna life assistant webapp + MCP server with **live-scraped cultural data** (Burgtheater, Staatsoper, Belvedere), AI chat, calendar, todos, expenses, shopping, and restaurant lunch menus. Supports Ollama/LM Studio/OpenAI LLMs. Ships as Tauri NSIS desktop app.
+
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/vienna-life-assistant
+cd vienna-life-assistant
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+## ViLife `web_sota` (FastMCP 3.4.4) — recommended
+
+Fleet SOTA surface for agents and daily use:
+
+```powershell
+Set-Location web_sota
+.\start.ps1
+```
+
+| Surface | URL |
+|---------|-----|
+| Frontend | http://127.0.0.1:10988 |
+| Backend + MCP | http://127.0.0.1:10922 (`/mcp`, `/api/*`) |
+
+**Pages:** Dashboard · Chat · Skills · Tools · Settings · Help · Apps · Logs · Fleet · Calendar · Expenses · KaffeehausHub · ConcertHall · MuseumGuide · ShoppingOffers · Travel
+
+**LLM (Settings):** Switch **Ollama** (11434), **LM Studio** (1234/v1), or **OpenAI** (API key). Each provider has model dropdown from `/api/llm/models`.
+
+**Live scraped data (no fake numbers):**
+- **Burgtheater** (37) + **Wiener Staatsoper** (14) — real performances, Playwright/httpx scrapers
+- **Belvedere** — 8 real exhibitions, httpx scraper
+- **Gasthaus Orlik** — daily lunch menu, httpx scraper
+- References: Steirereck, Enopizzeria Toledo, Mast Weinbar, coffee houses
+
+**MCP:** `vienna_life` portmanteau (8 ops), 6 Vienna skills, 6 prompts, agentic sampling. Scrapers use Playwright headless Chromium + httpx + BeautifulSoup, cached with TTL.
+
+See [`docs/PRD.md`](docs/PRD.md) and [`CHANGELOG.md`](CHANGELOG.md) for details.
+
+> **Note:** `vienna-live-mcp` is deprecated — use this repo's `web_sota` only.
+
+### Manual Setup
+
+If you don't have `just` installed:
+
+##  What It Does
 
 Your **personal command center** for Vienna life:
-- 📅 **Calendar**: Day/Week/Month views, Benny appointments, events
-- ✅ **Smart Todos**: 12 categories, priorities, filters, statistics
-- 💰 **Expense Tracking**: €836+ tracked, 7 categories, top stores
-- 🛒 **Shopping**: Spar/Billa offers, smart lists
-- 🤖 **AI Chatbot**: 16 integrated tools, 6 personalities, streaming responses (Ollama local or cloud APIs)
-- 🏠 **Smart Home**: Lights, cameras, Ring doorbell (via Tapo MCP)
-- 🧠 **Knowledge Base**: Search/read/create notes (Advanced Memory MCP)
-- 📚 **Media Hub**: 50k anime, 15k ebooks (Plex/Calibre MCP)
-- 🚊 **Transit**: Wiener Linien integration (U-Bahn, Tram, Bus)
-- ⚙️ **Technical Documentation**: Complete hierarchical tech stack guide (Flow Engineering, MCP Architecture, Future Roadmap)
-- 🔄 **Background Processing**: Celery-powered async tasks (email notifications, AI analysis, data sync, maintenance)
+-  **Calendar**: Day/Week/Month views, Benny appointments, events
+-  **Smart Todos**: 12 categories, priorities, filters, statistics
+-  **Expense Tracking**: 836+ tracked, 7 categories, top stores
+-  **Shopping**: Spar/Billa offers, smart lists
+-  **AI Chatbot**: 16 integrated tools, 6 personalities, streaming responses (Ollama local or cloud APIs)
+-  **Smart Home**: Lights, cameras, Ring doorbell (via Tapo MCP)
+-  **Knowledge Base**: Search/read/create notes (Advanced Memory MCP)
+-  **Media Hub**: 50k anime, 15k ebooks (Plex/Calibre MCP)
+-  **Transit**: Wiener Linien integration (U-Bahn, Tram, Bus)
+-  **Technical Documentation**: Complete hierarchical tech stack guide (Flow Engineering, MCP Architecture, Future Roadmap)
+-  **Background Processing**: Celery-powered async tasks (email notifications, AI analysis, data sync, maintenance)
 
-## ⚙️ Technical Documentation Tab
+##  Technical Documentation Tab
 
 The app includes a comprehensive **Technical Documentation** tab that provides hierarchical, beautiful documentation about the entire tech stack:
 
@@ -59,34 +102,34 @@ The app includes a comprehensive **Technical Documentation** tab that provides h
 - **Phase 4**: Advanced AI Integration (Multi-modal, Voice Commands)
 - **Phase 5**: Ecosystem Expansion (Mobile Apps, Multi-user Support)
 
-## 🔄 Background Task Processing (Celery)
+##  Background Task Processing (Celery)
 
 Vienna Life Assistant includes a **distributed task queue system** powered by Celery for handling background processing:
 
 ### **16 Background Task Categories:**
 
-#### **📧 Email Tasks**
+#### ** Email Tasks**
 - `send_welcome_email` - Welcome emails for new users
 - `send_daily_summary` - Daily activity summaries
 - `send_weekly_report` - Comprehensive weekly reports
 
-#### **🤖 AI Tasks**
+#### ** AI Tasks**
 - `process_long_ai_analysis` - Long-running AI analysis
 - `generate_weekly_report` - AI-powered report generation
 - `personalize_recommendations` - Personalized user recommendations
 
-#### **🔧 Maintenance Tasks**
+#### ** Maintenance Tasks**
 - `cleanup_old_conversations` - Database cleanup (90+ days)
 - `optimize_database` - Database optimization
 - `sync_external_data` - External service synchronization
 
-#### **👤 User Experience Tasks**
+#### ** User Experience Tasks**
 - `send_notification` - In-app notifications
 - `generate_personalized_content` - Dynamic content generation
 
 ### **Celery Architecture:**
 ```
-User Request → FastAPI → Celery Task → Redis Queue → Worker → Result → User
+User Request  FastAPI  Celery Task  Redis Queue  Worker  Result  User
 ```
 
 ### **Scheduled Tasks:**
@@ -104,63 +147,63 @@ result = send_welcome_email.delay("user@example.com", "John Doe")
 # Check status later: result.ready(), result.get()
 ```
 
-## 🏗️ Multi-MCP Server Architecture
+##  Multi-MCP Server Architecture
 
 This application integrates with **6 specialized MCP servers** that provide comprehensive digital ecosystem connectivity:
 
-- **🤖 Ollama MCP**: Local LLM inference (llama3.2:3b)
-- **🧠 Advanced Memory MCP**: Zettelkasten knowledge base ([sandraschi/advanced-memory-mcp](https://github.com/sandraschi/advanced-memory-mcp))
-- **🏠 Tapo MCP**: Smart home control ([sandraschi/devices-mcp](https://github.com/sandraschi/devices-mcp))
-- **🎬 Plex MCP**: Media library access ([sandraschi/plexmcp](https://github.com/sandraschi/plexmcp))
-- **📚 Calibre MCP**: Ebook management ([sandraschi/calibre-mcp](https://github.com/sandraschi/calibre-mcp))
-- **📸 Immich MCP**: Photo management ([sandraschi/immich-mcp](https://github.com/sandraschi/immich-mcp))
+- ** Ollama MCP**: Local LLM inference (llama3.2:3b)
+- ** Advanced Memory MCP**: Zettelkasten knowledge base ([sandraschi/advanced-memory-mcp](https://github.com/sandraschi/advanced-memory-mcp))
+- ** Tapo MCP**: Smart home control ([sandraschi/tapo-mcp](https://github.com/sandraschi/tapo-mcp))
+- ** Plex MCP**: Media library access ([sandraschi/plexmcp](https://github.com/sandraschi/plexmcp))
+- ** Calibre MCP**: Ebook management ([sandraschi/calibre-mcp](https://github.com/sandraschi/calibre-mcp))
+- ** Immich MCP**: Photo management ([sandraschi/immich-mcp](https://github.com/sandraschi/immich-mcp))
 
 See [`INTEGRATED_MCP_SERVERS.md`](INTEGRATED_MCP_SERVERS.md) for detailed MCP server documentation.
 
-## 🤖 AI Chatbot Features (Beta)
+##  AI Chatbot Features (Beta)
 
 ### **6 AI Personalities:**
 1. **Professional Assistant** - Helpful, accurate, professional
 2. **Creative Writer** - Imaginative, poetic, expressive
 3. **Technical Expert** - Precise, detailed, code examples
-4. **Friendly Companion** - Warm, casual, emojis 😊
+4. **Friendly Companion** - Warm, casual, emojis 
 5. **Concise Advisor** - Brief, direct, bullet points
 6. **Vienna Local** - Expert on Bezirke, Wiener Linien, restaurants
 
 ### **16 Integrated Tools (Beta):**
 
 **Core Tools (1-5):**
-- 🔢 **Calculator** - Math expressions, sqrt, powers
-- 🕐 **DateTime** - Current time, dates
-- 🔍 **Web Search** - DuckDuckGo search
-- ✅ **Todos** - Your task list
-- 📅 **Calendar** - Your schedule
+-  **Calculator** - Math expressions, sqrt, powers
+-  **DateTime** - Current time, dates
+-  **Web Search** - DuckDuckGo search
+-  **Todos** - Your task list
+-  **Calendar** - Your schedule
 
 **Advanced Memory MCP (6-9):**
-- 🧠 **Search Knowledge** - Query your zettelkasten
-- 📖 **Read Note** - Fetch specific notes
-- 📝 **Create Note** - Save insights from chat
-- 📅 **Recent Notes** - Latest activity
+-  **Search Knowledge** - Query your zettelkasten
+-  **Read Note** - Fetch specific notes
+-  **Create Note** - Save insights from chat
+-  **Recent Notes** - Latest activity
 
 **Tapo MCP - Smart Home (10-13):**
-- 🌤️ **Weather** - Vienna weather
-- 💡 **Smart Lights** - Philips Hue control
-- 📷 **Cameras** - Home security status
-- 🔔 **Ring Doorbell** - Recent events
+-  **Weather** - Vienna weather
+-  **Smart Lights** - Philips Hue control
+-  **Cameras** - Home security status
+-  **Ring Doorbell** - Recent events
 
 **Media & Transit (14-16):**
-- 🚊 **Wiener Linien** - U-Bahn, Tram, Bus info
-- 🎬 **Plex** - 50,000 anime/movies
-- 📚 **Calibre** - 15,000 ebooks
+-  **Wiener Linien** - U-Bahn, Tram, Bus info
+-  **Plex** - 50,000 anime/movies
+-  **Calibre** - 15,000 ebooks
 
 ### **Beta Features:**
-- ✨ **AI Prompt Enhancement** - Improves your questions (experimental)
-- 🔄 **Streaming Responses** - Real-time text generation
-- 💾 **Conversation Memory** - Save and resume chats
-- 🔧 **Auto-Tool Detection** - Smart pattern matching
-- 🎨 **Beautiful UI** - Avatars, timestamps, tool chips
+-  **AI Prompt Enhancement** - Improves your questions (experimental)
+-  **Streaming Responses** - Real-time text generation
+-  **Conversation Memory** - Save and resume chats
+-  **Auto-Tool Detection** - Smart pattern matching
+-  **Beautiful UI** - Avatars, timestamps, tool chips
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### 0. Clone Repository
 
@@ -240,36 +283,36 @@ docker compose logs -f frontend
 - **API Docs**: http://localhost:7334/docs
 - **Tailscale**: http://goliath:7333 (API: goliath:7334)
 
-## 📖 Usage Examples
+##  Usage Examples
 
 ### AI Chatbot Commands:
 
 ```
 # Core tools
-"what is 25 * 37"                    → Calculator: 925
-"what time is it"                    → DateTime: Current time
-"search for Vienna weather"          → Web search
+"what is 25 * 37"                     Calculator: 925
+"what time is it"                     DateTime: Current time
+"search for Vienna weather"           Web search
 
 # Knowledge base (Advanced Memory MCP)
-"search my notes for Python"         → Searches zettelkasten
-"read note MCP Patterns"             → Fetches note content
-"remember this: Best Schnitzel"      → Creates new note
-"what are my recent notes?"          → Shows activity
+"search my notes for Python"          Searches zettelkasten
+"read note MCP Patterns"              Fetches note content
+"remember this:  Schnitzel"       Creates new note
+"what are my recent notes?"           Shows activity
 
 # Smart home (Tapo MCP)
-"what's the weather?"                → Vienna weather
-"turn on lights"                     → Controls Philips Hue
-"turn off bedroom lights"            → Specific room control
-"list cameras"                       → Security cameras
-"who was at the door?"               → Ring doorbell events
+"what's the weather?"                 Vienna weather
+"turn on lights"                      Controls Philips Hue
+"turn off bedroom lights"             Specific room control
+"list cameras"                        Security cameras
+"who was at the door?"                Ring doorbell events
 
 # Transit & tasks
-"when's next U6?"                    → Wiener Linien departures
-"my todos"                           → Task list
-"my calendar"                        → Upcoming events
+"when's next U6?"                     Wiener Linien departures
+"my todos"                            Task list
+"my calendar"                         Upcoming events
 ```
 
-## 🏗️ Tech Stack
+##  Tech Stack
 
 ### Backend
 - **FastAPI** - Modern Python API framework
@@ -295,20 +338,20 @@ docker compose logs -f frontend
 - **Immich MCP** - Photo memories
 - **MyWienerLinien** - Vienna public transport
 
-## 📊 Database
+##  Database
 
 **PostgreSQL** container with 7 models:
 - `todos` - Task management (12+ items)
 - `calendar_events` - Schedule (10+ events)
 - `shopping_items` - Grocery lists
-- `expenses` - Expense tracking (€836+ tracked)
+- `expenses` - Expense tracking (836+ tracked)
 - `conversations` - Chat history
 - `messages` - Chat messages
 - `settings` - Application settings (LLM preferences)
 
 **Redis** for caching and background task queues.
 
-## 🧪 Testing
+##  Testing
 
 ```powershell
 cd D:\Dev\repos\vienna-life-assistant\backend
@@ -322,62 +365,62 @@ pytest tests/api/test_chat.py -v
 ```
 
 **Test Coverage:**
-- ✅ CRUD operations (todos, calendar, expenses)
-- ✅ API endpoints
-- ✅ Model validation
-- ✅ Ollama integration
-- ✅ Shopping scrapers
+-  CRUD operations (todos, calendar, expenses)
+-  API endpoints
+-  Model validation
+-  Ollama integration
+-  Shopping scrapers
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 vienna-life-assistant/
-├── backend/
-│   ├── api/
-│   │   ├── calendar/      # Calendar endpoints
-│   │   ├── todos/         # Todo endpoints
-│   │   ├── expenses/      # Expense endpoints
-│   │   ├── shopping/      # Shopping endpoints
-│   │   ├── llm/           # LLM management
-│   │   ├── chat/          # AI chatbot endpoints
-│   │   └── media/         # Media integration
-│   ├── models/            # SQLAlchemy models
-│   ├── services/          # Business logic
-│   │   ├── chat_service.py       # Chat + tools
-│   │   ├── ollama_service.py     # Local LLM
-│   │   └── mcp_clients.py        # MCP integrations
-│   ├── tests/             # Pytest tests
-│   └── vienna_life.db     # SQLite database
-│
-├── frontend/
-│   └── src/
-│       ├── features/
-│       │   ├── calendar/      # Calendar UI
-│       │   ├── todos/         # Todo UI
-│       │   ├── expenses/      # Expense tracker UI
-│       │   ├── shopping/      # Shopping UI
-│       │   ├── llm/           # LLM manager UI
-│       │   ├── chat/          # AI Chatbot UI ⭐
-│       │   └── media/         # Media dashboard
-│       └── services/
-│           └── api.ts         # API client
-│
-└── docs/
-    ├── FEATURES_ADDED.md      # Feature changelog
-    ├── TESTING.md             # Testing guide
-    ├── SQLITE_MIGRATION.md    # Database migration
-    └── ECOSYSTEM_INTEGRATION.md
+ backend/
+    api/
+       calendar/      # Calendar endpoints
+       todos/         # Todo endpoints
+       expenses/      # Expense endpoints
+       shopping/      # Shopping endpoints
+       llm/           # LLM management
+       chat/          # AI chatbot endpoints
+       media/         # Media integration
+    models/            # SQLAlchemy models
+    services/          # Business logic
+       chat_service.py       # Chat + tools
+       ollama_service.py     # Local LLM
+       mcp_clients.py        # MCP integrations
+    tests/             # Pytest tests
+    vienna_life.db     # SQLite database
+
+ frontend/
+    src/
+        features/
+           calendar/      # Calendar UI
+           todos/         # Todo UI
+           expenses/      # Expense tracker UI
+           shopping/      # Shopping UI
+           llm/           # LLM manager UI
+           chat/          # AI Chatbot UI 
+           media/         # Media dashboard
+        services/
+            api.ts         # API client
+
+ docs/
+     FEATURES_ADDED.md      # Feature changelog
+     TESTING.md             # Testing guide
+     SQLITE_MIGRATION.md    # Database migration
+     ECOSYSTEM_INTEGRATION.md
 ```
 
-## 🎨 Screenshots
+##  Screenshots
 
 - **Calendar**: Day/Week/Month views, Grid/List modes
 - **Todos**: 12 items with priorities, categories, statistics
-- **Expenses**: €836 tracked, category breakdown, top stores
+- **Expenses**: 836 tracked, category breakdown, top stores
 - **AI Chatbot**: Streaming chat, 6 personalities, tool chips
 - **LLM Manager**: 15 Ollama models, load/unload/pull/delete
 
-## 🔌 MCP Server Configuration
+##  MCP Server Configuration
 
 The Vienna Life Assistant integrates with **6 specialized MCP servers**. Each MCP server requires its corresponding application/service to be installed and configured first.
 
@@ -413,8 +456,8 @@ pip install -r requirements.txt
 
 # Clone and setup MCP server
 cd D:\Dev\repos
-git clone https://github.com/sandraschi/devices-mcp.git
-cd devices-mcp
+git clone https://github.com/sandraschi/tapo-mcp.git
+cd tapo-mcp
 
 # Install dependencies
 pip install -r requirements.txt
@@ -425,7 +468,7 @@ cp .env.example .env
 ```
 
 **Configuration:**
-- Path: `D:/Dev/repos/devices-mcp/src/tapo_mcp/server.py`
+- Path: `D:/Dev/repos/tapo-mcp/src/tapo_mcp/server.py`
 - Tools: Weather, lights, cameras, Ring doorbell
 - Requires: Tapo account credentials in `.env`
 
@@ -554,7 +597,7 @@ The application automatically detects MCP servers if they're cloned in `D:\Dev\r
 ```powershell
 # Set these in your shell or .env file:
 $env:ADVANCED_MEMORY_MCP_PATH="D:/Dev/repos/advanced-memory-mcp/src/advanced_memory/mcp/server.py"
-$env:TAPO_MCP_PATH="D:/Dev/repos/devices-mcp/src/tapo_mcp/server.py"
+$env:TAPO_MCP_PATH="D:/Dev/repos/tapo-mcp/src/tapo_mcp/server.py"
 $env:PLEX_MCP_PATH="D:/Dev/repos/plex-mcp/src/plex_mcp/server.py"
 $env:CALIBRE_MCP_PATH="D:/Dev/repos/calibre-mcp/src/calibre_mcp/server.py"
 $env:IMMICH_MCP_PATH="D:/Dev/repos/immich-mcp/src/immich_mcp/server.py"
@@ -564,11 +607,11 @@ $env:OLLAMA_MCP_PATH="D:/Dev/repos/local-llm-mcp/src/llm_mcp/main.py"
 ### MCP Server Status
 
 Check MCP server integration in the LLM tab of the web interface. Each MCP server shows:
-- ✅ Connected (tools available)
-- ⚠️ Not found (path incorrect)
-- ❌ Error (configuration issue)
+-  Connected (tools available)
+-  Not found (path incorrect)
+-  Error (configuration issue)
 
-## 🌐 Access
+##  Access
 
 ### Local Access:
 - Frontend: `http://localhost:3000`
@@ -581,25 +624,25 @@ Check MCP server integration in the LLM tab of the web interface. Each MCP serve
 
 **CORS configured** for both localhost and Tailscale access!
 
-## 🎯 Implementation Status
+##  Implementation Status
 
-- ✅ **Phase 1**: Project setup, database, models
-- ✅ **Phase 2**: Calendar, Todos, Shopping, Expenses
-- ✅ **Phase 3**: AI Chatbot with 16 tools (Beta)
-- ✅ **Phase 4**: MCP integrations (Advanced Memory, Tapo, Plex, Calibre)
-- ✅ **Phase 5**: Mobile responsiveness (iPhone/iPad ready)
-- ✅ **Phase 6**: Smart home integration (lights, cameras, weather)
+-  **Phase 1**: Project setup, database, models
+-  **Phase 2**: Calendar, Todos, Shopping, Expenses
+-  **Phase 3**: AI Chatbot with 16 tools (Beta)
+-  **Phase 4**: MCP integrations (Advanced Memory, Tapo, Plex, Calibre)
+-  **Phase 5**: Mobile responsiveness (iPhone/iPad ready)
+-  **Phase 6**: Smart home integration (lights, cameras, weather)
 
-## 🐕 Sample Data
+##  Sample Data
 
 Pre-loaded with realistic Vienna life data:
 - **12 Todos**: Benny care, shopping, self-care
 - **10 Calendar Events**: Vet appointments, coffee meetings
-- **15 Expenses**: €836.10 total, 7 categories
+- **15 Expenses**: 836.10 total, 7 categories
 - **Shopping Offers**: Spar/Billa weekly deals
 - **15 Ollama Models**: Ready for AI chat
 
-## 📝 Notes
+##  Notes
 
 - **Fully Docker containerized** - PostgreSQL, Redis, FastAPI, and React all in containers
 - **Stable development environment** - No more local server crashes or dependency conflicts
@@ -609,7 +652,7 @@ Pre-loaded with realistic Vienna life data:
 - **Tailscale ready** - access from anywhere
 - **MCP stdio transport** - proper FastMCP pattern
 
-## 🔧 Troubleshooting
+##  Troubleshooting
 
 ### Docker containers won't start
 ```powershell
@@ -660,7 +703,7 @@ cd D:\Dev\repos\advanced-memory-mcp
 python -m pytest tests/ -v
 ```
 
-## 🚀 Deployment
+##  Deployment
 
 ### Docker Production Deployment
 ```powershell
@@ -686,16 +729,16 @@ nssm install ViennaLifeDocker "C:\Program Files\Docker\Docker\Docker Desktop.exe
 nssm set ViennaLifeDocker AppDirectory "D:\Dev\repos\vienna-life-assistant"
 ```
 
-## 📚 Documentation
+##  Documentation
 
 - `INTEGRATED_MCP_SERVERS.md` - Complete MCP ecosystem guide
 - `FEATURES_ADDED.md` - Phase 2 features (Ollama, scrapers, UI)
 - `TESTING.md` - Pytest guide, fixtures, test coverage
-- `SQLITE_MIGRATION.md` - PostgreSQL → SQLite migration
+- `SQLITE_MIGRATION.md` - PostgreSQL  SQLite migration
 - `ECOSYSTEM_INTEGRATION.md` - MCP integration architecture
 - `COMPLETE.md` - Final project summary
 
-## 🎉 Beta Highlights
+##  Beta Highlights
 
 - **16 AI tools** across 4 MCP servers (beta)
 - **6 personalities** for different chat styles
@@ -708,7 +751,7 @@ nssm set ViennaLifeDocker AppDirectory "D:\Dev\repos\vienna-life-assistant"
 - **Mobile responsive** - Looks great on iPhone/iPad
 - **Flexible deployment** - Local Ollama or cloud LLM APIs (OpenAI/Anthropic)
 
-## 📱 Ports
+##  Ports
 
 - **Frontend**: 7333 (Docker)
 - **Backend API**: 7334 (Docker)
@@ -720,28 +763,39 @@ nssm set ViennaLifeDocker AppDirectory "D:\Dev\repos\vienna-life-assistant"
 - **Calibre**: 8080 (if running)
 - **Immich**: 2283 (if running)
 
-## 🇦🇹 Austrian Features
+##  Austrian Features
 
-- **Euro (€)** currency formatting
+- **Euro ()** currency formatting
 - **German dates** (Dezember, etc.)
 - **Vienna-specific** chatbot personality
 - **Local stores** (Spar, Billa, Manner Schnitten!)
 - **Wiener Linien** integration
 - **District knowledge** (Bezirke)
 
-## 🔐 Privacy
+##  Privacy
 
 - **100% local** - No cloud API calls (except optional web search)
 - **Your hardware** - RTX 4070 or better runs all AI locally
 - **Your data** - SQLite file on your machine
 - **MCP servers** - All on your Tailscale network (goliath)
 
-## 📄 License
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
+##  License
 
 Private project - All rights reserved to Sandra Schipal
 
 ---
 
-**Built with ❤️ in Vienna's 9th District**
+**Built with  in Vienna's 9th District**
 
-*For daily life management, Benny care, and keeping track of when you last washed your hair* 😄
+*For daily life management, Benny care, and keeping track of when you last washed your hair*

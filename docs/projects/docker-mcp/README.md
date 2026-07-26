@@ -1,70 +1,69 @@
-﻿# Docker MCP (fleet documentation)
+# docker-mcp
 
-**Canonical repository**: [docker-mcp on GitHub](https://github.com/sandraschi/docker-mcp) — `D:\Dev\repos\docker-mcp`  
-**Version** (see upstream `pyproject.toml`): **3.3.0**  
-**Changelog (authoritative)**: [docker-mcp/CHANGELOG.md](file:///D:/Dev/repos/docker-mcp/CHANGELOG.md). Short mirror: [CHANGELOG.md](./CHANGELOG.md).
+[![Python](https://img.shields.io/badge/python-3.12+-blue.svg)](https://python.org)
+[![FastMCP](https://img.shields.io/badge/FastMCP-3.5-purple.svg)](https://github.com/jlowin/fastmcp)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/sandraschi/docker-mcp/pulls)
 
-## What it is
+FastMCP 3.5 control plane for Docker — containers, images, volumes, networks, Compose, daemon recovery, **AI chat**, **backup/restore**, **image comparison**, **container analysis**, and a React web dashboard.
 
-FastMCP **3.3** control plane for **Docker Desktop** and the engine: containers, images, networks, volumes, compose-style workflows, daemon hang detection/recovery, **prefab UI** cards, **MCP sampling** (Ollama / LM Studio), and an optional **Tauri** desktop shell bundling the web dashboard.
+## Install
 
-## Current stack (high level)
+| Method | Command |
+|--------|---------|
+| **Claude Desktop** | `just mcpb-pack` → drag `.mcpb` onto Claude |
+| **Windows (NSIS)** | `just build-native` → run `*-setup.exe` |
+| **Dev (any OS)** | `uv sync && .\start.ps1` → `localhost:10806` |
 
-| Layer | Detail |
-|-------|--------|
-| **MCP** | FastMCP 3.3 (`fastmcp>=3.3,<4`), stdio + HTTP; `on_duplicate=replace` |
-| **Fleet surface** | Prompts, `resource://docker-mcp/skills`, prefab tools (`docker_*_card`) |
-| **Agentic** | `agentic_container_workflow` (SEP-1577 sampling when client supports it) |
-| **Web** | `web_sota` — Vite React; **10806** frontend, **10807** API (`start.ps1` waits for `/api/health`) |
-| **Pages** | Dashboard, containers, images, tools, chat, **Event logs** (`/logs`), settings (LLM glom-on) |
-| **MCPB** | Root `manifest.json` + `assets/prompts/` + `.mcpbignore` → `dist/docker-mcp-v3.3.0.mcpb` |
-| **Native** | Tauri 2 + PyInstaller sidecar `docker-mcp-backend` (NSIS/MSI under `native/target/release/bundle/`) |
-
-Legacy **`mcpb/`** subfolder was removed (2026-06); pack only from repo root.
-
-## Quick links
-
-| Doc | Location |
-|-----|----------|
-| Full README | [D:/Dev/repos/docker-mcp/README.md](file:///D:/Dev/repos/docker-mcp/README.md) |
-| Install | [D:/Dev/repos/docker-mcp/INSTALL.md](file:///D:/Dev/repos/docker-mcp/INSTALL.md) |
-| Development / MCPB / Tauri | [D:/Dev/repos/docker-mcp/docs/DEVELOPMENT.md](file:///D:/Dev/repos/docker-mcp/docs/DEVELOPMENT.md) |
-| Tools | [D:/Dev/repos/docker-mcp/docs/TOOLS.md](file:///D:/Dev/repos/docker-mcp/docs/TOOLS.md) |
-| Troubleshooting | [D:/Dev/repos/docker-mcp/docs/TROUBLESHOOTING.md](file:///D:/Dev/repos/docker-mcp/docs/TROUBLESHOOTING.md) |
-| Web ports | [operations/WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md) |
-| MCPB standards | [standards/MCPB_PACKAGING_STANDARDS.md](../../standards/MCPB_PACKAGING_STANDARDS.md) |
-| Project status | [STATUS.md](./STATUS.md) |
-
-## Run
+## Quick Start
 
 ```powershell
-cd D:\Dev\repos\docker-mcp
+git clone https://github.com/sandraschi/docker-mcp
+cd docker-mcp
 uv sync
 .\start.ps1
 ```
 
-MCP stdio: `just run` or `uv run python -m dockermcp`.
+Opens `http://127.0.0.1:10806` (API bridge on `10807`).
 
-## Claude Desktop (MCPB)
+## What You Can Do
 
-```json
-"mcpServers": {
-  "docker-mcp": {
-    "command": "python",
-    "args": ["-m", "dockermcp"],
-    "env": {
-      "PYTHONPATH": "D:/Dev/repos/docker-mcp/src",
-      "PYTHONUNBUFFERED": "1"
-    }
-  }
-}
-```
+- "List all running containers and show resource usage."
+- "Deploy my compose stack and verify every service is healthy."
+- "Compare nginx:1.25 and nginx:1.26 — what changed?"
+- "Analyze container my-app — why is it restarting?"
+- "Back up my database volume before the upgrade."
 
-Or install `docker-mcp-v3.3.0.mcpb` from releases (manifest uses the same `python -m dockermcp` entry).
+## Feature Overview
 
-## Notes for fleet index consumers
+| Area | Highlights |
+|------|------------|
+| **Containers** | CRUD, logs, stats, exec, inspect, health analysis |
+| **Images** | List, pull, build, tag, push, prune, search, compare |
+| **Compose** | Projects, up/down, logs, config, YAML file analysis |
+| **Backup/Restore** | `save/load image`, `backup/restore volume`, `export compose` |
+| **Docker Desktop** | Status, hang detection, triple-kill recovery, restart |
+| **AI Chat** | SSE streaming, tool execution cards, LLM provider discovery |
+| **Agentic** | Deploy, cleanup, diagnose, rollback workflows |
+| **Prefab Cards** | Containers, images, daemon status, system info |
 
-- **Category**: Infra  
-- **Ports**: 10806 (UI), 10807 (API) — do not repurpose without updating [WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md) and registries.  
-- Requires a working Docker socket; tools degrade gracefully when the daemon is down.  
-- Desktop recovery tools are **Windows-oriented** (Docker Desktop); Linux engine paths use socket checks.
+## Documentation
+
+| Doc | Contents |
+|-----|----------|
+| [docs/TOOLS.md](docs/TOOLS.md) | Full MCP tool reference |
+| [docs/COMPOSE.md](docs/COMPOSE.md) | Compose management & file analysis |
+| [docs/BACKUP.md](docs/BACKUP.md) | Docker backup & restore guide |
+| [docs/CHAT.md](docs/CHAT.md) | AI chat & agentic workflows |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Stack, transport, REST API |
+| [docs/CONFIGURATION.md](docs/CONFIGURATION.md) | Environment variables |
+| [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Build, just recipes, testing |
+| [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Common issues |
+
+## Requirements
+
+Python 3.12+, Docker Engine 20.10+, Node.js 20+ (dev). Rust 1.70+ (Tauri build only).
+
+## License
+
+MIT

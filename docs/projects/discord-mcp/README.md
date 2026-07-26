@@ -1,46 +1,107 @@
-# discord-mcp — Discord REST bridge (FastMCP 3.1)
+# Discord MCP
 
-**Central project documentation** for **discord-mcp** in MCP Central Docs.  
-**Local clone:** `D:/Dev/repos/discord-mcp`
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="tests/"><img src="https://img.shields.io/badge/tests-49%20passing-brightgreen?style=flat-square" alt="Tests"></a>
+  <a href="https://biomejs.dev"><img src="https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat-square&logo=biome&logoColor=white" alt="Biome"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-| Doc in this folder | Purpose |
-|--------------------|---------|
-| [README.md](./README.md) (this file) | Ports, transports, fleet links |
-| [STATUS.md](./STATUS.md) | Maturity, features |
-| [STRUCTURE.md](./STRUCTURE.md) | Layout vs central standards |
-| [INTEGRATION.md](./INTEGRATION.md) | Cursor, starts launcher, Glama |
+Connect your Discord bot to MCP clients — list servers, send messages, moderate members, search message history with RAG, and run agentic workflows from Cursor or Claude Desktop.
 
----
-
-## What it is
-
-**discord-mcp** exposes a **Discord bot** (REST API v10) to MCP hosts via:
-
-- **Stdio** — Cursor / Claude Desktop (`discord`, `discord_help`, `discord_agentic_workflow`).
-- **HTTP** — **Backend 10756:** REST `/api/v1/…`, OpenAPI `/docs`, MCP **streamable HTTP** at **`/mcp`**. **Frontend 10757:** Vite dashboard (proxy `/api` → 10756).
-
-Stack: **FastMCP 3.1** (instructions, sampling handler, skills, prompts, resource `resource://discord-mcp/capabilities`), **python-dotenv** for repo-root `.env`, **LanceDB** optional RAG (`rag_ingest` / `rag_query`), **httpx** with **Discord 429** retry.
+**v0.2.0** · 36 operations · FastMCP 3.2 · Comms lane · [Releases](https://github.com/sandraschi/discord-mcp/releases)
 
 ---
 
-## Quick reference
+## Contents
 
-| Item | Value |
-|------|--------|
-| Backend | `http://127.0.0.1:10756` — REST + **`/mcp`** |
-| Dashboard | `http://127.0.0.1:10757` |
-| Health | `GET /api/v1/health` |
-| Meta | `GET /api/v1/meta` |
-| Starts (fleet) | `mcp-central-docs/starts/discord-start.bat` |
-| Fleet ports doc | [WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md) |
-| Registry | [webapp-registry.json](../../operations/webapp-registry.json) (`discord-mcp-backend`, `discord-mcp-frontend`) |
-
-Canonical technical detail: **source repo** `discord-mcp/docs/TECHNICAL.md` and `discord-mcp/docs/README.md` (next to the code).
+- [Features](#features)
+- [Quick start](#quick-start)
+- [What you can do](#what-you-can-do)
+- [Ports](#ports)
+- [Documentation](#documentation)
+- [Requirements](#requirements)
 
 ---
 
-## Standards alignment
+## Features
 
-- [AGENT_PROTOCOLS.md](../../standards/AGENT_PROTOCOLS.md), [SOTA_REQUIREMENTS.md](../../standards/SOTA_REQUIREMENTS.md)
-- [WEBAPP_STANDARDS.md](../../standards/WEBAPP_STANDARDS.md) — ports **10756/10757**, `start.ps1`
-- [starts/README.md](../../starts/README.md) — launcher pattern (symlink caveat; discord uses relative `cd`)
+- **36 Discord operations** in one portmanteau tool — messaging, moderation, roles, webhooks, audit log, RAG
+- **Fleet web dashboard** — guilds, channels, messages, agentic chat, LanceDB search (ports **10756** / **10757**)
+- **Agentic workflow** — describe a goal; server uses sampling + tools (SEP-1577)
+- **Dual transport** — stdio for IDE hosts, streamable HTTP at `/mcp` for remote clients
+- **Built-in safety** — anti-spam rate limits, Discord 429 auto-retry, bind localhost only
+- **Bundled skills & prompts** — moderation playbook, RAG workflow, ops guides
+
+---
+
+## Quick start
+
+```powershell
+git clone https://github.com/sandraschi/discord-mcp
+cd discord-mcp
+.\start.ps1
+```
+
+1. Copy `.env.example` → `.env` and set `DISCORD_TOKEN` ([bot setup](docs/CONFIGURATION.md#discord-bot-token))
+2. Open dashboard **http://127.0.0.1:10757** · API **http://127.0.0.1:10756**
+
+Other install paths (just, Cursor, Claude Desktop, no-git): **[INSTALL.md](INSTALL.md)**
+
+---
+
+## What you can do
+
+**List servers and post a message**
+
+> List my Discord guilds, then send "Fleet check-in OK" to channel `#general` in the first server.
+
+**Moderation assist**
+
+> Show recent audit log entries for guild `123456789` and summarize ban/kick events from the last 24 hours.
+
+**Search ingested history**
+
+> Ingest the last 50 messages from `#dev`, then answer: what did we decide about the CI workflow?
+
+---
+
+## Ports
+
+| Service | Port | URL |
+|---------|------|-----|
+| Backend (REST + MCP `/mcp`) | 10756 | http://127.0.0.1:10756 |
+| Web dashboard | 10757 | http://127.0.0.1:10757 |
+
+---
+
+## Documentation
+
+| Doc | Contents |
+|-----|----------|
+| [INSTALL.md](INSTALL.md) | All install methods, prerequisites, verify steps |
+| [docs/CONFIGURATION.md](docs/CONFIGURATION.md) | Bot token, env vars, sampling, rate limits |
+| [docs/TOOLS.md](docs/TOOLS.md) | MCP tools, operations, prompts, skills |
+| [docs/WEBAPP.md](docs/WEBAPP.md) | Dashboard pages and REST API overview |
+| [docs/CURSOR-MCP.md](docs/CURSOR-MCP.md) | Cursor / Claude Desktop MCP wiring |
+| [docs/TECHNICAL.md](docs/TECHNICAL.md) | Architecture, transports, Discord 429 behavior |
+| [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Local dev, lint, test, CI |
+| [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Common errors and fixes |
+| [CHANGELOG.md](CHANGELOG.md) | Release notes |
+
+Fleet central mirror: [mcp-central-docs/projects/discord-mcp](https://github.com/sandraschi/mcp-central-docs/tree/master/projects/discord-mcp)
+
+---
+
+## Requirements
+
+- **Windows** (primary; fleet dev target) or macOS/Linux with Python 3.12+
+- **[uv](https://docs.astral.sh/uv/)** for Python deps · **Node 20+** for the webapp
+- **Discord bot token** — free at [Discord Developer Portal](https://discord.com/developers/applications)
+- Optional: [Ollama](https://ollama.com) for local agentic sampling when the MCP host has no LLM
+
+---
+
+**Repository:** [github.com/sandraschi/discord-mcp](https://github.com/sandraschi/discord-mcp)

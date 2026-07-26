@@ -1,11 +1,11 @@
-﻿# MyAI Platform â€“ Product Requirements Document
+# MyAI Platform – Product Requirements Document
 
 _Last updated: 2025-11-10_
 
 ---
 
 ## 1. Executive Summary
-MyAI is a production-ready AI platform that unifies ten specialized AI microservices, a FastAPI-based operations dashboard, and an MCP server into a single orchestrated stack. The platform must enable operators to provision, observe, and control AI workloads with minimal manual effort while providing rich APIs and MCP tooling to downstream clients such as Claude Desktop. This PRD defines the functional scope, architectural requirements, and success metrics for the platformâ€™s ongoing evolution toward a 9.5+/10 production readiness score.
+MyAI is a production-ready AI platform that unifies ten specialized AI microservices, a FastAPI-based operations dashboard, and an MCP server into a single orchestrated stack. The platform must enable operators to provision, observe, and control AI workloads with minimal manual effort while providing rich APIs and MCP tooling to downstream clients such as Claude Desktop. This PRD defines the functional scope, architectural requirements, and success metrics for the platform’s ongoing evolution toward a 9.5+/10 production readiness score.
 
 ---
 
@@ -16,7 +16,7 @@ MyAI is a production-ready AI platform that unifies ten specialized AI microserv
 - Provide a curated set of AI workloads (conversation, RAG, multimodal generation, media augmentation) with consistent ops contracts.
 - Offer first-class observability (metrics, logs, health checks) and secure default configurations (non-root, API keys, CORS).
 - Support dual-mode operation: REST APIs for human operators and MCP tools for AI copilots.
-- Maintain compliance with FastMCP 3.1.1++ documentation standards, Docker security baselines, and central documentation guidelines.
+- Maintain compliance with FastMCP 2.12+ documentation standards, Docker security baselines, and central documentation guidelines.
 
 ### 2.2 Non-Goals
 - Hosting arbitrary third-party services without onboarding work (new services require adherence to service contract).
@@ -40,7 +40,7 @@ MyAI is a production-ready AI platform that unifies ten specialized AI microserv
 
 ### 4.1 Control Plane
 - FastAPI dashboard on port 3060 with REST endpoints for service lifecycle management, health summaries, and configuration.
-- MCP server (FastMCP 3.1.1++) exposing at least eleven operations with 50+ line docstrings and no `description=` decorators.
+- MCP server (FastMCP 2.12+) exposing at least eleven operations with 50+ line docstrings and no `description=` decorators.
 - API key enforcement (`X-API-Key`) and CORS whitelist (3060, 3020, 8000).
 
 ### 4.2 AI Microservices
@@ -102,7 +102,7 @@ MyAI is a production-ready AI platform that unifies ten specialized AI microserv
 | **Scalability** | Compose stack supports horizontal scaling for select services (documented in `docker-compose.yml`). |
 | **Security** | No containers run as root; sensitive volumes read-only; CORS locked; API key required. |
 | **Documentation** | README/PRD kept current; `docs/` updated when features land; central docs referenced. |
-| **Standards Compliance** | Align with `mcp-central-docs/STANDARDS.md`, `FASTMCP_3.1.1+_MIGRATION.md`, Browser Automation Testing standards. |
+| **Standards Compliance** | Align with `mcp-central-docs/STANDARDS.md`, `FASTMCP_2.12_MIGRATION.md`, Browser Automation Testing standards. |
 
 ---
 
@@ -110,10 +110,10 @@ MyAI is a production-ready AI platform that unifies ten specialized AI microserv
 
 | Phase | Timeline | Focus | Deliverables |
 | --- | --- | --- | --- |
-| **Phase 1 â€“ Stabilize** | Q4 2025 | Ops hardening, doc refresh | Updated README/PRD, status reports, MCP docstring audit, Grafana dashboards |
-| **Phase 2 â€“ Automate** | Q1 2026 | Developer workflows | Scripts for service scaffolding, config editor, CI lint/test pipeline |
-| **Phase 3 â€“ Scale** | Q2 2026 | Multi-environment & deployment | GitHub Actions pipeline, container registry integration, production TLS recipe |
-| **Phase 4 â€“ Extend** | Q3 2026 | New capabilities | Additional MCP portmanteau tools, AI workload catalog expansion, AI guardrails |
+| **Phase 1 – Stabilize** | Q4 2025 | Ops hardening, doc refresh | Updated README/PRD, status reports, MCP docstring audit, Grafana dashboards |
+| **Phase 2 – Automate** | Q1 2026 | Developer workflows | Scripts for service scaffolding, config editor, CI lint/test pipeline |
+| **Phase 3 – Scale** | Q2 2026 | Multi-environment & deployment | GitHub Actions pipeline, container registry integration, production TLS recipe |
+| **Phase 4 – Extend** | Q3 2026 | New capabilities | Additional MCP portmanteau tools, AI workload catalog expansion, AI guardrails |
 
 ---
 
@@ -141,7 +141,6 @@ MyAI is a production-ready AI platform that unifies ten specialized AI microserv
 - `docs/MYAI_STATUS_REPORT_*.md`
 - `docs/monitoring/`
 - `mcp-central-docs/STANDARDS.md`
-- `mcp-central-docs/FASTMCP_3.1.1+_MIGRATION.md`
+- `mcp-central-docs/FASTMCP_2.12_MIGRATION.md`
 
 The MyAI Platform PRD should be reviewed quarterly or after any major architectural change.
-

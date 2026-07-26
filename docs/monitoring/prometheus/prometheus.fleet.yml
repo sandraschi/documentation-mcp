@@ -1,0 +1,140 @@
+# Fleet host targets (processes on host.docker.internal).
+# Append to prometheus.core.yml via start-unified-monitoring.ps1 → prometheus.yml
+# Opt-in: label containers with monitoring.unified=true and monitoring.job=<name>
+
+  # --- Blackbox: HTTP health / API reachability ---
+  - job_name: blackbox-fleet-http
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          - http://host.docker.internal:10795/health
+          - http://host.docker.internal:10795/api/status
+          - http://host.docker.internal:10717/api/health
+          - http://host.docker.internal:10720/health
+          - http://host.docker.internal:10740/health
+          - http://host.docker.internal:10736/health
+          - http://host.docker.internal:10736/metrics
+        labels:
+          monitor: blackbox
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+      - source_labels: [__param_target]
+        regex: '.*:10795/api/status'
+        target_label: job
+        replacement: docs-mcp-rag
+      - source_labels: [__param_target]
+        regex: '.*:10795/health'
+        target_label: job
+        replacement: docs-mcp
+      - source_labels: [__param_target]
+        regex: '.*:10717/.*'
+        target_label: job
+        replacement: devices-mcp
+      - source_labels: [__param_target]
+        regex: '.*:10720/.*'
+        target_label: job
+        replacement: calibre-mcp
+      - source_labels: [__param_target]
+        regex: '.*:10740/.*'
+        target_label: job
+        replacement: plex-mcp
+      - source_labels: [__param_target]
+        regex: '.*:10736/.*'
+        target_label: job
+        replacement: calibre-plus
+
+  # --- Prometheus-native /metrics endpoints ---
+  - job_name: docs-mcp
+    static_configs:
+      - targets: ["host.docker.internal:10795"]
+        labels:
+          app: mcp-central-docs
+          service: docs-mcp
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  - job_name: calibre-mcp
+    static_configs:
+      - targets: ["host.docker.internal:10720"]
+        labels:
+          app: calibre-mcp
+          service: backend
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  - job_name: devices-mcp
+    static_configs:
+      - targets: ["host.docker.internal:10717"]
+        labels:
+          app: devices-mcp
+          service: backend
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  - job_name: plex-mcp
+    static_configs:
+      - targets: ["host.docker.internal:10740"]
+        labels:
+          app: plex-mcp
+          service: backend
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  - job_name: observability-mcp-process
+    static_configs:
+      - targets: ["host.docker.internal:12009"]
+        labels:
+          app: observability-mcp
+          service: prometheus-exporter
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  - job_name: calibre-plus
+    static_configs:
+      - targets: ["host.docker.internal:10736"]
+        labels:
+          app: myai
+          service: calibre-plus
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  - job_name: devices-mcp-ring-metrics
+    static_configs:
+      - targets: ["host.docker.internal:8001"]
+        labels:
+          app: devices-mcp
+          service: ring-prometheus
+    scrape_interval: 30s
+
+  - job_name: avatar-mcp-metrics
+    static_configs:
+      - targets: ["host.docker.internal:10790"]
+        labels:
+          app: avatar-mcp
+    scrape_interval: 30s
+
+  - job_name: mcp-studio-host
+    static_configs:
+      - targets: ["host.docker.internal:8330"]
+        labels:
+          app: mcp-studio
+    metrics_path: /api/v1/health/metrics
+    scrape_interval: 30s
+
+  # --- OTel Collector (Prometheus exporter on :8889) ---
+  - job_name: otel-collector
+    static_configs:
+      - targets: ["otel-collector:8889"]
+        labels:
+          app: opentelemetry
+          service: fleet-collector
+    scrape_interval: 15s
+
+  # Add more repos here, or use prometheus.fleet.local.yml (gitignored overrides)

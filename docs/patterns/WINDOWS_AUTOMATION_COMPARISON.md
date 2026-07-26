@@ -12,7 +12,7 @@ Two primary approaches exist for Windows desktop automation in our ecosystem:
 | Approach | Repository | Philosophy |
 |----------|------------|------------|
 | **AutoHotkey** | autohotkey-test | Scripted, shareable, lightweight |
-| **PyWinAuto MCP** | pywinauto-mcp | AI-assisted, adaptive, integrated |
+| **PyWinAuto MCP** | windows-computer-use-mcp | AI-assisted, adaptive, integrated |
 
 ---
 
@@ -115,7 +115,7 @@ Claude: (analyzes UI, finds the right element regardless of exact ID)
 | Complex cross-app workflows | AI orchestrates multiple apps |
 | MCP ecosystem integration | Part of larger MCP system |
 
-**pywinauto-mcp examples:**
+**windows-computer-use-mcp examples:**
 - Desktop discovery ("What's open?")
 - Form filling with element detection
 - Error dialog text extraction
@@ -153,7 +153,7 @@ For complex workflows, **use both**:
 └─────────────────┘     └──────────────────┘
 
 User presses Ctrl+Alt+A → AHK triggers Claude → 
-Claude uses pywinauto-mcp → Results back to user
+Claude uses windows-computer-use-mcp → Results back to user
 ```
 
 ---
@@ -183,7 +183,7 @@ Need Windows automation?
 ## Repository Links
 
 - **autohotkey-test**: 75+ AHK scriptlets, games, productivity tools
-- **pywinauto-mcp**: 8 portmanteau tools, AI-driven automation
+- **windows-computer-use-mcp**: 8 portmanteau tools, AI-driven automation
 
 ---
 

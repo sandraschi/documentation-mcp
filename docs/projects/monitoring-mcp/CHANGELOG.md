@@ -1,4 +1,14 @@
-﻿# Changelog
+
+## [Unreleased] — 2026-06-14
+
+### Added
+- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
+- PyInstaller frozen backend embedded in NSIS installer
+- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
+- `just cua-nsis-test` recipe
+- Tauri CORS: `tauri://localhost` origins for WebView API access
+- `GET /api/v1/diagnostics` endpoint for CUA verification
+# Changelog
 
 All notable changes to the Monitoring MCP will be documented in this file.
 
@@ -8,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2026-01-16
 
 ### Added
-- **Initial Release**: Complete FastMCP 3.1.1+.3-powered monitoring server
+- **Initial Release**: Complete FastMCP 2.14.3-powered monitoring server
 - **Grafana Management Tool**: Comprehensive dashboard and panel operations
   - List, create, update, delete dashboards
   - Data source queries and management
@@ -41,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Error Recovery**: Graceful degradation and automatic retry logic
 
 ### Technical Features
-- **FastMCP 3.1.1+.3 Integration**: Latest MCP framework features
+- **FastMCP 2.14.3 Integration**: Latest MCP framework features
 - **Portmanteau Tool Design**: Consolidated operations to avoid tool explosion
 - **Async/Await Pattern**: Full asynchronous operations throughout
 - **Type Safety**: Complete type hints with mypy compliance
@@ -66,7 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **IDE Integration**: Zed extension configuration
 
 ### Dependencies
-- **Core**: FastMCP 3.1.1+.3+, httpx, pydantic v2, py-key-value-aio
+- **Core**: FastMCP 2.14.3+, httpx, pydantic v2, py-key-value-aio
 - **Monitoring**: grafana-api, prometheus-api-client, loky
 - **Data Processing**: pandas, numpy, plotly
 - **Development**: pytest, ruff, mypy, pre-commit

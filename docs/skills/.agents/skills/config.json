@@ -1,0 +1,28 @@
+{
+  "skills": [
+    {
+      "name": "mcp-standards",
+      "path": "mcp-standards",
+      "description": "Complete MCP ecosystem standards reference",
+      "version": "1.0.0",
+      "enabled": true,
+      "categories": [
+        "development",
+        "documentation",
+        "quality-assurance",
+        "devops"
+      ]
+    }
+  ],
+  "config": {
+    "default_skill": "mcp-standards",
+    "auto_load_modules": true,
+    "cache_enabled": true,
+    "log_level": "INFO"
+  },
+  "metadata": {
+    "created": "2026-01-20",
+    "author": "MCP Community",
+    "description": "MCP Standards skill collection for Claude Desktop"
+  }
+}

@@ -1,34 +1,107 @@
-﻿# pywinauto-mcp (fleet note)
+# windows-computer-use-mcp
 
-**Upstream repo:** `D:\Dev\repos\pywinauto-mcp`
+<p align="center">
+  <a href="https://github.com/sandraschi/windows-computer-use-mcp"><img src="https://img.shields.io/github/stars/sandraschi/windows-computer-use-mcp?style=flat-square" alt="Stars"></a>
+  <a href="https://github.com/sandraschi/windows-computer-use-mcp/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://fastmcp.com"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-Windows **desktop UI automation** via PyWinAuto (and related paths). **High risk** — real cursor/keyboard; read upstream **`docs/SAFETY.md`** first. Pair with **virtualization-mcp** for Sandbox/VM isolation when you need disposable hosts.
+**A tool for agents, and an agent itself.**
 
-**Version:** **0.4.2** (see upstream `pyproject.toml`). **FastMCP 3.2+** (`fastmcp>=3.2,<4`).
+| You | It |
+|-----|----|
+| Use it as an **MCP server** | Claude, Cursor, DeepSeek call `automation_click`, `automation_screenshot`, `automation_ocr` — 22 tools |
+| Use it as an **autonomous agent** | Give it a goal: `automation_mission(run="install app, verify UI, screenshot result")` — it plans, executes, retries, and reports |
+| Use it as a **webapp** | `start.ps1` opens a React dashboard at http://127.0.0.1:10788 with HITL, crawler, logging |
+| Use it as a **desktop app** | The NSIS installer bundles everything into one binary — no Python, no uv, no git needed |
 
-**Python:** 3.12+
+> **Exhibit A: 100 Tauri/NSIS installers, one unattended run, $2 in LLM costs.** Install, screenshot, verify, report — zero human intervention. That is what agentic Windows automation looks like at scale.
 
-## Web dashboard (`web_sota`)
+Built on [pywinauto](https://github.com/pywinauto/pywinauto). Read **[docs/SAFETY.md](docs/SAFETY.md)** before production use.
 
-| Role | Port |
-|------|------|
-| Vite (frontend) | **10788** |
-| FastAPI + MCP HTTP (backend) | **10789** |
+- [Quick Start](#quick-start)
+- [Features](#features)
+- [Documentation](#documentation)
+- [Ports](#ports)
+- [License](#license)
 
-**Start:** repo-root **`start.ps1`** or **`web_sota/start.ps1`**. Scripts wait for the **API port** (or health) before Vite so the proxy does not hit **`ECONNREFUSED`** on cold **`uv run`**. See **[WEBAPP_STANDARDS.md](../../standards/WEBAPP_STANDARDS.md) §1.2**.
+---
 
-## Cua Driver parity
+## Quick Start
 
-- [CUA_DRIVER_AND_PYWINAUTO.md](../../patterns/CUA_DRIVER_AND_PYWINAUTO.md) — comparison, Excel+Cursor FAQ, fleet-agent bridge
-- Upstream roadmap: `pywinauto-mcp/docs/CUA_PARITY_ROADMAP.md` · operator: `docs/CUA_PARITY.md`
-- New tools (Phase 1): **`get_window_state`**, `capture_mode`, `snapshot_id` + `element_index` on **`automation_elements`**
+| Method | Command / Config |
+|--------|-----------------|
+| **MCP stdio** (Cursor, Claude Desktop) | `{ "mcpServers": { "windows-computer-use": { "command": "uv", "args": ["--directory", "<PATH>", "run", "windows-computer-use-mcp"] } } }` |
+| **HTTP streamable** (any MCP HTTP client) | `{ "mcpServers": { "windows-computer-use": { "url": "http://127.0.0.1:10789/mcp" } } }` |
+| **Web operator UI** | `.\start.ps1` → http://127.0.0.1:10788 |
+| **Desktop app** (NSIS installer) | Download from [Releases](https://github.com/sandraschi/windows-computer-use-mcp/releases) — zero deps |
 
-## Fleet safety docs
+See **[INSTALL.md](INSTALL.md)** for detailed setup. Run `just demo` for examples.
 
-- [PYWINAUTO_MCP_SAFETY.md](../../patterns/PYWINAUTO_MCP_SAFETY.md)
-- [WEBAPP_STANDARDS.md §7](../../standards/WEBAPP_STANDARDS.md) — do not mix desktop MCP with routine webapp verification chains
+---
 
-## See also
+## Features
 
-- [WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md)
-- [fleet.md](../fleet.md)
+- **Window Management** — find, activate, maximize, minimize, position, close
+- **Mouse & Keyboard** — click, drag, type, hotkeys, app shortcuts
+- **UI Elements** — inspect, click, read text, verify state via UIA / Win32
+- **Visual Intelligence** — screenshots, OCR, template matching
+- **Autonomous Missions** — give it a goal, it plans and executes with retry + verification
+- **Macro Recording** — record any UI sequence, replay, verify outcomes
+- **Multi-App Workflows** — chain actions across Notepad, Calc, Paint, or any Windows app
+- **Telemetry** — every action logged to SQLite; query failure patterns by tool
+- **Adaptive Location** — auto-cascades through title/auto_id/control_id/class/OCR to find elements
+- **Face Recognition** — optional, off by default
+
+---
+
+## Documentation
+
+| Doc | Content |
+|-----|---------|
+| [INSTALL.md](INSTALL.md) | Setup: desktop app, uv, MCP config |
+| [docs/README.md](docs/README.md) | Full documentation hub |
+| [docs/py-stack.md](docs/py-stack.md) | Python dependency deep dive |
+| [docs/composing-with-playwright.md](docs/composing-with-playwright.md) | Browser automation with Playwright MCP |
+| [docs/ocr.md](docs/ocr.md) | OCR system — Tesseract setup, limitations, competition |
+| [docs/cua-nsis-certification.md](docs/cua-nsis-certification.md) | Dogfooding: using the tool to test its own NSIS installer |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Improvement roadmap short/medium/long term |
+| [docs/SAFETY.md](docs/SAFETY.md) | HITL, kill switch, opt-in features |
+| [docs/TOOLS.md](docs/TOOLS.md) | Portmanteau tool reference |
+| [tests/README.md](tests/README.md) | Test suite guide and e2e setup |
+| [examples/README.md](examples/README.md) | Runnable demos |
+| [mcpb/README.md](mcpb/README.md) | MCPB bundle packaging |
+| [web_sota/README.md](web_sota/README.md) | Operator UI build/dev guide |
+| [CHANGELOG.md](CHANGELOG.md) | Release history |
+
+---
+
+## Ports
+
+| Port | Service |
+|------|---------|
+| **10788** | Frontend — Vite operator UI |
+| **10789** | Backend — FastAPI + FastMCP HTTP | 
+| stdio | MCP transport (port-free) |
+
+---
+
+## Related
+
+| Repo | What it does |
+|------|-------------|
+| **[autohotkey-mcp](https://github.com/sandraschi/autohotkey-mcp)** | Raw input recording/replay via AHK |
+| **[browser-mcp](https://github.com/sandraschi/browser-mcp)** | Playwright browser control — for **webapps, HTML DOM, websites** |
+| **[virtualization-mcp](https://github.com/sandraschi/virtualization-mcp)** | Sandbox / VM isolation |
+| **[windows-operations-mcp](https://github.com/sandraschi/windows-operations-mcp)** | Registry, services, accounts |
+
+**Browser vs desktop:** This server drives **Win32 / UI Automation**. For HTML/DOM and websites, pair with **[browser-mcp](https://github.com/sandraschi/browser-mcp)** (Playwright). Both MCPs can run side by side — use one profile that loads both and let the LLM pick the right tool for the target.
+
+Fleet standards: [mcp-central-docs](https://github.com/sandraschi/mcp-central-docs).
+
+---
+
+## License
+
+MIT — Copyright (c) 2026 Sandra Schipal.

@@ -1,0 +1,273 @@
+{
+  "id": null,
+  "title": "MCP Studio Monitoring Dashboard",
+  "description": "Comprehensive monitoring for MCP Studio including metrics, repo scanning, and logs",
+  "tags": ["mcp-studio", "monitoring", "metrics", "logs"],
+  "timezone": "browser",
+  "panels": [
+      {
+        "id": 1,
+        "title": "MCP Studio Status",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 8,
+          "x": 0,
+          "y": 0
+        },
+        "targets": [
+          {
+            "expr": "up{job=\"mcp-studio\"}",
+            "legendFormat": "MCP Studio Status",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "text": "DOWN",
+                    "color": "red"
+                  },
+                  "1": {
+                    "text": "UP",
+                    "color": "green"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Active Connections",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 8,
+          "x": 8,
+          "y": 0
+        },
+        "targets": [
+          {
+            "expr": "mcp_active_connections",
+            "legendFormat": "Active Connections",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Memory Usage",
+        "type": "stat",
+        "gridPos": {
+          "h": 4,
+          "w": 8,
+          "x": 16,
+          "y": 0
+        },
+        "targets": [
+          {
+            "expr": "process_resident_memory_bytes{job=\"mcp-studio\"} / 1024 / 1024",
+            "legendFormat": "Memory (MB)",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "MB",
+            "decimals": 1
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "API Requests",
+        "type": "graph",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 4
+        },
+        "targets": [
+          {
+            "expr": "rate(mcp_api_requests_total[5m])",
+            "legendFormat": "API Requests/sec",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "reqps",
+            "label": "Requests/sec"
+          },
+          {
+            "format": "short"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "CPU Usage",
+        "type": "graph",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 4
+        },
+        "targets": [
+          {
+            "expr": "rate(process_cpu_seconds_total{job=\"mcp-studio\"}[5m]) * 100",
+            "legendFormat": "CPU Usage %",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "percent",
+            "label": "CPU %"
+          },
+          {
+            "format": "short"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Repository Scan Progress",
+        "type": "table",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 12
+        },
+        "targets": [
+          {
+            "expr": "mcp_scan_progress_total",
+            "legendFormat": "Total Repos Scanned",
+            "refId": "A"
+          },
+          {
+            "expr": "mcp_scan_progress_found",
+            "legendFormat": "MCP Repos Found",
+            "refId": "B"
+          },
+          {
+            "expr": "mcp_scan_progress_skipped",
+            "legendFormat": "Skipped",
+            "refId": "C"
+          },
+          {
+            "expr": "mcp_scan_progress_errors",
+            "legendFormat": "Errors",
+            "refId": "D"
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "A": "Total Scanned",
+                "B": "Found",
+                "C": "Skipped",
+                "D": "Errors"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Scan Statistics",
+        "type": "barchart",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 12
+        },
+        "targets": [
+          {
+            "expr": "mcp_scan_repos_found_total",
+            "legendFormat": "Repos Found",
+            "refId": "A"
+          },
+          {
+            "expr": "mcp_scan_repos_skipped_total",
+            "legendFormat": "Repos Skipped",
+            "refId": "B"
+          },
+          {
+            "expr": "mcp_scan_errors_total",
+            "legendFormat": "Scan Errors",
+            "refId": "C"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "MCP Studio Logs",
+        "type": "logs",
+        "gridPos": {
+          "h": 12,
+          "w": 24,
+          "x": 0,
+          "y": 20
+        },
+        "targets": [
+          {
+            "expr": "{job=\"mcp-studio-logs\"}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showTime": true,
+          "showLabels": false,
+          "showCommonLabels": false,
+          "wrapLogMessage": true,
+          "prettifyLogMessage": false,
+          "enableLogDetails": true,
+          "dedupStrategy": "none",
+          "sortOrder": "Descending"
+        }
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "templating": {
+      "list": []
+    },
+    "annotations": {
+      "list": []
+    },
+    "refresh": "30s",
+    "schemaVersion": 38,
+    "version": 0,
+    "links": []
+}

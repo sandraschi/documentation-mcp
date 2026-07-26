@@ -1,27 +1,33 @@
 # beyondcompare-mcp
-> **Technical guides for MCP server development, deployment, and troubleshooting** --- 📄 [CLAUDE_DESKTOP_DEBUGGING.md](CLAUDE_DESKTOP_DEBUGGING.md) **Debug MCP servers in Claude Desktop** - Log file loc...
 
-This project includes automated llms.txt generation for AI accessibility.
+MCP server for file and directory comparison via Beyond Compare engine. Compare files/folders, synchronize directories, generate diff reports, and manage developer workspaces.
+
+> Full reference: [llms-full.txt](llms-full.txt)
+
+## Key Tools
+- **File & folder comparison** — diff two files/directories via Beyond Compare engine
+- **Directory sync** — mirror, update, and backup synchronization modes
+- **Diff reports** — multi-format comparison reports (HTML, text)
+- **Workspace tools** — repo backup, health scanning, workspace analysis
+- **Code analysis** — duplicate code detection, workspace snapshot comparison
+- **Cleanup** — artifact cleanup with `node_modules` filtering
+
+## Ports
+| Port | Service |
+|------|---------|
+| 10840 | Dashboard frontend (Vite) |
+| 10841 | Dashboard API (FastAPI) |
+
+## Quick Start
+```bash
+uv sync && uv run beyondcompare-mcp
+```
 
 ## Docs
-- [Readme](docs\mcp-technical\README.md): **Technical guides for MCP server development, deployment, and troubleshooting**
-- [Readme](README.md): [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/dow...
-- [Readme](docs\repository-protection\README.md): **Complete guide to keeping your notepadpp-mcp repository safe**
-- [Readme](docs\mcpb-packaging\README.md): **Complete guide to packaging and distributing MCP servers with MCPB**
-- [Readme](docs\glama\README.md): This directory contains documentation related to achieving GLAMA AI Gold standard status for the Adv...
-- [Readme](docs\github\README.md): > **Purpose**: Comprehensive GitHub configuration guide to avoid hours of trial-and-error setup.
-- [Readme](docs\development\README.md): **Guides, best practices, and lessons learned for developing notepadpp-mcp**
-- [Test Minimal Setup](TEST_MINIMAL_SETUP.md): **Purpose**: Test if the issue is with FastMCP itself or with the server's initialization code.
-- [Complete Setup Guide](docs\github\COMPLETE_SETUP_GUIDE.md): > **6 hours of pain distilled into 30 minutes of setup**
-- [Antigravity Wrapper Setup](ANTIGRAVITY_WRAPPER_SETUP.md): **Date**: 2025-12-12
+- [README](README.md)
+- [CHANGELOG](CHANGELOG.md)
+- [llms-full.txt](llms-full.txt)
 
-## Configuration
-- [Pyproject](pyproject.toml): Python project configuration and dependencies
-- [Package](web_sota\package.json): Node.js project configuration and dependencies
-- [Config](.git\config): Application configuration files
-
-## Optional
-- [Changelog](CHANGELOG.md): Project changelog information
-- [Contributing](CONTRIBUTING.md): Project contributing information
-- [License](LICENSE): Project license information
-- [Enhancement Roadmap](docs\ENHANCEMENT_ROADMAP.md): Project roadmap information
+## Config
+- [pyproject.toml](pyproject.toml)
+- [.env.example](.env.example)

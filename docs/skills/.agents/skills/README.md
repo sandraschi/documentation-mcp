@@ -63,7 +63,7 @@ This directory contains Claude Desktop skills for MCP ecosystem standards manage
 ### Development Standards
 - **MCP Scaffolding**: Project structure and server templates
 - **MCPB Packaging**: Build, distribution, and publishing
-- **AI Sampling**: FastMCP 2.14.3+ sampling workflows
+- **AI Sampling**: FastMCP 3.2+ sampling workflows
 
 ### Quality Assurance
 - **Testing Standards**: Unit, integration, E2E testing

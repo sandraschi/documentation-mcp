@@ -1,23 +1,97 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to Unity3D-MCP will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.5.0] - 2026-05-28
+
+### Added
+- **Prometheus telemetry**: tool counters/histograms, bridge/execution-mode/jobs gauges, `/api/v1/metrics` + sidecar `:9092`.
+- **JSON logging** for Loki: `UNITY3D_MCP_LOG_FORMAT=json`.
+- **Docker + GHCR**: `Dockerfile`, `docker-compose.yml`, monitoring profile (Prometheus/Grafana/Loki/Promtail).
+- **`scripts/smoke_test.py`**: Agent Lab tool surface check.
+- **`unity_bridge` → `execution_mode`**: Hands-In (live GUI) vs Hands-Off (headless/disk) reporting.
+- **Docs**: `DUAL_MODE.md`, `MONITORING.md`, `DOCKER.md`.
 
 ### Changed
-- **UPGRADED to FastMCP 3.1.1++**: Complete migration to SOTA standards
-  - FastMCP dependency updated to `>=3.1.1+.0,<3.1.1+.0` (from 3.1.1+)
+- Version bump **1.4.0 → 1.5.0** (Phase 5 telemetry and deployment).
+
+## [1.4.0] - 2026-05-28
+
+### Added
+- **`unity_validation`** portmanteau: scene polycount/materials/missing scripts, model disk check, avatar + unified audit.
+- **`utils/scene_validator.py`**, **`utils/platform_audit.py`**: validation metrics and cross-platform preflight.
+- **`MCPBridge.cs`**: `validate_scene` action (triangle/material/missing-script counts).
+- **`multiplatform` → `audit_all`**: VRChat + CVR + Resonite + Cluster unified audit.
+- **Webapp `/agent-tools`**: Agent Lab UI with bridge, import, vision, validation, jobs, platform tabs.
+- **REST `POST /api/v1/tool`**: webapp MCP tool bridge (mirrors blender-mcp pattern).
+
+### Changed
+- Help tabs updated for v1.4 validation + `/agent-tools`.
+- Version bump **1.3.0 → 1.4.0** (Phase 4 validation and polish).
+
+## [1.3.0] - 2026-05-28
+
+### Added
+- **`unity_import`** portmanteau: Blender/fleet GLB/VRM/FBX handoff (`import_blender`, `import_fleet_batch`, `list_formats`).
+- **`unity_vision_refine`**: capture, review_bundle, apply_bridge_commands for agent vision loops.
+- **`utils/fleet_import.py`**, **`utils/vision_refine.py`**: fleet import and review bundle helpers.
+- **`worldlabs` → `assemble_review`**: import Marble assets then build vision review bundle.
+- **`unity_render`**: `capture_multi_angle`, `get_scene_summary`.
+- **`MCPBridge.cs`**: `capture_multi_angle`, `get_scene_summary`.
+
+### Changed
+- Webapp **Help** tabbed Agent Lab reference (v1.3).
+- Version bump **1.2.0 → 1.3.0** (Phase 3 fleet handoff + vision refine).
+
+## [1.2.0] - 2026-05-28
+
+### Added
+- **`unity_jobs`** portmanteau: async `build`, `batch_import`, and `simulation` jobs (submit/status/list/cancel).
+- **`utils/job_queue.py`**: in-process job queue with Prometheus active-job gauge.
+- **`utils/simulation_runner.py`**: bridge play-mode simulation with status polling.
+- **`MCPBridge.cs`**: `create_prefab`, `run_simulation`, `simulation_status`, `stop_simulation`.
+
+### Changed
+- **`unity_api`**: `create_prefab` and `run_simulation` wired to live bridge (no longer scaffold-only).
+- Version bump **1.1.0 → 1.2.0** (Phase 2 jobs and build depth).
+
+## [1.1.0] - 2026-05-28
+
+### Added
+- **Competitive analysis and roadmap**: `docs/COMPETITIVE_ANALYSIS.md`, `docs/ROADMAP.md` (phases 1–5).
+- **`unity_bridge`** portmanteau: live Editor bridge status, hierarchy, create/delete/transform via `MCPBridge.cs`.
+- **`unity_render`** portmanteau: `capture_game_view` for agent vision loops (PNG + optional base64).
+- **`utils/unity_runtime.py`**: bridge-first execution helper (`execute_bridge_action`).
+- **`utils/telemetry.py`**: Prometheus metrics skeleton (`monitoring` optional extra).
+- **`MCPBridge.cs`**: `capture_game_view` action (scene camera render to PNG).
+
+### Changed
+- **`unity_api`**: `get_scene_objects` and `modify_object` wired to live bridge (no longer scaffold-only for these ops).
+- Version bump **1.0.0 → 1.1.0** (Phase 1 agent vision + bridge wiring).
+
+## [Unreleased] - 2026-04-02
+
+### Changed
+- **UPGRADED to FastMCP 3.2.0**: Latest SOTA protocol standards.
+  - Migrated from FastMCP 2.13 to **FastMCP 3.2.0**.
+  - **ASGI Compatibility Fix**: Fixed startup failure by exposing global `app` attribute in `unity3d_mcp.server`.
+  - Standardized webapp backend port to **10831** and frontend to **10830**.
+  - Synchronized `server.py` with unified transport module (`transport.py`).
+  - Improved `run_stdio` and `run_http` methods for better error handling and SOTA compliance.
+
+- **UPGRADED to FastMCP 2.13+**: Complete migration to SOTA standards
+  - FastMCP dependency updated to `>=2.13.0,<2.14.0` (from 2.10)
   - Added server lifespan context manager for proper startup/shutdown
   - Migrated to structured logging with `structlog` (JSON output)
   - All logging now uses stderr (stdout reserved for MCP protocol)
   - Removed all `description=` parameters from `@mcp.tool` decorators
   - Enhanced all tool docstrings with comprehensive Args/Returns/Examples
-  - All docstrings now follow FastMCP 3.1.1++ standards (200+ lines for complex tools)
+  - All docstrings now follow FastMCP 2.13+ standards (200+ lines for complex tools)
   - Security fixes: CVE-2025-62801 (command injection), CVE-2025-62800 (XSS)
-  - Module docstring updated to reflect FastMCP 3.1.1++ compliance
+  - Module docstring updated to reflect FastMCP 2.13+ compliance
 - **BREAKING**: Removed `OSCManager` - use `oscmcp` for OSC functionality
 - OSC operations now require FastMCP server composition with `oscmcp`
 - See module docstring in `vrchat/__init__.py` for composition example
@@ -116,13 +190,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API reference
 
 ### Technical
-- FastMCP 3.1.1++ framework
+- FastMCP 2.10+ framework
 - Async/await architecture
 - Type hints throughout
 - Error handling and logging
 
 ### Standards
-- FastMCP 3.1.1++ compliant
+- FastMCP 2.12+ compliant
 - MCPB packaging
 - Professional folder structure
 - Modern Python tooling
@@ -141,7 +215,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Generated:** 2025-11-26  
 **Maintained by:** Sandra  
-**Project:** Unity3D-MCP - Professional Unity automation with Austrian precision! ðŸ‡¦ðŸ‡¹ðŸŽ®
-
+**Project:** Unity3D-MCP - Professional Unity automation with Austrian precision! 🇦🇹🎮
 
 

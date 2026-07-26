@@ -1,7 +1,7 @@
 # FastMCP Agentic Sampling: Autonomous Workflows
 
 **Last Updated:** 2026-04-21
-**Standard:** FastMCP 3.2.0 (GA)
+**Standard:** FastMCP 3.4.2 (originally written for 3.2.0 — `ctx.sample()` API unchanged)
 
 Agentic Sampling (SEP-1577) allows an MCP server to **borrow the client's LLM** to orchestrate multi-step workflows. This transforms the server from a passive "endpoint" into an active "agent" capable of reasoning and chaining tools autonomously.
 

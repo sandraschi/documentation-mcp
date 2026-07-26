@@ -1,11 +1,15 @@
 # HandBrake MCP Server
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![MCP 2.12.0](https://img.shields.io/badge/MCP-2.12.0-green.svg)](https://modelcontextprotocol.io/)
-[![DXT Compatible](https://img.shields.io/badge/DXT-Compatible-brightgreen)](https://github.com/anthropics/dxt)
-[![Documentation](https://img.shields.io/badge/docs-mkdocs-blue)](https://sandraschi.github.io/handbrake-mcp/)
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
 [![CI/CD Pipeline](https://github.com/sandraschi/handbrake-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/sandraschi/handbrake-mcp/actions/workflows/ci.yml)
 [![Docker](https://img.shields.io/badge/Docker-Supported-blue)](https://www.docker.com/)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-Ready-blue)](https://kubernetes.io/)
@@ -13,6 +17,20 @@
 [![Community](https://img.shields.io/badge/Community-Active-blueviolet)](https://github.com/sandraschi/handbrake-mcp/discussions)
 
 A **production-ready**, **FastMCP 3.2.0-compliant** server for professional video transcoding using HandBrakeCLI. Features an **Industrial SOTA Dashboard (v13.1)**, enterprise-grade CI/CD, and robust 127.0.0.1 networking for maximum stability.
+
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/handbrake-mcp
+cd handbrake-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
 
 ##  Features
 
@@ -133,7 +151,7 @@ The project includes a premium, SOTA-compliant dashboard for real-time transcodi
 cd web_sota
 .\start.bat
 ```
-Visit `http://localhost:10874` to access the control plane.
+Visit `http://localhost:51595` to access the control plane.
 
 ## 📦 Packaging & Distribution
 This repository is SOTA 2026 compliant and uses the officially validated `@anthropic-ai/mcpb` workflow for distribution.
@@ -361,3 +379,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 **HandBrake MCP | Industrial Transcoding Control Plane | 2026**
+
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.

@@ -1,10 +1,20 @@
-# git-github-mcp
-> FastMCP 2.14.4 portmanteau server for Git and GitHub operations. Uses `gh` CLI for GitHub; avoids the 40-tool explosion. - **git_ops**: clone, status, add, commit, push, pull, branch, tag, stash - **g...
+# git-github-mcp: Industrial Git/GitHub substrate
+> [Agentic Revolution Manifesto](https://github.com/sandraschi/mcp-central-docs/blob/master/manifesto/AGENTIC_REVOLUTION.md) | [SOTA v14.x Standard]
+> FastMCP 3.2+ hardened substrate for Git and GitHub operations. Uses `gh` CLI for GitHub; v1.20 non-interactive safety enforced. High-fidelity telemetry for commits, PRs, issues, and repo management.
+
+## Architecture
+- **Backend (Port 10702)**: Python/FastAPI wrapper for Git/GitHub CLI.
+- **Frontend (Port 10703)**: Vite-based dashboard for fleet telemetry and industrial triage.
+- **Discovery**: Automatic `gh.exe` detection across standard Windows paths.
+
+## Maintainer fleet triage
+- **Web:** route **`/inbox`** — PRs & Issues tabs, optional **fleet** mode (many `owner/repo` lines), same data as `github_ops`.
+- **Schedule:** A **supervisor** (robofang, OpenManus, OpenClaw, …) should run daily/weekly `pr_list` / `issue_list` across your repo list; MCP has no cron. Fleet doc: **mcp-central-docs** `patterns/GITHUB_MAINTAINER_HEARTBEAT.md`.
 
 This project includes automated llms.txt generation for AI accessibility.
 
 ## Docs
-- [Readme](README.md): FastMCP 2.14.4 portmanteau server for Git and GitHub operations. Uses `gh` CLI for GitHub; avoids th...
+- [Readme](README.md): FastMCP 3.1.1+ hardened substrate for Git and GitHub operations. Uses `gh` CLI for GitHub; v1.20 non-interactive safety.
 - [Changelog](CHANGELOG.md): - Initial release
 
 ## Configuration

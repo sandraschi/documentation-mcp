@@ -387,7 +387,7 @@ JellyfinError
 2. **New enrichment source** — Add class to `enrichment_service.py`, implement `fetch()` + `normalize()`
 3. **New WebSocket event handler** — Register callback in `WebSocketService._dispatch()`
 4. **Plugin bridge** — Jellyfin plugins can expose custom APIs; PluginService can introspect and proxy them
-5. **Tauri native** — Follow `tauri_godot_sota.md` template for native desktop wrapper
+5. **Tauri native** — Follow `tauri_nsis_building.md` template for native desktop wrapper
 
 ---
 

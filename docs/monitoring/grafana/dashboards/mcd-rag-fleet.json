@@ -1,0 +1,84 @@
+{
+  "title": "MCD / RAG & Fleet probes",
+  "uid": "mcd-rag-fleet",
+  "tags": ["mcp-central-docs", "rag", "fleet"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "RAG index ready",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "expr": "docs_index_ready{job=\"docs-mcp\"}", "refId": "A" }],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "options": { "0": { "text": "empty" }, "1": { "text": "ready" } } }
+          ]
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Indexed chunks",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "expr": "docs_index_chunks{job=\"docs-mcp\"}", "refId": "A" }]
+    },
+    {
+      "type": "stat",
+      "title": "Sources",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "expr": "docs_index_sources{job=\"docs-mcp\"}", "refId": "A" }]
+    },
+    {
+      "type": "stat",
+      "title": "Fleet registry apps",
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "expr": "docs_fleet_registry_apps{job=\"docs-mcp\"}", "refId": "A" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Fleet HTTP probe (blackbox)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "probe_success{job=~\"docs-mcp|docs-mcp-rag|devices-mcp|calibre-mcp|plex-mcp|calibre-plus\"}",
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "MCP scrape up",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "up{job=~\"docs-mcp|devices-mcp-ring-metrics|calibre-mcp|calibre-plus|plex-mcp|avatar-mcp-metrics|mcp-studio-host\"}",
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "logs",
+      "title": "Fleet MCP logs (Loki)",
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 12 },
+      "datasource": { "type": "loki", "uid": "loki" },
+      "targets": [
+        {
+          "expr": "{container=~\".*(calibre|plex|devices|avatar|tailscale).*\"} |= \"ERROR\"",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}

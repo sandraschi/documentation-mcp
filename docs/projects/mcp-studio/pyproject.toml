@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mcp-studio"
 version = "0.2.1-beta"
-description = "MCP Studio - Management tool for MCP servers (beta): Web dashboard (FastAPI) + MCP server (FastMCP 2.13.1)"
+description = "MCP Studio - Management tool for MCP servers (beta): Web dashboard (FastAPI) + MCP server (FastMCP 3.1.0+)"
 authors = [{ name = "Sandra Schipal", email = "sandraschipal@hotmail.com" }]
 readme = "README.md"
 requires-python = ">=3.10"
@@ -23,7 +23,7 @@ dependencies = [
     "uvicorn>=0.23.0",
     "pydantic>=2.0.0",
     "python-dotenv>=1.0.0",
-    "fastmcp[all]>=3.1.0,<4",
+    "fastmcp[all]>=3.4.4,<4",
     "mcp>=1.0.0,<2.0.0",  # CRITICAL: Prevent MCP 1.16.0+ Python 3.13 incompatibility
     "anyio>=4.0.0,<5.0.0",  # CRITICAL: Prevent incompatible anyio versions
     "structlog>=23.0.0",
@@ -50,19 +50,6 @@ dev = [
 where = ["src"]
 include = ["mcp_studio*"]
 
-[tool.ruff]
-line-length = 100
-target-version = "py310"
-src = ["src"]
-
-[tool.ruff.lint]
-select = ["E", "F", "I", "N", "W", "UP", "B", "A", "C4", "DTZ", "EM", "ISC", "ICN", "PT", "Q", "RET", "SIM", "TID", "ARG", "PLE", "PLW"]
-ignore = ["E501"]
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
@@ -82,3 +69,15 @@ exclude = ["**/node_modules", "**/__pycache__", "**/.*"]
 reportMissingImports = true
 reportMissingTypeStubs = false
 pythonVersion = "3.10"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

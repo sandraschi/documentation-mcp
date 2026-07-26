@@ -49,7 +49,7 @@ AvatarMCP uses a revolutionary portmanteau tools architecture that consolidates 
 - **Better Organization**: Related functionality logically grouped together
 - **Easier Maintenance**: Single class per functional area
 - **Improved Discoverability**: Clearer tool purposes and operations
-- **Standards Compliance**: FastMCP 2.12 compliant with multiline docstrings
+- **Standards Compliance**: FastMCP 3.2+ compliant with multiline docstrings
 - **Cleaner API**: More intuitive tool structure with operation-based design
 
 ### Architecture Overview
@@ -444,7 +444,7 @@ Optional dependencies (for development and testing):
 python -m avatarmcp
 ```
 
-The server will start and listen for MCP commands on stdin/stdout. You can interact with it using any MCP 2.12.0-compatible client.
+The server will start and listen for MCP commands on stdin/stdout. You can interact with it using any MCP 3.2+-compatible client.
 
 ### Example MCP Commands
 

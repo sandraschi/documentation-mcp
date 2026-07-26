@@ -4,6 +4,127 @@
 
 RebootX is an iPad application that provides mobile access to infrastructure monitoring tools like Grafana, enabling you to monitor your systems conveniently from your iPad. This document covers the integration of RebootX with your monitoring stack for "monitoring your infra in your pocket."
 
+## Fleet Integration (Unified Monitoring Stack)
+
+RebootX is part of the **fleet unified monitoring stack** (`mcp-central-docs/monitoring/`). It runs as a Docker service alongside Grafana, Prometheus, and Loki, and is accessible over Tailscale from an iPad.
+
+### Architecture
+
+```
+iPad (RebootX app) ──Tailscale──► rebootx-on-prem:12010
+                                         │
+                                         ├── GET  /runnables  ──► servers.json (fileJson mode)
+                                         ├── GET  /dashboards ──► dashboards.json (fileJson mode)
+                                         ├── POST /runnables/{id}/reboot ──► disabled (safe mode)
+                                         └── POST /runnables/{id}/stop   ──► disabled (safe mode)
+```
+
+The Go On-Prem server is built from source on container startup (`golang:1.22` image). It reads runnables and dashboards from static JSON files mounted at `/data/`.
+
+### Quick Start
+
+```powershell
+cd mcp-central-docs/monitoring
+docker compose up -d
+# RebootX is now on http://localhost:12010
+# Swagger UI on http://localhost:12011
+```
+
+### Configuration
+
+| Setting | Value |
+|---------|-------|
+| **Port** | `12010` (fleet standard) |
+| **Swagger UI** | `12011` |
+| **API Key** | `REBOOTX_API_KEY` env var (default: `unified-monitoring-rebootx-key`) |
+| **Path Prefix** | `unified-monitoring` |
+| **Runnable Mode** | `fileJson` only (`self` mode disabled — see Safety) |
+| **Dashboard Mode** | `fileJson` |
+| **Data Files** | `rebootx-on-prem/data/servers.json` (runnables) |
+| | `rebootx-on-prem/data/dashboards.json` (dashboards) |
+
+### Runnables Registered
+
+The `servers.json` defines four runnables visible in the RebootX app:
+
+| ID | Name | What it represents | Metrics |
+|----|------|-------------------|---------|
+| `tailscale-mcp-001` | Tailscale MCP Server | The MCP server itself | Active devices, network health, API latency, uptime |
+| `grafana-001` | Grafana Dashboard | Grafana instance | Dashboard views, query latency, active users |
+| `prometheus-001` | Prometheus Metrics | Prometheus instance | Metrics scraped, scrape duration, storage usage |
+| `loki-001` | Loki Log Aggregation | Loki instance | Log entries/sec, storage usage, query latency |
+
+Each runnable has:
+- **Status** (on/off) — shown as green/red indicator in the app
+- **Metrics** — up to 4 numeric gauges with color thresholds (green/yellow/red)
+- **Scope tags** — geo (local vs remote), logical (which subsystem)
+- **SSH placeholder** — present in schema but unused (fileJson mode)
+
+### Dashboards Registered
+
+| ID | Name | Metrics shown |
+|----|------|---------------|
+| `tailscale-network-overview` | Tailscale Network Overview | Active devices, health score, bandwidth, API latency, uptime |
+| `monitoring-infrastructure` | Monitoring Infrastructure | Grafana views, Prometheus metrics, Loki log rate, stack uptime |
+| `security-metrics` | Security Metrics | Scan results, auth attempts, blocked IPs, security score |
+| `performance-metrics` | Performance Metrics | Network latency, bandwidth, CPU, memory |
+
+### Adding New Runnables or Dashboards
+
+Edit the JSON files and restart the container:
+
+```powershell
+# Add a new runnable
+# 1. Edit monitoring/rebootx-on-prem/data/servers.json
+# 2. docker compose restart rebootx-on-prem
+```
+
+Required fields for a runnable:
+```json
+{
+    "id": "unique-id",
+    "name": "Human-readable name",
+    "status": "on",
+    "metrics": [
+        {"label": "Metric Name", "value": 42, "unit": "units", "thresholds": [50, 80]}
+    ]
+}
+```
+
+### Safety
+
+The On-Prem server supports two runnable modes:
+
+| Mode | Behavior | Used? |
+|------|----------|-------|
+| `fileJson` | Reads runnables from a static JSON file. **No reboot/stop capability.** | **Yes (default)** |
+| `self` | Uses syscall to actually reboot/stop the **host machine**. Requires privileged access. | **No** |
+
+Our config uses `fileJson` exclusively. The `self` mode is disabled because:
+- It uses real `reboot`/`shutdown` syscalls — one wrong tap on the iPad takes the monitoring host down
+- It requires running the container with elevated privileges
+- We don't need remote reboot from a phone for production infrastructure
+
+If you ever change this: **do not expose port 12010 outside Tailscale.**
+
+### Tailscale Access
+
+The unified monitoring stack runs on a dedicated host. Access the RebootX server from your iPad over Tailscale:
+
+```
+http://<tailscale-ip-of-monitoring-host>:12010
+```
+
+No public ports, no TLS certs needed — Tailscale encrypts the connection end-to-end.
+
+### Quis custodiet ipsos custodes?
+
+RebootX is the outermost observability layer — it watches the monitoring stack that watches the fleet. The stack (Grafana/Prometheus/Loki/RebootX) runs on dedicated infrastructure, and RebootX provides a pocket view of its health without needing to open a laptop. It is intentionally limited (read-only dashboards, no reboot capability) so the monitor cannot accidentally disrupt the monitored.
+
+---
+
+## 🚀 **What is RebootX?**
+
 ## 🚀 **What is RebootX?**
 
 RebootX is a mobile application designed to provide convenient access to infrastructure monitoring tools, particularly Grafana dashboards, directly from your iPad. It's perfect for homebrew monitoring enthusiasts who want affordable, mobile access to their infrastructure monitoring.

@@ -1,0 +1,59 @@
+name: MCP Scanner
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "mcp-server/**"
+      - ".cursor/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/mcp-scanner.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  mcp-source-and-endpoint-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install MCP scanner
+        run: uv tool install cisco-ai-mcp-scanner
+
+      - name: Prepare report directory
+        run: |
+          python -c "import os; os.makedirs('security-reports/mcp-scanner', exist_ok=True)"
+
+      # Source behavioral scan: catches code/description mismatch and risky dataflow.
+      - name: Behavioral source scan
+        run: |
+          mcp-scanner behavioral . --format raw --output security-reports/mcp-scanner/behavioral.json
+
+      # Optional endpoint scan: uncomment and set URL for repos with a CI-runnable MCP endpoint.
+      # - name: Endpoint scan (readiness + yara)
+      #   run: |
+      #     mcp-scanner --analyzers yara,readiness remote --server-url "http://127.0.0.1:8000/mcp" --format raw --output security-reports/mcp-scanner/endpoint.json
+
+      # Optional policy gate:
+      # - parse JSON and fail on high/critical using your own script/tooling.
+
+      - name: Upload scanner artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-scanner-reports
+          path: security-reports/mcp-scanner/**

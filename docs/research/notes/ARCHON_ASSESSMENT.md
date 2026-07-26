@@ -339,5 +339,5 @@ loop = LoopUntil(condition=condition, max_iterations=10)
 - Repo: https://github.com/coleam00/Archon
 - Docs: https://archon.diy
 - License: MIT
-- Fleet standards this assessment applies: `workflow_2026.md`, `architecting_sota.md`, `mcp_registration.md`, `tauri_godot_sota.md`
+- Fleet standards this assessment applies: `workflow_2026.md`, `architecting_sota.md`, `mcp_registration.md`, `tauri_nsis_building.md`
 - Fleet pipelines this intersects: `deepfang` execution architecture, `hermes-agent` fleet conductor, `depot-mcp` multi-repo ops

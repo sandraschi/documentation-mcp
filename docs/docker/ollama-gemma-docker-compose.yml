@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  # Gemma 2 27B (NEW - January 2025) - SOTA instruction-tuned reasoning
+  # 16GB model size. Perfect for 24GB VRAM. Best quality on single GPU.
+  gemma-27b:
+    image: ollama/ollama:latest
+    container_name: gemma-27b
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_gemma_27b:/root/.ollama
+    environment:
+      - OLLAMA_NUM_GPU=1  # Use GPU (4090 with 24GB VRAM)
+      - CUDA_VISIBLE_DEVICES=0
+      - OLLAMA_KEEP_ALIVE=4h  # Keep loaded 4 hours
+    deploy:
+      resources:
+        limits:
+          memory: 48g        # Plenty of headroom
+          cpus: '16'
+        reservations:
+          memory: 32g
+          cpus: '12'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: always
+    command: ollama serve
+
+  # Gemma 2 9B (Secondary - Medium quality, fast)
+  # For when you need speed over max quality. Same VRAM but faster.
+  gemma-9b:
+    image: ollama/ollama:latest
+    container_name: gemma-9b
+    ports:
+      - "11435:11434"
+    volumes:
+      - ollama_gemma_9b:/root/.ollama
+    environment:
+      - OLLAMA_NUM_GPU=1
+      - CUDA_VISIBLE_DEVICES=0
+      - OLLAMA_KEEP_ALIVE=2h
+    deploy:
+      resources:
+        limits:
+          memory: 24g
+          cpus: '8'
+        reservations:
+          memory: 16g
+          cpus: '6'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: always
+    command: ollama serve
+
+  # Gemma 2 2B (Ultra-lightweight)
+  # Edge inference, embeddings, real-time latency-critical tasks
+  gemma-2b:
+    image: ollama/ollama:latest
+    container_name: gemma-2b
+    ports:
+      - "11436:11434"
+    volumes:
+      - ollama_gemma_2b:/root/.ollama
+    environment:
+      - OLLAMA_NUM_GPU=1
+      - CUDA_VISIBLE_DEVICES=0
+      - OLLAMA_KEEP_ALIVE=1h
+    deploy:
+      resources:
+        limits:
+          memory: 8g
+          cpus: '4'
+        reservations:
+          memory: 4g
+          cpus: '2'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "2"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: always
+    command: ollama serve
+
+volumes:
+  ollama_gemma_27b:
+  ollama_gemma_9b:
+  ollama_gemma_2b:
+
+networks:
+  default:
+    name: ollama_network
+    driver: bridge

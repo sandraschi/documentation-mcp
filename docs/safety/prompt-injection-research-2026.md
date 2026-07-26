@@ -1,4 +1,4 @@
-﻿# Prompt Injection - Research Reference 2026
+# Prompt Injection - Research Reference 2026
 
 **Last Updated**: 2026-03-29
 **Tags**: [prompt-injection, security, arxiv, dtu, robofang, high]
@@ -167,14 +167,13 @@ All six present in any message = near-certain attack. Score accordingly.
 
 ## Tools & Products Referenced
 
-- **Bastio** (bastio.com) â€” secure proxy for agent web scraping;
-  renders pages in isolated browser, strips injections before returning
-  clean markdown. Catches 12 known indirect injection patterns.
-  Limitation: pattern 13+ always possible (halting problem).
-
-- **DefenseClaw** â€” hardened OpenClaw fork; fixes 0.0.0.0:18789
-  default binding vulnerability (40k exposed instances in original)
-
+- **Bastio** (bastio.com) - open-source AI security gateway (Go binary).
+  Drop-in reverse proxy that scans all LLM requests for PII, secrets,
+  prompt injection, jailbreaks, indirect injections, and code leaks
+  in <50us. No code changes - change one base URL. Catches ~95% of
+  common attack patterns; halting problem informs the remaining 5%.
+  Fleet doc: [integrations/bastio/README.md](../integrations/bastio/README.md)
+  Landscape: [safety/AI_GUARDRAILS_LANDSCAPE.md](AI_GUARDRAILS_LANDSCAPE.md)
 - **NemoClaw / OpenShell** â€” alternative OpenClaw derivatives
 
 ---

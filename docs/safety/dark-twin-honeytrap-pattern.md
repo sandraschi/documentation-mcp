@@ -45,6 +45,10 @@ Add to DTU for honeytrap support:
 - `/email/receive` — accepts inbound emails, forwards to honeytrap agent
 - Optional `/dtu/honeytrap` — health/metrics for honeytrap-specific logging
 
+## Status
+
+**This is an aspirational design document.** The DTU honeytrap pattern was researched and documented but never built as a working system. The concepts are valid but the implementation sketch below is untested. Anyone picking this up should validate against the current Dark App Factory DTU code.
+
 ## Caveats
 
 - Requires building the target system (e.g., OpenClaw clone-only policy may block)

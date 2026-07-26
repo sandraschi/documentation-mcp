@@ -1,82 +1,160 @@
-﻿# Changelog
+
+## [Unreleased] — 2026-06-14
+
+### Added
+- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
+- PyInstaller frozen backend embedded in NSIS installer
+- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
+- `just cua-nsis-test` recipe
+- Tauri CORS: `tauri://localhost` origins for WebView API access
+- `GET /api/v1/diagnostics` endpoint for CUA verification
+# Changelog
 
 All notable changes to OCR-MCP will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-05-14
+
+### Added
+
+- **Nemotron VL 8B backend** (`nemotron_vl_backend.py`) — NVIDIA document intelligence VLM
+  - 8B params, built on Llama-3.1-8B-Instruct + C-RADIOv2-H vision encoder
+  - Best-in-class document benchmarks: DocVQA 91.2%, ChartQA 86.3%, AI2D 85.0%
+  - Ideal for structured documents: invoices, forms, charts, diagrams, reports
+  - Requires `timm`, `einops`, `open-clip-torch` additional deps
+  - Uses custom `.chat()` API — different from standard `AutoModelForCausalLM`
+  - Backend name: `nemotron-vl`, alias: `nemotron`
+  - HF: `nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1`
+
 ## [Unreleased] - 2026-05-12
 
 ### Added
-- **MinerU2.5-Pro backend** — opendatalab coarse-to-fine doc parsing VLM (1.2B params, April 2026)
-  - HF: `opendatalab/MinerU2.5-Pro-2604-1.2B`, registered as `mineru-2.5`
-- **Backend model status UI** — New `/backends` route in webapp with availability indicators, download/progress/probe UX
-- **Model download REST API** — `/api/models/status`, `/api/models/download/{name}`, `/api/models/download/{name}/progress`
-- **`POST /api/restart`** — Backend restart endpoint; falls back to Vite plugin middleware when backend is dead
-- **"Restart Backend" button** in BackendsPage with auto-refetch after restart
-- **Fleet start script** — `starts/ocr-sota-start.bat` created; starts backend (uvicorn :10859) + frontend (Vite :10858)
-- **`list_backends()`** on `BackendManager` — returns structured dict with per-backend availability and capabilities
-- **18 new unit tests** — model availability, download status, backend listing structure
-- **Vite proxy error suppression** — no more terminal spam when backend temporarily offline
+
+- **MinerU2.5-Pro backend** (`mineru_backend.py`) — opendatalab coarse-to-fine doc parsing VLM
+  - 1.2B params, SOTA on multiple document parsing benchmarks
+  - Two-stage: global layout analysis → native-resolution content recognition
+  - HF: `opendatalab/MinerU2.5-Pro-2604-1.2B`
+  - Registered as `mineru-2.5` with alias `mineru`
+- **Backend model status UI** — New `/backends` route in `web_sota` with summary cards, per-backend availability indicators, model sizes, download/load buttons with live progress bars, and probe buttons
+- **`/api/models/status`** — Lists all registered backends with availability, capabilities, and download state
+- **`/api/models/download/{name}`** — Triggers async model load/download with background progress tracking
+- **`/api/models/download/{name}/progress`** — Pollable progress endpoint (not_started/downloading/verifying/available/failed)
+- **`POST /api/restart`** — Restarts the backend server process; spawns a new process and shuts down current one. Fallback Vite plugin handles restart when backend is dead
+- **"Restart Backend" button** in BackendsPage — visible when backend is offline, auto-refetches after 3-5s
+- **Fleet start script** — `D:\Dev\repos\mcp-central-docs\starts\ocr-sota-start.bat` created, delegates to `web_sota/start.ps1` which starts both backend (uvicorn :10859) and frontend (Vite :10858)
+- **`list_backends()` method** — Added to `BackendManager`; restructured return with `backends` dict, `available_count`, `total_count` (was missing, causing crashes in `manage_workflow(list_backends)`)
+- **18 new unit tests** — `TestBackendListAndStatus` (12 tests) + 4 webapp API tests + model availability/download/probe tests
+- **Vite proxy error suppression** — Proxy errors no longer flood terminal when backend is temporarily down
 
 ### Fixed
-- **Environment fragility** — Documented `.venv` corruption recovery path; `web_sota/start.ps1` runs `uv sync` before startup
-- **`start.ps1`** — Was starting MCP server instead of web backend; now delegates to `web_sota/start.ps1`
-- **API port mismatch** — `api.ts` base URL defaulted to phantom port 15550; changed to empty string for Vite proxy routing
+
+- **Environment fragility** — `.venv` can become corrupted (no `python.exe`). `web_sota/start.ps1` now runs `uv sync` before starting to ensure the venv is valid. Run `uv sync` manually if backend fails to start with "not a valid Python environment"
+- **`start.ps1` at repo root** — Was starting MCP server (`uv run -m ocr_mcp`) instead of web backend. Now delegates to `web_sota/start.ps1` which correctly starts both servers
+- **API port mismatch** — `frontend/src/services/api.ts` defaulted API base to `http://localhost:15550` (phantom port, never the right answer). Changed to empty string so requests go through Vite proxy to the correct backend port (10859)
 - **`web_sota/.env`** — Created with `VITE_API_BASE_URL=` to ensure proxy routing
-- **ScanViewer bitmap alignment** — Full-width scale instead of letterbox; left/right edges now match viewer edges
-- **operate_scanner save** — Scan images now always saved to disk (defaults to `scans/scan_{uuid}.png`) instead of returning in-memory only
-- **scan_batch argument order & persistence** — Fixed parameter swap; batch images now saved to disk
-- **list_backends() crash** — Added missing method (was called by `manage_workflow(list_backends)`)
+- **ScanViewer bitmap alignment** — `handleFit` now uses full-width scale (`container.width / img.width`) instead of letterbox; image left/right edges match viewer edges
+- **ScanViewer transform origin** — Changed from `50% 50%` to `0 0` with centering removed, keeping image anchored at top-left
+- **operate_scanner save_path** — Added `save_path`, `save_directory`, `brightness`, `contrast`, `count`, `duplex` parameters to MCP tool; scans are now always saved to disk (defaults to `scans/scan_{uuid}.png`) instead of returning in-memory PIL Image that couldn't be chained to `process_document`
+- **scan_batch argument order** — Fixed `scanner_manager.scan_batch(device_id, count, settings, save_directory)` → `(device_id, settings, count)`; batch scans now persist each image to disk
+- **list_backends** — Added missing method that was called from `_workflow.py` (would crash `manage_workflow(list_backends)` and `get_status`)
+
+## [Unreleased] - 2026-03-19
+
+### Fixed
+
+- **`workflow_management`** — MCP layer incorrectly called `handle_workflow_op` with positional args; added **`handle_mcp_workflow`** + **`expand_source_dir_to_document_paths`** so `source_dir` (file or directory) maps to `document_paths` and optional `pipeline_config` keys pass through.
+- **Optimization hints** — Replaced stale **florence-2** backend recommendation with **paddleocr-vl** in `_workflow._calculate_optimal_settings` / recommendations; **execute_pipeline** uses `pipeline_config.get("name")` to avoid KeyError.
+- **Server instructions** — Prompt text lists PaddleOCR-VL / Mistral instead of Florence-only stack.
+- **`.gitignore`** — ignore **`node_modules/`** (and `**/node_modules/`). Removed **`frontend/node_modules`** from Git tracking (~5k files); they remain on disk — run **`npm install`** under `frontend/`. **History on GitHub was rewritten** with `git filter-repo --path frontend/node_modules --invert-paths` and **`git push --force`** so those blobs are no longer on `origin`. Anyone who cloned before that must **re-clone** or reset hard to `origin/master` (forks: coordinate with upstream).
+
+### Added
+
+- **`corpus_management` MCP tool** — SQLite index (v0) under **`OCR_CORPUS_DIR`** or `{cache_dir}/corpus` (`corpus.db`). Operations: `register`, `get`, `search`, `list_recent`, `update_metadata`, `attach_ocr_result`. Module `ocr_mcp.corpus.store`.
+- **`docs/MCP_TOOLSET_MATRIX.md`** — Audit of portmanteau tools and operation implementation status.
+- **`POST /api/settings/mistral/test`** — Validates Mistral API key via **`GET {base}/models`**; optional JSON overrides for unsaved form key/URL. **`web_sota` Settings** — **Test API key** button.
+- **Help (`/help`)** — Reworked to cover **web application** (ports, proxy, routes, Settings semantics), **MCP server** (stdio, tools, env, Mistral vs web), and **OCR backends** table + doc links (`web_sota/src/pages/help.tsx`).
+- **`ocr_pip_install`** — Shared `ensure_ocr_pip_dependencies()` for **`OCR_AUTO_INSTALL_DEPS=1`** (torch/transformers stack + optional Paddle); invoked from **`run_ocr_startup_bootstrap`** so the **MCP server** gets the same auto-install as the web backend (removed duplicate logic from `backend/app.py`).
+- **`ml_stack_hints`** — One log line per process when CUDA is available but **flash-attn** is missing (VRAM hint + doc pointer).
+- **Startup bootstrap** — `ocr_mcp.utils.startup_bootstrap.run_ocr_startup_bootstrap(config)` runs after `OCRConfig()` in the FastAPI backend and MCP server: **PyYAML** dist-info repair (so `transformers` sees `pyyaml` version), **Tesseract** (Windows silent install), **Poppler** for pdf2image (Windows winget `oschwartz10612.Poppler`). Kill-switch: `OCR_AUTO_BOOTSTRAP=0`. Poppler: `OCR_AUTO_INSTALL_POPPLER=0`, env `POPPLER_PATH`; `OCRConfig.poppler_path` passed to `convert_from_path`.
+- **Windows Tesseract auto-install** — via bootstrap / `tesseract_bootstrap` (once per process). Opt out with `OCR_AUTO_INSTALL_TESSERACT=0`. `TesseractBackend` retries bootstrap if the first probe fails.
+- **Settings → Mistral OCR API** — `web_sota` settings page: API key (password field), base URL, save / remove key. Backend **`GET/POST /api/settings/mistral`** updates global `OCRConfig` and **`invalidate_backend("mistral-ocr")`**. **`GET /api/backends`** lists all registered backends with availability (not only available ones).
+
+### Changed
+
+- **EasyOCR** — use GPU only when `torch.cuda.is_available()`; log once before first reader init that models may download into cache.
+
+### Documentation
+
+- **README** — In-app Help pointer (`/help`); Mistral web vs MCP env in “What it does”; docs table links **`web_sota/src/pages/help.tsx`**.
+- **INSTALL** — Web routes, `/help`, Settings/Mistral/**test** API; MCP **`MISTRAL_API_KEY`** note; `web_sota/start.ps1` flow, PyYAML, `OCR_AUTO_INSTALL_DEPS`, tests pointer (unchanged parts retained).
+- **TECHNICAL** — Two-surface architecture (FastAPI vs FastMCP); selected REST routes (`/api/settings/mistral`, `/test`); dev steps numbering fix.
+- **OCR_BACKEND_REQUIREMENTS** — Mistral: `POST /api/settings/mistral/test` / UI **Test API key**.
+- **BACKEND_DEPS** — Frontend `/api` + `/static` proxy, Help source, Settings API summary; same venv / PyTorch notes as before.
 
 ## [Unreleased] - 2026-03-16
 
 ### Added
-- **FastMCP 3.1 prompts**: quality-assessment-guide, scanner-workflow, batch-processing-guide, agentic-workflow-instructions.
-- **Resources**: resource://ocr/capabilities, resource://ocr/skills (LLM skills reference).
+
+- **FastMCP 3.1 prompts**: `quality-assessment-guide`, `scanner-workflow`, `batch-processing-guide`, `agentic-workflow-instructions` (in addition to `process-instructions`).
+- **Resources**: `resource://ocr/capabilities` (backends + 3.1 features), `resource://ocr/skills` (LLM-oriented skills reference for document processing, scanning, workflows, agentic).
+- **Server docstring**: Documents sampling, agentic workflow tool, prompts, and skills in module header.
 
 ### Fixed
-- **WIA scanner discovery**: No longer lost after first request (CoUninitialize removed from device release; cleanup after enumerate).
-- **Agentic document workflow**: Real context.sample_step loop; GET /api/scanners no fake data.
+
+- **WIA scanner discovery lost after first request**
+  - Scanner was found on first `/api/scanners` call then reported 0 devices on later calls.
+  - **Cause**: `_release_device()` called `pythoncom.CoUninitialize()`, tearing down COM for the whole executor thread; next discovery then ran in a broken COM state. Also, cleanup ran before re-enumerate so devices were released right before enumeration.
+  - **Changes**: (1) `_release_device()` now only releases the device COM reference (e.g. `device.Release()`), no longer calls `CoUninitialize()`. (2) Discovery no longer cleans up at start; it enumerates first, builds the new device list, then releases only connections no longer in the new set. (3) All WIA discovery and scan already use a single-thread executor so COM stays on one STA thread.
+- **Agentic document workflow** — was simulated single-step mock; now uses real `context.sample_step` loop with tool execution (FastMCP 3.1).
+- **GET /api/scanners** — no longer returns fake "Demo Scanner" when discovery fails; returns `scanners: []` and `error` message.
+- **MCP server not starting in Cursor (FastMCP 3.x API)** — FastMCP 3.x removed `on_duplicate_tools`, `on_duplicate_resources`, `on_duplicate_prompts` and `include_fastmcp_meta`. Server now uses single `on_duplicate="replace"` and no longer passes removed kwargs, so it starts correctly in Cursor and other MCP clients.
 
 ### Changed
-- **FastMCP**: Upgraded to 3.1 (dependency, docs, badges). WIA uses single-thread executor.
+
+- **Web backend** — WIA operations use a dedicated single-thread `ThreadPoolExecutor` instead of `asyncio.to_thread()` so every discovery/scan runs on the same STA thread and device list stays stable.
+- **FastMCP** — Upgraded from 2.14.x to **3.1**: dependency `fastmcp[server]>=3.1`, all docs and docstrings updated.
 
 ## [Unreleased] - 2026-02-27
 
 ### Added
-- **PaddleOCR-VL-1.5 backend** (`paddleocr_vl_backend.py`) â€” January 2026 SOTA
-  - 94.5% accuracy on OmniDocBench v1.5 â€” top of all open-source benchmarks
+
+- **PaddleOCR-VL-1.5 backend** (`paddleocr_vl_backend.py`) — January 2026 SOTA
+  - 94.5% accuracy on OmniDocBench v1.5 — top of all open-source benchmarks
   - 0.9B parameters (NaViT encoder + ERNIE-4.5-0.3B LM), ~1.8GB on disk
-  - ~3.3GB VRAM with flash-attn; ~40GB without â€” flash-attn is mandatory on GPU
+  - ~3.3GB VRAM with flash-attn; ~40GB without — flash-attn is mandatory on GPU
   - First model with irregular box localization (tilted, folded, screen-captured docs)
   - Supports text, tables, formulas, charts, seals, 109 languages
   - HF: `PaddlePaddle/PaddleOCR-VL-1.5`
-- **DeepSeek-OCR-2 backend** (`deepseek_ocr2_backend.py`) â€” January 2026
+- **DeepSeek-OCR-2 backend** (`deepseek_ocr2_backend.py`) — January 2026
   - "Visual Causal Flow" architecture (arXiv:2601.20552)
   - 3B parameters, strong structured markdown output
   - HF: `deepseek-ai/DeepSeek-OCR-2`
   - Requires: `einops addict easydict flash-attn==2.7.3`
-- **olmOCR-2 backend** (`olmocr_backend.py`) â€” October 2025, Allen Institute for AI
+- **olmOCR-2 backend** (`olmocr_backend.py`) — October 2025, Allen Institute for AI
   - Built on Qwen2.5-VL-7B-Instruct, 82.4 on olmOCR-Bench
   - Best choice for scientific/academic PDFs with math equations and multi-column layouts
   - GRPO RL training specifically targets equations and tables
   - HF: `allenai/olmOCR-2-7B-1025`
 
 ### Changed
+
 - **Auto backend priority order** updated to reflect 2026 SOTA reality:
-  `paddleocr-vl â†’ mistral-ocr â†’ deepseek-ocr2 â†’ olmocr-2 â†’ deepseek-ocr â†’ qwen-layered â†’ got-ocr â†’ dots-ocr â†’ pp-ocrv5 â†’ easyocr â†’ tesseract`
+  `paddleocr-vl → mistral-ocr → deepseek-ocr2 → olmocr-2 → deepseek-ocr → qwen-layered → got-ocr → dots-ocr → pp-ocrv5 → easyocr → tesseract`
 - **Backend alias map** extended with `paddleocr`, `paddle`, `deepseek2`, `olmocr`, `olm`, `paddleocr-vl-1.5`; `florence` alias now redirects to `paddleocr-vl`
 
 ### Removed
-- **Florence-2 backend** (`florence_backend.py`) â€” deleted
+
+- **Florence-2 backend** (`florence_backend.py`) — deleted
   - Florence-2 is a general-purpose vision foundation model (object detection, captioning, grounding), not an OCR specialist
   - The OCR task prompt it exposed produced inferior results; confidence score was hardcoded; structured output methods were stubs
   - Replaced by PaddleOCR-VL-1.5 which is purpose-built and measurably better
 - **Demo mode backend list** no longer references florence-2 or pp-ocrv5 as defaults
 
 ### Fixed
-- **Scanner bug: `"id"` â†’ `"device_id"` in `/api/scanners` response**
+
+- **Scanner bug: `"id"` → `"device_id"` in `/api/scanners` response**
   - Frontend `ScannerInfo` interface expected `device_id`; backend was returning `id`
   - `selectedScanner` was always `undefined`, FormData sent garbage device_id, scan never triggered
 - **WIA COM threading: scan now runs in dedicated thread via `asyncio.to_thread()`**
@@ -88,28 +166,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Previously hardcoded `"auto"` regardless of user selection
 
 ### Changed (webapp)
-- **`process.tsx` (Pipeline page) rewritten** â€” was non-functional placeholder
+
+- **`process.tsx` (Pipeline page) rewritten** — was non-functional placeholder
   - Each pipeline card now has file picker + OCR backend selector + Run Pipeline button
   - Polls `/api/job/{id}` until complete; shows extracted text inline in expandable result panel
   - Quality Optimizer kept as separate utility below the pipeline cards
-- **`settings.tsx`** â€” added Default OCR Backend selector (persisted to `localStorage`)
+- **`settings.tsx`** — added Default OCR Backend selector (persisted to `localStorage`)
   - Shows scanner details: manufacturer, max DPI, raw device_id
-- **`scanner.tsx`** â€” added OCR Backend dropdown; "OCR this Scan" now uses selected backend instead of hardcoded `"auto"`
+- **`scanner.tsx`** — added OCR Backend dropdown; "OCR this Scan" now uses selected backend instead of hardcoded `"auto"`
 
 ## [Unreleased] - 2026-02-09
 
 ### Changed
-- Upgraded FastMCP to 3.1.1+.4+ (2026 SOTA standard)
-- Removed lifespan storage usage (mcp_instance.storage not in FastMCP 3.1.1+.5)
+
+- Upgraded FastMCP to 3.1 (see 2026-03-16 section)
+- Removed lifespan storage usage (mcp_instance.storage not in FastMCP 3.x)
 - Portmanteau tool docstrings: 2026 SOTA format, no triple quotes within
 - README: Portmanteau Tool Ecosystem aligned with actual operations
-- README: FastMCP badge updated to 3.1.1+.4+ (2026 SOTA)
 
 ## [0.2.0-alpha.0] - 2026-01-19
 
-### ðŸš€ **Major Improvements**
+### 🚀 **Major Improvements**
 
 #### **Development Environment Modernization**
+
 - **Streamlined Tooling**: Removed redundant Black and isort dependencies - Ruff now handles all linting, formatting, and import sorting
 - **Enhanced Ruff Configuration**: Configured Ruff for comprehensive code quality with import sorting and first-party package recognition
 - **Comprehensive Pre-commit Hooks**: Added 20+ quality checks including security scanning, complexity analysis, and secret detection
@@ -117,61 +197,70 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CI/CD Pipeline Enhancement**: Improved workflow with better error handling, security audits, and quality reports
 
 #### **Code Quality & Standards**
+
 - **Advanced Linting**: Integrated MyPy, Bandit, Pip-Audit, Radon, and Detect-Secrets
 - **Security Hardening**: Added comprehensive security scanning and vulnerability detection
 - **Documentation Generation**: Added pDoc for automatic API documentation generation
 - **Type Safety**: Enhanced type checking with proper dependency management
 
 #### **Infrastructure Improvements**
+
 - **Port Standardization**: Consolidated all ports to 15550 for consistent development experience
 - **Frontend-Backend Integration**: Fixed React app serving issues with proper static file handling
 - **Testing Framework**: Enhanced test suite with advanced fixtures, mock servers, and comprehensive coverage
 - **Build System**: Improved Poetry configuration with proper dependency grouping
 
 #### **Project Maturity**
+
 - **Professional Documentation**: Created dedicated `AI_MODELS.md` with detailed backend specifications
 - **Comprehensive README**: Added development setup guides, pre-commit documentation, and troubleshooting
 - **Changelog Management**: Established proper version tracking and release notes
 - **Badge System**: Added version, CI/CD, coverage, and status badges
 
-### ðŸ› ï¸ **Technical Enhancements**
+### 🛠️ **Technical Enhancements**
 
 #### **Backend Improvements**
+
 - **Ruff Integration**: Single tool for linting, formatting, and import sorting
 - **Error Handling**: Improved exception chaining and bare except fixes
 - **Static File Serving**: Proper React SPA routing with catch-all handlers
 - **CORS Configuration**: Updated origins for localhost:15550
 
 #### **Frontend Updates**
+
 - **API Configuration**: Standardized backend URL to localhost:15550
 - **Build Process**: Fixed static file generation and distribution
 - **Settings Management**: Updated default backend URLs
 
 #### **Testing Infrastructure**
+
 - **Advanced Fixtures**: Enhanced pytest configuration with proper path handling
 - **Mock Servers**: Improved testing utilities with configurable ports
 - **Performance Testing**: Added benchmark framework and load testing capabilities
 - **Cross-Platform**: Windows-compatible test execution
 
 #### **CI/CD Pipeline**
+
 - **Multi-OS Testing**: Ubuntu and Windows CI with Python 3.9-3.11
 - **Quality Gates**: Security audits, complexity analysis, and coverage requirements
 - **Documentation Deployment**: Automated pDoc generation and GitHub Pages deployment
 - **Release Automation**: GitHub releases with comprehensive test validation
 
-### ðŸ“Š **Quality Metrics**
+### 📊 **Quality Metrics**
 
 - **Code Coverage**: Maintained 90%+ test coverage requirement
 - **Security**: Zero high-severity vulnerabilities (pip-audit, Bandit)
 - **Complexity**: Cyclomatic complexity analysis with Radon
 - **Dependencies**: Vulnerability scanning and license compliance
 
-### ðŸ”„ **Breaking Changes**
+### 🔄 **Breaking Changes**
+
 - **Tooling Migration**: Black and isort removed in favor of Ruff
 - **Port Changes**: All services now use port 15550
 - **Import Structure**: Ruff import sorting may reorganize imports
 
-### ðŸ§ª **Testing & Validation**
+### 🧪 **Testing & Validation**
+
 - **Unit Tests**: Comprehensive backend and frontend test coverage
 - **Integration Tests**: End-to-end workflow validation
 - **WebApp Tests**: Playwright-based UI testing with server readiness checks
@@ -180,19 +269,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.2] - 2026-01-01
 
 ### Added
+
 - **Singleton Backend Manager**: Refactored `BackendManager` in `app.py` to a global singleton, ensuring COM context stability.
 - **Robust WIA 2.0 Acquisition**: Implemented explicitly scoped `CoInitialize` calls and reconnection logic in `wia_scanner.py` for hardware stability.
 - **Hardware Stability**: Successfully resolved the `WIA_ERROR_BUSY` (0x8021006B) and acquisition failures for Canon LiDE 400 scanners.
 - **Professional Web Interface**: Finalized integration of the modern React-based UI with the stable backend.
 
 ### Fixed
+
 - Indentation errors and logic flow in `webapp/backend/app.py` `/api/scan` endpoint.
 - Redundant backend re-initialization that caused resource churn and COM instability.
-- Port conflict resolution and documentation (Standardized on port 8765).
+- Port conflict resolution and documentation (standardized on 10858 frontend / 10859 backend).
 
 ## [0.1.1] - 2025-12-23
 
 ### Added
+
 - Complete implementation of all 6 advanced OCR backends:
   - Mistral OCR 3 (State-of-the-art API-based OCR, 74% win rate over OCR2)
   - DeepSeek-OCR (4.7M+ downloads)
@@ -209,11 +301,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete project documentation and usage guides
 
 ### Changed
+
 - Updated README with current backend matrix and tool ecosystem
 - Enhanced documentation with detailed backend descriptions
 - Improved error handling and user feedback throughout
 
 ### Fixed
+
 - Unicode encoding issues in Windows environment
 - Server startup problems with stdio mode
 - Logging configuration conflicts
@@ -223,10 +317,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PP-OCRv5 backend now fully functional with automatic model downloading
 - Webapp startup issues with MCP client initialization
 - MCP client JSON parsing errors from server log messages
-- Incorrect webapp port documentation (8000 â†’ 7460)
+- Incorrect webapp port documentation (8000 → 7460)
 - Blocking webapp startup during MCP client initialization
 
 ### Tested
+
 - PP-OCRv5 backend successfully tested and verified working
 - All 5 OCR models automatically downloaded and initialized:
   - PP-LCNet_x1_0_doc_ori (document orientation detection)
@@ -239,6 +334,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backend manager properly handles failed backends with mock implementations
 
 ### Added
+
 - MockOCRBackend class for graceful degradation of failed backends
 - Comprehensive backend fallback system preventing crashes
 - All 9 OCR backends now available in the system:

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "davinci-resolve-mcp"
 version = "0.1.0"
-description = "FastMCP server for professional video editing using DaVinci Resolve"
+description = "FastMCP 3.1.0+ MCP server for DaVinci Resolve (fleet standards: mcp-central-docs)"
 readme = "README.md"
 authors = [
     {name = "sandraschi", email = "sandra@sandraschi.dev"},
@@ -33,26 +33,26 @@ classifiers = [
 
 dependencies = [
     # Core dependencies
-    "fastmcp>=3.1.0,<4",
+    "fastmcp>=3.4.4,<4",
+    "typer>=0.12.0",
+    "rich>=13.7.0",
     "structlog>=23.0.0",
     "fastapi>=0.95.0",
     "uvicorn[standard]>=0.22.0",
     "python-dotenv>=1.0.0",
     "pydantic>=2.0.0,<3.0.0",
-    
     # Process management and system utilities
     "psutil>=5.9.0",
     "pathlib>=1.0.1",
-    
     # File handling and validation
     "python-magic>=0.4.27; platform_system!='Windows'",
     "python-magic-bin>=0.4.14; platform_system=='Windows'",
-    
     # Configuration and utilities
     "typing-extensions>=4.5.0",
     "python-dateutil>=2.8.2",
     "httpx>=0.24.0",
     "pyyaml>=6.0",
+    "prefab-ui>=0.14.0",
 ]
 
 [project.urls]
@@ -278,12 +278,12 @@ request_timeout = 120.0
 resolve_timeout = 60.0
 
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py312"
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "B", "UP", "N", "S"]
-ignore = ["E501"]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
 
 [tool.ruff.format]
 quote-style = "double"

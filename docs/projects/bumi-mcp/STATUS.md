@@ -1,41 +1,35 @@
-# bumi-mcp — Status
+# STATUS — bumi-mcp physical bot readiness
 
-**Last updated:** 2026-03-20  
-**Source repo:** [sandraschi/bumi-mcp](https://github.com/sandraschi/bumi-mcp)  
-**Local path:** `D:/Dev/repos/bumi-mcp`
+**Version:** 0.2.0 · **Updated:** 2026-06-04
 
----
+## Summary
 
-## Release channel
+| Layer | Status | Notes |
+|-------|--------|-------|
+| Product / OSS info MCP | ✅ Ready | `bumi(operation=info\|specs\|sdk_links\|market)` |
+| Webapp (10775) | ✅ Specs dashboard | No teleop UI yet |
+| REST `/api/v1/health` | ✅ Ready | Mock or rosbridge |
+| REST `/api/v1/telemetry` | ✅ Ready | IMU, battery, joint_states |
+| REST `/api/v1/control/estop` | ⚠️ Scaffold | Mock OK; hardware needs `BUMI_ESTOP_TOPIC` |
+| REST `/api/v1/control/walk` | ⚠️ Gated | Requires `BUMI_ALLOW_MOTION=1` + walk topic from SDK |
+| REST `/api/v1/control/head` | ⚠️ Stub | Returns not wired until neck API mapped |
+| rosbridge on Jetson | ❌ Not shipped | Install when EDU unit arrives |
+| teleoperator `BumiAdapter` | ❌ Not started | Depends on stable REST contract (this repo) |
+| Yahboom mission executor copy | 🗄️ Reference only | Holonomic `/cmd_vel` — **not** for biped |
 
-| Field | Value |
-|-------|--------|
-| **Version** | **0.1.0** |
-| **PyPI** | *publish when ready* |
-| **Ports** | **10774** backend · **10775** frontend |
+## Modes
 
----
+| Env | Use |
+|-----|-----|
+| `BUMI_USE_MOCK_BRIDGE=1` | Dev, CI, teleoperator contract tests |
+| `BUMI_IP=<tailnet>` + `uv sync --extra robot` | Physical rosbridge on Bumi Jetson |
+| `BUMI_ALLOW_MOTION=1` | Only after SDK topic validation on hardware |
 
-## What works today
+## Blockers before first physical motion
 
-- **stdio MCP** — `bumi`, `bumi_agentic_workflow`, prompt `bumi_quick_start`, skill `bumi-operator`.
-- **HTTP** — FastAPI `/api/*`, MCP streamable **`/mcp`**.
-- **Web** — Vite glass dashboard (hero, virtual twin, fleet JSON, tools manifest).
-- **CI** — Ruff + pytest (GitHub Actions).
+1. Noetix EDU unit + SDK/ROS topic documentation
+2. Map walk / estop / head to vendor topics (replace placeholders in `.env.example`)
+3. Human-supervised smoke test on stand before teleoperator wiring
+4. `BumiAdapter` in teleoperator-mcp (separate PR)
 
----
-
-## Honest gaps
-
-| Area | State |
-|------|--------|
-| **Vendor motion API** | Not integrated — add when Noetix documents a stable local interface. |
-| **PyPI** | Install from repo / path until published. |
-
----
-
-## See also
-
-- [README.md](./README.md)  
-- [INTEGRATION.md](./INTEGRATION.md)  
-- [RoboFang bumi-mcp.md](https://github.com/sandraschi/robofang/blob/main/docs/integrations/bumi-mcp.md)
+See [INTEGRATION.md](INTEGRATION.md) for bring-up sequence.

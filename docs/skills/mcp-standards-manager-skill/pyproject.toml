@@ -1,0 +1,91 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mcp-standards-manager"
+version = "1.0.0"
+description = "MCP Standards Management and Compliance Automation"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "MCP Community", email = "standards@mcp.community"},
+]
+maintainers = [
+    {name = "MCP Community", email = "standards@mcp.community"},
+]
+keywords = [
+    "mcp",
+    "standards",
+    "documentation",
+    "compliance",
+    "automation",
+    "fastmcp",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Documentation",
+]
+dependencies = [
+    "fastmcp>=3.1.0,<4",
+    "click>=8.0.0",
+    "pyyaml>=6.0",
+    "rich>=13.0.0",
+    "gitpython>=3.1.0",
+    "pathlib2>=2.3.0; python_version < '3.4'",
+    "tomli>=2.0.0; python_version < '3.11'",
+]
+
+[project.urls]
+Homepage = "https://github.com/sandraschi/mcp-standards-manager-skill"
+Documentation = "https://mcp-standards-manager.readthedocs.io/"
+Repository = "https://github.com/sandraschi/mcp-standards-manager-skill"
+Issues = "https://github.com/sandraschi/mcp-standards-manager-skill/issues"
+Changelog = "https://github.com/sandraschi/mcp-standards-manager-skill/blob/main/CHANGELOG.md"
+
+[project.scripts]
+standards = "mcp_standards_manager.cli:main"
+mcp-standards = "mcp_standards_manager.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mcp_standards_manager"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]  # Line too long, let black handle this
+
+[tool.ruff.lint.isort]
+known-first-party = ["mcp_standards_manager"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=mcp_standards_manager",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+]

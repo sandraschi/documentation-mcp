@@ -1,7 +1,7 @@
 # arxiv-mcp — TODO
 <!-- Cross-project context: D:\Dev\repos\mcp-central-docs\operations\INTEL_STACK_TODO.md -->
 
-**Last updated:** 2026-06-03  
+**Last updated:** 2026-06-07  
 **Repo:** `D:\Dev\repos\arxiv-mcp`  
 **Version:** 0.7.0  
 **Ports:** backend :10770, frontend :10771
@@ -33,6 +33,12 @@ Invoke-RestMethod -Uri "http://127.0.0.1:10770/api/depot/reindex" -Method Post
 - **No code changes required** — operational step only
 
 ---
+
+## Fleet probe (2026-06-07)
+
+- [x] `web_sota/start.ps1` — `uv sync --extra dev --extra rag` (fixes STARTUP PROBE missing fastembed/pyarrow)
+- [x] `Start-FleetDetachedShell` — log capture when `FLEET_PROBE_RUN=1` (no orphan `-NoExit` consoles)
+- [ ] **arxiv-mcp cold-start** — probe still `start_failed` (backend health >90s under capture); tune timeout or backend launch for probe mode
 
 ## Status
 

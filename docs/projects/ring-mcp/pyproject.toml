@@ -35,8 +35,10 @@ keywords = [
     "monitoring", "automation", "home-security", "iot", "smart-home", "surveillance"
 ]
 dependencies = [
-    "fastmcp>=3.1.0,<4", # Latest MCP specification
+    "fastmcp>=3.4.4,<4", # Fleet: FastMCP 3.4.4+ (MCP 3.2 ecosystem)
+    "fastapi>=0.115.0", # HTTP server + composition (not bundled by fastmcp 3.2)
     "ring-doorbell>=0.8.0", # Real Ring integration
+    "requests>=2.31.0", # HTTP client (ring_client)
     "httpx>=0.25.0", # Modern HTTP client
     "pydantic>=2.0.0", # Data validation
     "python-dotenv>=1.0.0", # Environment management
@@ -47,6 +49,7 @@ dependencies = [
     "prometheus-client>=0.20.0", # Prometheus metrics
     "structlog>=23.1.0", # Structured logging
     "websockets>=11.0.0,<16.0.0", # WebSocket support
+    "paho-mqtt>=2.1.0", # Optional ring-mqtt (Ring Alarm) MQTT bridge
     "python-dateutil>=2.8.2", # Date utilities
     "anyio>=4.5.0", # Async utilities
     "tomli>=0.10.2; python_version < \"3.11\"", # TOML support for older Python
@@ -63,6 +66,7 @@ dependencies = [
     "types-requests>=2.31.0",
     "types-python-dateutil>=2.8.0",
     "ruff>=0.15.2",
+    "prefab-ui>=0.14.0",
 ]
 
 [project.optional-dependencies]
@@ -76,7 +80,6 @@ dev = [
     "mypy>=1.8.0",
     "ruff>=0.1.0",             # Modern Python linter
     "respx>=0.20.0",           # HTTP mocking for tests
-    "fastmcp[test]>=3.1.0",   # FastMCP testing tools
     "types-requests>=2.31.0",  # Type stubs for requests
     "types-python-dateutil>=2.8.0"  # Type stubs for dateutil
 ]
@@ -93,18 +96,6 @@ target-version = ['py310']
 profile = "black"
 line_length = 100
 
-[tool.ruff]
-line-length = 100
-target-version = "py310"
-
-[tool.ruff.lint]
-select = ["E", "F", "W", "C90", "I", "N", "UP", "YTT", "S", "BLE", "FBT", "B", "A", "COM", "C4", "DTZ", "T10", "DJ", "EM", "EXE", "FA", "ISC", "ICN", "G", "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SLOT", "SIM", "TID", "TCH", "INT", "ARG", "PTH", "ERA", "PD", "PGH", "PL", "TRY", "FLY", "NPY", "AIR", "PERF", "FURB", "LOG", "RUF"]
-ignore = ["E501", "E722", "S101", "S104"]
-
-[tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]
-"tests/*" = ["S101", "PLR2004"]
-
 [tool.mypy]
 python_version = "3.10"
 warn_return_any = true
@@ -113,3 +104,15 @@ disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
 disallow_untyped_decorators = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

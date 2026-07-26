@@ -1,4 +1,4 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to openclaw-molt-mcp will be documented in this file.
 
@@ -43,7 +43,7 @@ All notable changes to openclaw-molt-mcp will be documented in this file.
 - scripts/check.ps1 and justfile for lint, typecheck, test
 - pre-commit hooks for ruff and mypy
 - Git repository initialized
-- Initial scaffold: FastMCP 3.1.1++ MCP server
+- Initial scaffold: FastMCP 2.14+ MCP server
 - Portmanteau tools: clawd_agent, clawd_sessions, clawd_skills, clawd_gateway
 - Dialogic tool returns (success, message, data)
 - MCPB packaging with extensive prompts (system, user, quick-start, configuration, troubleshooting, examples)
@@ -53,7 +53,6 @@ All notable changes to openclaw-molt-mcp will be documented in this file.
 ### Changed
 
 - **scripts/start.ps1**: Kills processes on 5181/5180 and **closes their parent PowerShell windows**; kills **watchfiles** (uvicorn --reload) only when the process command line contains this project root (other webapps' watchers are left alone).
-- **README**: Compact, info-dense; **What this repo is** table (MCP server, Webapp, webapp_api); install â†’ INSTALL.md; Repo layout; Docs table; Repo manifests section. Clarified: openclaw-molt-mcp *uses* OpenClaw/Moltbook, does not implement or replace them.
+- **README**: Compact, info-dense; **What this repo is** table (MCP server, Webapp, webapp_api); install → INSTALL.md; Repo layout; Docs table; Repo manifests section. Clarified: openclaw-molt-mcp *uses* OpenClaw/Moltbook, does not implement or replace them.
 - **Startpage**: Hero section (gradient card, responsive headline, tagline).
 - **Webapp sidebar**: Added **Starter page** (Globe icon), route `/starter`.
-

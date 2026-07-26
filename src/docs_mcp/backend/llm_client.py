@@ -130,6 +130,7 @@ async def chat_openai_compatible(
 
 # -- Streaming helpers --
 
+
 async def stream_ollama(base_url: str, model: str, messages: list[dict[str, str]]) -> AsyncGenerator[str, None]:
     """Stream chat from Ollama. Yields content tokens as they arrive."""
     if not base_url or not model:
@@ -189,7 +190,9 @@ async def stream_openai_compatible(
 
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.post(url, json=payload, headers=headers, timeout=aiohttp.ClientTimeout(total=300)) as resp:
+            async with session.post(
+                url, json=payload, headers=headers, timeout=aiohttp.ClientTimeout(total=300)
+            ) as resp:
                 if resp.status != 200:
                     text = await resp.text()
                     yield f"Error: LLM returned {resp.status}"

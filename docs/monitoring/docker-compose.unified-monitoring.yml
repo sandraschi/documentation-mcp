@@ -1,0 +1,235 @@
+
+
+# Unified Monitoring Stack for All MCP Repositories
+# ONE stack to rule them all — use dashboard provisioning + Loki labels per service.
+# DO NOT spin up per-repo Grafana/Loki/Prometheus containers.
+#
+# Image versions (pinned — update deliberately, not via :latest drift):
+#   grafana/grafana:    13.0.1  (2026-04-17)
+#   grafana/loki:       3.7.1   (2026-03-26)
+#   grafana/promtail:   3.6.10  (3.7.x image not on Hub; pair with Loki 3.7.x)
+#   prom/prometheus:    v3.11.3 (2026-04-27)
+#   prom/node-exporter: v1.9.1  (latest stable)
+#   gcr.io/cadvisor:    v0.49.2 (latest stable)
+#
+# Serves:
+# - All MCP Servers (tailscale-mcp, virtualization-mcp, database-operations-mcp, etc.)
+# - MyAI Platform (dashboard, calibre-plus, document-viewer, etc.)
+# - VeoGen Platform (video generation, music generation, etc.)
+# - Home Infrastructure (tapo-cameras, nest-protect, ring devices, etc.)
+# - Future Projects (any new MCP servers or applications)
+#
+# Host ports (override via .env — see .env.example):
+#   Grafana 12000, Prometheus 12001, Loki 12002, Promtail 12003,
+#   node-exporter 12004, cAdvisor 12005, rebootx-on-prem 12010
+# Internal container ports stay at Grafana/Prometheus/Loki defaults.
+
+services:
+  # Grafana - Single Dashboard for Everything
+  grafana:
+    image: grafana/grafana:13.0.1
+    container_name: unified-grafana
+    ports:
+      - "${UNIFIED_GRAFANA_HOST_PORT:-12000}:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      # Angular panel plugins removed — Grafana 13 refuses them at startup
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - unified-monitoring
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Prometheus - Central Metrics Collection
+  prometheus:
+    image: prom/prometheus:v3.11.3
+    container_name: unified-prometheus
+    ports:
+      - "${UNIFIED_PROMETHEUS_HOST_PORT:-12001}:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - unified-monitoring
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9090/ || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Loki - Central Log Aggregation
+  loki:
+    image: grafana/loki:3.7.1
+    container_name: unified-loki
+    ports:
+      - "${UNIFIED_LOKI_HOST_PORT:-12002}:3100"
+    volumes:
+      - ./loki/loki.yml:/etc/loki/local-config.yaml
+      - loki-data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - unified-monitoring
+    restart: unless-stopped
+    # Loki 3.7 image is distroless (no /bin/sh, wget, or curl). Check readiness on the host:
+    #   Invoke-WebRequest http://localhost:12002/ready
+
+  # Promtail - Log Collection Agent
+  promtail:
+    image: grafana/promtail:3.6.10
+    container_name: unified-promtail
+    ports:
+      - "${UNIFIED_PROMTAIL_HOST_PORT:-12003}:9080"
+    volumes:
+      - ./promtail/promtail.yml:/etc/promtail/config.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Host-process logs (uvicorn on Windows — not dockerized)
+      - ./logs/host:/host-logs:ro
+      - ../../..:/repos:ro
+      - ${FLEET_USER_LOCAL_SHARE:-/host-user-local-empty}:/host-user-local:ro
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - unified-monitoring
+    restart: unless-stopped
+    depends_on:
+      - loki
+
+  # RebootX On-Prem - Mobile Monitoring (iPad/iPhone fleet health)
+  # Builds from Go source on startup. Serves runnables + dashboard data
+  # to the RebootX iOS app over Tailscale.
+  rebootx-on-prem:
+    image: golang:1.22
+    container_name: unified-rebootx
+    ports:
+      - "${UNIFIED_REBOOTX_HOST_PORT:-12010}:12010"
+    environment:
+      - RBTX_API_KEY=${REBOOTX_API_KEY:-unified-monitoring-rebootx-key}
+      - RBTX_PATH_PREFIX=unified-monitoring
+      - RBTX_PORT=12010
+      - RBTX_BIND=0.0.0.0
+      - RBTX_PROTOCOL=http
+      - RBTX_RUNNABLE_SERVICE_IMPL=fileJson
+      - RBTX_RUNNABLE_SERVICE_FILE_JSON_FILE_PATH=/data/servers.json
+      - RBTX_DASHBOARD_SERVICE_IMPL=fileJson
+      - RBTX_DASHBOARD_SERVICE_FILE_JSON_FILE_PATH=/data/dashboards.json
+    volumes:
+      - ./rebootx-on-prem/data:/data
+      - ./rebootx-on-prem/impl:/app
+    working_dir: /app
+    command: bash -c "cd /app/http-server-go && go fmt && go build -o /build/rebootx-on-prem -v && /build/rebootx-on-prem"
+    networks:
+      - unified-monitoring
+    restart: unless-stopped
+    depends_on:
+      - grafana
+
+  # Node Exporter - System Metrics
+  node-exporter:
+    image: prom/node-exporter:v1.9.1
+    container_name: unified-node-exporter
+    ports:
+      - "${UNIFIED_NODE_EXPORTER_HOST_PORT:-12004}:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - unified-monitoring
+    restart: unless-stopped
+
+  # OTel Collector — receives OTLP from fleet MCP servers
+  # Exports: traces → Tempo, metrics → Prometheus
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.120.0
+    container_name: unified-otel-collector
+    ports:
+      - "${UNIFIED_OTEL_GRPC_PORT:-4317}:4317"
+      - "${UNIFIED_OTEL_HTTP_PORT:-4318}:4318"
+    volumes:
+      - ./otel-collector/config.yml:/etc/otel-collector/config.yml:ro
+    command: ["--config=/etc/otel-collector/config.yml"]
+    networks:
+      - unified-monitoring
+    restart: unless-stopped
+    depends_on:
+      - tempo
+
+  # Tempo — distributed trace storage
+  tempo:
+    image: grafana/tempo:2.7.1
+    container_name: unified-tempo
+    ports:
+      - "${UNIFIED_TEMPO_QUERY_PORT:-3200}:3200"
+    volumes:
+      - ./tempo/tempo.yml:/etc/tempo/tempo.yml:ro
+      - tempo-data:/var/tempo
+    command: ["-config.file=/etc/tempo/tempo.yml"]
+    networks:
+      - unified-monitoring
+    restart: unless-stopped
+
+  # Blackbox — probe host HTTP health (MCD RAG /api/status, MCP /health, etc.)
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.27.0
+    container_name: unified-blackbox
+    ports:
+      - "${UNIFIED_BLACKBOX_HOST_PORT:-12006}:9115"
+    volumes:
+      - ./prometheus/blackbox.yml:/etc/blackbox_exporter/config.yml:ro
+    networks:
+      - unified-monitoring
+    restart: unless-stopped
+
+  # cAdvisor - Container Metrics
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.2
+    container_name: unified-cadvisor
+    ports:
+      - "${UNIFIED_CADVISOR_HOST_PORT:-12005}:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    privileged: true
+    devices:
+      - /dev/kmsg
+    networks:
+      - unified-monitoring
+    restart: unless-stopped
+
+volumes:
+  grafana-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  loki-data:
+    driver: local
+  tempo-data:
+    driver: local
+
+networks:
+  unified-monitoring:
+    driver: bridge

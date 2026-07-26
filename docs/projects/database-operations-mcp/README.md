@@ -1,21 +1,35 @@
-[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](CHANGELOG.md)
+[![FastMCP Version](https://img.shields.io/badge/FastMCP-3.1.0-blue?style=flat-square&logo=python&logoColor=white)](https://github.com/sandraschi/fastmcp) [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) [![Linted with Biome](https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat-square&logo=biome&logoColor=white)](https://biomejs.dev/) [![Built with Just](https://img.shields.io/badge/Built_with-Just-000000?style=flat-square&logo=gnu-bash&logoColor=white)](https://github.com/casey/just)
+
+[![Version](https://img.shields.io/badge/version-1.4.1-blue.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.10+-green.svg)](https://python.org)
-[![FastMCP](https://img.shields.io/badge/FastMCP-3.1.1+.3-orange.svg)](https://github.com/modelcontextprotocol/python-sdk)
+[![FastMCP](https://img.shields.io/badge/FastMCP-3.1-orange.svg)](https://github.com/modelcontextprotocol/python-sdk)
 [![License](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 # Database Operations MCP
 
-FastMCP 3.1.1+.3 MCP server for database operations on Windows, with bookmark management tools.
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
+FastMCP 3.3 MCP server for database operations on Windows. Includes MCP prompts and a bundled database-expert skill. Browser bookmark management lives in [bookmarks-mcp](https://github.com/sandraschi/bookmarks-mcp).
+
+> **⚠️ NSIS Installer Status:** The Tauri NSIS desktop installer is currently non-functional due to a PyInstaller `--onefile` compatibility issue with fastmcp's OpenTelemetry dependency chain. A `--onedir` fix is in progress. The stdio and HTTP servers work normally.
 
 ## Scope
-- Primary: Database tools (inspection, backup/restore, analysis, Windows application databases)
-- Secondary: Bookmark tools (Firefox + Chromium browsers) including cross-browser synchronization
+- Database tools (inspection, backup/restore, analysis, Windows application databases)
+- Media library tools (Calibre, Plex)
+- Windows Registry and system utilities
 
 ## Tools Overview
 
-This server provides 24 portmanteau tools consolidating 124+ individual operations into unified interfaces.
-Individual tools have been deprecated in favor of portmanteau tools for maintainability and consistency.
+Portmanteau tools consolidate individual operations into unified interfaces.
 
-### Database Tools (Primary)
+### Database Tools
 - `db_connection` - Database connection management portmanteau (consolidates connection_tools, init_tools)
   - Operations: list_supported, register, init, list, test, test_all, close, get_info, restore, set_active, get_active, get_preferences, set_preferences
 - `db_operations` - Query execution, transactions, batch operations, data export portmanteau (consolidates query_tools, data_tools)
@@ -25,22 +39,8 @@ Individual tools have been deprecated in favor of portmanteau tools for maintain
 - `db_management` - Database health checks, optimization, backup/restore portmanteau (consolidates management_tools)
 - `db_fts` - Full-text search with ranking and highlighting portmanteau (consolidates fts_tools)
 - `db_analyzer` - Comprehensive database analysis and diagnostics portmanteau
-- `db_sampling_workflow` - FastMCP 3.1.1+.3 sampling-enabled agentic workflows for complex database operations
+- `agentic_workflow_tool` - FastMCP sampling-enabled agentic workflows for complex database operations
 - `windows_system` - Windows Registry, service status, system info portmanteau (consolidates registry_tools, windows_tools)
-
-### Bookmark Tools (Secondary)
-- `browser_bookmarks` - Universal browser bookmark portmanteau (Firefox/Chrome/Edge/Brave)
-  - Operations: list_bookmarks, add_bookmark, edit_bookmark, delete_bookmark, search_bookmarks, get_bookmark, and 20+ more
-  - Supports all browsers through single interface
-- `firefox_bookmarks` - Firefox-specific bookmark operations (SQLite-based)
-  - Operations: list_bookmarks, add_bookmark, search, find_duplicates, find_old_bookmarks, find_forgotten_bookmarks, refresh_bookmarks, get_bookmark_stats, find_broken_links
-  - Tag management: list_tags, find_similar_tags, batch_update_tags, merge_tags, clean_up_tags
-  - **Note:** Write operations require Firefox to be closed (SQLite lock)
-- `firefox_profiles` - Firefox profile management portmanteau
-- `firefox_backup` - Firefox backup/restore operations
-- `firefox_tagging` - Automated tagging (by folder, by year)
-- `sync_bookmarks` - Cross-browser bookmark synchronization (Firefox ↔ Chromium family)
-- `chrome_profiles` - Chrome profile management portmanteau
 
 ### Media & Other Tools
 - `media_library` - Calibre & Plex library management portmanteau (consolidates calibre_tools, plex_tools, media_tools)
@@ -49,147 +49,43 @@ Individual tools have been deprecated in favor of portmanteau tools for maintain
 
 ### Deprecated Tools (Use Portmanteau Equivalents)
 Individual tools are deprecated but kept for backwards compatibility. Migration paths:
-- `connection_tools.*` → `db_connection(operation='...')`
-- `init_tools.*` → `db_connection(operation='...')`
-- `query_tools.*` → `db_operations(operation='...')`
-- `data_tools.*` → `db_operations(operation='...')`
-- `schema_tools.*` → `db_schema(operation='...')`
-- `management_tools.*` → `db_management(operation='...')`
-- `fts_tools.*` → `db_fts(operation='...')`
-- `calibre_tools.*` → `media_library(operation='...')`
-- `plex_tools.*` → `media_library(operation='...')`
-- `registry_tools.*` → `windows_system(operation='...')`
-- `windows_tools.*` → `windows_system(operation='...')`
+- `connection_tools.*`  `db_connection(operation='...')`
+- `init_tools.*`  `db_connection(operation='...')`
+- `query_tools.*`  `db_operations(operation='...')`
+- `data_tools.*`  `db_operations(operation='...')`
+- `schema_tools.*`  `db_schema(operation='...')`
+- `management_tools.*`  `db_management(operation='...')`
+- `fts_tools.*`  `db_fts(operation='...')`
+- `calibre_tools.*`  `media_library(operation='...')`
+- `plex_tools.*`  `media_library(operation='...')`
+- `registry_tools.*`  `windows_system(operation='...')`
+- `windows_tools.*`  `windows_system(operation='...')`
 
 *See individual tool files in `src/database_operations_mcp/tools/` for complete API documentation.*
 
-## Core Database Features (Primary)
+## Core Database Features
 - SQLite utilities: open/read, schema introspection, queries, export
 - Backup and restore helpers for common Windows application databases
-- Windows paths helpers (Chrome/Edge/Brave/Firefox history, Outlook, etc.)
+- Windows paths helpers (browser history DBs, Outlook, etc.)
 - Safety helpers (file locks, status checks) with clear error messages
 - MCP tools organized under `src/database_operations_mcp/tools/`
-
-### Representative Tools
-- Windows DB helpers: `windows_tools.py`
-- Firefox DB safety/status: `tools/firefox/status.py`
-- Backup/maintenance helpers across known app DBs
-
-## Bookmark Tools (Secondary)
-Cross-browser bookmark utilities packaged with this server.
-
-### Firefox Bookmarks (SQLite-based)
-
-**Important:** Write operations require Firefox to be closed (SQLite database lock).
-Read operations work while Firefox is running using `force_access=True`.
-
-#### Core Operations
-```python
-# List bookmarks
-await firefox_bookmarks(operation="list_bookmarks", profile_name="default")
-
-# Add bookmark (Firefox must be closed!)
-await firefox_bookmarks(operation="add_bookmark", url="https://example.com", title="Example")
-
-# Search bookmarks
-await firefox_bookmarks(operation="search", search_query="python")
-```
-
-#### Bookmark Age Analysis
-```python
-# Find OLD bookmarks (by CREATION date) - e.g. bookmarks from 2005
-await firefox_bookmarks(operation="find_old_bookmarks", age_days=7000)
-# Returns: bookmarks with age_years, age_days, created timestamp
-
-# Find FORGOTTEN bookmarks (not VISITED in N days) - archive candidates
-await firefox_bookmarks(operation="find_forgotten_bookmarks", age_days=365)
-# Returns: suggestion to archive/delete these unused bookmarks
-
-# Refresh bookmarks - check for 404s, attempt URL fixes
-await firefox_bookmarks(operation="refresh_bookmarks", batch_size=100)
-# Returns: working/broken counts, fixable URLs with simplified alternatives
-```
-
-#### Tag Management
-```python
-await firefox_bookmarks(operation="list_tags")
-await firefox_bookmarks(operation="find_similar_tags")  # Find typos like "pythn" vs "python"
-await firefox_bookmarks(operation="merge_tags", tags=["python", "pythn"])  # Requires Firefox closed
-```
-
-#### Statistics & Maintenance
-```python
-await firefox_bookmarks(operation="get_bookmark_stats")
-await firefox_bookmarks(operation="find_duplicates")
-await firefox_bookmarks(operation="find_broken_links")
-```
-
-### Chrome / Edge / Brave (JSON)
-- `list_chrome_bookmarks(bookmarks_path=None)`
-- `list_edge_bookmarks(bookmarks_path=None)`
-
-### Chromium Portmanteau (Chrome/Edge/Brave)
-- `chromium_bookmarks(operation, browser, ...)` unified tool
-  - **list**: `operation="list"`, `browser="chrome|edge|brave"`, `limit?`, `bookmarks_path?`
-  - **add**: `operation="add"`, `title`, `url`, `folder?`, `allow_duplicates?`, `bookmarks_path?`
-  - **edit**: `operation="edit"`, `id?` or `url?`, `new_title?`, `new_folder?`, `create_folders?`, `allow_duplicates?`, `dry_run?`, `bookmarks_path?`
-  - **delete**: `operation="delete"`, `id?` or `url?`, `dry_run?`, `bookmarks_path?`
-
-```python
-# List first 50 Edge bookmarks via portmanteau
-await chromium_bookmarks(operation="list", browser="edge", limit=50)
-
-# Add to Brave in folder "Reading/Tech"
-await chromium_bookmarks(operation="add", browser="brave", title="Docs", url="https://example.com/docs", folder="Reading/Tech")
-
-# Rename and move a Chrome bookmark by URL (dry run)
-await chromium_bookmarks(operation="edit", browser="chrome", url="https://example.com/docs", new_title="Docs Home", new_folder="Reading/Docs", dry_run=True)
-
-# Delete by id in Edge
-await chromium_bookmarks(operation="delete", browser="edge", id="12345")
-```
-- `list_brave_bookmarks(bookmarks_path=None)`
-- `add_chrome_bookmark(title, url, folder=None, bookmarks_path=None)`
-- `add_edge_bookmark(title, url, folder=None, bookmarks_path=None)`
-- `add_brave_bookmark(title, url, folder=None, bookmarks_path=None)`
-
-### Cross-Browser Sync
-- `sync_bookmarks(source_browser, target_browser, dry_run=True, limit=1000)`
-  - Set `dry_run=False` to write to target.
-  - If writing to Firefox while it's open, the result will include: "error. firefox must be closed".
-
-### Examples
-```python
-# List Chrome bookmarks
-await list_chrome_bookmarks()
-
-# Add to Edge
-await add_edge_bookmark(title="Example", url="https://example.com")
-
-# Sync from Firefox to Chrome (write)
-await sync_bookmarks("firefox", "chrome", dry_run=False, limit=100)
-```
 
 ## Project Layout
 ```
 database-operations-mcp/
-├── src/
-│   └── database_operations_mcp/
-│       ├── main.py                      # MCP server entry
-│       ├── config/
-│       │   └── mcp_config.py            # shared MCP instance
-│       └── tools/
-│           ├── firefox/                 # Firefox bookmark + DB helpers
-│           ├── chrome/                  # Chrome bookmark tools
-│           ├── edge/                    # Edge bookmark tools
-│           ├── brave/                   # Brave bookmark tools
-│           ├── chromium_common.py       # Shared Chromium JSON helpers
-│           └── sync_tools.py            # Cross-browser sync tool
-├── tests/
-└── README.md
+ src/
+    database_operations_mcp/
+        main.py                      # MCP server entry
+        config/
+           mcp_config.py            # shared MCP instance
+        tools/                     # portmanteau + atomic DB tools
+        services/database/         # DB connectors
+ tests/
+ web_sota/                        # React dashboard (optional)
+ README.md
 ```
 
-## 📦 Packaging & Distribution
+##  Packaging & Distribution
 
 This repository is SOTA 2026 compliant and uses the officially validated `@anthropic-ai/mcpb` workflow for distribution.
 
@@ -199,6 +95,21 @@ To generate a `.mcpb` distribution bundle with complete source code and automate
 # SOTA 2026 standard pack command
 mcpb pack . dist/database-operations-mcp.mcpb
 ```
+
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/database-operations-mcp
+cd database-operations-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+
 
 ## Install Zed Extension
 This repository includes a Zed extension for native integration with the Zed editor.
@@ -214,7 +125,7 @@ cargo build --release --target wasm32-wasip1
 
 ### Install in Zed
 1. Open Zed
-2. Go to `Extensions` → `Install Dev Extension`
+2. Go to `Extensions`  `Install Dev Extension`
 3. Navigate to the repository and select: `zed-extension/extension.toml`
 4. The Database Operations MCP extension will be installed and loaded
 
@@ -262,25 +173,25 @@ Add the server to your MCP config (`%USERPROFILE%\AppData\Roaming\Cursor\.cursor
 ## Development
 For Python development setup, testing, and contribution guidelines, see [README-python.md](README-python.md).
 
-## 🚀 Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### 📦 Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
-uvx browser-bookmarks
+uvx database-operations-mcp
 ```
 
-### 🎯 Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
-  "browser-bookmarks": {
+  "database-operations": {
     "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/database-operations-mcp", "run", "browser-bookmarks"]
+    "args": ["--directory", "D:/Dev/repos/database-operations-mcp", "run", "database-operations-mcp"]
   }
 }
 ```
@@ -303,13 +214,13 @@ pip install git+https://github.com/sandraschi/database-operations-mcp.git
 ### For Claude Desktop (MCPB Package)
 
 1. Download or build the latest `.mcpb` file.
-2. Open Claude Desktop → Settings → Extensions
+2. Open Claude Desktop  Settings  Extensions
 3. Drag and drop the `.mcpb` file
 4. Restart Claude Desktop
 
-## FastMCP 3.1.1+.3 Features
+## FastMCP 3.1.0 Features
 
-This server uses FastMCP 3.1.1+.3 capabilities:
+This server uses FastMCP 3.1.0 capabilities:
 
 ### Conversational Tool Returns
 All tools return structured responses with natural language summaries alongside technical data.
@@ -367,19 +278,46 @@ The `db_sampling_workflow` tool enables complex database operations that would p
 
 ## Requirements
 - Python 3.10+
-- FastMCP 3.1.1+.3
-- Supported browsers installed (for bookmark tools)
+- FastMCP 3.1.0+
+- **Persistence**: `py-key-value-aio[disk]` for DiskStore (optional; in-memory fallback if not installed)
 - **Database Drivers**: `chromadb`, `pymongo`, `psycopg2-binary`, `duckdb`, `aiomysql`, `redis`
 - **Utilities**: `aiohttp`, `rich`, `psutil`
 
 
-## 🌐 Webapp Dashboard
 
-This MCP server includes a free, premium web interface for monitoring and control.
-By default, the web dashboard runs on port **10708**.
-*(Assigned ports: **10708** (Web dashboard))*
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
+## Webapp Dashboard
+
+This MCP server includes a web interface (FastMCP 3.1.0 gateway) for monitoring and tool execution.
+- **Frontend**: port **10708** (Vite dev server)
+- **Backend**: port **10709** (FastAPI + MCP mounted at `/mcp`, REST at `/api/tools`)
 
 To start the webapp:
-1. Navigate to the `webapp` (or `web`, `frontend`) directory.
-2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
+1. Navigate to the `web_sota` directory.
+2. Run `.\start.ps1` (PowerShell; from repo root: `cd web_sota; .\start.ps1`).
 3. Open `http://localhost:10708` in your browser.
+
+## Prompts and skills (FastMCP 3.1.0)
+
+- **MCP prompt `database_expert`**: Clients can call `get_prompt("database_expert", arguments={"focus": "general"|"sql"|"connections"|"export"})` to receive instruction text to inject so the LLM acts as a database expert using this server's tools. Use when you want the assistant to follow connection/schema/query/export  practices without reading this README.
+- **Bundled skill `database-expert`**: Exposed as MCP resources under the `skill://` scheme. Clients that support MCP resources can read `skill://database-expert/SKILL.md` (and manifest/supporting files) for the same expert guidance. The skill lives in `src/database_operations_mcp/skills/database-expert/` and is registered via the FastMCP Skills provider.
+
+See [FastMCP Prompts](https://goFastMCP 3.1.0com/servers/prompts) and [Skills Provider](https://goFastMCP 3.1.0com/servers/providers/skills) for the framework docs.
+
+## Persistence
+
+Connection state and preferences are persisted across restarts using `py-key-value-aio[disk]` (DiskStore).
+
+- **Storage location**: `%APPDATA%\database-operations-mcp` (Windows), `~/Library/Application Support/database-operations-mcp` (macOS), `~/.local/share/database-operations-mcp` (Linux).
+- **Persisted data**: Saved database connections, active connection id, user preferences (e.g. default page size), restore state, and schema cache.
+- **Initialization**: Storage is initialized in server lifespan; if the optional `[disk]` extra is not installed, the server falls back to in-memory storage and logs a warning.
+- **Development**: Set `ENABLE_PASSWORD_STORAGE=1` only in dev; it allows storing connection passwords (insecure, not for production).

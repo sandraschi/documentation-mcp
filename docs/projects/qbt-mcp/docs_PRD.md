@@ -1,14 +1,14 @@
-﻿# Product Requirements Document (PRD)
+# Product Requirements Document (PRD)
 ## RTorrent MCP Server
 
 **Version:** 1.0.0
 **Date:** September 23, 2025
-**Author:** Sandra's Austrian Anime Automation
+**Author:** rtorrent-mcp maintainers
 **Status:** Active Development
 
 ---
 
-## ðŸ“‹ Table of Contents
+## Table of Contents
 
 1. [Executive Summary](#executive-summary)
 2. [Product Overview](#product-overview)
@@ -21,20 +21,20 @@
 
 ---
 
-## ðŸŽ¯ Executive Summary
+## Executive Summary
 
-The RTorrent MCP Server is a FastMCP 3.1.1+ compliant Model Context Protocol server that enables seamless integration between rTorrent (a lightweight BitTorrent client) and AI assistants like Claude. The product focuses on Austrian legal compliance for anime torrenting automation, providing natural language interfaces for torrent management while ensuring adherence to local copyright laws.
+The RTorrent MCP Server is a FastMCP 3.x Model Context Protocol server that connects rTorrent (BitTorrent client) to AI assistants such as Claude. It targets anime-oriented workflows with Austrian legal **risk hints** in tooling (users remain responsible for compliance).
 
-### Key Value Propositions
+### Value propositions
 
-- **Legal Compliance**: Austrian-focused torrent management with built-in legal risk assessment
-- **AI Integration**: Natural language commands for torrent operations via Claude Desktop
-- **Self-Documenting**: Comprehensive tool descriptions and schemas for reliable AI interaction
-- **Quality Assurance**: Intelligent anime release ranking and Austrian preference optimization
+- **Legal hints**: Country-oriented risk messaging in tool outputs (not legal advice)
+- **AI integration**: Natural language and structured MCP tools for torrent and search workflows
+- **Tooling**: Docstrings and schemas for MCP clients
+- **Search helpers**: Heuristic release ordering and configurable preferences
 
 ---
 
-## ðŸ—ï¸ Product Overview
+## Product Overview
 
 ### Product Vision
 
@@ -42,7 +42,7 @@ The RTorrent MCP Server is a FastMCP 3.1.1+ compliant Model Context Protocol ser
 
 ### Core Functionality
 
-1. **rTorrent Integration**: Full SCGI API control for torrent operations
+1. **rTorrent integration**: Torrent operations via rTorrent RPC (SCGI/XML-RPC as configured)
 2. **Anime Search**: NYAA.si integration with quality scoring
 3. **Legal Compliance**: Country-specific legal risk assessment
 4. **Natural Language Processing**: Multi-language command processing
@@ -51,28 +51,28 @@ The RTorrent MCP Server is a FastMCP 3.1.1+ compliant Model Context Protocol ser
 ### Architecture
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚   Claude Desktop â”‚â”€â”€â”€â”‚   FastMCP 3.1.1+  â”‚â”€â”€â”€â”‚    rTorrent     â”‚
-â”‚                 â”‚    â”‚  MCP Server     â”‚    â”‚   SCGI API      â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                              â”‚
-                              â–¼
-                       â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-                       â”‚   NYAA.si API   â”‚
-                       â”‚   Search Engine â”‚
-                       â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Claude Desktop │───│   FastMCP 3.x   │───│    rTorrent     │
+│                 │    │  MCP Server     │    │   SCGI API      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                              │
+                              ▼
+                       ┌─────────────────┐
+                       │   NYAA.si API   │
+                       │   Search Engine │
+                       └─────────────────┘
 ```
 
 ---
 
-## ðŸ‘¥ Target Audience
+## Target Audience
 
 ### Primary Users
 
-1. **Sandra (Power User)**
-   - Location: Vienna, Austria
-   - Needs: Quick anime downloads with legal certainty
-   - Usage: Natural language commands in German/English
+1. **Primary power user (example persona)**
+   - Location: Austria (AT)
+   - Needs: Faster anime workflows with explicit legal-disclaimer flows
+   - Usage: Natural language commands in German/English where supported
 
 2. **Austrian Anime Community**
    - Legal-conscious users
@@ -93,7 +93,7 @@ The RTorrent MCP Server is a FastMCP 3.1.1+ compliant Model Context Protocol ser
 
 ---
 
-## ðŸ“‹ Requirements
+## Requirements
 
 ### Functional Requirements
 
@@ -184,13 +184,13 @@ The RTorrent MCP Server is a FastMCP 3.1.1+ compliant Model Context Protocol ser
 
 ---
 
-## ðŸ› ï¸ Technical Specifications
+## Technical Specifications
 
 ### Technology Stack
 
 | Component | Technology | Version | Justification |
 |-----------|------------|---------|---------------|
-| MCP Framework | FastMCP | 3.1.1+ | Latest stable with stdio support |
+| MCP Framework | FastMCP | 2.12 | Latest stable with stdio support |
 | Torrent Client | rTorrent | 0.9.8+ | Lightweight, SCGI API support |
 | Language | Python | 3.9+ | FastMCP compatibility |
 | HTTP Client | aiohttp | 3.9+ | Async operations |
@@ -285,7 +285,7 @@ class AppConfig:
 
 ---
 
-## ðŸŽ¨ User Experience
+## User Experience
 
 ### User Journey
 
@@ -313,30 +313,30 @@ class AppConfig:
 #### German Commands
 ```
 "lade attack on titan staffel 4"
-"suche die beste qualitÃ¤t one piece folgen"
-"zeige mir was gerade herunterlÃ¤dt"
-"stoppe den groÃŸen torrent"
+"suche die beste qualität one piece folgen"
+"zeige mir was gerade herunterlädt"
+"stoppe den großen torrent"
 ```
 
 ### Error Handling UX
 
 #### Connection Issues
 ```
-âŒ Cannot connect to rTorrent
-ðŸ’¡ Ensure rTorrent is running with SCGI on port 5000
-ðŸ”§ Check configuration in .rtorrent.rc
+[FAIL] Cannot connect to rTorrent
+ Ensure rTorrent is running with SCGI on port 5000
+ Check configuration in .rtorrent.rc
 ```
 
 #### Legal Warnings
 ```
-âš ï¸ Content may violate Austrian copyright law
-ðŸ‡¦ðŸ‡¹ Personal use exemption applies to small downloads
-ðŸ“‹ Consider legal streaming alternatives
+[WARN] Content may violate Austrian copyright law
+(AT) Personal use exemption applies to small downloads
+ Consider legal streaming alternatives
 ```
 
 ---
 
-## ðŸ“Š Success Metrics
+## Success Metrics
 
 ### Quantitative Metrics
 
@@ -364,7 +364,7 @@ class AppConfig:
 
 ---
 
-## âš ï¸ Risks and Mitigations
+## [WARN] Risks and Mitigations
 
 ### Technical Risks
 
@@ -414,10 +414,10 @@ class AppConfig:
 
 ---
 
-## ðŸ“… Implementation Timeline
+## Implementation Timeline
 
 ### Phase 1: Core Infrastructure (Week 1-2)
-- [ ] FastMCP 3.1.1+ integration
+- [ ] FastMCP 2.12 integration
 - [ ] Basic rTorrent SCGI connection
 - [ ] Project structure and testing setup
 
@@ -443,7 +443,7 @@ class AppConfig:
 
 ---
 
-## ðŸŽ¯ Conclusion
+## Conclusion
 
 The RTorrent MCP Server represents a unique intersection of torrent technology, AI integration, and legal compliance. By focusing on Austrian legal requirements and providing intuitive natural language interfaces, the product addresses a specific niche while serving as a reference implementation for MCP server development.
 
@@ -464,5 +464,4 @@ The product is positioned for success through its focused scope, technical excel
 
 *Document Version: 1.0.0*
 *Last Updated: September 23, 2025*
-*Approved By: Sandra's Austrian Anime Automation*
-
+*Approved by: product owner / maintainers (update as needed)*

@@ -1,30 +1,58 @@
-﻿# Changelog
+
+## [Unreleased] — 2026-06-14
+
+### Added
+- Tauri native wrapper (native/ directory) with bundle.resources + std::process::Command
+- CUA-NSIS: just cua-nsis-test recipe, scripts/cua-smoke.py, scripts/cua-nsis-config.json
+- Tauri CORS: tauri://localhost origins for WebView API access
+- NSIS installer at dist/ and native/target/release/bundle/nsis/
+
+### Changed
+- Frontend API calls use absolute http://127.0.0.1:{port} URLs in production build
+- CORS middleware includes allow_origin_regex for tauri.localhost
+# Changelog
 
 All notable changes to Robotics MCP will be documented in this file.
+
+## [1.4.1] - 2026-04-14
+
+### Industrialization (SOTA v1.4.1 compliance)
+- **Infrastructure**: Upgraded to **Justfile v1.4.1 Industrial Dashboard** with Magenta aesthetics.
+- **Frontend**: Successfully migrated `web_sota` to **Biome** (v1.9.4) for unified linting and formatting, replacing ESLint/Prettier.
+- **Logging**: Implemented **SOTABashFormatter** with "Print Bashing" icons and Unicode-safe terminal fallbacks.
+- **Security**: Deployed **Wurst-Auth (The Benny Protocol)** middleware to protect physical hardware operations (X-Wurst-Auth header required).
+- **Telemetry**: Added `MemoryLogHandler` for buffered log streaming to the webapp.
+- **Standards**: Hardened Windows binary mode for stdio to prevent JSON-RPC protocol corruption.
 
 ## [Unreleased]
 
 ### Added
+- **Sim fleet orchestrator** — `sim_fleet_status`, `sim_fleet_route`, `sim_fleet_backends` tools. Discovers and routes tasks to 11 backends (MuJoCo, Isaac, Gazebo, LimX, Unitree, Resonite, VRChat, Unity3D, World Labs, Blender, ros-mcp). Keyword-based task routing with Ollama fallback.
+- **Model marketplace** — `sim_marketplace_search`, `sim_marketplace_info` tools. Curated catalog of robot models (Unitree Go2/H1, LimX TRON 1/Oli) with metadata, file paths, compatible sim backends, LLM fallback search.
+- **Fleet registry** — `sim_orchestrator/registry.py` with 11 backends. `sim_orchestrator/router.py` with task routing and fallback prompts.
+- **Marketplace catalog** — `sim_orchestrator/marketplace.py` with static MODEL_CATALOG + search/info tools.
+- **vBoomy Resonite OSC bridge** — UDP via `pythonosc`; spawn/move/stop/head/estop addresses for teleoperator virtual twin loop. Auto-spawn on `POST /api/v1/robots` when `platform=resonite`. See teleoperator-mcp `docs/resonite/VBOOMY_OSC.md`.
+- **Creative vBot types** — `mechazilla`, `godzilla` (kaiju scale) in vbot CRUD; same holonomic OSC contract.
 - **IntegrationStatusBanner component**: Tailwind/shadcn banner showing connection status for heavy integrations (Unity, Blender, VRChat, Resonite, Gazebo, OSC, Avatar MCP). Polls `mcpService.getServers()` and `appLauncherService.getStatus()` every 10s. Shows green/red/amber states with one-click Start and Setup Guide links. Added to 8 pages: Unity3D, VRChat, Resonite, Gazebo, Niantic Splats, Environments/WorldLabs, VRM Avatars, VRoid, VBot Control (compact mode)
 - **Gazebo Simulation Integration**: ROS bridge client for simulated robots (TurtleBot3, differential drive) via rosbridge WebSocket. `robot_control` and `virtual_robotics` support. Web app control page at `/robot-control/gazebo`. See [docs/GAZEBO_INTEGRATION.md](docs/GAZEBO_INTEGRATION.md)
-- **ðŸ›¡ï¸ Enterprise Crash Protection**: Watchfiles automatic recovery with exponential backoff for 99.9% uptime
-- **ðŸ”Œ Port Standardization**: Updated default ports (HTTP: 12230, Webapp: 12220) to avoid conflicts
-- **ðŸ“Š Advanced Crash Analytics**: Detailed JSON crash reports with full error analysis and uptime tracking
-- **ðŸ§ Linux Production Support**: Systemd service files for enterprise deployment
-- **âš¡ PowerShell Management**: Easy Windows deployment scripts with configuration options
-- **ðŸ“š Comprehensive Documentation**: Watchfiles protection guide, robot integration manuals
-- **ðŸ¤– Multi-Robot Fleet Expansion**: Added Tdrone Mini drone support alongside existing robots
-- **ðŸŽ® Dedicated Control Interfaces**: Specialized control pages for each robot type
-- **ðŸ—ºï¸ Enhanced Map Visualization**: Real-time LIDAR mapping with collaborative SLAM support
-- **ðŸ”„ Multi-Robot Coordination**: Advanced collision avoidance and sensor fusion
-- **ðŸŽ¨ UI Modernization**: Professional Tailwind CSS + shadcn/ui design system
-- **ðŸ“± Responsive Design**: Mobile and desktop optimized interfaces
-- **ðŸ”§ Robotic Arm Enhancements**: Full 4-DOF arm control with gripper operations
-- **ðŸ§¹ Dreame D20 Pro Enhancements**: Zone cleaning, auto-empty, and map export capabilities
-- **ðŸš Tdrone Mini Integration**: PX4 flight control, FPV camera, and autonomous navigation
-- **ðŸ’¡ Philips Hue Pro Integration**: HomeAware movement detection for robot safety
-- **ðŸ“ˆ Performance Optimization**: Reduced startup time and improved error handling
-- **ðŸ§ª Enhanced Testing**: Comprehensive test coverage for all new features
+- **🛡️ Enterprise Crash Protection**: Watchfiles automatic recovery with exponential backoff for 99.9% uptime
+- **🔌 Port Standardization**: Updated default ports (HTTP: 12230, Webapp: 12220) to avoid conflicts
+- **📊 Advanced Crash Analytics**: Detailed JSON crash reports with full error analysis and uptime tracking
+- **🐧 Linux Production Support**: Systemd service files for enterprise deployment
+- **⚡ PowerShell Management**: Easy Windows deployment scripts with configuration options
+- **📚 Comprehensive Documentation**: Watchfiles protection guide, robot integration manuals
+- **🤖 Multi-Robot Fleet Expansion**: Added Tdrone Mini drone support alongside existing robots
+- **🎮 Dedicated Control Interfaces**: Specialized control pages for each robot type
+- **🗺️ Enhanced Map Visualization**: Real-time LIDAR mapping with collaborative SLAM support
+- **🔄 Multi-Robot Coordination**: Advanced collision avoidance and sensor fusion
+- **🎨 UI Modernization**: Professional Tailwind CSS + shadcn/ui design system
+- **📱 Responsive Design**: Mobile and desktop optimized interfaces
+- **🔧 Robotic Arm Enhancements**: Full 4-DOF arm control with gripper operations
+- **🧹 Dreame D20 Pro Enhancements**: Zone cleaning, auto-empty, and map export capabilities
+- **🚁 Tdrone Mini Integration**: PX4 flight control, FPV camera, and autonomous navigation
+- **💡 Philips Hue Pro Integration**: HomeAware movement detection for robot safety
+- **📈 Performance Optimization**: Reduced startup time and improved error handling
+- **🧪 Enhanced Testing**: Comprehensive test coverage for all new features
 
 ### Changed
 - **Strategic Platform Decision**: Yahboom ROSMASTER Series designated as primary platform (ROS2, modular, future-proof)
@@ -45,7 +73,7 @@ All notable changes to Robotics MCP will be documented in this file.
 - **Type Safety Improvements**: Fixed Pydantic schema generation errors
 - **Union Type Annotations**: Proper `Type | None` syntax throughout codebase
 - **Enhanced Documentation**: Comprehensive parameter descriptions for all tools
-- **Conversational Docstrings**: Updated all tool docstrings to FastMCP 3.1.1++ standards
+- **Conversational Docstrings**: Updated all tool docstrings to FastMCP 2.13+ standards
 - **Web Control Interface**: Modern web-based control panel for robot management
 - **Robot Auto-Loading**: Automatic robot registration from YAML configuration
 - **Home Patrol Features**: Pre-configured patrol routes for home security
@@ -89,8 +117,8 @@ All notable changes to Robotics MCP will be documented in this file.
 ## [0.2.1] - 2026-02-26
 
 ### Added
-- Advanced Agentic support and Sampling workflows (`AgenticSupportTool`) via FastMCP 3.1.1+.5 integration.
-- Upgraded `fastmcp` dependencies to `3.1.1+.5` across the ecosystem.
+- Advanced Agentic support and Sampling workflows (`AgenticSupportTool`) via FastMCP 2.14.5 integration.
+- Upgraded `fastmcp` dependencies to `2.14.5` across the ecosystem.
 - Extensive WebApp capability tracking specific endpoints: `Live Status`, `Dreame Config`, `Yahboom Feed`, `SLAM View`, `ROS 2 Telemetry`, `Tools/Apps Explorer`, and `VBot Ecosystem Map`.
 - Replaced the primary testing hardware specification (`Moorebot Scout`) with the `Yahboom ROS2 Car` fitted with an embedded 16GB Raspberry Pi 5.
 
@@ -98,7 +126,7 @@ All notable changes to Robotics MCP will be documented in this file.
 
 ### Added
 - Initial release
-- FastMCP 3.1.1++ server with dual transport (stdio/HTTP)
+- FastMCP 2.13+ server with dual transport (stdio/HTTP)
 - MCP server composition (osc-mcp, unity3d-mcp, vrchat-mcp, avatar-mcp)
 - Unified bot + vbot control interface
 - Robot control portmanteau tool

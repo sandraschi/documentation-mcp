@@ -1,44 +1,280 @@
-﻿# Meta MCP Changelog
+
+
+## [Unreleased] -- 2026-07-12
+
+### Added
+- **SOTA analyzer redesigned** (40+ rules from 2026 fleet standards):
+  - New categories: WEB, INFRA, SAFETY — 40 rules total (up from 26)
+  - Rules for Bun, Biome, TailwindCSS, Zustand, Lucide, dark mode, data-testid, Framer Motion
+  - Prefab coverage, dual transport, llms.txt/llms-full.txt, glama.json, .env.example
+  - Tauri/NSIS wrapper, port adjacency, PyInstaller spec, Playwright E2E, CUA-NSIS smoke test
+  - Session context injection (.cursorrules/.claude-plugin), start scripts, justfile, run_server.py
+  - Docstring SOTA 2026 (Annotated+Field), CORS Tauri origins, batch mutation safety (--bak/--dryrun)
+  - All rules carry `standard_ref` linking to mcd standards docs
+- **remediation_todo** field in analysis output — structured markdown grouped P0/P1/P2 with fix steps + standard refs
+- **Tiiny.host static page builder** — `scaffold_ops(operation="tiiny_site")` scaffolds + deploys to tiiny.host
+- **FastMCP 3.4.2 capability checks**: @mcp.prompt(), @mcp.resource(), output_schema, SkillsDirectoryProvider
+- **Docstring 3.4.3 checks**: ## Return Format, ## Examples, old Args: block detection
+
+### Changed
+- **Analysis web page** (Analysis.tsx) rebuilt — dedicated tool cards per operation, severity indicators, SOTA score, runt badges, dry-run/bak toggles, LLM deep analysis
+- **Builders web page** (Builders.tsx) — Tiiny.host card, output badges on each builder, clearer descriptions
+- **analyze_runts** thresholds: FastMCP < 3.4.2 = runt (was < 2.12), portmanteau threshold 20 (was 15)
+- **EmojiBuster** — adds dry_run=True to fix_unicode_logging for preview-before-write
+- **analysis_ops portmanteau** — dry_run and create_bak flags on all operations
+- **Better false positive handling**: FastMCP version from `[project.dependencies]` not description text, help/status tool detection via portmanteau operation names, print count excludes scripts/ and .venv, bare except count no longer includes `except Exception:`
+- **Fix gates found during remediation**: is_test filter fixed (matched package names containing "test", hiding tools in test_fixture_mcp), .venv path-part filtering on all file walks, JS console.log detection added
+- **Tool detection broadened**: catches @router.tool(), @server.tool(), programmatic registration (mcp.add_tool, register_tool)
+- **FastMCP 2.x references cleaned**: `_check_fastmcp_2133_features` → `_check_fastmcp_342_features`, version constants bumped, sampling detection looks for ctx.sample()
+
+### Fixed
+- `.env` bundle security leak: `tauri.conf.json` resources flagged when bundling .env instead of .env.example
+- API_BASE port mismatch detection: flags frontend-port-bound api.ts that breaks in Tauri production
+- Stale .bak file detection in source trees
+
+## [Unreleased] -- 2026-07-03
+
+### Added
+- **Dynamic capabilities router** -- lazy-loading proxy for the 130+ MCP server fleet:
+  - `meta_route_tool`: resolve tool_name → fleet server, hot-start via subprocess if offline, proxy MCP call over HTTP, return result. Avoids saturating LLM context with static mcp.json definitions.
+  - `meta_search_capabilities`: semantic search across tool names and descriptions in the capability index.
+  - `meta_routing_status`: index health, running servers, fleet stats.
+  - `meta_routing_reindex`: force full fleet re-scan and SQLite index rebuild.
+  - `meta_routing_servers`: list all fleet servers discovered by the index.
+  - SQLite-backed `CapabilityIndex` with sub-second lookups, upsert/semantic search, and server status tracking.
+  - `DynamicRouter` core service: fleet directory scanning, IDE mcp.json parsing, HTTP endpoint probing, hot-start with uv run, MCP JSON-RPC proxying via /mcp endpoint.
+  - `ToolMapping`, `ServerEndpoint`, `RouteRequest`, `RouteResult`, `IndexStats` Pydantic models.
+- **Consolidated routing registries**: replaced `capability_router` and `dynamic_routing` stubs with single `routing.py` registry. All routing tools delegate to `DynamicRouterService` (REST API parity).
+
+### Changed
+- Bumped version to 0.5.0 (minor: new routing subsystem).
+- `mcp_server.py`: cleaned up stale `capability_router` / `dynamic_routing` imports, registered `routing` suite.
+
+### Fixed
+- Removed dead import `register_capability_router_tools` from `mcp_server.py`.
+
+## [Unreleased] -- 2026-07-01
+
+### Added
+- **Harness generation suite** -- CLI-Anything integration for meta-mcp:
+  - `harness_analyze`: AST-based Python API surface extraction with curation
+    rules, domain grouping, backend detection. Produces ToolSurfaceSpec.
+  - `harness_generate`: consumes ToolSurfaceSpec, generates complete
+    fleet-conformant FastMCP 3.4+ server with portmanteau tools per domain
+    group, Prefab cards, SKILL.md, backend strategy, dual transport.
+  - `harness_refine`: gap analysis + incremental tool addition (non-destructive).
+- **Fleet config audit** -- `fleet_config_audit` tool scans all repos for
+  agent configs (CLAUDE.md, AGENTS.md, .cursorrules, llms.txt, glama.json, etc.)
+  with override priority chain. Webapp Config Audit page.
+- **15 portmanteau tools** -- consolidated from 125 flat tools to 55 total
+  (15 portmanteau + 40 domain-specific). All registries now have a single
+  `*_ops` entry point with `operation: Literal[...]`.
+- **Webapp Harness Generator page** -- guided 3-step pipeline (analyze -> preview -> generate)
+- **Script safety** -- `mcp-swapper.py` (dry-run, .bak, tally),
+  `log_rotate.py` (dry-run, .bak, error recovery),
+  `meta-ops.py` (functional, error handling, no emoji)
+- **deep_scan_repo fix** -- replaced `rglob("*")` with `os.walk` dir pruning
+  across all scanning paths. Prevents .venv/node_modules inflation.
+- SOTA-compliant docstrings on all portmanteau tools: [RATIONALE],
+  ## Operations, ## Return Format, ## Examples.
+
+### Changed
+- `create_response` accepts optional `error_type` parameter.
+- `mcp_repo_analyzer.py`: module-level `_IGNORE_DIRS` + `_walk_py_files()`
+- `pyproject.toml`: added `[tool.pytest.ini_options]` and `[tool.coverage]`
+- All legacy alias tools removed from registries (replaced by portmanteau)
+- Emoji stripped from all `src/meta_mcp/` Python source (except logging_config BASH_ICONS which use hex escapes)
+- Em dashes replaced with `--` across all registry files (18 files)
+- Stray `tools/repo_stats.py` moved to `scripts/`
+- Builder scripts moved from `tools/` to `scripts/` (fullstack-builder, etc.)
+
+### Fixed
+- `diagnostics_service.py`: shortened long messages (E501)
+- `server_builder_from_spec.py`: unused import `ast`, unused variable `default_op_name`
+- `harness_analyzer.py`: unused variable `all_code`, loop variables
+- `github_inspiration.py`: unused `time` import
+- `mcp_repo_analyzer.py`: missing `import os`
+
+## [Unreleased] -- 2026-06-14
+
+### Fixed
+- Tauri build: resolved Rust crate conflict (brotli/alloc-no-stdlib)
+- Tauri build: fixed PyInstaller path mismatch (hyphen to underscore in src dirs)
+- Tauri build: fixed TypeScript errors (unused imports, useRef arg, import.meta.env)
+- Tauri CORS: allow_origins includes tauri://localhost for WebView access
+
+### Added
+- CUA-NSIS: just cua-nsis-test recipe, smoke script, config
+- CUA-NSIS: build.ps1 now copies NSIS installer to dist/
+- CUA-NSIS: 11-phase smoke test (install, launch, WebView OCR, diagnostics, uninstall)
+
+## [Unreleased] -- 2026-06-14
+
+### Added
+- Tauri CORS: 	auri://localhost, http://tauri.localhost, https://tauri.localhost in CORS origins
+- Tauri CORS: _TAURI env var toggle with llow_origin_regex for secure WebView access
+- build.ps1: auto-copy NSIS installer to dist/ on build
+
+### Changed
+- CORS: llow_origins=["*"] → explicit origins list for Tauri webview compatibility
+# Meta MCP Changelog
 
 All notable changes to Meta MCP will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-> **Canonical changelog:** `D:/Dev/repos/meta_mcp/CHANGELOG.md`
+## [Unreleased]
+
+### Fixed -- fleet cold-start smoke teardown leak (2026-06-10)
+
+The 108-repo cold-start probe left ~234 orphaned processes (uv.exe + server
+python.exe pairs) because teardown was non-tree at every layer:
+
+1. `fleet_probes/scripts/stdio_mcp_smoke.py`: `proc.terminate()` killed only
+   the direct child (uv.exe for `uv run <server>`), orphaning the server
+   python grandchild on every run -- including successful ones. Now closes
+   stdin (graceful MCP exit hint) then tree-kills via `taskkill /T /F` in a
+   `finally` block.
+2. Same file: blocking `proc.stdout.readline()` ignored the deadline while a
+   silent child was alive, and the undrained stderr pipe could fill and block
+   chatty children (uv sync). Replaced with reader threads + queue; deadline
+   is now always honored.
+3. `fleet_probes/scripts/Invoke-FleetStdioMcpSmoke.ps1`: on helper timeout,
+   `$p.Kill()` (no tree on .NET Framework) orphaned uv AND server. Now
+   `taskkill /T /F /PID` first.
+
+Verified standalone: happy-path grandchild reaped in 2.2s; silent-server
+3s deadline honored (4.7s incl. tree-kill), grandchild reaped.
+
+## [0.3.0] - 2026-06-07
+
+Desktop installer release: Tauri 2 native app with bundled Python sidecar, plus dashboard TypeScript hardening and fleet doc vendoring.
+
+### Added
+- **Tauri 2 native desktop app** -- PyInstaller one-file sidecar, NSIS `.exe` + MSI installer (`just build-native`, `docs/TAURI.md`)
+- **MCPB package** -- `mcpb/manifest.json`, `pack.ps1`, `just mcpb-pack`; Claude Desktop bundle at `dist/meta-mcp-v*.mcpb`
+- **Fleet cold-install docs** -- vendored locally under `docs/fleet/` (no naked `mcp-central-docs` install links)
+- **`scaffold_mcp_server` FastMCP 3.4** -- sampling, agentic workflow, prompts/skills, CodeMode, prefab UI in generator output
+
+### Fixed
+- **`web_sota` TypeScript build** -- `apiTypes` helpers, generic `useApi`, typed API payloads across dashboard pages
+
+## [0.3.0-beta] - 2026-06-07
+
+First public **beta** GitHub release. MetaMCP positioned as a **Swiss-army-knife** fleet hub: builders, analyzers/scrubbers, probes, and repo inspiration in one MCP + dashboard.
+
+### Added
+- **Repo inspiration suite** -- `inspire_repo_*`, workflow, Prefab card, dashboard page
+- **Fleet cold-install probe** -- mcpb + stdio smoke; optional sandboxed `-Execute` via virtualization-mcp
+- **Fleet cold-start probe** -- dirty console detection, `stack_degraded`, broken-only reruns
+- **Analysis depot** -- persistent runs, MCD export, `analyze_fleet` multidimensional scan
+- **Builders** -- `scaffold_*` tools + dashboard Builders wizard (MCP server, fullstack, landing, webshop, game)
+- **Scrubbers** -- EmojiBuster, PowerShell validator, implementation honesty, `redact_secrets_audit`
+- **Dashboard** -- Tool Lab, Repo Inspiration, Fleet tabs, local LLM proxy, multitab Help
+- **Docs** -- README badges, GitHub topics/description, sandbox + inspiration sections
+
+### Changed
+- Ruff-clean Python tree; Biome-clean `web_sota`
+- `llms.txt` / manifest scrub per fleet standard
+- README/help/`show_mcp_overview` document builders, analyzers, and scrubbers
+
+## [Unreleased] - 2026-06-07 (archived)
+
+### Changed
+- **`llms.txt` / `llms-full.txt`:** Rewritten per fleet LLM manifest standard -- curated index + corpus for bots/RAG; no machine paths or embedded MCP configs; `llms-full.txt` tracked again.
+- **Privacy / PII scrub:** `docs/PRIVACY.md`; README privacy section; gitignore `data/tasks.json`, `llms-full.txt`, `debug_output.txt`; generic `.env.example` and `REPOS_DIR` default (`~/repos`); removed hardcoded `WURST_AUTH_TOKEN` default; `META_MCP_NODE_LABEL` for heartbeat; author email removed from `pyproject.toml`.
+- **README / PRD:** Trimmed for public release -- factual tone, fleet probe sections (cold-start, cold-install, dirty log, paths); removed stale marketing copy.
+
+### Added
+- **Fleet probe architecture (MCD-free):** `docs/fleet/FLEET_PROBE_ARCHITECTURE.md`, `fleet_paths.py`, `fleet_probes/` vendored scripts + manifests; probe services resolve meta_mcp / `~/.meta_mcp/fleet` first, MCD legacy fallback only.
+- **Fleet cold-install probe:** `FleetColdInstallService`, `/api/v1/fleet/cold-install/run|report`, `FleetColdInstall.tsx` tab (mcpb + stdio columns, IDE filter), MCP tools with `test_mcpb`, `host_mcpb_smoke`, `mcp_clients`. **mcpb = Claude Desktop only**; other IDEs use `stdio_*` outcomes.
+- **Fleet cold-start dirty log:** `fleet-webapp-start-probe.ps1` parses console output on every run (HTTP 4xx/5xx, STARTUP PROBE warnings); per-repo `dirtyLog` / `dirtyLogOk` / `consoleIssues[]`; `stack_degraded` outcome; teardown via two-pass `Stop-FleetPortSquatters`.
+
+### Changed
+- **`FleetStartMode.ps1` (vendored):** `Start-FleetDetachedShell` for `FLEET_PROBE_RUN=1` log capture without visible consoles.
 
 ## [Unreleased] - 2026-06-06
 
 ### Added
-- **Fleet cold-start probe — Broken\* mode:** UI button **Broken\* (N)** re-runs only repos that failed in the last report. API `broken_only: true` on `POST /api/v1/fleet/startup-probe/run`. Service passes `-BrokenOnly` to `fleet-webapp-start-probe.ps1`.
+- **Fleet cold-start probe -- Broken\* mode:** `FleetStartupProbe.tsx` button; `FleetStartupProbeRequest.broken_only`; `FleetStartupProbeService.run_probe(broken_only=…)` wraps `-BrokenOnly` on central probe script.
 
 ### Fixed
-- **FleetStartupProbe.tsx:** `runProbe` modes (`single` | `full` | `broken`); broken count from last complete report.
+- **Cold-start UI:** Broken\* enabled when last report `status === complete` and broken count > 0.
 
 ## [Unreleased] - 2026-05-31
 
 ### Added
-- **`repo_inspiration` suite** — `inspire_repo_structure`, `inspire_repo_files`, `inspire_repo_patterns` (Python port of [Repomuse](https://www.npmjs.com/package/repomuse), MIT, praveene3127). Fleet doc: [integrations/repo-inspiration.md](../../integrations/repo-inspiration.md).
+- **Analysis depot** -- durable runs under `~/.meta_mcp/analysis/` (replaces primitive 1h-only `~/.mcp-studio/scan-cache`); tools `list_analysis_depot`, `get_analysis_depot_run`, `publish_analysis_to_mcd`; `analyze_mcp_runts` / `show_mcp_status` accept `export_mcd`; MCD section `mcp-central-docs/projects/analysis/` with `FLEET_*_LATEST.md`, `runs/`, `repos/`, optional `projects/<repo>/ANALYSIS_SNAPSHOT.md`
+- **Phase D (fleet SOTA surface)** -- `prefab-ui` core dependency; `inspire_repo_structure_card` (Prefab + text fallback); MCP prompts (`inspire_repo_study`, `meta_mcp_fleet_discovery`); resources `resource://meta-mcp/repo-inspiration/skills`, `resource://meta-mcp/capabilities`; `META_MCP_PREFAB_APPS=0` to skip App tool registration
+- **`help` tool** -- fleet-standard discovery entry point (`list_mcp_tools` / `find_mcp_tools` remain aliases)
+- **`inspire_repo_help`** -- standalone inspiration parameter reference
+- **README / help docs** -- fleet [README_STRUCTURE](https://github.com/sandraschi/mcp-central-docs/blob/main/standards/README_STRUCTURE.md) user README; expanded [docs/tools/diagnostics.md](docs/tools/diagnostics.md)
+- **`repo_inspiration` suite** -- remote GitHub inspiration tools (native Python port of [Repomuse](https://www.npmjs.com/package/repomuse), MIT, praveene3127):
+  - `inspire_repo` portmanteau (`operation=structure|files|patterns|help`) plus legacy `inspire_repo_*` aliases
+  - **Phase A:** `data.chapters[]` (`overview`, `tree`, `manifest`, `readme`, `source`, `prompt`, `file`, `hint`); `profile` (`brief`|`standard`|`deep`); `subpath`, `branch`, `max_chars`, `language_hint`, glob filters; in-memory tree cache (5 min); `gitingest_url` in responses
+  - **Phase B:** large-repo directory summary, `data.hints[]`, `suggested_subpaths`, manifest-based `suggested_language_hint`, `rate_limit_remaining`; web UI warnings, subpath chips, expand-all, language hint field
+  - **Phase C:** `inspire_repo_workflow` (structure → files → patterns + optional `ctx.sample` synthesis)
+  - **Web:** `/api/v1/llm/models` and `/api/v1/llm/chat` proxy -- Settings model dropdown + Chat no longer blocked by browser CORS to Ollama
+- **Docs:** [docs/tools/repo-inspiration.md](docs/tools/repo-inspiration.md); fleet note in `mcp-central-docs/integrations/repo-inspiration.md`
+- **Web (`web_sota`):** **Repo Inspiration** page -- GitHub URL + three inspire tools; results split into collapsible chapters + full-text pane
 
-## [3.4.0] - 2026-02-21 - Toolchains & Presets ðŸ”—
-
-### ðŸš€ Major Feature Expansion
-**MetaMCP Enterprise** now features **Toolchain Manager**, a way to curate collections of MCP servers and rapidly hot-swap them into your preferred IDE clients.
-
-### Added
-- **ðŸ”— Toolchain Presets**: Create, read, update, and delete curated groups of MCP servers.
-- **âš¡ Rapid Deployment**: Apply an entire preset to Cursor, Windsurf, Zed, or Claude Desktop with one click.
-- **ðŸŒ Toolchain Dashboard**: A premium UI page in the webapp (`Toolchains.tsx`) to manage your configurations visually.
-
-## [3.2.1] - 2026-02-04 - Stability & Client Detection Fixes ðŸ”§
+### Confirmed working
+- **Toolchains / Config Switcher** (`web_sota/src/pages/Toolchains.tsx`): fully wired into sidebar nav and router. Backend (`ToolchainService`, `toolchains_service.py`) complete with CRUD + apply. API endpoints at `/api/v1/toolchains/{list,create,apply,available_servers}` and `DELETE /api/v1/toolchains/{name}` all functional. Profiles stored in `~/.meta_mcp_toolchains.json`, server pool sourced from `MASTER_MCP_CONFIG.json`.
 
 ### Fixed
-- **ðŸš€ Discovery Service**: Removed incorrect `await` keywords on synchronous functions (`discover_clients`, `check_client_integration`), resolving a `TypeError` on the Server Repos page.
-- **ðŸ” Tools UI**: Increased `z-index` of the search bar container to prevent it from being hidden behind tool cards.
+- **Frontend build**: `web_sota` Vite build confirmed working via `node_modules\.bin\vite.cmd build`. Pre-existing `tsc` errors in AppsHub/Topbar/DynamicForm do not block the Vite production build.
+
+### Notes
+- `frontend/` is a stale older copy of the webapp - active frontend is `web_sota/`. Changes to `frontend/` have no effect.
+
+## [Unreleased]
+
+### Changed
+- **Language Professionalization**: Removed overenthusiastic marketing language throughout codebase
+  - Replaced "SOTA" references with "modern" and "professional" 
+  - Updated project description from "Ultimate Bloat-Buster" to "Professional MCP server management platform"
+  - Standardized all documentation to use enterprise-ready terminology
 
 ### Added
-- **ðŸ–¥ï¸ Client Discovery**: Expanded detection paths for **Zed** (Scoop shims) and **Antigravity** (User-specific AppData).
-- **âš™ï¸ Client Configuration**: Implemented functional "Configure" and "View JSON" buttons on the Clients page with a new JSON editor modal.
+- **`meta_dev` suite** (`meta_dev_impl`): Fleet and developer helpers â€” `probe_fleet_health`, `diff_mcp_configs`, `export_cursor_mcp_snippet`, `audit_fastmcp_surface`, `find_orphan_tool_references`, `tail_log_file`, `env_sanity_check`, `summarize_server_for_prompt`, `mcp_changelog_digest`, `redact_secrets_audit`. Documented in [docs/tools/meta-dev.md](docs/tools/meta-dev.md).
+- **HTTP tool catalog**: `GET /api/v1/mcp/catalog` â€” live FastMCP tool list with JSON Schema for each tool (powers the dashboard).
+- **Tool Lab** (`web_sota`): Sidebar page to pick any registered tool, edit args via **DynamicForm** or raw JSON, and run via `POST /api/v1/tools/execute`.
+- **`justfile`**: `just sync`, `just fix`, `just serve`, `just web-dev`, `just web-build`, `just tools`, `just mcp-stdio`, `just ready`, etc. (PowerShell-friendly).
+- **Ruff** in **`[dependency-groups] dev`**; `src` lint/format via `uv run ruff`.
+- **`meta_mcp.tools` package** `__init__.py` re-exports `tool` / `structured_log` / `retry_on_failure` from `decorators` so legacy `from meta_mcp.tools import tool` imports keep working.
+
+### Changed
+- **Documentation layout**: Short root [README.md](README.md); guides in **docs/** â€” [INSTALL.md](docs/INSTALL.md), [ARCHITECTURE.md](docs/ARCHITECTURE.md), [TOOLS.md](docs/TOOLS.md), [docs/README.md](docs/README.md). Root [INSTALL.md](INSTALL.md) redirects to **docs/INSTALL.md**.
+- **`POST /api/v1/tools/execute`**: JSON body `{ "server_id", "tool_name", "parameters" }` (matches the web client); executes the **in-process** Meta MCP FastMCP app (`metaops` / `meta-mcp` / `local` server ids).
+- **Tool service**: Real `call_tool` / `list_tools` bridge (no simulated execution for local id); responses include **`result`** for the React app.
+- **Static UI**: FastAPI serves built assets from **`web_sota/dist`** (aligns with Vite `web_sota` build output and fleet ports **10718** backend / **10719** dev frontend per MCP Central Docs).
+
+### Added (earlier in Unreleased)
+- **`help`** (diagnostics): primary catalog â€” lists **all** tools (default **max_tools=2000**). Optional **query** filter. **`help_tools`** remains an alias (default cap 500).
+- **`meta_mcp_help`** (diagnostics): short overview (version, suites, next steps) only; points to **`help`** for the full list.
+- **`help_tools`** (diagnostics): alias of **`help`** for older clients.
+- **`generate_fleet_starts_launcher`** (diagnostics): runs MCP Central Docs `tools/sync_fleet_fastmcp.py` (`operation=fastmcp_only`) or `tools/generate_fleet_registry.py` (`operation=full_registry`) so **Fleet Starts Launcher** data stays current. Override clone path with **`MCP_CENTRAL_DOCS_ROOT`** if needed.
+
+## [3.4.0] - 2026-02-21 - Toolchains & Presets
+
+### Major Feature Expansion
+**MetaMCP Professional** now features **Toolchain Manager**, a way to curate collections of MCP servers and rapidly hot-swap them into your preferred IDE clients.
+
+### Added
+- **Toolchain Presets**: Create, read, update, and delete curated groups of MCP servers.
+- **Rapid Deployment**: Apply an entire preset to Cursor, Windsurf, Zed, or Claude Desktop with one click.
+- **Toolchain Dashboard**: A UI page in the webapp (`Toolchains.tsx`) to manage your configurations visually.
+
+## [3.2.1] - 2026-02-04 - Stability & Client Detection Fixes
+
+### Fixed
+- **Discovery Service**: Removed incorrect `await` keywords on synchronous functions (`discover_clients`, `check_client_integration`), resolving a `TypeError` on the Server Repos page.
+- **Tools UI**: Increased `z-index` of the search bar container to prevent it from being hidden behind tool cards.
+
+### Added
+- **Client Discovery**: Expanded detection paths for **Zed** (Scoop shims) and **Antigravity** (User-specific AppData).
+- **Client Configuration**: Implemented functional "Configure" and "View JSON" buttons on the Clients page with a new JSON editor modal.
 
 ### Changed
 ## [3.3.0] - 2026-02-06 - Dynamic Tools & Inspection ðŸ§ 
@@ -66,7 +302,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Added
 - **ðŸ’Ž Premium Dark Theme**: Complete UI overhaul with glassmorphism, smooth transitions, and a refined color palette (`bg-slate-950`).
-- **ðŸ—ï¸ Modular Architecture**:
+- **ðŸ--ï¸ Modular Architecture**:
   - **Layout Engine**: Retractable Sidebar, persistent Topbar with emergency stops, and responsive main content area.
   - **Interactive Modals**: Global Logger console (Ctrl+`) and Help dialogs (?).
   - **Atomic Components**: Reusable UI elements for consistency across the application.
@@ -180,7 +416,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Health scoring algorithm (0-100 scale)
   - Automated improvement recommendations
 
-- **ðŸ–¥ï¸ Client Ecosystem Management**: Multi-IDE integration platform
+- **ðŸ-¥ï¸ Client Ecosystem Management**: Multi-IDE integration platform
   - Configuration file parsing for 5+ IDEs
   - Safe configuration updates with backup
   - Server registration and unregistration
@@ -188,7 +424,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Cross-platform client support
 
 #### Changed
-- **ðŸ—ï¸ Architecture Overhaul**: Complete modular service architecture
+- **ðŸ--ï¸ Architecture Overhaul**: Complete modular service architecture
   - 8 independent services with dedicated responsibilities
   - Service health monitoring and status tracking
   - Graceful error handling and recovery
@@ -207,7 +443,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Professional enterprise design system
 
 #### Technical Improvements
-- **FastMCP 3.1.1+.1+**: Enhanced response patterns throughout
+- **FastMCP 2.14.1+**: Enhanced response patterns throughout
 - **Cross-platform Compatibility**: Windows, macOS, Linux verified
 - **Performance Optimization**: Efficient resource usage and caching
 - **Security Hardening**: Safe configuration management and validation
@@ -219,15 +455,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Configuration**: Enhanced client management with backup safety
 - **Tool Registry**: 8 modular suites replace simple tool collection
 
-## [2.0.0] - 2026-01-15 - Enterprise Foundation ðŸ—ï¸
+## [2.0.0] - 2026-01-15 - Enterprise Foundation ðŸ--ï¸
 
 ### Added
-- **ðŸ—ï¸ Modular Service Architecture**: Complete overhaul with 8 dedicated services
+- **ðŸ--ï¸ Modular Service Architecture**: Complete overhaul with 8 dedicated services
 - **ðŸŒ Enterprise Web Dashboard**: Real-time monitoring and management interface
 - **âš™ï¸ Server Lifecycle Management**: Start/stop/monitor MCP servers with process control
 - **ðŸ”§ Tool Execution Framework**: Remote tool invocation across server networks
 - **ðŸ“Š Repository Intelligence**: Deep codebase analysis with health assessment
-- **ðŸ–¥ï¸ Client Management System**: Multi-client configuration for 5+ IDEs
+- **ðŸ-¥ï¸ Client Management System**: Multi-client configuration for 5+ IDEs
 - **ðŸ”’ Enhanced Security**: Comprehensive Unicode safety and validation
 - **ðŸ“ˆ Performance Monitoring**: Real-time service health and metrics
 
@@ -238,7 +474,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **ðŸ“š Documentation**: Enterprise-grade documentation and standards
 
 ### Technical Enhancements
-- **FastMCP 3.1.1+.1+**: Full protocol compliance with enhanced patterns
+- **FastMCP 2.14.1+**: Full protocol compliance with enhanced patterns
 - **Cross-platform**: Verified Windows, macOS, Linux compatibility
 - **Process Management**: Advanced subprocess control and monitoring
 - **API Architecture**: RESTful endpoints for all enterprise functions
@@ -273,9 +509,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2026-01-04
 
 ### Changed
-- **ðŸ“– README.md**: Complete rewrite with "Argh-Coding" philosophy
+- **ðŸ“- README.md**: Complete rewrite with "Argh-Coding" philosophy
 - **ðŸŽ¯ Product Vision**: Focus on preventing developer pain points
-- **ðŸ—ï¸ Architecture**: Enhanced response pattern integration
+- **ðŸ--ï¸ Architecture**: Enhanced response pattern integration
 
 ### Fixed
 - **ðŸš¨ Critical Issue**: Unicode logging crashes causing production instability
@@ -304,7 +540,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Health Monitoring**: Basic server status checking
 
 ### Architecture
-- **FastMCP 3.1.1++**: Core framework integration
+- **FastMCP 2.13+**: Core framework integration
 - **Tool Registry**: Centralized tool management
 - **Enhanced Logging**: Structured logging with Unicode safety awareness
 - **Cross-Platform**: Windows, macOS, Linux support
@@ -335,4 +571,7 @@ Meta MCP follows the **"Argh-Coding" philosophy** - every feature is designed to
 ---
 
 **Meta MCP**: Turning "Argh!" moments into "Aha!" moments since 2026. ðŸš€
+
+
+
 

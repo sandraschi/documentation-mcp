@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "edge-bookmark-mcp-server"
@@ -29,7 +29,7 @@ classifiers = [
 keywords = ["mcp", "fastmcp", "edge", "bookmarks", "browser", "search", "analytics"]
 
 dependencies = [
-    "fastmcp>=3.1.0,<4",
+    "fastmcp>=3.4.4,<4",
     "rapidfuzz>=3.6.0", 
     "watchdog>=3.0.0",
     "pandas>=2.0.0",
@@ -42,15 +42,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "pytest-asyncio>=0.21.0",
-    "pytest-cov>=4.0.0",
-    "black>=23.0.0",
-    "isort>=5.12.0",
-    "mypy>=1.0.0",
-    "pre-commit>=3.0.0"
-]
+test = ["pytest>=8.0", "pytest-asyncio", "httpx"]
+dev = ["ruff>=0.9.0", "mypy"]
 excel = ["openpyxl>=3.1.0"]
 performance = ["orjson>=3.8.0", "uvloop>=0.17.0"]
 
@@ -63,9 +56,8 @@ Issues = "https://github.com/stephanschipal/edge-bookmark-mcp-server/issues"
 [project.scripts]
 edge-bookmark-server = "src.server:main"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["src*"]
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
 
 [tool.black]
 line-length = 88

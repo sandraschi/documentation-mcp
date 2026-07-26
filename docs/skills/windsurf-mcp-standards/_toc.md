@@ -9,7 +9,7 @@
 ### Core Development Standards
 - [MCP Scaffolding](modules/mcp-scaffolding.md) - Project structure, FastMCP server templates, initial setup
 - [MCPB Packaging](modules/mcpb-packaging.md) - Build, distribution, PyPI/MCP Registry publishing
-- [AI Sampling](modules/ai-sampling.md) - FastMCP 2.14.3+ sampling methods for creative AI workflows
+- [AI Sampling](modules/ai-sampling.md) - FastMCP 3.2+ sampling methods for creative AI workflows
 
 ### Frontend & Integration
 - [Frontend SOTA](modules/frontend-sota.md) - React, TypeScript, Tailwind CSS development standards
@@ -29,7 +29,7 @@
 ## Quick Reference
 
 ### FastMCP Requirements
-- Minimum Version: FastMCP 2.14.3+
+- Minimum Version: FastMCP 3.2+
 - Sampling Support: Required for creative MCP servers
 - Enhanced Patterns: Rich AI dialogue capabilities
 

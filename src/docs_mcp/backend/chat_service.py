@@ -116,7 +116,9 @@ async def stream_chat(
     full_response = ""
     try:
         if provider_key == "ollama":
-            url = api_url_resolved or (settings.get("ollama_url", "http://localhost:11434") if settings else "http://localhost:11434")
+            url = api_url_resolved or (
+                settings.get("ollama_url", "http://localhost:11434") if settings else "http://localhost:11434"
+            )
             m = model_resolved or (settings.get("ollama_model", "") if settings else "")
             async for chunk in lc.stream_ollama(url, m, messages):
                 full_response += chunk
@@ -132,7 +134,9 @@ async def stream_chat(
                 yield json.dumps({"type": "token", "content": chunk}) + "\n"
 
         elif provider_key == "local" or provider_key == "lmstudio":
-            url = api_url_resolved or (settings.get("lmstudio_url", "http://localhost:1234/v1") if settings else "http://localhost:1234/v1")
+            url = api_url_resolved or (
+                settings.get("lmstudio_url", "http://localhost:1234/v1") if settings else "http://localhost:1234/v1"
+            )
             if not url or url == "http://localhost:1234/v1":
                 url = api_url_resolved or (settings.get("local_llm_url", "") if settings else "")
             key = api_key_resolved or (settings.get("local_llm_key", "") if settings else "")

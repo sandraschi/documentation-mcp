@@ -1,0 +1,4 @@
+# bus-pirate-mcp
+
+Tools: bp_device, bp_run, bp_help
+Ports: 11034/11035

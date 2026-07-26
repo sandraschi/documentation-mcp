@@ -1,9 +1,33 @@
-﻿# DJ Media Hub - Composite MCP Server
+# DJ Media Hub - Composite MCP Server
 
-**VirtualDJ + Plex = Unlimited Possibilities** ðŸŽ§ðŸ“º
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
+**VirtualDJ + Plex = Unlimited Possibilities** 🎧📺
 
 A composite MCP server that mounts multiple media servers under one roof,
 enabling cross-server workflows that no single server could achieve alone.
+
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/dj-media-hub
+cd dj-media-hub
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
 
 ## Features
 
@@ -23,19 +47,19 @@ enabling cross-server workflows that no single server could achieve alone.
 | `record_mix_to_plex` | Save VirtualDJ recording -> Plex library |
 | `multi_deck_plex_load` | Load 8 tracks from Plex -> 8 decks in one call! |
 
-## ðŸš€ Installation
+## 🚀 Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+### 📦 Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx dj-media-hub
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+### 🎯 Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -105,24 +129,24 @@ record_mix_to_plex("Saturday Night Set 2025")
 
 ```
 DJ-Media-Hub (Composite)
-â”œâ”€â”€ /dj/*           <-- VirtualDJ-MCP mounted
-â”‚   â”œâ”€â”€ load_track_to_deck
-â”‚   â”œâ”€â”€ set_deck_volume
-â”‚   â”œâ”€â”€ stem_kill/stem_volume
-â”‚   â”œâ”€â”€ beatgrid_adjust
-â”‚   â””â”€â”€ ... (49 tools)
-â”œâ”€â”€ /plex/*         <-- Plex-MCP mounted
-â”‚   â”œâ”€â”€ plex_library
-â”‚   â”œâ”€â”€ plex_playlist
-â”‚   â”œâ”€â”€ plex_search
-â”‚   â””â”€â”€ ... (15 tools)
-â””â”€â”€ Root Tools      <-- Cross-server workflows
-    â”œâ”€â”€ plex_to_deck
-    â”œâ”€â”€ plex_playlist_to_automix
-    â”œâ”€â”€ record_mix_to_plex
-    â”œâ”€â”€ multi_deck_plex_load
-    â”œâ”€â”€ hub_status
-    â””â”€â”€ hub_help
+├── /dj/*           <-- VirtualDJ-MCP mounted
+│   ├── load_track_to_deck
+│   ├── set_deck_volume
+│   ├── stem_kill/stem_volume
+│   ├── beatgrid_adjust
+│   └── ... (49 tools)
+├── /plex/*         <-- Plex-MCP mounted
+│   ├── plex_library
+│   ├── plex_playlist
+│   ├── plex_search
+│   └── ... (15 tools)
+└── Root Tools      <-- Cross-server workflows
+    ├── plex_to_deck
+    ├── plex_playlist_to_automix
+    ├── record_mix_to_plex
+    ├── multi_deck_plex_load
+    ├── hub_status
+    └── hub_help
 ```
 
 ## Requirements
@@ -130,7 +154,7 @@ DJ-Media-Hub (Composite)
 - Python 3.10-3.11 (3.11 recommended for aubio)
 - VirtualDJ (running with HTTP network control enabled)
 - Plex Media Server (with API access)
-- FastMCP 3.1.1++
+- FastMCP 3.1.0+
 
 ## How It Works
 
@@ -168,8 +192,17 @@ mcp.mount("/obs", obs_mcp)            # OBS for streaming
 mcp.mount("/twitch", twitch_mcp)      # Twitch chat/alerts
 ```
 
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
 ## License
 
 MIT License - See LICENSE file
-
-

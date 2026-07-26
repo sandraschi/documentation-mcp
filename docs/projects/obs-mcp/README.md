@@ -1,94 +1,32 @@
-# 🔥 OBS Studio MCP Server
+# OBS Studio MCP Server
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![FastMCP 3.1.1+.3](https://img.shields.io/badge/FastMCP-3.1.1+.3-blue)](https://github.com/modelcontextprotocol/fastmcp)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![MCPB](https://img.shields.io/badge/MCPB-0.2-blue)](https://docs.anthropic.com/claude/docs/desktop-mcp)
-[![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-green)](https://github.com/sandraschi/obs-studio-mcp)
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.4-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-**State-of-the-Art MCP server for automating OBS Studio with AI-powered scene management and streaming control.**
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-### ✅ **Current Status: PRODUCTION READY - FastMCP 3.1.1+.3**
-- **FastMCP 3.1.1+.3 Compliance** - Latest MCP specification with conversational and sampling capabilities
-- **SEP-1577 Sampling Support** - Agentic workflows with autonomous tool orchestration
-- **Conversational Tool Returns** - Natural language responses with structured metadata
-- **MCPB Packaging** - Official Claude Desktop integration format
-- **Ruff Linted** - Enterprise-grade code quality (0 issues)
-- **Pydantic V2 Native** - Modern data validation with full V2 compatibility
-- **Comprehensive Prompts** - Extensive MCPB prompt templates for Claude Desktop
-- **REST API Server** - Full FastAPI REST interface for direct integration
+**FastMCP server for OBS Studio automation** — streaming, recording, scenes, audio, multi-target OSC orchestration, and AI media integrations (Streamfog AR lenses, TTS, WorldLabs 3D backgrounds, image/video generation).
 
-### 🔧 **Code Quality Standards**
-- ✅ **Zero Ruff Issues**: All code passes enterprise linting standards
-- ✅ **Type Safety**: 100% type coverage with mypy strict mode
-- ✅ **Modern Python**: 3.10+ with contemporary patterns and async/await
-- ✅ **Security**: Input validation, secure defaults, comprehensive error handling
-- ✅ **Performance**: Optimized async operations, connection pooling, resource management
+**Version 1.6.0** · Python 3.12+ · FastMCP >=3.4 · MIT
 
-## Features
+## Quick Start
 
-- **Stream Control**: Start/stop streams, monitor status, timecode, bitrate
-- **Recording**: Start/stop recordings, track file output and status
-- **Scene Management**: List scenes, switch between scenes
-- **Audio Control**: List audio sources, mute/unmute specific sources
-- **Replay Buffer**: Start/stop replay buffer, save highlights
-- **Virtual Camera**: Start/stop virtual camera output
-- **Transition Control**: Set scene transition types and duration
-- **System Status**: Get comprehensive OBS system status
-- **Help System**: Built-in help and documentation
-
-### 📋 **Available Tools (18)**
-
-#### 🎥 **Streaming Tools**
-- `stream_start()` - Start live streaming
-- `stream_stop()` - Stop live streaming
-- `stream_status()` - Get streaming status, timecode, bitrate
-
-#### 🎬 **Recording Tools**
-- `recording_start()` - Start recording
-- `recording_stop()` - Stop recording
-- `recording_status()` - Get recording status and file info
-
-#### 🎭 **Scene Management**
-- `scenes_list()` - List all available scenes
-- `scene_switch(scene_name)` - Switch to specific scene
-
-#### 🔊 **Audio Control**
-- `audio_sources()` - List all audio sources
-- `audio_mute(source_name, muted)` - Mute/unmute audio sources
-
-#### 🎮 **Advanced Features**
-- `replay_start()` - Start replay buffer
-- `replay_stop()` - Stop replay buffer
-- `replay_save()` - Save replay highlight
-- `virtualcam_start()` - Start virtual camera
-- `virtualcam_stop()` - Stop virtual camera
-- `transition_set()` - Configure scene transitions
-- `obs_status()` - Get comprehensive OBS status
-- `help()` - Built-in help system
-
-## Prerequisites
-
-- **Python 3.10+** (3.9 no longer supported for new features)
-- **OBS Studio 28.0+** with WebSocket server enabled
-  - OBS → Tools → WebSocket Server Settings → Enable server
-- **MCPB CLI** (for building packages): `npm install -g @anthropic-ai/mcpb`
-
-## 🚀 Installation
-
-### Prerequisites
-- [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
-- Python 3.12+
-
-### 📦 Quick Start
-Run immediately via `uvx`:
-```bash
-uvx obs-studio-mcp
+```powershell
+git clone https://github.com/sandraschi/obsmcp obs-mcp
+cd obs-mcp
+just
 ```
 
-### 🎯 Claude Desktop Integration
-Add to your `claude_desktop_config.json`:
+This lists all available recipes. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start. See [INSTALL.md](INSTALL.md) for setup without `just`.
+
+### Claude Desktop Integration
+
+Add to `claude_desktop_config.json`:
+
 ```json
 "mcpServers": {
   "obs-studio-mcp": {
@@ -97,84 +35,58 @@ Add to your `claude_desktop_config.json`:
   }
 }
 ```
-### 📦 **PyPI Package Install (RECOMMENDED)**
 
-**Fastest Installation - Production Ready:**
+Or build and drag-and-drop the MCPB package (see [Building & Packaging](#building--packaging)).
 
-```bash
-pip install obs-studio-mcp
-```
+## Prerequisites
 
-**Claude Desktop Integration:**
-- Open Claude Desktop
-- Settings → MCP Servers
-- Add new MCP server:
-  ```json
-  {
-    "mcpServers": {
-      "obs-studio-mcp": {
-        "command": "obs-studio-mcp"
-      }
-    }
-  }
-  ```
+- **Python 3.12+** and [uv](https://docs.astral.sh/uv/)
+- **OBS Studio 28.0+** with the WebSocket server enabled
+  (OBS → Tools → WebSocket Server Settings → Enable server)
+- Optional, for the integration tools: `streamfog-mcp`, `speech-mcp`, `worldlabs-mcp`, and the myAI media backends (see [Configuration](#configuration))
 
-### 🎯 **Claude Desktop (MCPB Package)**
+## Tools (36)
 
-**State-of-the-Art Installation:**
+All tools are `obs_`-prefixed. Call `obs_help` at runtime for the live, always-accurate registry.
 
-1. **Download MCPB Package:**
-   ```bash
-   # Build from source (recommended)
-   git clone https://github.com/sandraschi/obs-studio-mcp.git
-   cd obs-studio-mcp
-   ./build-mcpb.sh 0.1.0  # Linux/macOS
-   # OR
-   .\build-mcpb.ps1 -Version 0.1.0  # Windows PowerShell
-   ```
+### Core OBS control
 
-2. **Claude Desktop Integration:**
-   - Open Claude Desktop
-   - Settings → MCP Servers
-   - **Drag and drop** the `.mcpb` file
-   - Configure OBS WebSocket settings in Claude Desktop
+| Tool | Description |
+|------|-------------|
+| `obs_stream_start` / `obs_stream_stop` / `obs_stream_status` | Streaming lifecycle and status (timecode, bytes sent, reconnect state) |
+| `obs_recording_start` / `obs_recording_stop` / `obs_recording_status` | Recording lifecycle and status |
+| `obs_scenes_list` / `obs_scene_switch` | Scene enumeration and switching |
+| `obs_replay_start` / `obs_replay_stop` / `obs_replay_save` | Replay buffer control and highlight capture |
+| `obs_virtualcam_start` / `obs_virtualcam_stop` | Virtual camera output |
+| `obs_audio_sources` / `obs_audio_mute` | Audio source enumeration and mute control |
+| `obs_transition_set` | Scene transition type and duration |
+| `obs_status` | Overall OBS status (versions, streaming, recording) |
+| `obs_help` | Live tool registry introspection |
 
-3. **Verify Installation:**
-   ```
-   Claude: "Check my OBS streaming status"
-   # Claude will automatically use the MCP server
-   ```
+### OSC orchestration
 
-### 🛠️ **Other MCP Clients (Cursor, Windsurf, etc.)**
+| Tool | Description |
+|------|-------------|
+| `obs_send_osc` | Send OSC messages to configured targets (VRChat, stage gear, other nodes) |
+| `obs_list_targets` | Enumerate connection targets from `config/targets.yaml` |
 
-```bash
-# Install from PyPI (recommended)
-pip install obs-studio-mcp
+### AI media integrations
 
-# OR install from source
-git clone https://github.com/sandraschi/obs-studio-mcp.git
-cd obs-studio-mcp
-uv pip install -e .
-```
+| Tool | Description |
+|------|-------------|
+| `obs_streamfog_status` / `obs_streamfog_set_lens` / `obs_streamfog_clear` / `obs_streamfog_toggle_avatar` | Streamfog AR lens orchestration (via streamfog-mcp) |
+| `obs_scene_with_lens` | Atomic scene switch + AR lens activation |
+| `obs_speech_list_voices` / `obs_speech_tts` | TTS voiceovers and narration (via speech-mcp) |
+| `obs_worldlabs_generate_background` / `obs_worldlabs_list_backgrounds` | AI-generated 3D virtual backgrounds (via worldlabs-mcp) |
+| `obs_generate_image` / `obs_generate_video` | Gemini Imagen / Veo 3 media generation (via myAI) |
+| `obs_sd_generate` / `obs_sd_img2img` | Local Stable Diffusion / FLUX on the resident GPU |
 
-Add to your MCP config:
+### Workflows
 
-```json
-{
-  "mcpServers": {
-    "obs-studio-mcp": {
-      "command": "python",
-      "args": ["-m", "obs_studio_mcp.server"],
-      "env": {
-        "PYTHONPATH": "D:/Dev/repos/obs-studio-mcp/src",
-        "OBS_WS_HOST": "localhost",
-        "OBS_WS_PORT": "4455",
-        "OBS_WS_PASSWORD": ""
-      }
-    }
-  }
-}
-```
+| Tool | Description |
+|------|-------------|
+| `obs_list_workflows` | List Arazzo workflow descriptors bundled with the server |
+| `obs_agentic_workflow` / `obs_production_assistant` | Multi-step agentic automation (under active development) |
 
 ## Configuration
 
@@ -187,125 +99,62 @@ OBS_WS_PASSWORD=your_password
 LOG_LEVEL=INFO
 ```
 
-## 📚 **Documentation**
+Integration endpoints (Streamfog, speech, WorldLabs, myAI) and their enable flags are configured the same way — see `src/obs_studio_mcp/config.py` for the full list of settings and defaults. OSC targets live in `config/targets.yaml` and can be managed from the webapp Targets page.
 
-### **ADN Content Notes**
-Comprehensive Advanced Memory Network documentation:
-- **[OBS MCP Server](docs/adn-notes/OBS-MCP-Server.md)** - Complete technical overview, use cases, and enhancement roadmap
-- **[OBS Studio](docs/adn-notes/OBS-Studio.md)** - In-depth analysis of OBS Studio and its underrated capabilities
+## Webapp Dashboard
 
-### **Technical Documentation**
-- **[Complete Documentation Structure](docs/COMPLETE_DOCUMENTATION_STRUCTURE.md)** - Full project documentation index
-- **[Development Standards](docs/standards/)** - Code quality and development guidelines
-- **[MCP Technical Guide](docs/mcp-technical/)** - MCP protocol implementation details
+The repo ships a React dashboard for monitoring and control.
 
-## 📦 **Building & Packaging**
+- Frontend (Vite): port **10818**
+- Backend (FastAPI REST): port **10819**
 
-### **MCPB Package Build (SOTA)**
-
-```bash
-# Validate package structure
-.\build-mcpb.ps1 -Validate  # Windows
-./build-mcpb.sh --validate  # Linux/macOS
-
-# Build MCPB package
-.\build-mcpb.ps1 -Version 0.2.0  # Windows
-./build-mcpb.sh 0.2.0            # Linux/macOS
-
-# Clean and rebuild
-.\build-mcpb.ps1 -Clean -Version 0.2.0
+```powershell
+cd web_sota
+.\start.ps1
 ```
 
-### **Package Structure**
-```
-obs-studio-mcp-v0.1.0.mcpb/
-├── manifest.json          # MCPB manifest with full tool registry
-├── assets/
-│   ├── icon.png          # 256x256 package icon
-│   ├── screenshots/      # Feature screenshots
-│   └── prompts/          # Extensive Claude Desktop prompts
-│       ├── system.md     # System-level instructions
-│       ├── user.md       # User interaction templates
-│       ├── examples.json # Structured usage examples
-│       ├── quick-start.md
-│       ├── configuration.md
-│       └── troubleshooting.md
-└── src/
-    └── obs_studio_mcp/   # Source code only (no dependencies)
+Then open `http://localhost:10818`.
+
+## Building & Packaging
+
+MCPB packaging uses the Anthropic mcpb CLI via Bun (fleet standard):
+
+```powershell
+bunx @anthropic-ai/mcpb validate manifest.json
+bunx @anthropic-ai/mcpb pack . dist/obs-studio-mcp-v1.6.0.mcpb
 ```
 
-### **Development Setup**
+Or use the repo scripts: `.\build-mcpb.ps1` / `scripts\mcpb-pack.ps1`. Release flow is the fleet triple-play (`just release`).
 
-```bash
-# Clone repository
-git clone https://github.com/sandraschi/obs-studio-mcp.git
-cd obs-studio-mcp
+## Development
 
-# Install development dependencies
-uv pip install -r requirements.txt
-uv pip install -e .[dev]
-
-# Run tests
-pytest
-
-# Lint code
-ruff check .
-ruff format .
-
-# Type check
-mypy src/
+```powershell
+uv sync --all-extras     # install everything
+just lint                # ruff + biome
+just fix                 # auto-fix + format
+uv run pytest tests/ -v  # tests
 ```
 
-## 🎬 **Usage Examples**
+Quality stack: [Ruff](https://astral.sh/ruff) for Python, [Biome](https://biomejs.dev/) for the webapp, `bandit`/`safety` audits via `just check-sec` / `just audit-deps`, justfile recipes for all fleet operations.
+
+## Usage Examples
 
 ```
 "Start streaming"
-"Stop the stream"
-"Switch to the Gameplay scene"
-"List my scenes"
+"Switch to the Gameplay scene with the beauty_smooth lens"
 "Mute the microphone"
-"Start recording"
 "Save that replay!"
+"Generate a cyberpunk city background and list my scenes"
+"Send /avatar/parameters/Mute to the VRChat OSC target"
 ```
 
-## Tools
+## Documentation
 
-| Tool | Description |
-|------|-------------|
-| `start_stream` | Start streaming |
-| `stop_stream` | Stop streaming |
-| `get_stream_status` | Get stream status |
-| `start_recording` | Start recording |
-| `stop_recording` | Stop recording |
-| `list_scenes` | List all scenes |
-| `switch_scene` | Switch to a scene |
-| `start_replay_buffer` | Start replay buffer |
-| `save_replay_buffer` | Save replay clip |
-| `start_virtual_cam` | Start virtual camera |
-| `stop_virtual_cam` | Stop virtual camera |
-| `list_audio_sources` | List audio sources |
-| `toggle_mute` | Mute/unmute audio |
-| `set_transition` | Set scene transition |
-
-## Building MCPB Package
-
-```bash
-npm install -g @anthropic-ai/mcpb
-mcpb pack . dist/obs-studio-mcp-v0.1.0.mcpb --validate
-```
+- [INSTALL.md](INSTALL.md) — installation and troubleshooting
+- [CHANGELOG.md](CHANGELOG.md) — release history
+- [ASSESSMENT.md](ASSESSMENT.md) — current project audit
+- [docs/adn-notes/](docs/adn-notes/) — technical deep-dives on the server and OBS Studio
 
 ## License
 
-MIT License
-
-
-## 🌐 Webapp Dashboard
-
-This MCP server includes a free, premium web interface for monitoring and control.
-By default, the web dashboard runs on port **10818**.
-*(Assigned ports: **10818** (Web dashboard frontend), **10819** (Web dashboard backend (API)))*
-
-To start the webapp:
-1. Navigate to the `webapp` (or `web`, `frontend`) directory.
-2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
-3. Open `http://localhost:10818` in your browser.
+MIT

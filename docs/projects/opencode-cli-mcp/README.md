@@ -1,109 +1,110 @@
 # opencode-cli-mcp
 
-**Type:** MCP Server + Webapp  
-**Status:** Active — Functional Skeleton  
-**Version:** 0.1.0  
-**Ports:** Frontend **10950** / Backend **10951** / opencode serve **4096**  
-**Repo:** `D:\Dev\repos\opencode-cli-mcp`  
-**GitHub:** https://github.com/sandraschi/opencode-cli-mcp  
-**Last assessed:** 2026-05-01
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
----
 
-## Description
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-MCP server wrapping the [opencode](https://opencode.ai/) agentic coding CLI (`opencode serve`) into FastMCP tools. Lets Claude Desktop delegate complex multi-file coding tasks to the opencode agent as a subprocess or via its HTTP session API. Includes a FastAPI REST bridge and a Vite/React/Tailwind dashboard.
+MCP server wrapping [opencode](https://opencode.ai) CLI's HTTP API (`opencode serve`) into 14 FastMCP tools. Also includes a FastAPI REST bridge, a Vite/React fleet-standard dashboard, and [OpenCode custom tools](.opencode/tools/) that extend opencode itself.
 
-Sibling to `goose-mcp` (same pattern, different upstream CLI).
+**Pattern: Plan with Claude, implement with opencode.** Claude (expensive, high-judgment) orchestrates and supervises; opencode handles implementation grunt work on cheaper models (DeepSeek V4 Flash/Pro).
 
----
+## Quick Start
 
-## Architecture
-
-```
-Claude Desktop
-  └── FastMCP server (opencode-cli-mcp)
-        └── OpencodeClient (httpx → opencode serve :4096)
-FastAPI backend (:10951)
-  ├── /api/opencode/*  proxy to opencode serve
-  ├── /api/fleet       TCP-probe fleet ports
-  ├── /api/system      psutil metrics
-  └── /api/tools       tool catalogue
-Vite frontend (:10950)  proxies /api → :10951
+```powershell
+git clone https://github.com/sandraschi/opencode-cli-mcp
+cd opencode-cli-mcp
+just
 ```
 
----
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
 
-## MCP Tools (9)
+### Manual Setup
+
+If you don't have `just` installed:
+### Prerequisites
+- `opencode` CLI: `npm i -g opencode-ai`
+- Python 3.12+
+- Node.js 18+
+### Run Everything
+.\start.ps1
+Starts: opencode serve (`:4096`) + FastAPI backend (`:10951`) + Vite frontend (`:10950`).
+### MCP Server Only
+uv run -m opencode_cli_mcp.server
+Configure in Claude Desktop / Cursor / Windsurf (see [Integration Guide](docs/integration-guide.md)).
+
+## 12 MCP Tools
 
 | Tool | Purpose |
 |------|---------|
-| `opencode_run_agent` | Run agent non-interactively via `opencode run` (300s timeout) |
-| `opencode_list_sessions` | List active/recent sessions |
-| `opencode_get_session` | Get session metadata and state |
-| `opencode_export_session` | Export session as JSON |
-| `opencode_send_message` | Continue conversation in a session |
-| `opencode_get_messages` | Retrieve message history |
-| `opencode_server_status` | Health + session count + config |
-| `opencode_list_providers` | List configured LLM providers |
-| `opencode_get_project` | Get active project context |
+| `opencode_run_agent` | Launch agent (background or blocking) |
+| `opencode_get_run_status` | Poll running agent |
+| `opencode_list_runs` | List all agent runs |
+| `opencode_cancel_run` | Cancel a stuck run |
+| `opencode_list_sessions` | List opencode sessions |
+| `opencode_get_session` | Session details |
+| `opencode_session_diff` | Files changed in a session |
+| `opencode_send_message` | Continue a session |
+| `opencode_get_messages` | Session transcript |
+| `opencode_server_status` | Server health + config |
+| `opencode_list_providers` | Configured LLM providers |
+| `opencode_get_project` | Active project context |
 
-Prompt: `agent_instructions` — workflow guide for LLM consumers.
+## Key Workflows
 
----
+See [Usage Guide](docs/USAGE.md) for full details.
 
-## Start
+### Basic: Launch -> Poll -> Review
 
-```powershell
-# All-in-one
-.\start.ps1
-
-# Manual
-uv run -m opencode_cli_mcp.server   # MCP server
-uv run -m api.main                   # FastAPI backend :10951
-cd web_sota && npm run dev           # Vite frontend :10950
+```
+opencode_run_agent(prompt="refactor main.py", wait=false)
+    -> { job_id: "abc" }
+opencode_get_run_status("abc")     -> poll until completed
+opencode_session_diff("session-xyz") -> review changes
 ```
 
-Requires `opencode` CLI installed: `npm i -g opencode-ai`
+### Multi-Agent Sweep
 
----
+Launch N agents across N repos in parallel, poll all, review diffs. Designed for fleet-wide operations.
 
-## Known Issues (as of 2026-05-01)
+### Interactive Supervision
 
-See `docs/ASSESSMENT.md` for full detail.
+Start an agent, read its messages mid-task, send corrections, review final diff.
 
-**P1:**
-- `fleet.py` port→label map hardcoded, covers only 8/85 ports, will drift — needs to read from `mcp-central-docs` canonical source
-- `ensure_server()` never called — tools will throw raw exceptions if opencode isn't running
-- GPU detection uses deprecated `wmic` — replace with `Get-CimInstance`
+## OpenCode Custom Tools
 
-**P2:**
-- `opencode_run_agent` uses blocking `subprocess.run` — should be `asyncio.create_subprocess_exec`
-- `/api/tools` hardcodes the tool list — will diverge silently
+Copy `.opencode/tools/*.ts` into your opencode project to give opencode's LLM direct access to MCP fleet management, session inspection, and system diagnostics. 6 tools covering fleet, sessions, runs, system, providers, and tool discovery. See the [OC Tools page](http://localhost:10950/oc-tools) in the webapp for full documentation and source.
 
-**P3:**
-- `asyncio_mode = "auto"` missing from `pyproject.toml` — async pytest may fail
-- `start.ps1` zombie-kill pattern needs audit
+## Documentation
 
----
+| Doc | Description |
+|-----|-------------|
+| [Usage Guide](docs/USAGE.md) | All tools, workflows, async patterns, webapp pages |
+| [Integration Guide](docs/integration-guide.md) | MCP client config (Claude Desktop, Cursor, Windsurf) |
+| [Advanced Usage](docs/advanced-usage.md) | Async patterns, session management, cross-project, custom tools |
+| [Improvement Plan](docs/IMPROVEMENTS_2026-05-02.md) | Known issues and roadmap |
+| [Assessment](docs/ASSESSMENT.md) | Architecture review and bug audit |
+| [Changelog](CHANGELOG.md) | Version history |
 
-## Stack
+## Ports
 
-| Component | Version |
-|-----------|---------|
-| Python | 3.13 |
-| fastmcp | 3.2.4 |
-| fastapi | 0.136.1 |
-| starlette | 1.0.0 |
-| pydantic | 2.13.3 |
-| httpx | 0.28.1 |
-| React | 18.3.1 |
-| Vite | 5.4.x |
-| Tailwind | 3.4.x |
-| Zustand | 4.5.4 |
+| Port | Service |
+|------|---------|
+| 10950 | Frontend (Vite) |
+| 10951 | Backend (FastAPI) |
+| 4096 | opencode serve |
 
----
+## Security
 
-## Tags
+This MCP server runs arbitrary shell commands (`opencode run`) from LLM prompts. Only install in environments where you trust your MCP client (Claude Desktop, Cursor) and the models it uses.
 
-`[opencode-cli-mcp, fastmcp, agent-orchestration, coding-agent, active, webapp]`
+## Fleet
+
+- Registered in `mcp-central-docs`: ports 10950/10951
+- `fleet-registry.json` and `glama.json` in repo root
+- Webapp dashboard: `http://localhost:10950` (run `.\start.ps1`)

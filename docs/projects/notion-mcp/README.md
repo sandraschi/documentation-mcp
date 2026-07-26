@@ -1,49 +1,79 @@
 # NotionMCP - Comprehensive Notion Knowledge Orchestrator
 
-**FastMCP 3.1 Implementation with Austrian Efficiency 🇦🇹**
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
+**FastMCP 3.1.0 Implementation with Austrian Efficiency **
 
 **Status: Production-Ready (SOTA 2026)** - High-performance RAG and Semantic Search  
-**Version: 1.1.0-RAG** - Latest: FastMCP 3.1 migration, LanceDB core, and functional Dashboard
+**Version: 1.2.0** - Real Comments API, LLM-powered AI summary, Workers management, webhooks
 
 NotionMCP is a powerful MCP (Model Context Protocol) server and web application for comprehensive Notion workspace management and semantic knowledge retrieval. Built with Austrian efficiency for academic research, project organization, and RAG-powered intelligence.
 
 > [!IMPORTANT]
-> **FastMCP 3.1 Alignment**: This repository is fully compliant with the February 2026 Fleet Standard.
+> **FastMCP 3.1.0 Alignment**: This repository is fully compliant with the February 2026 Fleet Standard.
 
-## 🎯 Overview
+## Quick Start
 
-NotionMCP provides 21 comprehensive tools for managing Notion workspaces and performing semantic discovery. It features a local RAG pipeline using LanceDB for private, high-performance knowledge retrieval.
+```powershell
+git clone https://github.com/sandraschi/notion-mcp
+cd notion-mcp
+just
+```
 
-### ✨ Key SOTA Features
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
 
-- **🧠 Neural Intelligence (RAG)**: Built-in LanceDB vector core for semantic search and context-aware chat
-- **📊 SOTA Dashboard**: Functional web interface with real-time Notion telemetry and LLM "Glom On" discovery
-- **🗃️ complete Page Management**: Create, update, search, and organize pages with German/Japanese character support
-- **🔍 Semantic Search**: Discover knowledge using meaning and intent across your entire workspace
-- **🇦🇹 Austrian Reliability**: Zero first-time failures, strict rate limit awareness, and Europe/Vienna context
+### Manual Setup
 
-## 🚀 Quick Start (5 Minutes)
+If you don't have `just` installed:
+
+##  Overview
+
+NotionMCP provides **32 comprehensive tools** for managing Notion workspaces and performing semantic discovery. It features a local RAG pipeline using LanceDB for private, high-performance knowledge retrieval, plus Notion Workers management via the `ntn` CLI.
+
+###  Key SOTA Features
+
+- ** Neural Intelligence (RAG)**: Built-in LanceDB vector core for semantic search and context-aware chat
+- ** SOTA Dashboard**: Functional web interface with real-time Notion telemetry and LLM "Glom On" discovery
+- ** complete Page Management**: Create, update, search, and organize pages with German/Japanese character support
+- ** Semantic Search**: Discover knowledge using meaning and intent across your entire workspace
+- ** Real Comments API**: Threaded discussions via Notion's native Comments API (no more callout-block workaround)
+- ** LLM-Powered Summaries**: AI content analysis via configurable OpenAI-compatible API (Ollama, OpenAI, LM Studio)
+- ** Worker Management**: Deploy and manage Notion Workers via the `ntn` CLI bridge
+- ** Webhook Event Receiver**: Receive real-time Notion notifications at your endpoint
+- ** Personal Access Tokens (PAT)**: Use user-scoped tokens alongside internal integrations
+- ** Markdown Content Endpoints**: Read and write pages as enhanced markdown
+- ** Austrian Reliability**: Zero first-time failures, strict rate limit awareness, and Europe/Vienna context
+
+##  Quick Start (5 Minutes)
 
 ### Prerequisites
 
 - Python 3.11+
 - Notion account with integration token
 - Claude Desktop Pro with MCP support (or Cursor with MCP)
-- FastMCP 3.1+
+- FastMCP 3.1.0+
 
-## 🚀 Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### 📦 Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx notion-mcp
 ```
 
-### 🎯 Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -61,9 +91,9 @@ Add to your `claude_desktop_config.json`:
 4. Add the integration to your workspaces
 5. Paste token in `.env` file
 
-## 🛠️ Tool Reference (21 Tools)
+##  Tool Reference (32 Tools)
 
-### 📄 Page Management (5 tools)
+###  Page Management (5 tools)
 
 | Tool | Description | Example Use |
 |------|-------------|-------------|
@@ -73,7 +103,7 @@ Add to your `claude_desktop_config.json`:
 | `search_pages` | Natural language search across workspace | Find research by topic |
 | `archive_page` | Safely archive or delete pages | Project cleanup, organization |
 
-### 🗄️ Database Operations (6 tools)
+###  Database Operations (6 tools)
 
 | Tool | Description | Example Use |
 |------|-------------|-------------|
@@ -84,7 +114,7 @@ Add to your `claude_desktop_config.json`:
 | `get_database_schema` | Analyze database structure | Schema planning, validation |
 | `bulk_import_data` | Import CSV/JSON data efficiently | Research data migration |
 
-### 💬 Collaboration (3 tools)
+###  Collaboration (3 tools)
 
 | Tool | Description | Example Use |
 |------|-------------|-------------|
@@ -92,7 +122,7 @@ Add to your `claude_desktop_config.json`:
 | `get_comments` | Retrieve comment threads | Review feedback, conversations |
 | `get_workspace_users` | List workspace users and permissions | Team management, access control |
 
-### 🔍 Neural Discovery (RAG) (3 tools) [NEW]
+###  Neural Discovery (RAG) (3 tools) [NEW]
 
 | Tool | Description | Example Use |
 |------|-------------|-------------|
@@ -100,7 +130,7 @@ Add to your `claude_desktop_config.json`:
 | `search_notion_knowledge` | Semantic search across indexed Notion pages using embeddings | Context-aware research discovery |
 | `clear_rag_index` | Safely wipe the local vector database | Security cleanup, re-indexing |
 
-### 🔍 Advanced Features (4 tools)
+###  Advanced Features (4 tools)
 
 | Tool | Description | Example Use |
 |------|-------------|-------------|
@@ -108,8 +138,27 @@ Add to your `claude_desktop_config.json`:
 | `sync_external_data` | Sync from external sources | GitHub repos, research APIs |
 | `generate_ai_summary` | AI-powered content analysis | Research summaries, insights |
 | `export_workspace_data` | Backup and export functionality | Data backup, migration |
+| `import_workspace_data` | Import Markdown/JSON into Notion | Bulk content import |
 
-## 🇦🇹 Austrian Efficiency Features
+###  Webhook Management (2 tools) [NEW]
+
+| Tool | Description | Example Use |
+|------|-------------|-------------|
+| `verify_webhook` | Store verification token from Notion webhook POST | Complete webhook setup |
+| `list_webhook_events` | List received Notion webhook events | Monitor workspace activity |
+
+###  Notion Workers (6 tools) [NEW]
+
+| Tool | Description | Example Use |
+|------|-------------|-------------|
+| `deploy_worker` | Deploy a Notion Worker via ntn CLI | Deploy sync or tool worker |
+| `list_workers` | List deployed Workers | Check worker status |
+| `scaffold_worker` | Scaffold new Worker project | Create worker from template |
+| `worker_logs` | Fetch Worker logs | Debug deployed workers |
+| `check_ntn` | Verify ntn CLI installation | Pre-flight check |
+| `orchestrate_workers` | Multi-operation worker orchestration | Batch worker operations |
+
+##  Austrian Efficiency Features
 
 ### Direct Communication
 
@@ -117,7 +166,7 @@ Add to your `claude_desktop_config.json`:
 - **Honest limitations**: Explicit about Notion API constraints
 - **Actionable feedback**: Specific next steps when operations fail
 
-### Budget Awareness (~€100/month)
+### Budget Awareness (~100/month)
 
 - **Efficient API usage**: Intelligent batching and caching
 - **Rate limit respect**: Smart request patterns to avoid costs
@@ -126,23 +175,39 @@ Add to your `claude_desktop_config.json`:
 ### Vienna Context
 
 - **Timezone**: Proper Europe/Vienna date/time handling
-- **German support**: Full UTF-8 for ä, ö, ü, ß in content
+- **German support**: Full UTF-8 for , , ,  in content
 - **Date format**: DD.MM.YYYY Austrian standard
 - **Academic workflows**: Optimized for research and knowledge management
 
-### Weeb-Friendly 🎌
+### Weeb-Friendly 
 
-- **Japanese support**: Full Unicode for 日本語 content
+- **Japanese support**: Full Unicode for  content
 - **Anime tracking**: Pre-built database templates for anime/manga
 - **Language learning**: Vocabulary and progress tracking tools
 
-## 🔧 Configuration
+##  Configuration
 
 ### Environment Variables
 
 ```bash
-# Required
-NOTION_TOKEN=secret_your_token_here
+# Notion Authentication (choose one)
+NOTION_TOKEN=secret_your_integration_token_here
+# OR
+NOTION_PAT=ntn_your_personal_access_token_here
+
+# API Version
+NOTION_VERSION=2026-03-11
+
+# LLM for AI Summary (optional)
+LLM_API_URL=http://localhost:11434/v1/chat/completions
+LLM_API_KEY=ollama
+LLM_MODEL=llama3.2
+
+# Webhook Configuration (optional)
+NOTION_WEBHOOK_URL=https://your-public-endpoint/api/webhooks/notion
+
+# Notion CLI for Workers (optional)
+NTN_BIN=ntn
 
 # Austrian Context (Optional)
 TIMEZONE=Europe/Vienna
@@ -173,7 +238,7 @@ Ready-to-use databases for:
 - **Japanese learning**: Vocabulary, JLPT levels, practice
 - **Character databases**: Favorites, stats, series connections
 
-## 📚 Usage Examples
+##  Usage Examples
 
 ### Academic Research Workflow
 
@@ -202,7 +267,7 @@ await create_database_entry(
         "Status": "Read",
         "Rating": 5
     },
-    content="Revolutionary transformer architecture paper..."
+    content=" transformer architecture paper..."
 )
 
 # Query by status
@@ -218,7 +283,7 @@ results = await query_database(
 ```python
 # Create anime database
 await create_database(
-    title="Anime Collection 🎌",
+    title="Anime Collection ",
     parent_id="page_id", 
     properties_schema={
         "Title": "title",
@@ -228,7 +293,7 @@ await create_database(
         "Genre": "multi_select",
         "Studio": "rich_text"
     },
-    icon="🎌"
+    icon=""
 )
 
 # Add anime entry
@@ -265,7 +330,7 @@ backup = await export_workspace_data(
 )
 ```
 
-## 🧪 Testing
+##  Testing
 
 ```bash
 # Run all tests
@@ -292,12 +357,12 @@ pytest tests/ --cov=notion --cov-report=html
 pytest tests/test_api.py -v
 ```
 
-## 🤝 Development
+##  Development
 
 ### Austrian Efficiency Guidelines
 
 1. **Direct communication**: No euphemisms, clear error messages
-2. **Budget awareness**: Optimize for ~€100/month AI tools budget
+2. **Budget awareness**: Optimize for ~100/month AI tools budget
 3. **Real implementation**: No stubs, everything fully functional
 4. **Vienna context**: Proper timezone and character encoding
 5. **Academic focus**: Research and knowledge management optimization
@@ -331,34 +396,38 @@ make check
 
 ```
 notionmcp/
-├── config/           # YAML configurations
-├── docs/             # Documentation
-├── notion_mcp/       # Core Notion modules
-│   ├── client.py     # API client
-│   ├── pages.py      # Page operations
-│   ├── databases.py  # Database operations
-│   ├── collaboration.py # Comments & users
-│   └── automations.py   # AI & automation
-├── tests/            # Test suite
-│   ├── test_api.py  # Unit tests
-│   └── integration_tests.py  # Integration tests
-└── server.py         # FastMCP 3.1 entry point
+ config/           # YAML configurations
+ docs/             # Documentation
+ notion_mcp/       # Core Notion modules
+    client.py     # API client (Comments API, markdown endpoints)
+    pages.py      # Page operations
+    databases.py  # Database operations
+    collaboration.py # Comments & users (real Comments API)
+    automations.py   # AI summary, webhooks, automation
+    workers.py       # Notion Workers via ntn CLI (NEW)
+    plugins.py      # Plugin management
+    rag/            # LanceDB vector RAG pipeline
+    transport.py    # Dual STDIO/HTTP transport
+ tests/            # Test suite
+    test_api.py  # Unit tests
+    integration_tests.py  # Integration tests
+ server.py         # FastMCP entry point (32 tools)
 ```
 
-## 📖 Documentation
+##  Documentation
 
 - **[API Reference](docs/API.md)**: Complete tool documentation
 - **[Configuration Guide](docs/Configuration.md)**: Setup and customization
 - **[Troubleshooting](docs/Troubleshooting.md)**: Common issues and solutions
 
-## 🔒 Security
+##  Security
 
 - **Token security**: Never commit tokens to git
 - **Minimal permissions**: Grant only necessary access scopes
 - **Rate limiting**: Respect Notion API limits
 - **Budget monitoring**: Track usage to avoid unexpected costs
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -404,28 +473,39 @@ Solution:
 3. Verify all dependencies are installed: pip list
 ```
 
-## 💡 Tips for Austrian Efficiency
+##  Tips for Austrian Efficiency
 
 1. **Use templates**: Pre-configured academic and weeb databases
 2. **Batch operations**: Use bulk_import_data for large datasets
 3. **Smart caching**: Enable caching to reduce API calls
 4. **Vienna timezone**: All dates automatically in European format
-5. **German characters**: Full support for ä, ö, ü, ß in content
+5. **German characters**: Full support for , , ,  in content
 6. **Budget monitoring**: Track API usage to stay within limits
 
-## 📄 License
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
+##  License
 
 MIT License with Austrian context - see LICENSE file for details.
 
 ---
 
-**Built with Austrian efficiency in Vienna 🇦🇹**  
+**Built with Austrian efficiency in Vienna **  
 *Sin temor y sin esperanza* - practical Notion management without hype.
 
-**Perfect for:** Academic research • Project management • Anime tracking • Knowledge organization • Vienna workflows
+** for:** Academic research  Project management  Anime tracking  Knowledge organization  Vienna workflows
 
 
-## 🌐 Webapp Dashboard (SOTA 2026)
+##  Webapp Dashboard (SOTA 2026)
 
 This MCP server includes a premium, functional web interface for monitoring and control.
 By default, the web dashboard runs on port **10810**.
@@ -437,6 +517,6 @@ By default, the web dashboard runs on port **10810**.
 - **LLM Discovery**: Automated hardware detection (Ollama/LM Studio)
 
 To start the webapp:
-1. Navigate to the `Webapp` directory.
+1. Navigate to the `web_sota` directory.
 2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
 3. Open `http://localhost:10810` in your browser.

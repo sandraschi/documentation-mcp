@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Fleet Tauri CUA-NSIS Certification</title>
+<style>
+body { font-family: monospace; background: #0f172a; color: #e2e8f0; padding: 2rem; max-width: 1400px; margin: auto; }
+table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+th, td { border: 1px solid #334155; padding: 8px 12px; text-align: left; }
+th { background: #1e293b; position: sticky; top: 0; cursor: pointer; user-select: none; }
+tr:hover { background: #1e293b; }
+.pass { color: #4ade80; font-weight: bold; } .fail { color: #f87171; font-weight: bold; } .warn { color: #fbbf24; }
+a { color: #60a5fa; }
+img { max-width: 220px; max-height: 130px; border: 1px solid #334155; border-radius: 4px; margin: 2px; }
+h1 { color: #38bdf8; }
+.summary { margin: 1rem 0; padding: 1rem; background: #1e293b; border-radius: 8px; }
+.info { color: #94a3b8; font-size: 0.9rem; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; }
+.badge-cert { background: #166534; color: #bbf7d0; }
+.badge-fail { background: #7f1d1d; color: #fecaca; }
+.filters { margin: 1rem 0; }
+.filters input, .filters select { background: #1e293b; color: #e2e8f0; border: 1px solid #475569; padding: 6px; border-radius: 4px; margin-right: 8px; }
+.tooltip { position: relative; cursor: help; border-bottom: 1px dotted; }
+</style></head>
+<body>
+<h1> Fleet Tauri CUA-NSIS Certification</h1>
+<p class="info">Last updated: <span id="updated">2026-06-15</span> &middot; <a href="certification/manifest.json">manifest.json</a></p>
+<div class="summary" id="summary">Loading...</div>
+<div class="filters">
+  <input type="text" id="filter" placeholder="Filter by repo name..." oninput="render()">
+  <select id="statusFilter" onchange="render()">
+    <option value="all">All repos</option>
+    <option value="certified">Certified only</option>
+    <option value="failed">Failed only</option>
+    <option value="pending">Pending only</option>
+  </select>
+  <span id="count" class="info"></span>
+</div>
+<table>
+<thead><tr>
+<th onclick="sortBy('name')">Repo</th>
+<th onclick="sortBy('status')">Status</th>
+<th onclick="sortBy('backend_size')">Backend</th>
+<th onclick="sortBy('nav')">Nav</th>
+<th onclick="sortBy('bridge')">Bridge</th>
+<th onclick="sortBy('logs')">Logs</th>
+<th>Screenshots</th>
+<th>Report</th>
+</tr></thead>
+<tbody id="results"></tbody></table>
+<script>
+let data = null;
+let sortKey = 'name', sortDir = 1;
+
+async function load() {
+    const r = await fetch('certification/manifest.json');
+    data = await r.json();
+    document.getElementById('updated').textContent = data.updated;
+    render();
+}
+function render() {
+    if (!data) return;
+    const filter = document.getElementById('filter').value.toLowerCase();
+    const statusF = document.getElementById('statusFilter').value;
+    let filtered = data.repos.filter(r => {
+        if (filter && !r.name.toLowerCase().includes(filter)) return false;
+        if (statusF === 'certified' && r.status !== 'certified') return false;
+        if (statusF === 'failed' && r.status !== 'failed') return false;
+        if (statusF === 'pending' && r.status !== 'pending') return false;
+        return true;
+    });
+    filtered.sort((a,b) => {
+        let va = a[sortKey] || '', vb = b[sortKey] || '';
+        return va < vb ? -sortDir : va > vb ? sortDir : 0;
+    });
+    let html = '', pass = 0, fail = 0, pending = 0;
+    for (const r of filtered) {
+        if (r.status === 'certified') pass++; else if (r.status === 'failed') fail++; else pending++;
+        const st = r.status === 'certified' ? '<span class="pass">CERTIFIED</span>' :
+                   r.status === 'failed' ? '<span class="fail">FAILED</span>' :
+                   '<span class="warn">PENDING</span>';
+        html += `<tr><td><a href="https://github.com/sandraschi/${r.name}">${r.name}</a></td>
+        <td>${st}</td><td>${r.backend_size||'-'}</td>
+        <td>${r.nav||'-'}</td><td>${r.bridge||'-'}</td>
+        <td>${r.logs||'-'}</td>
+        <td>${(r.screenshots||[]).map(s => `<a href="certification/screenshots/${s}"><img src="certification/screenshots/${s}"></a>`).join('')||'-'}</td>
+        <td>${r.report ? `<a href="certification/reports/${r.report}">txt</a>` : '-'}</td></tr>`;
+    }
+    document.getElementById('results').innerHTML = html;
+    document.getElementById('count').textContent = `${filtered.length} shown (${pass} certified, ${fail} failed, ${pending} pending)`;
+    document.getElementById('summary').innerHTML = `Total: <strong>${data.repos.length}</strong> repos &middot; <span class="pass">${data.repos.filter(r=>r.status==='certified').length} certified</span> &middot; <span class="fail">${data.repos.filter(r=>r.status==='failed').length} failed</span> &middot; <span class="warn">${data.repos.filter(r=>r.status==='pending').length} pending</span> &middot; <span class="info">${Math.round(data.repos.filter(r=>r.status==='certified').length/data.repos.length*100)}% done</span>`;
+}
+function sortBy(k) { if (k === sortKey) sortDir *= -1; else { sortKey = k; sortDir = 1; } render(); }
+load();
+</script>
+</body></html>

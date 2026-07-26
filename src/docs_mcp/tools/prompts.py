@@ -1,4 +1,5 @@
 """MCP prompts and resources for documentation-mcp."""
+
 import logging
 from pathlib import Path
 

@@ -1,85 +1,119 @@
-# uitars-mcp — Desktop + Browser GUI Agent (UI-TARS powered)
+# UI-TARS MCP — Desktop + Browser Agent
 
-**Canonical source repo:** [github.com/sandraschi/uitars-mcp](https://github.com/sandraschi/uitars-mcp) · `D:/Dev/repos/uitars-mcp`
-**Port:** **10976** (FastAPI + MCP `/mcp` + webapp static files — single-port)
-**Stack:** FastMCP 3.2 · FastAPI · React 18 · Vite 5 · TypeScript · UI-TARS SDK · Playwright
-**Start:** `start.bat` → `start.ps1` · `starts/uitars-sota-start.bat`
-**Model:** UI-TARS-1.5-7B (HuggingFace) or Qwen2.5-VL-7B (Ollama) — fits RTX 4090 (24GB)
-**Version:** 0.2.0-beta
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
----
+> **Tell your computer what to do. It does it.**
+
+uitars-mcp gives AI agents (Claude, OpenCode, Hermes) eyes and hands on your desktop **and browser**. It takes screenshots, feeds them to a vision-language model, and executes mouse/keyboard/browser actions — all through standard MCP tools.
+
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/uitars-mcp
+cd uitars-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+git clone https://github.com/sandraschi/uitars-mcp.git
+cd uitars-mcp
+uv sync
+$env:UITARS_VLM_BASE_URL = "http://127.0.0.1:11434/v1"
+$env:UITARS_VLM_MODEL = "qwen2.5-vl:7b"
+.\web_sota\start.ps1
+The backend serves the API and MCP on port 10976. The Vite frontend runs on 10977 and proxies `/api` + `/mcp` to the backend. One `start.bat` launches both.
 
 ## What it does
 
-Desktop + browser GUI agent MCP server. Screenshot → VLM → action loop. Provider-agnostic — works with local Ollama, vLLM, or OpenAI-compatible cloud APIs. Iron Shell webapp with Dashboard, Desktop, Browser, Demo, and Help pages. 31 tests. Pre-commit + CI/CD.
+| Surface | Tools | How it works |
+|---------|-------|-------------|
+| **Desktop** | `uitars_execute`, `screenshot`, `click`, `type`, `help` | Screenshot → VLM → mouse/keyboard actions |
+| **Browser** | `uitars_browser_navigate`, `browser_execute`, `browser_close` | Headless Chromium → page screenshot → VLM → click/type/scroll |
 
-## MCP Tools (9)
+## Comparison
 
-| Tool | Access | Description |
-|------|--------|-------------|
-| `uitars_execute` | MUTATING | Full desktop GUI task via VLM grounding |
-| `uitars_screenshot` | Read-only | Capture desktop as base64 PNG |
-| `uitars_click` | MUTATING | Click at screen coordinates |
-| `uitars_type` | MUTATING | Type text at keyboard focus |
-| `uitars_browser_navigate` | MUTATING | Navigate to URL, return page screenshot |
-| `uitars_browser_execute` | MUTATING | Execute browser task via VLM grounding |
-| `uitars_browser_close` | MUTATING | Close browser, free Playwright resources |
-| `uitars_status` | Read-only | Unified health: VLM, browser, config |
-| `uitars_help` | Read-only | Inline help — tool reference, examples, config |
+| | uitars-mcp | pywinauto-mcp | autohotkey-mcp | Manual (human) |
+|---|---|---|---|---|
+| **Method** | Visual grounding (VLM) | UI element tree (Win32) | Scripted keybinds | Human clicking |
+| **Works with** | Any visible UI | Windows native apps only | Pre-defined hotkeys | Everything |
+| **Speed** | ~2-5s per action (VLM inference) | ~10ms (direct API) | ~1ms (native hook) | ~500ms-2s (varies with coffee) |
+| **Flexibility** | Adapts to any layout, any app | Fixed element paths break on UI changes | Rigid scripts | Requires human |
+| **Setup** | Point at a VLM endpoint | None (Win32 APIs) | Install AHK v2 | None |
+| **Accuracy** | Dependent on VLM quality | 100% for known elements | 100% for scripted flows | 100%* |
+| **Browser** | Built-in (Playwright) | No | No | Yes |
+| **Best for** | Unknown UIs, general automation | Precise Windows automation | Repetitive hotkey workflows | One-off tasks |
 
-## REST API
+## MCP Tools (8)
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/health` | GET | Backend readiness |
-| `/api/status` | GET | VLM model health + browser availability |
-| `/api/capabilities` | GET | Fleet-standard capability introspection |
-| `/api/screenshot` | GET | Desktop capture (base64 PNG + resolution) |
-| `/api/execute` | POST | Execute desktop GUI task |
-| `/api/browser/navigate` | POST | Navigate browser to URL |
-| `/api/browser/execute` | POST | Execute browser task |
-| `/api/browser/close` | POST | Close browser |
+### Desktop
+| Tool | What your agent says |
+|------|---------------------|
+| `uitars_execute` | "Open Notepad, type hello world" |
+| `uitars_screenshot` | "Show me the desktop" |
+| `uitars_click` | "Click at (500, 300)" |
+| `uitars_type` | "Type the report" |
+| `uitars_help` | "What can you do?" |
 
-## Documentation (in repo)
+### Browser
+| Tool | What your agent says |
+|------|---------------------|
+| `uitars_browser_navigate` | "Open github.com and show me the page" |
+| `uitars_browser_execute` | "Search for Python, click the first result" |
+| `uitars_browser_close` | "Done with the browser, free the resources" |
+| `uitars_status` | "Are VLM and browser both healthy?" |
 
-| Document | For |
-|----------|-----|
-| `README.md` | Overview, quick start, comparison table, VLM providers |
-| `SPEC.md` | Full architecture spec, 4-phase implementation plan |
-| `CHANGELOG.md` | Version history (v0.1.0 → v0.2.0-beta) |
-| `AGENTS.md` | AI agent instructions for working with this repo |
-| `docs/install.md` | Prerequisites, clone, uv sync, 3 VLM paths |
-| `docs/configuration.md` | Env vars, VLM providers, LiteLLM proxy, VRAM budget |
-| `docs/tools-reference.md` | All 9 MCP tools with parameters and examples |
-| `docs/architecture.md` | Single-port design, screenshot loop, data flow |
-| `docs/browser.md` | Browser operator: Playwright, headless, actions |
-| `docs/safety.md` | Fail-safe, privacy, emergency stop |
-| `docs/troubleshooting.md` | Common problems and fixes |
-| `docs/integration-guide.md` | Claude Desktop, fleet, REST API |
+## VLM Providers
+
+All providers must speak the **OpenAI `/v1/chat/completions` API** and accept images in `image_url` content blocks. The model must be **vision-capable** (screenshot → text).
+
+| Provider | Model | GPU needed | Setup |
+|----------|-------|-----------|-------|
+| **Ollama** (local) | `qwen2.5-vl:7b` | ~5.5 GB | `ollama pull qwen2.5-vl:7b` |
+| **vLLM** (local) | `ByteDance-Seed/UI-TARS-1.5-7B` | ~18 GB | pip install vllm |
+| **OpenAI** (cloud) | `gpt-4o` | — | `$env:UITARS_VLM_API_KEY = "sk-..."` |
+| **LiteLLM proxy** (local) | any VLM | — | Proxies any provider to OpenAI format |
+
+Anthropic Claude is **not** directly supported — it uses a different API protocol. Use [LiteLLM](https://github.com/BerriAI/litellm) as a translation proxy if you need it.
 
 ## Fleet Integration
 
-| Related | Role |
-|---------|------|
-| [chitchat](../chitchat/) | Social layer — can delegate GUI tasks to uitars-mcp |
-| [pywinauto-mcp](../pywinauto-mcp/) | Alternative Windows automation (no VLM required) |
-| [robofang](../robofang/) | Sentinel can use uitars_screenshot for visual verification |
-| [hermes-agent](../hermes-agent/) | Multi-agent workflows with desktop automation |
+```json
+{
+  "mcpServers": {
+    "uitars-mcp": {
+      "type": "http",
+      "url": "http://127.0.0.1:10976/mcp"
+    }
+  }
+}
+```
 
-## CI/CD & Quality
+Port **10976** (backend: FastAPI + MCP `/mcp`) and **10977** (frontend: Vite dev, proxies → 10976). Adjacent to chitchat (10974/10975).
 
-- **GitHub Actions**: dual-job CI (Python ruff+pytest + Frontend biome+tsc+build)
-- **Pre-commit**: ruff format+lint, biome format (web_sota)
-- **31 tests** passing: config (5), VLM client (3), help/status (4), action parsing (11), computer (6), browser (8)
-- **Fleet-standard ruff**: `E,F,W,I,B,S,UP,RUF`, line-length 120
-- **robofang.json** fleet manifest
+## Docs
 
-## Provenance
+| Document | For |
+|----------|-----|
+| [docs/install.md](docs/install.md) | Prerequisites, clone, 3 VLM paths, verify |
+| [docs/configuration.md](docs/configuration.md) | Env vars, VLM providers, VRAM budget |
+| [docs/tools-reference.md](docs/tools-reference.md) | Every MCP tool with parameters and examples |
+| [docs/architecture.md](docs/architecture.md) | Screenshot loop internals, data flow |
+| [docs/browser.md](docs/browser.md) | Browser operator setup, Playwright, headless mode |
+| [docs/safety.md](docs/safety.md) | Fail-safe, permissions, privacy |
+| [docs/troubleshooting.md](docs/troubleshooting.md) | Common problems and fixes |
+| [docs/integration-guide.md](docs/integration-guide.md) | Claude Desktop, fleet, REST API |
+| [SPEC.md](SPEC.md) | Full architecture spec |
+| [CHANGELOG.md](CHANGELOG.md) | Version history |
 
-Powered by ByteDance's UI-TARS model (Apache 2.0). SOTA on OSWorld, AndroidWorld, ScreenSpot benchmarks. Papers: [arXiv:2501.12326](https://arxiv.org/abs/2501.12326) (v1), [arXiv:2509.02544](https://arxiv.org/abs/2509.02544) (v2).
+## License
 
-See [chinese-tools/UI-TARS_ASSESSMENT.md](../chinese-tools/UI-TARS_ASSESSMENT.md) for full ecosystem analysis.
-
----
-
-*Tags: #uitars-mcp #gui-agent #computer-use #desktop-automation #browser-automation #vlm #mcp #fleet #fastmcp3.2 #playwright*
+Apache 2.0. Powered by ByteDance's UI-TARS model ([Apache 2.0](https://github.com/bytedance/UI-TARS)).

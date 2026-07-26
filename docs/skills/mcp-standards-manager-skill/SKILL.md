@@ -7,7 +7,7 @@ CREATED: 2026-01-20
 
 ---
 name: mcp-standards-manager
-description: Automated MCP ecosystem standards management, compliance checking, and documentation generation for FastMCP 2.14.3+ servers.
+description: Automated MCP ecosystem standards management, compliance checking, and documentation generation for FastMCP 3.2+ servers.
 ---
 
 # MCP Standards Manager
@@ -75,7 +75,7 @@ standards repo-status --repos all
 ## Standards Reference
 
 ### FastMCP Requirements
-- **Minimum Version**: FastMCP 2.14.3+
+- **Minimum Version**: FastMCP 3.2+
 - **Sampling Support**: Required for creative MCP servers
 - **Enhanced Response Patterns**: Mandatory for SOTA compliance
 
@@ -213,7 +213,7 @@ User Request → Command Parsing → Standards Engine → Repository Operations 
 
 ### 1.0.0 (Current)
 - Initial release with core standards management
-- FastMCP 2.14.3+ compliance checking
+- FastMCP 3.2+ compliance checking
 - Documentation generation and validation
 - Repository management and orchestration
 - Cross-platform support

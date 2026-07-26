@@ -1,0 +1,9 @@
+# Copy to promtail.host.local.yml (gitignored) for extra host log globs inside the Promtail container.
+
+  - job_name: host-my-machine
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: my-custom-mcp
+          platform: host
+          __path__: /host-logs/my-custom-mcp/*.log

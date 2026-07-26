@@ -1,0 +1,4 @@
+# test-fixture-mcp
+
+Tools: fixture_device, fixture_run, fixture_help
+Ports: 11038/11039

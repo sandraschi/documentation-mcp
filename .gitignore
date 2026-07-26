@@ -38,6 +38,18 @@ Thumbs.db
 # Backup / scratch
 *.bak
 
+# Tauri / native builds
+native/target/
+native/gen/
+native/binaries/
+resources/*.exe
+
+# MCPB bundles
+*.mcpb
+
+# Audit reports
+reports/
+
 # Project Specific
 debug.log
 scripts/out/

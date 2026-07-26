@@ -1,7 +1,7 @@
 # FastMCP 3.2 Persistent Storage Standards
 
 **Last Updated:** 2026-04-21
-**Version:** 3.2.0 (April 2026 SOTA)
+**Version:** 3.4.2 (originally written for 3.2.0 — API unchanged)
 **Applies to:** FastMCP 3.x, standard fleet servers (`*-mcp`)
 
 FastMCP 3.2 provides a standardized mechanism for cross-session persistence, ensuring that user preferences, authentication tokens, and server state survive restarts of the MCP host (Claude Desktop/Cursor) and the OS.
@@ -38,7 +38,7 @@ While the logic lives in `ctx`, the actual bits are stored via **Storage Backend
 ### Dependencies
 ```toml
 dependencies = [
-    "fastmcp>=3.2.0",
+    "fastmcp>=3.4.4,<4",
     "py-key-value-aio[disk]>=1.0.0"
 ]
 ```
@@ -104,7 +104,7 @@ async def adn_knowledge_save(ctx: Context, key: str, value: Any):
 - [ ] **DiskStore**: Used for any data that must survive a reboot.
 - [ ] **Pathing**: Uses `Path.home()` or `%APPDATA%` correctly.
 - [ ] **Serialization**: Data stored is JSON-friendly.
-- [ ] **Versioning**: Server uses `fastmcp>=3.2.0`.
+- [ ] **Versioning**: Server uses `fastmcp>=3.4.4,<4`.
 
 ---
 

@@ -1,0 +1,4 @@
+# function-generator-mcp
+
+Tools: fgen_device, fgen_run, fgen_help
+Ports: 11001/11002

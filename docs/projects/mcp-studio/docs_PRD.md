@@ -1,10 +1,10 @@
-﻿# MCP Studio - Product Requirements Document v2.0
+# MCP Studio - Product Requirements Document v2.0
 **Updated:** 2025-08-17  
-**Status:** ðŸŽ¯ **COMPREHENSIVE ARCHITECTURE COMPLETE**
+**Status:** 🎯 **COMPREHENSIVE ARCHITECTURE COMPLETE**
 
 ## 1. Executive Summary
 
-MCP Studio is a **comprehensive web-based management platform** for Model Context Protocol (MCP) servers, built on **FastMCP 3.1.1+** and **FastAPI**. It serves as both a **visual management interface** and a **powerful MCP server** itself, acting as "Mission Control" for the entire MCP ecosystem.
+MCP Studio is a **comprehensive web-based management platform** for Model Context Protocol (MCP) servers, built on **FastMCP 2.11** and **FastAPI**. It serves as both a **visual management interface** and a **powerful MCP server** itself, acting as "Mission Control" for the entire MCP ecosystem.
 
 ### 1.1 Key Differentiators
 - **Dual Architecture**: Both web UI and MCP server in one platform
@@ -37,7 +37,7 @@ Eliminate decision paralysis and context switching overhead by providing intelli
 
 ### 3.1 Dual Architecture Design
 
-#### Frontend Web UI ðŸ–¥ï¸
+#### Frontend Web UI 🖥️
 **FastAPI-powered web interface** providing:
 
 **Dashboard & Management**
@@ -47,7 +47,7 @@ Eliminate decision paralysis and context switching overhead by providing intelli
 - **Schema Visualization**: Interactive display of tool schemas and parameters
 - **Test Console**: Live testing interface with dynamic parameter forms
 
-#### FastMCP 3.1.1+ Stdio Backend âš¡
+#### FastMCP 2.11 Stdio Backend ⚡
 **High-performance MCP server** handling:
 
 **Protocol Management**
@@ -59,10 +59,10 @@ Eliminate decision paralysis and context switching overhead by providing intelli
 ### 3.2 Communication Flow
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    stdio     â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    HTTP/WS    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚  Claude Desktop â”‚ â†----------â†’ â”‚   MCP Studio     â”‚ â†----------â†’ â”‚   Web Browser   â”‚
-â”‚  (MCP Client)   â”‚   JSON-RPC   â”‚   (MCP Server)   â”‚   REST API    â”‚   (Frontend UI) â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜              â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜               â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+┌─────────────────┐    stdio     ┌──────────────────┐    HTTP/WS    ┌─────────────────┐
+│  Claude Desktop │ ←----------→ │   MCP Studio     │ ←----------→ │   Web Browser   │
+│  (MCP Client)   │   JSON-RPC   │   (MCP Server)   │   REST API    │   (Frontend UI) │
+└─────────────────┘              └──────────────────┘               └─────────────────┘
 ```
 
 ### 3.3 Claude Desktop Integration
@@ -81,42 +81,42 @@ Eliminate decision paralysis and context switching overhead by providing intelli
 
 ## 4. Revolutionary Features
 
-### 4.1 ðŸŽ¯ Working Sets Switcher (Flagship Feature)
+### 4.1 🎯 Working Sets Switcher (Flagship Feature)
 
 #### Core Concept
 **One-click switching** between focused MCP server configurations, eliminating decision paralysis and optimizing workflows for specific tasks.
 
 #### Working Set Categories
 
-**ðŸ› ï¸ Development Working Set**
+**🛠️ Development Working Set**
 - GitHub MCP (repository management)
 - Docker MCP (container operations)  
 - Playwright MCP (testing automation)
 - Filesystem MCP (file operations)
 - Windows Operations MCP (system tasks)
 
-**ðŸŽ¨ Media & Creative Working Set**
+**🎨 Media & Creative Working Set**
 - Blender MCP (3D modeling/animation)
 - Immich MCP (photo management)
 - Plex MCP (media consumption)
 - Stable Diffusion tools
 - Audio/video processing tools
 
-**ðŸ“ž Communication Working Set**
+**📞 Communication Working Set**
 - Microsoft 365 MCP (Office suite)
 - Slack MCP (team communication)
 - Email automation
 - Calendar management
 - Contact synchronization
 
-**ðŸ¤– Automation Working Set**
+**🤖 Automation Working Set**
 - VirtualBox MCP (VM management)
 - PyWinAuto MCP (Windows automation)
 - System health monitoring
 - Backup automation
 - Infrastructure management
 
-**ðŸŽ® Entertainment Working Set**
+**🎮 Entertainment Working Set**
 - Media consumption tools
 - Gaming utilities
 - Personal content management
@@ -168,17 +168,17 @@ Eliminate decision paralysis and context switching overhead by providing intelli
 ### 5.2 Key User Journeys
 
 #### Developer Workflow
-1. **Discover** â†’ Browse available MCP servers and tools
-2. **Test** â†’ Use built-in console to validate tool functionality
-3. **Configure** â†’ Set up working sets for different project types
-4. **Monitor** â†’ Track performance and health of MCP infrastructure
-5. **Debug** â†’ Access detailed logs and error information
+1. **Discover** → Browse available MCP servers and tools
+2. **Test** → Use built-in console to validate tool functionality
+3. **Configure** → Set up working sets for different project types
+4. **Monitor** → Track performance and health of MCP infrastructure
+5. **Debug** → Access detailed logs and error information
 
 #### End-User Workflow
-1. **Select** â†’ Choose appropriate working set for current task
-2. **Switch** â†’ One-click activation of optimized tool configuration
-3. **Work** â†’ Use AI tools through simplified, organized interface
-4. **Monitor** â†’ View status and health of active tools
+1. **Select** → Choose appropriate working set for current task
+2. **Switch** → One-click activation of optimized tool configuration
+3. **Work** → Use AI tools through simplified, organized interface
+4. **Monitor** → View status and health of active tools
 
 ### 5.3 Mobile Responsiveness
 - **Tablet Support**: Full functionality on tablet devices
@@ -211,7 +211,7 @@ Eliminate decision paralysis and context switching overhead by providing intelli
 
 #### Backend
 - **FastAPI**: Modern, fast web framework
-- **FastMCP 3.1.1+**: High-performance MCP implementation
+- **FastMCP 2.11**: High-performance MCP implementation
 - **Python 3.11+**: Latest Python features and performance
 - **Async/Await**: Efficient I/O handling throughout
 - **Pydantic**: Type safety and validation
@@ -249,7 +249,7 @@ Eliminate decision paralysis and context switching overhead by providing intelli
 ### 7.1 MCP Server Integration
 
 #### Native Support
-- **FastMCP 3.1.1++**: Full protocol compliance
+- **FastMCP 2.11+**: Full protocol compliance
 - **Stdio Transport**: Standard communication method
 - **Auto-Discovery**: Automatic server detection
 - **Health Monitoring**: Built-in health check integration
@@ -273,21 +273,21 @@ Eliminate decision paralysis and context switching overhead by providing intelli
 
 ## 8. Implementation Phases
 
-### 8.1 Phase 1: Core Platform (âœ… COMPLETED)
-- [x] FastMCP 3.1.1+ backend implementation
+### 8.1 Phase 1: Core Platform (✅ COMPLETED)
+- [x] FastMCP 2.11 backend implementation
 - [x] Basic web interface
 - [x] Server discovery and registration
 - [x] Tool browsing and testing
 - [x] Health monitoring foundation
 
-### 8.2 Phase 2: Working Sets Revolution (âœ… COMPLETED)
+### 8.2 Phase 2: Working Sets Revolution (✅ COMPLETED)
 - [x] Working sets architecture
 - [x] One-click switching mechanism
 - [x] Safety features (backup, preview, validation)
 - [x] 5 predefined working set categories
 - [x] Configuration management system
 
-### 8.3 Phase 3: Enterprise Features (ðŸŽ¯ IN PROGRESS)
+### 8.3 Phase 3: Enterprise Features (🎯 IN PROGRESS)
 - [x] **Rule-Based SOTA Analyzer** - Declarative rule system for repository analysis
 - [x] **Scan Result Persistence** - File-based caching for performance
 - [x] **Comprehensive Repo Details** - Structured JSON for AI consumption
@@ -298,7 +298,7 @@ Eliminate decision paralysis and context switching overhead by providing intelli
 - [ ] Advanced monitoring and alerting
 - [ ] Custom working set creation
 
-### 8.5 Phase 5: AI Enhancement (ðŸ”® PLANNED)
+### 8.5 Phase 5: AI Enhancement (🔮 PLANNED)
 - [x] **Repository Detail Collection** - Complete repo metadata for AI analysis
 - [ ] AI-powered tool recommendations
 - [ ] Automatic working set optimization
@@ -430,11 +430,10 @@ MCP Studio represents a **paradigm shift** in MCP ecosystem management, transfor
 
 The platform's **Austrian efficiency** philosophy ensures maximum productivity with minimum friction, while its robust architecture provides the reliability and performance required for production use. As the MCP ecosystem continues to grow, MCP Studio is positioned to become the essential infrastructure component that enables widespread adoption and effective utilization of AI tools.
 
-**Status**: ðŸŽ¯ **COMPREHENSIVE PRD COMPLETE**  
+**Status**: 🎯 **COMPREHENSIVE PRD COMPLETE**  
 **Next Steps**: Continue Phase 3 implementation and community feedback integration  
-**Vision**: Mission Control for the MCP Universe ðŸš€
+**Vision**: Mission Control for the MCP Universe 🚀
 
 ---
 
 *This PRD represents the complete vision and implementation strategy for MCP Studio, incorporating comprehensive architecture analysis and user feedback to create the definitive MCP management platform.*
-

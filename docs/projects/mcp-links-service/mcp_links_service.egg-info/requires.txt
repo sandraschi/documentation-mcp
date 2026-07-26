@@ -1,0 +1,3 @@
+mcp[cli]>=1.2.1
+fastmcp<4,>=3.4.2
+psutil>=6.0.0

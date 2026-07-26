@@ -1,21 +1,51 @@
-﻿## 1.4.1 - 2026-01-16
+
+## [Unreleased] — 2026-06-14
 
 ### Added
-- **FastMCP 3.1.1+.3 Upgrade**:
-  - Upgraded from FastMCP 3.1.1+.0+ to 3.1.1+.3+ for state-of-the-art capabilities
+- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
+- PyInstaller frozen backend embedded in NSIS installer
+- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
+- `just cua-nsis-test` recipe
+- Tauri CORS: `tauri://localhost` origins for WebView API access
+- `GET /api/v1/diagnostics` endpoint for CUA verification
+
+### Known Issues
+- **NSIS installer**: Backend exe crashes on fastmcp's OpenTelemetry dependency chain in `--onefile` mode. Build succeeds but uvicorn fails at import time (`ModuleNotFoundError: cachetools → opentelemetry → importlib_metadata`). Workaround: `--onedir` mode or pin fastmcp without telemetry extras. The HTTP and stdio servers work normally outside the Tauri bundle.
+
+## 1.4.2 - Unreleased
+
+### Added
+- **Persistence**: DiskStore via `py-key-value-aio[disk]` for connection state, active connection, preferences, and schema cache. Data directory: `%APPDATA%\database-operations-mcp` (Windows), `~/Library/Application Support/` (macOS), `~/.local/share/` (Linux). Optional `ENABLE_PASSWORD_STORAGE=1` for dev-only password persistence.
+- **LanceDB**: New `DatabaseType.LANCEDB` and `LanceDBConnector`; supported in `db_connection` and `get_supported_databases`.
+- **Webapp (web_sota)**: FastMCP 3.1 gateway; MCP mounted at `/mcp`, REST `GET /api/tools` and `POST /api/tools/call`; Dashboard and Tools UI (ports 10708/10709).
+- **FastMCP 3.1 prompts**: MCP prompt `database_expert` (optional `focus`: general, sql, connections, export) returns instruction text for LLM-as-database-expert using this server's tools. Clients use `get_prompt("database_expert", arguments={...})` to inject guidance.
+- **FastMCP 3.1 skills**: Bundled skill `database-expert` exposed as MCP resources (`skill://database-expert/SKILL.md`). SkillsDirectoryProvider registered in config; skill content in `src/database_operations_mcp/skills/database-expert/`.
+
+### Changed
+- **FastMCP 3.1**: Upgraded to FastMCP 3.1+; universal gateway and in-process MCP used by web backend.
+- **Dependencies**: Added `lancedb>=0.2.0`, `py-key-value-aio[disk]>=0.4.0` for persistence.
+
+### Removed
+- **Legacy web app**: Removed `web/` (static-only); web interface is now only `web_sota`.
+
+## 1.4.1 - 2026-01-16
+
+### Added
+- **FastMCP 2.14.3 Upgrade**:
+  - Upgraded from FastMCP 2.13.0+ to 2.14.3+ for state-of-the-art capabilities
   - Added conversational tool returns with natural language summaries and contextual guidance
   - Implemented sampling capabilities for agentic workflows and complex database operations
   - Enhanced error handling with actionable recovery suggestions and structured error codes
-  - Added `db_sampling_workflow` tool demonstrating FastMCP 3.1.1+.3 sampling features
+  - Added `db_sampling_workflow` tool demonstrating FastMCP 2.14.3 sampling features
 - **Improved AI Interaction**:
   - All portmanteau tools now return conversational responses alongside technical data
   - Better error messages with context-aware guidance and next steps
   - Enhanced tool discoverability through improved response structures
 
 ### Changed
-- **Requirements**: Updated `pyproject.toml` to require `fastmcp>=3.1.1+.3,<2.15.0`
-- **Documentation**: Updated all references from FastMCP 3.1.1+ to 3.1.1+.3 across README, status reports, and standards docs
-- **Badge**: Updated README badge to show FastMCP 3.1.1+.3 compliance
+- **Requirements**: Updated `pyproject.toml` to require `fastmcp>=2.14.3,<2.15.0`
+- **Documentation**: Updated all references from FastMCP 2.13 to 2.14.3 across README, status reports, and standards docs
+- **Badge**: Updated README badge to show FastMCP 2.14.3 compliance
 
 ### Technical
 - **Conversational Returns**: All tools now return `message` field with natural language summaries
@@ -122,7 +152,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Consolidated Firefox portmanteau tools for better organization
-- Comprehensive portmanteau tools with extensive FastMCP 3.1.1+ docstrings
+- Comprehensive portmanteau tools with extensive FastMCP 2.12 docstrings
 - Standardized CI/CD workflows across all GitHub Actions
 
 ### Changed

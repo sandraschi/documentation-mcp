@@ -13,6 +13,8 @@
 | node-exporter | **12004** | 9100 | http://localhost:12004/metrics |
 | cAdvisor | **12005** | 8080 | http://localhost:12005 |
 | blackbox-exporter | **12006** | 9115 | (internal probes) |
+| OTel Collector | **4317** (gRPC), **4318** (HTTP) | 4317, 4318 | OTLP receiver for fleet traces + metrics |
+| Tempo | **3200** | 3200 | http://localhost:3200 (trace query API) |
 
 Override ports in `monitoring/.env` (see `.env.example`). Registered in `operations/WEBAPP_PORTS.md` under **Unified observability stack**.
 
@@ -122,7 +124,7 @@ Implement once per repo (middleware or decorator on FastMCP tools), expose on th
 - Coarse HTTP traffic if uvicorn access logging is enabled and tailed to Loki
 - **Not** per-tool names, latency, or error breakdown
 
-**Optional later:** OpenTelemetry → Tempo/Jaeger (not in unified stack today).
+**Now live:** OpenTelemetry tracing (OTel Collector + Tempo on :4317/:3200). Canary: winrar-mcp. See `patterns/OPENTELEMETRY_FLEET_ROLLOUT.md`.
 
 ## observability-mcp (`D:\Dev\repos\observability-mcp`)
 

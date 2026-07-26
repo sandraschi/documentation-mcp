@@ -1,0 +1,2295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030712;
+            --card-bg: rgba(17, 24, 39, 0.6);
+            --accent: #6366f1;
+            /* Indigo */
+            --text: #f9fafb;
+            --text-dim: #9ca3af;
+            --mcp: #0ea5e9;
+            /* Sky */
+            --other: #8b5cf6;
+            /* Violet */
+            --junk: #4b5563;
+            /* Gray */
+            --flagship: #f43f5e;
+            /* Rose */
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shine: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #111827, #030712);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: left;
+            margin-bottom: 4rem;
+            padding: 3rem;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--glass-shine), transparent);
+            border: 1px solid var(--glass-border);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 3.5rem;
+            margin: 0;
+            letter-spacing: -0.04em;
+            background: linear-gradient(to right, #ffffff, #9ca3af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .stat-item {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 99px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .dot.flagship {
+            background: var(--flagship);
+        }
+
+        .dot.mcp {
+            background: var(--mcp);
+        }
+
+        .dot.other {
+            background: var(--other);
+        }
+
+        .dot.junk {
+            background: var(--junk);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            outline: none;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(31, 41, 55, 0.8);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .badge {
+            align-self: flex-start;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            letter-spacing: 0.1em;
+        }
+
+        .badge.MCPServer {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--mcp);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        .badge.Other {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--other);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .badge.Junk {
+            background: rgba(75, 85, 99, 0.1);
+            color: var(--junk);
+            border: 1px solid rgba(75, 85, 99, 0.2);
+        }
+
+        .badge.Flagship {
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--flagship);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
+
+        .repo-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: white;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .description {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-family: 'JetBrains Mono', monospace;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        #no-results {
+            text-align: center;
+            padding: 8rem;
+            grid-column: 1 / -1;
+            font-size: 1.5rem;
+            color: var(--text-dim);
+            display: none;
+        }
+
+        .sota-meta {
+            color: #6b7280;
+            font-size: 0.8rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Fleet Dashboard</h1>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="dot flagship"></div> Flagship: 6
+                </div>
+                <div class="stat-item">
+                    <div class="dot mcp"></div> MCP: 97
+                </div>
+                <div class="stat-item">
+                    <div class="dot other"></div> Other: 8
+                </div>
+                <div class="stat-item">
+                    <div class="dot junk"></div> Junk: 20
+                </div>
+                <div class="stat-item">Total: 131</div>
+            </div>
+            <p class="sota-meta">SOTA Snapshot: 2026-02-13 13:39</p>
+        </header>
+
+        <input type="text" class="search-box" placeholder="Search repositories..." id="search">
+
+        <div class="grid" id="grid">
+
+            <div class="card" data-category="Flagship">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/myai" class="repo-name">myai</a>
+                        <span class="badge Flagship">Flagship</span>
+                    </div>
+                    <p class="description">**By FlowEngineer sandraschi** Dual-mode AI microservices platform that ships
+                        a FastAPI control plane, an MCP server with production-grade tooling, and a fleet of AI
+                        applications orchestrated with Docker, Traefik, and a full monitoring stack.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Flagship">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/myconf" class="repo-name">myconf</a>
+                        <span class="badge Flagship">Flagship</span>
+                    </div>
+                    <p class="description">**Professional video conferencing platform** with AI voice agent integration,
+                        built on Turborepo and LiveKit. Features real-time transcription, multi-room support, and
+                        comprehensive device testing. ## Stability & SOTA Alignment</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-08</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Flagship">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/myhomeserver" class="repo-name">myhomeserver</a>
+                        <span class="badge Flagship">Flagship</span>
+                    </div>
+                    <p class="description">A modern, beautiful home automation dashboard built with React, Tailwind CSS,
+                        and MCP (Model Context Protocol) integration. ## 🚀 Overview</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-13</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Flagship">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/myscripts" class="repo-name">myscripts</a>
+                        <span class="badge Flagship">Flagship</span>
+                    </div>
+                    <p class="description">This repository contains a collection of personal PowerShell scripts. ##
+                        Folders</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Flagship">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/myvrworlds" class="repo-name">myvrworlds</a>
+                        <span class="badge Flagship">Flagship</span>
+                    </div>
+                    <p class="description">Beautiful React Tailwind VR Worlds Control Center - Integrating Avatar MCP,
+                        Blender MCP, VRChat MCP, Resonite MCP, OSC MCP, Unity3D MCP with ikubaysan dual-STT AI chatbot
+                        architecture</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-06</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Flagship">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/mywienerlinien" class="repo-name">mywienerlinien</a>
+                        <span class="badge Flagship">Flagship</span>
+                    </div>
+                    <p class="description">**Last Updated:** 2025-12-27 **Status:** ✅ Production Ready | 🏆 SOTA
+                        Compliant | 🚀 Fully Operational</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-10</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/__legacy_junk" class="repo-name">__legacy_junk</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/advanced-memory-mcp" class="repo-name">advanced-memory-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**Industrial Flagship SOTA v14.1.0** - Grounded agentic memory with Benny protocol adjudication. 
+                        Features multi-source RAG, high-fidelity skill synthesis, and Alsergrund Bridge integration. 
+                        Now fully synchronized for production workflows.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-04-11</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/ag-gazebo-bridge" class="repo-name">ag-gazebo-bridge</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">MCP server for bridging Gazebo Harmonic/Jetty `gz-transport` to AI agents. ##
+                        Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-07</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/ai-producer-hub" class="repo-name">ai-producer-hub</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">A Model Context Protocol server that integrates AI-powered music generation
+                        with professional production tools, enabling autonomous music creation workflows from MIDI input
+                        to live streaming. ## Overview</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-16</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/alexa-mcp" class="repo-name">alexa-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">An MCP server that acts as an acoustic bridge to control an Alexa device. It
+                        uses Text-to-Speech (TTS) to issue commands to a physical Alexa device via speakers, and
+                        Speech-to-Text (STT) to listen to Alexa's responses via a microphone. ## Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/anthropic-skills" class="repo-name">anthropic-skills</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Skills are folders of instructions, scripts, and resources that Claude loads
+                        dynamically to improve performance on specialized tasks. Skills teach Claude how to complete
+                        specific tasks in a repeatable way, whether that's creating documents with your company's brand
+                        guidelines, analyzing data using your organization's specific workflows, or automating personal
+                        tasks. For more information, check out:</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/avatar-mcp" class="repo-name">avatar-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**By FlowEngineer sandraschi** > FastMCP 2.14.3+ compatible VRM avatar
+                        management and animation server with conversational capabilities, SEP-1577 sampling support, and
+                        VRChat OSC integration</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/basic-memory" class="repo-name">basic-memory</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**🚀 Enhanced Version with Mermaid Diagrams & Extended Tools** Basic Memory
+                        lets you build persistent knowledge through natural conversations with Large Language Models
+                        (LLMs) like</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/beyondcompare-mcp" class="repo-name">beyondcompare-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">A modern MCP server that provides comprehensive file comparison, multimedia
+                        management, and developer workspace tools using Beyond Compare. Features 13 powerful tools for
+                        everything from file comparison to repository backup and workspace analysis. ## ✨ Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/blender-mcp" class="repo-name">blender-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">## 🚀 **"Create 3D Scenes with Chat"** **Transform natural language into 3D
+                        objects.** Tell Claude "create a steampunk robot with glowing red eyes" and watch it build your
+                        vision in Blender automatically.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-13</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/bookmarks-mcp" class="repo-name">bookmarks-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">FastMCP 2.13 compliant MCP server providing a unified `bookmarks` portmanteau
+                        tool for CRUD operations, organization, sync, and AI-powered helpers. ## Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/calibre-mcp" class="repo-name">calibre-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**FastMCP 2.14.4+ server for Calibre e-book library management with sampling,
+                        dialogic tool returns, and AI workflows** **Features:**</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-11</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/dark-app-factory" class="repo-name">dark-app-factory</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**"Software Factories for the Rest of Us."** A local-first, low-cost
+                        implementation of the "Software Factory" methodology (Spec -> Scenarios -> Agent Loop).</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-11</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/database-operations-mcp"
+                            class="repo-name">database-operations-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">FastMCP 2.14.3 MCP server for database operations on Windows, with bookmark
+                        management tools. ## Scope</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/davinci-resolve-mcp" class="repo-name">davinci-resolve-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**8 portmanteau** Professional AI-powered video editing automation for
+                        DaVinci Resolve through natural language commands and advanced MCP protocols. ---</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/devices-mcp" class="repo-name">devices-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">## 🎯 **DUAL-NATURE ARCHITECTURE** This repository serves **two complementary
+                        roles** in the smart home ecosystem:</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-13</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/directmedia-mcp" class="repo-name">directmedia-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**FastMCP 2.13+ server for accessing Directmedia Publishing "Digitale
+                        Bibliothek" - TEXT EXTRACTION WORKING!** ## 🎯 Overview</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/dj-media-hub" class="repo-name">dj-media-hub</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**VirtualDJ + Plex = Unlimited Possibilities** 🎧📺 A composite MCP server
+                        that mounts multiple media servers under one roof,</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-24</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/docker-mcp" class="repo-name">docker-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">## FastMCP 2.13+ server for comprehensive Docker operations with Austrian
+                        efficiency *Vienna-style Docker management with FastMCP 2.13+ - \</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/edge-bookmark-mcp-server"
+                            class="repo-name">edge-bookmark-mcp-server</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">results = search_bookmarks("github") `</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/ednaficator" class="repo-name">ednaficator</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**The AI assistant that actually remembers you and keeps your data in
+                        Austria** ## 🎯 Vision</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-02</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/email-mcp" class="repo-name">email-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Multi-service email platform for MCP-compatible clients. **Version
+                        0.3.0-alpha** - FastMCP 2.14.3 Standards Compliance</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/external" class="repo-name">external</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Read-only mirrors of upstream projects used for research, pattern matching,
+                        or integration testing. Paths in other repos expect these clones to live here. ## Current
+                        Mirrors</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-09</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/fastsearch-mcp" class="repo-name">fastsearch-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Lightning-fast file search using NTFS Master File Table - MCP Server</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/filesystem-mcp" class="repo-name">filesystem-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Comprehensive file system operations, Git repository management, and Docker
+                        container management MCP server</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-11</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/fullstack-demo" class="repo-name">fullstack-demo</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">A **professional fullstack application** with AI, MCP integration, and
+                        comprehensive monitoring. ## 🌟 Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/games-app" class="repo-name">games-app</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Games Collection - 75+ games with optional AI</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-07</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/gimp-mcp" class="repo-name">gimp-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**By FlowEngineer sandraschi** Professional image editing through Model
+                        Context Protocol (MCP) using GIMP.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-13</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/git-github-mcp" class="repo-name">git-github-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">FastMCP 2.14.4 portmanteau server for Git and GitHub operations. Uses `gh`
+                        CLI for GitHub; avoids the 40-tool explosion. ## Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-09</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/gtfs-mcp" class="repo-name">gtfs-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">A FastMCP 2.10 compliant server for downloading, parsing, and serving GTFS
+                        (General Transit Feed Specification) data. This server provides a standardized API</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/handbrake-mcp" class="repo-name">handbrake-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">A **production-ready**, **FastMCP 2.12.0-compliant** server for professional
+                        video transcoding using HandBrakeCLI. Features enterprise-grade CI/CD with real CLI integration
+                        testing, comprehensive MkDocs documentation deployed to GitHub Pages, automated release
+                        management with changelog generation, community health automation, and modern GitHub features
+                        including Discussions, Wiki, and professional issue/PR templates. ## 🌟 Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/home-assistant-mcp" class="repo-name">home-assistant-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**AI-Powered Smart Home Control via Model Context Protocol** Transform your
+                        Home Assistant smart home into a conversational AI assistant. Control lights, climate,
+                        automations, and all your smart devices using natural language through Claude Desktop and other
+                        MCP-compatible AI assistants.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/immich-mcp" class="repo-name">immich-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**FastMCP 2.14.3+** | **Austrian Efficiency** | **Conversational AI &
+                        Sampling** Efficient Immich photo library management through the MCP (Model Context Protocol).
+                        Built with Austrian efficiency principles: simple, reliable, and effective.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/inkscape-mcp" class="repo-name">inkscape-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Professional vector graphics and SVG operations for AI agents through the
+                        Model Context Protocol. ## Overview</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/junk" class="repo-name">junk</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-30</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/llm-txt-mcp" class="repo-name">llm-txt-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">> Automated generation and management of llms.txt documentation files for AI
+                        accessibility The LLM.txt MCP Server provides comprehensive tools for generating, validating,
+                        and managing `llms.txt` files that make project documentation accessible to AI systems. Built
+                        with FastMCP for seamless integration with Claude Desktop and other MCP-compatible clients.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/local-llm-mcp" class="repo-name">local-llm-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">A **production-ready** FastMCP 2.12+ compliant server for comprehensive LLM
+                        management and integration with **6 working providers** and **5 SOTA portmanteau tools**. ## 🌟
+                        **Status: EXCELLENT** ✅</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/mcp-central-docs" class="repo-name">mcp-central-docs</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**Private Repository - Internal Documentation Hub** **By FlowEngineer
+                        sandraschi**</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-13</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/mcp-federation-hub" class="repo-name">mcp-federation-hub</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**Unified orchestration layer for MCP (Model Context Protocol) server
+                        ecosystems** The MCP Federation Hub provides a centralized way to discover, manage, and interact
+                        with multiple MCP servers across your development environment. It federates existing MCP server
+                        repositories without modifying them, providing unified dashboards, documentation, and
+                        cross-server capabilities.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-24</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/mcp-links-service" class="repo-name">mcp-links-service</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/mcp-monorepo-demo" class="repo-name">mcp-monorepo-demo</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">🔒 **PRIVATE REPOSITORY** - Currently in development phase This repository
+                        contains a curated collection of high-quality MCP (Model Context Protocol) servers. We're
+                        building this privately to ensure quality and completeness before public release.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-22</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/mcp-server-template" class="repo-name">mcp-server-template</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**🚀 Generate FastMCP 2.10+ compliant servers with stdio transport in
+                        seconds** ## Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/mcp-studio" class="repo-name">mcp-studio</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**By FlowEngineer sandraschi** 🎯 **Mission Control for the MCP Zoo** 🦁🐘🦒
+                    </p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-10</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/mcp-test-suite" class="repo-name">mcp-test-suite</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/meta_mcp" class="repo-name">meta_mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**MetaMCP Enterprise** is the complete **"Argh-Coding" bloop-buster** - a
+                        comprehensive enterprise-grade management platform for MCP (Model Context Protocol) ecosystems.
+                        **Version**: 3.2.1 (SOTA Compliant)</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-10</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/moltbot-mcp" class="repo-name">moltbot-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">MCP server for [Moltbot](https://github.com/moltbot/moltbot) (ClawdBot)
+                        Gateway: status, health, send, agent, channels. FastMCP 2.14+. **Repo:**
+                        [github.com/sandraschi/moltbot-mcp](https://github.com/sandraschi/moltbot-mcp) (private)</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/monitoring-mcp" class="repo-name">monitoring-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">*A comprehensive FastMCP 2.14.3-powered monitoring server providing
+                        intelligent operations across Grafana, Prometheus, and Loki ecosystems with conversational AI
+                        assistance for DevOps workflows.* ## 🚀 Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/multi-backup-mcp" class="repo-name">multi-backup-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Multi-method backup MCP server - System backups, ZIP archives, and Git/GitHub
+                        integration. FastMCP 2.13.1+ compliant.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/nest-protect-mcp" class="repo-name">nest-protect-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">## 🏠 Overview The Nest Protect MCP Server is a **production-ready** FastMCP
+                        2.13.0 compatible server that provides seamless integration between Google Nest Protect devices
+                        and the Model Context Protocol (MCP). It offers comprehensive monitoring and control
+                        capabilities for your Nest Protect smoke and carbon monoxide detectors through Claude Desktop
+                        and other MCP clients.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/netatmo-weather-mcp" class="repo-name">netatmo-weather-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**AI-powered weather monitoring with sampling and predictive analytics for
+                        Netatmo weather stations.** The Netatmo Weather MCP Server provides comprehensive weather
+                        monitoring capabilities with advanced AI features including iterative sampling, predictive
+                        analytics, anomaly detection, and conversational tool returns. Built with FastMCP 2.14.3 for
+                        maximum compatibility with AI assistants.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/notepadpp-mcp" class="repo-name">notepadpp-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">MCP server for Notepad++ automation with portmanteau tool consolidation.
+                        FastMCP 2.14.1 compliant with structured logging and Windows API integration. ## Installation
+                    </p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/notion-mcp" class="repo-name">notion-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**FastMCP 2.14.1 Implementation with Austrian Efficiency 🇦🇹** **Status:
+                        Beta** - Actively developed, API may change</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/obs-mcp" class="repo-name">obs-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**State-of-the-Art MCP server for automating OBS Studio with AI-powered scene
+                        management and streaming control.** ### ✅ **Current Status: PRODUCTION READY - FastMCP 2.14.3**
+                    </p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/observability-mcp" class="repo-name">observability-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**FastMCP 2.14.1-powered observability server for monitoring MCP ecosystems**
+                        A comprehensive observability server built on FastMCP 2.14.1 that leverages OpenTelemetry
+                        integration, persistent storage, and advanced monitoring capabilities to provide
+                        production-grade observability for MCP server ecosystems. Features state-of-the-art Grafana
+                        dashboards for visualization, Loki for centralized log aggregation, and Prometheus for metrics
+                        collection.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/obsidian-mcp" class="repo-name">obsidian-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**FastMCP 2.14.1 server for Obsidian vault knowledge management** >
+                        **Status**: Beta - Actively developed, API may change</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/ocr-mcp" class="repo-name">ocr-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**Complete document processing solution with 7 state-of-the-art OCR engines,
+                        intelligent preprocessing, document analysis, quality assessment, workflow automation, and
+                        professional web interface.** ## 📋 Table of Contents</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/onenote-mcp" class="repo-name">onenote-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">State-of-the-art MCP server for Microsoft OneNote integration</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/openclaw-molt-mcp" class="repo-name">openclaw-molt-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">MCP server for OpenClaw/Moltbook ecosystem integration</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/osc-mcp" class="repo-name">osc-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**By FlowEngineer sandraschi** A **FastMCP 2.13 compliant** MCP server that
+                        enables natural language control of professional audio/visual applications through the **Open
+                        Sound Control (OSC)** protocol. Control Ableton Live, TouchDesigner, VRChat, Max/MSP, and other
+                        OSC-enabled applications directly from Claude Desktop or any MCP client.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/pinokio-mcp" class="repo-name">pinokio-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">MCP server for controlling [Pinokio](https://pinokio.co) - the 1-click
+                        localhost cloud for AI apps. ## Status: 🟢 PRODUCTION READY - Full Feature Set</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/plex-mcp" class="repo-name">plex-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">> **⚠️ ALPHA STATUS**: This project is in alpha development. Some features
+                        may be incomplete or unstable. **Playback control (`plex play`, `plex pause`) is currently
+                        non-functional for ALL clients**, including GDM-discoverable clients (PlexAmp) and non-GDM
+                        clients (Plex Web, Plex for Windows). See [STATUS_2026-01-08.md](STATUS_2026-01-08.md) for
+                        detailed status. A FastMCP 2.13+ server implementation for managing Plex Media Server with a
+                        clean, type-safe API.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-10</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/pywinauto-mcp" class="repo-name">pywinauto-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**Version 0.3.1** | **8 Comprehensive Portmanteau Tools** | **FastMCP
+                        2.13.1** | **SOTA 2026 Compliant** A sophisticated, FastMCP 2.13.1 compliant server for Windows
+                        UI automation using PyWinAuto. Features 8 comprehensive portmanteau tools consolidating 60+
+                        operations, face recognition security, and professional packaging.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/qbt-mcp" class="repo-name">qbt-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">FastMCP 2.13 SOTA server for anime torrenting automation with Austrian legal
+                        compliance using rTorrent. > **📝 Package name `qbtmcp`?** This project started as "qBittorrent
+                        MCP" but we discovered</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/readly-mcp" class="repo-name">readly-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">A specialized MCP server for automating reading and scraping tasks on the
+                        Readly web platform (`go.readly.com`). ## Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/reaper-mcp" class="repo-name">reaper-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**Austrian precision DAW automation via Reaper with OSC control.** ## ✨
+                        What's New (v2.0)</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/repomix-mcp" class="repo-name">repomix-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**Pack repositories into AI-friendly formats for comprehensive codebase
+                        analysis** A Model Context Protocol (MCP) server that integrates [Repomix](https://repomix.com/)
+                        to provide AI assistants with powerful repository analysis capabilities.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/resolume-mcp" class="repo-name">resolume-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**MCP server for Resolume Arena VJ software control and automation - Live
+                        video mixing from natural language commands** ---</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/resonite-mcp" class="repo-name">resonite-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**FastMCP 2.13.1+ compliant server for natural language control of Resonite
+                        social VR platform.** ## Overview</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/reversing-mcp" class="repo-name">reversing-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**FastMCP 2.13+ server for reverse engineering with Ghidra + SOTA AI/LLM
+                        stack + Modern Web Interface + Directmedia decompression** ## 🎯 **Overview**</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/ring-mcp" class="repo-name">ring-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**Universal Ring Security Ecosystem Control** - FastMCP 2.13.0 server for
+                        comprehensive Ring device management including doorbells, security cameras, and alarm systems
+                        with Austrian precision. > **Latest Version: 1.0.3** - [View Changelog](CHANGELOG.md)</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/robotics-mcp" class="repo-name">robotics-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Unified robotics control via MCP - Physical and virtual robots (bot + vbot)
+                    </p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/robotics-webapp-2" class="repo-name">robotics-webapp-2</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Reconstructed from running containers `robotics-webapp-frontend-1` and
+                        `robotics-webapp-backend-1` (ports 14000/14001). ## Contents</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-07</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/robotics-webapp-original"
+                            class="repo-name">robotics-webapp-original</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Robotics Control Web Interface - Frontend</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-07</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/Rube" class="repo-name">Rube</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Rube is a Model Context Protocol (MCP) server that connects your AI tools to
+                        500+ apps like Gmail, Slack, GitHub, and Notion. Simply install it in your AI client,
+                        authenticate once with your apps, and start asking your AI to perform real actions like 'Send an
+                        email' or 'Create a task.'</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/rustdesk-mcp" class="repo-name">rustdesk-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**FastMCP 2.14.1 compliant server** for managing RustDesk remote desktop
+                        connections via the `lejianwen/rustdesk-api`. ## 🎯 Status: Alpha Release</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/sdr-mcp" class="repo-name">sdr-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**Conversational AI SDR Control via Model Context Protocol 2.14.3** The SDR
+                        MCP Server provides an intelligent, conversational interface for Software Defined Radio
+                        operations. Using FastMCP 2.14.3's advanced features, it offers expert guidance, signal
+                        analysis, and real-time spectrum monitoring through natural dialogue.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/skills" class="repo-name">skills</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Repository for MCP ecosystem skills and standards. ## Available Skills</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-25</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/songgeneration-mcp" class="repo-name">songgeneration-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">AI-powered song generation server using Tencent AI Lab's LeVo model. Supports
+                        lyrics, style control, and stem separation. ## Installation</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/suno-mcp" class="repo-name">suno-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">MCP Server for automated Suno AI music generation</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/system-admin-mcp" class="repo-name">system-admin-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">A FastMCP 2.10+ compatible MCP service for elevated system administration
+                        tasks. ## Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/tailscale-mcp" class="repo-name">tailscale-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">A FastMCP 2.13+ compliant server for managing Tailscale networks with
+                        persistent storage, modern Python tooling, and comprehensive CI/CD. ## 🚀 Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/tapo-mcp" class="repo-name">tapo-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">## 🎯 **DUAL-NATURE ARCHITECTURE** This repository serves **two complementary
+                        roles** in the smart home ecosystem:</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-13</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/temp" class="repo-name">temp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/test-servers" class="repo-name">test-servers</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/unity3d-mcp" class="repo-name">unity3d-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**FastMCP 2.13+ Compliant** - Comprehensive Unity 3D automation with VRM
+                        avatar pipeline and VRChat integration. ## Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/universal-actuator-mcp"
+                            class="repo-name">universal-actuator-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description"></p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/vbox-mcp" class="repo-name">vbox-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/veogen" class="repo-name">veogen</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">VeoGen Authentication and Onboarding Testing Suite</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/vienna-life-assistant" class="repo-name">vienna-life-assistant</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**Timestamp**: 2025-12-15 **Status**: Beta Version 🚧</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-26</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/virtualdj-mcp" class="repo-name">virtualdj-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Professional DJ automation MCP server with Austrian efficiency for Sandra's
+                        music mixing needs. ## 🎯 Overview</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/virtualization-mcp" class="repo-name">virtualization-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**v1.0.1b2 - Production-ready VirtualBox MCP server with comprehensive VM
+                        operations** > **Production Ready**: Full-featured VirtualBox management through Claude Desktop
+                        with 60+ operations organized in 5 intuitive tools.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/vrchat-mcp" class="repo-name">vrchat-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**By FlowEngineer sandraschi** A FastMCP 2.12+ implementation for controlling
+                        VRChat avatars and assets via OSC protocol. **Designed primarily for Claude Desktop
+                        integration** - allows you to control VRChat using natural language commands. Also provides
+                        FastAPI HTTP API for web access.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/vroidstudio-mcp" class="repo-name">vroidstudio-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">**🚨 ALPHA STATUS 🚨 FastMCP 2.14.1+ SOTA Compliant Server for VRoid Studio
+                        Automation** > **🚨 ALPHA STATUS: CURRENTLY NON-FUNCTIONAL 🚨**</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/web-development-mcp" class="repo-name">web-development-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">Universal web development operations MCP server supporting modern frontend
+                        frameworks, build tools, and development workflows. ## Austrian Dev Efficiency</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/windows-operations-mcp"
+                            class="repo-name">windows-operations-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">A comprehensive Windows system operations MCP server implementing the FastMCP
+                        2.12.3 protocol with full MCPB (MCP Bundle) packaging support. ## ✨ Core Features (January 2026
+                        SOTA)</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-11</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="MCPServer">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/winrar-mcp" class="repo-name">winrar-mcp</a>
+                        <span class="badge MCPServer">MCPServer</span>
+                    </div>
+                    <p class="description">WinRAR MCP - FastMCP 2.13+ server for WinRAR archive operations</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Other">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/fullstack-builder-script"
+                            class="repo-name">fullstack-builder-script</a>
+                        <span class="badge Other">Other</span>
+                    </div>
+                    <p class="description">This repository showcases the AI-generated PowerShell script that scaffolds a
+                        production-ready fullstack application. The script was produced during a single agentic coding
+                        session in Cursor to demonstrate what automated tooling can create end-to-end. ## Highlights</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-02</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Other">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/hunyuan-worldplay" class="repo-name">hunyuan-worldplay</a>
+                        <span class="badge Other">Other</span>
+                    </div>
+                    <p class="description">MODEL_PATH=<path_printed_by_download_script> AR_ACTION_MODEL_PATH=
+                            <path_printed_by_download_script>/ar_model</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-09</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Other">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/neos-gpt" class="repo-name">neos-gpt</a>
+                        <span class="badge Other">Other</span>
+                    </div>
+                    <p class="description">Server to facilitate consumption of the OpenAI API from NeosVR, without
+                        exposing API keys in Logix. ## Features:</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-20</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Other">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/openclaw" class="repo-name">openclaw</a>
+                        <span class="badge Other">Other</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-09</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Other">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/tasshack_dreame_vacuum_ref"
+                            class="repo-name">tasshack_dreame_vacuum_ref</a>
+                        <span class="badge Other">Other</span>
+                    </div>
+                    <p class="description">Complete app replacement with Home Assistant for Dreame robot vacuums. ##
+                        Features</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Other">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/unitree-robotics" class="repo-name">unitree-robotics</a>
+                        <span class="badge Other">Other</span>
+                    </div>
+                    <p class="description">**Vienna-based open-source robotics project for Unitree humanoid robots** ##
+                        🎯 Project Mission</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-15</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Other">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/vr-ai-chatbot" class="repo-name">vr-ai-chatbot</a>
+                        <span class="badge Other">Other</span>
+                    </div>
+                    <p class="description">Install VB-CABLE A+B from here: https://vb-audio.com/Cable/index.htm</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-20</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Other">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/wan-video" class="repo-name">wan-video</a>
+                        <span class="badge Other">Other</span>
+                    </div>
+                    <p class="description">💜 <a href="https://wan.video"><b>Wan</b></a> &nbsp&nbsp ｜ &nbsp&nbsp 🖥️ <a
+                            href="https://github.com/Wan-Video/Wan2.2">GitHub</a> &nbsp&nbsp | &nbsp&nbsp🤗 <a
+                            href="https://huggingface.co/Wan-AI/">Hugging Face</a>&nbsp&nbsp | &nbsp&nbsp🤖 <a
+                            href="https://modelscope.cn/organization/Wan-AI">ModelScope</a>&nbsp&nbsp | &nbsp&nbsp 📑 <a
+                            href="https://arxiv.org/abs/2503.20314">Paper</a> &nbsp&nbsp | &nbsp&nbsp 📑 <a
+                            href="https://wan.video/welcome?spm=a2ty_o02.30011076.0.0.6c9ee41eCcluqg">Blog</a>
+                        &nbsp&nbsp | &nbsp&nbsp 💬 <a href="https://discord.gg/AKNgpMK4Yj">Discord</a>&nbsp&nbsp 📕 <a
+                            href="https://alidocs.dingtalk.com/i/nodes/jb9Y4gmKWrx9eo4dCql9LlbYJGXn6lpz">使用指南(中文)</a>&nbsp&nbsp
+                        | &nbsp&nbsp 📘 <a
+                            href="https://alidocs.dingtalk.com/i/nodes/EpGBa2Lm8aZxe5myC99MelA2WgN7R35y">User
+                            Guide(English)</a>&nbsp&nbsp | &nbsp&nbsp💬 <a
+                            href="https://gw.alicdn.com/imgextra/i2/O1CN01tqjWFi1ByuyehkTSB_!!6000000000015-0-tps-611-1279.jpg">WeChat(微信)</a>&nbsp&nbsp
+                    </p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-22</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/adn-tomfoolery" class="repo-name">adn-tomfoolery</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-11</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/apple-test" class="repo-name">apple-test</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">iOS/iPadOS/macOS app development using Cursor IDE with Xcode 26.1
+                        integration, focusing on Apple Intelligence applications. ## Project Overview</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/autohotkey-test" class="repo-name">autohotkey-test</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">A comprehensive collection of AutoHotkey v2 scriptlets with modern web
+                        dashboard and development tools. ## 🚀 Quick Start</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/basic-memory-docs" class="repo-name">basic-memory-docs</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">Basic Memory knowledge export with search and navigation ## Overview</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/epub_test" class="repo-name">epub_test</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/freevibe-at" class="repo-name">freevibe-at</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">Internal testing landing page for freevibe.at and paidvibe.at on server
+                        **213.47.34.131**. ## Contents</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-10</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/fullstack-demo-backend"
+                            class="repo-name">fullstack-demo-backend</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">Backend microservices for Fullstack Demo - AI-powered dashboard with chat,
+                        image generation, and TTS/STT</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/management-stack" class="repo-name">management-stack</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-25</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/media-stack" class="repo-name">media-stack</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-25</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/moltbot-docker" class="repo-name">moltbot-docker</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">Run Moltbot Gateway in Docker for local experimentation. ## Prerequisites</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-31</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/node_modules" class="repo-name">node_modules</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/robotics-webapp" class="repo-name">robotics-webapp</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-12</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/rustdesk-api" class="repo-name">rustdesk-api</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-15</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/scrapes" class="repo-name">scrapes</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">This directory contains all web scraping results and analyses. ## Structure
+                    </p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/scripts" class="repo-name">scripts</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-02-09</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/test-pdf-export" class="repo-name">test-pdf-export</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/uv-install" class="repo-name">uv-install</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/wakan-plus" class="repo-name">wakan-plus</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/workspaces" class="repo-name">workspaces</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">No description available.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-01</span>
+                </div>
+            </div>
+
+
+            <div class="card" data-category="Junk">
+                <div>
+                    <div class="card-header">
+                        <a href="file:///D:/Dev/repos/zed-extension-template"
+                            class="repo-name">zed-extension-template</a>
+                        <span class="badge Junk">Junk</span>
+                    </div>
+                    <p class="description">**Template for adding Zed IDE extensions to MCP servers** This template
+                        provides a standardized way to add Zed IDE extension support to any MCP server. Even if your MCP
+                        server is experimental or "wild", having a Zed extension makes it discoverable and usable within
+                        Zed's AI assistant.</p>
+                </div>
+                <div class="footer">
+                    <span>2026-01-15</span>
+                </div>
+            </div>
+
+            <div id="no-results">No repositories matching your search.</div>
+        </div>
+    </div>
+
+    <script>
+        const search = document.getElementById('search');
+        const cards = document.querySelectorAll('.card');
+        const noResults = document.getElementById('no-results');
+
+        search.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            let hasVisible = false;
+
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(term)) {
+                    card.style.display = 'flex';
+                    hasVisible = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            noResults.style.display = hasVisible ? 'none' : 'block';
+        });
+    </script>
+</body>
+
+</html>

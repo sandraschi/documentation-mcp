@@ -1,31 +1,56 @@
-﻿# Browser Bookmarks Tools (MCP)
+# Browser Bookmarks Tools (MCP)
 
-FastMCP 3.1.1+ compliant MCP server providing a unified `bookmarks` portmanteau tool for CRUD operations, organization, sync, and AI-powered helpers.
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.3-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-## Features
 
-- **Primary Browser:** Firefox (SQLite-based bookmarks)
-- **Secondary Browsers:** Chrome, Edge, Brave (JSON-based bookmarks)
-- **Optional:** Safari (plist-based bookmarks)
-- **AI Features:** Smart tagging, summarization, and content analysis
-- **Cross-browser Sync:** Import/export between different browsers
-- **Organization:** Automatic categorization and duplicate detection
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
+FastMCP 3.3 MCP server with **multiple portmanteau tools** (not one mega `bookmarks` tool). Ported from database-operations-mcp.
+
+## MCP Tools (portmanteau surfaces)
+
+| Tool | Purpose |
+|------|---------|
+| `browser_bookmarks` | Universal CRUD/search/export across Firefox, Chrome, Edge, Brave |
+| `firefox_profiles` | Firefox profile create/load/portmanteau profiles |
+| `firefox_backup` | Backup/restore Firefox profile data |
+| `firefox_curated` | Curated bookmark source collections |
+| `firefox_tagging` | Folder/year-based auto-tagging |
+| `firefox_utils` | Firefox paths, lock checks, places DB info |
+| `sync_bookmarks` | Cross-browser sync (dry-run supported) |
+| `chrome_profiles` | Chromium profile management |
+| `ai_bookmark_portmanteau` | AI categorize, dedupe, curate, maintain, export |
+
+`firefox_bookmarks` remains an internal helper used by `browser_bookmarks` for Firefox-specific SQLite operations.
 
 ## Quick Start
 
-## ðŸš€ Installation
+```powershell
+git clone https://github.com/sandraschi/bookmarks-mcp
+cd bookmarks-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx bookmarks-mcp
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -87,17 +112,11 @@ uv run python -m browser_bookmarks_tools
 
 ## Available Operations
 
-The `bookmarks` tool supports the following operations:
+See tool docstrings for full operation lists. Primary entry points:
 
-- **`create`** - Add new bookmarks with metadata
-- **`read`** - Retrieve bookmarks by URL, title, or tags
-- **`update`** - Modify existing bookmarks
-- **`delete`** - Remove bookmarks
-- **`organize`** - Auto-categorize and clean up bookmarks
-- **`sync`** - Import/export between browsers
-- **`analyze`** - AI-powered content analysis and tagging
-- **`tag`** - Smart tag generation and management
-- **`summarize`** - Create bookmark summaries
+- **`browser_bookmarks`** — `list_bookmarks`, `add_bookmark`, `search_bookmarks`, `find_duplicates`, `export_bookmarks`, tag ops, age analysis, broken links, etc.
+- **`sync_bookmarks`** — cross-browser transfer with `dry_run`
+- **`ai_bookmark_portmanteau`** — `categorize`, `dedupe`, `curate`, `maintain`, `export`
 
 ## Browser Support Details
 
@@ -121,22 +140,22 @@ The `bookmarks` tool supports the following operations:
 ### Project Structure
 ```
 bookmarks-mcp/
-â”œâ”€â”€ src/browser_bookmarks_tools/
-â”‚   â”œâ”€â”€ __init__.py          # Package initialization
-â”‚   â”œâ”€â”€ __main__.py          # Module entry point for `python -m`
-â”‚   â”œâ”€â”€ mcp_server.py       # FastMCP server implementation
-â”‚   â”œâ”€â”€ bookmarks/           # Core bookmark operations
-â”‚   â”‚   â”œâ”€â”€ manager.py       # CRUD operations
-â”‚   â”‚   â”œâ”€â”€ organizer.py     # Organization features
-â”‚   â”‚   â”œâ”€â”€ portmanteau.py   # Main tool interface
-â”‚   â”‚   â””â”€â”€ sync.py          # Cross-browser sync
-â”‚   â”œâ”€â”€ ai/                  # AI-powered features
-â”‚   â”‚   â”œâ”€â”€ analyzer.py      # Content analysis
-â”‚   â”‚   â”œâ”€â”€ summarizer.py    # Summary generation
-â”‚   â”‚   â””â”€â”€ tagger.py        # Smart tagging
-â”‚   â””â”€â”€ browsers/            # Browser-specific implementations
-â”œâ”€â”€ tests/
-â””â”€â”€ pyproject.toml
+ src/browser_bookmarks_tools/
+    __init__.py          # Package initialization
+    __main__.py          # Module entry point for `python -m`
+    mcp_server.py       # FastMCP server implementation
+    bookmarks/           # Core bookmark operations
+       manager.py       # CRUD operations
+       organizer.py     # Organization features
+       portmanteau.py   # Main tool interface
+       sync.py          # Cross-browser sync
+    ai/                  # AI-powered features
+       analyzer.py      # Content analysis
+       summarizer.py    # Summary generation
+       tagger.py        # Smart tagging
+    browsers/            # Browser-specific implementations
+ tests/
+ pyproject.toml
 ```
 
 ### Running Tests
@@ -182,6 +201,17 @@ export PYTHONPATH="/path/to/bookmarks-mcp/src:$PYTHONPATH"
 4. Add tests for new functionality
 5. Submit a pull request
 
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
 ## License
 
 [Add appropriate license information]
@@ -189,16 +219,48 @@ export PYTHONPATH="/path/to/bookmarks-mcp/src:$PYTHONPATH"
 ## Changelog
 
 ### v0.1.0
-- Initial FastMCP 3.1.1+ compliant implementation
+- Initial FastMCP 3.1.0 compliant implementation
 - Firefox, Chrome, Edge, Brave, and Safari support
 - Unified portmanteau tool interface
 - AI-powered bookmark analysis and tagging
 - Cross-browser synchronization
 
 
-## ðŸŒ Webapp Dashboard
+## Web dashboard
 
-This MCP server includes a free, premium web interface for monitoring and control.
+| Service | Port | Notes |
+|---------|------|-------|
+| Frontend (Vite) | **10802** | `web_sota/start.ps1` |
+| Backend (FastAPI + MCP) | **10803** | `MCP_TRANSPORT=http` |
+
+Pages: Dashboard, Bookmarks (CRUD + pagination), Search (folder/tag filters), Tree, Bulk ops (sync wizard, export download), Tags, AI Command, MCP Tools, Settings, Help.
+
+### Production auth
+
+HTTP Basic auth is **enabled by default** on `/api/*` routes.
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `BOOKMARKS_WEB_AUTH` | `1` | Set `0` to disable (dev only) |
+| `BOOKMARKS_WEB_USER` | `admin` | Username |
+| `BOOKMARKS_WEB_PASS` | `mcp` | Password |
+
+Configure credentials in **Settings → API auth** (stored in browser localStorage as Basic auth header).
+
+Root `/health` is unauthenticated for load balancers.
+
+### Tauri desktop
+
+```powershell
+cd native
+.\build.ps1
+```
+
+Spawns the MCP backend sidecar on 10803 and loads the built SPA.
+
+##  Webapp Dashboard
+
+This MCP server includes a React web interface for monitoring and control.
 By default, the web dashboard runs on port **10802**.
 *(Assigned ports: **10802** (Web dashboard frontend), **10803** (Web dashboard backend))*
 
@@ -206,4 +268,3 @@ To start the webapp:
 1. Navigate to the `webapp` (or `web`, `frontend`) directory.
 2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
 3. Open `http://localhost:10802` in your browser.
-

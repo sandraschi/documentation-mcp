@@ -1,0 +1,53 @@
+# Host-process logs (files on disk). Requires Promtail volume mounts — see docker-compose + .env.
+# Start host MCPs with scripts/Invoke-FleetLoggedCommand.ps1 or log to logs/host/<job>/.
+
+  - job_name: host-docs-mcp
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: docs-mcp
+          platform: host
+          __path__: /host-logs/docs-mcp/*.log
+      - targets: [localhost]
+        labels:
+          job: docs-mcp
+          platform: host
+          log: debug
+          __path__: /repos/mcp-central-docs/debug.log
+
+  - job_name: host-devices-mcp
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: devices-mcp
+          platform: host
+          __path__: /host-user-local/devices-mcp/*.log
+      - targets: [localhost]
+        labels:
+          job: devices-mcp
+          platform: host
+          __path__: /host-logs/devices-mcp/*.log
+
+  - job_name: host-calibre-mcp
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: calibre-mcp
+          platform: host
+          __path__: /host-logs/calibre-mcp/*.log
+
+  - job_name: host-plex-mcp
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: plex-mcp
+          platform: host
+          __path__: /host-logs/plex-mcp/*.log
+
+  - job_name: host-fleet-catchall
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: host-fleet
+          platform: host
+          __path__: /host-logs/*/*.log

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gimp-mcp"
-version = "3.0.0"
-description = "FastMCP 2.13 server for professional image editing using GIMP - portmanteau architecture"
+version = "4.6.0"
+description = "FastMCP 3.4.2 SOTA server for professional image editing using GIMP - Industrial Modernization"
 readme = "README.md"
 authors = [
     {name = "Sandra Schipal", email = "sandra@sandraschi.dev"},
@@ -32,32 +32,33 @@ classifiers = [
 ]
 
 dependencies = [
-    # Core FastMCP dependencies - upgraded to 2.13+
-    "fastmcp>=3.1.0,<4",
+    # FastMCP 3.2+ (sampling, skills provider, prompts, prefab)
+    "fastmcp>=3.4.4,<4",
     "pydantic>=2.0.0,<3.0.0",
     "typing-extensions>=4.5.0,<5.0.0",
-    
     # Image processing
     "pillow>=10.0.0,<12.0.0",
     "numpy>=1.24.0,<3.0.0",
-    
     # Process management and system utilities
     "psutil>=5.9.0,<7.0.0",
     "python-dotenv>=1.0.0,<2.0.0",
-    
     # File handling and validation
     "python-magic>=0.4.27,<1.0.0; platform_system!='Windows'",
     "python-magic-bin>=0.4.14,<1.0.0; platform_system=='Windows'",
     "filetype>=1.2.0,<2.0.0",
-    
     # Configuration and utilities
     "pyyaml>=6.0.0,<7.0.0",
     "python-dateutil>=2.8.2,<3.0.0",
     "click>=8.1.3,<9.0.0",
-    
+    "loguru>=0.7.0,<1.0.0",
     # Async utilities
     "anyio>=4.5.0,<5.0.0",
-    "httpx>=0.27.0,<1.0.0"
+    "httpx>=0.27.0,<1.0.0",
+    "pytest>=7.4.4",
+    "pytest-asyncio>=0.23.8",
+    "pytest-cov>=4.1.0",
+    "fastapi>=0.129.0",
+    "prefab-ui>=0.14.0",
 ]
 
 [project.urls]
@@ -122,14 +123,6 @@ docs = [
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.ruff]
-line-length = 100
-target-version = "py310"
-
-[tool.ruff.lint]
-select = ["E", "F", "W"]
-ignore = ["E501"]  # Line length handled by formatter
-
 [tool.black]
 line-length = 100
 target-version = ["py310"]
@@ -137,7 +130,7 @@ include = '\.pyi?$'
 
 [tool.isort]
 profile = "black"
-line_length = 100
+line-length = 100
 
 [tool.mypy]
 python_version = "3.10"
@@ -154,19 +147,23 @@ warn_unreachable = true
 
 # Advanced analysis dependencies
 analysis = [
-    "scipy>=1.10.0,<2.0.0",  # For image quality metrics
+    "scipy>=1.10.0,<2.0.0",
+]
+
+monitoring = [
+    "prometheus-client>=0.20.0,<1.0.0",
 ]
 
 all = [
-    "gimp-mcp[http,analysis]"
+    "gimp-mcp[http,analysis,monitoring]"
 ]
 
 # MCP Server Configuration
 [tool.fastmcp]
 name = "gimp-mcp"
 display_name = "GIMP MCP Server"
-version = "3.0.0"
-description = "FastMCP 2.13+ server for professional image editing using GIMP - portmanteau architecture"
+version = "4.6.0"
+description = "FastMCP 3.2.0 SOTA — portmanteau tools, sampling, prompts, resources, skills, prefab, MCPB"
 entry_point = "gimp_mcp.main:main"
 architecture = "portmanteau"
 
@@ -251,8 +248,63 @@ name = "batch_convert"
 description = "Convert multiple images to target format"
 category = "batch"
 
+# Layer Management Tools
+[[tool.dxt.tools]]
+name = "create_layer"
+description = "Create a new layer in an image"
+category = "layers"
+
+[[tool.dxt.tools]]
+name = "duplicate_layer"
+description = "Duplicate an existing layer"
+category = "layers"
+
+[[tool.dxt.tools]]
+name = "delete_layer"
+description = "Remove a layer from the image"
+category = "layers"
+
+[[tool.dxt.tools]]
+name = "merge_layers"
+description = "Merge multiple layers together"
+category = "layers"
+
+# Image Analysis Tools
+[[tool.dxt.tools]]
+name = "analyze_image_quality"
+description = "Perform deep image quality analysis"
+category = "analysis"
+
+[[tool.dxt.tools]]
+name = "extract_image_statistics"
+description = "Extract histogram and color statistics"
+category = "analysis"
+
+# Performance & System Tools
+[[tool.dxt.tools]]
+name = "optimize_image_processing"
+description = "Optimize image processing performance"
+category = "system"
+
+[[tool.dxt.tools]]
+name = "get_system_performance_info"
+description = "Get system resource usage and GIMP status"
+category = "system"
+
 [tool.dxt.config]
 log_level = "INFO"
 max_workers = 4
 request_timeout = 60.0
 gimp_timeout = 30.0
+
+[tool.ruff]
+line-length = 200
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008", "B904", "B018", "S102", "S104", "S310", "S324", "S603", "S607", "S110"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

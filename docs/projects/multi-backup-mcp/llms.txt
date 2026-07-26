@@ -1,30 +1,24 @@
 # multi-backup-mcp
-> **Complete guide to keeping your notepadpp-mcp repository safe** --- 1. [Branch Protection Settings](BRANCH_PROTECTION_SETTINGS.md) - **START HERE** (5 minutes setup) 2. [Branch Strategy & AI Workflow...
 
-This project includes automated llms.txt generation for AI accessibility.
+> Two-tier backup orchestration: Hasleo system images + git-tracked repo archival.
 
-## Docs
-- [Readme](docs\repository-protection\README.md): **Complete guide to keeping your notepadpp-mcp repository safe**
-- [Readme](README.md): [![Python](https://img.shields.io/badge/python-3.8+-blue)](#requirements)
-- [Readme](docs\development\README.md): **Guides, best practices, and lessons learned for developing notepadpp-mcp**
-- [Readme](docs\mcp-technical\README.md): **Technical guides for MCP server development, deployment, and troubleshooting**
-- [Readme](docs\glama\README.md): This directory contains documentation related to achieving GLAMA AI Gold standard status for the Adv...
-- [Readme](docs\glama-platform\README.md): **Complete guide to achieving and maintaining Gold Status on Glama.ai**
-- [Readme](docs\github\README.md): > **Purpose**: Comprehensive GitHub configuration guide to avoid hours of trial-and-error setup.
-- [Readme](docs\mcpb-packaging\README.md): **Complete guide to packaging and distributing MCP servers with MCPB**
-- [Quickstart](docs\QUICKSTART.md): > **New in v1.0**: Experience a modern web interface for Hasleo Backup Suite!
-- [Complete Setup Guide](docs\github\COMPLETE_SETUP_GUIDE.md): > **6 hours of pain distilled into 30 minutes of setup**
+## Quick Start
+- Start: `uv run python -m multi_backup_mcp`
+- Tests: `uv run pytest tests/ -q`
+- Lint: `uv run ruff check src/ tests/`
 
-## Api
-- [Api](src\multi_backup_mcp\api.py): Api definitions and implementations
-- [System Models](src\multi_backup_mcp\models\system_models.py): Models definitions and implementations
-- [Base Models](src\multi_backup_mcp\models\base_models.py): Models definitions and implementations
-- [Schedule Models](src\multi_backup_mcp\models\schedule_models.py): Models definitions and implementations
+## Key Links
+- [Full Reference](llms-full.txt)
+- [API Docs](http://127.0.0.1:10799/docs)
+- [Web Dashboard](http://127.0.0.1:10798)
 
-## Configuration
-- [Pyproject](pyproject.toml): Python project configuration and dependencies
-- [Package](package.json): Node.js project configuration and dependencies
-- [Config](.git\config): Application configuration files
-
-## Optional
-- [Changelog](CHANGELOG.md): Project changelog information
+## Tool Categories
+- **Backups**: create_backup, list_backups, start_backup, cancel_backup, check_backup_image, mount_backup_image, unmount_backup_image, launch_hasleo_tool
+- **Repo Archival**: scan_repositories, run_repo_backup, list_repo_backups, run_nuclear_backup
+- **Schedules**: create_schedule, list_schedules, get_schedule, enable_schedule, disable_schedule, get_upcoming_backups
+- **Archives**: create_archive, list_archives, extract_archive
+- **Git/GitHub**: make_git, make_github
+- **System**: get_system_info, check_hasleo_installed, get_storage_info, list_usb_drives, create_emergency_disk
+- **AI Stack**: list_ai_providers, list_ai_models, pull_ai_model
+- **Logging**: get_logs, export_logs, rotate_logs
+- **Meta**: help, status, backup_workflow, autonomous_backup_agent

@@ -13,6 +13,7 @@ logger = logging.getLogger("docs_mcp.tools.rag")
 _READ_ONLY = {"readonly": True}
 _MUTATING = {}
 
+
 def _search_docs_raw(query: str, limit: int = 5) -> dict:
     """Internal search helper returning a plain dict (not markdown)."""
     store = get_store()
@@ -49,6 +50,7 @@ def _search_docs_raw(query: str, limit: int = 5) -> dict:
             "Browse the file tree in the webapp",
         ],
     }
+
 
 def search_docs(query: str, limit: int = 5) -> dict:
     """Perform a semantic search across all indexed documentation.
@@ -133,18 +135,23 @@ def register_tools(mcp: FastMCP):
         lmstudio_url = settings.get("lmstudio_url") or "http://localhost:1234/v1"
 
         import asyncio
+
         try:
             tasks = [list_ollama_models(ollama_url), list_openai_models(lmstudio_url)]
             results = await asyncio.gather(*tasks, return_exceptions=True)
 
             ollama_res = results[0] if not isinstance(results[0], Exception) else ([], f"Ollama Error: {results[0]}")
-            lmstudio_res = results[1] if not isinstance(results[1], Exception) else ([], f"LM Studio Error: {results[1]}")
+            lmstudio_res = (
+                results[1] if not isinstance(results[1], Exception) else ([], f"LM Studio Error: {results[1]}")
+            )
 
             ollama_models, o_err = ollama_res
             lm_models, l_err = lmstudio_res
 
-            if o_err: error_log.append(o_err)
-            if l_err: error_log.append(l_err)
+            if o_err:
+                error_log.append(o_err)
+            if l_err:
+                error_log.append(l_err)
 
             final_provider, final_url, final_model = None, None, None
 
@@ -158,7 +165,8 @@ def register_tools(mcp: FastMCP):
                     if match:
                         final_model = match
                         break
-                if not final_model: final_model = ollama_models[0]
+                if not final_model:
+                    final_model = ollama_models[0]
 
             if final_provider and final_model:
                 ctx.report_progress(f"Synthesizing answer via {final_provider} ({final_model})...", 60)
@@ -247,6 +255,7 @@ def get_document(relative_path: str) -> dict:
     """
     try:
         from docs_mcp.backend.config import config
+
         docs_root = config.DOCS_ROOT.resolve()
         target_path = (docs_root / relative_path).resolve()
 
@@ -268,6 +277,7 @@ def get_document(relative_path: str) -> dict:
             content = f.read()
 
         import datetime
+
         stat = target_path.stat()
         res = {
             "success": True,

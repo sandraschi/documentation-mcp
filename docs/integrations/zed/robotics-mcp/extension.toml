@@ -1,0 +1,11 @@
+id = "robotics-mcp"
+name = "Robotics MCP"
+version = "0.1.0"
+schema_version = 1
+authors = ["Sandra Schipal <sandraschipal@gmail.com>"]
+description = "Multi-robot control system with VRM avatar integration and Unity/VRChat support"
+repository = "https://github.com/sandraschi/robotics-mcp"
+
+[context_servers.robotics-mcp]
+name = "Robotics MCP"
+description = "Robot control, virtual robot management, and AI-assisted robotics workflows"

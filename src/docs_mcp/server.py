@@ -46,6 +46,7 @@ prompts.register_tools(docs_mcp)
 memory.register_tools(docs_mcp)
 register_prefab_cards(docs_mcp)
 
+
 # 3. Lifespan Management
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -68,6 +69,7 @@ async def lifespan(app: FastAPI):
     process_manager.cleanup_all()
     # Close stores
     close_stores()
+
 
 # 4. Initialize FastAPI Application
 app = FastAPI(title="Documentation MCP Control Plane", lifespan=lifespan)
@@ -106,6 +108,7 @@ ASSETS_DIR = FRONTEND_DIST / "assets"
 if ASSETS_DIR.exists():
     app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR)), name="assets")
 
+
 @app.get("/{path:path}")
 async def serve_spa(path: str):
     """Catch-all for SPA routing."""
@@ -120,9 +123,11 @@ async def serve_spa(path: str):
         return FileResponse(index_path)
     return Response("Frontend not built. Run 'just build' in web_sota.", status_code=404)
 
+
 def main():
     """Entry point for stdio transport."""
     docs_mcp.run(transport="stdio")
+
 
 if __name__ == "__main__":
     import subprocess
@@ -155,10 +160,7 @@ if __name__ == "__main__":
     subprocess.run(["powershell.exe", "-NoProfile", "-Command", _port_kill], capture_output=True)
 
     for i in range(240):
-        r = subprocess.run(
-            ["powershell.exe", "-NoProfile", "-Command", _poll],
-            capture_output=True, text=True
-        )
+        r = subprocess.run(["powershell.exe", "-NoProfile", "-Command", _poll], capture_output=True, text=True)
         if r.stdout.strip() == "0":
             break
 
@@ -171,4 +173,5 @@ if __name__ == "__main__":
         time.sleep(1)
 
     import uvicorn
+
     uvicorn.run(app, host="127.0.0.1", port=port, reload=False, reuse_port=True)

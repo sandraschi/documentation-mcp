@@ -1,3 +1,116 @@
+
+## [Unreleased] — 2026-07-09
+
+### Fixed
+- **Tauri build no longer breaks webapp:** `native/build.ps1` now restores standalone `.next/` cache after building with `TAURI_BUILD=1` (was leaving `basePath:/app` in routes manifest, breaking `next start`)
+- **Frontend standalone server now works:** `webapp/start.ps1` uses `node .next/standalone/server.js` with `PORT=10721` instead of `npm run start` (incompatible with `output: 'standalone'`); auto-copies `.next/static` into standalone output
+- **`backend.rs` self-kill removed:** `free_port()` no longer kills `calibre-mcp-native.exe` by name (was killing the current process)
+- **`backend.rs` missing `MCP_TRANSPORT=http`:** Added env var so backend opens HTTP port 10720 instead of stdio
+- **`transport.py` Starlette `@app.get` crash:** Replaced FastAPI-style decorator with Starlette `Route` for health endpoint
+- **PyInstaller metadata fixes:** Added `annotated_doc-` and `annotated-doc-` to `_keep_dist`; added `hooks/runtime-opentelemetry.py` for `StopIteration` crash
+- **`build.ps1` bundles `.env.example` instead of `.env`:** Prevents personal API key leakage into installer
+- **Tauri app frontend fixed:** `main.rs` navigates to backend URL immediately (with window retry); `loading.html` removed (was set as `frontendDist` but broke Tauri — needs a directory)
+- **OpenTelemetry crash in frozen exe fixed:** `build.ps1` patches `opentelemetry.context` StopIteration fallback; runtime hook sets `OTEL_PROPAGATORS=none`
+- **CUA smoke test improved:** pywinauto window detection (filters classic Calibre by class_name); `_release_mouse()` in finally; traceback logging for phase failures
+- **Nav links now UIA-accessible:** `aria-label` on every sidebar `<Link>`; `core:window:allow-set-focus` permission added to capabilities
+
+### Added
+- **Session context injection:** `.claude-plugin/plugin.json`, `hooks/hooks.json`, updated `.cursorrules` and `.windsurfrules` with tool-awareness prompt — agents now know calibre-mcp's capabilities on session start
+- **`just cua-nsis-test` recipe:** Runs CUA-NSIS smoke test (install → launch → verify → uninstall)
+- **Playwright tests expanded:** From 2 to 9 tests covering backend health, API endpoints, page loads, console error detection
+
+## [Unreleased] — 2026-07-05 (continued)
+
+### Added
+- **Agentic chat:** `/api/llm/agentic` endpoint with proper OpenAI-compatible tool calling (ReAct loop, 6 MCP tools, up to 5 tool calls per turn)
+- **Custom personality:** Editable textarea when "Custom" personality is selected, persisted to localStorage
+- **Model settings:** Auto-fetch models on provider/URL change, default model selector saved to localStorage, chat reads saved preference
+- **Book description preview:** List view shows first 2 lines of rendered HTML description
+
+### Changed
+- **Chat rewrite:** Uses `/api/llm/agentic` with native `tool_calls` instead of fragile keyword matching + JSON parsing
+- **AppLayout:** `h-screen` instead of `min-h-screen` for fixed viewport height + `main` is `flex-col` for proper child sizing
+- **Logger modal:** Level filter dropdown (Error/Warning/Info/Debug), auto-scroll toggle, refresh button, color-coded log levels
+- **Sidebar:** Collapse toggle moved into header bar (right edge, per fleet standard)
+- **Zoom hook:** Keyboard shortcuts (Ctrl+Plus/Minus/0) added, dev browser fallback uses CSS `zoom`
+- **Containers dropdown:** Removed from topbar (was fleet infra noise in e-book app)
+
+### Fixed
+- **LLM timeout:** Increased from 30s to 120s; agentic endpoint wrapped in try/except for friendly error messages
+- **Hydration error:** `suppressHydrationWarning` on `<body>` for Dark Reader + ZoomControls uses `useState(1.0)` with post-mount localStorage read
+- **API routes:** Restored missing `/api/llm/models` and `/api/llm/chat` endpoints (accidentally dropped in rewrite)
+- **CORS:** Explicit Tauri origins with `CALIBRE_TAURI` env var gating
+
+---
+
+## [Unreleased] — 2026-07-05
+
+### Added
+- **API endpoints:** `/api/v1/diagnostics` for CUA smoke testing, `/api/health` as alias for `/health`
+- **Zoom UI:** `-` `100%` `+` controls in topbar + Ctrl+Plus/Minus/0 keyboard shortcuts
+- **Logger modal:** Now shows live backend logs instead of raw system status JSON
+
+### Changed
+- **Webapp backend merge:** Single FastAPI process on 10720 serves REST API, MCP at `/mcp`, health, diagnostics — no port conflict
+- **Health endpoint:** Returns full shape (server, version, uptime, tool_count, providers)
+- **CORS:** Explicit Tauri origins with `CALIBRE_TAURI` env var gating
+- **NSIS hooks:** Fleet-standard (Stop-Process layer, UninstallPrevious, Sleep 3000, ExecWait)
+- **Tauri backend spawn:** Fleet-standard MCP_PORT/MCP_HOST env vars, 240s kill poll with UAC escalation, TCP health check
+- **Chat page:** Full SOTA rewrite — localStorage persistence, export/clear, provider status, example prompts, data-testids
+- **Sidebar:** Collapse toggle moved to top (fleet standard)
+- **Zoom:** Dev browser fallback uses CSS `zoom` instead of `transform: scale()` (fleet standard)
+- **Containers dropdown:** Removed from topbar (was fleet infrastructure noise in an e-book app)
+- **API routes:** Fixed arXiv double-prefix bug, health/help/status route mismatches
+- **Version gaslights:** All version strings unified to `1.8.6` (was split across `1.0.0`, `1.4.0`, `1.8.6`)
+
+### Fixed
+- **Diagnostics tool_count:** Returns real tool count instead of hardcoded `0`
+- **`plex_media` filter bug:** Genre, year, actor, director, min_rating, unwatched params now actually passed through to search
+- **Hydration error:** `suppressHydrationWarning` on `<body>` for Dark Reader browser extension
+- **Console spam:** Removed `CALIBRE_DEBUG` print statements from webapp backend
+
+---
+
+## [Unreleased] — 2026-06-17
+
+### Added
+- **GPU RAG (fleet standard):** `just rag-gpu-install`, `just rag-gpu-metadata`, `just rag-cpu-install` — fastembed-gpu + onnxruntime-gpu with batched embed (CPU 64 / GPU 256). Scripts: `enable-rag-gpu.ps1`, `run-rag-gpu-metadata.ps1`, `rag_reindex_metadata.py`, `fastembed_gpu.py`.
+- **Passage RAG filters:** `rag_retrieve` and `/rag` webapp support optional `book_ids` and `formats` query filters (LanceDB prefilter).
+
+### Changed
+- Metadata and content LanceDB stores use fleet `create_text_embedding()` instead of plain CPU fastembed.
+
+---
+
+## [Unreleased] — 2026-06-17
+
+### Fixed
+- **PyInstaller PYZ import bug**: stdlib modules (`difflib`, `statistics`, `pydoc`) failed to import at runtime despite being in the PYZ archive. Fix: `noarchive=True` in spec forces all `.pyc` to extract to disk.
+- **Frontend `/app/` 404**: StaticFiles mount returned 404 at request time due to Starlette path normalization on Windows temp dirs. Fix: `os.path.realpath()` + `follow_symlink=True`.
+- **Missing `jwt` module**: Added PyJWT to `collect_all` packages in spec.
+- **Missing `statistics` module**: Added to `hiddenimports`.
+
+### Changed
+- `calibre-mcp-backend.spec`: `noarchive=False` → `noarchive=True`
+- `webapp/backend/app/main.py`: StaticFiles mount uses `os.path.realpath()` + `follow_symlink=True`
+- `webapp/frontend/next.config.js`: Added `basePath: '/app'` for Tauri builds (fixes `/_next/` asset 404s)
+- `webapp/backend/app/config.py`: Added `http://goliath:10721` to CORS_ORIGINS for Tailscale access
+
+---
+
+## [Unreleased] — 2026-06-14
+
+### Added
+- Tauri CORS: 	auri://localhost, http://tauri.localhost, https://tauri.localhost in CORS origins
+- Tauri CORS: _TAURI env var toggle with llow_origin_regex for secure WebView access
+- build.ps1: auto-copy NSIS installer to dist/ on build
+- CUA-NSIS: config-driven smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
+- CUA-NSIS: `just build-native` + `just cua-nsis-test` recipes
+- CUA-NSIS: 11-phase smoke (install, launch, WebView OCR, feature route, diagnostics, uninstall)
+- CUA-NSIS: local certification — all 11 phases pass locally (2026-06-14)
+
+### Changed
+- CORS: llow_origins=["*"] → explicit origins list for Tauri webview compatibility
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -5,89 +118,181 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-This mirror is kept loosely in sync with `D:\Dev\repos\calibre-mcp\CHANGELOG.md`.
+## [1.8.6] - 2026-06-08
 
-## [Unreleased]
 ### Added
-- **Roadmap documentation** for next-phase projects: reading-flow integration,
-  annotation intelligence, book-of-the-day, duplicate detection, audiobook
-  generator. Full specs in `docs/plans/` in the main repo, agent skills in
-  `.cursor/skills/`, fleet-level README/TODO/STATUS mirrored here.
-- **`PLUGIN_IDEAS.md`** — brainstorm of future Calibre plugin features
-  grouped by theme (reading-time features, library management, discovery,
-  writing capture, multimedia, meta-tools).
-- **`VIEWER_EXTENSIBILITY_ANALYSIS.md`** — honest analysis of what the
-  Calibre viewer plugin API (`ViewerPlugin` class) actually allows,
-  correcting an earlier incorrect claim that it was fully sealed.
+
+- **Fleet MCP tool metrics**: `fleet_tool_metrics.py` Prometheus counters/histograms wired in `server.py`.
+- **Root `start.bat`**: Thin wrapper delegating to `start.ps1` for fleet launchers.
+
+### Changed
+
+- **Tauri desktop 1.8.6**: Production backend on port 10720 with hardened native spawn.
+- **Docker compose**: Unified monitoring labels (`monitoring.unified`, `monitoring.job`).
+- **Documentation**: Hub/index cleanup (pywinauto pattern); archive banners on stale fleet-import docs.
+- **Package identity**: `uv.lock` aligned to PyPI name `calibremcp`.
+
+## [1.8.0] - 2026-04-18
+
+### Industrialization & SOTA Hardening
+- **Pydantic V2 Migration**: Completed mandatory upgrade from legacy `@validator` to `@field_validator(..., mode="after")` + `@classmethod` for all models. Standardized on `v2`-native validation patterns.
+- **Ruff Linting Excellence**: Resolved over 100 manual linting violations (TRY400, B904, PTH, SIM, S110). Replaced silent `except: pass` with `contextlib.suppress`.
+- **Backend Modernization**: Systematic migration from `os.path` to `pathlib.Path` in core service and server modules.
+- **Structured Logging**: Standardized on `logger.exception` for diagnostic-rich error reporting across the MCP lifecycle.
+- **Robustness**: Replaced deprecated `TimeoutError` aliases and established binary `stdio` hygiene for Windows compatibility.
+- **Venv Repair**: Resolved environment corruption where site-packages were accidentally modified during bulk refactoring. Recreated `webapp/backend` venv with Python 3.12.9.
+
+### Fixed
+- **Query Tools Resilience**: Fixed major syntax and indentation errors in `book_tools.py` and `metadata_rag.py` introduced during automated industrialization.
+- **Model Registration**: Fixed `PydanticUserError` runtime blockers in the book model registry.
 
 ## [1.7.0] - 2026-04-16
-### Added
-- **`media_research_book`** — deep book research with concurrent source
-  fetching across Wikipedia, SF Encyclopedia, TVTropes, Anime News Network,
-  Open Library, plus local library data, synthesised via LLM sampling.
-  REST endpoint `POST /api/rag/research/{book_id}`.
-- **Plugin v1 shipped** — working Calibre GUI plugin at ~38KB. Tabbed
-  metadata editor, semantic search dialog, streaming research dialog with
-  offline Ollama support.
-- Webapp `/rag` page gains 4th tab "Research" with streaming progress +
-  source attribution + local data badges.
 
-## [1.6.0] - 2026-04-14
 ### Added
-- **RAG endpoints** beyond metadata search: `/api/rag/retrieve` (passage
-  retrieval), `/api/rag/synopsis` (LLM-generated synopsis from passages),
-  `/api/rag/research` (orchestrated deep research).
-- **Series analysis** tool — gap detection, reading order suggestions.
-  UI page at `/series/analysis`.
-- **Extended metadata v2** — read_status, date_read, mood, culprit,
-  locked_room_type, original_language, translator, edition_notes.
-  Stored in `calibre_mcp_data.db` (not Calibre's metadata.db).
-- **Calibre plugin** (first working release) — talks to webapp via httpx
-  and to local state DB directly.
 
-## [1.5.0] - 2026-03-31
+**`media_research_book` — Deep book research tool**
+
+New MCP tool and REST endpoint `POST /api/rag/research/{book_id}`.
+
+Given any book ID from your Calibre library, fetches and synthesises:
+- Wikipedia article (book) — summary, plot, reception, adaptations, accolades
+- Wikipedia article (author) — biography and bibliography context
+- SF Encyclopedia — for SF/fantasy/space opera/cyberpunk tagged books
+- TVTropes Literature page — for fiction (best-effort, graceful fallback)
+- Anime News Network Encyclopedia — for manga/light novel/anime tagged books
+- Open Library — for books with ISBN identifier
+
+All sources fetched concurrently with per-source timeout and graceful failure.
+Source routing is automatic based on Calibre tags/genres.
+
+Local data combined into synthesis: your rating, series, personal notes from
+`calibre_mcp_data.db`, and top RAG passages from content index if built.
+
+Synthesised via LLM sampling into a structured markdown report with sections:
+Overview, The Author, Plot & Content, Critical Reception, Themes & Tropes,
+Adaptations & Related Media, If You Liked This, Your Library.
+
+Requires sampling-capable MCP client (Claude Desktop / Cursor).
+
+**Frontend: Research tab on RAG page**
+
+Fourth tab on `/rag` page alongside Metadata / Passages / Synopsis.
+- Book ID input with spoilers toggle
+- Source attribution bar (green = fetched, grey = failed)
+- Local data badges (rating stars, series, notes indicator, RAG passage count)
+- Full report rendered in scrollable panel
+
+**Spec documented at `docs/BOOK_RESEARCH_SPEC.md`**
+
+
+
 ### Added
-- Import Hub Stabilization: hardening of automated book ingestion sources
-- Anna's Archive UX Optimization: CAPTCHA/timer detection, mirror management
-- arXiv reliability: exponential backoff, custom User-Agent
-- Global Import Settings: persistent UI settings for target library and
-  automated tag injection
+
+**Calibre plugin — first working release**
+- `calibre_plugin/` is now fully functional and tested. Install with `calibre-customize -b calibre_plugin` or from the pre-built ZIP.
+- Extended metadata panel (`Ctrl+Shift+M`): First Published, Translator, personal notes — stored in `calibre_mcp_data.db`, shared with the MCP server. Works standalone with no webapp required.
+- VL from Query: calls `/api/search`, retrieves book IDs, creates a Calibre saved search as a virtual library.
+- Config dialog: server URL, DB path override.
+- Full dev/test script at `scripts/calibre-plugin-test.ps1` with full Windows paths.
+- Complete documentation at `calibre_plugin/README.md` and `docs/integrations/CALIBRE_INTEGRATION_GUIDE.md`.
+
+**RAG API — new endpoints**
+- `GET /api/rag/retrieve` — full-text passage retrieval via `rag_retrieve` (LanceDB content index)
+- `POST /api/rag/content/build` — build/rebuild the content index (separate from metadata index)
+- `POST /api/rag/search` — combined portmanteau search via `calibre_rag`
+- `POST /api/rag/synopsis/{book_id}` — RAG-synthesised spoiler-aware synopsis via `media_synopsis`
+- `POST /api/rag/critical-reception/{book_id}` — critical reception synthesis
+- `POST /api/rag/deep-research` — cross-book thematic analysis
+- `POST /api/rag/metadata/export` — JSON metadata export for external pipelines
+
+**Series API — new endpoints**
+- `GET /api/series/analysis?series_name=` — reading order + owned/missing breakdown for a named series
+- `GET /api/series/completion` — library-wide series completion report
+
+**Webapp frontend — RAG page overhaul**
+- Three-tab interface: Metadata search / Passage retrieval / Synopsis generator
+- Separate build controls for metadata index (fast) and content index (slow/large libraries)
+- Passage results with `<mark>` snippet highlighting
+- Synopsis panel with spoilers toggle
+
+**Webapp frontend — Series Analysis page**
+- New page at `/series/analysis`
+- Named series lookup with progress bar (owned/total ratio)
+- Reading order list with Owned/Missing badges, links to book pages
+- Accessible from sidebar and from the Series list page header
+
+### Fixed
+- All stale port 13000 references corrected to 10720 throughout plugin, webapp backend config, and MCP client.
+- CORS origins corrected from port 13001 to 10721.
+- `config_widget.py` fallback URL was writing 13000 back on empty save — fixed.
+- Archived stale `CALIBRE_PLUGIN_IMPLEMENTATION_NOTES.md` (January 2025 checklist, superseded).
+- Replaced 22KB boilerplate `CALIBRE_INTEGRATION_GUIDE.md` with accurate architecture doc.
+
+
+### Added
+- **SOTA 2026 Industrialization**: Fleet-wide modernization for April 2026 standards.
+- **FastMCP 3.2.0 Parity**: Full integration of native prompts, skills, and sampling features.
+- **Biome Integration**: High-fidelity linting and formatting toolchain for the web dashboard.
+- **Universal Connect Pattern**: Support for multiple simultaneous clients via stdio and HTTP transports.
+- **Concurrency Safety**: Thread-safe database operations preventing race conditions in multi-client environments.
+
+### Changed
+- **Codebase Hardening**: Purged all executable `print` statements to ensure strict JSON-RPC protocol compliance.
+- **Ruff Standard**: Aligned with 120-character line length and expanded SOTA linting rules. 
+- **Webapp Performance**: Optimized Next.js dashboard with adjacent port assignments (10722).
+
+### Fixed
+- **FastAPI Routing Error**: Removed legacy decorators to align with FastMCP 3.2+ architecture.
+- **Database Concurrency**: Implemented thread-safe operations with row-level locking.
+### Added
+- **Import Hub Stabilization**: Comprehensive hardening of automated book ingestion sources.
+- **Anna's Archive UX Optimization**:
+    - Automatic detection of interactive "landing pages" (CAPTCHAs and timers).
+    - Improved mirror management with support for custom mirrors via `ANNAS_MIRRORS` environment variable.
+    - Specialized error code `MANUAL_INTERACTION_REQUIRED` for mirrors requiring browser fallback.
+- **arXiv Reliability**:
+    - Exponential backoff retry logic (5 attempts) to mitigate `HTTP 429` rate limiting.
+    - Custom User-Agent string to comply with arXiv API usage guidelines.
+- **Global Import Settings**:
+    - Persistent UI settings for target library selection.
+    - Automated tag injection (e.g., "automated-import") and series assignment for incoming books.
+- **Documentation**: New [DOWNLOAD_SITES.md](docs/DOWNLOAD_SITES.md) guide detailing mirror configurations and technical requirements.
 
 ## [1.4.0] - 2026-03-27
 ### Added
-- MCPB packaging alignment (v0.2 manifest)
-- docs/PROMPTS.md and docs/COOKBOOK.md
-- skill://calibre-expert bundled expert skill
-- Self-contained LanceDB vector store
-- Background metadata RAG index build with progress polling
-
+- **MCPB — mcp-central-docs alignment:** `mcpb/manifest.json` v0.2 with `python -m calibre_mcp`, `tools` as `{name, description}` list, `user_config`, compatibility.
+- **docs/PROMPTS.md** — MCP `@mcp.prompt()` catalog with suggested tool pairings.
+- **docs/COOKBOOK.md** — Goal-oriented recipes (FTS vs RAG lanes, workflows).
+- **skill://calibre-expert** — Bundled expert skill for library management.
+- **Self-contained LanceDB vector store** — Decoupled RAG logic for easier maintenance.
+- **Metadata RAG build progress** — Background build with percentage gauge and status polling for large libraries.
 ### Changed
-- Unified CI workflow with PyPI publishing
-- Webapp startup SOTA (port reservoir 10720/10721)
-
+- **GitHub Actions:** Unified `ci.yml` and released-based `ci-cd.yml` with PyPI publishing.
+- **Webapp startup SOTA** — Port reservoir 10720/10721; `start.ps1` with zombie clear.
+- **FastMCP 3.1 Tool Preloading** — Fixed issues with module resolution on Windows.
 ### Fixed
-- Book isbn/lccn AttributeError (ORM mapping)
-- Webapp layout standardization
+- **Book isbn/lccn AttributeError** — Fixed ORM mapping for identifiers.
+- **Webapp layout** — Standardized 3-column layout and improved topbar accessibility.
 
 ## [1.3.0] - 2026-02-26
 ### Added
-- Neural Media RAG portmanteau (LanceDB-backed)
-- DeepIngestor for full-text parsing and semantic chunking
-- Agentic Synthesis API for central-docs integration
+- **Neural Media RAG Portmanteau**: Unified semantic search and Q&A tool powered by LanceDB.
+- **DeepIngestor**: Full-text parsing and semantic chunking for high-density embeddings.
+- **Agentic Synthesis API**: Expanded webapp backend with search/chat endpoints for central docs integration.
 
 ## [1.2.0] - 2026-02-04
 ### Added
-- MCPB packaging support
-
+- **MCPB Packaging**: Support for bundle-based installation.
 ### Fixed
-- Startup reliability (standardized Python, dependency resolution)
+- **Startup Reliability**: Standardized on system Python and fixed dependency resolution.
 
 ## [1.1.0] - 2026-01-22
 ### Added
-- Natural language search via FastMCP sampling
-- Auto-open books when search results are unique
-- Title-specific search bypassing FTS
+- **Natural Language Search**: Intelligent query parsing with FastMCP sampling.
+- **Auto-Open Books**: Unique search results automatically launch in system viewer.
+- **Title-Specific Search**: Precise title matching bypassing FTS.
 
 ## [1.0.0] - 2025-10-21
 ### Added
-- Initial release with core library management tools
+- Initial release with core library management tools.
+

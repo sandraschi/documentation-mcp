@@ -1,323 +1,215 @@
-﻿# Meta MCP - Product Requirements Document
+# MetaMCP -- product requirements
 
-> **Canonical PRD:** `D:/Dev/repos/meta_mcp/PRD.md` (2026-06-06: **Fleet cold-start probe** + **Broken\*** mode; 2026-05-31: **repo_inspiration** suite).
+## Summary
 
-### Fleet Cold-Start Probe (mirror)
+MetaMCP manages a fleet of MCP servers: scaffolding, harness generation, remote GitHub study, fleet probes, config audit, diagnostics, and analysis. It ships as **stdio MCP**, a **REST API**, and a **web dashboard** (`web_sota`).
 
-- **UI:** `web_sota/src/pages/FleetStartupProbe.tsx` — Test one / Full fleet / **Broken\* (N)**
-- **API:** `broken_only` on `POST /api/v1/fleet/startup-probe/run`
-- **Ops doc:** [FLEET_WEBAPP_PROBE.md](../../docs/operations/FLEET_WEBAPP_PROBE.md)
-
-## ðŸŽ¯ Product Vision
-
-**Meta MCP** is the ultimate "Argh-Coding" bloop-buster - a comprehensive management platform for MCP (Model Context Protocol) servers that prevents the developer pain points we've all experienced through enhanced response patterns and proactive tooling.
-
-## ðŸŽ­ The Problem: "Argh-Coding" Moments
-
-Every developer has experienced these frustrating moments:
-
-### ðŸš¨ **Critical Production Issues**
-- **Unicode Logging Crashes**: `logger.info("ðŸš€ Process started")` causes service crashes and restart loops
-- **Docker Desktop Confusion**: UI works but doesn't, tray frozen, main UI deceptive
-- **Framework Assumption Errors**: `list_tools()` method doesn't exist, hours wasted
-- **MCPB Packaging Failures**: Missing dependencies, incorrect manifests
-
-### ðŸŒ **Productivity Killers**
-- **Mysterious Service Restarts**: No clear error messages, infinite loops
-- **SOTA Compliance Gaps**: Repositories not following FastMCP 3.1.1+.1+ standards
-- **Manual Server Management**: No centralized MCP server lifecycle management
-- **Repetitive Scaffolding**: Building MCP servers from scratch every time
-
-## ðŸ’¡ Solution: Enhanced Response Patterns
-
-Meta MCP implements **FastMCP 3.1.1+.1+ enhanced response patterns** that transform developer frustration into productive solutions:
-
-```python
-# Before: Mysterious crashes
-Service crashed with no clear error message
-
-# After: Immediate diagnosis
-"LOGGING_UNICODE_CRASH: Found 16 Unicode loggers causing restart loops.
- Auto-fixed all, added pre-commit hooks. Success stories: qbt-mcp stable."
-```
-
-## ðŸ—ï¸ Current Enterprise Architecture
-
-### **ðŸŽ¯ MetaMCP Enterprise: Complete MCP Ecosystem Orchestrator**
-
-MetaMCP has evolved from a basic MCP server into a **comprehensive enterprise platform** that surpasses traditional MCP management tools. This is a "tricky" application because it orchestrates complex interactions between:
-
-- **8 Modular Tool Suites** running simultaneously
-- **Multi-client IDE Integration** across 5+ development environments
-- **Real-time Server Lifecycle Management** with process control
-- **Cross-platform Compatibility** with Windows-first design philosophy
-- **Enterprise Web Dashboard** with live API integration
-- **Repository Intelligence** with health scoring and recommendations
-
-### **ðŸ”§ Key Technical Challenges Addressed**
-
-#### **Unicode Safety First (The "Tricky" Part)**
-- **Hex Escape Sequences**: All Unicode uses `\uXXXX` format to prevent grep crashes
-- **Safe Scanner Philosophy**: Literal-free detection prevents recursive tool failures
-- **Comprehensive Validation**: Pre-commit hooks, CI checks, and runtime validation
-- **Cross-Platform Unicode**: Windows, macOS, Linux compatibility with encoding safety
-
-#### **Modular Service Architecture**
-- **8 Independent Services**: Each with dedicated responsibilities and error isolation
-- **Service Health Monitoring**: Real-time status tracking across all components
-- **Graceful Degradation**: System continues functioning when individual services fail
-- **Hot-swappable Components**: Services can be restarted without affecting others
-
-#### **Enterprise Process Management**
-- **Server Lifecycle Control**: Start/stop/monitor MCP servers with PID tracking
-- **Cross-Platform Process Handling**: Windows subprocess management with proper cleanup
-- **Resource Monitoring**: CPU, memory, and performance tracking
-- **Process Isolation**: Each server runs in isolated process space
-
-### **ðŸŒ Web Dashboard Complexity**
-
-#### **Real API Integration (Not Mock Data)**
-- **Live Health Monitoring**: Actual service status from 8 running services
-- **Dynamic Server Discovery**: Real-time scanning and status updates
-- **Tool Inventory**: Live tool counting and metadata extraction
-- **Client Configuration**: Actual IDE integration status across platforms
-
-#### **Enterprise UI Challenges**
-- **8 Service Health Display**: Real-time status indicators with error handling
-- **Multi-client Integration**: Complex state management across 5+ IDEs
-- **Server Management Interface**: Process control with safety mechanisms
-- **Repository Analysis**: Deep codebase scanning with progress indicators
-
-## ðŸ› ï¸ Core Product Features
-
-### ðŸ”§ **Enterprise Diagnostic Tools**
-
-#### **ðŸš¨ EmojiBuster / Safe Scanner (Priority 1 - CRITICAL)**
-- **Audit repositories** using the `safe_scanner` philosophy (literal-free detection)
-- **Hex-based identification** prevents auditing tool crashes (e.g., recursive grep)
-- **Auto-fix capability** with standard ASCII replacements
-- **Prevention tools** (pre-commit hooks, CI validation)
-- **Success stories tracking** for stability verification
-
-**Enhanced Response Example:**
-```python
-{
-    "success": True,
-    "operation": "emojibuster_scan",
-    "scan_results": {
-        "repos_scanned": ["qbt-mcp", "docs-mcp"],
-        "unicode_loggers_found": 16,
-        "auto_fixed": 16,
-        "crash_risk_eliminated": "HIGH"
-    },
-    "success_stories": [
-        "qbt-mcp: 3 Unicode loggers removed, no more crashes",
-        "docs-mcp: 2 Unicode loggers removed, service stable"
-    ],
-    "recommendations": [
-        "Add pre-commit hook for Unicode logging validation",
-        "Weekly audits for new Unicode additions"
-    ]
-}
-```
-
-#### **ðŸ“‹ SOTA Validator**
-- **FastMCP 3.1.1+.1+ compliance checking**
-- **Enhanced response pattern validation**
-- **MCPB packaging standards verification**
-- **Unicode safety standards compliance**
-
-#### **ðŸ” Runt Analyzer**
-- **Repository health assessment**
-- **Upgrade readiness evaluation**
-- **SOTA compliance scoring**
-- **Improvement roadmap generation**
-
-### ðŸ—ï¸ **Generation & Scaffolding Tools**
-
-#### **ðŸš€ MCP Server Builder**
-- **SOTA-compliant server scaffolding**
-- **Enhanced response pattern templates**
-- **Unicode-safe logging configuration**
-- **FastMCP 3.1.1++ persistence setup**
-
-#### **ðŸ³ Docker Scaffolder**
-- **Production-ready container generation**
-- **Unicode-safe logging configuration**
-- **Health check implementation**
-- **Monitoring stack integration**
-
-#### **ðŸŒ WebApp Builder** (Future - refactor 8000-line script)
-- **Fullstack application generation**
-- **MCP integration patterns**
-- **Production deployment ready**
-
-#### **ðŸŽ¨ Landing Page Builder**
-- **Startup-ready page generation**
-- **Beautiful hero sections**
-- **MCP-powered content management**
-
-### ðŸŒ **Management & Operations**
-
-#### **ðŸ“Š Server Discovery**
-- **MCP server scanning across system**
-- **Client configuration analysis**
-- **Tool inventory and metadata**
-- **Connection status monitoring**
-- **Client Integration Diagnostics**: Cross-client health checks
-
-#### **âš™ï¸ Configuration Management**
-- **Safe client configuration updates**
-- **MCPB package management**
-- **Environment-specific configs**
-- **Rollback capabilities**
-
-## ðŸŽ¯ Target Users
-
-### Primary Users
-- **MCP Server Developers**: Building and maintaining MCP servers
-- **DevOps Engineers**: Managing MCP deployments
-- **System Administrators**: Overseeing MCP infrastructure
-
-### Secondary Users
-- **Application Developers**: Using MCP servers in applications
-- **Technical Leads**: Ensuring team compliance with standards
-- **Platform Engineers**: Managing MCP ecosystems
-
-## ðŸš€ Success Metrics
-
-### Technical Metrics
-- **Unicode Crash Reduction**: Target 95% reduction in logging-related crashes
-- **SOTA Compliance**: 90% of managed repositories SOTA-compliant
-- **Tool Adoption**: 80% of MCP developers using Meta MCP tools
-- **Response Time**: <5 seconds for repository scans
-
-### Business Metrics
-- **Developer Productivity**: 50% reduction in debugging time
-- **Service Stability**: 99% uptime for MCP-managed services
-- **Onboarding Speed**: New MCP servers deployed in <30 minutes
-- **Community Growth**: 100+ active users in first 6 months
-
-## ðŸ“‹ Technical Requirements
-
-### Core Architecture
-- **FastMCP 3.1.1+.1+**: Enhanced response patterns implementation
-- **Unicode Safety**: Comprehensive logging Unicode validation
-- **Cross-Platform**: Windows, macOS, Linux support
-- **Multi-Repository**: Simultaneous repository management
-
-### Integration Requirements
-- **Git Integration**: Repository scanning and management
-- **Docker Integration**: Container management and monitoring
-- **CI/CD Integration**: Automated validation and deployment
-- **Monitoring Integration**: Health checks and alerting
-
-### Performance Requirements
-- **Scalability**: Handle 100+ repositories simultaneously
-- **Speed**: Complete repository scan in <60 seconds
-- **Memory**: <500MB for typical operations
-- **Storage**: Persistent configuration and cache management
-
-## ðŸ—“ï¸ Development Roadmap
-
-### Phase 1: Foundation (âœ… COMPLETED - Q1 2026)
-- [x] **Enterprise MCP Server**: FastMCP 3.1.1+.1+ with 8 modular tool suites
-- [x] **Complete Tool Registry**: Auto-discovery system with 40+ tools
-- [x] **EmojiBuster / Safe Scanner**: Unicode logging and docstring crash prevention
-- [x] **Agent Protocol Updates**: Implement "Follow All Rules" frontmatter in `gemini.md`
-- [x] **SOTA Validator**: FastMCP 3.1.1+.1+ compliance with health scoring
-- [x] **Enhanced Documentation**: Complete standards integration
-- [x] **Enterprise Web Dashboard**: Real-time monitoring and management UI
-
-### Phase 2: Enterprise Expansion (ðŸš€ CURRENT - Q2 2026)
-- [x] **Server Lifecycle Management**: Start/stop/monitor MCP servers with process control
-- [x] **Tool Execution Engine**: Remote tool invocation across MCP server networks
-- [x] **Repository Intelligence**: Deep codebase analysis with health assessment
-- [x] **Client Ecosystem Management**: Multi-client configuration for 5+ IDEs
-- [x] **MCP Server Builder**: SOTA-compliant scaffolding with enhanced patterns
-- [x] **Docker Scaffolder**: Production container generation with monitoring
-- [x] **Web Frontend**: Complete enterprise UI with real functionality
-- [x] **CI/CD Integration**: Automated validation and deployment pipelines
-
-### Phase 2.5: Agent Orchestration (ðŸ“‹ PLANNED - Feb 2026)
-- [ ] **Agent Lifecycle Tools**: start_agent, get_agent_status, get_agent_report, stop_agent, list_agents
-- [ ] **Tool-chain agents**: Run sequence of tools on a server; await completion; structured returns
-- [ ] **Swarms** (later): Fan-out to multiple agents, aggregate reports
-- See: [docs/AGENT_LIFECYCLE_IMPLEMENTATION_PLAN.md](docs/AGENT_LIFECYCLE_IMPLEMENTATION_PLAN.md)
-
-### Phase 3: Advanced Ecosystem (ðŸ“‹ PLANNED - Q3-Q4 2026)
-- [ ] **WebApp Builder**: Refactor 8000-line script into modular enterprise components
-- [ ] **Landing Page Builder**: Enhanced startup-ready page generation with AI optimization
-- [ ] **Advanced Analytics**: Usage metrics, performance insights, and predictive analytics
-- [ ] **Plugin System**: Third-party tool extensions and marketplace ecosystem
-- [ ] **Multi-tenant Architecture**: Enterprise deployment with RBAC and audit trails
-- [ ] **AI-Powered Insights**: ML-driven recommendations and automated remediation
-- [ ] **Federated MCP Networks**: Cross-organization MCP server orchestration
-
-## ðŸŽ¨ Design Principles
-
-### Enhanced Response Patterns
-All tools must implement FastMCP 3.1.1+.1+ enhanced responses:
-- **Progressive Success**: Multi-level detail with recommendations
-- **Error Recovery**: Specific recovery steps with alternatives
-- **Conversational Context**: Natural dialogue flow
-- **Rich Metadata**: Search and navigation support
-
-### Unicode Safety First (Safe Scanner Standard)
-- **Zero Literal Unicode**: All tools must use hex escape sequences (e.g., `\uXXXX`) instead of literal emojis in source code.
-- **Global Docstring Safety**: docstrings must be ASCII-only to prevent client-side UI crashes.
-- **Comprehensive Validation**: Pre-commit hooks and CI checks for hex compliance.
-- **Auto-Fix Capability**: Automatic Unicode replacement and ASCII sanitization.
-
-### Developer Experience
-- **Immediate Value**: Tools provide instant benefit
-- **Clear Documentation**: Comprehensive examples and patterns (including Agent Protocol frontmatter)
-- **Progressive Disclosure**: Simple to advanced usage
-- **Native PowerShell Standard**: All scripts must use native cmdlets (no Linux aliases)
-- **Community Driven**: User feedback drives development
-
-## ðŸš€ Go-to-Market Strategy
-
-### Launch Strategy
-1. **Technical Blog Posts**: "Argh-Coding" series on Hacker News
-2. **MCP Community**: Integration with mcp-central-docs
-3. **Open Source**: MIT license, community contributions
-4. **Tool Showcases**: Live demonstrations of enhanced responses
-
-### Growth Strategy
-1. **Word of Mouth**: Developer success stories
-2. **Integration Partners**: MCP framework maintainers
-3. **Content Marketing**: Educational content on Unicode safety
-4. **Community Building**: Contributor onboarding program
-
-## ðŸ“„ Success Criteria
-
-### Phase 1 Success (âœ… ACHIEVED)
-- [x] **8 Tool Suites**: Complete MCP ecosystem management platform
-- [x] **Enterprise Web Dashboard**: Real-time monitoring and management
-- [x] **Unicode Safety**: Comprehensive crash prevention across all components
-- [x] **Production Stability**: Zero Unicode-related crashes in MetaMCP itself
-- [x] **Cross-Platform**: Windows, macOS, Linux compatibility verified
-
-### Phase 2 Success (ðŸš€ CURRENT TARGETS)
-- [x] **Server Lifecycle Management**: Full process control for MCP servers
-- [x] **Tool Execution Networks**: Remote tool invocation across server ecosystems
-- [x] **Repository Intelligence**: Deep analysis with health scoring and recommendations
-- [x] **Client Ecosystem**: Multi-client configuration management for 5+ IDEs
-- [x] **Enterprise UI**: Complete web interface with real functionality
-- [ ] **CI/CD Integration**: Automated validation pipelines (Next Priority)
-- [ ] **50+ GitHub stars** within first month post-Phase 2 completion
-- [ ] **10+ community contributors** actively participating
-
-### Phase 3 Success (ðŸ“‹ FUTURE TARGETS)
-- [ ] **100+ active users** by end of 2026
-- [ ] **90% reduction** in Unicode-related crashes for users
-- [ ] **Integration** with major MCP frameworks and platforms
-- [ ] **Established** as go-to tool for MCP development ecosystem
-- [ ] **Marketplace** with 20+ third-party extensions
-- [ ] **Enterprise deployments** with multi-tenant architecture
+**Stack:** Python 3.12+ · FastMCP 3.4+ · FastAPI · React/Vite · Tailwind  
+**Version:** `0.3.0` (see `pyproject.toml`)
 
 ---
 
-**Meta MCP**: Transforming "Argh!" moments into "Aha!" moments through enhanced response patterns and proactive developer tooling. ðŸš€
+## Problems addressed
 
+| Problem | Approach |
+|---------|----------|
+| MCP servers hard to start/stop across many repos | Fleet runtime service + dashboard |
+| Silent failures (Unicode in logs, bad PowerShell, stale tools) | Diagnostics suite (EmojiBuster, validators, scans) |
+| No way to verify fleet repos actually boot | Cold-start + cold-install probes |
+| Studying upstream repos requires clone + grep | `inspire_repo_*` over GitHub API |
+| New MCP repos repeat boilerplate | Scaffolding tools |
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  web_sota (React)  ←→  FastAPI /api/v1  ←→  FastMCP    │
+│       │                      │                    │      │
+│  Fleet tabs              Services            MCP tools   │
+│  Tool Lab                (probe, runtime,    (stdio for  │
+│  Repo Inspiration         analysis, …)        IDEs)      │
+└─────────────────────────────────────────────────────────┘
+         │
+         ▼
+  fleet_probes/scripts/  →  PowerShell probes on dev host
+  ~/.meta_mcp/fleet/     →  manifests, reports, progress
+```
+
+**Services (representative):** discovery, diagnostics, fleet runtime, fleet startup probe, fleet cold-install, analysis depot, repo inspiration, toolchains, scaffolding.
+
+**Active frontend:** `web_sota/` only. `frontend/` is legacy; do not edit for UI work.
+
+---
+
+## Fleet probes
+
+Orchestration lives in meta_mcp; probe scripts are vendored under `fleet_probes/`. Runtime state defaults to `~/.meta_mcp/fleet/`. **mcp-central-docs is not required** at runtime (optional handbook mirror).
+
+### Cold-start probe
+
+| Item | Detail |
+|------|--------|
+| Question | Does `start.ps1` bring up backend + frontend; is console output clean? |
+| Script | `fleet_probes/scripts/fleet-webapp-start-probe.ps1` |
+| UI | Fleet dashboard → **Cold-start** tab |
+| API | `POST /api/v1/fleet/startup-probe/run`, `GET …/report` |
+| MCP | `fleet_startup_probe`, `fleet_startup_probe_report` |
+| Modes | Test one repo, full fleet, **Broken\*** (re-run failures from last report) |
+| Safety | meta_mcp excluded from full/broken runs (probe host) |
+
+Per repo: parse-check `start.ps1` → start → backend health → frontend + Vite proxy → **dirty log parse** → teardown.
+
+**Dirty log (2026-06):** capture via `FLEET_PROBE_RUN=1` and `Start-FleetDetachedShell`. Flag HTTP 4xx/5xx, STARTUP PROBE warnings, proxy errors. Fields: `dirtyLog`, `dirtyLogOk`, `consoleIssues[]`. Outcome `stack_degraded` when stack is up but logs are dirty. Teardown: two-pass `Stop-FleetPortSquatters` (no `taskkill`).
+
+### Cold-install probe
+
+| Item | Detail |
+|------|--------|
+| Question | Can a consumer follow `INSTALL.md` (mcpb / stdio / manual)? |
+| Script | `fleet_probes/scripts/fleet-cold-install-probe.ps1` |
+| UI | Fleet dashboard → **Cold-install** tab |
+| API | `POST /api/v1/fleet/cold-install/run`, `GET …/report` |
+| MCP | `fleet_cold_install_probe`, `fleet_cold_install_probe_report` |
+| mcpb | **Claude Desktop only** (`mcpb install` → `claude_desktop_config.json`) |
+| stdio | Cursor, Windsurf, Antigravity, Zed, OpenCode via `stdio_mcp_smoke.py` |
+| Sandbox | virtualization-mcp APIs for consumer install runs; host stdio smoke fallback |
+
+### Planned probe extensions
+
+Manifest flags (not separate programs yet): Docker `build`/`compose` health, Tauri build smoke. See [docs/fleet/FLEET_PROBE_ARCHITECTURE.md](docs/fleet/FLEET_PROBE_ARCHITECTURE.md).
+
+### Dynamic routing (0.5.0)
+
+Lazy-loading proxy for the 130+ fleet MCP server ecosystem.
+
+| Item | Detail |
+|------|--------|
+| Entry point | `meta_route_tool(tool_name, arguments, target_server?)` |
+| Index | SQLite capability index at `~/.meta_mcp/capability_index.sqlite3` |
+| Discovery | Scans `D:/Dev/repos/` for pyproject.toml, probes running HTTP servers, reads IDE mcp.json |
+| Hot-start | Subprocess via `uv run` with `MCP_PORT` env, poll up to 30s |
+| Protocol | MCP JSON-RPC POST to `http://127.0.0.1:{port}/mcp` |
+| REST mirror | POST/GET `/api/v1/routing/call`, `/status`, `/rebuild`, `/search` |
+| Tools | `meta_route_tool`, `meta_search_capabilities`, `meta_routing_status`, `meta_routing_reindex`, `meta_routing_servers` |
+
+**Why not static mcp.json?** With 130+ servers, the JSON definitions saturate the agent's context window. The router resolves tool names on demand, hot-starts servers only when called, and returns results without the LLM ever knowing the full server topology.
+
+
+---
+
+## Core features
+
+### Diagnostics
+
+- **EmojiBuster / safe scanner** -- detect/fix Unicode in logs and docstrings that crash Windows consoles and grep
+- **PowerShell validator** -- native cmdlet patterns (no Linux aliases in fleet scripts)
+- **Runt analyzer / fleet analyzer** -- repo health and upgrade readiness
+- **`help`** -- tool catalog (`list_mcp_tools` / `find_mcp_tools` aliases)
+
+### Repository intelligence
+
+- **Repo packing** -- Repomix-style context bundles for LLMs
+- **Analysis depot** -- durable runs under `~/.meta_mcp/analysis/`
+- **Repo inspiration** -- `inspire_repo_*` (structure, files, patterns, workflow); MIT workflow inspired by Repomuse; web **Repo Inspiration** page
+- **Prefab card** -- `inspire_repo_structure_card` when `prefab-ui` enabled
+
+### Fleet runtime
+
+- Start/stop/monitor MCP server processes
+- IDE config helpers and toolchains (profiles in `~/.meta_mcp_toolchains.json`)
+- MCP prompts: `inspire_repo_study`, `meta_mcp_fleet_discovery`
+- Resources: `resource://meta-mcp/repo-inspiration/skills`, `resource://meta-mcp/capabilities`
+
+### Scaffolding
+
+- MCP server, Docker, webapp, and landing-page generators (PowerShell-driven; large `tools/fullstack-builder.ps1`)
+
+### Web dashboard
+
+- **Tool Lab** -- run any registered tool with DynamicForm or raw JSON
+- **Fleet** -- runtime audit, cold-start, cold-install tabs
+- **Settings** -- local LLM proxy (`/api/v1/llm/*`) for Ollama / LM Studio
+- Default ports: **10718** (API + static build), **10719** (Vite dev)
+
+---
+
+## FastMCP / MCP surface status
+
+| Capability | Status |
+|------------|--------|
+| FastMCP 3.2+ | Required (`fastmcp>=3.2.0`) |
+| Sampling (`ctx.sample`) | `inspire_repo_workflow` when host supports it |
+| MCP prompts | Implemented |
+| MCP skills resources | Implemented |
+| Prefab UI | Core dep; `META_MCP_PREFAB_APPS=0` disables App tools |
+| Agent lifecycle tools | Planned -- see `docs/AGENT_LIFECYCLE_IMPLEMENTATION_PLAN.md` |
+
+---
+
+## Requirements
+
+### Runtime
+
+- Python 3.10+ (3.12+ recommended), [uv](https://docs.astral.sh/uv/)
+- Windows for fleet probe PowerShell scripts
+- Optional: `GITHUB_TOKEN`, `FLEET_REPOS_ROOT`, fleet path overrides (see [fleet_probes/README.md](fleet_probes/README.md))
+
+### Dependencies (core)
+
+Declared in `pyproject.toml`: fastmcp, fastapi, uvicorn, aiohttp, prefab-ui, etc. **Pillow (PIL) is not a core dependency** (scaffold output only).
+
+### Privacy
+
+Local operator tool -- no user accounts. IDE configs, probe logs, and `~/.meta_mcp/` may contain secrets or hostnames. See [docs/PRIVACY.md](docs/PRIVACY.md).
+
+### Unicode safety
+
+- Prefer ASCII in tool docstrings and log messages on Windows
+- Diagnostics tools enforce/detect literal Unicode in repos under scan
+
+---
+
+## Roadmap
+
+### Done
+
+- [x] Modular MCP tool suites and `help` catalog
+- [x] Web dashboard (`web_sota`) with Tool Lab and fleet runtime
+- [x] Repo inspiration + analysis depot
+- [x] Fleet cold-start probe (UI, API, MCP, dirty log, Broken\*)
+- [x] Fleet cold-install probe (UI, API, MCP, mcpb + multi-IDE stdio)
+- [x] Vendored `fleet_probes/` + `fleet_paths` (MCD-free runtime)
+
+### Next
+
+- [ ] CI-friendly probe runs (non-interactive, artifact upload)
+- [ ] Playwright cold-start pass (SPA render after `stack_ok`)
+- [ ] Docker / Tauri manifest probe phases
+- [ ] Agent lifecycle MCP tools
+- [ ] Track pre-commit hook in repo (currently local `.git/hooks` only)
+
+### Later
+
+- [ ] Webapp builder refactor (split monolithic `fullstack-builder.ps1`)
+- [ ] Broader Prefab coverage for list/status tools
+
+---
+
+## Documentation map
+
+| Doc | Purpose |
+|-----|---------|
+| [README.md](README.md) | User-facing overview |
+| [INSTALL.md](INSTALL.md) | Install and IDE setup |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Server and API layout |
+| [docs/TOOLS.md](docs/TOOLS.md) | Tool index |
+| [docs/fleet/FLEET_PROBE_ARCHITECTURE.md](docs/fleet/FLEET_PROBE_ARCHITECTURE.md) | Probe design |
+| [CHANGELOG.md](CHANGELOG.md) | Release notes |
+
+---
+
+## License
+
+MIT -- see [LICENSE](LICENSE).

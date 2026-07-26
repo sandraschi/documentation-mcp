@@ -1,19 +1,25 @@
 # Docker MCP — fleet status
 
-**Last reviewed**: 2026-06-02  
-**Upstream version**: 3.3.0  
+**Last reviewed**: 2026-06-24  
+**Upstream version**: 3.3.1-beta  
 **Repo**: `D:\Dev\repos\docker-mcp`
 
 ## Compliance snapshot
 
 | Standard | Status |
 |----------|--------|
-| FastMCP 3.3 | OK (`3.3.1` resolved) |
-| WEBAPP_STANDARDS (`/logs`, settings LLM glom) | OK |
-| MCPB root `manifest.json` v0.2 | OK (~229 KB pack) |
-| Tauri native build (Windows) | OK (NSIS + MSI 3.3.0) |
-| README fleet shape (~100 lines upstream) | OK |
-| Legacy `mcpb/` folder | Removed |
+| FastMCP 3.3 | OK |
+| WEBAPP_STANDARDS (/logs, settings LLM glom, help tabs) | OK |
+| MCPB root manifest.json v0.2 | OK |
+| Tauri native build (Windows NSIS) | OK (3.3.1-beta, CUA-certified) |
+| README fleet shape | OK |
+| CSP explicit with backend port | OK (pitfall #13 fixed) |
+| Connection health store (zustand) | OK |
+| Ctrl+Scroll zoom | OK |
+| CUA smoke test (9 phases) | OK (pywinauto + OCR + nav click-through) |
+| Docker triple kill recovery | OK (POST /api/docker/recover) |
+| Diagnostics endpoint | OK (GET /api/v1/diagnostics) |
+| data-testid on connection status | OK |
 
 ## Ports
 
@@ -24,11 +30,11 @@
 
 ## Build artifacts (local)
 
-- MCPB: `dist/docker-mcp-v3.3.0.mcpb`
-- Tauri: `native/target/release/bundle/nsis/Docker MCP_3.3.0_x64-setup.exe`
-- Sidecar: `native/binaries/docker-mcp-backend-x86_64-pc-windows-msvc.exe`
+- NSIS: `native/target/release/bundle/nsis/Docker MCP_3.3.1_x64-setup.exe`
+- Backend: `dist/docker-mcp-backend.exe` (28.6 MB, PyInstaller onefile)
 
 ## Open items
 
-- README Preview screenshots (WEBAPP_STANDARDS) — optional
-- `DOCKER_MCP_PREFAB_APPS` env documented in CONFIGURATION; wire when needed
+- Version tag needs bump from 3.3.0 → 3.3.1 in pyproject.toml, tauri.conf.json
+- GitHub release: `gh release create v3.3.1-beta dist/*.exe --title "Docker MCP 3.3.1-beta" --notes "See CHANGELOG.md"`
+- CUA cert on remaining 13 built repos (CSP fix applied, need rebuild + test)

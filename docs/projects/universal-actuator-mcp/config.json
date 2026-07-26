@@ -84,7 +84,9 @@
             "env": {
                 "PYTHONPATH": "D:/Dev/repos/advanced-memory-mcp/src"
             },
-            "githubUrl": "https://github.com/sandraschi/advanced-memory-mcp"
+            "githubUrl": "https://github.com/sandraschi/advanced-memory-mcp",
+            "url": "127.0.0.1:10732",
+            "scheme": "sse"
         },
         "infrastructure": {
             "command": "python",
@@ -117,7 +119,9 @@
             "env": {
                 "PYTHONPATH": "D:/Dev/repos/plex-mcp/src"
             },
-            "githubUrl": "https://github.com/sandraschi/plex-mcp"
+            "githubUrl": "https://github.com/sandraschi/plex-mcp",
+            "url": "127.0.0.1:10740",
+            "scheme": "sse"
         },
         "calibre": {
             "command": "python",
@@ -128,7 +132,9 @@
             "env": {
                 "PYTHONPATH": "D:/Dev/repos/calibre-mcp/src"
             },
-            "githubUrl": "https://github.com/sandraschi/calibre-mcp"
+            "githubUrl": "https://github.com/sandraschi/calibre-mcp",
+            "url": "127.0.0.1:10720",
+            "scheme": "sse"
         },
         "robotics": {
             "command": "python",
@@ -161,12 +167,28 @@
             "env": {
                 "PYTHONPATH": "D:/Dev/repos/immich-mcp/src"
             },
-            "githubUrl": "https://github.com/sandraschi/immich-mcp"
+            "githubUrl": "https://github.com/sandraschi/immich-mcp",
+            "url": "127.0.0.1:10839",
+            "scheme": "sse"
         },
-        "consumption": {
+        "docsops": {
             "command": "python",
             "args": [
-                "D:/Dev/repos/universal-actuator-mcp/consumption_router.py"
+                "-m",
+                "docs_mcp"
+            ],
+            "env": {
+                "PYTHONPATH": "D:/Dev/repos/mcp-central-docs/src"
+            },
+            "githubUrl": "https://github.com/sandraschi/mcp-central-docs",
+            "url": "127.0.0.1:10795",
+            "scheme": "sse"
+        },
+        "consumption": {
+            "command": "uv",
+            "args": [
+                "run",
+                "universal-actuator-mcp"
             ],
             "env": {
                 "PYTHONPATH": "D:/Dev/repos/calibre-mcp/src;D:/Dev/repos/plex-mcp/src;D:/Dev/repos/immich-mcp/src"

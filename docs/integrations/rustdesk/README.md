@@ -64,6 +64,63 @@ The `hbbs` and `hbbr` services now survive reboots and are manageable via `servi
 
 ---
 
+### rustdesk++ Fork — Relay Mesh Backbone
+
+The [rustdesk++ fork](https://github.com/sandraschi/rustdesk/tree/rustdesk-pp) adds a headless CLI and REST API, turning the relay into a **fleet mesh backbone** for cross-server communication.
+
+#### Architecture
+
+```
+Any peer  ──→ hbbs :21116 ──→ PunchHoleRequest ──→ Peer discovery
+                │                                       │
+                └── hbbr :21117 ◄── relay pairing ──────┘
+                                    │
+                         ┌─────────┼─────────┐
+                         ▼         ▼         ▼
+                    File xfer  MCP tunnel  Remote exec
+                         (Phase 2)    (Phase 3)
+```
+
+#### NSSM Services (24/7)
+
+| Service | Port | Status |
+|---------|------|--------|
+| RustDesk-HBBS (ID server) | 21116 | ✅ Running, auto-start |
+| RustDesk-HBBR (Relay) | 21117 | ✅ Running, auto-start |
+| RustDesk (client) | — | ✅ Running, auto-start |
+| rustdesk++ API server | 10806 | ✅ Running, auto-start |
+
+#### REST API (rustdesk++ `--api-server`)
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/v1/health` | Fork API server status |
+| `GET /api/v1/peers` | List registered peers from hbbs DB |
+| `GET /api/v1/peer/{id}` | Check peer online/offline status |
+| `POST /api/v1/file/upload` | Send file via relay |
+| `POST /api/v1/file/download` | Receive file via relay |
+| `POST /api/v1/peer/{id}/restart` | Restart remote peer |
+| `POST /api/v1/peer/{id}/shutdown` | Shutdown remote peer |
+| `POST /api/v1/peer/{id}/dir` | Create remote directory |
+
+#### CLI (rustdesk++)
+
+| Command | Description |
+|---------|-------------|
+| `--send-file <id> <local> <remote> [pwd]` | Send file via relay |
+| `--list-dir <id> <path> [pwd]` | List remote directory |
+| `--peer-info <id>` | Check if peer is online |
+| `--restart <id> [pwd]` | Restart remote PC |
+| `--shutdown <id> [pwd]` | Shutdown remote PC |
+| `--create-dir <id> <path> [pwd]` | Create remote directory |
+| `--status` | Local Fritz/relay status |
+
+#### Configuration
+
+hbbs runs with `--mask 192.168.0.0/24 -r 100.118.171.110:21117` — LAN peers get local `local_ip`, Tailscale peers get the `-r` relay address. Key is `loHuCAmzS1MO3tFxDe0cTHKuRJLsTqxVdhxc2ON7kkk=`.
+
+---
+
 ### MCP Registration
 ```json
 {

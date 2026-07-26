@@ -5,19 +5,281 @@ All notable changes to Advanced Memory MCP will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [1.10.0] - Super skillmaker + capture stack (2026-07-17)
+
+### Added
+- **make_skill_advanced + adn_llm registered** (15 tools; both had `@mcp.tool`
+  commented out since creation). E2E verified: research_first_create produced a
+  spec-compliant, web-grounded SKILL.md on llama3.2:3b in 14.4s.
+- **Session scribe** (`scripts/session_scribe.py`, hourly task): auto-captures
+  Claude session transcripts into vault `inbox/` with per-session local-LLM
+  summaries, repo auto-tags, dedupe via per-session seen counts; copies digests
+  to aiwatcher `data/inbox/`.
+- **Continue Work prompt**: latest START NOTE + recent notes + newest scribe
+  digest - session context injection.
+- **Version-visible /health** on both HTTP entry points (version, git_sha,
+  started_at, uptime, shutting_down) per mcd HEALTH_ENDPOINT_STANDARD; the
+  NSSM CLI path previously had no health route at all.
+- **Webapp LLM persistence**: GET/PUT `/management/llm-config` backing the
+  provider/model dropdowns; real Ollama keep_alive load/unload (were fakes).
+- `services/research_sources.py`: direct DuckDuckGo/arXiv/GitHub research.
+- `_version.py` (version-source drift: pyproject said 1.8.1, CHANGELOG 1.9.0).
+
+### Fixed
+- stdio proxy: restore stdout before proxy run; probe/proxy try-blocks split
+  (AttributeError was mislabeled as probe failure -> hung local fallback).
+- `build_error_response` tolerant signature (2-arg calls raised TypeError,
+  masking every real error in make_skill_advanced).
+- adn_skills markdown-string returns normalized to dict (output schema errors).
+- Ollama default model: installed-model detection replaces hardcoded `llama3`.
+- Deterministic SKILL.md frontmatter repair (small models omit closing `---`).
+- research_driven_skill imports: modules live in `mcp/beta/`, not `mcp/tools/`.
+- Read-only instances no longer run project-sync DB UPDATEs at startup.
+- NSSM log litter gitignored (`data/nssm-*.log`).
+
+### Earlier unreleased
+- llms-full.txt created (was missing)
+- .env.example created (was missing)
+- glama.json framework updated to >=3.4.2
+
 ## [1.9.0] - Industrial Portmanteau Standard (2026-04-27)
-9: 
-10: ### 💎 **Industrial Portmanteau (Standardized)**
 11: 
-12: #### Changed - Core Documentation Engine
-13: - **Rationale-First Docstrings**: All 12 core tool groups (`audio`, `inbox`, `skills`, `zettel`, `nav`, `notes`, `search`, `knowledge`, `project`, `system`, `mcp`, `typora`) now feature `[RATIONALE]` blocks as the first entry in their docstrings. This provides agentic IDEs with the architectural justification for consolidated toolsets.
-14: - **Discriminated Union Schema**: Migrated all tool schemas to use `Annotated[Union[...], Field(discriminator="operation")]`. This ensures 100% static scannability for tools like Toolbench and resolves mutual exclusivity ambiguities for LLM routers.
-15: - **High-Fidelity Examples**: Expanded the `[EXAMPLES]` section of every tool with valid JSON/Python snippets covering edge cases and complex multi-parameter operations.
-16: - **Operation Mapping**: Standardized the `[SUPPORTED OPERATIONS]` list to include short descriptions and parameter requirements, improving the "solve rate" for zero-shot tool selection.
-17: 
-18: ---
-19: 
-20: ## [1.5.0] - Semantic Research (RAG) & Performance Surge (2026-02-27)
+12: ### Added
+13: 
+14: - **Industrial Portmanteau Standard:** Overhauled all 12 core tool modules (`audio`, `inbox`, `skills`, `zettel`, `nav`, `notes`, `search`, `knowledge`, `project`, `system`, `mcp`, `typora`) with the **2026 Improved Portmanteau** pattern.
+15: - **Rationale-First Docstrings:** Every tool now includes a `[RATIONALE]` section explaining the architectural choice for consolidation, reducing LLM "floundering" in tool-dense environments.
+16: - **Strict Discriminated Unions:** Migrated all Pydantic models to use `Annotated[Union[...], Field(discriminator="operation")]`. This ensures that static analyzers (Toolbench/Arcade) can resolve mutually exclusive parameter sets despite being consolidated into single entry points.
+17: - **Operation Maps:** Added explicit bulleted operation maps and high-fidelity Python examples to all tool docstrings.
+18: 
+19: ### Documentation
+20: 
+21: - **MCD Standardization:** Formally codified the "Industrial Portmanteau" as the fleet-wide standard in `mcp-central-docs`.
+22: - Updated **README.md** and **docs/COMPLIANCE_AND_STANDARDS.md** to reflect the new 2026 tool architecture.
+23: 
+24: ---
+25: 
+26: ## [1.8.2] - Vector store logging & Seed notes (2026-04-27)
+27: 
+28: ### Added
+29: 
+30: - **`docs/seed-notes/`** — Three **vault-ready** markdown memos (YAML frontmatter) capturing **2026-04** Google Gemini / Deep Research / Interactions / Tailscale MCP ingress news.
+
+### Fixed
+
+- **Observation permalinks** when the parent entity has no stored `permalink`: avoid synthesizing `none/observations/...` (from Python `None` stringification) by falling back to `file_path` or `entity-{id}` before appending `/observations/...`, matching relation behavior.
+- **Vector store logging:** missing LanceDB table before first index is logged at **DEBUG** with correct loguru formatting (no misleading INFO “creating table” on every search).
+
+### Tests
+
+- Unpack `(rows, total)` from `SearchService.search` / `SearchRepository.search` in service, repository, sync, and API tests (callers had been treating the return value as a bare list).
+
+## [1.8.1] - Extra RAG folders & LanceDB storage docs (2026-04-21)
+
+### Added
+
+- **`rag_extra_roots`** in `AdvancedMemoryConfig` (persisted in `~/.advanced-memory/config.json`): optional list of **absolute directories on the API host** whose `.md`, `.mdx`, and `.txt` files are chunked into LanceDB when you run a full **Rebuild search index**. Chunks are tagged as global extras and included in semantic / hybrid search for **every** vault project (`SearchService.index_rag_extra_roots`, widened vector metadata filter).
+- **Management API:** `GET` / `PUT /api/v1/management/rag-extra-roots`, `POST /api/v1/management/rag-extra-roots/validate`.
+- **Webapp Vault sync:** section **Extra RAG folders (LanceDB)** — list paths, save to config, validate on server, reload; **Folder hint** uses `showDirectoryPicker()` when available (browsers still cannot supply a drive letter; users paste the full server path).
+
+### Documentation
+
+- **LanceDB on disk:** the vector store directory is **`{parent of the app SQLite file}/vectors`**, typically `%USERPROFILE%\.advanced-memory\vectors` next to `memory.db` (or under `ADVANCED_MEMORY_HOME` if set). It is **not** under the git checkout by default. The config field **`rag_persist_dir` / `RAG_PERSIST_DIR`** remains legacy naming and is **not** used to choose the LanceDB path for `VectorRepository` (implementation uses the `vectors` sibling path in `deps.py` / `sync_service.py`).
+- **Cross-repo clarity:** other documentation stacks (for example **mcp-central-docs**) keep their **own** LanceDB directory (that project defaults to `src/docs_mcp/data/lancedb` inside its repo). Advanced Memory does **not** share one database with unrelated repos unless an operator deliberately points two apps at the same path.
+- Updated **README**, **docs/README**, **docs/PRD**, **docs/USAGE**, **docs/AI-FEATURES**, **docs/ARCHITECTURE**, **webapp/README** for the above.
+
+### Tests
+
+- `tests/test_search_rag_extra_helpers.py` — paragraph chunking and extra-root metadata helpers.
+
+### Changed
+
+- **`prefab-ui`:** dependency floor raised from **0.1.3** to **≥0.19.0** (lock resolves **0.19.1**) so installs align with the current FastMCP 3.2 Prefab / `ToolResult` stack.
+
+### Fixed
+
+- **FastAPI management watch:** `app.state.watch_task` is initialized in the HTTP app lifespan and management routes read it with `getattr`, so `GET /api/v1/management/watch/status` no longer raises when the watch task field was never set.
+- **Webapp Note Vault (`/notes`):** Missing imports for `useBackendAutoReconnect` and the offline recovery clipboard helpers caused a runtime `ReferenceError` on every visit; the page loads again.
+- **Webapp Note Vault:** Search hits and list rows may ship `tags` as an array, a JSON string, or a single string; the UI normalizes them before filtering and rendering. Opening a note from **Recent Activity** via `/notes?id=<permalink>` waits until the vault project is selected, then loads content through the knowledge entity **content** endpoint without assuming a full note DTO.
+- **Webapp:** `App` metadata for the right-hand sidebar maps the slim content response safely (word counts and file size derived from body text when the API omits those fields).
+- **Webapp Note Vault (tree view):** Tree building and sort no longer assume every note has a non-empty title or permalink segment.
+
+---
+
+## [1.8.0] - FastMCP 3.2 GA Managed Namespaces (2026-04-21)
+
+### Changed - Tool surface decomposed into 12 mounted sub-apps
+
+The monolithic `adn_*` / `portmanteau_*` tools have been decomposed into
+**12 FastMCP Managed Namespaces**, each mounted as its own sub-app. Every
+`operation=` branch is now a first-class tool with its own name, docstring,
+and required-parameter schema. This replaces the single multi-operation
+portmanteau pattern as the primary tool surface.
+
+**Namespaces:** `audio`, `inbox`, `skills`, `zettel`, `nav`, `notes`,
+`search`, `knowledge`, `project`, `system`, `mcp`, `typora`.
+
+**Result:** 79 tools across 12 namespaces (vs. the previous ~15 portmanteau
+entry points). Each tool has a verb-level name (e.g. `audio_dictate`,
+`notes_write`, `search_rag`) and a schema the model can introspect
+individually, which materially improves tool-selection accuracy and reduces
+argument-extraction errors in clients that rank tools by description density.
+
+#### Added
+- `src/advanced_memory/mcp/tools/{audio,inbox,skills,zettel,nav,notes,search,knowledge,project,system,mcp,typora}.py` - per-namespace sub-apps built with `FastMCP(...)` and registered via `mcp.mount(app, namespace=...)` in `server.py`.
+- `@audio_app.tool(task=True)` on long-running dictation, unlocking FastMCP 3.2 GA task-tool semantics (progress + cancellation).
+- `zettel.customize` wired to the real `_customize_operation` (category / topic / depth / project) - was a simulation stub in the pre-refactor branch.
+- `scripts/test_stdio_handshake.py` - standalone JSON-RPC handshake harness that spawns the server exactly the way Cursor / Claude Desktop do (`uv run ... --transport stdio`), performs `initialize` + `tools/list`, and prints a per-namespace tool-count breakdown. Used to verify IDE startup post-refactor (~1.2s boot, 79 tools).
+
+#### Fixed
+- `server.py` now reattaches `app_lifespan` to the mounted MCP instance (`mcp.lifespan = app_lifespan`). The refactor initially dropped this, which would have silently disabled the file watcher, project session bootstrap, and MCP resource initialization in IDE launches.
+- `mcp.ToolResult(...)` -> `from fastmcp.tools import ToolResult` in `tools/search.py`, `tools/zettelmaker.py`, `tools/adn_knowledge_rag.py`, and `beta/adn_visualize.py`. The old symbol does not exist on FastMCP 3.2.
+- `beta/adn_visualize.py`: dropped stale `types.ToolResult` return annotation (now `-> Any`) and removed the unused `mcp.types` import.
+- `zettelmaker.py`: repaired stale `from advanced_memory.mcp.tools import write_note` -> `from advanced_memory.mcp.tools.write_note import write_note as mcp_write_note`.
+- `tools/search.py`: restored `search_notes` plus its helpers (`_extract_tags_from_query_string`, `_format_search_results_as_markdown`, `_format_search_error_response`) as non-decorated logic providers. `cli/commands/tool.py` and `mcp/tools/adn_search._notes_search` both import these at module load, so the initial refactor broke the CLI entry point and prevented Cursor from ever getting a response.
+
+#### Removed
+- `src/advanced_memory/mcp/tool_registry.py`. The portmanteau + shadow-unrolling registration pipeline is obsolete; namespaces replace it.
+- `ADVANCED_MEMORY_ARCADE_COMPLIANCE` shadow-unrolling (lived in `tool_registry.py`). Strict static scanners like toolbench.arcade.dev now see first-class namespaced tool names by default.
+- `ADVANCED_MEMORY_FULL_TOOLS_MODE` toggle. The full tool surface is always exposed via the 12 namespaces; there is no longer a "compact" vs. "full" mode to choose between.
+- `src/advanced_memory/mcp/tools/__init__.py` gutted to re-export only the shared response helpers (`build_error_response`, `build_success_response`). Tool registration now happens in `server.py` via the sub-app mounts.
+
+#### Internal
+- Legacy `adn_*` and `portmanteau_*` functions kept, but their `@mcp.tool` decorators are replaced with comments marking them as decommissioned. They remain importable as plain async functions so the new namespace wrappers can delegate to them unchanged during the transition.
+- Backward compatibility: direct imports of the legacy functions from Python code continue to work; only the registered MCP tool *names* have changed (e.g. `adn_audio(operation="dictate", ...)` is now `audio_dictate(...)` on the wire).
+
+### Migration notes for integrators
+
+- If you called tools by MCP name from a client: switch `adn_<domain>` with an `operation` argument to `<domain>_<operation>` with the operation's actual parameters. Run `scripts/test_stdio_handshake.py` against your checkout for the authoritative per-namespace tool list.
+- If you relied on `ADVANCED_MEMORY_FULL_TOOLS_MODE=true` to get the "atomic" surface, remove it: that surface is now the default.
+- If you set `ADVANCED_MEMORY_ARCADE_COMPLIANCE=true` for toolbench / Arcade scans, remove it: namespaced tool names are already first-class and scanner-visible.
+
+---
+
+## [1.7.1] - Sync Performance Fix (2026-04-16)
+
+### Fixed - Critical Sync Performance Regression
+
+#### `sync_service.py` — `handle_move`: skip re-index on path-only moves
+
+**Problem:** `handle_move` unconditionally called `search_service.index_entity()` after
+every move, even when only the path separator changed (`/` → `\` on Windows). This
+re-read the full file from disk and rebuilt the entire trigram FTS stem index for every
+entity — turning a 2,822-file path-normalisation pass into a multi-hour operation (~8h
+on a 3,000-entity vault).
+
+**Fix:** Introduced `content_changed` flag. `index_entity` is now only called when
+`update_permalinks_on_move=True` causes a real file rewrite. Pure path-separator moves
+use the new `search_service.update_entity_path()` — a cheap SQL UPDATE on `file_path`
+with no file I/O.
+
+**Result:** 2,822 path-only moves: ~7 hours → ~3 minutes.
+
+#### `sync_service.py` — `resolve_relations`: remove gratuitous re-index
+
+**Problem:** After resolving each wikilink relation (`to_id`/`to_name` update only),
+`index_entity` was called on the resolved entity. Relation resolution does not change
+file content; the search index was already correct. On a large vault this added ~21
+minutes of unnecessary re-indexing after every sync.
+
+**Fix:** Removed the `index_entity` call from `resolve_relations`. The search index
+for entity content is unchanged by relation resolution.
+
+**Result:** `resolve_relations` phase: ~21 minutes → ~2 minutes.
+
+#### `search_repository.py` — new `update_entity_path` method
+
+Added lightweight `update_entity_path(entity_id, new_file_path)` that issues a single
+`UPDATE search_index SET file_path = :new_path WHERE entity_id = :id` without reading
+or re-stemming file content. Used by `handle_move` for path-only renames.
+
+**Combined improvement: full sync of a 3,000-entity vault with 2,951 path moves went
+from ~8 hours to ~5 minutes.**
+
+---
+## [1.7.0] - Industrial Testing & Arcade Compliance (2026-04-11)
+
+### ðŸš€ **Industrial Testing Scaffold**
+
+#### Added - Prefab Infrastructure (SOTA v14.1.0)
+- **PrefabManager Hardening**: Implemented a robust, deterministic environment rehydration system with support for JSON-based environment templates ("prefabs").
+- **Relational Integrity**: Engineered a two-pass seeding mechanism to resolve relational dependencies (Entity -> Observation -> Relation) without `IntegrityError` collisions.
+- **Deterministic Seeding**: Integrated `EntityParser` and `generate_permalink` for consistent filename sanitization (`Project_Glenn.md`) and path resolution across Windows and Unix environments.
+- **Cascaded Cleanup**: Optimized environment teardown using SQLAlchemy cascaded deletions for zero-leak test isolation.
+
+### ðŸ± **Industrial Interface & Documentation**
+
+#### Added - Modular Documentation (SOTA v14.1.0)
+- **Documentation Refactoring**: Transitioned from monolithic documentation to a modular `docs/` suite covering Architecture, Usage, Fleet Integration, and Compliance.
+- **Benny Protocol Integration**: Established the "Benny Anchor" (German Shepherd) as the emotional and security grounding protocol across all primary documentation.
+- **Premium Industrial Branding**: Deployed a cinematic 21:9 wide banner header for the primary README, aligning with the Schipal Fleet's contemporary "Knowledge Library" aesthetic.
+- **Pristine Root Architecture**: Offboarded redundant documentation and compliance manifests to the `docs/` hierarchy to maintain a clean, production-ready repository root.
+
+### ðŸ›¡ï¸ **Arcade Compliance**
+
+#### Added - Static Scanner Optimization
+- **Shadow Unrolling**: Implemented the `ADVANCED_MEMORY_ARCADE_COMPLIANCE` layer to satisfy strict static analysis tools (e.g., toolbench.arcade.dev) that reject portmanteau patterns.
+- **Dual Presentation Mode**: Introduced `ADVANCED_MEMORY_FULL_TOOLS_MODE` to toggle between specialized tool sets and consolidated portmanteau entry points.
+
+### ðŸ”§ **Technical Fixes**
+
+#### Fixed - Backend & Repository Stability
+- **LanceDB API Alignment**: Resolved `DeprecationWarning` and functional regressions by migrating `table_names()` to `list_tables()`.
+- **Path Resolution**: Fixed critical Windows-specific path resolution bugs where `base_path` was incorrectly handled during prefab discovery.
+- **Unified Error Handling**: Standardized conversational error responses across all core tools for superior agentic feedback loops.
+
+---
+
+## [1.6.1] - Tool Modernization & Zero Noise Docs (2026-03-30)
+
+### ðŸš€ **FastMCP 3.1 Modernization**
+
+#### Refactored - Zero Noise Tool Documentation
+- **Annotated Signatures**: Migrated core tools (`search_notes`, `write_note`, `read_note`, `recent_activity`, `status`, `build_context`) to use `Annotated[Type, Field(description="...")]` for parameter documentation.
+- **Single Source of Truth**: Documentation now resides exclusively in the function signature, ensuring the MCP JSON schema is automatically generated without redundant docstring "Args" blocks.
+- **LLM Optimization**: Removed verbose and repetitive "Args" and "Returns" sections from docstrings to reduce token noise and improve agentic tool selection.
+
+### ðŸ”§ **Code Quality & Maintenance**
+
+#### Fixed - Repository-Wide Linting (Ruff)
+- **Comprehensive Cleanup**: Executed `ruff check --fix --unsafe-fixes` and `ruff format` across the entire repository.
+- **SOTA Standards**: Resolved 90+ linting issues, including:
+  - Migration to native `datetime.UTC` (removing deprecated `utcnow`).
+  - Adoption of modern `isinstance(x, A | B)` syntax and `X | Y` type unions.
+  - Fixes for B905 (zip strictness) and UP035/UP006 (modern typing imports).
+- **Import Optimization**: Removed unused imports and resolved import sorting (I001) in critical modules.
+- **Zero Noise Modernization**: Eliminated redundant docstring "Args" and "Returns" across the entire codebase.
+
+### ðŸ¢ **Industrial Rebranding**
+
+#### Refactored - Professional Technical Persona
+- **Branding Purge**: Removed all scifi-lore and dramatic AI terminology (e.g., "OpenFang", "Substrate", "Audio Soul", "Cognitive Bridge") from documentation and source code.
+- **Documentation Sanitization**: Overhauled `README.md` and `TECHNICAL.md` with industrial-grade technical descriptions focusing on Knowledge Management and Research.
+- **UI Labeling Optimization**: Updated Webapp labels in `Dashboard.tsx` and `GraphCanvas.tsx` to reflect the new professional identity (e.g., "Knowledge Management Layer", "Skill Library", "Knowledge Graph").
+
+---
+
+## [1.6.0] - Modernization & Prefab UI 0.2 (2026-03-30)
+
+### ðŸš€ **UI/UX Modernization**
+
+#### Migrated to Prefab UI 0.2 (FastMCP 3.1)
+- **App Engine**: Replaced deprecated `App` with `PrefabApp` and migrated all prefabs to the new reactive component structure.
+- **Glassmorphism Design**: Implemented `pf-glass` and `pf-outline` SOTA 2026 design patterns across the toolset.
+- **Knowledge Visualization**: Replaced legacy `Graph` component with a dynamic **Mermaid** flowchart for interactive relationship mapping.
+- **Improved Layouts**: Refactored grid systems to use the new `GridColumn` and standard `Column`/`Row` components for high-fidelity responses.
+
+### ðŸ”§ **Technical Stability**
+
+#### Fixed - Tool Runtime Stability
+- **Missing Imports**: Resolved critical `NameError` in `read_note.py` and other tool files where `Any` was used without an import.
+- **Dependency Cleanliness**: Automated cleanup of unused imports in `prefabs.py` to ensure O-lint codebase.
+- **Protocol Compliance**: Verified FastMCP 3.1 `ToolResult` serialization for rich UI payloads.
+
+---
+
+## [1.5.0] - Semantic Research (RAG) & Performance Surge (2026-02-27)
 
 ### ðŸš€ **Semantic Intelligence (RAG)**
 
@@ -43,10 +305,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-#### FastMCP 3.1.1+.1+ Sampling API â€” `inter_server_tools.py` rewrite
-- **Root cause**: `mcp/sampling.py` accessed `mcp.ctx` which does not exist on FastMCP instances. `mcp/inter_server.py` used a manual tool-call loop with dict-formatted tools â€” the pre-3.1.1+.1 low-level pattern incompatible with `ctx.sample(tools=[...])`.
+#### FastMCP 2.14.1+ Sampling API â€” `inter_server_tools.py` rewrite
+- **Root cause**: `mcp/sampling.py` accessed `mcp.ctx` which does not exist on FastMCP instances. `mcp/inter_server.py` used a manual tool-call loop with dict-formatted tools â€” the pre-2.14.1 low-level pattern incompatible with `ctx.sample(tools=[...])`.
 - **Symptom**: All three agentic meta-tools (`agentic_content_workflow`, `intelligent_batch_processor`, `sampling_capabilities_status`) raised `AttributeError` at call time.
-- **Fix â€” `mcp/tools/inter_server_tools.py`**: Full rewrite using the correct FastMCP 3.1.1+.1+ SEP-1577 pattern:
+- **Fix â€” `mcp/tools/inter_server_tools.py`**: Full rewrite using the correct FastMCP 2.14.1+ SEP-1577 pattern:
   - 5 real async leaf-tool functions (no mocks, no lambdas), each calling the actual service layer
   - `ctx: Context` parameter â€” correct name for FastMCP auto-injection (old code used `context`)
   - `ctx.sample(messages=..., tools=[fn,...], result_type=PydanticModel)` for LLM orchestration
@@ -84,9 +346,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased] - Skills Factory (2026-02-10)
+## [Unreleased]
 
-### Added - Skills Factory (Research Chaining + LLM-Guided Loop)
+### Fixed - Hardened MCP Startup & Lock Recovery (2026-04-09)
+
+- **PID-Aware Locking**: Enhanced the `_stdio_single_instance_lock` context manager to store the active process ID (PID) in the lock file. If a conflict occurs, the error message now explicitly identifies the PID of the process holding the lock.
+- **Automated Startup Cleanup**: Hardened `start.ps1` with a "Clean Slate" routine that proactively removes stale `mcp-stdio.lock` files and terminates orphaned `advanced-memory` or `am mcp` processes before server launch.
+- **Graceful Cleanup**: Ensured the lock file is explicitly removed upon graceful server shutdown.
+
+### Fixed - Cursor / MemOps MCP startup (2026-03-07)
+
+- **MCP config must use `mcp` subcommand and `--transport stdio`**: Without them the process runs the CLI and exits; the server only starts with `advanced-memory mcp --transport stdio`. README and docs updated.
+- **docs/CURSOR_MCP_SETUP.md**: New doc with correct Cursor/Claude MCP config (command, args including `mcp` and `--transport stdio`), where to put it, and why the previous config failed. README "Supported MCP Clients" links to it.
+- **Cursor config**: Use full path to `uv` (e.g. `D:/Dev/repos/uv-install/uv.exe`) if `uv` is not on PATH when Cursor starts the subprocess.
+
+### Added - Semantic search API and Deep Search UI (2026-03-05)
+
+- **POST `/{project}/search/semantic`**: Request body `{ query, limit }`. Returns RAG chunks (entity_id, permalink, title, snippet, chunk_text, score) from LanceDB vector search + rerank. Used by the Deep Search page.
+- **GET `/{project}/knowledge/entities/{identifier:path}/content`**: Returns full note content as JSON `{ title, permalink, content }` for a given permalink/path. Enables "click chunk to show full note" in the UI. Route declared before the generic entity route so `/content` is matched correctly.
+- **SearchDeep.tsx**: Replaced mock data with real API calls. Fetches current project from `getProjects()`, calls semantic search API, displays real chunks; on chunk click calls note-content API and shows full note in a modal.
+- **api.ts**: `searchSemanticChunks(project, query, limit)` and `getNoteContent(project, permalink)`.
+- **Schemas**: `SemanticSearchRequest`, `SemanticChunkResult`, `SemanticSearchResponse` in `schemas/search.py`; `NoteContentResponse` in `schemas/response.py`.
+- **Tests**: `test_semantic_search_returns_schema` (POST semantic, response shape); `test_get_entity_content` (GET entity content JSON). Conftest: `search_service` fixture updated for `SearchService` constructor (`vector_repository`, `app_config`); added `vector_repository` fixture for tests.
+
+### Fixed - Webapp startup and docs (2026-03-05)
+
+- **start.ps1**: Run npm install and Vite from `webapp/frontend/` (where `package.json` lives) instead of `webapp/` to avoid ENOENT. Start Python backend from repository root so `advanced_memory` is importable.
+- **Backend health check**: After starting the backend, wait up to ~12s and verify port 10705 is listening; print "Backend is up" or a warning before starting Vite.
+- **main.css**: Fix Tailwind `@apply` for `.indigo-glow` â€” use `rgba(99_102_241_0.3)` (underscores) so commas in arbitrary values are not parsed as class separators (PostCSS error resolved).
+- **Docs**: Dedicated [webapp/README.md](webapp/README.md) for webapp architecture, ports, start.ps1/start.bat, and troubleshooting. Main README links to it under Web Interface and Standalone Web Application.
+
+### Added - Skills Factory (Research Chaining + LLM-Guided Loop) (2026-02-10)
 
 #### skill_research_chain.py (2026-02-10)
 - **ResearchChainService**: Chains arxiv, github, rag, web research with LLM-guided gap analysis
@@ -137,7 +427,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `add_examples` (default False): Add concrete examples, illustrations, case studies
   - `add_context` (default False): Add background, definitions, "why it matters"
   - `expand_sections` (default False): Turn bullet points into full paragraphs; runt notes into full notes
-  - `update_stale_tech` (default False): Update outdated lib/tool versions (e.g. FastMCP 3.1.1+ -> 3.1.1+); flags uncertainty
+  - `update_stale_tech` (default False): Update outdated lib/tool versions (e.g. FastMCP 2.10 -> 2.14); flags uncertainty
   - `content` (optional): Custom instruction passed to LLM (scope, facts, version lock, tone)
 - **Biographical updates**: When `update_content=True`, adds death dates and life events for persons who died after the note was written.
 - **Structured responses**: Enhance now returns dict (not string) for MCP client compatibility.
@@ -356,7 +646,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Research-Driven Skill Generator**: Enhanced `make_skill_advanced` tool
   - Multi-source research integration (web, GitHub, arXiv, TV Tropes, documents, RAG)
   - Intelligent research type detection based on topic
-  - Comprehensive skill content generation with FastMCP 3.1.1+.3 sampling
+  - Comprehensive skill content generation with FastMCP 2.14.3 sampling
   - Cross-disciplinary knowledge synthesis
   - Primary source integration with direct quotes
   - Academic rigor with peer-reviewed content inclusion
@@ -518,11 +808,11 @@ This release transforms Advanced Memory from a knowledge management system into 
 ### Changed
 - **MCP instance architecture** - Complete rewrite for stdio mode compatibility
 - **Logger management** - Nuclear option disable for JSON-RPC compliance
-- **Prompt/resource registration** - FastMCP 3.1.1++ best practices implementation
+- **Prompt/resource registration** - FastMCP 2.12+ best practices implementation
 
 ## [1.5.1] - 2026-02-27
 ### Added
-- **`adn_knowledge_rag`**: Specialized tool for high-density context retrieval (robofang bridge).
+- **`adn_knowledge_rag`**: Specialized tool for high-density context retrieval (OpenFang bridge).
 - **Metadata Encryption**: Implemented transparent Fernet (AES-128) encryption for LanceDB metadata.
 
 ### Changed
@@ -533,10 +823,10 @@ This release transforms Advanced Memory from a knowledge management system into 
 
 ## [1.5.0] - 2026-02-12
 
-### ðŸš€ FastMCP 3.1.1+.3 Advanced Features & Ecosystem Expansion
+### ðŸš€ FastMCP 2.14.3 Advanced Features & Ecosystem Expansion
 
 #### Major Framework Upgrades
-- **SEP-1577 Sampling with Tools Implementation**: Complete FastMCP 3.1.1+.3 compliance with server-to-server communication and advanced sampling capabilities
+- **SEP-1577 Sampling with Tools Implementation**: Complete FastMCP 2.14.3 compliance with server-to-server communication and advanced sampling capabilities
 - **Conversational Response Patterns**: All MCP tools now return human-readable conversational responses alongside structured data
 - **SOTA MCP Standards v12.0 Full Compliance**: Repository fully modernized with Three Pillars documentation (Architecture, Behavior, Operations)
 
@@ -597,7 +887,7 @@ This release transforms Advanced Memory from a knowledge management system into 
 #### Documentation Excellence
 - **Comprehensive Prompt Templates**: Created 6 extensive prompt templates (system, user, examples, research, content, project management)
 - **Professional Documentation Structure**: Hierarchical organization with cross-references and progressive disclosure
-- **FastMCP 3.1.1+.3 Standards**: Updated all references and implementations to latest framework version
+- **FastMCP 2.14.3 Standards**: Updated all references and implementations to latest framework version
 - **Quality Assurance**: Automated freshness checks and version synchronization
 
 #### Technical Improvements
@@ -809,7 +1099,7 @@ This release achieves **complete code quality** with **zero type errors**, **zer
   - Context building for conversation continuity
 
 - **MCP Server**
-  - FastMCP 3.1.1++ implementation
+  - FastMCP 2.12+ implementation
   - Stdio transport support
   - Proper tool registration with decorators
   - MCP compliance and best practices
@@ -849,7 +1139,7 @@ This release achieves **complete code quality** with **zero type errors**, **zer
 - Async/await throughout
 - Pydantic v2 for validation
   - SQLAlchemy 2.0 for database
-- FastMCP 3.1.1++ for MCP protocol
+- FastMCP 2.12+ for MCP protocol
 - SQLite with FTS5 for search
 - Loguru for structured logging
 
@@ -874,4 +1164,3 @@ This project uses [Semantic Versioning](https://semver.org/):
 ---
 
 _For upgrade instructions and migration guides, see [MIGRATION_PLAN.md](MIGRATION_PLAN.md)_
-

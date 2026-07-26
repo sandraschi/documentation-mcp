@@ -152,6 +152,13 @@ toolbench-drift:
 	Set-Location '{{justfile_directory()}}'
 	uv run python toolbench/scripts/report_reference_drift.py
 
+# ── MCPB Packaging ──────────────────────────────────────────────────────────
+
+# Build MCPB bundle for Claude Desktop distribution
+mcpb-pack:
+    Set-Location '{{justfile_directory()}}'
+    uv run mcpb pack . dist/documentation-mcp-v$(uv run python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])").mcpb
+
 # ── Native (Tauri) ──────────────────────────────────────────────────────────
 
 # Build the Tauri NSIS desktop installer (full pipeline: frontend -> Rust -> NSIS)

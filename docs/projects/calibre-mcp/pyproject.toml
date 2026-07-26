@@ -1,17 +1,17 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "uv-dynamic-versioning>=0.7.0"]
+build-backend = "hatchling.build"
 
 [project]
-name = "calibre-mcp"
-version = "1.1.0"
-description = "FastMCP 2.14.4+ server for conversational Calibre e-book library management with sampling, dialogic returns, and AI workflows"
-authors = [
-    {name = "Sandra", email = "sandra@example.com"}
-]
+name = "calibremcp"
+version = "1.8.6"
+description = "SOTA April 2026 industrialized FastMCP 3.2.0 server for conversational Calibre e-book library management with sampling, agentic workflows, skills, prompts, and LanceDB metadata RAG"
 readme = "README.md"
-license = {text = "MIT"}
 requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [
+    { name = "Sandra Schipal", email = "sandra@schipal.at" }
+]
 keywords = ["mcp", "calibre", "ebooks", "fastmcp"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "fastmcp>=3.1.0,<4",
+    "fastmcp>=3.4.4,<4",
     "fastapi>=0.115.0",
     "httpx>=0.27.0",
     "pydantic>=2.9.0",
@@ -33,17 +33,23 @@ dependencies = [
     "sqlalchemy>=2.0.0",
     "aiohttp>=3.9.0",
     "keyring>=24.0.0",
-    "py-key-value-aio[disk]>=0.3.0,<0.4.0", # FastMCP 2.14.1+ persistent storage backend
-    "tenacity>=8.2.0", # Retry logic for network operations and external API calls
+    "py-key-value-aio[filetree]>=0.4.4,<0.5.0", # FastMCP 2.14.1+ persistent storage backend
+    "tenacity>=8.2.0", # Retry logic
     "psutil>=5.9.0", # System and process utilities (required by system_tools)
-    "beautifulsoup4>=4.12.0", # Anna's Archive HTML parsing
+    "beautifulsoup4>=4.12.0", # Anna's Archive HTML parsing; EPUB location resolver
+    "ebooklib>=0.18.0", # EPUB spine / phrase resolution for FTS locations
+    "pymupdf>=1.24.0", # PDF page search for FTS locations (import fitz)
     "ruff>=0.14.1",
+    "lancedb>=0.17.0",
+    "fastembed>=0.4.0",
+    "lxml>=5.1.0", # Robust XML parsing for arXiv Atom feed
+    "prefab-ui>=0.18.0", # MCP Apps (Prefab) — required for show_*_prefab_card tools
+    "defusedxml>=0.7.1",
 ]
 
 [project.optional-dependencies]
 rag = [
     "chromadb>=0.4.0",
-    "fastembed>=0.3.0",
 ]
 dev = [
     "pytest>=8.3.0",
@@ -59,33 +65,27 @@ dev = [
 ]
 
 [project.scripts]
-calibre-mcp = "calibre_mcp.__main__:run"
+schip-mcp-calibre = "calibre_mcp.__main__:run"
 
 [project.urls]
-Homepage = "https://github.com/sandra/calibre-mcp"
-Repository = "https://github.com/sandra/calibre-mcp.git"
-Issues = "https://github.com/sandra/calibre-mcp/issues"
+Homepage = "https://github.com/sandraschi/calibremcp"
+Repository = "https://github.com/sandraschi/calibremcp.git"
+Issues = "https://github.com/sandraschi/calibremcp/issues"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/calibre_mcp"]
+
+[tool.uv-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "pep440"
+
+[tool.setuptools.package-data]
+calibre_mcp = ["skills/**/*.md"]
 
 [tool.black]
 line-length = 100
 target-version = ["py311"]
-
-[tool.ruff]
-line-length = 100
-target-version = "py311"
-
-[tool.ruff.lint]
-select = ["E", "W", "F", "I", "B", "C4", "UP", "S"]
-ignore = ["E501", "B008", "C901", "B904"]
-exclude = ["__pycache__", ".git", ".venv", "venv", "dist", "build"]
-
-[tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101"]  # Allow assert in tests
-"src/calibre_mcp/__main__.py" = ["E402"]  # Imports after warning suppression for MCP stdio protocol
-"src/calibre_mcp/server.py" = ["E402"]  # Imports after warning suppression for MCP stdio protocol
 
 [tool.mypy]
 python_version = "3.11"
@@ -95,7 +95,34 @@ warn_unused_configs = true
 
 [dependency-groups]
 dev = [
+    "pillow>=11.3.0",
+    "pytesseract>=0.3.13",
     "pytest>=8.4.2",
     "pytest-asyncio>=1.2.0",
     "pytest-cov>=7.0.0",
+    "pywinauto>=0.6.9",
 ]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+exclude = ["mcpb", "webapp/frontend", "node_modules", "dist", ".venv", "calibre_plugin", "calibre-plugins", "scripts", "repro_*.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "C4", "B", "N"]
+ignore = [
+    "E501",    # Line too long
+    "E722",    # Bare except (common pattern)
+    "F841",    # Unused variable (false positives in async)
+    "B008",    # Function call in argument defaults
+    "B904",    # raise from err
+    "B007",    # Unused loop variable
+    "N802",    # Function name lowercase (legacy API compat)
+    "N803",    # Argument name uppercase (legacy compat)
+    "N806",    # Variable name uppercase (legacy compat)
+    "N999",    # Module name (calibre-plugins bridge)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

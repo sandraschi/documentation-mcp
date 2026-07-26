@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "multi-backup-mcp"
-version = "0.3.0"
-description = "Multi-method backup MCP server - System backups, ZIP archives, and Git/GitHub integration. FastMCP 3.1+ compliant."
+version = "0.4.0"
+description = "Multi-method backup MCP server - System backups, ZIP archives, and Git/GitHub integration."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
@@ -38,24 +38,21 @@ keywords = [
 ]
 
 dependencies = [
-    "fastmcp>=3.1.0,<4",
+    "fastmcp>=3.4.4,<4",
     "fastapi>=0.95.0",
     "uvicorn>=0.21.0",
-    "pydantic>=1.10.7",
+    "pydantic>=2.0.0",
     "python-dotenv>=1.0.0",
     "httpx>=0.24.0",
-    "pytest>=7.3.1",
-    "pytest-asyncio>=0.21.0",
+    "aiohttp>=3.9.0",
     "ruff>=0.15.2",
+    "prefab-ui>=0.14.0",
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=7.3.1",
-    "pytest-asyncio>=0.21.0",
-    "ruff>=0.3.0",
-    "mypy>=1.5.0",
-]
+test = ["pytest>=8.0", "pytest-asyncio", "httpx"]
+dev = ["ruff>=0.9.0", "mypy"]
+cloud = ["boto3>=1.28.0"]
 
 [project.urls]
 Homepage = "https://github.com/sandraschi/multi-backup-mcp"
@@ -64,24 +61,43 @@ Documentation = "https://github.com/sandraschi/multi-backup-mcp#readme"
 Issues = "https://github.com/sandraschi/multi-backup-mcp/issues"
 
 [project.scripts]
-multi-backup-mcp = "multi_backup_mcp.__main__:main"
+multi-backup-mcp = "multi_backup_mcp.__main__:cli_main"
 
-[tool.setuptools]
-package-dir = {"" = "src"}
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.ruff]
-line-length = 100
-target-version = "py310"
-
-[tool.ruff.lint]
-select = ["E", "F", "I", "N", "W", "UP", "B", "C4", "SIM"]
-ignore = ["E501"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/multi_backup_mcp"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
 asyncio_mode = "auto"
 
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = [
+    "S101",   # assert (tests)
+    "B008",   # function call in default arg
+    "E501",   # line too long (help text, docstrings)
+    "S603",   # subprocess (git, gh - legitimate)
+    "S604",   # shell=True (not used, but preemptive)
+    "S607",   # partial path (git, gh on PATH)
+    "S104",   # bind 0.0.0.0 (MCP servers)
+    "S108",   # hardcoded temp path (placeholder)
+    "S110",   # try-except-pass (CPU detection, etc.)
+    "S112",   # try-except-continue (iteration)
+    "RUF006", # asyncio fire-and-forget tasks
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+]

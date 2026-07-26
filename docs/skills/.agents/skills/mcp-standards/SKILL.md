@@ -27,7 +27,7 @@ The comprehensive standards collection for the MCP (Model Context Protocol) ecos
 ### 🚀 **Development Standards**
 - [MCP Scaffolding](./modules/mcp-scaffolding.md) - Project structure and server templates
 - [MCPB Packaging](./modules/mcpb-packaging.md) - Build and distribution standards
-- [AI Sampling](./modules/ai-sampling.md) - FastMCP 2.14.3+ sampling workflows
+- [AI Sampling](./modules/ai-sampling.md) - FastMCP 3.2+ sampling workflows
 
 ### 🎨 **Frontend & Integration**
 - [Frontend SOTA](./modules/frontend-sota.md) - React, TypeScript, Tailwind standards
@@ -47,7 +47,7 @@ The comprehensive standards collection for the MCP (Model Context Protocol) ecos
 ## Key Requirements
 
 ### FastMCP Version
-**Minimum: FastMCP 2.14.3+** - Required for sampling support and enhanced AI workflows.
+**Minimum: FastMCP 3.2+** - Required for sampling support and enhanced AI workflows.
 
 ### Status Classification
 - ✅ **Tested and Working** - Verified functionality with tests
@@ -151,7 +151,7 @@ async def example_tool(ctx, param: str) -> dict:
 
 ## Standards Compliance Checklist
 
-- [ ] FastMCP 2.14.3+ minimum version
+- [ ] FastMCP 3.2+ minimum version
 - [ ] Proper project structure (MCP Scaffolding)
 - [ ] Comprehensive error handling (no empty catches)
 - [ ] Detailed logging with correlation IDs

@@ -1,42 +1,129 @@
-# chitchat — Conversation Starters & Fleet Docs Crosslink
+# Chitchat
 
-**Canonical source repo:** `D:/Dev/repos/chitchat`
-**Ports:** **10974** (FastAPI + MCP `/mcp`) · **10975** (Vite dashboard)
-**Stack:** FastMCP 3.2 · FastAPI · React 18 · Vite 5 · TypeScript
-**Start:** `web_sota/start.ps1`
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
----
 
-## What it does
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-- **Conversation Starters** — 64 curated topics across 8 categories (Ice Breakers, Tech & Tools, Deep Thoughts, Vienna & Local, Creative & Weird, Work & Life, Food & Drink, Hypotheticals)
-- **Conversation Archive** — JSON-backed CRUD for saving conversations with topic, response, and tags. Filter by tag, delete, stats.
-- **Fleet Docs Crosslink** — Semantic search across `mcp-central-docs` via docs_mcp backend (port **10795**). Discover fleet standards, patterns, and port registries.
+Conversation starters, archive, and fleet docs crosslink — a FastAPI + FastMCP webapp.
+
+**Ports:** 10974 (backend) / 10975 (frontend) | Hermes dashboard: **10972** (WSL2)
+
+**Fleet docs (docsops):** REST + MCP on **10795** (`mcp-central-docs` backend). Do not use **10791** — that port is fleet starts UI; avatar-mcp Prometheus metrics use **10790**.
+
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/chitchat
+cd chitchat
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+.\web_sota\start.ps1
+Or via root:
+.\start.ps1
+The backend starts in a hidden window on port 10974. The Vite frontend opens on port 10975. Your default browser opens automatically.
+
+## What It Does
+
+### Welcome & Topics
+Browse **64 curated conversation starters** across 8 categories:
+
+| Category | Topics |
+|----------|--------|
+| Ice Breakers | First-meeting openers |
+| Tech & Tools | Dev workflows, hot takes, keyboard shortcuts |
+| Deep Thoughts | Philosophy, future predictions, unlearning |
+| Vienna & Local | Kaffeehaus, U-Bahn, Heuriger, Donauinsel |
+| Creative & Weird | Movie pitches, fake words, animal rankings |
+| Work & Life | Career advice, saying no, deep work |
+| Food & Drink | Desert island meals, overrated trends, hangover cures |
+| Hypotheticals | Teleportation, alien diplomacy, simulation theory |
+
+### Archive
+Save conversations with topics, responses, and tags. Browse, filter, and delete entries. JSON-backed in `archive/chitchat_archive.json`.
+
+### Fleet Docs Crosslink
+Semantic search across mcp-central-docs via the **docs_mcp** backend on port **10795** (`CHITCHAT_DOCSOPS_BASE`). Search standards, patterns, port registries, and fleet-wide documentation.
+
+### Hermes Agent
+Fleet conductor runs in WSL2. Start the dashboard from repo root:
+
+```powershell
+.\start_hermes.ps1
+```
+
+Hermes MCP connects to chitchat at `http://<windows-gateway>:10974/mcp` and docsops at `http://<windows-gateway>:10795/mcp` (gateway IP from WSL: `ip route show default`). Template: `hermes-fleet-config.yaml`.
+
+## API Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/health` | Server health |
+| GET | `/api/welcome` | Welcome message + random topic |
+| GET | `/api/topics` | Browse topics (optional `?category=` and `?random=true`) |
+| GET | `/api/archive` | List archived chats (`?tag=` filter) |
+| GET | `/api/archive/{id}` | Get one entry |
+| POST | `/api/archive` | Add entry `{topic, response, tags}` |
+| DELETE | `/api/archive/{id}` | Delete entry |
+| GET | `/api/archive/stats/summary` | Archive statistics |
+| GET | `/api/docs/search?query=` | Fleet docs search |
+| GET | `/api/docs/health` | Docsops availability check |
 
 ## MCP Tools
 
-| Tool | Access | Description |
-|------|--------|-------------|
-| `chitchat_welcome` | Read-only | Random conversation starter + warm welcome |
-| `chitchat_topics` | Read-only | Browse topics by category or get random |
-| `chitchat_archive` | Read-write | CRUD for saved conversations (add/list/get/delete/stats) |
-| `chitchat_search_docs` | Read-only | Semantic search across fleet documentation |
+| Tool | Description |
+|------|-------------|
+| `chitchat_welcome` | Random topic greeting |
+| `chitchat_topics` | Browse topics by category |
+| `chitchat_archive` | Full archive CRUD |
+| `chitchat_search_docs` | Crosslink to fleet docs |
 
-## REST API (10 endpoints)
+## Project Structure
 
-`/api/health`, `/api/welcome`, `/api/topics`, `/api/archive` (CRUD + stats), `/api/docs/search`, `/api/docs/health`
-
----
+```
+chitchat/
+├── src/chitchat/
+│   ├── __init__.py         # Package metadata
+│   ├── __main__.py         # CLI entry: uv run chitchat --serve
+│   ├── server.py           # FastMCP server + @mcp.tool() tools
+│   ├── app.py              # FastAPI app + REST routes
+│   ├── config.py           # Configuration (ports, paths)
+│   ├── topics.py           # 64 curated topics across 8 categories
+│   ├── archive.py          # JSON file-backed chat archive
+│   └── search.py           # Docsops semantic search client
+├── web_sota/
+│   ├── src/
+│   │   ├── App.tsx         # React app (welcome, topics, archive, docs tabs)
+│   │   ├── main.tsx        # Entry point
+│   │   └── index.css       # Dark theme
+│   ├── index.html
+│   ├── vite.config.ts      # Proxies /api → backend :10974
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── start.ps1           # Port clearing + backend + frontend + browser
+│   └── start.bat
+├── archive/                 # Archived conversations (JSON)
+├── tests/
+├── pyproject.toml
+├── start.ps1
+├── start.bat
+└── README.md
+```
 
 ## Fleet Integration
 
-| Related | Role |
-|---------|------|
-| [mcp-central-docs](../mcp-central-docs/) | Docs source for crosslink search |
-| [hermes-agent](../hermes-agent/) | Hermes can use chitchat tools for social interactions |
-| [uitars-mcp](../uitars-mcp/) | Companion GUI agent — chitchat can delegate desktop tasks |
-| [robofang](../robofang/) | Fleet supervisor routing |
-
----
-
-*Tags: #chitchat #social #conversation #mcp #fleet #fastmcp3.2*
+- Ports from reserved range (10700-11000)
+- Single-backend pattern: one FastAPI process serves REST + MCP at `/mcp`
+- Crosslinks to `mcp-central-docs` via `docsops` semantic search
+- `start.ps1` follows SOTA standard: port clearing, backend readiness poll, browser open

@@ -21,7 +21,7 @@ The comprehensive standards collection for the MCP (Model Context Protocol) ecos
 #### 🚀 **Development Standards**
 - **[MCP Scaffolding](./docs/standards/mcp-scaffolding.md)** - Project structure, FastMCP server templates, initial setup
 - **[MCPB Packaging](./docs/standards/mcpb-packaging.md)** - Build, distribution, PyPI/MCP Registry publishing
-- **[AI Sampling](./docs/standards/ai-sampling.md)** - FastMCP 2.14.3+ sampling methods for creative AI workflows
+- **[AI Sampling](./docs/standards/ai-sampling.md)** - FastMCP 3.2+ sampling methods for creative AI workflows
 
 #### 🎨 **Creative & Specialized MCP Servers**
 - **Blender MCP** - 3D modeling and rendering integration
@@ -49,7 +49,7 @@ The comprehensive standards collection for the MCP (Model Context Protocol) ecos
 
 ## FastMCP Version Requirements
 
-**All MCP servers MUST use FastMCP 2.14.3+ for SOTA compliance.**
+**All MCP servers MUST use FastMCP 3.2+ for SOTA compliance.**
 
 ### Key Features in 2.14.3+
 - ✅ **Sampling Method Support** - True AI workflows for creative MCP servers
@@ -85,7 +85,7 @@ mcp-server-name/
 │   ├── integrations/    # Integration guides
 │   ├── api/            # API documentation
 │   └── examples/       # Usage examples
-├── pyproject.toml        # FastMCP 2.14.3+
+├── pyproject.toml        # FastMCP 3.2+
 ├── .mcp-standards.yaml   # Standards compliance config
 ├── .cursorrules         # IDE-specific rules
 ├── .cursorignore       # IDE ignore patterns
@@ -97,7 +97,7 @@ mcp-server-name/
 ```
 
 ### File Standards Checklist
-- [ ] `pyproject.toml` - FastMCP 2.14.3+ dependency
+- [ ] `pyproject.toml` - FastMCP 3.2+ dependency
 - [ ] `README.md` - Links to INSTALL.md, API docs
 - [ ] `INSTALL.md` - Platform-specific installation
 - [ ] `CHANGELOG.md` - Semantic versioning format
@@ -454,7 +454,7 @@ async def mcp_websocket(websocket: WebSocket, session_id: str):
 
 ### FastMCP Version Requirements
 - **v1.6-v1.7**: FastMCP 2.14.1+ minimum
-- **v1.8+**: FastMCP 2.14.3+ minimum (sampling support)
+- **v1.8+**: FastMCP 3.2+ minimum (sampling support)
 
 ## Getting Help
 

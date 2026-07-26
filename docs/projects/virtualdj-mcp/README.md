@@ -1,48 +1,69 @@
-﻿# VirtualDJ-MCP ðŸŽµ
+# VirtualDJ-MCP 
 
-[![Production Ready](https://img.shields.io/badge/status-production%20ready-brightgreen.svg)](docs/MCP_PRODUCTION_CHECKLIST.md)
-[![FastMCP](https://img.shields.io/badge/FastMCP-3.1.1+.1-blue.svg)](https://gofastmcp.com)
-[![Portmanteau](https://img.shields.io/badge/Tools-12%20Portmanteau-purple.svg)](#-portmanteau-tools-default)
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
 Professional DJ automation MCP server with Austrian efficiency for Sandra's music mixing needs.
 
-## ðŸŽ¯ Overview
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/virtualdj-mcp
+cd virtualdj-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+
+##  Overview
 
 VirtualDJ-MCP provides seamless integration between Claude and VirtualDJ, enabling professional DJ automation, mixing, and library management through natural language commands.
 
-### âœ¨ What's New (v2.0)
+###  What's New (v2.0)
 
 - **Portmanteau Tools**: 62+ tools consolidated into 12 clean interfaces (81% reduction!)
 - **Plex Integration**: Search and load tracks directly from Plex Media Server
 - **Stem Separation**: Real-time vocal/instrumental isolation and mashups
 - **Video Mixing**: Full video DJ support with effects and transitions
+- **Cross-MCP deck API**: standard REST endpoints for load/play/sync/cue handoff from other MCP servers
 
-### ðŸ’ª Strengths
+###  Strengths
 
 - Professional DJ software integration (20+ years of VirtualDJ development)
 - **HTTP API Integration**: Real-time control via Network Control Plugin
 - Real-time deck control and mixing automation
 - Multi-deck support (up to 8 decks simultaneously)
 - **NEW: Plex Media Server integration**
-- **Production-Ready**: FastMCP 3.1.1+.1 implementation
+- **Production-Ready**: FastMCP 3.1.0 implementation
 
-### âš ï¸ Requirements
+###  Requirements
 
 - **VirtualDJ 2023 or later**
 - **VirtualDJ Pro license** (required for Network Control Plugin)
 - **Python 3.10 or 3.11** (3.12+ not supported - aubio dependency)
 - Network Control Plugin installed and enabled
 
-## ðŸš€ Quick Start
+##  Quick Start
 
 ### Step 1: Install VirtualDJ Network Control Plugin
 
 1. Open **VirtualDJ**
-2. Go to **Config** â†’ **Extensions** â†’ **Effects** â†’ **Other**
+2. Go to **Config**  **Extensions**  **Effects**  **Other**
 3. Install **"Network Control"** plugin
-4. Enable it in **Master panel** â†’ **Master Effect** â†’ **Auto-Start**
+4. Enable it in **Master panel**  **Master Effect**  **Auto-Start**
 
-ðŸ“– **[Full Plugin Setup Guide](docs/NETWORK_CONTROL_SETUP.md)**
+ **[Full Plugin Setup Guide](docs/NETWORK_CONTROL_SETUP.md)**
 
 ### Step 2: Install VirtualDJ-MCP
 
@@ -94,7 +115,7 @@ Add to `claude_desktop_config.json`:
 
 **Note:** Some JSON linters object to `cwd` parameter. Using `-m` module execution with `PYTHONPATH` avoids this issue.
 
-## ðŸŽ›ï¸ Portmanteau Tools (Default)
+##  Portmanteau Tools (Default)
 
 VirtualDJ-MCP uses **12 consolidated portmanteau tools** for a cleaner AI interface:
 
@@ -119,20 +140,31 @@ Set `VDJ_TOOL_MODE` environment variable:
 - `portmanteau` (default) - 12 consolidated tools
 - `individual` - 62+ individual tools (backward compatibility)
 
+## Cross-MCP REST deck handoff
 
-## ðŸš€ Installation
+VirtualDJ-MCP exposes stable REST endpoints so other MCP servers can hand off tracks without MCP tool coupling:
+
+- `POST /api/v1/deck/{deck_id}/load` (`track_path`)
+- `POST /api/v1/deck/{deck_id}/play_pause` (`action=play|pause|toggle`)
+- `POST /api/v1/deck/{deck_id}/sync`
+- `POST /api/v1/deck/{deck_id}/cue` (`mode=start|cue|set_cue`)
+
+These are used by `songgeneration-mcp` Listen exports for direct deck preparation before live mixing/scratching.
+
+
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx virtualdj-mcp
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -187,7 +219,7 @@ vdj_recording("start", name="Friday Night Mix", format="mp3")
 vdj_recording("stop")
 ```
 
-## ðŸŽ¬ Plex Integration
+##  Plex Integration
 
 Load tracks directly from your Plex Media Server!
 
@@ -207,19 +239,19 @@ Add Plex token to your environment:
 ```
 
 
-## ðŸš€ Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx virtualdj-mcp
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -244,7 +276,7 @@ vdj_plex("search", artist="Pink Floyd")
 vdj_plex("load_from_plex", query="Dancing Queen", deck_id=1)
 ```
 
-## ðŸŽ¤ Stem Separation
+##  Stem Separation
 
 VirtualDJ's Stems 2.0 enables real-time isolation:
 
@@ -296,32 +328,32 @@ VDJ_LIBRARY_PATH=C:/Music
 ## Architecture
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                        Claude / Cursor                          â”‚
-â”‚                         (MCP Client)                            â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                          â”‚ MCP Protocol (stdio)
-                          â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                      VirtualDJ-MCP Server                       â”‚
-â”‚                       (FastMCP 3.1.1+.1)                          â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚
-â”‚  â”‚              12 Portmanteau Tools                         â”‚   â”‚
-â”‚  â”‚  vdj_deck â”‚ vdj_mixer â”‚ vdj_stems â”‚ vdj_plex â”‚ ...       â”‚   â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚
-â”‚                             â–¼                                    â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                           â”‚
-â”‚  â”‚ VDJ Client   â”‚    â”‚ Plex Client  â”‚                           â”‚
-â”‚  â”‚ (HTTP/httpx) â”‚    â”‚ (HTTP/httpx) â”‚                           â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”˜    â””â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”˜                           â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-          â”‚                   â”‚
-          â–¼                   â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚   VirtualDJ     â”‚    â”‚  Plex Server    â”‚
-â”‚ Network Control â”‚    â”‚  (port 32400)   â”‚
-â”‚   (port 80)     â”‚    â”‚                 â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+
+                        Claude / Cursor                          
+                         (MCP Client)                            
+
+                           MCP Protocol (stdio)
+                          
+
+                      VirtualDJ-MCP Server                       
+                       (FastMCP 3.1.0)                          
+     
+                12 Portmanteau Tools                            
+    vdj_deck  vdj_mixer  vdj_stems  vdj_plex  ...          
+     
+                                                                 
+                                 
+   VDJ Client        Plex Client                             
+   (HTTP/httpx)      (HTTP/httpx)                            
+                                 
+
+                             
+                             
+    
+   VirtualDJ           Plex Server    
+ Network Control       (port 32400)   
+   (port 80)                          
+    
 ```
 
 ## Troubleshooting
@@ -337,15 +369,15 @@ VDJ_LIBRARY_PATH=C:/Music
 1. Verify `PLEX_TOKEN` is set correctly
 2. Test: `curl "http://localhost:32400/?X-Plex-Token=YOUR_TOKEN"`
 
-ðŸ“– **[Full Troubleshooting Guide](docs/NETWORK_CONTROL_SETUP.md#troubleshooting)**
+ **[Full Troubleshooting Guide](docs/NETWORK_CONTROL_SETUP.md#troubleshooting)**
 
-## ðŸ“š Documentation
+##  Documentation
 
 - **[Network Control Setup](docs/NETWORK_CONTROL_SETUP.md)** - Plugin installation
 - **[VirtualDJ Reference](docs/VIRTUALDJ_REFERENCE.md)** - VDJScript commands
 - **[MCP Production Checklist](docs/MCP_PRODUCTION_CHECKLIST.md)** - Production readiness
 
-## ðŸ‡¦ðŸ‡¹ Austrian Efficiency
+##  Austrian Efficiency
 
 - **Practical solutions** over theoretical complexity
 - **12 tools** instead of 62+ (81% reduction!)
@@ -354,5 +386,15 @@ VDJ_LIBRARY_PATH=C:/Music
 
 ---
 
-**Built with Austrian efficiency for professional DJ automation! ðŸŽµðŸ‡¦ðŸ‡¹**
+**Built with Austrian efficiency for professional DJ automation! **
 
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.

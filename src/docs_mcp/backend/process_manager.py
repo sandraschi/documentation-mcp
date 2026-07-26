@@ -3,6 +3,7 @@ import subprocess
 
 logger = logging.getLogger("docs_mcp.backend.process_manager")
 
+
 class ProcessManager:
     """Singleton-style manager for tracking and controlling background subprocesses."""
 
@@ -27,11 +28,7 @@ class ProcessManager:
             if proc.poll() is not None:
                 to_remove.append(key)
             else:
-                active_procs.append({
-                    "id": key,
-                    "pid": proc.pid,
-                    "status": "running"
-                })
+                active_procs.append({"id": key, "pid": proc.pid, "status": "running"})
 
         for key in to_remove:
             logger.debug(f"Cleaning up dead process {key}")
@@ -46,7 +43,7 @@ class ProcessManager:
             self.stop_process(proc_id=key)
         logger.info(f"Cleaned up {len(keys)} processes")
 
-    def stop_process(self, proc_id: str = None, pid: int = None) -> bool:
+    def stop_process(self, proc_id: str | None = None, pid: int | None = None) -> bool:
         """Stop a process by ID or PID using absolute taskkill."""
         target_key = None
         target_pid = None
@@ -65,7 +62,7 @@ class ProcessManager:
             try:
                 # Use taskkill for Windows to ensure tree cleanup
                 logger.info(f"Stopping process {target_key} (PID: {target_pid})")
-                subprocess.run(["taskkill", "/F", "/T", "/PID", str(target_pid)], check=False) # noqa: S603, S607
+                subprocess.run(["taskkill", "/F", "/T", "/PID", str(target_pid)], check=False)  # noqa: S603, S607
                 if target_key:
                     del self.registry[target_key]
                 return True
@@ -74,6 +71,7 @@ class ProcessManager:
                 return False
 
         return False
+
 
 # Global instance for easy import
 process_manager = ProcessManager()

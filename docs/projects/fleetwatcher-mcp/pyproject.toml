@@ -1,0 +1,23 @@
+[project]
+name = "fleetwatcher-mcp"
+version = "0.1.0"
+description = "Internal fleet pulse — monitor repos, builds, sessions, and supply chain"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.139.0",
+    "fastmcp>=3.4.4,<4",
+    "httpx",
+]
+
+[project.entry-points."mcp.server"]
+fleetwatcher = "fleetwatcher_mcp.server:main"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+
+[tool.ruff.format]
+quote-style = "double"

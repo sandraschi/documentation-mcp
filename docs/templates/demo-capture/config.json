@@ -1,0 +1,24 @@
+{
+  "backend_port": 11028,
+  "frontend_port": 11029,
+  "health_path": "/api/health",
+  "output_dir": "../../docs/screenshots",
+  "video_name": "full walkthrough",
+  "trace_name": "demo-trace.zip",
+  "start_cmd": "uv run python -m my_server --mode http --port {port}",
+  "frontend_dir": "web_sota",
+  "pages": [
+    { "route": "/", "selector": "[data-testid='dashboard']", "name": "Dashboard" },
+    { "route": "/status", "selector": "text=status", "name": "Status" },
+    { "route": "/settings", "selector": "text=Settings", "name": "Settings" },
+    { "route": "/help", "selector": "text=Help", "name": "Help" }
+  ],
+  "video_steps": [
+    { "action": "goto", "url": "/" },
+    { "action": "wait", "ms": 2000 },
+    { "action": "goto", "url": "/status" },
+    { "action": "wait", "ms": 1000 },
+    { "action": "goto", "url": "/settings" },
+    { "action": "wait", "ms": 1000 }
+  ]
+}

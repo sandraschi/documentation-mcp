@@ -1,40 +1,53 @@
-﻿# AvatarMCP
+# AvatarMCP
+
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
 **By FlowEngineer sandraschi**
 
-> FastMCP 3.1.1+.3+ compatible VRM avatar management and animation server with conversational capabilities, SEP-1577 sampling support, and VRChat OSC integration
-
-## Creative pipeline (v0.4.1+)
-
-Orchestrates VRoid Hub, vroidstudio-mcp, blender-mcp, VTube staging.
-
-| Doc | Path |
-|-----|------|
-| Repo | `avatar-mcp/docs/CREATIVE_PIPELINE.md` |
-| Fleet hub | `mcp-central-docs/docs/avatars/README.md` |
-| What is MMD? | `mcp-central-docs/docs/avatars/MMD_EXPLAINER.md` |
-| Godot | `mcp-central-docs/docs/avatars/GODOT_AND_AVATARS.md` |
-
-Web UI: **http://127.0.0.1:10792/pipeline** | API: **10793**
+> FastMCP 3.1.0+ compatible VRM avatar management and animation server with conversational capabilities, SEP-1577 sampling support, and VRChat OSC integration
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://docs.astral.sh/ruff/)
-[![FastMCP 3.1.1+.3](https://img.shields.io/badge/FastMCP-3.1.1+.3+-brightgreen)](https://fastmcp.readthedocs.io/)
+[![FastMCP 3.1.0](https://img.shields.io/badge/FastMCP-3.3-brightgreen)](https://FastMCP 3.1.0readthedocs.io/)
 [![VRChat OSC](https://img.shields.io/badge/VRChat-OSC-9cf)](docs/VRChat_OSC_Integration_Guide.md)
 [![Portmanteau Tools](https://img.shields.io/badge/Tools-Portmanteau-blueviolet)](docs/architecture/PORTMANTEAU_TOOLS_PLAN.md)
 
-## ðŸš€ Features
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/avatar-mcp
+cd avatar-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+
+##  Features
 
 ### Core Features
 
-- **Portmanteau Tools Architecture**: Consolidated 16 portmanteau tools with FastMCP 3.1.1+.3 sampling capabilities
+- **Portmanteau Tools Architecture**: Consolidated 16 portmanteau tools with FastMCP 3.1.0 sampling capabilities
   - Exposes only portmanteau tools to MCP (no raw core-tool list); bootstrap via `system_monitor(operation="initialize")`
+- **Creative Pipeline** web UI at `/pipeline` — Hub download, vroidstudio-mcp, blender-mcp, VTube staging, model_type detection
+  - Docs: [docs/CREATIVE_PIPELINE.md](docs/CREATIVE_PIPELINE.md) | MCD: `mcp-central-docs/docs/avatars/FLEET_VRM_PIPELINE.md`
   - Reduces tool explosion from 28 individual tools to 16 unified interfaces
   - Operation-based design with comprehensive multiline docstrings
   - Clean, maintainable architecture with focused tool classes
 
-- **FastMCP 3.1.1+.3 Compatible**: Fully implements the MCP protocol with sampling capabilities (SEP-1577) for agentic workflows
+- **FastMCP 3.1.0 Compatible**: Fully implements the MCP protocol with sampling capabilities (SEP-1577) for agentic workflows
 - **Agentic Sampling Workflows**: LLM-driven orchestration of complex avatar behaviors without manual sequencing
 - **VRM 2.0 Support**: Load and manage VRM 2.0 avatar models with real-time manipulation
 - **VRChat OSC Integration**: Seamless communication with VRChat for avatar control
@@ -52,9 +65,9 @@ Web UI: **http://127.0.0.1:10792/pipeline** | API: **10793**
 - **System Monitoring**: Comprehensive system health and diagnostics
 - **Debug Tools**: Built-in debugging and testing utilities
 
-## ðŸ—ï¸ Portmanteau Tools Architecture
+##  Portmanteau Tools Architecture
 
-AvatarMCP uses a revolutionary portmanteau tools architecture that consolidates related functionality into unified interfaces, leveraging FastMCP 3.1.1+.3 sampling capabilities for agentic workflows.
+AvatarMCP uses a  portmanteau tools architecture that consolidates related functionality into unified interfaces, leveraging FastMCP 3.1.0 sampling capabilities for agentic workflows.
 
 ### Benefits
 
@@ -62,12 +75,12 @@ AvatarMCP uses a revolutionary portmanteau tools architecture that consolidates 
 - **Better Organization**: Related functionality logically grouped together
 - **Easier Maintenance**: Single class per functional area
 - **Improved Discoverability**: Clearer tool purposes and operations
-- **Standards Compliance**: FastMCP 3.1.1+ compliant with multiline docstrings
+- **Standards Compliance**: FastMCP 3.1.0 compliant with multiline docstrings
 - **Cleaner API**: More intuitive tool structure with operation-based design
 
 ### Architecture Overview
 
-The server exposes only the 16 portmanteau tools. **Bootstrap first** with `system_monitor({"operation": "initialize"})` (optional: `models_dir`); then use other portmanteau tools. Each uses an operation-based design:
+The server exposes only the 16 portmanteau tools. **Bootstrap first** with `system_monitor({"operation": "initialize"})` (optional: `models_dir`); then use other portmanteau tools. Each portmanteau tool uses an operation-based design:
 
 ```python
 # Example: avatar_manager tool
@@ -90,26 +103,26 @@ await avatar_manager({
 
 For detailed architecture documentation, see [Portmanteau Tools Plan](docs/architecture/PORTMANTEAU_TOOLS_PLAN.md).
 
-## ðŸ“š Documentation
+##  Documentation
 
 ### Core Components
 
-- `MCPServer`: FastMCP 3.1.1+.0-compatible server implementation
+- `MCPServer`: FastMCP 3.1.0-compatible server implementation
 - `VRChatOSC`: OSC integration with VRChat for avatar control
 - `VRMModel`: VRM 2.0 model loading and management
 - `AnimationController`: Manage and play animations on avatars
 - `MCPTools`: MCP command handlers for avatar control
-- `AvatarSamplingTool`: Agentic workflow orchestration using FastMCP 3.1.1+.3 sampling
+- `AvatarSamplingTool`: Agentic workflow orchestration using FastMCP 3.1.0 sampling
 
 ### Feature Guides
 
 - **[Sampling Workflows Guide](SAMPLING_WORKFLOWS_GUIDE.md)**: Complete guide to agentic sampling workflows
-  - Workflow examples and best practices
+  - Workflow examples and  practices
   - Creative applications and use cases
   - Technical implementation details
   - Troubleshooting and optimization tips
 
-## ðŸ’¬ Available Prompts
+##  Available Prompts
 
 AvatarMCP supports natural language interaction through the following commands:
 
@@ -177,11 +190,12 @@ For detailed documentation, see [AVATAR_CONTROLS.md](docs/AVATAR_CONTROLS.md).
 
 ### MCP Protocol Support
 
-AvatarMCP implements the following portmanteau tools leveraging FastMCP 3.1.1+.3 sampling capabilities:
+AvatarMCP implements the following portmanteau tools leveraging FastMCP 3.1.0 sampling capabilities:
 
 #### Core Portmanteau Tools
 
 - **`avatar_manager`**: Comprehensive avatar lifecycle management
+- **`avatar_pipeline`**: Creative pipeline orchestrator (VRoid brute-force → Blender validate → VTube staging)
 - **`animation_manager`**: Animation control, sequences, and layering
 - **`emotion_manager`**: Emotional states and personality profiles
 - **`audio_manager`**: Audio playback and synthesis
@@ -201,16 +215,16 @@ AvatarMCP implements the following portmanteau tools leveraging FastMCP 3.1.1+.3
 - **`unity_config_manager`**: Unity configuration management
 - **`server_controller`**: Server lifecycle management
 
-## ðŸŽ­ Agentic Sampling Workflows (FastMCP 3.1.1+.3)
+##  Agentic Sampling Workflows (FastMCP 3.1.0)
 
-AvatarMCP introduces **agentic sampling workflows** - a revolutionary feature leveraging FastMCP 3.1.1+.3's SEP-1577 "sampling with tools" specification. This enables LLMs to autonomously orchestrate complex avatar behaviors without manual step-by-step programming.
+AvatarMCP introduces **agentic sampling workflows** - a  feature leveraging FastMCP 3.1.0's SEP-1577 "sampling with tools" specification. This enables LLMs to autonomously orchestrate complex avatar behaviors without manual step-by-step programming.
 
 ### Key Benefits
 
-- **ðŸŽª Intelligent Choreography**: AI creates seamless multi-step performances
-- **âš¡ Efficiency Gains**: Reduces 10+ tool calls to single workflow requests
-- **ðŸ§  Emotional Intelligence**: LLM understands timing, flow, and emotional context
-- **ðŸŽ¨ Complex Behaviors**: Sophisticated avatar interactions and storytelling
+- ** Intelligent Choreography**: AI creates seamless multi-step performances
+- ** Efficiency Gains**: Reduces 10+ tool calls to single workflow requests
+- ** Emotional Intelligence**: LLM understands timing, flow, and emotional context
+- ** Complex Behaviors**: Sophisticated avatar interactions and storytelling
 
 ### Sampling Workflow Examples
 
@@ -335,49 +349,47 @@ await avatar_agentic_workflow({
 
 ### Getting Started with Sampling Workflows
 
-1. **Bootstrap** with `system_monitor({"operation": "initialize"})` once per session.
-2. **Load your avatar** using `avatar_manager` first
+1. **Load your avatar** using `avatar_manager` first
 2. **Choose appropriate operations** for your workflow goal
 3. **Write descriptive prompts** that include timing and emotional context
 4. **Start with simple workflows** (3-5 iterations) and scale up
 5. **Monitor results** to refine prompts and operation selection
 
-For complete MCP protocol documentation, see [FastMCP Documentation](https://fastmcp.readthedocs.io/).
+For complete MCP protocol documentation, see [FastMCP Documentation](https://FastMCP 3.1.0readthedocs.io/).
 
 ### VRChat OSC Integration
 
 See [VRChat OSC Integration Guide](docs/VRChat_OSC_Integration_Guide.md) for details on how to configure and use the OSC integration.
 
-## ðŸš€ Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx avatarmcp
 ```
 
-### ðŸŽ¯ Claude Desktop / Cursor Integration
-Use **stdio** with the `mcp` entry point so the server runs; include `--stdio` for the avatar-mcp module. Full path to `uv` recommended if not on PATH.
+###  Claude Desktop Integration
+Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
-  "avatarops": {
-    "command": "D:/Dev/repos/uv-install/uv.exe",
-    "args": ["--directory", "D:/Dev/repos/avatar-mcp", "run", "python", "-m", "avatarmcp", "--stdio"]
+  "avatarmcp": {
+    "command": "uv",
+    "args": ["--directory", "D:/Dev/repos/avatar-mcp", "run", "avatarmcp"]
   }
 }
 ```
-Banner and stdout are suppressed in stdio mode so the JSON-RPC stream is not corrupted. See `integrations/avatar/README.md` in mcp-central-docs for config details.
 ### Prerequisites
 
 - Python 3.9+
 - pip (Python package manager)
 - [VRChat](https://vrchat.com/) (for VRChat OSC integration - optional)
 
-### ðŸ“¦ PyPI Package Install (RECOMMENDED)
+###  PyPI Package Install (RECOMMENDED)
 
 **Fastest Installation - Production Ready:**
 
@@ -387,7 +399,7 @@ pip install avatarmcp
 
 **Claude Desktop Integration:**
 - Open Claude Desktop
-- Settings â†’ MCP Servers
+- Settings  MCP Servers
 - Add new MCP server:
   ```json
   {
@@ -399,7 +411,19 @@ pip install avatarmcp
   }
   ```
 
-## ðŸ“¦ Packaging & Distribution
+### Web dashboard (web_sota)
+
+Optional React dashboard (Vite, port 10792) with API proxy to the backend (10793). From repo root:
+
+```powershell
+cd web_sota
+npm install
+npm run dev
+```
+
+Requires `framer-motion` and a valid `APPS_CATALOG` export from `src/common/apps-catalog.ts`. See [CHANGELOG](CHANGELOG.md) for recent web UI fixes.
+
+##  Packaging & Distribution
 
 This repository is SOTA 2026 compliant and uses the officially validated `@anthropic-ai/mcpb` workflow for distribution.
 
@@ -410,7 +434,7 @@ To generate a `.mcpb` distribution bundle with complete source code and automate
 mcpb pack . dist/avatar-mcp.mcpb
 ```
 
-### ðŸ› ï¸ Other MCP Clients (Cursor, Windsurf, etc.)
+###  Other MCP Clients (Cursor, Windsurf, etc.)
 
 ```bash
 # Install from PyPI (recommended)
@@ -438,7 +462,7 @@ Optional dependencies (for development and testing):
 
 ```bash
 
-## ðŸš€ Quick Start
+##  Quick Start
 
 ### Running the Server
 
@@ -447,7 +471,7 @@ Optional dependencies (for development and testing):
 python -m avatarmcp
 ```
 
-The server will start and listen for MCP commands on stdin/stdout. You can interact with it using any MCP 3.1.1+.0-compatible client.
+The server will start and listen for MCP commands on stdin/stdout. You can interact with it using any MCP 2.12.0-compatible client.
 
 ### Example MCP Commands
 
@@ -527,7 +551,7 @@ python examples/vrchat_avatar_control.py --vrm path/to/your/model.vrm --demo
 ```
 
 
-## Ã°Å¸â€Â§ Configuration
+##  Configuration
 
 ### OSC Settings
 
@@ -577,7 +601,7 @@ config.parameter_mappings = {
 ```
 
 
-## Ã°Å¸Â¤â€“ Integration with Other MCP Services
+##  Integration with Other MCP Services
 
 ### OSCMCP Integration
 
@@ -618,7 +642,7 @@ await integrator.set_expression("happy", 1.0)
 
 ```
 
-## Ã°Å¸â€œÅ¡ API Reference
+##  API Reference
 
 ### VRChatOSCServer
 
@@ -673,7 +697,7 @@ High-level integration with MCP ecosystem.
 
 - `set_expression(expression, strength=1.0)`: Set a facial expression
 
-## Ã°Å¸â€ºÂ  Development
+##  Development
 
 ### Setup
 
@@ -706,26 +730,41 @@ pre-commit install
 
 ```bash
 
-# Run tests
+# Install dev dependencies
+uv sync --dev
 
+# Run all tests
+uv run pytest tests/ -v
 
-pytest
+# Run specific test suites
+uv run pytest tests/test_portmanteau_tools.py -v
+uv run pytest tests/test_server.py -v
+uv run pytest tests/test_animation.py -v
+```
 
-# Run with coverage report
-pytest --cov=avatarmcp tests/
+The test suite includes:
+- **Portmanteau tool tests** (14 tests): Covers all 16 portmanteau tools — system_monitor (init/shutdown/status), avatar_manager (load/list/set_active/unload/errors), animation_manager (play/stop/no-active), chat_manager (full lifecycle), artifact_manager (scan), tool registration.
+- **Server tests** (5 tests): AvatarMCPServer lifecycle, tool instantiation, OSC helper, VRMManager integration.
+- **Animation tests** (6 tests): AnimationKeyframe, AnimationClip, AnimationController (play, update, blend, stop).
+- **VRM loader tests** (6 tests): File I/O, metadata extraction, bone loading, error handling.
+- **API tests** (2 tests): FastAPI TestClient health, model listing.
+- **Integration tests** (3 tests): Server start/stop, VRM scanning, OSC communication.
 
+**Status**: 49/49 tests passing. Legacy tests rewritten for current architecture.
 
+### Code Style
 
+```bash
 
+# Lint Python (Ruff)
+uv run ruff check .
 
+# Lint frontend (Biome)
+uv run --directory web_sota npx @biomejs/biome check .
 
-# Run specific test file
-pytest tests/test_osc_server.py -v
-
-
-
-
-
+# Fix both
+uv run ruff check . --fix && uv run ruff format .
+uv run --directory web_sota npx @biomejs/biome check --apply .
 ```
 
 ### Code Style
@@ -754,15 +793,29 @@ flake8
 
 ```
 
-## Ã°Å¸Â¤Â Contributing
+##  Contributing
 
 Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
-## Ã°Å¸â€œâ€ž License
+
+##  🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just test`).
+- **Security**: Automated audits via `bandit` and `safety`.
+- **CI/CD**: GitHub Actions — lint, type-check, test, build, release. Python 3.12/3.13 matrix.
+- **Quality Gates**: 49 passing tests, Ruff + mypy + Bandit + Trivy in CI.
+- **Containers**: Docker Compose with Prometheus, Loki, Grafana, Promtail for full observability.
+
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Ã°Å¸â€œÅ“ Credits
+##  Credits
 
 - VRM Consortium for the [VRM specification](https://vrm.dev/)
 
@@ -773,10 +826,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with Ã¢ÂÂ¤Ã¯Â¸Â by [Your Name] | [GitHub](https://github.com/yourusername)
+Made with by **FlowEngineer sandraschi** | [GitHub](https://github.com/anomalyco/avatar-mcp)
 
 
-## ðŸŒ Webapp Dashboard
+##  Webapp Dashboard
 
 This MCP server includes a free, premium web interface for monitoring and control.
 By default, the web dashboard runs on port **10792**.
@@ -786,4 +839,3 @@ To start the webapp:
 1. Navigate to the `webapp` (or `web`, `frontend`) directory.
 2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
 3. Open `http://localhost:10792` in your browser.
-

@@ -1,0 +1,58 @@
+name: Skill Scanner
+
+on:
+  pull_request:
+    paths:
+      - ".cursor/skills/**"
+      - "**/SKILL.md"
+      - ".github/workflows/skill-scanner.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "43 3 * * *"
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  skill-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install skill scanner
+        run: uv tool install cisco-ai-skill-scanner
+
+      - name: Prepare report directory
+        run: |
+          python -c "import os; os.makedirs('security-reports/skill-scanner', exist_ok=True)"
+
+      - name: Run recursive skill scan (SARIF)
+        run: |
+          skill-scanner scan-all ".cursor/skills" --recursive --use-behavioral --format sarif --output "security-reports/skill-scanner/skill-scan.sarif"
+
+      # Optional strict gate. Start after baseline/suppression process is in place.
+      # - name: Enforce severity threshold
+      #   run: |
+      #     skill-scanner scan-all ".cursor/skills" --recursive --use-behavioral --fail-on-severity high --format json --output "security-reports/skill-scanner/skill-scan.json"
+
+      - name: Upload SARIF to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: security-reports/skill-scanner/skill-scan.sarif
+
+      - name: Upload scanner artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-scanner-reports
+          path: security-reports/skill-scanner/**

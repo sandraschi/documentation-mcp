@@ -1,4 +1,16 @@
-﻿# Changelog
+
+## [Unreleased] — 2026-06-14
+
+### Added
+- Tauri native wrapper (native/ directory) with bundle.resources + std::process::Command
+- CUA-NSIS: just cua-nsis-test recipe, scripts/cua-smoke.py, scripts/cua-nsis-config.json
+- Tauri CORS: tauri://localhost origins for WebView API access
+- NSIS installer at dist/ and native/target/release/bundle/nsis/
+
+### Changed
+- Frontend API calls use absolute http://127.0.0.1:{port} URLs in production build
+- CORS middleware includes allow_origin_regex for tauri.localhost
+# Changelog
 
 All notable changes to **Web Development MCP** will be documented in this file.
 
@@ -10,33 +22,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.0] - 2026-01-19
 
 ### Added
-- **ðŸŽ¨ Revolutionary AI Construction System**: Complete natural language to 3D object conversion
+- **🎨 Revolutionary AI Construction System**: Complete natural language to 3D object conversion
   - `manage_object_construction`: Universal object creation with LLM-generated Web Development scripts
   - `manage_object_repo`: Comprehensive object repository with versioning and search
-  - FastMCP 3.1.1+.3 sampling integration for conversational 3D creation
+  - FastMCP 2.14.3 sampling integration for conversational 3D creation
   - Multi-layer security validation (syntax, security scoring, sandbox execution)
   - Iterative refinement system with automatic failure recovery
-- **ðŸ¤– Agentic Construction Pipeline**: End-to-end AI-powered 3D creation workflow
+- **🤖 Agentic Construction Pipeline**: End-to-end AI-powered 3D creation workflow
   - Natural language parsing with contextual understanding
   - LLM script generation with scene context and reference objects
   - Complexity levels (simple/standard/complex) and style presets (realistic/stylized/lowpoly/scifi)
   - Conversational refinement with max iteration limits
-- **ðŸ“š MCP Resource System**: Structured script collections accessible via URIs
+- **📚 MCP Resource System**: Structured script collections accessible via URIs
   - `Web Development://scripts/robots`, `Web Development://scripts/furniture`, `Web Development://scripts/rooms`
   - Mock script collections for robots, furniture, rooms, houses, vehicles, nature
   - Resource-based access for LLM-guided construction
-- **ðŸ”§ Enhanced CLI**: Comprehensive command-line interface improvements
+- **🔧 Enhanced CLI**: Comprehensive command-line interface improvements
   - `--list-tools`: Display all available MCP tools with descriptions
   - `--show-config`: Show current configuration, environment, and system status
   - Improved help text with detailed examples and environment variables
   - Cross-platform compatibility fixes (removed Unicode emojis)
-- **ðŸ›¡ï¸ Security Architecture**: Production-ready validation and sandboxing
+- **🛡️ Security Architecture**: Production-ready validation and sandboxing
   - Script validation pipeline with security scoring (0-100 scale)
   - Complexity assessment and resource limit enforcement
   - Safe execution environment with timeout and error containment
 
 ### Technical Improvements
-- **FastMCP 3.1.1+.3 Compliance**: Updated from 3.1.1+.0 to 3.1.1+.3 with sampling capabilities
+- **FastMCP 2.14.3 Compliance**: Updated from 2.12.0 to 2.14.3 with sampling capabilities
 - **Portmanteau Tool Consolidation**: Reduced tool explosion with versatile multi-operation tools
 - **Context Preservation**: Maintains conversational state across LLM sampling calls
 - **Import Error Fixes**: Resolved critical import issues for Context and ScriptValidationResult
@@ -55,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **8 New Advanced VR Tools** for professional avatar workflows:
   - `Web Development_validation`: Pre-flight checks for VRChat/Resonite compatibility
   - `Web Development_splatting`: Gaussian Splatting (3DGS) import with proxy objects
-  - `Web Development_materials_baking`: Shader conversion (toonâ†’PBR) and material atlasing
+  - `Web Development_materials_baking`: Shader conversion (toon→PBR) and material atlasing
   - `Web Development_vrm_metadata`: VRM-specific data (first person, visemes, spring bones)
   - `Web Development_atlasing`: Material/texture merging for mobile VR optimization
   - `Web Development_shapekeys`: Facial animation (visemes A/I/U/E/O, blink, expressions)
@@ -95,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Mobile VR optimization (reduce draw calls)
 
 ### Technical
-- **FastMCP 3.1.1++ Portmanteau Pattern**: All tools use consolidated interfaces
+- **FastMCP 2.13+ Portmanteau Pattern**: All tools use consolidated interfaces
 - **Advanced Web Development API Integration**: Direct access to rigging, materials, and animation
 - **Cross-Platform File Handling**: Pathlib-based operations for Windows/Linux/Mac
 - **Comprehensive Error Recovery**: Custom exceptions for each tool category

@@ -1,4 +1,4 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Enhanced MIDI Processing**: Improved MIDI-to-AI content conversion with structured analysis
 
 ### Changed
-- **Framework Upgrade**: FastMCP 3.1.1+.0 â†’ 3.1.1+.3 with sampling support
+- **Framework Upgrade**: FastMCP 2.14.0 → 2.14.3 with sampling support
 - **Python Version**: Minimum requirement increased to Python 3.11+
 - **Build System**: Migrated from setuptools to Hatchling
 - **SongGeneration Integration**: Replaced Suno-MCP with SongGeneration-MCP (LeVo AI model)
@@ -69,4 +69,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Limited AI orchestration capabilities
 - Framework compatibility issues with older FastMCP versions
 - Missing comprehensive testing infrastructure
-

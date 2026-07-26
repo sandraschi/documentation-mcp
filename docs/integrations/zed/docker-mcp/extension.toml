@@ -1,0 +1,11 @@
+id = "docker-mcp"
+name = "Docker MCP"
+version = "0.1.0"
+schema_version = 1
+authors = ["Sandra Schipal <sandraschipal@gmail.com>"]
+description = "Docker container management and orchestration MCP server"
+repository = "https://github.com/sandraschi/docker-mcp"
+
+[context_servers.docker-mcp]
+name = "Docker MCP"
+description = "Container lifecycle management, image operations, and orchestration"

@@ -1,7 +1,7 @@
-# pywinauto-mcp: safety model vs vendor “My Computer” apps
+# windows-computer-use-mcp (formerly windows-computer-use-mcp): safety model vs vendor “My Computer” apps
 
 **Status:** Fleet pattern · **Last updated:** 2026-04-10  
-**Audience:** Operators of **pywinauto-mcp**, OpenManus / sampling-capable hosts, **server farms**
+**Audience:** Operators of **windows-computer-use-mcp**, OpenManus / sampling-capable hosts, **server farms**
 
 ---
 
@@ -9,8 +9,8 @@
 
 | If you need… | Install |
 |--------------|---------|
-| Desktop UI automation on **your** Windows session | **pywinauto-mcp** — read **`docs/SAFETY.md`** in that repo first |
-| **Windows Sandbox / VM** provisioning + disposable installs | **Also install `virtualization-mcp`** — pywinauto-mcp **does not** replace Sandbox lifecycle |
+| Desktop UI automation on **your** Windows session | **windows-computer-use-mcp** — read **`docs/SAFETY.md`** in that repo first |
+| **Windows Sandbox / VM** provisioning + disposable installs | **Also install `virtualization-mcp`** — windows-computer-use-mcp **does not** replace Sandbox lifecycle |
 
 **Full sandbox isolation** = **both** servers in the MCP client: **virtualization-mcp** for box + assets; **pywinauto** (or tests) **inside** the guest — not host pywinauto clicking the Sandbox window.
 
@@ -18,7 +18,7 @@
 
 ## OpenManus, openmanus-mcp, OpenClaw, Manus-class (multiplicative risk)
 
-**pywinauto-mcp** is **not** like a browser MCP: it can move the **real cursor** and send **real keys** to **whatever has focus** on the host.
+**windows-computer-use-mcp** is **not** like a browser MCP: it can move the **real cursor** and send **real keys** to **whatever has focus** on the host.
 
 **Why the combo matters:**
 
@@ -27,7 +27,7 @@
 | **OpenManus** | Long tool loops, **optional MCP fan-in**, **sampling** — see [SAMPLING_API_RISKS.md](../standards/SAMPLING_API_RISKS.md). |
 | **openmanus-mcp** | Fleet **bridge + dashboard** — makes OpenManus easier to **orchestrate from more hosts**; does not add desktop safety by itself. |
 | **OpenClaw / RoboFang / Manus-class** | Autonomy + channels narratives — **more** pressure to “just automate” without isolation. |
-| **pywinauto-mcp** | **OS-level** UI automation — **uniquely dangerous** in the fleet. |
+| **windows-computer-use-mcp** | **OS-level** UI automation — **uniquely dangerous** in the fleet. |
 
 **Fleet rule:** Treat **OpenManus + pywinauto + openmanus-mcp** + any **OpenClaw**-style gateway as **production-root** territory: **VM / spare user**, **kill switch** on pywinauto, **virtualization-mcp** for Sandbox workflows, **client step caps**, and **no** pywinauto in default IDE chains for web work. **Canonical narrative:** [integrations/openmanus.md](../integrations/openmanus.md) (Caution block).
 
@@ -35,7 +35,7 @@
 
 ## Why this exists
 
-Products such as **Manus “My Computer”** (and similar Meta-style narratives) ship **closed guardrails**: allowlists, confirmation steps, and telemetry tuned for their runtime. Our stack is **self-hosted**: **pywinauto-mcp** exposes **Win32 UIAutomation** plus **pointer injection** via an in-repo **`win32_mouse`** path (**`SetCursorPos`** / **`mouse_event`**, DPI-aware) and **PyAutoGUI** mainly for **keyboard** and legacy paths — all reachable from any MCP client. That is **full session leverage** if the model or sampling loop misbehaves.
+Products such as **Manus “My Computer”** (and similar Meta-style narratives) ship **closed guardrails**: allowlists, confirmation steps, and telemetry tuned for their runtime. Our stack is **self-hosted**: **windows-computer-use-mcp** exposes **Win32 UIAutomation** plus **pointer injection** via an in-repo **`win32_mouse`** path (**`SetCursorPos`** / **`mouse_event`**, DPI-aware) and **PyAutoGUI** mainly for **keyboard** and legacy paths — all reachable from any MCP client. That is **full session leverage** if the model or sampling loop misbehaves.
 
 **FastMCP 3.1 sampling + long agentic workflows** can multiply tool calls per user turn. Combined with desktop automation, that can **hammer production hosts** or **spiral on the wrong HWND** (see [FLEET_COMPUTER_USE_MCP.md](./FLEET_COMPUTER_USE_MCP.md) IDE warning).
 
@@ -43,7 +43,7 @@ This document describes **defense in depth**: what the server implements, what y
 
 ---
 
-## Layers in pywinauto-mcp (current)
+## Layers in windows-computer-use-mcp (current)
 
 | Layer | Mechanism | Notes |
 |--------|-----------|--------|
@@ -88,13 +88,13 @@ A **“sandboxed pywinauto”** product sounds simple: spin up **Windows Sandbox
 
 **Fleet composition (already available):** **virtualization-mcp** (fleet repo; see its README and `assets/sandbox/`) exposes **Windows Sandbox launch**, mapped **host assets** → `C:\Assets`, optional **full dev setup** (winget + toolchain), **AIRGAP**, optional **host Ollama** from the guest. Use that to **provision** the disposable desktop; run **tests or a small Python script inside the guest** that uses pywinauto locally — or a **headless** runner pushed with the assets folder.
 
-**Why we do not ship a single merged “sandboxed pywinauto” tool in pywinauto-mcp (for now):**
+**Why we do not ship a single merged “sandboxed pywinauto” tool in windows-computer-use-mcp (for now):**
 
 - **Orchestration** belongs next to **Sandbox XML / VM lifecycle** (virtualization-mcp), not inside every UI tool.
 - **MCP inside the guest** (stdio/HTTP forwarded to the host) is doable but **operationally heavy** (port mapping, health, two servers). Treat as a **phase-2** pattern if you need agent-driven UI **inside** the box.
 - **Simpler win:** `virtualization-mcp` **launch** + **guest script** that runs pytest/pywinauto with **no** host desktop automation.
 
-**Summary:** Prefer **virtualization-mcp for sandbox/VM**, **pywinauto-mcp only on the host** when you accept host risk — or run **pywinauto in the guest** without MCP until you need the extra complexity.
+**Summary:** Prefer **virtualization-mcp for sandbox/VM**, **windows-computer-use-mcp only on the host** when you accept host risk — or run **pywinauto in the guest** without MCP until you need the extra complexity.
 
 ---
 
@@ -105,7 +105,7 @@ A **“sandboxed pywinauto”** product sounds simple: spin up **Windows Sandbox
 - [SAMPLING_API_RISKS.md](../standards/SAMPLING_API_RISKS.md) — sampling amplification  
 - **virtualization-mcp** (fleet) — Windows Sandbox launch, `assets/sandbox`, dev-setup APIs (compose with guest-side tests)  
 - [integrations/openmanus.md](../integrations/openmanus.md) — Caution block (OpenManus + pywinauto + openmanus-mcp + OpenClaw / Manus-class)  
-- Upstream repo: `pywinauto-mcp` README — Safety section
+- Upstream repo: `windows-computer-use-mcp` README — Safety section
 
 ---
 

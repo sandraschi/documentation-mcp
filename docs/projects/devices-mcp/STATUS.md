@@ -1,9 +1,9 @@
 # Devices MCP -- Project Status (Unified Home Portmanteau)
 
-**Last Updated**: 2026-05-25
+**Last Updated**: 2026-06-16
 **Repo**: `D:\Dev\repos\devices-mcp` | [GitHub](https://github.com/sandraschi/devices-mcp)
-**Version**: v1.21.1 (SOTA 2026)
-**Python**: 3.10+ | **Frontend**: React 19 / Vite 7
+**Version**: v1.22.1 (SOTA 2026)
+**Python**: 3.10+ | **Frontend**: React 19 / Vite 7 | **Desktop**: Tauri 2.0 (tray app)
 **Status**: 🟠 BETA (Active Deployment)
 
 ---
@@ -20,14 +20,18 @@ The central orchestration hub for home security and IoT devices. `devices-mcp` s
 
 ### 1. Specialised MCP Servers
 - **Tapo Camera MCP**: PTZ, ONVIF discovery, and thermal diagnostics.
-- **Ring MCP**: WebRTC live streaming and doorbell event handling (No subscription required).
+- **Ring MCP**: Doorbell ding/motion events, alarm arm/disarm, battery status, sensors (no subscription).
+  - ⚠️ Live snapshots, WebRTC video, and cloud recordings require **Ring Protect subscription** (~$100/yr).
+  - Ring API artificially gates features that the hardware natively supports (local WiFi video).
+  - Without subscription: ding events, motion alerts, alarm controls, contact/motion sensors still work.
 - **Energy MCP**: Real-time power monitoring for Tapo P115 smart plugs.
 - **Lighting MCP**: Philips Hue + Tapo Lighting with HomeAware motion detection.
 - **Nest Protect MCP**: Smoke/CO monitoring via direct Google Nest API or HA bridge.
 
 ### 2. Unified Security Dashboard
-- **Location**: `http://localhost:7777`
+- **Location**: `http://127.0.0.1:10717/app/`
 - **Dashboards**: Energy charts, lighting pickers, camera grids, and alert timelines.
+- **Tray App**: Tauri 2.0 system tray with doorbell ding notifications (native OS toasts).
 - **Onboarding**: Progressive discovery system for automated device integration.
 - **Status Supervisor**: Health pollin of all devices every 60s with auto-reconnect.
 

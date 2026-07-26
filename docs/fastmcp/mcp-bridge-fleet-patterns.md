@@ -365,7 +365,7 @@ Invoke-RestMethod http://127.0.0.1:10909/api/capabilities
 
 ## 9. Reference
 
-- Reusable module: `mcp-central-docs\standards\rules\mcp_bridge.py`
+- Reusable module: `mcp-central-docs\standards\patterns\mcp_bridge.py`
 - `setup_mcp_bridge(mcp, logger)` — one-call retrofitting
 - `probe_bridges(bridges, logger)` — startup check
 - `add_bridge_to_capabilities(bridges)` — capabilities fragment

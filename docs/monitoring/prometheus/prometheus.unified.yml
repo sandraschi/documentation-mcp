@@ -1,0 +1,325 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'unified-monitoring'
+    replica: 'prometheus-1'
+
+rule_files:
+  - "/etc/prometheus/rules/*.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 5s
+    metrics_path: /metrics
+
+  # Grafana
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['grafana:3000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # Loki
+  - job_name: 'loki'
+    static_configs:
+      - targets: ['loki:3100']
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # Promtail
+  - job_name: 'promtail'
+    static_configs:
+      - targets: ['promtail:9080']
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # Node Exporter - System Metrics
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # cAdvisor - Container Metrics
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # RebootX On-Prem
+  - job_name: 'rebootx-on-prem'
+    static_configs:
+      - targets: ['rebootx-on-prem:12010']
+    scrape_interval: 30s
+    metrics_path: /metrics
+
+  # ============================================================================
+  # MCP SERVERS
+  # ============================================================================
+
+  # Tailscale MCP Server
+  - job_name: 'tailscale-mcp'
+    static_configs:
+      - targets: ['tailscale-mcp:9091']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Virtualization MCP Server
+  - job_name: 'virtualization-mcp'
+    static_configs:
+      - targets: ['virtualization-mcp:9091']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Database Operations MCP Server
+  - job_name: 'database-operations-mcp'
+    static_configs:
+      - targets: ['database-operations-mcp:9091']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Windows Operations MCP Server
+  - job_name: 'windows-operations-mcp'
+    static_configs:
+      - targets: ['windows-operations-mcp:9091']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Filesystem MCP Server
+  - job_name: 'filesystem-mcp'
+    static_configs:
+      - targets: ['filesystem-mcp:9091']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # System Admin MCP Server
+  - job_name: 'system-admin-mcp'
+    static_configs:
+      - targets: ['system-admin-mcp:9091']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Blender MCP Server
+  - job_name: 'blender-mcp'
+    static_configs:
+      - targets: ['blender-mcp:9091']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # GIMP MCP Server
+  - job_name: 'gimp-mcp'
+    static_configs:
+      - targets: ['gimp-mcp:9091']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Notepad++ MCP Server
+  - job_name: 'notepadpp-mcp'
+    static_configs:
+      - targets: ['notepadpp-mcp:9091']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Avatar MCP Server
+  - job_name: 'avatarmcp'
+    static_configs:
+      - targets: ['avatarmcp:9091']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Tapo Cameras MCP Server
+  - job_name: 'tapo-cameras-mcp'
+    static_configs:
+      - targets: ['tapo-cameras-mcp:9091']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # ============================================================================
+  # MYAI PLATFORM
+  # ============================================================================
+
+  # MyAI Dashboard
+  - job_name: 'myai-dashboard'
+    static_configs:
+      - targets: ['myai-dashboard:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # MyAI Calibre Plus
+  - job_name: 'myai-calibre-plus'
+    static_configs:
+      - targets: ['myai-calibre-plus:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # MyAI Document Viewer
+  - job_name: 'myai-document-viewer'
+    static_configs:
+      - targets: ['myai-document-viewer:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # MyAI Gemini Tools
+  - job_name: 'myai-gemini-tools'
+    static_configs:
+      - targets: ['myai-gemini-tools:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # MyAI Plex Tools
+  - job_name: 'myai-plex-tools'
+    static_configs:
+      - targets: ['myai-plex-tools:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # ============================================================================
+  # VEOGEN PLATFORM
+  # ============================================================================
+
+  # VeoGen Backend
+  - job_name: 'veogen-backend'
+    static_configs:
+      - targets: ['veogen-backend:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # VeoGen Frontend
+  - job_name: 'veogen-frontend'
+    static_configs:
+      - targets: ['veogen-frontend:3000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # VeoGen Music Generation
+  - job_name: 'veogen-music'
+    static_configs:
+      - targets: ['veogen-music:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # VeoGen Video Generation
+  - job_name: 'veogen-video'
+    static_configs:
+      - targets: ['veogen-video:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # ============================================================================
+  # HOME INFRASTRUCTURE
+  # ============================================================================
+
+  # Tapo Cameras
+  - job_name: 'tapo-cameras'
+    static_configs:
+      - targets: ['tapo-cameras:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Nest Protect
+  - job_name: 'nest-protect'
+    static_configs:
+      - targets: ['nest-protect:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Ring Devices
+  - job_name: 'ring-devices'
+    static_configs:
+      - targets: ['ring-devices:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # Smart Plugs (Energy Monitoring)
+  - job_name: 'smart-plugs'
+    static_configs:
+      - targets: ['smart-plugs:8000']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 10s
+
+  # ============================================================================
+  # EXTERNAL SERVICES
+  # ============================================================================
+
+  # Docker Daemon Metrics (if available)
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['host.docker.internal:9323']
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # Redis (if available)
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # PostgreSQL (if available)
+  - job_name: 'postgresql'
+    static_configs:
+      - targets: ['postgres:5432']
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # ============================================================================
+  # DYNAMIC SERVICE DISCOVERY
+  # ============================================================================
+
+  # Docker Service Discovery
+  - job_name: 'docker-services'
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+        filters:
+          - name: label
+            values: ["monitoring=enabled"]
+    relabel_configs:
+      - source_labels: [__meta_docker_container_name]
+        regex: '/?(.*)'
+        target_label: 'container_name'
+      - source_labels: [__meta_docker_container_label_monitoring_job]
+        target_label: 'job'
+      - source_labels: [__meta_docker_container_label_monitoring_port]
+        target_label: '__address__'
+        regex: '(.+)'
+        replacement: '${1}'
+      - source_labels: [__meta_docker_container_label_monitoring_path]
+        target_label: '__metrics_path__'
+        regex: '(.+)'
+        replacement: '${1}'

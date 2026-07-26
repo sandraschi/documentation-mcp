@@ -1,43 +1,58 @@
-﻿# MCP Server Generator
+# MCP Server Generator
 
-**ðŸš€ Generate FastMCP 3.1.1++ compliant servers with stdio transport in seconds**
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
+**🚀 Generate FastMCP 3.1.0+ compliant servers with stdio transport in seconds**
 
 ## Features
 
-- âœ… Simple command-line interface
-- âœ… Generates fully functional MCP servers
-- âœ… Uses stdio transport for MCP client compatibility
-- âœ… Includes example tools (help, hello)
-- âœ… Proper Python package structure
-- âœ… pyproject.toml with all necessary dependencies
+- ✅ Simple command-line interface
+- ✅ Generates fully functional MCP servers
+- ✅ Uses stdio transport for MCP client compatibility
+- ✅ Includes example tools (help, hello)
+- ✅ Proper Python package structure
+- ✅ pyproject.toml with all necessary dependencies
 
 ## Quick Start
 
-### 1. Generate a New MCP Server
+```powershell
+git clone https://github.com/sandraschi/mcp-server-template
+cd mcp-server-template
+just
+```
 
-```bash
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+### 1. Generate a New MCP Server
 # Generate a new server
 python simple_gen.py MyServer
-
 # Navigate to the server directory
 cd mcp_myserver
-
 # Install in development mode
 uv pip install -e .
-
 # Run the server
 python -m myserver.server
-```
 
 ## Server Structure
 
 ```
 mcp_myserver/
-â”œâ”€â”€ pyproject.toml    # Project configuration
-â””â”€â”€ src/
-    â””â”€â”€ myserver/     # Your server package
-        â”œâ”€â”€ __init__.py
-        â””â”€â”€ server.py # Main server implementation
+├── pyproject.toml    # Project configuration
+└── src/
+    └── myserver/     # Your server package
+        ├── __init__.py
+        └── server.py # Main server implementation
 ```
 
 ## Available Tools
@@ -72,6 +87,17 @@ async def your_tool(param1: str, param2: int = 42) -> dict:
    python -m pytest tests/
    ```
 
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -88,10 +114,10 @@ Restart Claude Desktop. Done.
 - `python generate_mcp_server.py "API Client"`
 
 Each generates a working MCP server with:
-- âœ… FastMCP 3.1.1++ patterns
-- âœ… Built-in testing
-- âœ… Claude Desktop config
-- âœ… Anti-pattern protection
+- ✅ FastMCP 3.1.0+ patterns
+- ✅ Built-in testing
+- ✅ Claude Desktop config
+- ✅ Anti-pattern protection
 
 ## Prerequisites
 
@@ -99,19 +125,19 @@ Each generates a working MCP server with:
 - pip (Python package manager)
 - Virtual environment (recommended)
 
-## ðŸš€ Installation
+## 🚀 Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+### 📦 Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx mcp-generate
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+### 🎯 Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -227,15 +253,15 @@ See `docs/WINDSURF_FIXING_PLAN.md` for detailed implementation plan.
 
 ```text
 mcp-server-template/
-â”œâ”€â”€ src/mcp_server_template/     # Main implementation (WORKING)
-â”‚   â”œâ”€â”€ tools/                   # Tool implementations (BASIC)
-â”‚   â”œâ”€â”€ utils/                   # Utilities (WORKING)
-â”‚   â””â”€â”€ main.py                  # Entry point (WORKING)
-â”œâ”€â”€ tests/                       # Test suite (EMPTY - NEEDS WORK)
-â”œâ”€â”€ mcpb_pack/                    # MCPB packaging (EMPTY - NEEDS WORK)
-â”œâ”€â”€ prompts/                     # Prompt templates (EMPTY - NEEDS WORK)
-â”œâ”€â”€ docs/                        # Documentation (PARTIAL)
-â””â”€â”€ pyproject.toml              # Project config (WORKING)
+├── src/mcp_server_template/     # Main implementation (WORKING)
+│   ├── tools/                   # Tool implementations (BASIC)
+│   ├── utils/                   # Utilities (WORKING)
+│   └── main.py                  # Entry point (WORKING)
+├── tests/                       # Test suite (EMPTY - NEEDS WORK)
+├── mcpb_pack/                    # MCPB packaging (EMPTY - NEEDS WORK)
+├── prompts/                     # Prompt templates (EMPTY - NEEDS WORK)
+├── docs/                        # Documentation (PARTIAL)
+└── pyproject.toml              # Project config (WORKING)
 ```
 
 ## License
@@ -249,5 +275,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**âš ï¸ Important**: This template is a work in progress. Do not use for production until missing components are implemented. See assessment documents in `docs/` for detailed status.
-
+**⚠️ Important**: This template is a work in progress. Do not use for production until missing components are implemented. See assessment documents in `docs/` for detailed status.

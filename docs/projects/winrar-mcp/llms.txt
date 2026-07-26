@@ -1,0 +1,27 @@
+# WinRAR MCP (v0.3.1)
+
+A state-of-the-art Model Context Protocol (MCP) server for industrial WinRAR archive management on Windows.
+
+## Technical Core
+- **Framework**: FastMCP 3.1 (stdio transport) / Starlette (HTTP transport)
+- **Engine**: Python 3.12+ / WinRAR CLI (`Rar.exe`, `UnRAR.exe`)
+- **Dashboard**: React 18 / Vite / HSL-tailored Dark Mode
+- **Test Suite**: Pytest with modular industrial fixtures and handler verification
+
+## Tools (17 individual)
+- **Archive creation**: create_archive, create_sfx_archive, archive_repo
+- **Archive extraction**: extract_archive
+- **Archive management**: add_to_archive, delete_from_archive, archive_info, list_archive, test_archive
+- **Advanced analysis**: analyze_compression_efficiency, batch_archive_operations, compare_archives, smart_archive_backup, archive_health_monitor, secure_file_operations
+- **System**: help, status
+
+## Operational Standards
+- **Wait Policy**: Async job stores for long-running archive tasks; polling via `/api/v1/jobs`
+- **Error Handling**: Structured `ArchiveError` with detailed stderr capture
+- **Testing**: `just test` / `just test-cov` for developer validation
+
+## Repository Layout
+- `src/winrarmcp/`: Core service logic and MCP server definition
+- `webapp/`: High-performance React dashboard and Starlette API bridge
+- `tests/`: Modular test suite with shared fixtures
+- `justfile`: Industrial operations dashboard

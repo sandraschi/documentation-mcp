@@ -4,15 +4,20 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "games-mcp"
-version = "2.3.14"
+version = "2.6.0"
 description = "SOTA Games MCP Server - Complete chess, Go, Shogi analysis and game management via Claude/Cursor"
 authors = [
     {name = "FlowEngineer", email = "sandraschi@proton.me"}
 ]
 dependencies = [
-    "fastmcp>=3.1.0,<4",
+    "fastmcp>=3.4.4,<4",
     "aiohttp>=3.8.0",
+    "httpx>=0.27",
     "pydantic>=2.0.0",
+    "aiohttp-cors>=0.8.1",
+    "open-spiel>=1.6.11",
+    "uvicorn>=0.24.0",
+    "fastapi>=0.104.0",
 ]
 requires-python = ">=3.10"
 readme = "README.md"
@@ -30,22 +35,47 @@ http = [
 
 [tool.setuptools]
 packages = ["games_mcp"]
-package-dir = {"" = "src"}
+package-dir = {"" = "games-mcp/src"}
 
 [tool.setuptools.package-data]
 games_mcp = ["*.md", "*.txt"]
 
 [tool.ruff]
-line-length = 88
-target-version = "py310"
+line-length = 120
+target-version = "py312"
+extend-exclude = [
+    "games-mcp/test_mcp_server.py",
+    "games-mcp/validate_mcp.py",
+    "games-mcp/bridge.py",
+]
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "C90", "I", "N", "UP", "YTT", "S", "BLE", "FBT", "B", "A", "COM", "C4", "DTZ", "T10", "DJ", "EM", "EXE", "FA", "ISC", "ICN", "G", "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SLOT", "SIM", "TID", "TCH", "INT", "ARG", "PTH", "ERA", "PD", "PGH", "PL", "TRY", "FLY", "NPY", "AIR", "PERF", "FURB", "LOG", "RUF"]
-ignore = ["S101", "S104", "COM812", "ISC001"]
+select = ["E", "F", "W", "I", "N", "UP"]
+ignore = ["S101", "S104", "COM812", "ISC001", "E501", "N999"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
-"test_*.py" = ["S101", "PLR2004"]
+"test_*.py" = ["S101", "PLR2004", "E402"]
+"src/games_mcp/enhanced_ai_manager.py" = ["F401", "F821"]
+"src/games_mcp/services/ai/minimax.py" = ["E701"]
+"src/games_mcp/tools/management.py" = ["N806"]
+"engines/*.py" = ["E501", "E722", "F841"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["games_mcp"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-v --tb=short"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+]

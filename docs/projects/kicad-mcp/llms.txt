@@ -1,0 +1,80 @@
+# KiCad MCP — LLM Context
+
+KiCad MCP is a FastMCP 3.2 server for AI-driven PCB/schematic automation on KiCad EDA.
+**39 MCP tools** across 6 categories. **Version 0.3.0** adds hybrid KiCad install (stable 10.x exports + 11 nightly headless IPC CRUD).
+
+## Hybrid architecture (v0.3.0)
+
+```
+MCP/REST → crud_router OR run_kicad_cli
+              │
+    Export lane (KICAD_CLI_PATH, 10.x stable)
+    Gerber STEP DRC ERC BOM library schematic CLI
+              │
+    CRUD lane (crud_backend)
+         ├─ ipc: kicad-cli api-server + kicad-python (11 nightly)
+         ├─ tcp: kc_bridge.py :11018 (KiCad GUI, legacy)
+         └─ none: export-only
+```
+
+Env: `KICAD_CLI_PATH`, `KICAD_IPC_CLI_PATH`, `KICAD_MCP_CRUD_BACKEND`, `KICAD_MCP_IPC_ENABLED`.
+
+Probe: `python -m kicad_mcp.scripts.probe_ipc_headless`
+
+Doc: `docs/NIGHTLY_HEADLESS.md`
+
+## Key Files
+
+| Path | Purpose |
+|------|---------|
+| `src/kicad_mcp/server.py` | FastMCP + FastAPI gateway, hybrid lifespan |
+| `src/kicad_mcp/kicad_install.py` | Stable vs IPC CLI discovery |
+| `src/kicad_mcp/ipc_backend.py` | Headless IPC session (kipy) |
+| `src/kicad_mcp/crud_router.py` | CRUD backend dispatch |
+| `src/kicad_mcp/kc_bridge.py` | Legacy TCP JSON-RPC bridge (pcbnew GUI) |
+| `src/kicad_mcp/tools/pcb.py` | 17 PCB tools |
+| `src/kicad_mcp/tools/schematic.py` | 8 schematic tools |
+| `src/kicad_mcp/scripts/probe_ipc_headless.py` | Hybrid install diagnostic |
+| `docs/NIGHTLY_HEADLESS.md` | Hybrid install guide |
+| `webapp/` | React 19 dashboard |
+| `justfile` | bootstrap, serve, test, e2e |
+
+## Ports
+
+| Port | Service |
+|------|---------|
+| 11016 | Backend (FastAPI + FastMCP) |
+| 11017 | Frontend (Vite dev) |
+| 11018 | Legacy KiCad TCP bridge |
+
+## Quick Start
+
+```powershell
+uv sync --extra ipc
+just bootstrap
+just serve
+# http://localhost:11017
+```
+
+## kicad_status fields (v0.3.0)
+
+`kicad_cli_path`, `kicad_ipc_cli_path`, `version`, `kicad_ipc_version`, `ipc_api_server`, `ipc_python_installed`, `crud_backend`, `bridge_mode` (alias), `work_dir`, `uptime_s`
+
+## Tool Categories
+
+- PCB (17): load, info, list, DRC, exports, place/track/via/save/outline (CRUD needs ipc or tcp)
+- Schematic (8): load, info, ERC, exports
+- BOM (1), Library (6), Marketplace (5), System (2)
+
+## Install extras
+
+```powershell
+uv sync --extra ipc    # kicad-python for headless CRUD
+uv sync --extra dev    # pytest, ruff
+```
+
+## Agent cautions
+
+- Use board **copies** for CRUD experiments (11 nightly may upgrade file format).
+- Manufacturing exports always use stable CLI, not IPC.
+- `pcb_place_component` IPC not wired in v0.3.0 — use TCP bridge if needed.

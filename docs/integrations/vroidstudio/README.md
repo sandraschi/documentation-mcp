@@ -13,7 +13,7 @@ GUI automation bridge for **VRoid Studio** — there is no native VRoid authorin
 
 ## Dependency
 
-**pywinauto-mcp** on port **10789** — keyboard, mouse, window focus, screenshots.
+**windows-computer-use-mcp** on port **10789** — keyboard, mouse, window focus, screenshots.
 
 ## MCP tool: `vroid_studio`
 
@@ -42,7 +42,7 @@ Called by **avatar-mcp** `avatar_pipeline` operation `vroid_quick_avatar` and `f
 ```text
 avatar-mcp (10793)
     POST vroidstudio-mcp (10881) /api/v1/control/tool
-        → pywinauto-mcp (10789)
+        → windows-computer-use-mcp (10789)
             → VRoid Studio GUI
 ```
 

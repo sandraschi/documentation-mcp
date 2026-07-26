@@ -1,20 +1,36 @@
-# songgeneration-mcp (fleet index)
+# songgeneration-mcp
 
-**GitHub:** [sandraschi/songgeneration-mcp](https://github.com/sandraschi/songgeneration-mcp)
+**Version**: v0.2 — 4 backends, Quick Generate page
+**Ports**: 10885 (backend), 10884 (frontend)
 
-**Local clone:** `D:\Dev\repos\songgeneration-mcp` (edit docs in the repo; this file is a fleet mirror).
+Unified AI music generation server. Tries 4 backends in order: Lyria 3 Pro (Vertex AI) → Stable Audio Open 1.0 (diffusers) → MusicGen-small (transformers) → Studio SG2 (local API).
 
-## One-liner
+## Backends
 
-**SongGeneration v2 (LeVo 2 / SG2)** MCP server: **local** open-weight music generation via SongGeneration-Studio—**dual-track** (`vocal.wav`, `inst.wav`), SG2 length tags, optional **~10 s** style prompt.
+| Backend | Quality | Local? | First load |
+|---------|---------|--------|------------|
+| Lyria 3 Pro | Best | No (Vertex AI) | API call |
+| Stable Audio Open | Good (instrumentals) | Yes (diffusers) | ~3GB |
+| MusicGen-small | Fair | Yes (transformers) | ~2GB |
+| Studio SG2 | Variable | Yes (separate repo) | ~5GB |
 
-## vs Gemini Lyria 3 Pro (~Mar 2026)
+## Pages
 
-- **Lyria 3 Pro**: Cloud, Gemini-integrated; often **~$0.08/track** in typical credit economics (**verify** pricing).
-- **SG2 / LeVo 2**: **On-prem**; strong for **classical**, **rubato**, **instrumental** nuance; counterweight to **US-centric** commercial defaults—complements (not replaces) Google’s AI roadmap for many users.
+| Page | Route | What |
+|------|-------|------|
+| Quick Generate | `/quick` | Text prompt → 4 backends → Load to Deck |
+| Generate | `/generate` | Studio-specific: lyrics, voices, stems |
+| Listen | `/listen` | Browse generated tracks |
+| Settings | `/settings` | Backend configuration |
 
-Full PRD and comparison: repo `docs/PRD.md`, `docs/LYRIA_VS_SG2.md`; MCP resource `docs://lyria-vs-sg2`.
+## Install
 
-## Ports (fleet)
+```powershell
+just install-all          # all 4 backends
+uv run uvicorn ... :10885 # serve
+```
 
-See `operations/WEBAPP_PORTS.md`: **10884** frontend, **10885** MCP HTTP (if used).
+## Links
+
+- GitHub: https://github.com/sandraschi/songgeneration-mcp
+- Docs: `docs/INSTALL.md`, `docs/BACKENDS.md`

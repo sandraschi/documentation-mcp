@@ -108,7 +108,7 @@ def _fts_fallback(query: str, limit: int = 10, offset: int = 0) -> list[dict]:
             filename = (r.get("metadata") or {}).get("filename", "").lower()
             if query_lower in content or query_lower in filename:
                 matched.append(r)
-        return matched[offset:offset + limit]
+        return matched[offset : offset + limit]
     except Exception as e:
         logger.warning(f"FTS fallback failed: {e}")
         return []
@@ -124,13 +124,12 @@ async def api_search_sources():
             return {"sources": []}
         tbl = store.db.open_table(store.table_name)
         rows = tbl.to_arrow().to_pylist()
-        sources = sorted(set(
-            r.get("metadata", {}).get("filename", "unknown") for r in rows
-        ))
+        sources = sorted(set(r.get("metadata", {}).get("filename", "unknown") for r in rows))
         return {"sources": sources}
     except Exception as e:
         logger.error(f"Error listing sources: {e}")
         raise HTTPException(status_code=500, detail=str(e)) from e
+
 
 @router.get("/tree")
 async def api_tree():
@@ -162,6 +161,7 @@ async def api_tree():
         logger.error(f"Error in api_tree: {e}")
         raise HTTPException(status_code=500, detail=str(e)) from e
 
+
 @router.get("/content")
 async def api_content(path: str):
     """Retrieve raw file content."""
@@ -177,6 +177,7 @@ async def api_content(path: str):
         logger.error(f"Error in api_content: {e}")
         raise HTTPException(status_code=500, detail=str(e)) from e
 
+
 @router.post("/reindex")
 async def api_reindex(background_tasks: BackgroundTasks):
     """Trigger manual re-indexing in the background."""
@@ -184,6 +185,7 @@ async def api_reindex(background_tasks: BackgroundTasks):
     _reindex_status[job_id] = "queued"
     background_tasks.add_task(_run_reindex, job_id)
     return {"success": True, "job_id": job_id, "message": "Reindex started in background."}
+
 
 @router.get("/reindex/{job_id}")
 async def api_reindex_status(job_id: str):
@@ -196,6 +198,7 @@ async def api_reindex_status(job_id: str):
     if status.startswith("error:"):
         return {"success": False, "status": "error", "error": status.split(":", 1)[1]}
     return {"success": True, "status": status}
+
 
 @router.get("/reindex/{job_id}/events")
 async def api_reindex_events(job_id: str):

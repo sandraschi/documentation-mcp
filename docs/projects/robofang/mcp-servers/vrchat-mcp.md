@@ -2,7 +2,7 @@
 
 **By FlowEngineer sandraschi**
 
-A FastMCP 2.12+ implementation for controlling VRChat avatars and assets via OSC protocol. **Designed primarily for Claude Desktop integration** - allows you to control VRChat using natural language commands. Also provides FastAPI HTTP API for web access.
+A FastMCP **3.2+** implementation for controlling VRChat avatars and assets via OSC protocol. **Designed primarily for Claude Desktop integration** - allows you to control VRChat using natural language commands. Also provides FastAPI HTTP API for web access.
 
 ## GitHub Topics
 
@@ -74,7 +74,7 @@ In Claude Desktop, you can now use natural language commands like:
 
 ## Features
 
-- **✅ FastMCP 2.12+ Compatible** - Dual interface support (MCP stdio + FastAPI HTTP)
+- **✅ FastMCP 3.2+ Compatible** - Dual interface support (MCP stdio + FastAPI HTTP)
 - **✅ Plugin System** - Extensible architecture with decorator-based tool registration
 - **✅ OSC Integration** - Bidirectional communication with VRChat using Open Sound Control
 - **✅ Avatar Control** - Basic parameter management for VRChat avatars

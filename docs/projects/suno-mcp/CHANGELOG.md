@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- **Shared Playwright session:** `suno_*` and `recon_*` tools now use one `BrowserManager` via `get_shared_browser_manager()` so human-in-the-loop uses a single Chromium window instead of two independent instances.
+
+### Documentation
+- README: clarify what “human-in-the-loop” means (Playwright only), what MCP/FastAPI/web_sota actually do, and how to improve the stack.
+
+### Fixed
+- **web_sota:** Dashboard and Status pages now load **real** `GET /health` and `GET /api/v1/status` instead of hard-coded KPIs; added `src/lib/backend.ts`, `VITE_API_BASE_URL`, `src/vite-env.d.ts`. Build fixes (unused imports, `Music` icon).
+
+### Added
+- **`recon_capture_page` MCP tool** and **`capture_current_page_dom`** (any Suno URL, not only `/studio`).
+- **FastAPI:** `POST /api/v1/recon/capture-current`, `POST /api/v1/recon/find-elements`, `GET /api/v1/recon/output-dir`.
+- **web_sota:** `/recon` page with buttons to run capture + element map against the live Playwright session.
+- **HTTP tool executor:** `recon_close_session`, `recon_ensure_authenticated_session`, `recon_periodic_dom_snapshots` wired in `_handle_recon_tool` (were missing before).
+
+## [1.2.0] - 2026-03-20
+
+### Added
+- **FastMCP 3.1**: `from fastmcp import FastMCP` with `instructions`, lifespan, `on_duplicate="replace"`.
+- **Sampling**: `SunoSamplingHandler` — OpenAI-compatible chat/completions (default local Ollama); env `SUNO_SAMPLING_*`, `SUNO_SAMPLING_USE_CLIENT_LLM`.
+- **Prompts**: `prompt://suno/generation-guide`, `session-workflow`, `recon-workflow`, `agentic-instructions`.
+- **Skills**: `SkillsDirectoryProvider` — bundled `skills/music-generation/SKILL.md` (`skill://music-generation/SKILL.md`).
+- **Agentic workflow**: `agentic_suno_workflow` (SEP-1577) — `context.sample_step` loop with selected tools.
+- **Resource**: `resource://suno/capabilities`.
+- **Dependencies**: `httpx` (sampling HTTP), `fastmcp>=3.1.0,<4`.
+
+### Fixed
+- **Entry points**: `main()` now passes `mcp_app` to `run_server` (was incorrectly passing `get_server_status`). `main_api()` uses `uvicorn.run(fastapi_app, ...)` instead of misusing `run_server`.
+
+### Changed
+- Version 1.2.0 across package, FastAPI, and help text; tool count includes `agentic_suno_workflow` (17 tools).
+
 ## [1.1.0] - 2025-11-28
 
 ### Added

@@ -1,4 +1,4 @@
-﻿# Product Requirements Document (PRD)
+# Product Requirements Document (PRD)
 ## DaVinci Resolve MCP - AI-Powered Video Editing Automation
 
 **Version:** 0.2.0  
@@ -33,7 +33,7 @@ DaVinci Resolve MCP provides the first comprehensive Model Context Protocol (MCP
 
 ### Key Value Propositions
 - **Natural Language Control**: Transform complex video editing operations into simple conversations
-- **FastMCP 3.1.1+.3 Compliance**: Latest MCP protocol with conversational tools and sampling capabilities
+- **FastMCP 2.14.3 Compliance**: Latest MCP protocol with conversational tools and sampling capabilities
 - **Professional Grade**: Support for 4K, 8K, HDR workflows with frame-accurate editing
 - **Developer Friendly**: Comprehensive API with 95%+ test coverage and full documentation
 
@@ -63,7 +63,7 @@ DaVinci Resolve MCP provides the first comprehensive Model Context Protocol (MCP
 - Multi-format rendering and export
 
 #### 3. Developer Platform
-- FastMCP 3.1.1+.3 compliance with latest features
+- FastMCP 2.14.3 compliance with latest features
 - Portmanteau tool design (7 tools vs 26 individual)
 - Comprehensive testing and documentation
 - Multiple distribution formats (PyPI, MCPB, Zed extension)
@@ -71,16 +71,16 @@ DaVinci Resolve MCP provides the first comprehensive Model Context Protocol (MCP
 ### Product Architecture
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚   AI Agents     â”‚â”€â”€â”€â–¶â”‚  FastMCP Server  â”‚â”€â”€â”€â–¶â”‚ DaVinci Resolve â”‚
-â”‚ (Claude, etc.)  â”‚    â”‚  3.1.1+.3          â”‚    â”‚   API           â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                              â”‚
-                              â–¼
-                       â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-                       â”‚ Portmanteau      â”‚
-                       â”‚ Tools (7)        â”‚
-                       â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   AI Agents     │───▶│  FastMCP Server  │───▶│ DaVinci Resolve │
+│ (Claude, etc.)  │    │  2.14.3          │    │   API           │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+                              │
+                              ▼
+                       ┌──────────────────┐
+                       │ Portmanteau      │
+                       │ Tools (7)        │
+                       └──────────────────┘
 ```
 
 ---
@@ -186,9 +186,9 @@ DaVinci Resolve MCP provides the first comprehensive Model Context Protocol (MCP
 
 #### FR-001: MCP Protocol Compliance
 **Priority:** Critical  
-**Description:** Full compliance with FastMCP 3.1.1+.3 protocol including conversational tools and sampling capabilities.  
+**Description:** Full compliance with FastMCP 2.14.3 protocol including conversational tools and sampling capabilities.  
 **Acceptance Criteria:**
-- Passes all FastMCP 3.1.1+.3 validation tests
+- Passes all FastMCP 2.14.3 validation tests
 - Implements conversational tool returns
 - Supports SEP-1577 sampling for agentic workflows
 
@@ -288,8 +288,8 @@ DaVinci Resolve MCP provides the first comprehensive Model Context Protocol (MCP
 
 ### Technical Requirements
 
-#### TR-001: FastMCP 3.1.1+.3 Integration
-**Description:** Complete implementation of FastMCP 3.1.1+.3 features.  
+#### TR-001: FastMCP 2.14.3 Integration
+**Description:** Complete implementation of FastMCP 2.14.3 features.  
 **Requirements:**
 - Conversational tool returns
 - Sampling capabilities (SEP-1577)
@@ -328,7 +328,7 @@ DaVinci Resolve MCP provides the first comprehensive Model Context Protocol (MCP
 
 #### Data Flow
 ```
-User Query â†’ FastMCP Server â†’ Tool Selection â†’ DaVinci Resolve API â†’ Response Formatting â†’ User
+User Query → FastMCP Server → Tool Selection → DaVinci Resolve API → Response Formatting → User
 ```
 
 ### API Specifications
@@ -578,10 +578,10 @@ Recovery: Guides user to open/create project
 
 ## Timeline and Milestones
 
-### Phase 1: Foundation (Q1 2026) âœ…
+### Phase 1: Foundation (Q1 2026) ✅
 **Status:** Completed  
 **Deliverables:**
-- FastMCP 3.1.1+.3 integration with conversational tools
+- FastMCP 2.14.3 integration with conversational tools
 - Complete DaVinci Resolve API integration
 - Portmanteau tool design implementation
 - Basic agentic workflow support
@@ -615,11 +615,11 @@ Recovery: Guides user to open/create project
 ### Key Milestones
 
 #### January 2026
-- âœ… FastMCP 3.1.1+.3 compliance
-- âœ… Conversational tool returns
-- âœ… MCPB packaging
-- âœ… Zed extension preparation
-- âœ… Professional documentation
+- ✅ FastMCP 2.14.3 compliance
+- ✅ Conversational tool returns
+- ✅ MCPB packaging
+- ✅ Zed extension preparation
+- ✅ Professional documentation
 
 #### February 2026
 - Advanced sampling capabilities
@@ -645,7 +645,7 @@ Recovery: Guides user to open/create project
 
 DaVinci Resolve MCP represents a significant advancement in AI-powered video editing automation. By providing the first comprehensive MCP integration for professional video editing software, it opens new possibilities for AI-assisted creative workflows.
 
-The combination of FastMCP 3.1.1+.3's advanced capabilities, professional-grade DaVinci Resolve integration, and thoughtful product design positions this project for success in both the open source community and commercial markets.
+The combination of FastMCP 2.14.3's advanced capabilities, professional-grade DaVinci Resolve integration, and thoughtful product design positions this project for success in both the open source community and commercial markets.
 
 The focus on conversational interfaces, agentic workflows, and developer experience ensures that DaVinci Resolve MCP will be both powerful and accessible to users across the spectrum from individual creators to enterprise production teams.
 
@@ -655,4 +655,3 @@ The focus on conversational interfaces, agentic workflows, and developer experie
 **Last Updated:** January 17, 2026  
 **Next Review:** March 1, 2026  
 **Document Owner:** sandraschi
-

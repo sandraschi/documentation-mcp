@@ -1,60 +1,76 @@
-# 🌤️ Netatmo Weather MCP Server
+# Netatmo Weather MCP Server
 
-[![FastMCP 3.1.1+.3](https://img.shields.io/badge/FastMCP-3.1.1+.3-blue.svg)](https://github.com/modelcontextprotocol)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
 **AI-powered weather monitoring with sampling and predictive analytics for Netatmo weather stations.**
 
-The Netatmo Weather MCP Server provides comprehensive weather monitoring capabilities with advanced AI features including iterative sampling, predictive analytics, anomaly detection, and conversational tool returns. Built with FastMCP 3.1.1+.3 for maximum compatibility with AI assistants.
+The Netatmo Weather MCP Server provides comprehensive weather monitoring capabilities with advanced AI features including iterative sampling, predictive analytics, anomaly detection, and conversational tool returns. Built with FastMCP 3.1 for compatibility with AI assistants and the MCP ecosystem.
 
-## ✨ Features
+##  Features
 
-### 🤖 AI-Powered Weather Intelligence
+###  AI-Powered Weather Intelligence
 - **Iterative Sampling**: AI-guided weather pattern discovery with continuous refinement
 - **Predictive Analytics**: Short-term weather forecasting with confidence scoring
 - **Anomaly Detection**: Statistical analysis for unusual weather patterns
 - **Pattern Recognition**: Automated identification of weather trends and cycles
 
-### 💬 Conversational AI Interface
+###  Conversational AI Interface
 - **Context-Aware Responses**: Tools provide conversational context and next-step suggestions
 - **Workflow Guidance**: AI suggests optimal sequences of operations
 - **Error Recovery**: Helpful hints when operations fail
 - **Progress Tracking**: Real-time feedback on long-running operations
 
-### 🔮 Smart Weather Predictions
+###  Smart Weather Predictions
 - **Multi-Modal Forecasting**: Temperature, humidity, pressure, wind, and rain predictions
 - **Confidence Scoring**: Each prediction includes reliability metrics
 - **Trend Analysis**: Long-term weather pattern analysis and visualization
 - **Automation Suggestions**: Smart home integration recommendations based on weather patterns
 
-### 📊 Comprehensive Monitoring
+###  Comprehensive Monitoring
 - **Prometheus Metrics**: Performance metrics and health indicators
 - **Structured Logging**: JSON-formatted logs with full context
 - **Health Checks**: System status and connectivity monitoring
 - **Real-Time Dashboards**: Grafana integration for weather visualization
 
-## 🚀 Quick Start
+## Quick Start
 
+```powershell
+git clone https://github.com/sandraschi/netatmo-weather-mcp
+cd netatmo-weather-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
 ### Prerequisites
-
 - Python 3.10 or higher
 - Netatmo Developer Account ([dev.netatmo.com](https://dev.netatmo.com))
 - Netatmo Weather Station
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### 📦 Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx netatmo-weather-mcp
 ```
 
-### 🎯 Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -66,24 +82,47 @@ Add to your `claude_desktop_config.json`:
 ```
 ### Configuration
 
-1. **Get Netatmo API Credentials:**
-   - Visit [dev.netatmo.com](https://dev.netatmo.com) and create an app
-   - Note your Client ID and Client Secret
+1. **Get Netatmo API Credentials:** Visit [dev.netatmo.com](https://dev.netatmo.com), create an app, note Client ID and Client Secret.
 
-2. **Set Environment Variables:**
-   ```bash
-   export NETATMO_CLIENT_ID="your_client_id"
-   export NETATMO_CLIENT_SECRET="your_client_secret"
-   export NETATMO_USERNAME="your_email@domain.com"
-   export NETATMO_PASSWORD="your_password"
-   ```
+2. **Credentials** (choose one):
+   - **Environment variables:**
+     ```bash
+     export NETATMO_CLIENT_ID="your_client_id"
+     export NETATMO_CLIENT_SECRET="your_client_secret"
+     export NETATMO_USERNAME="your_email@domain.com"
+     export NETATMO_PASSWORD="your_password"
+     ```
+   - **Webapp Settings:** Run the webapp and enter the same four values in Settings; they are stored in memory for the session only.
 
-3. **Run the Server:**
+3. **Run the MCP server (stdio):**
    ```bash
    netatmo-weather-mcp
    ```
 
-## 🛠️ Usage
+### Webapp (React + FastAPI)
+
+A browser UI runs alongside the MCP server for dashboards and station data.
+By default, the web dashboard runs on port **10822**.
+*(Assigned ports: **10822** (Frontend), **10823** (Backend))*
+
+To start the webapp dashboard and backend:
+```powershell
+.\start.ps1
+```
+
+### Advanced Startup Flags
+- `-Headless`: Runs everything in the background (hidden windows).
+- `-BackendOnly`: Starts only the Python API server (no Vite frontend).
+- `-NoBrowser`: Prevents the automatic browser opening.
+
+Access the dashboard at `http://localhost:10822`.
+
+- **Onboarding:** New users can open **Get started** in the sidebar (or go to `/onboarding`) for a short guide: create an app at [dev.netatmo.com](https://dev.netatmo.com), enter Client ID/secret and account credentials in Settings, then use Dashboard and Stations.
+- **Pages:** Get started (onboarding), Dashboard (health, stations, current weather), Stations (list and readings), Trends (placeholder), Chat (placeholder), Settings (backend URL and Netatmo credentials).
+- **Stations:** Loaded from your Netatmo account via the cloud API after credentials are set; there is no local network discovery.
+- **Backend API:** FastAPI app in `web_app.py` exposes `GET /api/health`, `GET /api/stations`, `GET /api/stations/{id}`, `GET /api/stations/{id}/status`, `GET /api/weather/current?station_id=...`, `GET/POST /api/config/credentials` (credentials in memory for session).
+
+##  Usage
 
 ### Basic Weather Monitoring
 
@@ -143,36 +182,38 @@ weather_prediction_engine(
 )
 ```
 
-## 🏗️ Architecture
+##  Architecture
 
 ### Core Components
 
 ```
 netatmo-weather-mcp/
-├── src/netatmo_weather_mcp/
-│   ├── server.py              # FastMCP 3.1.1+.3 server implementation
-│   ├── core/
-│   │   ├── netatmo_client.py  # Netatmo API client with authentication
-│   │   └── exceptions.py      # Custom exception handling
-│   ├── tools/
-│   │   ├── weather_monitoring.py    # Weather station management
-│   │   ├── ai_sampling.py           # AI sampling tools
-│   │   └── predictive_analytics.py  # Prediction engine
-│   └── sampling/
-│       └── weather_sampling.py      # Sampling algorithms
-├── mcpb/                    # MCPB packaging
-├── monitoring/              # Prometheus & logging config
-└── tests/                   # Comprehensive test suite
+ src/netatmo_weather_mcp/
+    server.py              # FastMCP server (stdio entrypoint)
+    web_app.py             # FastAPI app for webapp backend (ports 10822/10823)
+    core/
+       netatmo_client.py  # Netatmo API client with authentication
+       exceptions.py      # Custom exception handling
+    tools/
+       weather_monitoring.py    # Weather station management
+       ai_sampling.py           # AI sampling tools
+       predictive_analytics.py  # Prediction engine
+    sampling/
+        weather_sampling.py      # Sampling algorithms
+ web_sota/                 # React + Vite frontend, start.ps1
+ mcpb/                     # MCPB packaging
+ monitoring/               # Prometheus & logging config
+ tests/                    # Test suite
 ```
 
-### FastMCP 3.1.1+.3 Features
+### FastMCP 3.1 Features
 
 - **Sampling Method Support**: Advanced AI sampling for creative weather analysis
 - **Enhanced Response Patterns**: Conversational tool returns with context
 - **Server Lifespan Management**: Proper resource initialization and cleanup
 - **Advanced Tool Management**: Portmanteau patterns for consolidated functionality
 
-## 📋 API Reference
+##  API Reference
 
 ### Tools
 
@@ -205,7 +246,7 @@ netatmo-weather-mcp/
 - `prediction_type="trend_analysis"`: Long-term trend analysis
 - `prediction_type="anomaly_detection"`: Anomaly prediction and alerting
 
-## 🔧 Configuration
+##  Configuration
 
 ### Environment Variables
 
@@ -219,6 +260,8 @@ netatmo-weather-mcp/
 | `METRICS_PORT` | No | `9091` | Prometheus metrics port |
 | `ENABLE_METRICS` | No | `true` | Enable Prometheus metrics |
 | `LOG_LEVEL` | No | `INFO` | Logging level |
+| `WEBAPP_ORIGIN` | No | - | CORS origin for webapp (e.g. `http://localhost:10822`) |
+| `VITE_API_URL` | No | `http://127.0.0.1:10823/api` | Frontend: backend API base URL |
 
 ### MCP Client Configuration
 
@@ -241,7 +284,7 @@ Add to your MCP client configuration:
 }
 ```
 
-## 📊 Monitoring & Observability
+##  Monitoring & Observability
 
 ### Metrics
 
@@ -260,7 +303,7 @@ Add to your MCP client configuration:
 
 Structured JSON logs with correlation IDs for full request tracing.
 
-## 🧪 Testing
+##  Testing
 
 ```bash
 # Run all tests
@@ -275,7 +318,7 @@ pytest tests/integration/
 pytest tests/ai/
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -284,17 +327,28 @@ pytest tests/ai/
 5. Ensure all tests pass
 6. Submit a pull request
 
-## 📄 License
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
+##  License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - [FastMCP](https://github.com/modelcontextprotocol) for the excellent MCP framework
 - [Netatmo](https://dev.netatmo.com) for their comprehensive weather API
-- The MCP community for standards and best practices
+- The MCP community for standards and  practices
 
-## 🔗 Links
+##  Links
 
 - [Netatmo Developer Portal](https://dev.netatmo.com)
 - [FastMCP Documentation](https://modelcontextprotocol.io)
@@ -303,4 +357,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Built with ❤️ for AI-powered weather monitoring**
+**Built with  for AI-powered weather monitoring**

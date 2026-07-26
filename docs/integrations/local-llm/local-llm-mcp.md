@@ -1,6 +1,8 @@
-# Local LLM MCP: Fleet Orchestration Hub
+# Local LLM MCP: Optional LLM Hub
 
-The Local LLM MCP server serves as the **industrial-grade orchestration hub** for managing and querying inference engines across the local ecosystem. It acts as both a JSON-RPC gateway and a premium visual dashboard for fleet-wide monitoring.
+The Local LLM MCP server provides centralized MCP tools for managing LLM providers (Ollama, LM Studio, cloud). It also includes a web dashboard for provider configuration and GPU telemetry.
+
+Most fleet MCPs call Ollama directly via `*_SAMPLING_BASE_URL` — this repo is for when you need a unified multi-provider surface.
 
 ## 🚀 Server Registration
 
@@ -17,7 +19,7 @@ The Local LLM MCP server serves as the **industrial-grade orchestration hub** fo
 }
 ```
 
-## 🛠️ Portmanteau Edge Tools
+## Portmanteau Tools
 
 The server utilizes the **SOTA Portmanteau Pattern** to consolidate individual operations into unified interfaces:
 
@@ -28,7 +30,7 @@ The server utilizes the **SOTA Portmanteau Pattern** to consolidate individual o
 | `llm_generation` | Inference | Industrial-grade text and chat generation API. |
 | `llm_multimodal` | Vision | Unified vision analysis for all supporting local/cloud backends. |
 
-## 🖥️ SOTA Orchestration Dashboard
+## SOTA Dashboard
 
 This server provides a premium **Model Orchestration Dashboard** (Vite/React) on dedicated ports:
 
@@ -40,11 +42,11 @@ This server provides a premium **Model Orchestration Dashboard** (Vite/React) on
 - **Live Config Engine**: Browser-based management for `.env` credentials and endpoints.
 - **Resource Analytics**: Real-time GPU and VRAM telemetry.
 
-## 📊 Interaction Principles
+## Interaction Principles
 
-- **Hub Pattern**: The server acts as a central control plane. Other MCP services (e.g., Robotics, Plex) frequently use this hub as their primary inference backend.
+- **Hub Pattern**: The server provides a central control plane for multi-provider LLM ops. Most fleet MCPs bypass this hub and call Ollama directly via `*_SAMPLING_BASE_URL`.
 - **Persistence Layer**: Configuration changes made via the UI are persisted directly to the backend filesystem.
-- **Failover Logic**: Automatic routing to secondary engines (Ollama/LM Studio) if primary high-performance vLLM instances are busy.
+- **Dashboard**: Port 10832 (Vite React) proxies to port 10833 (FastAPI REST).
 
 ---
 *Last updated: 2026-04-15*

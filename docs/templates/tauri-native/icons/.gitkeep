@@ -1,0 +1,3 @@
+# Generate app icons via: npx @tauri-apps/cli icon
+# Place icon.png (at least 1024x1024) and icon.ico here.
+# See https://v2.tauri.app/start/resources/icons/

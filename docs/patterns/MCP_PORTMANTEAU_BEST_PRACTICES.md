@@ -123,9 +123,9 @@ return "\n".join(output)  # ✅ Always returns string
 |---------|------------|----------------|
 | virtualization-mcp | 6-7 tools | ✅ Production |
 | advanced-memory-mcp | ~15 tools | ✅ Production |
-| pywinauto-mcp | 8 tools | ✅ Production (v0.3.0) |
+| windows-computer-use-mcp | 8 tools | ✅ Production (v0.3.0) |
 
 ---
 
-**Status:** Best practice documented and implemented in virtualization-mcp, advanced-memory-mcp, pywinauto-mcp ✅  
+**Status:** Best practice documented and implemented in virtualization-mcp, advanced-memory-mcp, windows-computer-use-mcp ✅  
 **Last Updated:** 2025-11-29

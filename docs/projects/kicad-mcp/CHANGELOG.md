@@ -1,28 +1,104 @@
-# KiCad MCP — Changelog
 
-## v0.3.0 (2026-05-29)
+## [Unreleased] — 2026-06-14
 
-### Added — Hybrid install + headless IPC CRUD
+### Fixed
+- Tauri build: resolved Rust crate conflict (brotli/alloc-no-stdlib)
+- Tauri build: fixed PyInstaller path mismatch (hyphen to underscore in src dirs)
+- Tauri build: fixed TypeScript errors (unused imports, useRef arg, import.meta.env)
+- Tauri CORS: allow_origins includes tauri://localhost for WebView access
 
-- Hybrid KiCad routing: **stable 10.x** (`KICAD_CLI_PATH`) for exports/DRC/ERC; **11 nightly** (`KICAD_IPC_CLI_PATH`) for headless PCB CRUD via `kicad-python` / `kipy`
-- Modules: `kicad_install.py`, `ipc_backend.py`, `crud_router.py`, `scripts/probe_ipc_headless.py`
-- Optional PyPI extra: `uv sync --extra ipc` installs `kicad-python>=0.7`
-- Env: `KICAD_MCP_CRUD_BACKEND` (`auto`|`ipc`|`tcp`|`none`), `KICAD_MCP_IPC_ENABLED`
-- Doc: `docs/NIGHTLY_HEADLESS.md` (repo) + fleet mirror `HYBRID_INSTALL.md`
-- Tests: CLI discovery + CRUD router (14 pytest total)
-- Cursor/fleet MCP config: `--extra ipc`, hybrid env vars in `MASTER_MCP_CONFIG.json`
+### Added
+- CUA-NSIS: just cua-nsis-test recipe, smoke script, config
+- CUA-NSIS: build.ps1 now copies NSIS installer to dist/
+- CUA-NSIS: 11-phase smoke test (install, launch, WebView OCR, diagnostics, uninstall)
+- CUA-NSIS: local certification — all 11 phases pass locally (2026-06-14)
+
+# Changelog
+
+## [0.3.0] — 2026-05-29
+
+### Added — Hybrid KiCad install (stable 10.x + 11 nightly IPC)
+
+- **`docs/NIGHTLY_HEADLESS.md`** — full guide: side-by-side install, env vars, Cursor `mcp.json`, backend selection, troubleshooting, file-format warnings
+- **`kicad_install.py`** — discovers Windows KiCad installs; `resolve_stable_cli()` prefers 10.x without `api-server`; `resolve_ipc_cli()` requires `kicad-cli api-server`
+- **`ipc_backend.py`** — headless CRUD session via `kipy.KiCad(headless=True)` and nightly `kicad-cli api-server` child process
+- **`crud_router.py`** — unified dispatch: IPC → TCP `kc_bridge` → none
+- **`scripts/probe_ipc_headless.py`** — probe stable/IPC CLIs, kipy, optional board load
+- **Optional dependency** `[project.optional-dependencies] ipc = ["kicad-python>=0.7"]` — install with `uv sync --extra ipc`
+- **Tests:** `test_kicad_install.py`, `test_crud_router.py` (14 total passing)
+- **Environment variables:** `KICAD_IPC_CLI_PATH`, `KICAD_MCP_CRUD_BACKEND`, `KICAD_MCP_IPC_ENABLED`
 
 ### Changed
 
-- `crud_backend` replaces `bridge_mode` as primary status field (`bridge_mode` kept as alias)
-- `kicad_status` exposes both CLI paths, IPC capability flags, active backend
-- PCB mutating tools use CRUD router (IPC preferred over TCP bridge in `auto` mode)
-- Webapp dashboard/status API surfaces hybrid install state
-- Version bump 0.2.0 → 0.3.0
+- **`server.py` lifespan** — picks `crud_backend` (`ipc` | `tcp` | `none`) on startup; shuts down IPC session on exit
+- **`kicad_status` / `/api/v1/status`** — reports `kicad_ipc_cli_path`, `kicad_ipc_version`, `ipc_api_server`, `ipc_python_installed`, `crud_backend` (`bridge_mode` is legacy alias)
+- **`tools/pcb.py`** — CRUD tools route through `crud_send` instead of raw TCP bridge only
+- **Webapp Dashboard** — shows CRUD backend, IPC nightly status, kipy install hint
+- **Fleet:** `MASTER_MCP_CONFIG.json` and user `mcp.json` updated with hybrid env + `--extra ipc`
+- **Docs:** README, SETUP, ARCHITECTURE, KICAD_API, API, llms.txt, AGENTS.md, INSTALL.md; mcp-central-docs project pages refreshed
 
-### Partial / upcoming in v0.3.x
+### IPC headless coverage (v0.3.0)
 
-- `pcb_place_component` via IPC library API (still TCP-only today)
-- IPC export lane deferred — manufacturing exports stay on stable kicad-cli
+| Operation | IPC | Notes |
+|-----------|:---:|-------|
+| pcb_load / info / list components/nets/tracks | ✅ | |
+| pcb_get_component | ✅ | |
+| pcb_add_track / pcb_add_via / pcb_save | ✅ | |
+| pcb_set_board_outline | ⚠️ | experimental on nightlies |
+| pcb_place_component | ❌ | falls back to TCP bridge or error |
+| DRC / STEP / Gerber / all exports | — | stable `KICAD_CLI_PATH` lane (unchanged) |
 
-## v0.2.0 (2026-05-25)
+### Known limitations
+
+- Requires **KiCad 11 dev nightly** with `api-server` for headless CRUD; stable 10.0.3 alone stays export-only until nightly is installed
+- Boards saved by 11 nightly may use a newer file format than 10.0.3 — use copies for agent experiments
+- `pcb_place_component` via IPC not wired yet; use `KICAD_MCP_CRUD_BACKEND=tcp` + `kc_bridge.py` as fallback
+
+## [0.2.0] — 2026-05-25
+
+### Added
+- 8 PCB export wrappers: pcb_export_pos (pick-and-place), pcb_export_dxf, pcb_export_svg, pcb_export_pdf, pcb_export_vrml, pcb_export_glb, pcb_export_ipc2581, pcb_export_odbpp (KiCad 9.0+)
+- 3 Schematic export wrappers: sch_export_pdf, sch_export_svg, sch_export_dxf
+- 2 Library export wrappers: fp_export_svg, sym_export_svg
+- PCB CRUD tools: pcb_place_component, pcb_add_track, pcb_add_via, pcb_save, pcb_set_board_outline
+- Bridge handlers: pcb_place_component, pcb_add_track, pcb_add_via, pcb_save (4 new pcbnew API methods)
+- All bridge handlers use `_MUTATING` annotation and require TCP bridge
+
+### Fixed
+- kc_bridge.py: `pcb_set_board_outline` bug — was creating N polygons with all N vertices each instead of 1 polygon with N vertices
+- kc_bridge.py: docstring now correctly lists only implemented methods (removed 7 ghosts)
+- kc_bridge.py: default port 11014 → 11018 (fleet standard)
+
+## [0.1.1] — 2026-05-25
+
+### Changed
+- Re-ported from 11012/11013/11014 to 11016/11017/11018 (port conflict with tahoma2d-mcp and google-ai-mcp)
+- All 26 tools now have SOTA annotations (`READ_ONLY` / `MUTATING`) and `version="0.1.0"`
+
+### Added
+- Marketplace tools: marketplace_search, marketplace_categories, marketplace_download, parts_search, parts_missing (5 tools, bringing total to 26)
+- Playwright e2e tests (12 tests: 8 frontend, 4 REST API)
+- CI/CD GitHub Actions workflow (lint, typecheck, pytest, e2e)
+- Ports 11016/11017/11018 registered in fleet WEBAPP_PORTS.md
+
+### Fixed
+- start.ps1 rewritten to SOTA 2026 standard (param block, readiness polling, auto-browser-open, ScriptRoot)
+- justfile `web` recipe: direct npx instead of cmd /c wrapper
+- server.py: DRY `_READ_ONLY` constant for server-level tools
+- README: tool count corrected (19 → 26), marketplace row added
+
+## [0.1.0] — 2026-05-23
+
+### Added
+- Initial release with 21 MCP tools across 5 categories (now 26)
+- Unified FastAPI + FastMCP gateway server
+- KiCad TCP bridge (kc_bridge.py) for pcbnew operations
+- PCB tools: load, inspect, list components/nets/tracks, DRC, STEP/Gerber export
+- Schematic tools: load, inspect, ERC, netlist/BOM export
+- BOM generator with grouping by value/footprint
+- Library browser: footprint and symbol search
+- Vite + React webapp with 8 pages
+- justfile with bootstrap, serve, dev, lint, test, health, e2e recipes
+- kicad-cli subprocess fallback for headless operations
+
+

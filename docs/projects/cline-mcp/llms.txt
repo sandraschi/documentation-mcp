@@ -1,0 +1,19 @@
+# cline-mcp
+
+MCP server wrapping the Cline SDK.
+- [README.md](README.md) — full docs
+- [llms-full.txt](llms-full.txt) — complete reference
+
+## Tools
+- `agent_run(prompt, model?, provider?)` — one-shot agent
+- `agent_session_start(prompt)` — background session
+- `agent_session_status(session_id)` — check session
+- `agent_session_stop(session_id)` — stop session
+- `agent_session_list()` — list sessions
+- `agent_schedule_create(name, cron, prompt)` — schedule agent
+- `agent_schedule_list()` — list schedules
+- `agent_schedule_delete(name)` — delete schedule
+- `agent_team_run(goal)` — multi-agent team
+
+## Port
+11096 (MCP HTTP, reserved)

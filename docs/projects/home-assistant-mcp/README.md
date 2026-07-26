@@ -1,88 +1,89 @@
-# home-assistant-mcp — Home Assistant MCP Server
+# Home Assistant MCP Server
 
-**FastMCP 3.1 — Portmanteau, sampling (SEP-1577), agentic workflow, prompts, skills**
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://biomejs.dev"><img src="https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat-square&logo=biome&logoColor=white" alt="Biome"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-> Single MCP bridge to Home Assistant. Get states, call services, trigger automations. Control lights, vacuums (e.g. Dreame D20 Pro via HA), climate, and any HA-integrated device from AI clients and the webapp.
 
----
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-## Summary
+FastMCP 3.2.0 MCP server and webapp for **Home Assistant**. Portmanteau tool, sampling, agentic workflow, prompts, and skills. Webapp follows SOTA standards (React, Tailwind, dark theme, ports 10796/10797).
 
-| Item | Details |
-|------|---------|
-| **Repo** | `D:\Dev\repos\home-assistant-mcp` |
-| **Ports** | Backend 10796, Dashboard 10797 |
-| **Protocol** | FastMCP 3.1 |
-| **Start** | `webapp\start.ps1` or `uv run python -m home_assistant_mcp.server --mode stdio` (Cursor) / `--mode dual --port 10796` (dashboard) |
+## Features
 
----
+- **MCP tools**: `ha(operation=...)`  get_states, get_state, call_service, get_config, get_automations, trigger_automation. `ha_help(category)`. `ha_agentic_workflow(goal)` with SEP-1577 sampling.
+- **Prompts**: `ha_quick_start`, `ha_diagnostics`.
+- **Skills**: `skills/ha-operator.md`.
+- **REST API**: GET /api/v1/health, /api/v1/states, /api/v1/config, /api/v1/automations; POST /api/v1/services/{domain}/{service}, /api/v1/automations/trigger.
+- **Webapp**: Dashboard, States (filter by domain), Services (call service form), Automations (list + trigger), Settings, Help, MCP Tools.
 
-## Tools
+## Ports
 
-- **ha(operation, domain, service, entity_id, service_data)** — get_states, get_state, call_service, get_config, get_automations, trigger_automation.
-- **ha_help(category, topic)** — Multi-level help (get_states, call_service, get_config, automations, connection).
-- **ha_agentic_workflow(goal)** — High-level goal; uses `ctx.sample()` with get_states, get_state, call_service, trigger_automation (SEP-1577).
+- Backend: **10796** (REST + MCP SSE)
+- Dashboard: **10797** (Vite)
 
----
+## Quick Start
 
-## Prompts
+```powershell
+git clone https://github.com/sandraschi/home-assistant-mcp
+cd home-assistant-mcp
+just
+```
 
-- **ha_quick_start()** — Setup (HA token, HA_URL, dashboard, MCP usage).
-- **ha_diagnostics()** — Diagnostic checklist.
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
 
----
+### Manual Setup
 
-## Skills
+If you don't have `just` installed:
 
-- **skills/ha-operator.md** — Operator skill: tools, prompts, when to use agentic_workflow.
 
----
+## Setup
 
-## REST API
+Clone the repo and install dependencies from the **repository root** (not `webapp/`):
 
-- **GET /api/v1/health** — Service health and HA connection flag.
-- **GET /api/v1/states** — All states or filter by ?entity_id=... &domain=...
-- **GET /api/v1/config** — HA server config.
-- **GET /api/v1/automations** — List automation entities.
-- **POST /api/v1/services/{domain}/{service}** — Call HA service (body: entity_id, etc.).
-- **POST /api/v1/automations/trigger** — Body: { entity_id: "automation.xxx" }.
+```powershell
+git clone https://github.com/sandraschi/home-assistant-mcp.git
+Set-Location home-assistant-mcp
+uv sync
+```
 
----
+Start the webapp from the **same** clone:
 
-## Webapp (SOTA)
+```powershell
+cd webapp
+.\start.ps1
+```
 
-- **Dashboard** — Backend and HA connection status; quick links.
-- **States** — Entity list with domain filter (light, switch, vacuum, climate, sensor, automation, etc.).
-- **Services** — Call service form (domain, service, entity_id) and quick actions (light on/off, vacuum start/dock, etc.).
-- **Automations** — List automation entities and Trigger button.
-- **Settings** — Env vars (HA_URL, HA_TOKEN, HA_MCP_PORT).
-- **Help** — Overview, Quick Start, Connection, Troubleshooting.
-- **MCP Tools** — Tool list and mcp_config.json snippet.
+Set **HA_URL** (e.g. http://homeassistant.local:8123) and **HA_TOKEN** (Long-Lived Access Token from HA Profile  Long-Lived Access Tokens).
 
----
-
-## Environment
-
-| Variable | Purpose |
-|----------|---------|
-| **HA_URL** | Home Assistant URL (default http://homeassistant.local:8123). |
-| **HA_TOKEN** | Long-Lived Access Token (Profile → Long-Lived Access Tokens in HA). |
-| **HA_MCP_PORT** | Backend port (default 10796). |
-
----
-
-## Cursor / Claude Desktop (SSE)
+## MCP client
 
 ```json
-"home-assistant": {
-  "url": "http://localhost:10796/sse",
-  "transport": "sse"
+{
+  "mcpServers": {
+    "home-assistant": {
+      "url": "http://localhost:10796/sse",
+      "transport": "sse"
+    }
+  }
 }
 ```
 
----
-
 ## Fleet
 
-- Complements **dreame-mcp**: control Dreame D20 Pro via HA (no miio token needed) or use dreame-mcp for map/dedicated vacuum UX.
-- Complements **yahboom-mcp**, **virtualization-mcp**, and other fleet MCPs; one HA bridge for all HA-managed devices.
+Documented in mcp-central-docs (integrations + projects/home-assistant-mcp).
+
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.

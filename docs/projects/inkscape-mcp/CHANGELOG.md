@@ -1,4 +1,6 @@
-﻿# Changelog
+
+## [Unreleased] — 2026-07-14
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -8,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.0] - 2026-01-19 - AI SVG Generation System
 
 ### Added
-- **`generate_svg` tool**: Natural language to SVG generation with FastMCP 3.1.1+.3 sampling
+- **`generate_svg` tool**: Natural language to SVG generation with FastMCP 2.14.3 sampling
 - **Style presets**: geometric, organic, technical, heraldic, abstract
 - **Quality levels**: draft, standard, high, ultra with optimization
 - **Inkscape post-processing**: Automatic vector operations on generated content
@@ -20,63 +22,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0] - 2026-01-15 - SOTA Packaging, Zed IDE Integration & Production-Ready Distribution
 
-### ðŸ† **State-of-the-Art (SOTA) Packaging & Distribution**
+### 🏆 **State-of-the-Art (SOTA) Packaging & Distribution**
 
 Complete modernization of packaging infrastructure for professional deployment across all MCP-compatible platforms.
 
-#### âœ… **PyPI Publishing Infrastructure**
+#### ✅ **PyPI Publishing Infrastructure**
 - **Modern build system**: Migrated from setuptools to hatchling for better dependency management
 - **uv integration**: Full support for uv package manager and uvx one-shot execution
 - **Cross-platform wheels**: Optimized binary distributions for Windows, macOS, Linux
 - **Comprehensive metadata**: SEO-optimized package description and keywords for discoverability
 
-#### âœ… **MCPB Ecosystem Support**
+#### ✅ **MCPB Ecosystem Support**
 - **Claude Desktop**: Production-ready configuration with uvx execution
 - **Windsurf**: Native integration with optimized startup parameters
 - **Universal compatibility**: Single configuration works across all MCPB clients
 - **Timeout optimization**: Tuned for reliable operation in AI assistant environments
 
-#### âœ… **Installation Methods**
+#### ✅ **Installation Methods**
 - **PyPI distribution**: `pip install inkscape-mcp` and `uv pip install inkscape-mcp`
 - **One-shot execution**: `uvx inkscape-mcp` for testing without installation
 - **GitHub source**: Direct installation from repository with `uvx git+https://github.com/sandraschi/inkscape-mcp`
 - **Docker support**: Containerized deployment for isolated environments
 
-#### âœ… **Zed IDE Integration**
+#### ✅ **Zed IDE Integration**
 - **Native extension**: Complete Zed extension with Rust WebAssembly bridge
 - **Automated deployment**: Build scripts for cross-platform Wasm compilation
 - **Security sandbox**: Isolated execution preventing IDE crashes
 - **Performance optimized**: Minimal overhead through compiled bridge
 
-### ðŸ“š **Professional Documentation Suite**
+### 📚 **Professional Documentation Suite**
 
-#### âœ… **Comprehensive Installation Guide**
+#### ✅ **Comprehensive Installation Guide**
 - **INSTALL.md**: 300+ lines covering all installation methods, troubleshooting, and production deployment
 - **PUBLISH.md**: Complete PyPI publishing workflow with pre/post-publish checklists
 - **Configuration examples**: MCPB configs for Claude Desktop and Windsurf
 - **Performance tuning**: Production optimization guides
 
-#### âœ… **Quality Assurance Infrastructure**
+#### ✅ **Quality Assurance Infrastructure**
 - **Pre-commit hooks**: Automated code quality gates with ruff, mypy, and security checks
 - **CI/CD pipeline**: GitHub Actions for automated testing and Wasm builds
 - **Development tooling**: uv-based development environment with comprehensive testing
 - **Security auditing**: Automated vulnerability scanning and dependency checks
 
-### ðŸ”§ **Technical Infrastructure Upgrades**
+### 🔧 **Technical Infrastructure Upgrades**
 
-#### âœ… **Build System Modernization**
+#### ✅ **Build System Modernization**
 - **hatchling backend**: Modern Python packaging with better plugin support
 - **uv dependency management**: Faster installs, better lockfile management
 - **Cross-platform builds**: Consistent builds across Windows, macOS, Linux
 - **Development dependencies**: Comprehensive dev tooling with version pinning
 
-#### âœ… **Code Quality & Standards**
+#### ✅ **Code Quality & Standards**
 - **Ruff configuration**: Advanced linting rules for code consistency
 - **MyPy integration**: Strict type checking for reliability
 - **Security scanning**: Automated vulnerability detection
 - **Formatting standards**: Consistent code style across the project
 
-#### âœ… **Distribution Channels**
+#### ✅ **Distribution Channels**
 - **PyPI primary**: Official Python package distribution
 - **GitHub secondary**: Source distribution with uvx support
 - **Docker tertiary**: Containerized deployment option
@@ -84,31 +86,31 @@ Complete modernization of packaging infrastructure for professional deployment a
 
 ## [1.2.0-beta] - 2025-01-15 - Complete Inkscape Extension System & Unity/VRChat Workflows
 
-### ðŸš€ **Major Feature: Complete Inkscape Extension System**
+### 🚀 **Major Feature: Complete Inkscape Extension System**
 
 This release transforms Inkscape-MCP into a **full-featured extension platform**, implementing comprehensive support for Inkscape's rich ecosystem of Python extensions. Based on Gemini's extension analysis, we've added native support for the 200+ Inkscape extensions that power professional vector workflows.
 
-### ðŸŽ¯ **Core Extension Infrastructure**
+### 🎯 **Core Extension Infrastructure**
 
-#### âœ… **Extension Discovery & Loading**
+#### ✅ **Extension Discovery & Loading**
 - **Cross-platform discovery**: Automatic detection of extensions in standard Inkscape directories
 - **XML parsing**: Robust `.inx` file parsing for extension metadata and parameters
 - **Dynamic loading**: Runtime extension registration with parameter validation
 - **Hot-reload capable**: Extensions can be added/removed without server restart
 
-#### âœ… **Extension Execution Engine**
+#### ✅ **Extension Execution Engine**
 - **CLI integration**: Native `--extension=extension_id` support with parameter injection
 - **Async execution**: Non-blocking extension execution with configurable timeouts
 - **Error handling**: Comprehensive error reporting and recovery
 - **Parameter mapping**: Automatic conversion between MCP and extension parameter formats
 
-#### âœ… **MCP Integration**
+#### ✅ **MCP Integration**
 - **Extension registry**: `list_extensions` operation for discovering available extensions
 - **Extension execution**: `execute_extension` operation with full parameter support
 - **Status monitoring**: Extension health and availability in server status
 - **Configuration support**: Per-extension configuration in `config.yaml`
 
-### ðŸŽ¨ **Custom Unity/VRChat Extensions (AG Series)**
+### 🎨 **Custom Unity/VRChat Extensions (AG Series)**
 
 Based on Gemini's workflow analysis, we've implemented **4 specialized extensions** for Unity and VRChat development:
 
@@ -136,7 +138,7 @@ Based on Gemini's workflow analysis, we've implemented **4 specialized extension
 - **Unity Workflow**: Optimize textures and maintain color accuracy
 - **Parameters**: `max_colors`, `palette`, `dither`
 
-### ðŸ”§ **Enhanced System Architecture**
+### 🔧 **Enhanced System Architecture**
 
 #### **Extension Manager**
 - **Discovery**: Scans `~/.config/inkscape/extensions/` and custom directories
@@ -156,7 +158,7 @@ Based on Gemini's workflow analysis, we've implemented **4 specialized extension
 - **Result formatting**: Structured responses with extension metadata
 - **Error reporting**: Detailed extension execution error information
 
-### ðŸ“š **Documentation & Examples**
+### 📚 **Documentation & Examples**
 
 #### **Extension Development Guide**
 - Complete tutorial for creating custom Inkscape extensions
@@ -170,7 +172,7 @@ Based on Gemini's workflow analysis, we've implemented **4 specialized extension
 - Performance optimization techniques
 - Troubleshooting common issues
 
-### ðŸ§ª **Testing & Quality Assurance**
+### 🧪 **Testing & Quality Assurance**
 
 #### **Extension Testing Suite**
 - Unit tests for extension discovery and loading
@@ -184,7 +186,7 @@ Based on Gemini's workflow analysis, we've implemented **4 specialized extension
 - Performance benchmarking for batch operations
 - Memory usage and resource consumption monitoring
 
-### ðŸŽ¯ **Unity/VRChat Compatibility**
+### 🎯 **Unity/VRChat Compatibility**
 
 #### **Unity-Specific Optimizations**
 - Coordinate system normalization for proper UI placement
@@ -198,7 +200,7 @@ Based on Gemini's workflow analysis, we've implemented **4 specialized extension
 - Performance optimization for real-time rendering
 - Format compatibility with VRChat's SVG import
 
-### âœ¨ **Added**
+### ✨ **Added**
 
 #### **New Operations (2 Total)**
 - `list_extensions`: Discover and catalog all available Inkscape extensions
@@ -210,7 +212,7 @@ Based on Gemini's workflow analysis, we've implemented **4 specialized extension
 - `org.project_ag.layer_animation`: CSS animation creation
 - `org.project_ag.color_quantize`: Color palette optimization
 
-### ðŸ”§ **Enhanced**
+### 🔧 **Enhanced**
 
 #### **System Tool Expansion**
 - Extended `inkscape_system` portmanteau with extension operations
@@ -227,7 +229,7 @@ Based on Gemini's workflow analysis, we've implemented **4 specialized extension
 - Asynchronous extension execution support
 - Resource management for extension processes
 
-### ðŸ“š **Documentation**
+### 📚 **Documentation**
 
 #### **Extension System Documentation**
 - Complete extension development guide
@@ -240,13 +242,13 @@ Based on Gemini's workflow analysis, we've implemented **4 specialized extension
 - Parameter mapping and validation details
 - Performance considerations and optimization
 
-### ðŸ› **Fixed**
+### 🐛 **Fixed**
 - Extension system initialization issues
 - Parameter validation edge cases
 - Cross-platform extension directory detection
 - Memory management in extension execution
 
-### ðŸ§ª **Testing**
+### 🧪 **Testing**
 - Extension discovery and loading tests
 - Parameter validation and schema generation
 - Cross-platform compatibility testing
@@ -256,84 +258,84 @@ Based on Gemini's workflow analysis, we've implemented **4 specialized extension
 
 ## [1.1.1] - 2025-01-15 - Production-Ready Robustness & Critical Fixes
 
-### ðŸ”’ **Critical Robustness Fixes (Gemini Analysis Integration)**
+### 🔒 **Critical Robustness Fixes (Gemini Analysis Integration)**
 
 This release addresses **all 7 critical gaps** identified by Gemini's comprehensive technical analysis, transforming Inkscape-MCP from "works in theory" to "production bulletproof."
 
-#### âœ… **1. Stateful Action Chains - FIXED**
-**Problem**: Inkscape's `--actions` API is stateful - operations must follow "Select â†’ Modify â†’ Persist" chain or fail silently
+#### ✅ **1. Stateful Action Chains - FIXED**
+**Problem**: Inkscape's `--actions` API is stateful - operations must follow "Select → Modify → Persist" chain or fail silently
 **Solution**:
 - Implemented mandatory action chain pattern: `select-by-id;operation;export-filename:output.svg;export-do`
 - Updated all CLI examples with correct stateful execution
 - Server now enforces proper sequencing internally to prevent "dud" commands
 
-#### âœ… **2. Object ID Prerequisites - FIXED**
+#### ✅ **2. Object ID Prerequisites - FIXED**
 **Problem**: AI agents hallucinate IDs like "path1" without discovery, causing 100% failure rate
 **Solution**:
 - `inkscape_analysis("objects")` promoted as **mandatory prerequisite** for all ID-requiring operations
 - Added clear prerequisite documentation in all operation descriptions
 - Implemented "Look before you leap" workflow guidance
 
-#### âœ… **3. Output Filtering & JSON-RPC Stability - FIXED**
+#### ✅ **3. Output Filtering & JSON-RPC Stability - FIXED**
 **Problem**: Inkscape outputs headers/GTK warnings that break JSON parsing, causing ontological drift
 **Solution**:
 - Implemented proper stderr filtering and JSON response cleaning
 - Added output sanitization to prevent AI confusion
 - Ensured clean JSON-RPC responses for reliable agent interaction
 
-#### âœ… **4. Technical Implementation Corrections - FIXED**
+#### ✅ **4. Technical Implementation Corrections - FIXED**
 **Problem**: Incorrect CLI syntax, missing export-do, wrong parameter usage in documentation
 **Solution**:
 - Fixed all CLI examples with proper Inkscape 1.2+ syntax
 - Corrected `selection-simplify` parameter usage (uses document threshold, not direct numeric)
 - Added mandatory `export-filename:output.svg;export-do` for all file-modifying operations
 
-#### âœ… **5. Architectural Hardening - IMPLEMENTED**
+#### ✅ **5. Architectural Hardening - IMPLEMENTED**
 **Headless Mode**: Added `--batch-process` flag to prevent GUI flashes on Windows/Linux
 **Resource Protection**: Added `--no-remote-resources` to prevent hanging on missing external images
 **Z-Order Control**: Added `object-raise` and `object-lower` operations for layering management
 **Document Units**: Added `set_document_units` for coordinate system normalization
 **Tracing Enhancement**: Added brightness threshold parameters for color tracing support
 
-#### âœ… **6. Easter Egg Integrity - CONFIRMED**
+#### ✅ **6. Easter Egg Integrity - CONFIRMED**
 Benny's orange preference remains properly isolated - no leakage in prompt engineering.
 
-#### âœ… **7. Project AG Headless Mode - IMPLEMENTED**
+#### ✅ **7. Project AG Headless Mode - IMPLEMENTED**
 Added comprehensive headless mode documentation preventing dbus/GUI issues in Windows environments.
 
-### âœ¨ **Final Refinements (Gemini Phase 3)**
+### ✨ **Final Refinements (Gemini Phase 3)**
 
-#### ðŸŽ¯ **Laser Dot LDDO Compliance - IMPLEMENTED**
+#### 🎯 **Laser Dot LDDO Compliance - IMPLEMENTED**
 Updated `generate_laser_dot` with proper SVG `<animate>` tags for frantic animation:
 - **Frantic Timing**: 0.12s-0.25s intervals for "pulsing" effect
 - **LDDO-Compliant**: Pure SVG animation, no external dependencies
 - **Cross-Viewer Compatible**: Standard `<animate>` tags work everywhere
 
-#### ðŸ“ **Coordinate System Documentation - IMPLEMENTED**
+#### 📐 **Coordinate System Documentation - IMPLEMENTED**
 Clarified Inkscape coordinate system handling:
 - **UI Origin**: Bottom-Left (Inkscape's ruler display)
 - **SVG Standard**: Top-Left (W3C specification, --query flags)
 - **Server Normalization**: Automatic conversion prevents "drawing off-canvas" errors
 
-#### ðŸš€ **Headless Mode Memory Optimization - IMPLEMENTED**
+#### 🚀 **Headless Mode Memory Optimization - IMPLEMENTED**
 Emphasized `--batch-process` critical importance:
 - **Memory Goal**: <50MB baseline maintained
-- **Without --batch-process**: GTK/display context â†’ 500MB+ RAM, server hangs
-- **With --batch-process**: Pure CLI â†’ 50MB RAM, container/GitHub Actions compatible
+- **Without --batch-process**: GTK/display context → 500MB+ RAM, server hangs
+- **With --batch-process**: Pure CLI → 50MB RAM, container/GitHub Actions compatible
 
-### ðŸ† **PROJECT COMPLETE - PRODUCTION READY**
+### 🏆 **PROJECT COMPLETE - PRODUCTION READY**
 
 **Inkscape MCP Server v1.1.1** achieves **100% Gemini Requirements Satisfaction**:
 
-âœ… **Zero Silent Failures**: Stateful action chains prevent "dud" commands
-âœ… **AI-Safe Operations**: Mandatory prerequisites block hallucinated IDs
-âœ… **JSON-RPC Stability**: Output filtering prevents parsing failures
-âœ… **Headless Operation**: No GUI flashes, 50MB memory footprint maintained
-âœ… **LDDO Compliance**: All operations produce optimized, reusable output
-âœ… **Cross-Platform**: Coordinate system normalization prevents off-canvas drawing
-âœ… **Easter Egg Integrity**: Benny's preferences isolated, laser dot frantic but compliant
+✅ **Zero Silent Failures**: Stateful action chains prevent "dud" commands
+✅ **AI-Safe Operations**: Mandatory prerequisites block hallucinated IDs
+✅ **JSON-RPC Stability**: Output filtering prevents parsing failures
+✅ **Headless Operation**: No GUI flashes, 50MB memory footprint maintained
+✅ **LDDO Compliance**: All operations produce optimized, reusable output
+✅ **Cross-Platform**: Coordinate system normalization prevents off-canvas drawing
+✅ **Easter Egg Integrity**: Benny's preferences isolated, laser dot frantic but compliant
 
-### âœ¨ **Added**
+### ✨ **Added**
 
 #### **New Operations (26 Total)**
 - `object_raise`: Move objects up in Z-order/layering hierarchy
@@ -345,7 +347,7 @@ Emphasized `--batch-process` critical importance:
 - `trace_image`: Added brightness threshold parameter for color tracing
 - All vector operations now include proper action chain validation
 
-### ðŸ”§ **Enhanced**
+### 🔧 **Enhanced**
 
 #### **CLI Wrapper Robustness**
 - Enforced `--batch-process` for all operations (prevents GUI flashes)
@@ -363,7 +365,7 @@ Emphasized `--batch-process` critical importance:
 - Added prerequisite requirements to operation descriptions
 - Improved troubleshooting guidance for common issues
 
-### ðŸ› **Fixed**
+### 🐛 **Fixed**
 - Silent failures in boolean operations due to missing selection state
 - JSON parsing errors from Inkscape header output
 - Incorrect parameter usage in path simplification operations
@@ -371,13 +373,13 @@ Emphasized `--batch-process` critical importance:
 - GUI flashes on Windows/Linux systems
 - Hanging processes when external images are unreachable
 
-### ðŸ“š **Documentation**
+### 📚 **Documentation**
 - Added "Critical Implementation Gaps (FIXED)" section to technical specification
 - Updated all operation descriptions with prerequisite requirements
 - Corrected CLI examples throughout documentation
 - Added troubleshooting guidance for headless mode issues
 
-### ðŸ§ª **Testing**
+### 🧪 **Testing**
 - Added validation tests for action chain correctness
 - Prerequisite checking verification
 - Headless mode functionality testing
@@ -389,24 +391,24 @@ Emphasized `--batch-process` critical importance:
 
 ## [1.1.0] - 2025-01-14 - Complete Vibe Architect Workflow
 
-### ðŸŽ‰ **Major Release: Complete Implementation**
+### 🎉 **Major Release: Complete Implementation**
 
 This release transforms Inkscape-MCP into a comprehensive "vibe architect" workflow tool, implementing all 23 advanced vector operations across 5 specialized categories as requested by Gemini's AG specifications.
 
-### âœ¨ **Added**
+### ✨ **Added**
 
-#### ðŸŽ¨ **Vibe-to-Vector Tools (Generative)**
+#### 🎨 **Vibe-to-Vector Tools (Generative)**
 - **`construct_svg`**: Build complex SVGs from text descriptions (Polish royal crest demo)
 - **`generate_barcode_qr`**: Create QR codes and barcodes using Inkscape extensions
 - **`create_mesh_gradient`**: Generate complex organic color gradients with multiple stops
 - **`text_to_path`**: Convert text strings to editable Bezier curves with font selection
 - **`trace_image`**: Enhanced raster-to-vector conversion using Potrace with multiple modes
 
-#### ðŸ”§ **Geometric Logic (Boolean Operations)**
+#### 🔧 **Geometric Logic (Boolean Operations)**
 - **`apply_boolean`**: Complete boolean operations suite (Union, Difference, Intersection, Exclusion, Division)
 - **`path_inset_outset`**: Shrink or grow shapes for borders and halo effects
 
-#### âš™ï¸ **Path Engineering (LDDO Prevention)**
+#### ⚙️ **Path Engineering (LDDO Prevention)**
 - **`path_operations`**: Advanced path manipulation (simplify, reverse, boolean ops)
 - **`path_clean`**: Remove empty groups, unused defs, and hidden metadata
 - **`path_combine`**: Merge separate paths into compound objects
@@ -415,21 +417,21 @@ This release transforms Inkscape-MCP into a comprehensive "vibe architect" workf
 - **`optimize_svg`**: Clean and optimize SVG for web deployment
 - **`scour_svg`**: Remove "LDDO" (Low-Density Derivative Output) metadata
 
-#### ðŸ‘ï¸ **Query & Analysis (AI's "Eyes")**
+#### 👁️ **Query & Analysis (AI's "Eyes")**
 - **`measure_object`**: Query object dimensions using `--query-x`, `--query-width`, `--query-height`
 - **`query_document`**: Get comprehensive document statistics and object enumeration
 - **`count_nodes`**: Analyze path complexity for optimization decisions
 
-#### ðŸŽ® **Specialized VRChat/Resonite Workflows**
+#### 🎮 **Specialized VRChat/Resonite Workflows**
 - **`export_dxf`**: Export paths for CAD and 3D modeling tools (R14 format)
 - **`layers_to_files`**: Export each layer as separate PNG/SVG files for texture atlases
 - **`fit_canvas_to_drawing`**: Snap document boundaries to actual artwork for clean Unity imports
 
-#### ðŸŽ¯ **Entertainment & Easter Eggs**
+#### 🎯 **Entertainment & Easter Eggs**
 - **`generate_laser_dot`**: Animated green laser pointer SVG for Benny (Easter egg)
 - **Benny Test**: Laser dot generation with proper node counting and animation
 
-### ðŸ”§ **Enhanced**
+### 🔧 **Enhanced**
 
 #### **Inkscape Actions API Integration**
 - Complete `--batch-process` implementation with action chaining
@@ -449,19 +451,19 @@ This release transforms Inkscape-MCP into a comprehensive "vibe architect" workf
 - Comprehensive error recovery mechanisms
 - Optimized file size reduction (LDDO prevention)
 
-### ðŸ“š **Documentation**
+### 📚 **Documentation**
 - Complete README rewrite with all 23 operations documented
 - Category-based organization (Vibe-to-Vector, Geometric Logic, Path Engineering, etc.)
 - Usage examples for all major operations
 - Architecture documentation with portmanteau tool explanations
 
-### ðŸ§ª **Testing**
+### 🧪 **Testing**
 - Comprehensive test suite with Polish royal crest construction
 - Mesh gradient generation verification
 - Laser dot animation testing
 - Path complexity analysis validation
 
-### ðŸŽ¯ **Compatibility**
+### 🎯 **Compatibility**
 - **Inkscape 1.2+** with Actions API support (preferred)
 - **Inkscape 1.0+** backward compatibility
 - **Cross-platform**: Windows, macOS, Linux with auto-detection
@@ -469,8 +471,8 @@ This release transforms Inkscape-MCP into a comprehensive "vibe architect" workf
 
 ## [1.0.0] - 2025-01-13 - Initial Portmanteau Architecture
 
-### âœ¨ **Added**
-- FastMCP 3.1.1++ integration with modern portmanteau architecture
+### ✨ **Added**
+- FastMCP 2.13+ integration with modern portmanteau architecture
 - Basic Inkscape CLI wrapper with cross-platform detection
 - 8 portmanteau tools consolidating 40+ operations
 - File operations (load, save, convert, validate)
@@ -479,7 +481,7 @@ This release transforms Inkscape-MCP into a comprehensive "vibe architect" workf
 - YAML-based configuration with environment variable support
 - Comprehensive error handling and validation
 
-### ðŸ”§ **Technical Foundation**
+### 🔧 **Technical Foundation**
 - Async operation support with configurable timeouts
 - Process management and resource isolation
 - Security-focused file validation
@@ -496,12 +498,12 @@ This release transforms Inkscape-MCP into a comprehensive "vibe architect" workf
 - **Patch**: Bug fixes and optimizations
 
 ### Categories
-- ðŸŽ¨ **Vibe-to-Vector**: Generative tools bridging ideas to assets
-- ðŸ”§ **Geometric Logic**: Boolean operations and shape manipulation
-- âš™ï¸ **Path Engineering**: Optimization and LDDO prevention
-- ðŸ‘ï¸ **Query & Analysis**: AI vision and measurement tools
-- ðŸŽ® **VR/Unity Pipeline**: Specialized export workflows
-- ðŸŽ¯ **Entertainment**: Easter eggs and fun features
+- 🎨 **Vibe-to-Vector**: Generative tools bridging ideas to assets
+- 🔧 **Geometric Logic**: Boolean operations and shape manipulation
+- ⚙️ **Path Engineering**: Optimization and LDDO prevention
+- 👁️ **Query & Analysis**: AI vision and measurement tools
+- 🎮 **VR/Unity Pipeline**: Specialized export workflows
+- 🎯 **Entertainment**: Easter eggs and fun features
 
 ### Testing
 - **Benny Test**: Laser dot generation with proper complexity analysis
@@ -511,8 +513,8 @@ This release transforms Inkscape-MCP into a comprehensive "vibe architect" workf
 ---
 
 **Legend:**
-- âœ… Implemented and tested
-- ðŸ”„ In development
-- ðŸ“‹ Planned for future release
-- ðŸŽ¯ Key achievement/milestone
+- ✅ Implemented and tested
+- 🔄 In development
+- 📋 Planned for future release
+- 🎯 Key achievement/milestone
 

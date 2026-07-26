@@ -1,0 +1,11 @@
+id = "system-admin-mcp"
+name = "System Admin MCP"
+version = "0.1.0"
+schema_version = 1
+authors = ["Sandra Schipal <sandraschipal@gmail.com>"]
+description = "System administration and infrastructure management MCP server"
+repository = "https://github.com/sandraschi/system-admin-mcp"
+
+[context_servers.system-admin-mcp]
+name = "System Admin MCP"
+description = "System monitoring, process management, and infrastructure operations"

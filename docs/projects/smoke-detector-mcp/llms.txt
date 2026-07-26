@@ -1,0 +1,4 @@
+# smoke-detector-mcp
+
+Tools: smoke_device, smoke_run, smoke_help
+Ports: 11040/11041

@@ -1,0 +1,7 @@
+pyproject.toml
+mcp_links_service.egg-info/PKG-INFO
+mcp_links_service.egg-info/SOURCES.txt
+mcp_links_service.egg-info/dependency_links.txt
+mcp_links_service.egg-info/entry_points.txt
+mcp_links_service.egg-info/requires.txt
+mcp_links_service.egg-info/top_level.txt

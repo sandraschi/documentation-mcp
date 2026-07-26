@@ -37,7 +37,7 @@ Check `model_type` in registry metadata — quadrupeds need different motion too
 
 **Goal:** Default anime gal from desktop VRoid without Hub.
 
-**Prerequisites:** pywinauto-mcp (10789), vroidstudio-mcp (10881), blender-mcp (10849), VRoid Studio installed.
+**Prerequisites:** windows-computer-use-mcp (10789), vroidstudio-mcp (10881), blender-mcp (10849), VRoid Studio installed.
 
 ```json
 { "operation": "full_pipeline", "vrm_filename": "anime_gal.vrm", "pick_sample": true }
@@ -114,7 +114,7 @@ When auto-detection is wrong:
 | Symptom | Check |
 |---------|-------|
 | Hub download 401 | Re-run `hub_auth` start/complete |
-| VRoid export fails | pywinauto-mcp + VRoid window focused |
+| VRoid export fails | windows-computer-use-mcp + VRoid window focused |
 | Blender validate 0 meshes | VRM addon installed in headless Blender |
 | Wrong model_type | Set `model_type_override` or edit `.meta.json` |
 | Godot shows T-pose | Bake animations to GLB in Blender first |

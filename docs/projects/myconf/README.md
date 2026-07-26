@@ -1,158 +1,156 @@
-# myconf (AG-Visio / Teams++)
+# Teleconference MCP (AG-Visio / Teams++)
 
-**Professional video conferencing platform** with AI voice agent integration, built on Turborepo and LiveKit. Features real-time transcription, multi-room support, screen sharing, meeting recording, background blur, and comprehensive device testing.
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-**Version**: 2.3.0 | **Status**: Active Development | **Ports**: Web 10886, Conferencing MCP 10720, Remoting MCP 10725, Agent 10887
+[![CI](https://github.com/sandraschi/myconf/actions/workflows/ci.yml/badge.svg)](https://github.com/sandraschi/myconf/actions/workflows/ci.yml)
+[![Docker](https://img.shields.io/badge/docker-8%20containers-2496ed?logo=docker)](https://docker.com)
+[![Grafana](https://img.shields.io/badge/observability-grafana%2Bprometheus%2Bloki-orange)](docs/FEATURES.md)
 
----
-
-## Stability & SOTA Alignment
-
-Adheres to strict **SOTA (State-Of-The-Art) standards**:
-- **Ruff linting** with 120-char line limit, zero errors across 42 files
-- **68 Python tests** (pytest, parametrized) + **27 frontend unit tests** (vitest) + **22 E2E specs** (Playwright)
-- **Bandit** security scanning + **Safety** dependency auditing
-- **Pre-commit hooks** for ruff, mypy, trailing-whitespace, yaml/json validation
-- **CI pipeline**: parallel Node 20 + Python 3.12 jobs with Codecov
-
----
-
-## Architecture
-
-```
-Browser (port 10886)
-  │ WebSocket
-  ▼
-LiveKit SFU (port 15580) ─── Redis (port 16379)
-  │ WebRTC           │ Data Channel
-  ▼                   ▼
-Visio AI Agent (port 10887)
-  │ SSE discovery (10700-10800)
-  ▼
-conferencing-mcp (10720)   remoting-mcp (10725)
-  SQLite + LanceDB           mss + pynput
-```
-
----
-
-## Features
-
-### Web Application (port 10886)
-- Multi-room conferencing with grid/focus layout
-- Screen sharing via `getDisplayMedia` + LiveKit track publishing
-- Background blur via `@livekit/track-processors`
-- Meeting recording via LiveKit Egress API
-- Meeting intelligence panel (AI summaries + action items)
-- Real-time transcription with speaker identification
-- Chat panel via LiveKit `useChat`
-- Device test page (`/test`) with camera/mic/speaker validation
-- Scheduling UI (`/meetings`) — create, list, copy invite link
-- Settings: devices, theme (dark/light/system), telemetry, Ollama model management
-- Health dashboard (`/health`) with LiveKit and discovery status
-- Help modal (`?`), log viewer (filter, download, clear)
-- Pre-join device validation, reconnection banner, room discovery
-- Mobile responsive layout (sidebar hidden, panels stack on < 1024px)
-
-### AI Agent (Visio)
-- Voice pipeline: Silero VAD → Whisper STT → Ollama LLM → Piper TTS
-- Dynamic MCP tool discovery (scans 10700–10800)
-- LanceDB RAG memory (transcripts, codebase, mission logs)
-- Contact manager (Windows COM + local users)
-- Screen reading via UIAutomation OCR
-- Jargon detection / LDDO analysis
-- Automatic room joining, context-aware responses
-
-### MCP Servers
-
-**conferencing-mcp** (port 10720, FastMCP 3.2):
-- `generate_meeting_summary` / `extract_action_items` — LLM sampling + LanceDB persist
-- `conference_schedule/list/get/update/cancel` — SQLite calendaring
-- `room_create/list/delete/update_metadata` — LiveKit room CRUD
-- `participant_invite/list/remove` — participant management
-- `room_participant_list/kick/mute` — real-time participant control
-- `room_send_data` — data channel broadcast
-- `get_dev_stats` — git + disk status
-- `get_substrate_heartbeat` — LiveKit + Ollama health probe
-- `orchestrate_remote_support` — RustDesk detection and launch
-- `list_active_conferences` — LiveKit rooms + scheduled conferences
-
-**remoting-mcp** (port 10725, FastMCP 3.2):
-- `move_mouse / click_mouse / type_text / press_key` — input injection
-- `join_meeting / leave_meeting` — screen publishing to LiveKit
-- `get_status / screen_resolution` — state queries
-
-### Infrastructure
-- Docker Compose: LiveKit (15580–15582), Redis (16379), Web (15500), Agent
-- Ollama runs outside Docker on host PC
-- Docker volumes for persistent data: `livekit_data`, `redis_data`, `lancedb_data`
+**Self-hosted, AI-powered video conferencing** — a privacy-respecting alternative to Zoom/Teams with a local-first AI voice assistant, real-time screen sharing, RAG memory, remote desktop, and full observability stack.
 
 ---
 
 ## Quick Start
 
 ```powershell
+git clone https://github.com/sandraschi/myconf
+cd myconf
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
 git clone https://github.com/sandraschi/myconf.git
 cd myconf
 uv sync
 npm install
+docker compose -f docker-compose.yaml -f docker-compose.observability.yaml up -d
+.\start.ps1 all
+> **Prerequisites**: [Python 3.12+](https://python.org), [Node.js 18+](https://nodejs.org), [Docker](https://docker.com), [Ollama](https://ollama.com)
+
+## Documentation
+
+| Guide | Description |
+|-------|-------------|
+| **[Installation](docs/INSTALL.md)** | Full setup guide: prerequisites, Docker, Ollama, config |
+| **[Architecture](docs/ARCHITECTURE.md)** | System design: services, ports, data flow, MCP discovery |
+| **[LiveKit](docs/LIVEKIT.md)** | WebRTC infrastructure: server config, STUN, room management |
+| **[Features](docs/FEATURES.md)** | All capabilities: conferencing, AI agent, remoting, memory, contacts, observability |
+| **[Usage](docs/USAGE.md)** | User manual: dashboard, settings, agent interaction, Docker, observability |
+| **[Contributing](CONTRIBUTING.md)** | Development standards: Ruff, tests, CI/CD, PR process |
+| **[Technical Reference](TECHNICAL.md)** | Deep-dive into protocol details and internals |
+| **[Changelog](CHANGELOG.md)** | Version history from 0.1.0 to 2.1.0 |
+
+---
+
+## At a Glance
+
+```
+┌─────────────────────────────────────────────────────┐
+│              Docker Stack (8 containers)             │
+│                                                      │
+│  Browser (10886/15500) ←→ LiveKit SFU (15580)       │
+│       │                            │                 │
+│       ├── Redis (16379)            └── Agent (10887) │
+│       │                                │             │
+│       ├── conferencing-mcp (10720)     ├── Ollama    │
+│       ├── remoting-mcp (10725)         ├── LanceDB   │
+│       │                                └── MCP Disc  │
+│       │                                              │
+│       └── Observability Stack:                       │
+│            Prometheus (19090) → Grafana (13000)      │
+│            Promtail → Loki (13100)                   │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## Key Capabilities
+
+| Feature | Stack | Status |
+|---------|-------|--------|
+| Video conferencing | LiveKit WebRTC + Next.js 16 | ✅ |
+| AI voice assistant | Ollama + Whisper (OpenAI) + Piper | ✅ |
+| Multi-participant transcription | Independent STT per audio track | ✅ |
+| Meeting summaries | FastMCP 3.2 sampling + LanceDB | ✅ |
+| Screen capture share | mss + LiveKit tracks | ✅ |
+| Screen sharing (browser) | getDisplayMedia + LiveKit track | ✅ |
+| Remote mouse/keyboard | pynput + pynput | ✅ |
+| RAG memory | LanceDB + FastEmbed (384-dim) | ✅ |
+| Contact management | Windows COM + local users | ✅ |
+| Screen reading OCR | UIAutomation COM | ✅ |
+| Conference scheduling | SQLite + LiveKit API | ✅ |
+| Meeting recording | LiveKit Egress API | ✅ |
+| Background blur | @livekit/track-processors | ✅ |
+| File sharing | HTTP upload + data channel broadcast | ✅ |
+| Chat panel | LiveKit useChat | ✅ |
+| OIDC auth | Authentik via next-auth v5 | ✅ |
+| Guest join | /join/[room] one-click page | ✅ |
+| PWA support | Web manifest + SVG icon | ✅ |
+| Mobile responsive | TailwindCSS breakpoints | ✅ |
+| Health monitoring | TCP probe + Ollama check | ✅ |
+| Prometheus metrics | /metrics on all services | ✅ |
+| Grafana dashboards | Auto-provisioned + Loki logs | ✅ |
+| Tests | 63 Python + 27 frontend + 13 E2E | ✅ |
+
+---
+
+## Port Map
+
+| Service | Dev Port | Docker Port |
+|---------|----------|-------------|
+| Web dashboard | 10886 | 15500 |
+| AI agent | 10887 | (container) |
+| Conferencing MCP | 10720 | (dev only) |
+| Conferencing health | 10721 | (dev only) |
+| Remoting MCP | 10725 | (dev only, Win) |
+| MCP discovery | 10700–10800 | — |
+| LiveKit WS | 15580 | 15580 |
+| LiveKit WebRTC | 15581 | 15581 |
+| LiveKit UDP | 15582 | 15582 |
+| Redis | 16379 | 16379 |
+| **Grafana** | — | **13000** |
+| **Loki** | — | **13100** |
+| **Prometheus** | — | **19090** |
+
+---
+
+## Running the Stack
+
+```powershell
+# Full stack (all 8 containers)
+docker compose -f docker-compose.yaml -f docker-compose.observability.yaml up -d
+
+# Core only (no observability)
+docker compose -f docker-compose.yaml up -d
+
+# Development (local processes, Docker infra only)
 docker compose up -d livekit redis
 .\start.ps1 all
 ```
 
-### Individual Services
-
-```powershell
-uv run -m myconf conferencing   # MCP server (port 10720)
-uv run -m myconf remoting       # Remoting MCP (port 10725)
-uv run -m myconf agent          # AI agent (port 10887)
-uv run -m myconf web            # Dashboard (port 10886)
-```
-
----
-
-## Documentation
-
-| Guide | Location |
-|-------|----------|
-| Installation | `docs/INSTALL.md` |
-| Architecture | `docs/ARCHITECTURE.md` |
-| LiveKit Reference | `docs/LIVEKIT.md` |
-| Features | `docs/FEATURES.md` |
-| Usage | `docs/USAGE.md` |
-| Technical Reference | `TECHNICAL.md` |
-| Changelog | `CHANGELOG.md` |
-| PRD | `PRD.md` |
-
----
-
-## Testing
-
-```powershell
-# Python (44 tests)
-uv run pytest tests/ apps/agent/tests/ -v
-
-# Web unit (27 tests)
-cd apps/web && npx vitest run
-
-# Web E2E (13 specs, requires dev server)
-cd apps/web && npx playwright test
-```
-
----
-
-## Claude Desktop Integration
-
-```json
-"mcpServers": {
-  "myconf": {
-    "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/myconf", "run", "myconf"]
-  }
-}
-```
+### Access Points
+| Service | URL |
+|---------|-----|
+| Dashboard | http://localhost:15500 |
+| Health | http://localhost:15500/health |
+| Guest join | http://localhost:15500/join/room-name |
+| Meetings | http://localhost:15500/meetings |
+| Files | http://localhost:15500/files |
+| **Grafana** | http://localhost:13000 (admin/admin) |
+| **Prometheus** | http://localhost:19090 |
+| **LiveKit** | http://localhost:15580 |
 
 ---
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).

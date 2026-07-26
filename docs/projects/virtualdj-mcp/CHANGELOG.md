@@ -1,9 +1,37 @@
-﻿# Changelog
+
+## [Unreleased] — 2026-06-14
+
+### Added
+- Tauri native wrapper (native/ directory) with bundle.resources + std::process::Command
+- CUA-NSIS: just cua-nsis-test recipe, scripts/cua-smoke.py, scripts/cua-nsis-config.json
+- Tauri CORS: tauri://localhost origins for WebView API access
+- NSIS installer at dist/ and native/target/release/bundle/nsis/
+
+### Changed
+- Frontend API calls use absolute http://127.0.0.1:{port} URLs in production build
+- CORS middleware includes allow_origin_regex for tauri.localhost
+# Changelog
 
 All notable changes to VirtualDJ-MCP will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- **Cross-MCP deck handoff endpoints** for external orchestration:
+  - `POST /api/v1/deck/{deck_id}/sync`
+  - `POST /api/v1/deck/{deck_id}/cue` (`mode=start|cue|set_cue`)
+- **API index updates** in `/api` for `deck_sync` and `deck_cue`.
+
+### Changed
+- **Server lint baseline** cleaned with repo-level Ruff configuration aligned to active runtime surfaces.
+- **Security/runtime hygiene**:
+  - exception chaining in API/client error paths
+  - loopback bind for FastAPI runner (`127.0.0.1`)
+  - status probing now logs errors instead of silent pass
+  - non-crypto random and hash warnings addressed in active services
 
 ## [1.0.1] - 2025-11-28
 
@@ -26,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Dual Interface Architecture**: Both MCP (Claude Desktop) and FastAPI (REST API) interfaces implemented
-- **FastMCP 3.1.1++ Framework**: Upgraded to latest FastMCP with proper modular architecture
+- **FastMCP 2.12+ Framework**: Upgraded to latest FastMCP with proper modular architecture
 - **Modular Tool Organization**: Refactored from monolithic server.py to organized tool categories:
   - `deck_control/` - Deck playback, loading, seeking, volume control
   - `mixing/` - Crossfader, auto-sync, effects, EQ controls
@@ -46,12 +74,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **Architecture Refactor**: Complete rewrite from 885-line monster server.py to thin, modular design
 - **Entry Point**: Changed from `virtualdj_mcp` to `mcp.server` module
-- **Dependencies**: Updated FastMCP to 3.1.1++, added FastAPI, uvicorn, and other dependencies
+- **Dependencies**: Updated FastMCP to 2.12+, added FastAPI, uvicorn, and other dependencies
 - **Directory Structure**: Reorganized to `src/mcp/` with tool categories
 - **Configuration**: Updated Claude Desktop config for new module structure
 
 ### Technical Details
-- **FastMCP Version**: 3.1.1+.0+ (required for production)
+- **FastMCP Version**: 2.12.0+ (required for production)
 - **Python Support**: 3.10, 3.11, 3.12
 - **Platform**: Windows 10/11 (PowerShell compatible)
 - **Dependencies**: 15 core packages properly declared
@@ -60,13 +88,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Test Coverage**: Local test scripts for both interfaces
 
 ### Production Readiness
-- âœ… Dual interface (MCP + FastAPI) implemented
-- âœ… Modular architecture (no monster server.py)
-- âœ… FastMCP 3.1.1++ framework
-- âœ… Comprehensive testing infrastructure
-- âœ… Professional documentation
-- âœ… PowerShell/Windows compatibility
-- âœ… Proper packaging and distribution
+- ✅ Dual interface (MCP + FastAPI) implemented
+- ✅ Modular architecture (no monster server.py)
+- ✅ FastMCP 2.12+ framework
+- ✅ Comprehensive testing infrastructure
+- ✅ Professional documentation
+- ✅ PowerShell/Windows compatibility
+- ✅ Proper packaging and distribution
 
 ## [0.1.0] - 2025-01-01
 

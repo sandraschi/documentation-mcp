@@ -1,11 +1,71 @@
-﻿# Local LLM MCP Server - Changelog
+# Local LLM MCP Server - Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.1] - 2026-07-06
+
+### Added
+- **LM Link awareness**: `llm_lmstudio` tool gains `link_status` operation
+  - Probes `lms link status --json` via async subprocess for live peer/model discovery
+  - Returns connected peers, their loaded models, link state, and preferred device
+  - Graceful fallback with `recovery_options` when `lms` CLI is missing
+- **LM Link provider health**: `check_lm_link_status()` in `provider_health.py`
+  - 60-second cache TTL with forced refresh support
+  - Results exposed in `GET /api/v1/health` and `GET /api/v1/diagnostics` under `lm_link` key
+  - Structured `LinkStatus` dataclass: ok, enabled, device_name, peers, peer_count
+
+### Changed
+- `llm_lmstudio` portmanteau now supports 4 operations (was 3): list_models, load_model, unload_model, link_status
+- `GET /api/v1/health` response includes `lm_link` peer data alongside provider status
+
+## [1.2.0] - 2026-07-03
+
+### Added
+- **Provider Health Service** (`services/provider_health.py`)
+  - Unified liveness checks for Ollama and LM Studio with 3s connect timeout
+  - Result caching with 30-second TTL
+  - Circuit breaker: 3 consecutive failures → mark unavailable for 60 seconds
+  - LM Studio Docker port-conflict detection (validates content-type + JSON shape on :1234)
+- **Provider Health Endpoints**
+  - `GET /api/v1/health` — fleet-standard health with provider status
+  - `GET /api/v1/diagnostics` — CUA-NSIS smoke test endpoint (tool count, provider status, system info)
+  - `GET /v1/gateway/providers/health` — per-provider reachability probe
+- **Provider check MCP tool** — `llm_health(operation="provider_check")` returns structured Ollama/LM Studio health
+- **Connection hardening** across all local provider code paths:
+  - Granular timeouts: 5s connect, 30s read, 300s pull
+  - Retry with exponential backoff (1s, 2s, 4s) on connection failures
+  - Structured error types: `connection_refused`, `timeout`, `docker_conflict`, `circuit_open`
+
+### Fixed
+- **Ollama `unload_model`**: was sending bogus `POST /api/chat` with empty model; now uses correct `POST /api/generate` with `keep_alive: 0`
+- **`core/startup.py`**: removed dead import from non-existent `..managers.model_manager` that crashed on import
+- **`services/model_service.py`**: fixed unreachable `_initialized = True` after `return`; missing `HTTPException`/`status` imports; duplicate dead `except Exception` block; missing `try:` block in `get_model_info`
+- **`services/model_intelligence.py`**: removed extra `}` causing syntax error
+- **`gateway/adapters/bedrock.py`**: added missing `import httpx` (F821)
+- **`tools/dora_tools.py`**: added missing `import asyncio` (F821)
+- **`providers/gemini/provider.py`**, **`providers/perplexity/provider.py`**: fixed `file_path` → `model.get("id", "")` (F821)
+
+### Added
+- **Model Orchestration Dashboard** (Vite + React + Tailwind)
+  - Unified hub for monitoring and controlling multiple LLM providers.
+  - Interactive **Fleet Launcher** for navigating the local MCP ecosystem.
+  - Real-time **Engine Analytics** dashboard with GPU/RAM telemetry.
+  - Glassmorphism-based premium UI with dark mode support.
+- **Live Configuration API** (`/api/v1/config`)
+  - Enables browser-side updates to provider URLs and API keys.
+  - Persistent storage of configuration directly back to the `.env` file.
+  - Nested Pydantic-aware update engine for complex settings objects.
+
+### Fixed
+- **Backend Stability**: Resolved critical `ImportError` caused by naming collision between `models.py` and the `models/` directory.
+- **Frontend Build**: Fixed TypeScript compilation errors related to `SpeechRecognition` and Vite environment variables.
+- **Process Management**: Improved port cleaner in `start.ps1` to handle orphaned backend/frontend instances.
+- **Documentation**: Corrected port assignments (10832/10833) across the repository.
+
+## [1.0.1] - 2025-01-08
 
 ### Added
 - **Google Cloud Portmanteau Tool** (`llm_google_cloud_tool`)
@@ -25,7 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced error handling for gated content
 
 - **Extensive Multilevel Help System** (10 new tools)
-  - `list_available_tools` - 5-level tool discovery (names â†’ expert details)
+  - `list_available_tools` - 5-level tool discovery (names → expert details)
   - `get_tool_help` - Comprehensive tool documentation
   - `search_tools` - Relevance-scored tool search
   - `get_tool_signature` - Function signatures with metadata
@@ -50,7 +110,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Architecture**: Improved portmanteau pattern implementation
 
 ### Technical Enhancements
-- **SOTA Compliance**: Full FastMCP 3.1.1+.1+ compatibility
+- **SOTA Compliance**: Full FastMCP 2.14.1+ compatibility
 - **Provider Integration**: Unified config system for all LLM providers
 - **Error Handling**: Enhanced structured error responses
 - **Performance**: Optimized tool registration and caching
@@ -60,7 +120,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release of Local LLM MCP Server
-- FastMCP 3.1.1++ framework implementation
+- FastMCP 2.12+ framework implementation
 - Multi-provider LLM support (Ollama, LM Studio, vLLM, OpenAI, Anthropic)
 - Portmanteau tool architecture for consolidated operations
 - GPU management tools for NVIDIA RTX series
@@ -91,11 +151,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Component | Version | Status |
 |-----------|---------|--------|
-| FastMCP | 3.1.1+.1+ | âœ… Compatible |
-| vLLM | 0.10.1.1 | âœ… Compatible |
-| Python | 3.10+ | âœ… Supported |
-| PyTorch | 2.4.0+ | âœ… Supported |
-| Transformers | 4.44.0+ | âœ… Supported |
+| FastMCP | 2.14.1+ | ✅ Compatible |
+| vLLM | 0.10.1.1 | ✅ Compatible |
+| Python | 3.10+ | ✅ Supported |
+| PyTorch | 2.4.0+ | ✅ Supported |
+| Transformers | 4.44.0+ | ✅ Supported |
 
 ### Migration Notes
 
@@ -113,10 +173,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 **Legend:**
-- âœ… Added feature
-- ðŸ”„ Changed behavior
-- ðŸ› Bug fix
-- ðŸ“š Documentation
-- ðŸ”’ Security enhancement
-- ðŸš€ Performance improvement
-
+- ✅ Added feature
+- 🔄 Changed behavior
+- 🐛 Bug fix
+- 📚 Documentation
+- 🔒 Security enhancement
+- 🚀 Performance improvement

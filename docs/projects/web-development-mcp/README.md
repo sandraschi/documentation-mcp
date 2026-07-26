@@ -1,12 +1,14 @@
-﻿# Web Development MCP ðŸŒ
+# Web Development MCP 
 
 <p align="center">
-  <img src="https://img.shields.io/badge/MCP-Standard-blue?style=for-the-badge&logo=anthropic&logoColor=white" alt="MCP Standard"/>
-  <img src="https://img.shields.io/badge/FastMCP-3.1.1+.3+-orange?style=for-the-badge&logo=anthropic&logoColor=white" alt="FastMCP 3.1.1+.3+"/>
-  <img src="https://img.shields.io/badge/Glama-Indexed-green?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Glama Indexed"/>
-  <img src="https://img.shields.io/badge/Production-Ready-green?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Production Ready"/>
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
 </p>
 
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
 Universal web development operations MCP server supporting modern frontend frameworks, build tools, and development workflows.
 
@@ -15,43 +17,43 @@ One unified interface for entire web development stack - from project creation t
 
 ## Features
 
-### ðŸš€ Project Scaffolding
+###  Project Scaffolding
 - **React** - TypeScript + Vite + React Router + Testing Library
 - **Vue 3** - TypeScript + Vite + Vue Router + Pinia + Vitest
 - **SvelteKit** - TypeScript + SvelteKit routing + Vitest
 - **Next.js** - TypeScript + App Router + Server Components
 - **Vanilla TypeScript** - Modern TypeScript with Vite
 
-### ðŸ“¦ Package Management
+###  Package Management
 - **Multi-manager support** - npm, yarn, pnpm auto-detection
 - **Dependency analysis** - Security audits and optimization
 - **Smart updates** - Conflict resolution and compatibility checks
 - **Bundle analysis** - Size optimization and tree-shaking
 
-### ðŸ”§ Build & Configuration
+###  Build & Configuration
 - **Vite optimization** - Lightning-fast development and builds
 - **TypeScript setup** - Strict mode with path mapping
 - **ESLint configuration** - Austrian dev standards with framework-specific rules
 - **Testing setup** - Vitest + Testing Library + JSDOM
 
-### âœ¨ Code Generation
+###  Code Generation
 - **Smart components** - React/Vue components with TypeScript
 - **Custom hooks** - State, effect, fetch, and storage hooks
-- **Best practices** - Consistent patterns and Austrian dev standards
+- ** practices** - Consistent patterns and Austrian dev standards
 
-## ðŸš€ Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx web-development-mcp
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -86,86 +88,80 @@ uv pip install -e .
 
 ## Quick Start
 
+```powershell
+git clone https://github.com/sandraschi/web-development-mcp
+cd web-development-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
 ### 1. Create a New React Project
-```python
 # List available frameworks
 list_available_frameworks()
-
 # Create React app with TypeScript
 create_react_app(
-    project_name="my-awesome-app",
-    target_directory="./projects",
-    options={
-        "router": True,
-        "testing": True,
-        "eslint_strict": True
-    }
+project_name="my--app",
+target_directory="./projects",
+options={
+"router": True,
+"testing": True,
+"eslint_strict": True
+}
 )
-```
-
 ### 2. Package Management
-```python
 # Auto-detect package manager
-detect_package_manager("./my-awesome-app")
-
+detect_package_manager("./my--app")
 # Install packages
 install_packages(
-    project_path="./my-awesome-app",
-    packages=["axios", "@tanstack/react-query"],
-    dev_dependencies=False
+project_path="./my--app",
+packages=["axios", "@tanstack/react-query"],
+dev_dependencies=False
 )
-
 # Analyze project
-analyze_package_json("./my-awesome-app")
-```
-
+analyze_package_json("./my--app")
 ### 3. Configure Development Tools
-```python
 # Setup TypeScript with strict rules
 configure_typescript(
-    project_path="./my-awesome-app",
-    strict_mode=True,
-    include_react=True
+project_path="./my--app",
+strict_mode=True,
+include_react=True
 )
-
 # Configure ESLint with Austrian standards
 configure_eslint(
-    project_path="./my-awesome-app",
-    framework="react",
-    typescript=True,
-    strict_rules=True
+project_path="./my--app",
+framework="react",
+typescript=True,
+strict_rules=True
 )
-
 # Optimize Vite configuration
 configure_vite(
-    project_path="./my-awesome-app",
-    framework="react",
-    port=5173
+project_path="./my--app",
+framework="react",
+port=5173
 )
-```
-
 ### 4. Generate Components
-```python
 # Generate React component
 generate_react_component(
-    project_path="./my-awesome-app",
-    component_name="UserCard",
-    include_styles=True,
-    include_tests=True,
-    props_interface={
-        "name": "string",
-        "email": "string",
-        "avatar": "string"
-    }
+project_path="./my--app",
+component_name="UserCard",
+include_styles=True,
+include_tests=True,
+props_interface={
+"name": "string",
+"email": "string",
+"avatar": "string"
+}
 )
-
 # Generate custom hook
 generate_custom_hook(
-    project_path="./my-awesome-app",
-    hook_name="useUserData",
-    hook_type="fetch"
+project_path="./my--app",
+hook_name="useUserData",
+hook_type="fetch"
 )
-```
 
 ## Available Tools
 
@@ -207,21 +203,32 @@ All generated code follows Austrian development efficiency principles:
 
 | Framework | Scaffolding | Components | Testing | Build Config |
 |-----------|-------------|------------|---------|--------------|
-| React     | âœ…          | âœ…         | âœ…      | âœ…           |
-| Vue 3     | âœ…          | âœ…         | âœ…      | âœ…           |
-| SvelteKit | ðŸ“‹ Planned  | ðŸ“‹ Planned | ðŸ“‹ Planned | ðŸ“‹ Planned |
-| Next.js   | ðŸ“‹ Planned  | âœ…         | âœ…      | ðŸ“‹ Planned |
+| React     |           |          |       |            |
+| Vue 3     |           |          |       |            |
+| SvelteKit |  Planned  |  Planned |  Planned |  Planned |
+| Next.js   |  Planned  |          |       |  Planned |
 
 ## Development
 
-Built with FastMCP 3.1.1+ for maximum compatibility and performance.
+Built with FastMCP 3.1.0 for maximum compatibility and performance.
+
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
 
 ## License
 
 MIT License - See LICENSE file for details.
 
 
-## ðŸŒ Webapp Dashboard
+##  Webapp Dashboard
 
 This MCP server includes a free, premium web interface for monitoring and control.
 By default, the web dashboard runs on port **10852**.
@@ -231,4 +238,3 @@ To start the webapp:
 1. Navigate to the `webapp` (or `web`, `frontend`) directory.
 2. Run `start.bat` (Windows) or `./start.ps1` (PowerShell).
 3. Open `http://localhost:10852` in your browser.
-

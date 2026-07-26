@@ -96,4 +96,4 @@ Capable hosts render the `structured_content` in a dedicated "App Surface" (Clau
 ## References
 - [tool-documentation.md](./tool-documentation.md)
 - [fastmcp-32-fleet-capability-map.md](./fastmcp-32-fleet-capability-map.md)
-- [prefab-vs-webapps.md](./prefab-vs-webapps.md)
+- [prefab-vs-webapps.md](../archive/fastmcp/prefab-vs-webapps.md)

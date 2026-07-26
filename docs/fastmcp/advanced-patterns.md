@@ -1,7 +1,7 @@
 # FastMCP 3.2 Advanced Patterns
 
 **Last Updated:** 2026-04-21
-**Version:** 3.2.0 (April 2026 SOTA)
+**Version:** 3.4.2 (originally written for 3.2.0)
 **Applies to:** FastMCP 3.x, standard fleet servers (`*-mcp`)
 
 Advanced implementation patterns for building mission-critical, agentic MCP servers with FastMCP 3.2.
@@ -51,7 +51,7 @@ For servers with hundreds of tools, use **CodeMode** to hide raw tools and provi
 
 ### Configuration
 ```python
-from fastmcp.experimental.transforms import CodeModeTransform
+from fastmcp.experimental.transforms.code_mode import CodeMode
 
 mcp = FastMCP(
     "KnowledgeHub",

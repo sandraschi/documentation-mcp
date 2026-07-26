@@ -1,17 +1,17 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "uv-dynamic-versioning>=0.7.0"]
+build-backend = "hatchling.build"
 
 [project]
 name = "unity3d-mcp"
-version = "1.0.0"
+version = "1.5.0"
 description = "Unity 3D MCP Server - Comprehensive Unity automation with VRM avatar pipeline and VRChat integration"
-authors = [
-    {name = "Sandra", email = "sandra@example.com"}
-]
-license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [
+    { name = "Sandra Schipal", email = "sandra@schipal.at" }
+]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -28,7 +28,7 @@ classifiers = [
 keywords = ["unity3d", "mcp", "vrm", "vrchat", "avatar", "automation", "fastmcp"]
 
 dependencies = [
-    "fastmcp>=3.1.0,<4",
+    "fastmcp>=3.4.4,<4",
     "pydantic>=2.0.0",
     "uvicorn>=0.23.0",
     "asyncio-mqtt>=0.11.0",
@@ -39,17 +39,28 @@ dependencies = [
     "typing-extensions>=4.0.0",
     "structlog>=23.0.0",
     "httpx>=0.27.0",
-    "ruff>=0.15.2",
+    "UnityPy>=1.20.0",
+    "prefab-ui>=0.14.0",
+    "fastapi>=0.136.1",
 ]
+
+
 
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
     "pytest-cov>=4.1.0",
-    "ruff>=0.3.0",
+    "ruff>=0.15.2",
     "mypy>=1.0.0"
 ]
+monitoring = [
+    "prometheus-client>=0.21.0",
+]
+apps = [
+    "prefab-ui>=0.1.0"
+]
+
 docs = [
     "mkdocs>=1.5.0",
     "mkdocs-material>=9.0.0",
@@ -68,11 +79,16 @@ unity3d-mcp = "unity3d_mcp.server:main"
 [tool.setuptools]
 package-dir = {"" = "src"}
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/unity3d_mcp"]
+
+[tool.uv-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "pep440"
 
 [tool.black]
-line-length = 100
+line-length = 120
 target-version = ['py38']
 include = '\.pyi?$'
 extend-exclude = '''
@@ -137,14 +153,19 @@ exclude_lines = [
 ]
 
 [tool.ruff]
-line-length = 100
-target-version = "py38"
+line-length = 120
+target-version = "py312"
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "N", "W", "UP"]
-ignore = []
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF"]
+ignore = ["S101", "B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = ["S603", "S106", "S107", "S310"]
+"scripts/**/*" = ["S603", "S607", "S310", "S110", "E501", "E741"]
+"web_sota/backend/**/*" = ["S110"]
+"src/**/http_server.py" = ["S603"]
 
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
-

@@ -1,0 +1,15 @@
+# SDR-MCP
+
+> Software Defined Radio MCP server — RTL-SDR spectrum, waterfall, FM audio, station databases, and GNU Radio demod sidecar.
+
+## Key Links
+
+- [llms-full.txt](llms-full.txt) — full reference
+- [README](README.md) — quick start
+- [docs/MCP_SERVER.md](docs/MCP_SERVER.md) — tool reference
+
+## Quick Facts
+
+- Ports: 10890 (frontend), 10891 (MCP HTTP /mcp), 10892 (web API)
+- 6 portmanteau tools: sdr_device, sdr_spectrum, sdr_stations, sdr_online, sdr_gnuradio, sdr_agentic_assist
+- Hardware: RTL-SDR (USB), rtl_tcp, GNU Radio Docker sidecar

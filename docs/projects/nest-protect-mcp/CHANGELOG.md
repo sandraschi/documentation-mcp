@@ -1,34 +1,57 @@
-﻿# Changelog
+
+## [Unreleased] — 2026-06-14
+
+### Added
+- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
+- PyInstaller frozen backend embedded in NSIS installer
+- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
+- `just cua-nsis-test` recipe
+- Tauri CORS: `tauri://localhost` origins for WebView API access
+- `GET /api/v1/diagnostics` endpoint for CUA verification
+# Changelog
 
 All notable changes to the Nest Protect MCP project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **FastMCP 3.1** - Upgraded from 2.x; sampling, agentic workflows, prompts (skills).
+- **Prompts (skills)** - `nest_protect_setup`, `nest_protect_safety_check`, `nest_protect_overview` for agentic flows.
+- **Webapp onboarding** - `/onboarding` page with full auth/setup steps (Google Cloud, refresh token script, .env).
+- **Webapp help** - Topbar Help opens modal with setup summary and link to onboarding; sidebar "Setup & auth" link.
+- **Auth docs** - [docs/AUTH_SETUP.md](docs/AUTH_SETUP.md) and [scripts/get_nest_refresh_token.py](scripts/get_nest_refresh_token.py) for obtaining refresh token.
+
+### Changed
+- **Dependencies** - `fastmcp>=3.1.0,<4.0.0`; `websockets` constraint relaxed for 3.1 compatibility.
+- **README** - Version references updated to FastMCP 3.1; auth troubleshooting points to script and AUTH_SETUP.
+
 ## [1.0.0] - 2025-12-21
 
-### ðŸ”¥ **SOTA Upgrade - FastMCP 3.1.1+.0 & MCPB Packaging**
+### **SOTA Upgrade - FastMCP 2.13.0 & MCPB Packaging**
 
-### ðŸŽ¯ **State of the Art Modernization**
-- **FastMCP 3.1.1+.0 Migration** - Latest MCP specification compliance with enhanced tool registration
+### 🎯 **State of the Art Modernization**
+- **FastMCP 2.13.0 Migration** - Latest MCP specification compliance with enhanced tool registration
 - **MCPB Packaging Revolution** - Complete transformation from DXT to Claude Desktop optimized packaging
 - **Python 3.10+ Baseline** - Modern requirements replacing 3.9+ with enhanced security and performance
 - **20 Production Tools** - Expanded device management suite with comprehensive coverage
 - **OAuth 2.0 Security** - Complete authentication flow with automatic token refresh and management
 
-### ðŸ—ï¸ **Architecture Excellence**
+### 🏗️ **Architecture Excellence**
 - **22KB Comprehensive Assets** - Extensive prompt templates and documentation for Claude Desktop
 - **Enhanced Error Handling** - Improved exception management and user-friendly error messages
 - **State Management** - Persistent configuration and device state with automatic recovery
 - **Performance Optimization** - Sub-3-second startup times and efficient resource utilization
 
-### ðŸ“¦ **Deployment & Distribution**
+### 📦 **Deployment & Distribution**
 - **MCPB Package** (`nest-protect-mcp-1.0.0.mcpb`) - Claude Desktop optimized with drag-and-drop installation
 - **Claude Desktop Integration** - Seamless integration with comprehensive prompt templates
 - **Multi-Platform Support** - Windows, macOS, Linux compatibility with modern Python versions
 - **GitHub Releases** - Automated semantic versioning with enhanced changelog and release notes
 
-### ðŸ”§ **Tool Suite Expansion**
+### 🔧 **Tool Suite Expansion**
 - **Device Status Tools** (3): list_devices, get_device_status, get_device_events
 - **Device Control Tools** (5): hush_alarm, run_safety_check, set_led_brightness, sound_alarm, arm_disarm_security
 - **System Status Tools** (3): get_system_status, get_process_status, get_api_status
@@ -38,27 +61,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2025-10-01
 
-### ðŸš€ **Major Release - Production Ready**
+### 🚀 **Major Release - Production Ready**
 
-### ðŸŽ¯ **Core Infrastructure**
-- **Complete FastMCP 3.1.1+.0 Implementation** - Full MCP protocol compliance with proper tool registration
+### 🎯 **Core Infrastructure**
+- **Complete FastMCP 2.12.0 Implementation** - Full MCP protocol compliance with proper tool registration
 - **Real API Integration** - Authentic Google Smart Device Management API calls (no mocks)
 - **Comprehensive Error Handling** - Structured logging and graceful error recovery
 - **Pydantic V2 Compatibility** - Modern validation patterns throughout
 
-### ðŸ—ï¸ **Architecture & Development**
+### 🏗️ **Architecture & Development**
 - **Modern CI/CD Pipeline** - GitHub Actions with multi-OS testing, security scanning, and automated deployment
 - **DXT Package Support** - Production-ready MCP deployment package with 15 extensive prompt templates
 - **Docker Multi-Architecture** - AMD64 and ARM64 container support for various deployment environments
 - **Comprehensive Testing** - 100+ test cases with integration and performance testing
 
-### ðŸ“¦ **Deployment & Distribution**
+### 📦 **Deployment & Distribution**
 - **DXT Package** (`nest-protect-mcp-0.1.0.dxt`) - 174KB lightweight package for MCP environments
 - **Docker Container** - Multi-stage build with security hardening
 - **PyPI Ready** - Standard Python package distribution
 - **GitHub Releases** - Automated semantic versioning and changelog generation
 
-### ðŸŽ¨ **15 Extensive Prompt Templates**
+### 🎨 **15 Extensive Prompt Templates**
 1. **Device Status Overview** - Comprehensive device monitoring with filtering
 2. **Alarm Management** - Active alarm detection and control
 3. **Device Testing** - Safety check execution with instructions
@@ -74,46 +97,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 13. **Performance Analysis** - System performance metrics and optimization
 14. **Troubleshooting Assistance** - Problem diagnosis and resolution guidance
 
-### ðŸ”§ **Technical Features**
+### 🔧 **Technical Features**
 - **15 Production Tools** - Complete device management suite
 - **Interactive Tool Help** - Parameter descriptions and validation
 - **Enhanced Logging System** - Comprehensive debugging and monitoring
 - **State Management** - Persistent configuration and device state
 - **Security Hardening** - Vulnerability scanning and secure practices
 
-### ðŸ› ï¸ **Developer Experience**
+### 🛠️ **Developer Experience**
 - **Modern Development Practices** - Pre-commit hooks, code formatting, type checking
 - **Comprehensive Documentation** - README, API docs, troubleshooting guides
 - **Testing Framework** - Unit, integration, and performance tests
 - **Development Tools** - Auto-reload, enhanced debugging, profiling
 
-### ðŸ“Š **CI/CD & Automation**
+### 📊 **CI/CD & Automation**
 - **Multi-OS Testing** - Ubuntu, Windows, macOS across Python 3.9-3.12
 - **Security Scanning** - Automated vulnerability detection and reporting
 - **Performance Benchmarking** - Automated performance testing and reporting
 - **Automated Releases** - Semantic versioning with PR-based releases
 - **Documentation Deployment** - GitHub Pages with auto-deployment
 
-### ðŸ”’ **Security & Quality**
+### 🔒 **Security & Quality**
 - **OAuth 2.0 Authentication** - Secure Google API integration
 - **HTTPS Encryption** - Secure API communications
 - **Input Validation** - Pydantic V2 model validation
 - **Dependency Scanning** - Automated security vulnerability detection
 - **Code Quality** - MyPy type checking, Bandit security analysis
 
-### ðŸš€ **Performance Optimizations**
+### 🚀 **Performance Optimizations**
 - **Connection Pooling** - Efficient HTTP request management
 - **State Caching** - Reduced API calls through intelligent caching
 - **Async/Await** - Non-blocking operations for optimal performance
 - **Memory Management** - Efficient device state handling
 
-### ðŸ“š **Documentation Updates**
+### 📚 **Documentation Updates**
 - **Comprehensive README** - Setup guides, troubleshooting, deployment options
 - **PRD Enhancement** - Updated product requirements with modern features
 - **Architecture Documentation** - System design and component relationships
 - **API Documentation** - Complete tool reference with examples
 
-### âœ… **Quality Assurance**
+### ✅ **Quality Assurance**
 - **100+ Test Cases** - Comprehensive test coverage
 - **Multi-Environment Testing** - Cross-platform validation
 - **Performance Testing** - Scalability and reliability validation

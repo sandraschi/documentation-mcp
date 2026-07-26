@@ -1,8 +1,14 @@
 # plex-mcp — Status
 
-**As of:** 2026-04-19
-**Current version:** 2.4.1 (released early April 2026)
-**Status:** Active development, stable for daily use.
+**As of:** 2026-07-09
+**Current version:** 2.4.1
+**Status:** Active, stable. Settings `.env` footgun removed, Movies filter bug fixed.
+
+## 2026-07-09: Settings footgun removed + filter bugs fixed
+
+- **`.env` fallback chain removed**: `settings_store.py` and `config.py` now read from repo root `.env` only — no more stale tokens from cached `settings.json` or sibling `.env` files winning by accident
+- **Movies filter bug fixed**: `media_type` was passed as raw Plex filter `mediatype` — changed to `libtype=media_type` in both browse and search; `min_rating` stripped from Plex filter kwargs (Plex has no `minRating` filter)
+- **`search_media` sanitised**: `media_type` and `min_rating` popped from `**filters` before reaching Plex API
 
 ## Current state
 

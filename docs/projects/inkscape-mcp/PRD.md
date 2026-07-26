@@ -1,4 +1,4 @@
-﻿# Product Requirements Document (PRD)
+# Product Requirements Document (PRD)
 
 ## Inkscape MCP Server - AI-Powered Vector Graphics
 
@@ -9,22 +9,22 @@
 
 ---
 
-## ðŸŽ¯ Executive Summary
+## 🎯 Executive Summary
 
 The Inkscape MCP Server is a **production-ready, bulletproof** Model Context Protocol (MCP) implementation that transforms Inkscape's vector graphics capabilities into an AI-powered "vibe architect" workflow tool. This server enables Claude and other AI agents to perform professional vector graphics operations through a clean, standardized interface with **zero silent failures**.
 
 **Key Achievement:** Complete implementation of all 26 advanced vector operations across 6 specialized categories, plus **100% resolution of all 7 critical gaps identified by Gemini's technical analysis**, making this the most robust and reliable Inkscape automation tool available.
 
-### ðŸ›¡ï¸ **Production Readiness Guarantee**
-- âœ… **Zero Silent Failures**: Proper stateful action chains prevent "dud" commands
-- âœ… **AI-Safe Object Discovery**: Mandatory prerequisites prevent hallucinated IDs
-- âœ… **JSON-RPC Stability**: Proper output filtering prevents parsing failures
-- âœ… **Headless Operation**: No GUI flashes or hanging processes
-- âœ… **Cross-Platform Reliability**: Robust error handling and resource management
+### 🛡️ **Production Readiness Guarantee**
+- ✅ **Zero Silent Failures**: Proper stateful action chains prevent "dud" commands
+- ✅ **AI-Safe Object Discovery**: Mandatory prerequisites prevent hallucinated IDs
+- ✅ **JSON-RPC Stability**: Proper output filtering prevents parsing failures
+- ✅ **Headless Operation**: No GUI flashes or hanging processes
+- ✅ **Cross-Platform Reliability**: Robust error handling and resource management
 
 ---
 
-## ðŸ“‹ Table of Contents
+## 📋 Table of Contents
 
 1. [Product Overview](#product-overview)
 2. [Target Users & Use Cases](#target-users--use-cases)
@@ -39,7 +39,7 @@ The Inkscape MCP Server is a **production-ready, bulletproof** Model Context Pro
 
 ---
 
-## ðŸŽ¨ Product Overview
+## 🎨 Product Overview
 
 ### Vision
 Create the definitive AI-powered vector graphics workflow tool that serves as a "universal translator" for creative professionals, enabling seamless conversion between ideas, sketches, and production-ready vector assets.
@@ -58,7 +58,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 
 ---
 
-## ðŸ‘¥ Target Users & Use Cases
+## 👥 Target Users & Use Cases
 
 ### Primary Users
 1. **AI Agents & Assistants** (Claude, custom AI workflows)
@@ -69,25 +69,25 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 
 ### Key Use Cases
 
-#### ðŸŽ¨ **Vibe Architect Workflow**
+#### 🎨 **Vibe Architect Workflow**
 - Convert rough sketches to production vector assets
 - Generate complex geometric patterns from descriptions
 - Create QR codes and barcodes for marketing materials
 - Build organic color gradients for artistic projects
 
-#### ðŸ”§ **Technical Precision**
+#### 🔧 **Technical Precision**
 - Perform boolean operations on complex shapes
 - Optimize SVG output for web deployment
 - Query object dimensions for programmatic layout
 - Export clean paths for CAD/CAM workflows
 
-#### ðŸŽ® **VR/Unity Pipeline**
+#### 🎮 **VR/Unity Pipeline**
 - Export individual layers as texture atlases
 - Generate DXF files for 3D modeling workflows
 - Fit canvas boundaries for clean Unity imports
 - Create G-code for CNC/plotter output
 
-#### ðŸ“Š **AI Analysis & Optimization**
+#### 📊 **AI Analysis & Optimization**
 - Measure object properties for layout decisions
 - Count path complexity for performance optimization
 - Analyze document structure for automated processing
@@ -95,7 +95,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 
 ---
 
-## ðŸ’» Technical Requirements
+## 💻 Technical Requirements
 
 ### System Requirements
 
@@ -113,16 +113,16 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 - **Storage:** SSD for optimal performance
 
 ### Dependencies
-- **Core:** FastMCP 3.1.1++, Pydantic 2.0+, Python 3.10+
+- **Core:** FastMCP 2.13+, Pydantic 2.0+, Python 3.10+
 - **Image Processing:** Pillow 10.0+
 - **System:** psutil 5.9+, python-magic
 - **Optional:** SciPy (for advanced analysis), HTTPX (for web features)
 
 ---
 
-## ðŸ”§ Feature Specifications
+## 🔧 Feature Specifications
 
-### 1. ðŸŽ¨ Generative Tools
+### 1. 🎨 Generative Tools
 
 #### `generate_svg`
 **Description:** Generate SVG graphics from natural language descriptions using AI
@@ -161,7 +161,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 **Output:** SVG with vector paths
 **Algorithms:** Potrace with multiple trace modes
 
-### 2. ðŸ”§ Geometric Logic (Boolean Operations)
+### 2. 🔧 Geometric Logic (Boolean Operations)
 
 #### `apply_boolean`
 **Description:** Perform set operations on vector shapes
@@ -176,7 +176,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 **Output:** Modified SVG with resized shapes
 **Use Cases:** Borders, shadows, halo effects
 
-### 3. âš™ï¸ Path Engineering (LDDO Prevention)
+### 3. ⚙️ Path Engineering (LDDO Prevention)
 
 #### `path_simplify`
 **Description:** Reduce node count while maintaining shape
@@ -208,7 +208,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 **Output:** Optimized SVG with reduced file size
 **Features:** Remove metadata, optimize paths, compress output
 
-### 4. ðŸ‘ï¸ Query & Analysis (AI's "Eyes")
+### 4. 👁️ Query & Analysis (AI's "Eyes")
 
 #### `measure_object`
 **Description:** Query object dimensions and properties
@@ -229,7 +229,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 **Output:** Node count and complexity metrics
 **Categories:** Low (<50), Medium (50-100), High (>100) complexity
 
-### 5. ðŸŽ® VR/Unity Pipeline
+### 5. 🎮 VR/Unity Pipeline
 
 #### `export_dxf`
 **Description:** Export for CAD applications
@@ -249,7 +249,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 **Output:** SVG with canvas fitted to content
 **Benefits:** Clean Unity imports, proper pivot points, minimal empty space
 
-### 6. ðŸŽ¯ Entertainment & Layering Control
+### 6. 🎯 Entertainment & Layering Control
 
 #### `generate_laser_dot`
 **Description:** Animated laser pointer for entertainment
@@ -277,7 +277,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 
 ---
 
-## ðŸŽ­ User Experience
+## 🎭 User Experience
 
 ### Interface Design
 - **Portmanteau Tools:** 9 consolidated tools reducing cognitive load
@@ -299,12 +299,12 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 
 ---
 
-## ðŸ—ï¸ Technical Architecture
+## 🏗️ Technical Architecture
 
 ### Core Components
 
 #### FastMCP Integration
-- **Version:** 3.1.1++ with portmanteau architecture
+- **Version:** 2.13+ with portmanteau architecture
 - **Protocol:** Standard MCP with custom tool consolidation
 - **Transport:** Stdio-based JSON-RPC (most common and reliable)
 - **Discovery:** Automatic tool registration and metadata exposure
@@ -336,7 +336,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 
 ---
 
-## âš¡ Performance Requirements
+## ⚡ Performance Requirements
 
 ### Operation Timings
 - **Simple Operations:** <1 second (measure_object, path_clean)
@@ -358,7 +358,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 
 ---
 
-## ðŸ”’ Security & Safety
+## 🔒 Security & Safety
 
 ### Input Validation
 - **File Types:** Strict SVG/image format validation
@@ -380,7 +380,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 
 ---
 
-## ðŸ§ª Testing & Quality Assurance
+## 🧪 Testing & Quality Assurance
 
 ### Test Coverage
 - **Unit Tests:** All individual operations and helper functions
@@ -401,7 +401,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 
 ---
 
-## ðŸ“Š Success Metrics
+## 📊 Success Metrics
 
 ### Functional Metrics
 - **Operation Success Rate:** >95% for valid inputs
@@ -429,7 +429,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 
 ---
 
-## ðŸ“… Roadmap & Future Considerations
+## 📅 Roadmap & Future Considerations
 
 ### Phase 2 (v1.2.0) - Enhanced AI Integration
 - **Vision Analysis:** OCR and image understanding for design feedback
@@ -451,7 +451,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 
 ---
 
-## ðŸ“ž Support & Documentation
+## 📞 Support & Documentation
 
 ### Documentation Structure
 - **README.md:** Quick start and feature overview
@@ -474,7 +474,7 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 - [x] **AI SVG Generation:** Natural language to SVG conversion
 - [x] **27 Operations Implemented:** All 6 categories fully functional
 - [x] **Cross-Platform Support:** Windows, macOS, Linux compatibility
-- [x] **MCP Integration:** FastMCP 3.1.1+.3+ with portmanteau architecture
+- [x] **MCP Integration:** FastMCP 2.14.3+ with portmanteau architecture
 - [x] **Error Handling:** Comprehensive validation and recovery
 - [x] **Documentation:** Complete API documentation with examples
 
@@ -495,4 +495,3 @@ Empower AI agents with professional-grade vector graphics capabilities while mai
 **Document Version:** 1.3.0
 **Last Updated:** January 19, 2026
 **Review Status:** Production Release
-

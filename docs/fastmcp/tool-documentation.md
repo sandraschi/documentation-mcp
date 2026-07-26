@@ -1,7 +1,7 @@
 # FastMCP 3.2 Tool Documentation Standards
 
 **Last Updated:** 2026-04-21
-**Version:** 3.2.0 (April 2026 SOTA)
+**Version:** 3.4.2 (originally written for 3.2.0 — docstring standards unchanged)
 
 This document defines the **SOTA 2026 standards** for FastMCP tool implementation. All fleet servers must adhere to these patterns to ensure high-fidelity RAG discovery, agentic orchestration, and rich UI presentation.
 

@@ -1,0 +1,26 @@
+# V-Bot Mind MCP
+
+> Autonomous virtual robot brain — perception, LLM reasoning, episodic memory, personality, and motor output for fleet V-Bots in Godot, Unity3D, and Resonite.
+
+## Quick Links
+
+- [README](README.md) — Full project overview
+- Skill: `skill://vbot-mind/SKILL.md` — How to use V-Bot Mind
+
+## Core Tools
+
+- `vbot_mind` — Full V-Bot lifecycle portmanteau (9 operations)
+- `vbot_agentic_workflow` — Multi-step autonomous goal pursuit
+
+## Configuration
+
+- `VBOT_MIND_LLM_BASE_URL` — LLM provider (default: http://127.0.0.1:11434/v1)
+- `VBOT_MIND_LLM_MODEL` — Model name (default: qwen2.5:7b)
+
+## Key Files
+
+- `src/vbot_mind/mcp/tools/vbot_mind_tools.py` — Main portmanteau tool
+- `src/vbot_mind/mcp/tools/vbot_agentic.py` — Agentic workflow tool
+- `src/vbot_mind/mcp/models/portmanteau.py` — Pydantic models
+- `src/vbot_mind/config.py` — Configuration
+- `webapp/src/pages/Dashboard.tsx` — React dashboard

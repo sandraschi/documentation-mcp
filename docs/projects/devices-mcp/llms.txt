@@ -1,38 +1,42 @@
 # devices-mcp
-> **Guides, best practices, and lessons learned for developing notepadpp-mcp** --- 📄 [AI_DEVELOPMENT_RULES.md](AI_DEVELOPMENT_RULES.md) **Guidelines for AI-assisted development** - Best practices for wo...
+> Beta home IoT: MCP tools (FastMCP 3.2) + FastAPI/React dashboard + optional Windows Tauri installer.
+> Version: 2.4.0 · Generated: 2026-06-01 21:50 UTC
+> Repo: https://github.com/sandraschi/devices-mcp · Default branch: **main** (do not use legacy `master`)
 
-This project includes automated llms.txt generation for AI accessibility.
+## Status
+- Beta — not production-hardened; requires `config.yaml` for LAN devices.
+- Three delivery legs: MCP · webapp · desktop (see Architecture).
 
-## Docs
-- [Readme](docs\development\README.md): **Guides, best practices, and lessons learned for developing notepadpp-mcp**
-- [Readme](docs\github\README.md): > **Purpose**: Comprehensive GitHub configuration guide for the Devices MCP project.
-- [Readme](docs\glama-platform\README.md): **Complete guide to achieving and maintaining Gold Status on Glama.ai**
-- [Watchfiles Readme](docs\WATCHFILES_README.md): This directory contains crashproofing implementation for the Devices MCP WebApp using watchfiles. Th...
-- [Readme](docs\mcpb-packaging\README.md): **Complete guide to packaging and distributing MCP servers with MCPB**
-- [Readme](docs\notepadpp\README.md): **Everything you need to know about Notepad++ - from history to advanced usage**
-- [Readme](README.md): [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licens...
-- [Readme](docs\repository-protection\README.md): **Complete guide to keeping your notepadpp-mcp repository safe**
-- [Readme](docs\mcp-technical\README.md): **Technical guides for MCP server development, deployment, and troubleshooting**
-- [Quickstart](docs\monitoring\QUICKSTART.md): **Date:** 2025-12-10
+## Core docs
+- [README](https://github.com/sandraschi/devices-mcp/blob/main/README.md): Overview, TOC, quick install, ports.
+- [INSTALL](https://github.com/sandraschi/devices-mcp/blob/main/INSTALL.md): Desktop NSIS, MCPB, clone, NSSM.
+- [docs index](https://github.com/sandraschi/devices-mcp/blob/main/docs/README.md): Documentation map.
+- [Architecture](https://github.com/sandraschi/devices-mcp/blob/main/docs/ARCHITECTURE.md): Three legs, sidecars, single backend :10717.
+- [Desktop](https://github.com/sandraschi/devices-mcp/blob/main/docs/DESKTOP.md): Tauri installer, splash, NSSM coexistence.
+- [Configuration](https://github.com/sandraschi/devices-mcp/blob/main/docs/CONFIGURATION.md): config.yaml, Vienna preset, logging default path, local LLM URLs.
+- [Tools](https://github.com/sandraschi/devices-mcp/blob/main/docs/TOOLS.md): MCP portmanteau families + stdio snippet.
+- [Development](https://github.com/sandraschi/devices-mcp/blob/main/docs/DEVELOPMENT.md): uv, just, PyInstaller, Tauri build.
+- [Troubleshooting](https://github.com/sandraschi/devices-mcp/blob/main/docs/TROUBLESHOOTING.md): White screen, logs, firewall.
+- [AGENTS](https://github.com/sandraschi/devices-mcp/blob/main/AGENTS.md): Agent startup, ports, repo layout.
+- [Full corpus](https://github.com/sandraschi/devices-mcp/blob/main/llms-full.txt): Concatenated markdown above.
 
-## Api
-- [  Init  ](src\devices_mcp\plex\api\__init__.py): Api definitions and implementations
-- [Admin](src\devices_mcp\plex\api\admin.py): Api definitions and implementations
-- [Playlists](src\devices_mcp\plex\api\playlists.py): Api definitions and implementations
-- [Models](src\devices_mcp\nest_protect\models.py): Models definitions and implementations
-- [Core](src\devices_mcp\plex\models\core.py): Models definitions and implementations
-- [Quality](src\devices_mcp\plex\models\quality.py): Models definitions and implementations
+## Web dashboard (leg 2)
+- URL: http://127.0.0.1:10717/app/
+- Settings → Logging: default `%USERPROFILE%\.local\share\devices-mcp\devices-mcp.log`
+- Settings → Local LLM: Ollama (11434), LM Studio (1234); Chat uses same catalog.
 
-## Examples
-- [Examples](examples/): Example code and implementations
+## Ports
+| Port | Service |
+|------|---------|
+| 10717 | FastAPI backend + SPA `/app/` |
+| 10716 | Vite dev only |
+| 10715 | Camera sidecar (optional) |
 
-## Configuration
-- [Pyproject](pyproject.toml): Python project configuration and dependencies
-- [Package](grafana\plugins\tapo-camera-stream\package.json): Node.js project configuration and dependencies
-- [](.env): Environment variables and configuration
-- [Config](.git\config): Application configuration files
+## Releases (https://github.com/sandraschi/devices-mcp/releases)
+- `devices-mcp.mcpb` — MCP leg
+- `Devices-MCP-*-x64-setup.exe` — desktop leg (~247 MB with sidecars)
+- `Devices-MCP-*-windows-x64.zip` — portable
 
-## Optional
-- [Changelog](CHANGELOG.md): Project changelog information
-- [Contributing](CONTRIBUTING.md): Project contributing information
-- [License](LICENSE): Project license information
+## MCP entry
+- Module: `devices_mcp.server_v2` (stdio / HTTP)
+- Package root: `src/devices_mcp/`

@@ -1,51 +1,75 @@
 # fullstack-demo
 
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
 A **professional fullstack application** with AI, MCP integration, and comprehensive monitoring.
 
-## 🌟 Features
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/fullstack-demo
+cd fullstack-demo
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+
+##  Features
 
 ### **Frontend (React + TypeScript + Chakra UI)**
-- ✅ Modern dashboard with beautiful UI
-- ✅ AI ChatBot (4 providers: OpenAI, Anthropic, Ollama, LM Studio)
-- ✅ MCP Client Dashboard (connect to other MCP servers)
-- ✅ MCP Server Dashboard (show tools THIS app exposes)
-- ✅ File Upload & Processing
-- ✅ Voice Interface (Speech in/out)
-- ✅ 2FA Authentication
-- ✅ PWA Support (installable, offline mode)
-- ✅ Prompt Engineering UI
-- ✅ Usage Analytics
-- ✅ Comprehensive Help Modal
-- ✅ Professional Log Viewer
-- ✅ Monitoring Dashboard
+-  Modern dashboard with beautiful UI
+-  AI ChatBot (4 providers: OpenAI, Anthropic, Ollama, LM Studio)
+-  MCP Client Dashboard (connect to other MCP servers)
+-  MCP Server Dashboard (show tools THIS app exposes)
+-  File Upload & Processing
+-  Voice Interface (Speech in/out)
+-  2FA Authentication
+-  PWA Support (installable, offline mode)
+-  Prompt Engineering UI
+-  Usage Analytics
+-  Comprehensive Help Modal
+-  Professional Log Viewer
+-  Monitoring Dashboard
 
 ### **Backend (FastAPI + PostgreSQL + Redis)**
-- ✅ FastAPI with async support
-- ✅ PostgreSQL database with migrations
-- ✅ Redis caching and sessions
-- ✅ Email system (FastMail)
-- ✅ Image generation API (Hugging Face)
-- ✅ MCP Session Manager (persistent connections)
-- ✅ WebSocket support
-- ✅ Prometheus metrics
-- ✅ Health checks
+-  FastAPI with async support
+-  PostgreSQL database with migrations
+-  Redis caching and sessions
+-  Email system (FastMail)
+-  Image generation API (Hugging Face)
+-  MCP Session Manager (persistent connections)
+-  WebSocket support
+-  Prometheus metrics
+-  Health checks
 
 ### **MCP Server (12-Command CLI)**
-- ✅ **Dual transport**: stdio (Claude Desktop) + HTTP/SSE (web clients)
-- ✅ **12 commands**: start, status, test, benchmark, export-config, etc.
-- ✅ **18 options**: Full configuration control
-- ✅ **Beautiful interactive wizard** with pretty UI
-- ✅ **6 exposed tools**: database, images, notifications, logs, workflows
-- ✅ **Windows-safe Unicode** (no crashes!)
+-  **Dual transport**: stdio (Claude Desktop) + HTTP/SSE (web clients)
+-  **12 commands**: start, status, test, benchmark, export-config, etc.
+-  **18 options**: Full configuration control
+-  **Beautiful interactive wizard** with pretty UI
+-  **6 exposed tools**: database, images, notifications, logs, workflows
+-  **Windows-safe Unicode** (no crashes!)
 
 ### **Infrastructure**
-- ✅ Docker containerization
-- ✅ Prometheus + Grafana + Loki monitoring
-- ✅ CI/CD pipelines
-- ✅ Comprehensive testing
-- ✅ Production-ready
+-  Docker containerization
+-  Prometheus + Grafana + Loki monitoring
+-  CI/CD pipelines
+-  Comprehensive testing
+-  Production-ready
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Node.js 18+
@@ -93,7 +117,7 @@ A **professional fullstack application** with AI, MCP integration, and comprehen
    uvicorn app.main:app --reload
    `
 
-### 🌐 Access Points
+###  Access Points
 
 - **Frontend:** http://localhost:9132
 - **Backend API:** http://localhost:8000
@@ -103,7 +127,7 @@ A **professional fullstack application** with AI, MCP integration, and comprehen
 - **Prometheus:** http://localhost:9191
 - **Loki:** http://localhost:3199
 
-## 🔌 MCP Server CLI
+##  MCP Server CLI
 
 This app includes a **professional MCP server** with a comprehensive CLI!
 
@@ -114,7 +138,7 @@ This app includes a **professional MCP server** with a comprehensive CLI!
 python backend/mcp_server.py start           # Start MCP server
 python backend/mcp_server.py status          # Show configuration
 python backend/mcp_server.py version         # Show version
-python backend/mcp_server.py interactive     # Beautiful config wizard 🎨
+python backend/mcp_server.py interactive     # Beautiful config wizard 
 
 # Development Commands
 python backend/mcp_server.py test            # Test all tools
@@ -161,7 +185,7 @@ python backend/mcp_server.py interactive
 - **`WINDOWS_SAFE_UNICODE.md`** - Unicode character reference
 - **Dashboard:** http://localhost:9132/mcp-server
 
-## 🏗️ Architecture
+##  Architecture
 
 ### Frontend
 - **React 18** with TypeScript
@@ -178,7 +202,7 @@ python backend/mcp_server.py interactive
 - **Redis** for caching
 - **Celery** for background tasks
 
-### 🤖 AI Features (Multi-Provider Support)
+###  AI Features (Multi-Provider Support)
 - **AI ChatBot** - Floating chat with streaming responses
 - **OpenAI** - GPT-4, GPT-4 Turbo, GPT-3.5
 - **Anthropic** - Claude 3.5 Sonnet, Opus, Sonnet, Haiku
@@ -189,7 +213,7 @@ python backend/mcp_server.py interactive
 - **Model Management** - Load/unload local models
 - **Streaming Responses** - Real-time AI output
 
-### 🔌 MCP Client Dashboard
+###  MCP Client Dashboard
 - **Server Discovery** - Auto-detect Claude Desktop servers
 - **Tool Execution** - Run any MCP tool visually
 - **Server Connection** - Connect to any MCP server
@@ -197,7 +221,7 @@ python backend/mcp_server.py interactive
 - **Results Display** - Formatted JSON output
 - **Universal Frontend** - Works with ANY MCP server
 
-### 🌐 MCP Server (DUAL-MODE MCP HUB!)
+###  MCP Server (DUAL-MODE MCP HUB!)
 - **Exposes MCP Tools** - App becomes an MCP server
 - **Claude Integration** - Use app tools directly in Claude
 - **6 Built-in Tools:**
@@ -210,7 +234,7 @@ python backend/mcp_server.py interactive
 - **Auto Config** - mcp-config.json for Claude Desktop
 - **Dual Mode** - Client AND Server in one app!
 
-### 📁 File Upload & Processing
+###  File Upload & Processing
 - **Drag-Drop Upload** - Beautiful drop zone
 - **Image Processing** - Resize, thumbnail, grayscale
 - **PDF Extraction** - Text extraction, page count
@@ -218,7 +242,7 @@ python backend/mcp_server.py interactive
 - **Multi-File Support** - Batch processing
 - **Progress Tracking** - Upload progress bars
 
-### 🎤 Voice Interface
+###  Voice Interface
 - **Speech-to-Text** - Web Speech API integration
 - **Text-to-Speech** - Multiple voice options
 - **Voice Commands** - Navigate with voice
@@ -226,7 +250,7 @@ python backend/mcp_server.py interactive
 - **Voice Selection** - Choose from system voices
 - **Hands-Free** - Complete voice control
 
-### 🔐 Security Features
+###  Security Features
 - **2FA Setup** - TOTP authenticator support
 - **QR Code Generation** - Easy mobile setup
 - **Token Verification** - 6-digit code verification
@@ -235,7 +259,7 @@ python backend/mcp_server.py interactive
 - **Authy** - Compatible
 - **1Password** - Compatible (Premium)
 
-### 📱 PWA Support
+###  PWA Support
 - **Installable** - Add to home screen
 - **Offline Mode** - Service worker caching
 - **App-Like Experience** - Standalone display
@@ -251,7 +275,7 @@ python backend/mcp_server.py interactive
 - **Nginx** reverse proxy
 - **GitHub Actions** CI/CD
 
-## 🧪 Testing
+##  Testing
 
 `ash
 # Backend tests
@@ -263,7 +287,7 @@ cd frontend
 npm test
 `
 
-## 📊 Monitoring
+##  Monitoring
 
 The application includes comprehensive monitoring:
 
@@ -272,15 +296,15 @@ The application includes comprehensive monitoring:
 - **Health checks:** Built-in health endpoints
 - **Performance:** Request timing and error tracking
 
-## 🚀 Deployment
+##  Deployment
 
 See docs/deployment.md for production deployment guides.
 
-## 📝 API Documentation
+##  API Documentation
 
 Interactive API documentation is available at /docs when running the backend.
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -288,6 +312,17 @@ Interactive API documentation is available at /docs when running the backend.
 4. Add tests
 5. Submit a pull request
 
-## 📄 License
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
+##  License
 
 MIT License - see LICENSE file for details.

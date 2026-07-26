@@ -1,9 +1,73 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased] — 2026-07-06
+
+### Fixed
+- `_kill_orphaned_stdio()` startup guard: on launch, kills any stale filesystem_mcp stdio
+  processes from previous CD sessions while preserving the HTTP daemon (port 10742).
+  Prevents Claude Desktop hangs from orphaned stdio processes accumulating across reconnects.
+
+### Changed
+- README.md: synced tool count and transport architecture description.
+- MCD project page: synced FastMCP version and added reliability note.
+
+### Added
+- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
+- PyInstaller frozen backend embedded in NSIS installer
+- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
+- `just cua-nsis-test` recipe
+- Tauri CORS: `tauri://localhost` origins for WebView API access
+- `GET /api/v1/diagnostics` endpoint for CUA verification
+
+## [2.2.0] - 2026-06-11
+
+### Fixed — head_file / tail_file on large or mixed-encoding files
+
+Tailing real Windows logs (e.g. 10MB Claude Desktop MCP logs containing
+mixed UTF-8/cp1252 bytes) failed hard: both operations did a strict
+`read_text()` of the **entire file**, so a single bad byte anywhere — at
+position 503845 in a 10-line tail request — aborted the read, and every
+tail cost O(file size) in time and memory.
+
+- `tail_file`: rewritten as a backwards block read from EOF (8KB blocks,
+  stop after `lines + 1` newlines), decoding only the tail bytes with
+  `errors="replace"`. O(tail size) regardless of file size.
+- `head_file`: now streams line-by-line with `errors="replace"` and stops
+  after N lines instead of slurping the file.
+- `total_lines` in the response is now `None` when not counted (counting
+  would require reading the whole file, defeating head/tail). `head_file`
+  still reports it when the file was fully consumed.
+
+Verified against the failing 10.4MB `mcp-server-memops1.log` on Goliath
+(utf-8 default now succeeds; previously required latin-1 workaround).
+
+### Changed
+- **FastMCP 3.2+ Upgrade**: Updated FastMCP dependency from 2.14.4+ to 3.2.0 for universal connect pattern support
+- **Concurrency Safety**: Implemented atomic file operations with proper locking for multi-client access
+- **Documentation**: Updated FastMCP version references throughout README and documentation
+
+### Added
+- **Universal Connect Pattern**: Support for multiple simultaneous clients via stdio and HTTP transports
+- **Atomic File Operations**: New `file_ops_safe` tool with atomic write patterns preventing corruption
+- **File Locking System**: Comprehensive locking mechanism for file and directory operations
+- **Concurrency Testing**: Built-in testing tools for multi-client operation validation
+- **FastMCP 3.2 Features**: Access to new 3.2 functionality including codemode, prefabs, app providers, and transforms
+
+### Fixed
+- **File Corruption Risk**: Eliminated race conditions in concurrent file operations
+- **Multi-Client Access**: Safe simultaneous access to same files from multiple clients
+- **Version References**: Updated all FastMCP 2.14.4+ references to 3.2+ in documentation and badges
+- **Dependency Resolution**: Ensured compatibility with latest FastMCP 3.2.0 features
+
+### Security
+- **Atomic Writes**: All file write operations use temporary file patterns with verification
+- **Lock Timeouts**: 30-second timeout prevents deadlocks in concurrent scenarios
+- **Queue Management**: FIFO queue for waiting operations prevents resource starvation
 
 ## [2.1.0] - 2026-02-27
 
@@ -46,7 +110,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `troubleshooting.md` - Comprehensive troubleshooting guide
 
 ### Changed
-- **FastMCP Upgrade**: Migrated from FastMCP 3.1.1+.0 to 3.1.1+.1+
+- **FastMCP Upgrade**: Migrated from FastMCP 2.12.0 to 2.14.1+
 - **Packaging Migration**: Complete transition from DXT to MCPB format
 - **Installation Method**: MCPB drag-and-drop now primary installation method
 - **Dependencies**: MCPB packages no longer bundle dependencies (installed separately)
@@ -92,7 +156,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Pre-commit hooks for code quality
 
 ### Changed
-- Project structure optimized for FastMCP 3.1.1+ compatibility
+- Project structure optimized for FastMCP 2.10 compatibility
 - Improved error handling and validation
 - Enhanced security with secure path handling
 

@@ -1,0 +1,11 @@
+# sketchboard-excalidraw-mcp
+
+> Excalidraw canvas authorship + headless-render MCP server. Day 1 scaffold -
+> canvas bridging and headless rendering are not yet implemented; see
+> docs/DESIGN.md and llms-full.txt for the real build status.
+
+## Docs
+
+- [README](README.md): overview, fork sources, ports, license/attribution
+- [docs/DESIGN.md](docs/DESIGN.md): architecture decisions and build plan
+- [RELEASE_TIER.md](RELEASE_TIER.md): current release tier (pre-T1)

@@ -1,0 +1,4 @@
+# bench-camera-mcp
+
+Tools: bcam_device, bcam_run, bcam_help
+Ports: 11042/11043

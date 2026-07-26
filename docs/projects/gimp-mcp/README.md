@@ -1,97 +1,121 @@
-﻿# GIMP MCP Server
+# GIMP MCP Server
 
-**By FlowEngineer sandraschi**
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://biomejs.dev"><img src="https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat-square&logo=biome&logoColor=white" alt="Biome"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-Professional image editing through Model Context Protocol (MCP) using GIMP 3 — **Agent Lab v4.6.0**.
+**Professional image editing through GIMP 3 — controlled by AI agents via the Model Context Protocol.** 18 portmanteau tools consolidate GIMP's ~1000 PDB procedures into clean, discoverable operations.
 
-[![FastMCP](https://img.shields.io/badge/FastMCP-3.2-blue)](https://github.com/jlowin/fastmcp)
-[![Python](https://img.shields.io/badge/Python-3.12+-green)](https://python.org)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
-
-## Agent Lab (v4.6.0)
-
-Dual-mode GIMP orchestrator: **Hands-In** live bridge (`:10824`) + **Hands-Off** headless CLI.
-
-| Port | Service |
-|------|---------|
-| 10772 | Webapp (Dashboard, Agent Tools) |
-| 10773 | HTTP MCP + FastAPI |
-| 10824 | GIMP Live Bridge (host plugin) |
-
-### Agent Lab tools
-
-| Tool | Purpose |
-|------|---------|
-| `gimp_bridge_tool` | Bridge status, execution mode, ping |
-| `gimp_render_tool` | Canvas capture for vision loops |
-| `gimp_validation_tool` | Texture/image QA (Unity, Gazebo) |
-| `gimp_import_tool` | blender → gimp → unity handoff |
-| `gimp_vision_refine_tool` | Multi-angle texture review bundles |
-| `gimp_sim_art_tool` | Gazebo icons, atlases, decal UV sheets, VRChat, auto-import |
-| `gimp_batch_tool` | Batch ops incl. `pbr_pack` (albedo/normal/roughness) |
-
-### Fleet pipelines
-
-| Pipeline | Script | Docs |
-|----------|--------|------|
-| Textures | `scripts/run-fleet-pipeline.ps1` | [FLEET_PIPELINE.md](https://github.com/sandraschi/gimp-mcp/blob/master/docs/FLEET_PIPELINE.md) |
-| Sim art | `scripts/run-sim-art-pipeline.ps1` | [SIM_ART_PIPELINE.md](https://github.com/sandraschi/gimp-mcp/blob/master/docs/SIM_ART_PIPELINE.md) |
-| E2E smoke | `scripts/fleet_e2e_smoke.py --offline --strict` | CI + fleet probe |
-
-### Cross-fleet HTTP (no stdio mount)
-
-| Consumer | Integration |
-|----------|-------------|
-| **robotics-mcp** | `robotics_sim_art` → POST `:10773/api/v1/tool` |
-| **avatar-mcp** | `POST /api/v1/avatars/{id}/thumbnail` + `avatar_manager set_thumbnail` |
-| **unity3d-mcp** | `gimp_import_tool push_unity` |
-
-## Quick start
+## Quick Start
 
 ```powershell
 git clone https://github.com/sandraschi/gimp-mcp
 cd gimp-mcp
-uv sync
-.\start.ps1 -RestartGimp
+just
 ```
 
-MCPB bundle:
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
 
-```powershell
-uv run python build_mcpb.py
-# dist/gimp-mcp-4.5.2.mcpb
+### Manual Setup
+
+If you don't have `just` installed:
+1. Install GIMP 3.2+ (standalone, not Windows Store) from gimp.org
+2. Run `uv sync` to install Python dependencies
+3. Launch GIMP with the bridge plugin: `.\start.ps1 -RestartGimp`
+4. Open http://localhost:10772
+
+## Table of Contents
+
+| Document | What's inside |
+|----------|---------------|
+| [📦 Installation](docs/readme/INSTALL.md) | Prerequisites, MCPB install, GIMP 3, uv sync, Agent Lab pipelines |
+| [Competitive Analysis](docs/COMPETITIVE_ANALYSIS.md) | GIMP MCP landscape and fleet differentiation |
+| [Roadmap](docs/ROADMAP.md) | Agent Lab phases (bridge, vision, fleet handoff) |
+| [Fleet Pipeline](docs/FLEET_PIPELINE.md) | blender -> gimp -> unity texture handoff |
+| [Monitoring](docs/MONITORING.md) | Prometheus metrics and Loki JSON logs |
+| [Sim Art Pipeline](docs/SIM_ART_PIPELINE.md) | Gazebo icons, atlases, VRChat handoff |
+| [🏗️ Architecture](docs/readme/ARCHITECTURE.md) | 4-layer design, portmanteau pattern, tool registration flow, Live vs Headless, ports |
+| [🖼️ GIMP Integration](docs/readme/GIMP_INTEGRATION.md) | Live Bridge mechanics, PDB proxy, GIMP 3 Python-Fu, known limitations, troubleshooting |
+| [🧩 GIMP Plugins](docs/readme/GIMP_PLUGINS.md) | Bridge plugin architecture, installation, lifecycle, protocol, extending, directory locations |
+| [⚙️ CLI & API](docs/readme/CLI_API.md) | CLI batch mode, PDB proxy ref, REST API, webapp pages, all 21 justfile recipes |
+
+## Tools
+
+| Tool | Ops | Description |
+|------|-----|-------------|
+| `gimp_file` | 6 | load, save, convert, info, validate, list_formats |
+| `gimp_transform` | 7 | resize, crop, rotate, flip, scale, perspective, autocrop |
+| `gimp_color` | 12 | brightness, contrast, levels, curves, HSL, balance, auto, invert, threshold, posterize, desaturate, colorize |
+| `gimp_filter` | 8 | blur, sharpen, noise, edge_detect, artistic, enhance, distort, light_shadow |
+| `gimp_layer` | 8 | create, duplicate, merge, flatten, opacity, blend, reorder, info |
+| `gimp_analysis` | 8 | quality, statistics, histogram, compare, detect_issues, report, color_profile, metadata |
+| `gimp_batch` | 6 | resize, convert, process, watermark, rename, optimize |
+| `gimp_system` | 8 | status, help, diagnostics, cache, config, performance, tools, version |
+| `gimp_pdb` | ∞ | **Universal PDB proxy** — call any of ~1000+ GIMP procedures by name |
+| `gimp_workspace` | 10 | list images, undo/redo, undo groups, metadata, resolution |
+| `gimp_channel` | 8 | create, delete, list, set color/opacity, duplicate channels |
+| `gimp_animation` | 5 | list frames, set delay, optimize/export GIF |
+| `gimp_paths` | 8 | create, delete, stroke, import/export SVG, vector paths |
+| `gimp_parasites` | 9 | XCF metadata: list, attach, detach parasites on images/drawables |
+| `gimp_gmic` | 4 | G'MIC filter integration — 500+ filters via plug-in-gmic |
+| `gimp_gegl` | 2 | GEGL non-destructive editing operations |
+| `gimp_color_management` | 7 | ICC profiles, assignment, conversion, soft proofing |
+| `gimp_snapshot` | 1+ | **`get_state_snapshot`** — live base64 PNG of current canvas (region crop, max_size). Enables AI vision loop: edit → snapshot → assess → refine. Requires optional GIMP bridge plugin. |
+
+### Optional: GIMP Bridge Plugin
+
+For live interaction with a running GIMP (real-time snapshots, undo/redo, interactive editing),
+install the bridge plugin:
+
+1. Copy `plugins/gimp_mcp_bridge/gimp_mcp_bridge.py` to GIMP's plug-ins directory
+   - Windows: `%APPDATA%\GIMP\3.2\plug-ins\gimp_mcp_bridge\`
+   - macOS: `~/Library/Application Support/GIMP/3.2/plug-ins/gimp_mcp_bridge/`
+   - Linux: `~/.config/GIMP/3.2/plug-ins/gimp_mcp_bridge/`
+2. Restart GIMP
+3. Go to **Filters > Development > MCP > Start MCP Bridge**
+4. Server auto-detects the bridge on port 10824
+
+Without the plugin, all tools fall back to headless CLI mode (`gimp-console-3.exe`).
+
+## Example: Resize an Image
+
+```
+User: "Resize this photo to 1920x1080"
+
+Agent calls: gimp_transform(operation="resize",
+  input_path="C:/photos/sunset.jpg",
+  output_path="C:/photos/sunset_1920.jpg",
+  width=1920, height=1080)
+
+Response: {"success": true, "message": "Resized sunset.jpg from
+  4000x2250 to 1920x1080 (lanczos, 95% quality)", ...}
 ```
 
-## MCP registration (stdio)
+Behind the scenes — the tool detects whether GIMP is running (Live Bridge via TCP :10824) or not (Headless CLI via `gimp-console-3.exe`), and routes the operation accordingly.
 
-```json
-{
-  "gimp-mcp": {
-    "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/gimp-mcp", "run", "python", "-m", "gimp_mcp.mcp_server"],
-    "env": { "PYTHONUNBUFFERED": "1" }
-  }
-}
-```
+## Webapp
 
-## Portmanteau tools (core)
+The webapp (http://localhost:10772) is a full SOTA React/Tailwind/Zustand dashboard with:
 
-17 domain tools consolidating ~1000 GIMP PDB procedures: `gimp_file`, `gimp_transform`, `gimp_color`, `gimp_filter`, `gimp_layer`, `gimp_analysis`, `gimp_batch`, `gimp_system`, `gimp_pdb`, plus workspace, channel, animation, paths, G'MIC, GEGL, color management.
-
-## Documentation
-
-| Doc | Content |
-|-----|---------|
-| [INSTALL.md](https://github.com/sandraschi/gimp-mcp/blob/master/docs/readme/INSTALL.md) | MCPB, bridge, Docker, monitoring |
-| [ROADMAP.md](https://github.com/sandraschi/gimp-mcp/blob/master/docs/ROADMAP.md) | Agent Lab phases 1–6 |
-| [MONITORING.md](https://github.com/sandraschi/gimp-mcp/blob/master/docs/MONITORING.md) | Prometheus + Loki |
-| [DOCKER.md](https://github.com/sandraschi/gimp-mcp/blob/master/docs/DOCKER.md) | Container deployment |
-
-## Repository
-
-- **GitHub**: [sandraschi/gimp-mcp](https://github.com/sandraschi/gimp-mcp)
-- **MCPB**: `dist/gimp-mcp-*.mcpb` (build locally or GitHub Release on tag `v*`)
+| Page | Features |
+|------|----------|
+| **LLM Chat** | localStorage-persistent conversation history (100 msg cap), 5 personalities (GIMP Expert, Research Assistant, Expert Reviewer, Quick Summarizer, Custom), skills-as-preprompt (fetched from `/api/skills` on mount), 8 clickable example prompts, Export (.txt download), Clear, voice input (STT via Web Speech API), TTS read-aloud per message, editable model name, provider status indicator (green/red dot), `data-testid` attributes on all controls |
+| **Dashboard** | System health, bridge status, version, KPIs |
+| **Apps Hub** | Dynamic fleet discovery |
+| **Tools Explorer** | Portmanteau drill-down with docstrings/schemas |
+| **Skills** | Markdown-rendered skill browser |
+| **Agent Tools** | Bridge, Vision, Validation, Capture Gallery tabs |
+| **Settings** | AI provider API keys, local LLM provider/model |
+| **API Docs** | Swagger UI + ReDoc via iframe |
 
 ## License
 
-MIT — Sandra Schipal
+MIT — see [LICENSE](LICENSE) for details.
+
+---
+
+*Built with [FastMCP 3.2](https://github.com/jlowin/fastmcp) by [sandraschi](https://github.com/sandraschi)*

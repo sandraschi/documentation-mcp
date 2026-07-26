@@ -1,6 +1,6 @@
-﻿# ðŸ  Home Security Dashboard MCP - Product Requirements Document (PRD)
+# 🏠 Home Security Dashboard MCP - Product Requirements Document (PRD)
 
-## ðŸ“‹ **PRODUCT OVERVIEW** (Updated October 2025)
+## 📋 **PRODUCT OVERVIEW** (Updated October 2025)
 
 ### **Product Name**
 Home Security Dashboard MCP - Dual Architecture Platform
@@ -9,63 +9,65 @@ Home Security Dashboard MCP - Dual Architecture Platform
 A production-ready security monitoring platform with dual MCP architecture: serving as both individual camera/sensor MCP servers AND a unified security dashboard that orchestrates multiple MCP servers for comprehensive home security monitoring.
 
 ### **Target Users**
-- **ðŸ  Home Security Professionals**: Users with comprehensive security ecosystems (cameras + sensors)
-- **ðŸ¤– AI Integration Developers**: Developers building MCP-based security systems
-- **ðŸ¢ System Administrators**: IT professionals managing multi-vendor security networks
-- **ðŸ”§ Home Automation Enthusiasts**: Users integrating multiple smart home systems
-- **ðŸ“± Remote Monitoring Users**: Users needing mobile access via VPN (Tailscale)
+- **🏠 Home Security Professionals**: Users with comprehensive security ecosystems (cameras + sensors)
+- **🤖 AI Integration Developers**: Developers building MCP-based security systems
+- **🏢 System Administrators**: IT professionals managing multi-vendor security networks
+- **🔧 Home Automation Enthusiasts**: Users integrating multiple smart home systems
+- **📱 Remote Monitoring Users**: Users needing mobile access via VPN (Tailscale)
 
-### **ðŸŽ¯ DUAL ARCHITECTURE EXPLANATION**
+### **🎯 DUAL ARCHITECTURE EXPLANATION**
 
 **This platform serves two complementary roles:**
 
-#### **ðŸŽ¥ Role 1: Individual MCP Servers**
+#### **🎥 Role 1: Individual MCP Servers**
 - **Devices MCP**: Standalone TP-Link camera control
 - **USB Webcam MCP**: Direct webcam management
 - **Ring MCP**: Doorbell/camera security integration
 - **Nest Protect MCP**: Smoke/CO detector monitoring
 - **Each MCP server**: Can run independently for specific device control
 
-#### **ðŸ  Role 2: Unified Security Dashboard**
+#### **🏠 Role 2: Unified Security Dashboard**
 - **Multi-MCP Orchestrator**: Coordinates multiple MCP servers
 - **Unified Interface**: Single dashboard for all security devices
 - **Cross-System Correlation**: Intelligent alert analysis across systems
 - **Real-time Monitoring**: Live status from cameras + sensors + alarms
 
-### **ðŸ† MAJOR ACHIEVEMENT - PRODUCTION READY!**
-- **âœ… Robotics Integration**: Dreame D20 Pro (Cloud) and Yahboom ROS 2 (Mock) (WORKING)
-- **âœ… Fleet Expansion**: Multi-camera Tapo support (Kitchen + Living Room) (WORKING)
-- **âœ… Windows USB Camera Server**: Integrated local USB camera server on port 10715 (WORKING)
-- **âœ… Live Web Dashboard**: Working at `localhost:7777`
-- **âœ… USB Webcam Support**: Auto-detection and monitoring (WORKING)
-- **âœ… Claude Desktop Integration**: MCP server loads successfully (WORKING)
-- **âœ… Repository Cleanup**: Massive 270+ linting cleanup across 160+ files (WORKING)
-- **âœ… Hardware Research**: Added BETAFPV Pavo35 and Insta360 X5 documentation (WORKING)
+### **🏆 MAJOR ACHIEVEMENT - PRODUCTION READY!**
+- **✅ Robotics Integration**: Dreame D20 Pro (Cloud) and Yahboom ROS 2 (Mock) (WORKING)
+- **✅ Fleet Expansion**: Multi-camera Tapo support (Kitchen + Living Room) (WORKING)
+- **✅ Windows USB Camera Server**: Integrated local USB camera server on port 10715 (WORKING)
+- **✅ Live Web Dashboard**: Working at `localhost:7777`
+- **✅ USB Webcam Support**: Auto-detection and monitoring (WORKING)
+- **✅ Claude Desktop Integration**: MCP server loads successfully (WORKING)
+- **✅ Repository Cleanup**: Massive 270+ linting cleanup across 160+ files (WORKING)
+- **✅ Hardware Research**: Added BETAFPV Pavo35 and Insta360 X5 documentation (WORKING)
 
-## ðŸŽ¯ **CORE REQUIREMENTS - CURRENT STATUS**
+## 🎯 **CORE REQUIREMENTS - CURRENT STATUS**
 
 ### **1. Camera Support**
-- **âœ… Tapo Cameras**: Multi-camera support with ONVIF bypass (WORKING)
-- **âœ… USB Webcams**: Auto-detected and monitored (WORKING)
-- **âœ… Robotics**: Dreame D20 Pro and Yahboom ROS 2 (WORKING)
-- **ðŸ“‹ Furbo Cameras**: Pet camera support (planned)
+- **✅ Tapo Cameras**: Multi-camera support with ONVIF bypass (WORKING)
+- **✅ USB Webcams**: Auto-detected and monitored (WORKING)
+- **✅ Robotics**: Dreame D20 Pro and Yahboom ROS 2 (WORKING)
+- **📋 Furbo Cameras**: Pet camera support (planned)
 
 ### **2. MCP Integration**
-- **âœ… FastMCP 3.1.1+.0 Compliance**: Full protocol compatibility (WORKING)
-- **âœ… Tool Discovery**: 52 tools registered and working (WORKING)
-- **âœ… Claude Desktop Integration**: Server loads successfully (WORKING)
-- **âœ… Real-time Communication**: Live camera data through MCP (WORKING)
+- **✅ FastMCP 3.1 Compliance**: Full protocol compatibility, sampling, skills, prompts (WORKING)
+- **✅ Tool Discovery**: 52+ tools registered and working (WORKING)
+- **✅ Skills provider**: Cursor/Codex skills directories exposed as MCP resources (WORKING)
+- **✅ Prompts**: device_status, list_cameras registered for LLM use (WORKING)
+- **✅ Claude Desktop Integration**: Server loads successfully (WORKING)
+- **✅ Real-time Communication**: Live camera data through MCP (WORKING)
 
 ### **3. Web Dashboard**
-- **ðŸ”„ Real-time Video Streaming**: Live MJPEG streams (next phase)
-- **ðŸ”„ RTSP Integration**: Direct streaming from Tapo cameras (pending auth)
-- **âœ… Dynamic Camera Management**: Auto-add USB cameras (WORKING)
-- **âœ… Responsive Design**: Professional UI at localhost:7777 (WORKING)
-- **âœ… Real-time Status**: Live camera monitoring (WORKING)
+- **🔄 Real-time Video Streaming**: Live MJPEG streams (next phase)
+- **🔄 RTSP Integration**: Direct streaming from Tapo cameras (pending auth)
+- **✅ Dynamic Camera Management**: Auto-add USB cameras (WORKING)
+- **✅ Responsive Design**: Professional UI at localhost:7777 (WORKING)
+- **✅ Real-time Status**: Live camera monitoring (WORKING)
 
-## ðŸš€ **GETTING STARTED GUIDE** (UPDATED October 2025)
+## 🚀 **GETTING STARTED GUIDE** (UPDATED October 2025)
 
-### **âœ… WHAT WORKS NOW**
+### **✅ WHAT WORKS NOW**
 
 ```bash
 # 1. Start the Live Dashboard (RECOMMENDED)
@@ -76,21 +78,21 @@ python start.py dashboard
 # MCP server loads automatically - look for Tapo Camera tools in Claude
 ```
 
-### **ðŸ“Š CURRENT CAPABILITIES**
-- **âœ… USB Webcam Detection**: Auto-discovered and displayed
-- **âœ… Real-time Status Monitoring**: Camera health and connections
-- **âœ… Professional Dashboard UI**: Clean, responsive interface
-- **âœ… Claude Desktop Tools**: 52 MCP tools available
-- **ðŸ”„ Tapo Camera Integration**: Needs correct password authentication
+### **📊 CURRENT CAPABILITIES**
+- **✅ USB Webcam Detection**: Auto-discovered and displayed
+- **✅ Real-time Status Monitoring**: Camera health and connections
+- **✅ Professional Dashboard UI**: Clean, responsive interface
+- **✅ Claude Desktop Tools**: 52 MCP tools available
+- **🔄 Tapo Camera Integration**: Needs correct password authentication
 
 ### **Prerequisites**
 ```bash
 # Required Software (Already Working)
-âœ… Python 3.8+ (installed)
-âœ… OpenCV (for webcam support) (working)
-âœ… FastMCP 3.1.1+.0 (working)
-âœ… USB webcam (auto-detected)
-ðŸ”„ Tapo cameras (pending auth resolution)
+✅ Python 3.8+ (installed)
+✅ OpenCV (for webcam support) (working)
+✅ FastMCP 3.1 (working)
+✅ USB webcam (auto-detected)
+🔄 Tapo cameras (pending auth resolution)
 ```
 
 ### **Installation** (Already Done)
@@ -143,7 +145,7 @@ python test_webcam_streaming.py
 python -m devices_mcp.web.server
 ```
 
-## ðŸ“º **VIDEO STREAMING FEATURES**
+## 📺 **VIDEO STREAMING FEATURES**
 
 ### **USB Webcam Streaming**
 - **Format**: MJPEG (Motion JPEG)
@@ -165,7 +167,7 @@ python -m devices_mcp.web.server
 - **Status Monitoring**: Online/offline indicators
 - **Snapshot Capture**: Still image capture
 
-## ðŸ”§ **TECHNICAL SPECIFICATIONS**
+## 🔧 **TECHNICAL SPECIFICATIONS**
 
 ### **Backend Architecture**
 - **Framework**: FastAPI for web server
@@ -174,10 +176,9 @@ python -m devices_mcp.web.server
 - **Tool System**: Modular MCP tool architecture
 
 ### **Frontend Architecture**
-- **Template Engine**: Jinja2 for server-side rendering
-- **JavaScript**: Vanilla JS for dynamic functionality
-- **CSS Framework**: Custom responsive design
-- **Real-time Updates**: AJAX for live data
+- **Target stack (web-sota standard):** React + Vite + Tailwind CSS + shadcn/ui. See [Web SOTA Frontend Standards](standards/WEB_SOTA_FRONTEND_STANDARDS.md).
+- **Current/legacy:** Jinja2 SSR + vanilla JS + custom CSS (to be migrated to the target stack).
+- **Real-time updates:** Prefer React state + fetch/SSE/WebSocket; AJAX acceptable in legacy pages.
 
 ### **API Endpoints**
 ```
@@ -194,7 +195,7 @@ GET  /api/status                # Server status
 - **Media Operations**: 4 tools (capture, recording, status)
 - **System Management**: 8 tools (info, reboot, logs, settings)
 
-## ðŸ”„ **STABILITY & RELIABILITY STANDARDS (v1.18.1)**
+## 🔄 **STABILITY & RELIABILITY STANDARDS (v1.18.1)**
 
 ### **Zero Stdout Pollution**
 - **CRITICAL**: No plain-text `print()` or `sys.stdout.write()` allowed in production code.
@@ -206,7 +207,7 @@ GET  /api/status                # Server status
 - **Thread Safety**: Ensure no conflicting event loops are started in the same thread.
 - **Graceful Shutdown**: All async resources must be closed properly on exit.
 
-## ðŸ“Š **PERFORMANCE REQUIREMENTS**
+## 📊 **PERFORMANCE REQUIREMENTS**
 
 ### **Video Streaming**
 - **Frame Rate**: 30 FPS minimum
@@ -220,7 +221,7 @@ GET  /api/status                # Server status
 - **Startup Time**: <5 seconds
 - **Response Time**: <100ms for API calls
 
-## ðŸ”’ **SECURITY REQUIREMENTS**
+## 🔒 **SECURITY REQUIREMENTS**
 
 ### **Authentication**
 - **Camera Credentials**: Secure storage and transmission
@@ -232,7 +233,7 @@ GET  /api/status                # Server status
 - **Data Retention**: Configurable storage policies
 - **Access Control**: User-based permissions
 
-## ðŸš€ **DEPLOYMENT OPTIONS**
+## 🚀 **DEPLOYMENT OPTIONS**
 
 ### **Development Mode**
 ```bash
@@ -257,14 +258,14 @@ EXPOSE 7777
 CMD ["python", "-m", "devices_mcp.web.server"]
 ```
 
-## ðŸ“± **BROWSER COMPATIBILITY**
+## 📱 **BROWSER COMPATIBILITY**
 
 ### **Supported Browsers**
-- âœ… **Chrome/Chromium**: Full support
-- âœ… **Firefox**: Full support
-- âœ… **Safari**: Full support
-- âœ… **Edge**: Full support
-- âœ… **Mobile Browsers**: Responsive design
+- ✅ **Chrome/Chromium**: Full support
+- ✅ **Firefox**: Full support
+- ✅ **Safari**: Full support
+- ✅ **Edge**: Full support
+- ✅ **Mobile Browsers**: Responsive design
 
 ### **Required Features**
 - **HTML5 Video**: For video streaming
@@ -272,7 +273,7 @@ CMD ["python", "-m", "devices_mcp.web.server"]
 - **Fetch API**: For AJAX requests
 - **CSS Grid**: For responsive layout
 
-## ðŸŽ¯ **SUCCESS METRICS**
+## 🎯 **SUCCESS METRICS**
 
 ### **Technical Metrics**
 - **Uptime**: 99.9% availability
@@ -286,31 +287,31 @@ CMD ["python", "-m", "devices_mcp.web.server"]
 - **Camera Discovery**: Automatic detection where possible
 - **Documentation**: Comprehensive guides and examples
 
-## ðŸ”® **FUTURE ROADMAP**
+## 🔮 **FUTURE ROADMAP**
 
 ### **Phase 1 (Current)**
-- âœ… Windows USB camera server integration (Port 10715)
-- âœ… Massive repository linting cleanup (270+ lints, 160+ files)
-- âœ… Drone Research: BETAFPV Pavo35 documented
-- âœ… Camera Research: Insta360 X5 connectivity guide added
-- âœ… Real video streaming implementation
-- âœ… USB webcam support
-- âœ… Tapo camera integration
-- âœ… MCP tool registration
+- ✅ Windows USB camera server integration (Port 10715)
+- ✅ Massive repository linting cleanup (270+ lints, 160+ files)
+- ✅ Drone Research: BETAFPV Pavo35 documented
+- ✅ Camera Research: Insta360 X5 connectivity guide added
+- ✅ Real video streaming implementation
+- ✅ USB webcam support
+- ✅ Tapo camera integration
+- ✅ MCP tool registration
 
 ### **Phase 2 (Next)**
-- ðŸ”„ Advanced PTZ controls
-- ðŸ”„ Motion detection alerts
-- ðŸ”„ Recording management
-- ðŸ”„ Mobile app integration
+- 🔄 Advanced PTZ controls
+- 🔄 Motion detection alerts
+- 🔄 Recording management
+- 🔄 Mobile app integration
 
 ### **Phase 3 (Future)**
-- ðŸ“‹ AI-powered analytics
-- ðŸ“‹ Cloud storage integration
-- ðŸ“‹ Multi-tenant support
-- ðŸ“‹ Enterprise features
+- 📋 AI-powered analytics
+- 📋 Cloud storage integration
+- 📋 Multi-tenant support
+- 📋 Enterprise features
 
-## ðŸ“ž **SUPPORT & DOCUMENTATION**
+## 📞 **SUPPORT & DOCUMENTATION**
 
 ### **Getting Help**
 - **GitHub Issues**: Bug reports and feature requests
@@ -321,17 +322,32 @@ CMD ["python", "-m", "devices_mcp.web.server"]
 ### **Documentation Structure**
 ```
 docs/
-â”œâ”€â”€ assessment.md                    # Current system assessment
-â”œâ”€â”€ video_streaming_implementation.md # Streaming implementation details
-â”œâ”€â”€ mock_removal_progress.md         # Mock removal progress
-â”œâ”€â”€ USER_GUIDE.md                    # User documentation
-â”œâ”€â”€ GRAFANA_INTEGRATION_*.md         # Grafana integration guides
-â””â”€â”€ standards/                       # Development standards
+├── assessment.md                    # Current system assessment
+├── video_streaming_implementation.md # Streaming implementation details
+├── mock_removal_progress.md         # Mock removal progress
+├── USER_GUIDE.md                    # User documentation
+├── GRAFANA_INTEGRATION_*.md         # Grafana integration guides
+└── standards/                       # Development standards
 ```
 
 ---
 
-**Last Updated**: March 2026
-**Version**: 1.20.0
-**Status**: Production Ready âœ…
+## Fleet integration (2026-06)
 
+**Requirement:** Expose aggregated home-safety priority incidents for Fritz urgent dispatch without pushing webhooks.
+
+| Item | Status |
+|------|--------|
+| `GET /api/fleet/priority` on backend `:10717` | Implemented |
+| Shelly kitchen/temp thresholds | Implemented |
+| Nest CO/smoke via Home Assistant | Implemented |
+| Ring intrusion window (configurable minutes) | Implemented |
+| Consumer: Fritz `coworker_devices_watch` (5m poll) | Implemented |
+
+See [FLEET_INTEGRATION.md](FLEET_INTEGRATION.md).
+
+---
+
+**Last Updated**: June 2026
+**Version**: 1.21.5+
+**Status**: Beta

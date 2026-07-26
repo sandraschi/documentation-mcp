@@ -1,453 +1,59 @@
-# VeoGen - AI Video Generator with Complete Monitoring Stack
+# VeoGen Industrial (v3.1 SOTA)
 
-**🚀 PRODUCTION READY** - VeoGen is a comprehensive AI-powered video generation platform with full observability, monitoring, and alerting capabilities built on Google's Veo AI technology. Now featuring advanced Movie Maker capabilities with frame-to-frame continuity and enterprise-grade monitoring.
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-## ✨ What's New in v2.0
 
-### 🎬 Movie Maker Feature
-- **AI Script Generation**: Create complete movie scripts from simple concepts
-- **Frame Continuity**: Seamless transitions between scenes using FFmpeg
-- **9 Visual Styles**: Anime, Pixar, Wes Anderson, Claymation, and more
-- **Movie Presets**: Short Film, Commercial, Music Video, Feature, Story
-- **Cost Management**: Built-in budget controls and cost estimation
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-### 🔧 Recent Improvements
-- **✅ Fixed API Key Service**: Complete API key management system
-- **✅ Enhanced UI**: Improved dropdown styling and navigation
-- **✅ Settings Integration**: Easy access to API configuration
-- **✅ Production Monitoring**: 4 comprehensive dashboards
-- **✅ Security Hardening**: Encrypted API key storage
-- **✅ User Manager Tool**: Standalone user management interface with enhanced readability
+**VeoGen Industrial** is an April 2026 state-of-the-art media generation hub. It has been completely rebuilt to leverage the Gemini 3.1 series, Veo 3.1, and Lyria 3 for high-fidelity industrial video, music, and multimodal reasoning.
 
-## 🚀 Quick Start
+## 🚀 The Big Four Studios
 
-### Prerequisites
-- Docker and Docker Compose
-- 8GB+ RAM recommended
-- 50GB+ free disk space
+### 🎬 Veo 3.1 (Video)
+- Cinematic text-to-video with full 60s continuity.
+- Image-to-video with high semantic alignment.
+- SOTA frame-to-frame stability and temporal consistency.
 
-### Installation
-```bash
-# Clone the repository
-git clone <your-repo-url>
-cd veogen
+### 🎵 Lyria 3 (Music)
+- Full-track high-fidelity composition.
+- Pro-level audio quality (48kHz stereo).
+- Advanced genre and mood mastery using the latest deep composition tokens.
 
-# Start the complete stack
-./setup.sh       # Linux/Mac
-# or
-setup.bat        # Windows
+### 🖼️ Nano Banana 2 (Images)
+- Powered by Gemini 3.1 Flash Image.
+- Precise text rendering within visuals.
+- Native Search Grounding for high-accuracy depictions.
+
+### 💬 Gemini 3.1 (Chat & Live)
+- Multi-persona reasoning using Gemini 3.1 Pro.
+- **Flash TTS Integration**: Natural prosody via `[audio tags]`.
+- Thinking-level toggle for deep technical reasoning.
+
+## 🛠️ Infrastructure (Industrial Standard)
+
+- **Frontend**: Vite 5 + React 18.3 + Biome (SOTA 2026 performance).
+- **Backend**: FastAPI 0.111 + FastMCP 3.2 (Fleet-compliant).
+- **Design**: **Glassmorphism Premium** with Inter/Outfit typography.
+- **Ports**: Fleet Registry Standard (Backend: `10730`, Frontend: `10731`).
+
+## 📦 Quick Start
+
+```ps1
+# Fleet-compatible auto-deployment
+./start.ps1
 ```
 
-### Access Your Application
-- **Main App**: http://localhost:4710
-- **API Docs**: http://localhost:4700/docs
-- **User Manager**: http://localhost:8083
-- **Grafana**: http://localhost:4725 (admin/veogen123)
-- **Prometheus**: http://localhost:4740
-- **Alertmanager**: http://localhost:4745
-
-## 🎯 Key Features
-
-### 🤖 MCP Client Integration
-VeoGen includes a powerful MCP (Model Control Protocol) client that automatically connects to all MCP servers configured in Claude Desktop. This enables seamless integration with a wide range of tools and services.
-
-**Features**:
-- Auto-discovers and connects to MCP servers
-- Unified interface for all MCP tools
-- Asynchronous operations with asyncio
-- Comprehensive error handling and logging
-- Automatic tool discovery and caching
-
-**Usage Example**:
-```python
-from app.services.mcp import mcp_client
-
-# Call any MCP tool
-result = await mcp_client.call_tool(
-    server_name="microsoft-365",
-    tool_name="send_email",
-    params={"to": "user@example.com", "subject": "Test", "body": "Hello!"}
-)
-```
-
-**Documentation**: See [MCP Integration](./docs/architecture/mcp-integration.md) for details.
-
-
-### 🎬 Video Generation
-- **Text-to-Video**: Generate 1-60 second videos from text prompts
-- **Multiple Styles**: Cinematic, realistic, animated, artistic
-- **Custom Controls**: Duration, aspect ratio, motion intensity
-- **Reference Images**: Upload images to guide generation
-
-### 🎭 Movie Maker
-- **Script Creation**: AI-powered multi-scene script generation
-- **Scene Planning**: Automatic breakdown into 8-second clips
-- **Continuity System**: Frame-to-frame continuity between scenes
-- **Style Consistency**: Maintain visual style across all clips
-- **User Control**: Review and edit scripts before production
-
-### 🔐 User Management
-- **Secure Authentication**: JWT-based user authentication
-- **API Key Management**: Secure storage and management of API keys
-- **User Settings**: Customizable preferences and defaults
-- **Usage Tracking**: Monitor video generation usage and limits
-
-### 👥 User Manager Tool
-- **Standalone Interface**: Independent user management dashboard
-- **Complete CRUD**: Create, read, update, delete user operations
-- **Real-time Stats**: User counts, video statistics, API usage
-- **Search & Filter**: Advanced user search and filtering capabilities
-- **Export Functions**: CSV export for user data analysis
-- **Status Management**: Active/inactive user status control
-
-## 📊 Monitoring Stack Overview
-
-VeoGen includes a complete observability stack:
-
-### Core Application
-- **Frontend**: React-based UI (Port 4710)
-- **Backend**: FastAPI Python service (Port 4700)
-- **Database**: PostgreSQL with monitoring
-- **Cache**: Redis with metrics
-
-### Monitoring & Observability
-- **Grafana**: Dashboards and visualization (Port 4725)
-- **Prometheus**: Metrics collection and alerting (Port 4740)
-- **Loki**: Log aggregation and analysis (Port 3100)
-- **Promtail**: Log shipping agent
-- **Alertmanager**: Alert routing and notifications (Port 4745)
-- **Node Exporter**: System metrics (Port 4750)
-- **cAdvisor**: Container metrics (Port 4755)
-
-## 📈 Dashboards & Analytics
-
-### Available Dashboards
-1. **System Overview** (`/d/veogen-overview`)
-   - Service health status
-   - System performance metrics
-   - Active job counts
-   - Real-time status indicators
-
-2. **Video Analytics** (`/d/veogen-video`)
-   - Video generation success rates
-   - Performance by style
-   - Duration analytics
-   - Queue monitoring
-
-3. **Infrastructure Monitoring** (`/d/veogen-infrastructure`)
-   - CPU and memory usage
-   - Container resource consumption
-   - Disk space monitoring
-   - Network metrics
-
-4. **Error Analysis** (`/d/veogen-errors`)
-   - Error rates by component
-   - Real-time error logs
-   - Error categorization
-   - Debugging insights
-
-### Key Metrics Tracked
-- **Video Generation**: Success rate, duration, queue size, active jobs
-- **Movie Projects**: Project completion, scene generation, style performance
-- **System Health**: CPU, memory, disk usage, network I/O
-- **Application Performance**: Request latency, error rates, throughput
-- **FFmpeg Operations**: Processing time, failure rates, resource usage
-- **API Usage**: Gemini API calls, token consumption, response times
-
-## 🔔 Alerting
-
-### Configured Alerts
-- **Critical**: Service downtime, high failure rates
-- **Warning**: Performance degradation, resource constraints
-- **Info**: High usage patterns, maintenance notices
-
-### Alert Channels
-- **Email**: Critical and warning alerts
-- **Slack**: Real-time notifications (configure webhook)
-- **Webhook**: Custom integrations with VeoGen backend
-
-### Alert Rules
-- Service health monitoring
-- Resource utilization thresholds
-- Error rate monitoring
-- Performance degradation detection
-- Storage usage alerts
-
-## 🏗️ Architecture
-
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│                 │    │                 │    │                 │
-│    Frontend     │───▶│     Backend     │───▶│   Google Veo    │
-│   (React)       │    │   (FastAPI)     │    │      API        │
-│                 │    │                 │    │                 │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │
-         │                       │
-         ▼                       ▼
-┌─────────────────┐    ┌─────────────────┐
-│                 │    │                 │
-│    Grafana      │    │   Prometheus    │
-│  (Dashboards)   │◀───│   (Metrics)     │
-│                 │    │                 │
-└─────────────────┘    └─────────────────┘
-         │                       │
-         │                       │
-         ▼                       ▼
-┌─────────────────┐    ┌─────────────────┐
-│                 │    │                 │
-│      Loki       │    │  Alertmanager   │
-│    (Logs)       │    │   (Alerts)      │
-│                 │    │                 │
-└─────────────────┘    └─────────────────┘
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-Create a `.env` file with your configuration:
-
-```bash
-# Google Cloud & API Configuration
-GOOGLE_CLOUD_PROJECT=your-project-id
-GOOGLE_CLOUD_LOCATION=us-central1
-GOOGLE_API_KEY=your-google-api-key
-GEMINI_API_KEY=your-gemini-api-key
-
-# Database Configuration
-DATABASE_URL=postgresql://veogen:veogen123@postgres:5432/veogen
-
-# Redis Configuration  
-REDIS_URL=redis://:veogen123@redis:6379
-
-# Application Settings
-DEBUG=false
-MAX_CONCURRENT_GENERATIONS=5
-MAX_QUEUE_SIZE=50
-GENERATION_TIMEOUT=3600
-
-# Monitoring Settings
-GRAFANA_ADMIN_PASSWORD=veogen123
-ALERTMANAGER_WEBHOOK_TOKEN=your-webhook-token
-```
-
-### API Key Setup
-1. **Access Settings**: Click your profile → Settings
-2. **Configure API Keys**:
-   - Google API Key (for Veo video generation)
-   - Google Cloud Project ID
-   - Gemini API Key (for AI text generation)
-3. **Test Connection**: Verify your API keys work
-
-### Grafana Setup
-1. Access Grafana at http://localhost:4725
-2. Login with `admin` / `veogen123`
-3. Dashboards are automatically provisioned
-4. Data sources are pre-configured
-
-### Alert Configuration
-1. Update `monitoring/alertmanager.yml` with your notification preferences
-2. Configure Slack webhooks for real-time notifications
-3. Set up email SMTP settings for critical alerts
-
-## 📝 Logging
-
-### Structured Logging
-VeoGen uses structured JSON logging for better analysis:
-
-```json
-{
-  "timestamp": "2024-01-15T10:30:00Z",
-  "level": "INFO",
-  "service": "video-generation",
-  "message": "Video generation completed",
-  "job_id": "job_123",
-  "style": "cinematic",
-  "duration": 45.2,
-  "status": "completed"
-}
-```
-
-### Log Categories
-- **Application Logs**: General application events
-- **Video Generation**: Video processing specific logs
-- **Movie Maker**: Movie project logs
-- **FFmpeg**: Video processing operation logs
-- **Error Logs**: Centralized error tracking
-
-## 🚨 Troubleshooting
-
-### Common Issues
-
-**Services won't start**
-```bash
-# Check Docker status
-docker ps
-docker-compose logs [service-name]
-
-# Restart specific service
-docker-compose restart [service-name]
-```
-
-**API Key Issues**
-```bash
-# Check API key service
-docker-compose logs backend | grep api_key
-
-# Verify API key configuration
-curl -X GET http://localhost:4700/health
-```
-
-**Frontend Issues**
-```bash
-# Rebuild frontend
-docker-compose build --no-cache frontend
-docker-compose up -d frontend
-
-# Check frontend logs
-docker-compose logs frontend
-```
-
-**User Manager Issues**
-```bash
-# Check if User Manager is running
-curl http://localhost:8083/health
-
-# Start the User Manager Tool
-python user_manager_server.py
-
-# Check User Manager logs
-python user_manager_server.py | grep -E "(ERROR|WARNING)"
-```
-
-**Monitoring Issues**
-```bash
-# Check monitoring stack
-docker-compose ps | grep -E "(grafana|prometheus|loki)"
-
-# Restart monitoring
-docker-compose restart grafana prometheus loki
-```
-
-### Performance Optimization
-
-**Resource Limits**
-```bash
-# Check resource usage
-docker stats
-
-# Scale services
-docker-compose up -d --scale backend=3
-```
-
-**Database Optimization**
-```bash
-# Check database performance
-docker-compose exec postgres psql -U veogen -d veogen -c "SELECT * FROM pg_stat_activity;"
-```
-
-## 🔒 Security Features
-
-### Implemented Security
-- **API Key Encryption**: Secure hashing and encryption of API keys
-- **JWT Authentication**: Secure user authentication with token management
-- **Input Validation**: Comprehensive input sanitization and validation
-- **Rate Limiting**: DDoS protection and resource management
-- **HTTPS Support**: SSL/TLS encryption for data in transit
-
-### Best Practices
-- **Environment Variables**: Never commit API keys to version control
-- **Regular Updates**: Keep dependencies and containers updated
-- **Access Control**: Use strong passwords and limit admin access
-- **Monitoring**: Monitor for suspicious activity and failed login attempts
-
-## 🚀 Deployment
-
-### Production Deployment
-```bash
-# Production environment
-export NODE_ENV=production
-export DEBUG=false
-
-# Start with production settings
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-```
-
-### Cloud Deployment
-- **AWS**: Use ECS or Fargate with Application Load Balancer
-- **Google Cloud**: Deploy to Cloud Run or GKE
-- **Azure**: Use Container Instances or AKS
-- **DigitalOcean**: Deploy to App Platform
-
-### Scaling
-```bash
-# Horizontal scaling
-docker-compose up -d --scale backend=5 --scale frontend=3
-
-# Load balancing
-docker-compose up -d nginx
-```
-
-## 📊 Performance Metrics
-
-### Current Performance
-- **Response Time**: <200ms average API response time
-- **Video Generation**: 2-5 minutes for 8-second clips
-- **Uptime**: 99.9% availability target
-- **Concurrent Users**: Support for 100+ concurrent generations
-- **Error Rate**: <1% error rate with comprehensive tracking
-
-### Optimization Tips
-- **Caching**: Enable Redis caching for better performance
-- **CDN**: Use CDN for static assets and video delivery
-- **Database**: Optimize database queries and indexing
-- **Monitoring**: Use metrics to identify bottlenecks
-
-## 🤝 Contributing
-
-### Development Setup
-```bash
-# Clone repository
-git clone <your-repo-url>
-cd veogen
-
-# Install dependencies
-cd frontend && npm install
-cd ../backend && pip install -r requirements.txt
-
-# Start development environment
-docker-compose up -d postgres redis
-npm start  # Frontend
-uvicorn app.main:app --reload  # Backend
-```
-
-### Code Standards
-- **Frontend**: ESLint + Prettier configuration
-- **Backend**: Black + isort for Python formatting
-- **Testing**: Jest for frontend, pytest for backend
-- **Documentation**: JSDoc for JavaScript, docstrings for Python
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-### Documentation
-- **API Documentation**: http://localhost:4700/docs
-- **Technical Docs**: See `/docs` directory
-- **Architecture**: `/docs/architecture/` directory
-
-### Community
-- **Issues**: Report bugs and feature requests
-- **Discussions**: General questions and community support
-- **Wiki**: Additional documentation and guides
-
-### Enterprise Support
-- **Priority Support**: Available for enterprise customers
-- **Custom Development**: Tailored solutions and integrations
-- **Training**: On-site training and workshops
+### Access Points
+- **Web Hub**: http://localhost:10731
+- **API Registry**: http://localhost:10730/docs
+- **Telemetry**: http://localhost:10732/metrics
 
 ---
 
-**VeoGen v2.0** - Production-ready AI video generation platform with enterprise monitoring and advanced Movie Maker capabilities.
+**VeoGen Industrial** - Rebuilt for the 2026 Fleet Registry.
+鼓

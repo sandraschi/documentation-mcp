@@ -217,9 +217,9 @@ APPS_CATALOG: list[AppEntry] = [
     },
     {
         "label": "Mcp Central Docs",
-        "url": "http://127.0.0.1:10795",
-        "port": 10795,
-        "whatItIs": "Fleet Frontend",
+        "url": "http://127.0.0.1:11033",
+        "port": 11033,
+        "whatItIs": "Public Docs Hub (documentation-mcp)",
         "whatYouCanDo": "Enable autonomous mcp central docs operations and data integration within your fleet.",
         "startScript": "mcp-central-docs/start.ps1",
     },

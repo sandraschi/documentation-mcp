@@ -1,4 +1,14 @@
-﻿# Changelog
+
+## [Unreleased] — 2026-06-14
+
+### Added
+- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
+- PyInstaller frozen backend embedded in NSIS installer
+- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
+- `just cua-nsis-test` recipe
+- Tauri CORS: `tauri://localhost` origins for WebView API access
+- `GET /api/v1/diagnostics` endpoint for CUA verification
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -7,21 +17,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-- **Cursor IDE startup**: Added `__main__.py` so `python -m davinci_resolve_mcp` works
-- **RichHandler conflict**: Replaced RichHandler with plain StreamHandler in MCP stdio mode (stdout reserved for JSON-RPC)
-- **server.py syntax**: Removed duplicate/corrupt block causing SyntaxError
+### Added
+- **Color grading implementation**: Portmanteau `_impl` functions now use real Fusion API (AddTool, LUTFile, Lift/Gamma/Gain/Offset arrays) instead of stubs
+- **Audio effects implementation**: Portmanteau audio `add_audio_effect_impl` now creates real Fusion AudioEQ/Compressor/Reverb/etc. nodes
+- **Timeline markers**: `add_timeline_marker`, `get_timeline_markers`, `delete_timeline_marker` tools with full color/name/note/duration support
+- **Keyframe operations**: `add_keyframe_impl`, `get_keyframes_impl`, `delete_keyframe_impl` for clip property animation
+- **Subtitle management**: New `subtitle_tools.py` module with add/get/edit/delete subtitle operations plus SRT import/export
+- **Gallery stills**: `grab_still`, `get_stills`, `apply_grade_from_still` operations via gallery API
+- **Speed/retime**: `set_clip_property` action in portmanteau timeline for Speed/Zoom/Position control
+- **CLI `run-script` command**: Execute arbitrary Resolve Python scripts with pre-initialized resolve/project/fusion globals
+- **CLI `render` command**: Render timelines directly from command line with format/codec/resolution options
+- **CLI `import-media` command**: Import media files into projects from command line
+- **CLI `open-project` command**: Open (and optionally create) projects from command line
+- **Fairlight depth**: EQ bands (6-band parametric), track sends to buses, bus configuration, automation keyframe retrieval
+- **Portmanteau `resolve_subtitle` tool**: 6 subtitle actions (add, get, edit, delete, import_srt, export_srt)
+- **Portmanteau tool expansion**: `resolve_color` gained grab_still/get_stills/apply_grade_from_still; `resolve_timeline` gained add_marker/get_markers/delete_marker/add_keyframe/get_keyframes/delete_keyframe/set_clip_property; `resolve_fairlight` gained track_eq/track_send/get_buses/track_automation
 
-### Documentation
-- Updated CURSOR_FIX.md with all config options and troubleshooting
-- Added Cursor setup to examples/README.md, INSTALLATION.md, README.md
-- Fixed examples/advanced_config.json (run_mcp.py, correct cwd)
-- **Cursor + uv**: Server started via `uv run davinci-resolve-mcp`; project listed in central **MASTER_MCP_CONFIG** (operations/MASTER_MCP_CONFIG.json) and enabled
+### Changed
+- **Portmanteau tool count**: 8 → 9 (added `resolve_subtitle`)
+- **Individual tool count**: 26 → 38 (+3 markers, +3 keyframes, +4 subtitles, +3 stills)
+- **Default mode now fully functional**: Color grading and audio effects work out of the box without needing `RESOLVE_TOOL_MODE=individual`
+- **API coverage**: ~40% → ~65% of official Resolve Scripting API
+
+### Fixed
+- **F541 f-string**: Removed extraneous f-prefix in `main.py` run_script command
+- **Portmanteau color stubs**: All 4 `_impl` functions now execute real Resolve operations
+- **Portmanteau audio stub**: `add_audio_effect_impl` now creates actual Fusion effect nodes
 
 ## [0.2.0] - 2026-01-17
 
 ### Added
-- **FastMCP 3.1.1+.3 Compliance**: Updated to latest FastMCP protocol with conversational tool returns and sampling capabilities
+- **FastMCP 2.14.3 Compliance**: Updated to latest FastMCP protocol with conversational tool returns and sampling capabilities
 - **Conversational Tool Returns**: All tools now return natural language responses alongside structured data
 - **SEP-1577 Sampling Support**: Implemented agentic workflow orchestration using FastMCP sampling
 - **MCPB Packaging**: Added professional MCPB package distribution with validation and optimization
@@ -55,7 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release of DaVinci Resolve MCP server
-- Full FastMCP 3.1.1++ compatibility with stdio protocol support
+- Full FastMCP 2.12+ compatibility with stdio protocol support
 - Claude Desktop integration with MCP protocol
 - Comprehensive tool set for professional video editing:
   - Project management (create, open, list, settings)
@@ -84,7 +110,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version History Summary
 
 ### 0.2.0 - Production Ready (2026-01-17)
-- Complete FastMCP 3.1.1+.3 implementation with conversational AI
+- Complete FastMCP 2.14.3 implementation with conversational AI
 - Professional packaging and distribution
 - Enterprise-ready features and documentation
 - Advanced agentic workflow capabilities
@@ -104,7 +130,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Breaking Changes
 - **Tool Response Format**: All tools now return conversational responses with `success`, `message`, and `operation` fields
 - **Configuration**: New environment variables for conversational features
-- **Dependencies**: Updated to FastMCP 3.1.1+.3 (minimum requirement)
+- **Dependencies**: Updated to FastMCP 2.14.3 (minimum requirement)
 
 #### New Features
 - Conversational tool returns: `resolve_system("info")` now includes natural language messages
@@ -113,7 +139,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Zed extension: Native editor integration
 
 #### Migration Steps
-1. Update FastMCP: `pip install fastmcp>=3.1.1+.3`
+1. Update FastMCP: `pip install fastmcp>=2.14.3`
 2. Update tool calls: Handle new response format with `message` field
 3. Configure sampling: Set `RESOLVE_TOOL_MODE=portmanteau` for optimal performance
 4. Test integrations: Verify conversational responses work with your MCP client

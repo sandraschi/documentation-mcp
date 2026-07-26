@@ -1,3 +1,41 @@
+
+## [Unreleased] — 2026-07-09
+
+### Fixed
+- **Settings `.env` footgun removed:** `settings_store.py` no longer caches expired tokens in `settings.json` — `.env` always wins, no fallback chain across multiple `.env` files
+- **Config `.env` fallback chain removed:** `config.py` `_env_files()` replaced with single `_env_file()` pointing to repo root `.env` only
+- **Movies filter bug fixed:** `media_type` was passed as raw Plex filter field `mediatype` (Plex uses `libtype`) — changed to `libtype=media_type` parameter in both browse and search paths
+- **`min_rating` filter crash fixed:** Removed from Plex filter kwargs (Plex has no `minRating` field), applied as post-search Python filter instead
+- **Backend `search_media` now strips invalid filter fields:** `media_type` and `min_rating` popped from filters before passing to Plex API
+- **Tauri app frontend fixed:** `main.rs` navigates to backend URL immediately (with window retry); `backend.rs` now sets `MCP_TRANSPORT=http`
+- **PyInstaller opentelemetry crash fixed:** `build.ps1` patches `opentelemetry.context` StopIteration fallback; runtime hook disables propagator loading
+- **CUA smoke test rewritten:** uses direct pywinauto (no pywinauto-mcp dep); automation warning banner; set_focus + maximize before nav; UIA element discovery for sidebar nav; `_release_mouse()` in finally block; page verification via OCR (checks 404/error/blank)
+- **Nav links now UIA-accessible:** `aria-label` on every sidebar `<Link>`; `core:window:allow-set-focus` permission added to capabilities
+
+## [Unreleased] — 2026-06-17
+
+### Added
+- **GPU RAG (fleet standard):** `just rag-gpu-install`, `just rag-gpu-sync`, `just rag-cpu-install` — fastembed-gpu fallback path (replaces sentence-transformers for local LanceDB). Scripts: `plex_rag_sync.py`, `run-rag-gpu-sync.ps1`, `plex_mcp/rag/fastembed_gpu.py`.
+- **fastembed** dependency for in-repo RAG fallback.
+
+### Changed
+- Local RAG fallback uses `BAAI/bge-small-en-v1.5` via fastembed (aligned with fleet standard).
+
+---
+
+## [Unreleased] — 2026-06-14
+
+### Added
+- Tauri CORS: 	auri://localhost, http://tauri.localhost, https://tauri.localhost in CORS origins
+- Tauri CORS: _TAURI env var toggle with llow_origin_regex for secure WebView access
+- build.ps1: auto-copy NSIS installer to dist/ on build
+- CUA-NSIS: config-driven smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
+- CUA-NSIS: `just build-native` + `just cua-nsis-test` recipes
+- CUA-NSIS: 11-phase smoke (install, launch, WebView OCR, feature route, diagnostics, uninstall)
+- CUA-NSIS: local certification — all 11 phases pass locally (2026-06-14)
+
+### Changed
+- CORS: llow_origins=["*"] → explicit origins list for Tauri webview compatibility
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -5,14 +43,116 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.4.0] - 2026-04-09
+## [Unreleased]
+
+## [2.4.1] - 2026-06-08
 
 ### Added
-- **Industrial RAG**: Implemented deep-indexing for TV shows (episodes) and music (albums) with recursive library traversal.
-- **Contextual Enrichment**: Content strings now include grandparent (Show/Artist) and parent (Season/Series) metadata for high-fidelity semantic search.
-- **Media Repair Hub**: New premium dashboard for library health, real-time sync telemetry, and maintenance control.
-- **Industrial Dashboard**: "Alsergrund Industrial" design system implemented for the RAG Management and Repair UI.
-- **Enhanced Telemetry**: Real-time progress logs and vector store statistics (row counts) exposed via backend and UI.
+
+- **Tauri desktop 2.4.1**: Production shell on port 10740 — CORS, `API_BASE`, hardened backend spawn, fleet tool metrics.
+- **FastMCP 3.2 alignment**: All 22 tools now use `version="1.0.0"`, `annotations=READ_ONLY|MUTATING|DESTRUCTIVE`, `Annotated[Field]` parameters, `ToolResult` returns, and SOTA docstrings (`## Return Format` / `## Examples`).
+- **Prefab interactive cards**: 9 `prefab_ui` card builders in `src/plex_mcp/prefabs.py` wired as `structured_content` — library grid, library detail, media browser, media detail, server status, server info, performance dashboard, streaming sessions, streaming clients.
+- **Webapp `_prefab` pipeline**: `mcp/client.py` extracts `structured_content` from ToolResult as `_prefab` in API responses for frontend rendering.
+- **Webapp image proxy fix**: `follow_redirects=True` on httpx client (v0.28.1 defaults `False`, breaking Plex 307 redirects to `/photo/:/transcode`).
+- **Lazy FastMCP mount**: Webapp backend startup reduced from ~103s to <1s — `fastmcp` import deferred to background `asyncio.create_task`.
+- **CI**: Markdown link check (**lychee**, non-blocking) and **Playwright** e2e smoke for the Next.js app (`webapp/frontend/e2e`, `npm run test:e2e`, `just e2e`).
+- **Webapp**: `BackendStatusBanner` when the FastAPI backend is unreachable; proxy debug logs only when `NEXT_DEBUG_PROXY=1`.
+- **Documentation**: Operational improvements checklist ([`docs/plans/OPERATIONAL_IMPROVEMENTS.md`](docs/plans/OPERATIONAL_IMPROVEMENTS.md)), GitHub PR template, `just version` (reads `pyproject.toml`); symptom table in [`TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md); [`docs/DOCKER.md`](docs/DOCKER.md) + example compose; `docs/assets/` wireframe SVGs; “suggested agent flows” in [`TOOLS.md`](docs/TOOLS.md); “Video walkthrough” placeholder in [`QUICKSTART.md`](docs/QUICKSTART.md).
+- **Webapp (Biome)**: Relaxed a few **a11y/suspicious** rules in `biome.json` for pragmatic noise control; removed `eval` from media probe FPS; `SearchForm` now carries `library_id` in the query string; `server-info-view` uses `for...of` instead of nested `forEach`.
+- **Docs** (earlier in unreleased): Troubleshooting “diagnose in order” section; RAG `docs_mcp` import verification one-liners; Caddy and nginx samples in self-hosting guide.
+
+### Fixed
+
+- **Webapp image proxy**: `images.py` now follows Plex 307 redirects (`follow_redirects=True`) — httpx v0.27+ default change broke all poster/artwork images.
+- **`plex_media_service._plex_item_to_media_item`**: `thumbUrl`/`artUrl` → `thumb`/`art` (capital-U properties return full server URLs with tokens, breaking proxy path extraction).
+- **Pydantic v2**: 13+ `.dict()` calls replaced with `.model_dump()` across portmanteau tools.
+- **Lint/tooling**: Ruff + Biome green; root `biome.json`, frontend build artifacts in `.gitignore`.
+- **Documentation**: `DOCUMENTATION_INDEX.md` hub, archive banners on stale fleet-import docs, `TAURI.md` production notes.
+
+## [2.5.0] - 2026-04-19
+### Added
+- **Dialogue RAG (Subtitle Neural Search)**: Complete end-to-end implementation for semantic search across media dialogue. 
+  - New `sync_subtitles` operation in `plex_rag` tool to index SRT/VTT tracks.
+  - New `search_subtitles` operation for deep content discovery via dialogue snippets.
+  - Robust SRT/VTT parser with timestamp extraction and dialogue normalization.
+- **Webapp Subtitle Management**: 
+  - Updated RAG Dashboard with "Sync Subtitles" control and real-time dialogue indexing telemetry.
+  - New "Dialogue Search" mode in the web search interface with timestamped results and media linking.
+- **Multi-Table Vector Store**: Extended LanceDB configuration to support concurrent metadata and subtitle indices.
+
+### Changed
+- **Tool Docstrings**: Updated `plex_rag` with detailed operation patterns for subtitle management.
+
+## [2.4.1] - 2026-04-17 (superseded by 2026-06-08 release above)
+### Added
+- **High-Value Media Enrichment**: New `plex_media_enrichment` tool for fetching deep contextual summaries from Wikipedia and external metadata links.
+- **RAG Augmentation**: The `plex_rag` tool now supports an `enrich=True` flag during `sync_metadata` to augment the vector index with Wikipedia narrative context.
+- **Hardened Error Handling**: Standardized `AUTH_FAILURE` detection across all portmanteau tools to eliminate noisy tracebacks and provide actionable remediation steps for 401 Unauthorized errors.
+
+### Changed
+- **Tool Docstrings**: Updated all portmanteau tools with expanded docstrings and consistent pattern rationale sections.
+- **Zero-Console Policy**: Verified full removal of `print()` statements from production core modules.
+
+## [2.4.0] - 2026-04-14
+### Added
+- **SOTA 2026 Industrialization**: Fleet-wide modernization for April 2026 standards.
+- **FastMCP 3.2.0 Parity**: Full integration of native prompts, skills, and sampling features.
+- **Biome Integration**: High-fidelity linting and formatting toolchain for the web dashboard.
+- **Universal Connect Pattern**: Support for multiple simultaneous clients via stdio and HTTP transports.
+- **Sampling (2026)**: Industrialized server-side sampling with `PlexSamplingHandler` and `agentic_plex_workflow`.
+
+### Changed
+- **Codebase Hardening**: Purged all executable `print` statements in configuration and tool modules to ensure strict JSON-RPC protocol compliance.
+- **Ruff Standard**: Aligned with 120-character line length and expanded SOTA linting rules. 
+- **Webapp Performance**: Optimized Next.js dashboard with adjacent port assignments (10741/10742).
+
+### Fixed
+- **JSON-RPC Protocol Integrity**: Replaced unauthorized `print()` calls in `config.py` with `sys.stderr.write`.
+- **FastMCP Compatibility**: Resolved `NullLogger` attribute errors and startup regressions.
+
+## [2.3.1] - 2026-03-30
+
+### Fixed
+- **FastMCP 3.1 Compatibility**: Hardened the custom `NullLogger` in `src/plex_mcp/app.py` with missing standard `Logger` attributes (`handlers`, `filters`, `propagate`, `level`, etc.) to prevent `AttributeError` during startup in `stdio` mode (e.g., in Antigravity).
+
+## [2.3.0] - 2026-02-26
+
+### Added
+- **Neural Media RAG Portmanteau** (`tools/portmanteau/plex_rag.py`): New unified search and synthesis tool for accessing context vectorized by LanceDB.
+- **Agentic Synthesis API**: Expanded the webapp FastAPI backend with `POST /api/v1/search` and `POST /api/v1/chat` to expose backend capabilities directly to the Unified Search Hub in `mcp-central-docs` without necessitating MCP protocol bridging.
+
+## [2.2.0] - 2026-02-04
+
+### Added
+- **MCPB Packaging**: Full implementation of standard MCPB bundles with optimized build patterns
+- **Build Infrastructure**: Added `mcpb.json` and staging patterns for clean packaging
+
+### Fixed
+- **Startup Logic**: Standardized server execution via system Python (`python -m plex_mcp`)
+- **Dependency Management**: Resolved missing `aiohttp`, `fastmcp`, and `plexapi` in system environment
+- **Path Resolution**: Fixed `PYTHONPATH` issues in `mcp_config.json` for reliable module loading
+
+## [Unreleased] - ALPHA
+
+### Documentation
+- **Hub layout:** Root [README.md](README.md) stays short; specialized guides live under [docs/](docs/) ([INSTALL](docs/INSTALL.md), [CONFIGURATION](docs/CONFIGURATION.md), [TOOLS](docs/TOOLS.md), [RAG](docs/RAG.md), [WEBAPP](docs/WEBAPP.md), [DEVELOPMENT](docs/DEVELOPMENT.md), [TROUBLESHOOTING](docs/TROUBLESHOOTING.md), [docs/README.md](docs/README.md)).
+- **[docs/PRD.md](docs/PRD.md):** Product scope, in/out of scope, PyPI conditional on registration, playback caveat.
+- **Install doc:** [docs/INSTALL.md](docs/INSTALL.md) documents **uv** on Windows (`uv.exe` on PATH), pipe-free installer script, and **PyPI** only after publish.
+- **Legacy stubs:** [docs/installation.md](docs/installation.md), [docs/development.md](docs/development.md), [docs/troubleshooting.md](docs/troubleshooting.md) redirect to canonical UPPERCASE filenames; [docs/index.md](docs/index.md) points at the hub.
+
+### Changed
+- **Fleet packaging**: Root **`justfile`** (uv sync, lock, run, lint, fmt, test, check, webapp, pack-mcpb), **`llms.txt`** + **`llms-full.txt`** (LLM index + corpus), committed **`uv.lock`** (`uv lock`).
+- **Sampling (2026)**: Server-side `PlexSamplingHandler` (OpenAI-compatible chat/completions; default Ollama at `PLEX_SAMPLING_BASE_URL`, inherits from `LLM_BASE_URL` when unset). `agentic_plex_workflow` uses real `Context.sample_step` with tool execution; `plex_natural_assistant` uses `Context.sample`. Removed stub agentic tools. MCP resources `resource://plex/skills` and `resource://plex/capabilities`; prompts `prompt://plex/rag-workflow`, `prompt://plex/agentic-pattern`, `prompt://plex/library-tour`. `PLEXMCP_ALLOW_LOGGING` / pytest `conftest` avoid global logger suppression breaking FastMCP under test runners.
+- **FastMCP 3.1 alignment**: Constructor updated to 3.1 style: `FastMCP("PlexMCP", instructions="...")` (no `name=`, `version=` kwargs). Prompt `plex_media_guide` now returns `list[Message]` via `fastmcp.prompts.Message` instead of raw dicts. Webapp backend replaced deprecated `@app.on_event("startup")` with a lifespan context manager.
+
+### Added
+- **Movies webapp**: Plex poster images on movie cards and list (via Next.js image proxy `/api/image/...` to backend). Movie detail modal on card/list click: wider layout (max-w-4xl), full poster, metadata (year, duration, content rating, rating, studio, genres, directors, tagline, summary), **Play in Plex** button (opens Plex Web in new tab when Plex URL is set in Settings), Close and Escape to dismiss.
+- **Settings RAG section**: **RAG / Indexing** block with "Reindex metadata" button calling `POST /api/rag/sync`; shows indexed count or error so reindexing is visible without going to Semantic search.
+- **In-repo RAG fallback**: When mcp-central-docs vector store is unavailable, optional LanceDB + sentence-transformers fallback (install with `pip install plex-mcp-advanced[rag]`); see `src/plex_mcp/services/rag_ingestor.py`.
+- **FastMCP 3.1 alignment**: Transport docstrings and help updated to 3.1; fleet launch and v1 search/chat routes moved from MCP app to webapp backend (`POST /api/fleet/launch`, `POST /api/v1/search`, `POST /api/v1/chat`). Prompt `plex_media_guide` for agentic workflows.
+- **Semantic search page**: Webapp page `/search/semantic` with natural-language search over RAG index; **Sync / Index metadata** button to start RAG indexing from the UI (`POST /api/rag/sync`). Backend `GET /api/rag/semantic` and `plex_rag` in MCP client tool map.
+- **Chat preprompt**: LLM chat receives a live system preprompt (MCP server tools, webapp pages, Plex server name/version, media libraries, integrations). Built in `webapp/backend/app/chat_context.py`; injected when `use_context: true` (default) in `POST /api/llm/chat`.
+- **RAG over movie and music descriptions** - Metadata RAG (LanceDB) now indexes movie, show, and **music (artist)** libraries from Plex API. Searchable content includes title, plot/summary, year, genres, directors (movies/shows) and artist title/summary (music). Use `plex_rag(operation="sync_metadata")` then `plex_rag(operation="semantic_search", query="...")`. Data sourced from Plex server via API (no local DB).
 - **Webapp (reservoir 10740/10741)**: Full browser UI with FastAPI backend and Next.js 15 frontend
   - **Glassmorphism UI**: Backdrop-blur panels, retractable sidebar, topbar
   - **Logger modal**: Tail of webapp log with level/filter (topbar)
@@ -26,11 +166,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Settings page**: Plex API key and URL, LLM provider (ollama/lmstudio/openai), base URL, API key, default model (from /api/llm/models); persisted via GET/PATCH /api/system/settings and backend data/settings.json (file overrides .env at runtime)
   - **Start**: webapp/start.ps1 and start.bat; see webapp/SETUP.md
 - **Port reservoir**: Backend 10740, frontend 10741 (mcp-central-docs WEBAPP_PORTS.md)
+- **Next.js route /tools/get_system_status**: OPTIONS returns 204 (stops 404 from MCP clients probing); GET proxies to backend /api/server/status.
 
 ### Changed
-- **FastMCP 3.2+ Upgrade**: Updated FastMCP dependency from 3.1.0 to 3.2.0 for universal connect pattern support
-- **Documentation**: Updated FastMCP version references throughout README and documentation
-- **Compatibility**: Enhanced support for simultaneous stdio + HTTP access patterns
+- **RAG dependency** documented in README and Semantic search page: semantic search requires mcp-central-docs **source** on path (not the mcp-central-docs MCP server running). Sync available from UI.
+- **Webapp backend**: start.ps1 now runs the **FastAPI webapp backend** (`webapp/backend/app/main:app`) on 10740 instead of the MCP-only app. Backend exposes all REST routes (`/api/server/*`, `/api/libraries/*`, `/api/search`, `/api/movies`, `/api/system/*`, `/api/logs`, `/api/help`, `/api/llm/*`, `/api/webapp-launch`, etc.) and mounts FastMCP at `/mcp`. Fixes 404/502 when frontend proxies to backend.
+- **Start script**: Backend is launched with `.venv\Scripts\python.exe -m uvicorn app.main:app` (PYTHONPATH includes repo `src` and `webapp/backend`) so the venv is used directly and `uv sync` is not run at start (avoids "file in use" when venv is locked).
+- **Fleet ports**: Frontend proxy default `BACKEND_URL` is `http://127.0.0.1:10740`; start.ps1 uses backend 10740, frontend 10741.
+- **Next.js 15**: Removed invalid `--host` from npm dev script (Next 15 uses `--hostname`; default binds all interfaces). Removed invalid `turbopack` key from next.config.js (clears config warning).
+- **CORS**: Added Starlette CORSMiddleware to FastMCP `http_app()` (allowed origins: localhost:10741, 127.0.0.1:10741, and 10740 variants) so browser/WebSocket connections from the frontend no longer get 403.
+- **Dependencies**: Added `fastapi`, `uvicorn[standard]`, `pydantic-settings`, `httpx`, `python-multipart` to root pyproject.toml so the webapp backend runs with the project venv.
+- Updated project status to ALPHA in README; alpha status badge and warning notice.
+- Next.js frontend pinned to 15.2.0 (webpack dev); turbopack config removed for Next 15 compatibility.
+- Backend config loads .env from webapp/backend path (not cwd) so token is found when started from any directory.
+- Backend data/ and settings.json in .gitignore (secrets not committed).
 
 ### Status
 - **Project Status**: ALPHA - Active development, some features incomplete
@@ -39,15 +188,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Non-GDM clients (Plex Web, Plex for Windows): Not controllable via tested API endpoints
 - **See**: [STATUS_2026-01-08.md](STATUS_2026-01-08.md) for detailed status
 
-### Changed
-- Updated project status to ALPHA in README
-- Added alpha status badge and warning notice
-- Next.js frontend pinned to 15.2.0 (webpack dev); turbopack.root set for Next 16 compatibility
-- Backend config loads .env from webapp/backend path (not cwd) so token is found when started from any directory
-- Backend data/ and settings.json in .gitignore (secrets not committed)
-
 ### Fixed
-- **Webapp Backend**: Fixed "Unknown error" on Libraries page caused by unhandled FastMCP 3.2 `ToolResult` objects in the MCP client.
 - Client discovery now finds all client types (PlexAmp, Plex Web, Plex for Windows)
 - Multi-source client discovery implementation
 
@@ -78,7 +219,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `plex_collections` - Collections management (7 operations)
   - `plex_quality` - Quality profiles (6 operations)
   - `plex_help` - Help & discovery (4 operations)
-- **FastMCP 3.1.1++ Compliance**: All tools use Literal types for operation parameters
+- **FastMCP 2.13+ Compliance**: All tools use Literal types for operation parameters
 - **Comprehensive Docstrings**: Standardized docstrings with PORTMANTEAU PATTERN RATIONALE sections
 - **Structured Error Handling**: AI-friendly error responses with suggestions
 
@@ -98,7 +239,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Error Messages**: Improved error handling with structured responses
 
 ### Technical Details
-- **FastMCP Version**: 3.1.1++ with Literal type support
+- **FastMCP Version**: 2.13+ with Literal type support
 - **Total Operations**: 106+ operations consolidated into 15 tools
 - **Backward Compatibility**: Old tools remain in codebase but are not loaded by default
 
@@ -130,7 +271,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Technical Details
 - **Python Version**: >=3.10.0 (tested on 3.10-3.13)
-- **FastMCP**: >=3.1.1+.0 with MCP 3.1.1+.0 compliance
+- **FastMCP**: >=2.10.0 with MCP 2.12.0 compliance
 - **PlexAPI**: >=4.15.0 for Plex Media Server integration
 - **Platforms**: Windows, Linux, macOS support
 - **Package Size**: 5.0 MB (optimized for distribution)

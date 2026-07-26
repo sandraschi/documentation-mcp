@@ -1,50 +1,72 @@
-﻿# MyAI Platform
+# MyAI Platform
 
-**By FlowEngineer sandraschi**
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-Dual-mode AI microservices platform that ships a FastAPI control plane, an MCP server with production-grade tooling, and a fleet of AI applications orchestrated with Docker, Traefik, and a full monitoring stack.
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
+Dual-mode AI microservices platform: FastAPI dashboard (3060), Docker/Traefik subapps, FastMCP 3.1.0 `myai_platform_mcp` with fleet web_sota (10888/10889), and a full monitoring stack. By FlowEngineer sandraschi.
 
 ---
 
-## ðŸ“Œ Highlights
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/myai
+cd myai
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+
+##  Highlights
 - **FastAPI Dashboard (port 3060)** with service lifecycle management, health probes, and MCP orchestration.
-- **MCP Server (FastMCP 3.1.1++)** exposing eleven operational tools with comprehensive docstrings and portmanteau patterns.
+- **MCP Server (FastMCP 3.1.0)** exposing operational tools with comprehensive docstrings and portmanteau patterns.
 - **Thirteen AI microservices** (LLM chat, document RAG, Gemini multimodal suite, Stable Diffusion, talking avatar, **HunyuanWorld 3D modeling**, **Wan2.2 video generation**, etc.) following a shared service contract.
 - **Infrastructure-ready Docker Compose** including Traefik, Prometheus, Grafana, Loki, Portainer, PostgreSQL, Weaviate, and GPU workloads.
 - **Security first**: non-root containers, read-only Docker socket, API key enforcement, strict CORS, and resource limits across the stack.
 
 ---
 
-## ðŸ—ï¸ Architecture Overview
+##  Architecture Overview
 
 ```
 myai/
-â”œâ”€â”€ core/
-â”‚   â”œâ”€â”€ dashboard/        # FastAPI app + MCP server + service APIs
-â”‚   â”œâ”€â”€ llm_integration/  # Shared LLM adapters (Ollama, vLLM, Gemini, etc.)
-â”‚   â”œâ”€â”€ logging_system/   # Central logging configuration & helpers
-â”‚   â””â”€â”€ monitoring/       # Prometheus/Grafana/Loki provisioning
-â”œâ”€â”€ projects/
-â”‚   â”œâ”€â”€ bob_and_alice/        # Multi-persona LLM chat (5188)
-â”‚   â”œâ”€â”€ character_conversation/# Role-based ensemble chat (5190)
-â”‚   â”œâ”€â”€ document_viewer/      # Document RAG + Weaviate (5192)
-â”‚   â”œâ”€â”€ future_you/           # Future self simulator (5194)
-â”‚   â”œâ”€â”€ stablediff_gradio/    # Stable Diffusion UI (5196)
-â”‚   â”œâ”€â”€ talking_avatar/       # Voice + animation (5198, GPU)
-â”‚   â”œâ”€â”€ teams_debate/         # Multi-agent debate (5200/5201)
-â”‚   â”œâ”€â”€ gemini_tools/         # Google Gemini multimodal suite (5206)
-â”‚   â”œâ”€â”€ plex_plus/            # Plex AI extensions (3020/3001)
-â”‚   â””â”€â”€ calibre_plus/         # Calibre AI extensions (8000/9000)
-â”œâ”€â”€ docker-compose.yml        # Full platform orchestration (18+ services)
-â”œâ”€â”€ docs/                     # Standards, patterns, status reports
-â””â”€â”€ scripts/                  # Diagnostics, maintenance, automation
+ core/
+    dashboard/        # FastAPI app + MCP server + service APIs
+    llm_integration/  # Shared LLM adapters (Ollama, vLLM, Gemini, etc.)
+    logging_system/   # Central logging configuration & helpers
+    monitoring/       # Prometheus/Grafana/Loki provisioning
+ projects/
+    bob_and_alice/        # Multi-persona LLM chat (5188)
+    character_conversation/# Role-based ensemble chat (5190)
+    document_viewer/      # Document RAG + Weaviate (5192)
+    future_you/           # Future self simulator (5194)
+    stablediff_gradio/    # Stable Diffusion UI (5196)
+    talking_avatar/       # Voice + animation (5198, GPU)
+    teams_debate/         # Multi-agent debate (5200/5201)
+    gemini_tools/         # Google Gemini multimodal suite (5206)
+    plex_plus/            # Plex AI extensions (3020/3001)
+    calibre_plus/         # Calibre AI extensions (8000/9000)
+ docker-compose.yml        # Full platform orchestration (18+ services)
+ docs/                     # Standards, patterns, status reports
+ scripts/                  # Diagnostics, maintenance, automation
 ```
 
 Traefik fronts user traffic, while internal services communicate over the `ai-network` bridge. Monitoring agents collect metrics/logs for every container, feeding the Grafana dashboards that ship with the repo.
 
 ---
 
-## ðŸ”¢ Service Matrix
+##  Service Matrix
 
 | Service | Description | Tech Stack | Ports |
 | --- | --- | --- | --- |
@@ -66,7 +88,7 @@ Supporting infrastructure: Traefik (80/8080), Prometheus (9091), Grafana (3100),
 
 ---
 
-## ðŸš€ Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Docker Engine 24+
@@ -100,7 +122,7 @@ Stop everything with `docker compose down` (add `-v` to wipe volumes).
 
 ---
 
-## ðŸ§‘â€ðŸ’» Development Workflows
+##  Development Workflows
 
 ### Dashboard + MCP Server
 ```powershell
@@ -154,7 +176,7 @@ npm run dev         # or npm run build for production bundle
 
 ---
 
-## ðŸ“ˆ Monitoring & Operations
+##  Monitoring & Operations
 - **Prometheus** scrapes application metrics at `http://localhost:9091`.
 - **Grafana** dashboards are preloaded under `monitoring/grafana/`. Import them after the first startup.
 - **Loki + Promtail** centralize logs (`docker compose logs -f` for raw output).
@@ -163,7 +185,7 @@ npm run dev         # or npm run build for production bundle
 
 ---
 
-## ðŸ” Security Baselines
+##  Security Baselines
 - Containers run as non-root (`user: 1000:999`), and the Docker socket is mounted read-only (`/var/run/docker.sock:ro`).
 - Dashboard APIs require `DASHBOARD_API_KEY` via the `X-API-Key` header (see `core/dashboard/main.py`).
 - CORS is locked to known origins (3060, 3020, 8000); never widen to `*`.
@@ -172,18 +194,18 @@ npm run dev         # or npm run build for production bundle
 
 ---
 
-## ðŸ“š Documentation Map
-- `docs/MCP_SERVER_DEVELOPMENT_PATTERNS.md` â€“ FastMCP 3.1.1++ tool standards and portmanteau patterns.
-- `docs/HUNYUANWORLD_TECHNICAL_INTEGRATION.md` â€“ Complete technical guide to HunyuanWorld 1.5 integration, architecture, performance, and comparison with WorldLabs.ai.
-- `docs/WAN2.2_TECHNICAL_INTEGRATION.md` â€“ Complete technical guide to Wan2.2 video generation integration, MoE architecture, multi-modal capabilities, and performance benchmarks.
-- `docs/MYAI_STATUS_REPORT_*.md` â€“ weekly status, service health, improvement targets.
-- `docs/monitoring/` â€“ Prometheus, Grafana, Loki configuration and dashboards.
-- `docs/tools-reference.md` â€“ MCP tool catalog.
-- `docs/integration-guide.md` (todo) â€“ Claude Desktop integration recipe for the MCP server.
+##  Documentation Map
+- `docs/MCP_SERVER_DEVELOPMENT_PATTERNS.md`  FastMCP 3.1.0+ tool standards and portmanteau patterns.
+- `docs/HUNYUANWORLD_TECHNICAL_INTEGRATION.md`  Complete technical guide to HunyuanWorld 1.5 integration, architecture, performance, and comparison with WorldLabs.ai.
+- `docs/WAN2.2_TECHNICAL_INTEGRATION.md`  Complete technical guide to Wan2.2 video generation integration, MoE architecture, multi-modal capabilities, and performance benchmarks.
+- `docs/MYAI_STATUS_REPORT_*.md`  weekly status, service health, improvement targets.
+- `docs/monitoring/`  Prometheus, Grafana, Loki configuration and dashboards.
+- `docs/tools-reference.md`  MCP tool catalog.
+- `docs/integration-guide.md` (todo)  Claude Desktop integration recipe for the MCP server.
 
 ---
 
-## ðŸ¤ Contributing
+##  Contributing
 1. Follow MCP docstring and error-handling requirements (50+ lines per tool, structured error returns).
 2. Run `ruff`, `pyright`, and relevant unit tests before opening PRs.
 3. Update `CHANGELOG.md` and docs when behaviour or configuration changes.
@@ -191,7 +213,7 @@ npm run dev         # or npm run build for production bundle
 
 ---
 
-## ðŸ†˜ Support
+##  Support
 - Platform questions: open issues in this repo.
 - MCP standards: `D:\Dev\repos\mcp-central-docs\STANDARDS.md`.
 - Incidents & hotfixes: track in `docs-private/` (git-ignored) and propagate summaries to `docs/`.
@@ -201,19 +223,19 @@ npm run dev         # or npm run build for production bundle
 Built for production-ready AI experimentation with rock-solid operational guardrails. Enjoy exploring the platform!
 
 
-## ðŸš€ Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx myai-start
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -224,3 +246,13 @@ Add to your `claude_desktop_config.json`:
 }
 ```
 
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.

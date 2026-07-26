@@ -1,6 +1,16 @@
-﻿# GTFS MCP Server
+# GTFS MCP Server
 
-A FastMCP 3.1.1+ compliant server for downloading, parsing, and serving GTFS
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
+A FastMCP 3.1.0 compliant server for downloading, parsing, and serving GTFS
 (General Transit Feed Specification) data. This server provides a standardized API
 for accessing transit data from various agencies, handling the quirks and
 inconsistencies of real-world GTFS feeds.
@@ -9,31 +19,41 @@ inconsistencies of real-world GTFS feeds.
 
 - **GTFS Feed Management**: Download and update GTFS feeds from any URL
 - **Robust Parser**: Handles malformed/missing data with grace
-- **FastMCP 3.1.1+ Compliant**: Full compatibility with the Model Control Protocol
+- **FastMCP 3.1.0 Compliant**: Full compatibility with the Model Control Protocol
 - **RESTful API**: Easy integration with web and mobile applications
 - **Real-time Updates**: WebSocket support for live departure information
 - **Geospatial Queries**: Find stops and routes near a location
 
 ## Quick Start
 
-### Prerequisites
+```powershell
+git clone https://github.com/sandraschi/gtfs-mcp
+cd gtfs-mcp
+just
+```
 
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+### Prerequisites
 - Python 3.10+
 - pip (Python package manager)
 
-## ðŸš€ Installation
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx gtfs-mcp
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -96,17 +116,17 @@ curl "http://localhost:8000/v1/stops/12345/departures?feed_id=my-feed&limit=5"
 
 ```text
 gtfs-mcp/
-â”œâ”€â”€ src/
-â”‚   â””â”€â”€ gtfs_mcp/           # Main package
-â”‚       â”œâ”€â”€ __init__.py     # Package initialization
-â”‚       â”œâ”€â”€ main.py         # FastAPI application
-â”‚       â”œâ”€â”€ config.py       # Configuration management
-â”‚       â”œâ”€â”€ api/            # API endpoints
-â”‚       â”œâ”€â”€ core/           # Core functionality
-â”‚       â””â”€â”€ services/       # Business logic
-â”œâ”€â”€ tests/                  # Test suite
-â”œâ”€â”€ pyproject.toml          # Project metadata and dependencies
-â””â”€â”€ README.md               # This file
+ src/
+    gtfs_mcp/           # Main package
+        __init__.py     # Package initialization
+        main.py         # FastAPI application
+        config.py       # Configuration management
+        api/            # API endpoints
+        core/           # Core functionality
+        services/       # Business logic
+ tests/                  # Test suite
+ pyproject.toml          # Project metadata and dependencies
+ README.md               # This file
 ```
 
 ### Running Tests
@@ -131,6 +151,17 @@ isort .
 mypy .
 ```
 
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
 ## License
 
 MIT
@@ -148,4 +179,3 @@ Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTIN
 ## Support
 
 For support, please open an issue on the [GitHub repository](https://github.com/sandraschi/gtfs-mcp/issues).
-

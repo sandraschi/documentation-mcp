@@ -69,7 +69,7 @@ main.import_server(sub, prefix="sub")
 #### System Administration Domain
 - `filesystem-mcp` - File operations
 - `windows-operations-mcp` - Windows automation
-- `pywinauto-mcp` - GUI automation
+- `windows-computer-use-mcp` - GUI automation
 - `dockermcp` - Containers
 - `vboxmcp` - Virtual machines
 - `tailscale-mcp` - Networking

@@ -1,138 +1,167 @@
-# dreame-mcp — Dreame D20 Pro Plus MCP Server
+# Dreame D20 Pro Plus MCP Server
 
-**FastMCP 3.1 — DreameHome cloud, portmanteau, sampling (SEP-1577), agentic workflow, prompts, skills**
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://biomejs.dev"><img src="https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat-square&logo=biome&logoColor=white" alt="Biome"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
-> Dedicated MCP server and webapp for the Dreame D20 Pro Plus robot vacuum (dreame.vacuum.r2566a).
-> Uses the **DreameHome cloud API** — no local token or miio required.
-> Protocol and map layer extracted from [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum) ref clone.
-> SOTA webapp (React, Tailwind, dark theme) on ports 10894/10895.
 
----
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-## Summary
+FastMCP 3.2.0 MCP server and webapp for the **Dreame D20 Pro Plus** robot vacuum. Uses the **DreameHome cloud API**; local **miio** is optional (hybrid mode: see below).
+Protocol layer extracted from [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum).
 
-| Item | Details |
-|------|---------|
-| **Repo** | `D:\Dev\repos\dreame-mcp` |
-| **Ports** | Backend 10894 (MCP SSE + REST), Dashboard 10895 (Vite) |
-| **Protocol** | FastMCP 3.1, DreameHome cloud (Alibaba Cloud / EU region) |
-| **Start** | `starts\dreame-start.bat` or `webapp\start.bat` |
-| **Ref clone** | `D:\Dev\repos\tasshack_dreame_vacuum_ref` (Tasshack protocol + map layer) |
-| **Device** | Dreame D20 Pro Plus / dreame.vacuum.r2566a / DID 2045852486 |
+## Features
 
----
+- **MCP tools**: `dreame(operation=...)`  status, map, start_clean, stop, pause, go_home, find_robot, battery
+- **MCP tools**: `dreame_help(category)`, `dreame_agentic_workflow(goal)` with SEP-1577 sampling
+- **Prompts**: `dreame_quick_start`, `dreame_diagnostics`
+- **Skills**: `skills/dreame-operator.md`
+- **REST API**: GET /api/v1/health, /api/v1/status, /api/v1/map; POST /api/v1/control/{cmd}
+- **Webapp**: Dashboard, LIDAR Map, Status, Controls, Settings, Help, MCP Tools
 
-## Why cloud, not local
+## Ports
 
-The D20 Pro Plus is a DreameHome-only device:
-- No local miio token (token field returns N/A)
-- Not available in Mi Home app
-- DreameHome disables the local API entirely
+- Backend: **10894** (REST + MCP SSE)
+- Dashboard: **10895** (Vite dev server)
 
-The Tasshack dreame-vacuum HA integration has broken EU auth (known open bug since mid-2025).
-Solution: call the DreameHome cloud REST + MQTT API directly using `DreameVacuumDreameHomeCloudProtocol`
-from the Tasshack ref clone, bootstrapped with stubbed miio/HA dependencies.
+## Prerequisites
 
----
+1. Clone **this** repo and enter it:
+   ```powershell
+   git clone https://github.com/sandraschi/dreame-mcp.git
+   Set-Location dreame-mcp
+   ```
 
-## Tools
+2. Clone the Tasshack dreame-vacuum reference repo (protocol + map layer). Default ref path is `D:/Dev/repos/tasshack_dreame_vacuum_ref`:
+   ```powershell
+   Set-Location D:\Dev\repos
+   git clone https://github.com/Tasshack/dreame-vacuum tasshack_dreame_vacuum_ref
+   Set-Location dreame-mcp
+   ```
+   (Adjust paths if your dev folder is not `D:\Dev\repos`; set `DREAME_REF_PATH` accordingly.)
 
-- **dreame(operation, param1, param2, payload)** — Portmanteau: status, map, start_clean, stop, pause, go_home, find_robot, battery.
-- **dreame_help(category, topic)** — Multi-level help (status, map, control, connection, agentic).
-- **dreame_agentic_workflow(goal)** — High-level natural-language goal via `ctx.sample()` (SEP-1577).
+3. Install Python deps from the **dreame-mcp** repository root:
+   ```powershell
+   uv sync
+   ```
 
----
-
-## Prompts
-
-- **dreame_quick_start()** — Setup and connect instructions (env vars, ref clone, dashboard, MCP client).
-- **dreame_diagnostics()** — Diagnostic checklist (status, map render, connection, py-mini-racer).
-
----
-
-## Skills
-
-- **skills/dreame-operator.md** — Operator skill: tool selection, prompts, workflow rules.
-
----
-
-## REST API
-
-| Endpoint | Description |
-|----------|-------------|
-| GET /api/v1/health | Service health, connected flag, DID |
-| GET /api/v1/status | Battery %, state, charging, area, time |
-| GET /api/v1/map | LIDAR map — single JSON body; `raw_b64` (raw file bytes) + optional `image` (PNG base64). See repo `docs/MAP_AND_ROBOTICS.md` |
-| POST /api/v1/control/{cmd} | start_clean, stop, pause, go_home, find_robot |
-
----
-
-## Webapp (SOTA)
-
-- **Dashboard** — Backend + robot connection status; quick links.
-- **LIDAR Map** — Fetch and display map image (base64 PNG or raw JSON); refresh, raw toggle.
-- **Status** — Battery and state; polling every 10 s.
-- **Controls** — Start, Stop, Pause, Return to dock, Find robot.
-- **Settings** — Env vars reference.
-- **Help** — Tabs: The Robot, Quick Start, MCP Server, Connection, Connection methods, **Map API**, Troubleshoot.
-- **MCP Tools** — Tool list and mcp_config.json snippet.
-
----
-
-## Environment Variables
+## Environment variables
 
 | Variable | Required | Description |
-|----------|----------|-------------|
-| **DREAME_USER** | ✅ | DreameHome email or phone |
-| **DREAME_PASSWORD** | ✅ | DreameHome password |
-| **DREAME_COUNTRY** | — | Cloud region (default: `eu`) |
-| **DREAME_DID** | — | Device ID, auto-discovered if single device (2045852486) |
-| **DREAME_AUTH_KEY** | — | Refresh token from previous login (speeds startup) |
-| **DREAME_REF_PATH** | — | Tasshack ref clone path (default: `D:/Dev/repos/tasshack_dreame_vacuum_ref`) |
-| **DREAME_MCP_PORT** | — | Backend port (default: 10894) |
+|---|---|---|
+| `DREAME_USER` |  | DreameHome email or phone |
+| `DREAME_PASSWORD` |  | DreameHome password |
+| `DREAME_COUNTRY` |  | Cloud region, default `eu` |
+| `DREAME_DID` |  | Device ID, auto-discovered if single device |
+| `DREAME_AUTH_KEY` |  | Refresh token from previous login (speeds up startup) |
+| `DREAME_REF_PATH` |  | Path to tasshack ref clone (default: `D:/Dev/repos/tasshack_dreame_vacuum_ref`) |
+| `DREAME_MCP_PORT` |  | Backend port (default: `10894`) |
+| `DREAME_IP` / `DREAME_TOKEN` |  | Local miio (null token if token empty); hybrid with cloud for maps |
 
----
+## Development and tests
 
-## Map rendering and fleet consumption
+- **Python** (repo root): `uv run ruff check src tests`, `uv run pytest` (CI sets `PYTHONPATH=src`; on Windows: `$env:PYTHONPATH = 'src'; uv run pytest tests`).
+- **MCP tool `dreame(operation=...)`** returns **Markdown** for LLM context. For **structured dicts** (same shapes as the REST handlers), import `fetch_status_data`, `fetch_map_data`, and `execute_control_data` from `dreame_mcp.portmanteau` (see `tests/test_map.py`).
+- **Live tests** (real robot + cloud): `DREAME_LIVE=1 uv run pytest tests --live` or `--live` flag.
+- **Webapp** (`webapp/`): `npm ci` then `npm run biome:ci` and `npm run build`.
 
-**HTTP contract:** `GET /api/v1/map` returns **one JSON document** — map binary is **base64** in `raw_b64` (and optional `image` for PNG). No multipart body. Other fleet servers (robotics-mcp, yahboom-mcp) can poll this URL.
+## Connection Modes
 
-Map decode + PNG rendering requires the Tasshack dep chain: `py-mini-racer`, `numpy`, `Pillow`, `cryptography`.
-If `dreame(operation='map')` returns `render_error`, those deps may be missing; **`raw_b64`** is still returned.
+This server supports three operational modes depending on your `.env` configuration:
 
-**Canonical doc:** `D:\Dev\repos\dreame-mcp\docs\MAP_AND_ROBOTICS.md` and `docs/PRD.md` §5 in the dreame-mcp repo.
+| Mode | Credentials | Commands | Lidar Map | Notes |
+| :--- | :--- | :---: | :---: | :--- |
+| **Local** | `DREAME_IP` | ⚡ Local | ❌ No | Uses the **Null Token trick** (`000...000`) |
+| **Cloud** | `USER` + `PWD` | ☁️ Cloud | ✅ Yes | Subject to cloud latency and API rate limits |
+| **Hybrid** | **Both** | ⚡ **Local** | ✅ **Yes** | **Recommended**: Fast control + Full visual map |
 
----
+### The "Null Token" Trick (Bypass)
 
-## Cursor / Claude Desktop (SSE)
+For users avoiding the DreameHome cloud for controls, you do not need to extract a secret 32-character token. By providing only the `DREAME_IP`, the backend automatically uses a **Null Token** (`32 zeros`). This works on many bridged or circumvention-ready firmwares (like those used with the Tasshack protocol).
 
-```json
-"dreame": {
-  "url": "http://localhost:10894/sse",
-  "transport": "sse"
-}
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/dreame-mcp
+cd dreame-mcp
+just
 ```
 
-Or stdio (run server separately first):
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+
+
+## Setup
+
+1. **Configure credentials**: Copy `.env.example` to `.env` and fill in your details.
+   ```powershell
+   # Typical Hybrid Setup (.env)
+   DREAME_IP=192.168.0.178
+   DREAME_USER=your@email.com
+   DREAME_PASSWORD=yourpassword
+   ```
+
+2. **Start the system**:
+   ```powershell
+   # Start backend + webapp together
+   .\webapp\start.ps1
+   ```
+
+## MCP client config
 
 ```json
-"dreame-mcp": {
-  "command": "D:/Dev/repos/uv-install/uv.exe",
-  "args": ["--directory", "D:/Dev/repos/dreame-mcp", "run", "python", "-m", "dreame_mcp", "--mode", "stdio"],
-  "env": {
-    "PYTHONUNBUFFERED": "1",
-    "DREAME_USER": "your@email.com",
-    "DREAME_PASSWORD": "yourpassword",
-    "DREAME_COUNTRY": "eu"
+{
+  "mcpServers": {
+    "dreame": {
+      "url": "http://localhost:10894/sse",
+      "transport": "sse"
+    }
   }
 }
 ```
 
----
+## Map (LIDAR / floor plan)
 
-## Fleet
+**Map data does not require miIO** on this server: it uses DreameHome cloud + the Tasshack ref at `DREAME_REF_PATH`. Local miIO is optional and often unavailable on DreameHome-only firmware.
 
-- **Starts symlink**: `mcp-central-docs\starts\dreame-start.bat` → `dreame-mcp\webapp\start.bat`
-- **Ports**: 10894 (backend), 10895 (frontend) — per WEBAPP_PORTS.md
-- **Ref clone**: `tasshack_dreame_vacuum_ref` — used as protocol/map library, not modified
-- Other robots (yahboom-mcp etc.) can use `/api/v1/map` for cross-robot map access
+- **REST:** `GET http://localhost:10894/api/v1/map` (same JSON as MCP `dreame(operation='map')`).
+- **Fields:** `image` (base64-encoded image when decode/render works), `raw_b64` (always on successful cloud fetch; use for custom decoders or **robotics-mcp / yahboom-mcp**), optional `map_data`, optional `render_error` if the PNG path failed.
+- **Dashboard:** **Map** page at `http://localhost:10895` shows the image when `image` is present.
+
+**Download path (cloud):** matches Home Assistant’s Tasshack integration — resolve **`OBJECT_NAME`** (property 6.3) when available, then **`get_interim_file_url` / `get_file`** (signed object storage). **`get_device_file`** is only a fallback; it often returns `80001` if the cloud cannot reach the device at that moment.
+
+**Render path:** raw bytes are decoded with **`DreameVacuumMapDecoder.decode_map`** and drawn with **`DreameVacuumMapRenderer.render_map`** (not `DreameMapVacuumMapManager` methods, which only orchestrate HA state). The ref clone’s `custom_components.…` packages are given proper `__path__` at load time so `map.py` imports cleanly.
+
+See **[docs/MAP_AND_ROBOTICS.md](docs/MAP_AND_ROBOTICS.md)** for fleet integration, the JSON contract, and operations.
+
+### Map rendering (dependencies)
+
+The rendered image requires the Tasshack stack: `py-mini-racer`, `numpy`, `Pillow`, `cryptography`, and related pins from `uv.lock`. If `dreame(operation='map')` has `render_error` but `raw_b64` is set, the fetch worked and only decode/render failed; check logs and dependencies.
+
+## Troubleshooting: `Unable to discover the device` / status 502
+
+`GET /api/v1/health` includes **`local_miot`**: `true` only after a successful UDP miio handshake to `DREAME_IP` (port 54321). If you see **`Unable to discover the device` `192.168.x.x`** in logs or **`local_miot: false`**, the robot did not answer the standard miio discovery on the LAN. Typical causes: **DreameHome-only firmware** (no or limited LAN miio), **wrong IP**, **null token not accepted** (add a real **`DREAME_TOKEN`**), or **cloud login failed** (fix **`DREAME_USER` / `DREAME_PASSWORD` / `DREAME_COUNTRY`**, captcha, 2FA) so you get **`DREAME_DID`** and maps. Set **`DREAME_DID`** manually in `.env` when you know it from the app or cloud.
+
+## Docs
+
+- [Map and fleet robotics](docs/MAP_AND_ROBOTICS.md)  HTTP/MCP consumption, miIO vs cloud, yahboom / robotics integration
+- [PRD](docs/PRD.md)  product context, ports, **5 Map API contract**
+- [Token and Home Assistant](docs/TOKEN_AND_HOME_ASSISTANT.md)  historical miIO reference (v0.2+ uses cloud)
+
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.

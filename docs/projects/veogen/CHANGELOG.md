@@ -1,34 +1,34 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## [3.1.0-industrial] - 2026-04-18
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+### 🚀 Industrial Revolution
+- **SOTA Stack Migration**: Upgraded total infrastructure to April 2026 standards.
+- **Frontend Vite Migration**: Removed `create-react-app` in favor of Vite 5 (10x faster HMR).
+- **React 18.3+**: Modernized core components and hooks.
+- **Fleet Port Standardization**: Shifted backend to `10730` and frontend to `10731` for Registry compliance.
 
-## [1.0.0] - 2025-10-21
+### 🤖 AI Models (v3.1)
+- **Gemini 3.1 Pro/Flash**: Complete integration with thinking-level controls.
+- **Nano Banana 2**: Implemented the new Gemini 3.1 Flash Image model for ultra-fast Image generation with search grounding.
+- **Flash TTS**: Native Gemini 3.1 TTS integration with natural prosody and audio tags.
+- **Veo 3.1**: Advanced video generation with cinematic continuity.
+- **Lyria 3**: High-fidelity music composition system.
 
-### Added
-- Initial release
-- Core functionality implemented
-- Documentation created
+### 🎨 Design & UX
+- **Glassmorphism Premium**: Total UI overhaul using modern translucent design tokens.
+- **Studio Hierarchy**: Streamlined the 25+ legacy routes into the "Big Four" core studios and a collapsible "Lab" for experimental tools.
+- **Motion System**: Implemented high-fidelity Framer Motion transitions.
 
-### Changed
-- N/A
+### 🛠️ Tooling & DX
+- **Biome Integration**: Strict linting and formatting for the frontend (0-error standard).
+- **FastMCP 3.2**: Upgraded MCP integration for modern bridge protocols.
+- **JUST / PS1 Start**: Standardized startup patterns.
 
-### Fixed
-- N/A
+### 🧹 The Great Purge
+- Deleted 30+ junk files (`_broken`, `_backup`, `_corrupted`).
+- Archived "gaslight" placeholder routes.
+- Removed legacy `setup.sh`/`setup.bat`.
 
-### Removed
-- N/A
-
----
-
-## How to Update This File
-
-When making changes, add them under the appropriate section:
-- **Added** for new features
-- **Changed** for changes in existing functionality
-- **Deprecated** for soon-to-be removed features
-- **Removed** for now removed features
-- **Fixed** for any bug fixes
-- **Security** for vulnerability fixes
+## [2.0.0] - 2025-10-15
+- Legacy "Movie Maker" version. (Outdated)

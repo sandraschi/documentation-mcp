@@ -40,7 +40,7 @@ Common issues and solutions for MCP servers.
 **Solutions**:
 ```powershell
 # Upgrade to SOTA 3.1.1+ baseline
-uv add fastmcp>=3.1.1
+uv add fastmcp>=3.4.4
 
 # Verify version
 uv run python -c "import fastmcp; print(fastmcp.__version__)"

@@ -4,7 +4,7 @@ server:
   debug: false
   log_level: WARNING
 auth:
-  enabled: false  # Set to true to enable authentication (currently disabled for development)
+  enabled: false
   username: admin
   password: admin123
   users:
@@ -54,11 +54,11 @@ web:
     quality: 80
     max_streams: 10
 logging:
-  file: devices_mcp.log
+  file: tapo_mcp.log
   max_size: 10
   backup_count: 5
 energy:
-  electricity_rate_eur_per_kwh: 0.30
+  electricity_rate_eur_per_kwh: 0.3
   tapo_p115:
     account:
       username: sandraschipal@hotmail.com
@@ -79,7 +79,6 @@ energy:
       name: Server
       location: Server Room
       readonly: true
-# iKettle removed - user doesn't own this hardware
 public_webcams:
   enabled: true
   vienna_webcams:
@@ -108,10 +107,10 @@ public_webcams:
       location: Prater, Vienna 2nd district
       description: The famous Wiener Riesenrad ferris wheel
     schoenbrunn:
-      name: Schönbrunn Gardens
+      name: "Sch\xF6nbrunn Gardens"
       type: public_webcam
       url: https://www.schoenbrunn.at/en/webcam/webcam.jpg
-      location: Schönbrunn Palace, Vienna 13th district
+      location: "Sch\xF6nbrunn Palace, Vienna 13th district"
       description: Beautiful palace gardens - great for seasonal weather
     naschmarkt:
       name: Naschmarkt
@@ -189,7 +188,7 @@ weather:
 ring:
   enabled: true
   email: sandraschipal@hotmail.com
-  password: Sec1000ri#
+  password: Sec20000ri#
   token_file: ring_token.cache
   cache_ttl: 60
 ring_mcp:
@@ -199,7 +198,13 @@ shelly:
   sensors: null
   cache_ttl: 30
   devices: null
-# Thermal cameras removed - user doesn't own this hardware
+nest:
+  enabled: true
+  refresh_token: ''
+  client_id: ''
+  client_secret: ''
+  token_file: nest_token.cache
+  cache_ttl: 60
 security:
   integrations:
     homeassistant:
@@ -227,12 +232,15 @@ robotics_mcp:
   devices:
     dreame_d20:
       type: dreame
-      name: "Dreame D20 Pro"
+      name: Dreame D20 Pro
       host: 192.168.0.144
       token: ${DREAME_VACUUM_TOKEN}
     yahboom_car:
       type: yahboom
-      name: "Yahboom ROS 2 Car"
+      name: Yahboom ROS 2 Car
       host: 192.168.0.100
       port: 5000
-
+llm:
+  ollama_url: http://127.0.0.1:11434
+  lm_studio_url: http://127.0.0.1:1234
+  preferred_provider: lm_studio

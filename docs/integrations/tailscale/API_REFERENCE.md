@@ -1,449 +1,159 @@
-# Tailscale API Reference
+# Tailscale API Reference (Fleet Notes)
 
-**Date:** October 23, 2025  
-**Purpose:** Comprehensive Tailscale API reference for all MCP repositories
+**Refreshed:** 2026-06-20, against `tailscale-mcp` `src/tailscalemcp/client/api_client.py` directly — every endpoint below is a real method on `TailscaleAPIClient`, not a guess at what the Tailscale Admin API might offer.
 
----
-
-## 🎯 **Overview**
-
-This document provides comprehensive documentation for the Tailscale API, covering all endpoints, authentication, and usage patterns relevant to MCP server development.
+This page covers the REST endpoints this server actually calls. **Funnel and Taildrop are not REST calls** — they shell out to the `tailscale` CLI binary instead (see [FEATURES.md](https://github.com/sandraschi/tailscale-mcp/blob/main/docs/FEATURES.md) and the architecture note at the bottom of this page). The previous version of this page invented REST endpoints for both that don't exist anywhere in Tailscale's actual API.
 
 ---
 
-## 🔐 **Authentication**
+## Authentication
 
-### **API Key Authentication**
-```python
-import httpx
+Every request carries a bearer token:
 
-headers = {
-    "Authorization": f"Bearer {api_key}",
-    "Content-Type": "application/json"
-}
+```
+Authorization: Bearer tskey-api-...
 ```
 
-### **Environment Variables**
-```bash
-TAILSCALE_API_KEY=your_api_key_here
-TAILSCALE_TAILNET=your_tailnet_name
-```
+Base URL is built per-tailnet at client init: `https://api.tailscale.com/api/v2/tailnet/{tailnet}`. All the endpoints below are relative to that base.
 
----
+## Devices
 
-## 📡 **Core API Endpoints**
+| Method | Endpoint | Client method |
+|---|---|---|
+| GET | `/devices` | `list_devices()` |
+| GET | `/devices/{device_id}` | `get_device(device_id)` |
+| POST | `/devices/{device_id}` | `update_device(device_id, updates)` |
+| DELETE | `/devices/{device_id}` | `delete_device(device_id)` |
 
-### **Devices**
+`update_device` is the one real write endpoint for devices — rename, tag, and authorize are all expressed as different `updates` payloads to this same endpoint, not separate REST calls.
 
-#### **List Devices**
-```http
-GET /api/v2/device
-```
+## ACL Policy
 
-**Parameters:**
-- `fields`: Comma-separated list of fields to include
-- `limit`: Maximum number of devices to return
+| Method | Endpoint | Client method |
+|---|---|---|
+| GET | `/acl` | `get_acl_policy()` |
+| POST | `/acl` | `update_acl_policy(policy)` |
 
-**Response:**
-```json
-{
-  "devices": [
-    {
-      "id": "device_id",
-      "name": "device_name",
-      "user": "user@example.com",
-      "addresses": ["100.64.0.1"],
-      "hostname": "device-hostname",
-      "os": "linux",
-      "created": "2023-01-01T00:00:00Z",
-      "lastSeen": "2023-01-01T12:00:00Z",
-      "online": true,
-      "authorized": true,
-      "tags": ["tag:server", "tag:production"]
-    }
-  ]
-}
-```
+## DNS
 
-#### **Get Device Details**
-```http
-GET /api/v2/device/{device_id}
-```
+| Method | Endpoint | Client method |
+|---|---|---|
+| GET | `/dns/nameservers` | `get_dns_config()` |
+| POST | `/dns/nameservers` | `update_dns_config(config)` |
 
-#### **Authorize Device**
-```http
-POST /api/v2/device/{device_id}/authorized
-```
+## Services (beta — subject to change upstream)
 
-**Request Body:**
-```json
-{
-  "authorized": true
-}
-```
+| Method | Endpoint | Client method |
+|---|---|---|
+| GET | `/services` | `list_services()` |
+| GET | `/services/{id}` | `get_service(id)` |
+| POST | `/services` | `create_service(payload)` |
+| POST | `/services/{id}` | `update_service(id, payload)` |
+| DELETE | `/services/{id}` | `delete_service(id)` |
 
-#### **Update Device Tags**
-```http
-POST /api/v2/device/{device_id}/tags
-```
+Responses are parsed into a `Service` model (`src/tailscalemcp/models/service.py`), not raw dicts.
 
-**Request Body:**
-```json
-{
-  "tags": ["tag:server", "tag:production"]
-}
-```
+## Users
 
-### **Users**
+| Method | Endpoint | Client method |
+|---|---|---|
+| GET | `/users?type=&role=` | `list_users(user_type, role)` |
+| GET | `/users/{id}` | `get_user(id)` |
 
-#### **List Users**
-```http
-GET /api/v2/user
-```
+## Device invites
 
-**Response:**
-```json
-{
-  "users": [
-    {
-      "id": "user_id",
-      "loginName": "user@example.com",
-      "displayName": "User Name",
-      "profilePicURL": "https://example.com/avatar.jpg",
-      "created": "2023-01-01T00:00:00Z"
-    }
-  ]
-}
-```
+| Method | Endpoint | Client method |
+|---|---|---|
+| GET | `/devices/{device_id}/device-invites` | `list_device_invites(device_id)` |
+| POST | `/devices/{device_id}/device-invites` | `create_device_invites(device_id, invites)` |
+| GET | `/device-invites/{id}` | `get_device_invite(id)` |
+| DELETE | `/device-invites/{id}` | `delete_device_invite(id)` |
+| POST | `/device-invites/{id}/resend` | `resend_device_invite(id)` |
+| POST | `/device-invites/-/accept` | `accept_device_invite(invite)` |
 
-#### **Create User**
-```http
-POST /api/v2/user
-```
+## User invites
 
-**Request Body:**
-```json
-{
-  "loginName": "user@example.com",
-  "displayName": "User Name"
-}
-```
+| Method | Endpoint | Client method |
+|---|---|---|
+| GET | `/tailnet/{t}/user-invites` | `list_user_invites(tailnet)` |
+| POST | `/tailnet/{t}/user-invites` | `create_user_invites(invites, tailnet)` |
+| GET | `/user-invites/{id}` | `get_user_invite(id)` |
+| DELETE | `/user-invites/{id}` | `delete_user_invite(id)` |
+| POST | `/user-invites/{id}/resend` | `resend_user_invite(id)` |
 
-### **Access Control Lists (ACLs)**
+No `accept` endpoint for user invites — that distinction (device invites *can* be self-accepted via API, user invites can't) is real and worth remembering; it's not an oversight in this client.
 
-#### **Get ACL**
-```http
-GET /api/v2/tailnet/{tailnet}/acl
-```
+## Device posture attributes
 
-**Response:**
-```json
-{
-  "acl": [
-    {
-      "action": "accept",
-      "src": ["*"],
-      "dst": ["*:*"]
-    }
-  ],
-  "groups": {
-    "group:admins": ["user@example.com"]
-  },
-  "hosts": {
-    "server": "100.64.0.1"
-  },
-  "tests": []
-}
-```
+| Method | Endpoint | Client method |
+|---|---|---|
+| GET | `/devices/{device_id}/attributes` | `get_device_posture_attributes(device_id)` |
+| POST | `/devices/{device_id}/attributes/{key}` | `set_custom_device_posture_attribute(...)` |
+| DELETE | `/devices/{device_id}/attributes/{key}` | `delete_custom_device_posture_attribute(...)` |
+| PATCH | `/tailnet/{t}/device-attributes` | `batch_update_device_posture_attributes(nodes, comment, tailnet)` |
 
-#### **Update ACL**
-```http
-POST /api/v2/tailnet/{tailnet}/acl
-```
+## Device keys
 
-**Request Body:**
-```json
-{
-  "acl": [
-    {
-      "action": "accept",
-      "src": ["group:admins"],
-      "dst": ["*:22"]
-    }
-  ]
-}
-```
+| Method | Endpoint | Client method |
+|---|---|---|
+| POST | `/devices/{device_id}/expire` | `expire_device_key(device_id)` |
+| POST | `/devices/{device_id}/key` | `update_device_key(device_id, key_expiry_disabled)` |
+| POST | `/devices/{device_id}/ip` | `set_device_ip(device_id, ipv4)` |
 
-### **DNS**
+## Logging
 
-#### **Get DNS Configuration**
-```http
-GET /api/v2/tailnet/{tailnet}/dns/nameservers
-```
+| Method | Endpoint | Client method |
+|---|---|---|
+| GET | `/tailnet/{t}/logging/configuration` | `list_configuration_audit_logs(...)` |
+| GET | `/tailnet/{t}/logging/network` | `list_network_flow_logs(...)` |
+| GET | `/tailnet/{t}/logging/{log_type}/stream/status` | `get_log_streaming_status(log_type, tailnet)` |
+| GET | `/tailnet/{t}/logging/{log_type}/stream` | `get_log_streaming_configuration(log_type, tailnet)` |
+| PUT | `/tailnet/{t}/logging/{log_type}/stream` | `set_log_streaming_configuration(log_type, config, tailnet)` |
 
-#### **Update DNS Configuration**
-```http
-POST /api/v2/tailnet/{tailnet}/dns/nameservers
-```
+## Webhooks
 
-**Request Body:**
-```json
-{
-  "nameservers": ["8.8.8.8", "8.8.4.4"]
-}
-```
+| Method | Endpoint | Client method |
+|---|---|---|
+| GET | `/tailnet/{t}/webhooks` | `list_webhooks(tailnet)` |
+| POST | `/tailnet/{t}/webhooks` | `create_webhook(endpoint_url, provider_type, ...)` |
+| GET | `/tailnet/{t}/webhooks/{id}` | `get_webhook(id, tailnet)` |
+| PATCH | `/tailnet/{t}/webhooks/{id}` | `update_webhook(id, updates, tailnet)` |
+| DELETE | `/tailnet/{t}/webhooks/{id}` | `delete_webhook(id, tailnet)` |
+| POST | `/tailnet/{t}/webhooks/{id}/rotate` | `rotate_webhook_secret(id, tailnet)` |
 
-#### **Get DNS Records**
-```http
-GET /api/v2/tailnet/{tailnet}/dns/records
-```
+## Tailnet settings & contacts
 
-#### **Create DNS Record**
-```http
-POST /api/v2/tailnet/{tailnet}/dns/records
-```
+| Method | Endpoint | Client method |
+|---|---|---|
+| GET | `/tailnet/{t}/tailnet-settings` | `get_tailnet_settings(tailnet)` |
+| PATCH | `/tailnet/{t}/tailnet-settings` | `update_tailnet_settings(settings, tailnet)` |
+| GET | `/tailnet/{t}/contacts` | `get_contact_preferences(tailnet)` |
+| PUT | `/tailnet/{t}/contacts` | `update_contact_preferences(contacts, tailnet)` |
 
-**Request Body:**
-```json
-{
-  "name": "example",
-  "type": "A",
-  "value": "100.64.0.1"
-}
-```
+## Error responses
 
-### **Taildrop (File Sharing)**
+Real exception hierarchy from `src/tailscalemcp/exceptions.py` — not a generic dict-based error scheme:
 
-#### **List Files**
-```http
-GET /api/v2/tailnet/{tailnet}/files
-```
+| HTTP status | Exception raised |
+|---|---|
+| 401 | `AuthenticationError` |
+| 404 | `NotFoundError` |
+| 429 | `RateLimitExceededError` |
+| other 4xx/5xx | `TailscaleAPIError` |
 
-#### **Send File**
-```http
-POST /api/v2/tailnet/{tailnet}/files/{device_id}
-```
+All inherit from `TailscaleMCPError`, which carries `message`, `code`, and a `details` dict (`.to_dict()` for the wire shape). 401s specifically get extra handling at the tool layer — see [TRAPS_AND_PITFALLS.md §6](../../standards/TRAPS_AND_PITFALLS.md#6-stale-in-process-api-credentials-surfacing-as-a-flat-invalid-api-key-error).
 
-**Request Body:**
-```json
-{
-  "filename": "example.txt",
-  "content": "file content here"
-}
-```
+## Rate limiting and retry — real defaults, not invented numbers
 
-#### **Receive File**
-```http
-GET /api/v2/tailnet/{tailnet}/files/{device_id}/{filename}
-```
+From `src/tailscalemcp/config.py` and `client/rate_limiter.py` / `client/retry.py`:
 
----
+- **Rate limit**: 1 request/second by default (`rate_limit_per_second`), token-bucket style over a 60-second window — configurable, but this is what ships.
+- **Retries**: 3 attempts by default, exponential backoff (`backoff_factor=2.0`) with up to 25% random jitter, capped at 60 seconds total wait.
+- **Retried on**: network errors, HTTP 429/500/502/503/504, timeouts. **Not retried**: 401/404/429-as-final (rate limit itself raises `RateLimitExceededError` rather than silently retrying forever — the retry-on-429 case is for upstream Tailscale 429s during the request, separate from this client's own self-imposed 1/sec limiter).
+- **Connection pooling**: `max_connections=10`, `max_keepalive_connections=5` by default.
 
-## 🔧 **Common Usage Patterns**
+These aren't aspirational — they're the literal `Field(default=...)` values in `TailscaleConfig`. Override via `.env` if a workload needs different limits.
 
-### **Device Management**
-```python
-async def list_devices(api_key: str, tailnet: str) -> List[Dict]:
-    """List all devices in the tailnet."""
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            f"https://api.tailscale.com/api/v2/tailnet/{tailnet}/devices",
-            headers={"Authorization": f"Bearer {api_key}"}
-        )
-        return response.json()["devices"]
+## What's not REST: Funnel and Taildrop
 
-async def authorize_device(api_key: str, device_id: str) -> bool:
-    """Authorize a device."""
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            f"https://api.tailscale.com/api/v2/device/{device_id}/authorized",
-            headers={"Authorization": f"Bearer {api_key}"},
-            json={"authorized": True}
-        )
-        return response.status_code == 200
-```
-
-### **ACL Management**
-```python
-async def get_acl(api_key: str, tailnet: str) -> Dict:
-    """Get current ACL configuration."""
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            f"https://api.tailscale.com/api/v2/tailnet/{tailnet}/acl",
-            headers={"Authorization": f"Bearer {api_key}"}
-        )
-        return response.json()
-
-async def update_acl(api_key: str, tailnet: str, acl_config: Dict) -> bool:
-    """Update ACL configuration."""
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            f"https://api.tailscale.com/api/v2/tailnet/{tailnet}/acl",
-            headers={"Authorization": f"Bearer {api_key}"},
-            json=acl_config
-        )
-        return response.status_code == 200
-```
-
-### **DNS Management**
-```python
-async def get_dns_records(api_key: str, tailnet: str) -> List[Dict]:
-    """Get DNS records."""
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            f"https://api.tailscale.com/api/v2/tailnet/{tailnet}/dns/records",
-            headers={"Authorization": f"Bearer {api_key}"}
-        )
-        return response.json()["records"]
-
-async def create_dns_record(api_key: str, tailnet: str, name: str, 
-                          record_type: str, value: str) -> bool:
-    """Create a DNS record."""
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            f"https://api.tailscale.com/api/v2/tailnet/{tailnet}/dns/records",
-            headers={"Authorization": f"Bearer {api_key}"},
-            json={
-                "name": name,
-                "type": record_type,
-                "value": value
-            }
-        )
-        return response.status_code == 200
-```
-
----
-
-## 📊 **Rate Limiting**
-
-### **Rate Limits**
-- **Standard API**: 100 requests per minute
-- **Bulk Operations**: 10 requests per minute
-- **Authentication**: 20 requests per minute
-
-### **Rate Limit Headers**
-```http
-X-RateLimit-Limit: 100
-X-RateLimit-Remaining: 95
-X-RateLimit-Reset: 1640995200
-```
-
-### **Handling Rate Limits**
-```python
-import asyncio
-from datetime import datetime
-
-async def make_request_with_retry(client, url, headers, max_retries=3):
-    """Make request with rate limit retry logic."""
-    for attempt in range(max_retries):
-        try:
-            response = await client.get(url, headers=headers)
-            if response.status_code == 429:  # Rate limited
-                retry_after = int(response.headers.get("Retry-After", 60))
-                await asyncio.sleep(retry_after)
-                continue
-            return response
-        except Exception as e:
-            if attempt == max_retries - 1:
-                raise e
-            await asyncio.sleep(2 ** attempt)
-```
-
----
-
-## 🚨 **Error Handling**
-
-### **Common Error Codes**
-- **400 Bad Request**: Invalid request parameters
-- **401 Unauthorized**: Invalid or missing API key
-- **403 Forbidden**: Insufficient permissions
-- **404 Not Found**: Resource not found
-- **429 Too Many Requests**: Rate limit exceeded
-- **500 Internal Server Error**: Server error
-
-### **Error Response Format**
-```json
-{
-  "error": {
-    "code": "invalid_request",
-    "message": "Invalid request parameters",
-    "details": {
-      "field": "device_id",
-      "reason": "Device not found"
-    }
-  }
-}
-```
-
-### **Error Handling Pattern**
-```python
-async def handle_api_response(response: httpx.Response) -> Dict:
-    """Handle API response with proper error handling."""
-    if response.status_code == 200:
-        return response.json()
-    elif response.status_code == 401:
-        raise ValueError("Invalid API key")
-    elif response.status_code == 403:
-        raise PermissionError("Insufficient permissions")
-    elif response.status_code == 404:
-        raise ValueError("Resource not found")
-    elif response.status_code == 429:
-        raise ValueError("Rate limit exceeded")
-    else:
-        raise RuntimeError(f"API error: {response.status_code}")
-```
-
----
-
-## 🔍 **Advanced Features**
-
-### **Webhooks**
-```python
-async def create_webhook(api_key: str, tailnet: str, url: str, 
-                        events: List[str]) -> Dict:
-    """Create a webhook for events."""
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            f"https://api.tailscale.com/api/v2/tailnet/{tailnet}/webhooks",
-            headers={"Authorization": f"Bearer {api_key}"},
-            json={
-                "url": url,
-                "events": events
-            }
-        )
-        return response.json()
-```
-
-### **Bulk Operations**
-```python
-async def bulk_authorize_devices(api_key: str, device_ids: List[str]) -> Dict:
-    """Authorize multiple devices in bulk."""
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            "https://api.tailscale.com/api/v2/device/bulk/authorize",
-            headers={"Authorization": f"Bearer {api_key}"},
-            json={"device_ids": device_ids}
-        )
-        return response.json()
-```
-
----
-
-## 📚 **Additional Resources**
-
-### **Official Documentation**
-- [Tailscale API Documentation](https://tailscale.com/kb/1247/api)
-- [Tailscale CLI Reference](https://tailscale.com/kb/1240/tailscale-cli)
-- [Tailscale Admin Console](https://login.tailscale.com/admin)
-
-### **Community Resources**
-- [Tailscale GitHub](https://github.com/tailscale/tailscale)
-- [Tailscale Community Forum](https://github.com/tailscale/tailscale/discussions)
-- [Tailscale Blog](https://tailscale.com/blog/)
-
----
-
-**Status**: ✅ Active  
-**Last Updated**: October 23, 2025  
-**Version**: 1.0.0  
-**Purpose**: Comprehensive Tailscale API reference for MCP development
+Both `manage_funnel` and `manage_taildrop` operations shell out to the **`tailscale` CLI binary** (`src/tailscalemcp/utils/tailscale_cli.py`'s `TailscaleCLI` wrapper) rather than calling a REST endpoint — there is no `/api/v2/.../funnel` or `/api/v2/.../files` endpoint in Tailscale's actual API, despite what older drafts of fleet documentation claimed. `FunnelManager` and `TaildropManager` both check CLI availability at init (`use_cli`) and degrade gracefully: Funnel raises a clear error if the CLI isn't found, while Taildrop falls back to a **simulated transfer** (progress percentages, no actual file movement) if the CLI is unavailable — worth knowing if a Taildrop test "succeeds" but no file actually arrives anywhere.

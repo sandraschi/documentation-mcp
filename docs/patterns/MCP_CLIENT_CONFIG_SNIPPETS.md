@@ -39,12 +39,36 @@ Windows venv: `"command": "<REPO_ROOT>/.venv/Scripts/python.exe"`
 
 | Client | Config path | Servers key |
 |--------|-------------|-------------|
-| **Cursor** | `%APPDATA%\Cursor\User\globalStorage\cursor-storage\mcp_config.json` | `mcpServers` |
+| **Cursor** | `%USERPROFILE%\.cursor\mcp.json` and `%APPDATA%\Cursor\User\globalStorage\cursor-storage\mcp_config.json` | `mcpServers` |
 | **Claude Desktop** | `%APPDATA%\Claude\claude_desktop_config.json` | `mcpServers` |
 | **Windsurf** | `%USERPROFILE%\.codeium\windsurf\mcp_config.json` | `mcpServers` |
 | **Zed** | `%APPDATA%\Zed\settings.json` | `mcpServers` |
 | **Antigravity** | `%USERPROFILE%\.gemini\antigravity\mcp_config.json` | `mcpServers` |
+| **OpenCode** | `%USERPROFILE%\.config\opencode\opencode.json` | `mcp` (`type: local`, `command` array) |
 | **LM Studio** | `%USERPROFILE%\.lmstudio\mcp.json` | `mcpServers` |
+
+**Fleet cold-install discovery:** `mcp-central-docs/scripts/Get-FleetMcpClientRegistry.ps1` implements the table above for host stdio smoke (`-HostMcpbSmoke`).
+
+## memops multi-IDE (HTTP daemon + stdio proxy)
+
+One HTTP daemon owns SQLite/LanceDB; every IDE gets a fast stdio stub.
+
+| Script | Role |
+|--------|------|
+| `scripts/Start-MemopsDaemon.ps1 -Ensure` | Start `127.0.0.1:10732` (writer backend) |
+| `scripts/Sync-FleetMemopsClient.ps1` | Push stub to all IDE configs |
+| `scripts/memops-fleet-defaults.json` | Ports, uv path, env template |
+
+**Primary IDE** (default `cursor`): writer — no `ADVANCED_MEMORY_READONLY`.  
+**All other IDEs**: `ADVANCED_MEMORY_READONLY=1` + `ADVANCED_MEMORY_HTTP_PROXY=http://127.0.0.1:10732/mcp`.
+
+```powershell
+Set-Location D:\Dev\repos\mcp-central-docs\scripts
+.\Start-MemopsDaemon.ps1 -Ensure
+.\Sync-FleetMemopsClient.ps1 -PrimaryClient cursor
+```
+
+Reload MCP in each IDE after sync.
 
 ## Snippet Files in Repos
 

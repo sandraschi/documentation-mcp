@@ -8,7 +8,7 @@ Repository for MCP ecosystem skills and standards.
 **File**: `mcp-standards-windsurf.zip`
 
 Complete MCP ecosystem standards reference with hierarchical documentation:
-- FastMCP 2.14.3+ requirements and sampling workflows
+- FastMCP 3.2+ requirements and sampling workflows
 - Project scaffolding, packaging, and deployment standards
 - Testing, error handling, logging, and monitoring patterns
 - Frontend integration and documentation standards

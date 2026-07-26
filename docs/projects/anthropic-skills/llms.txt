@@ -1,0 +1,13 @@
+# anthropic-skills
+> Skills are folders of instructions, scripts, and resources that Claude loads dynamically to improve performance on specialized tasks. Skills teach Claude how to complete specific tasks in a repeatable...
+
+This project includes automated llms.txt generation for AI accessibility.
+
+## Docs
+- [Readme](README.md): Skills are folders of instructions, scripts, and resources that Claude loads dynamically to improve ...
+- [Assessment](ASSESSMENT.md): **Category**: Other Project
+- [Agent Skills Spec](agent_skills_spec.md): A skill is a folder of instructions, scripts, and resources that agents can discover and load dynami...
+- [Third Party Notices](THIRD_PARTY_NOTICES.md): THE FOLLOWING SETS FORTH ATTRIBUTION NOTICES FOR THIRD PARTY SOFTWARE THAT MAY BE CONTAINED IN PORTI...
+
+## Configuration
+- [Config](.git\config): Application configuration files

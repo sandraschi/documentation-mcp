@@ -1,19 +1,19 @@
 # llm-txt-mcp
-> **Complete guide to packaging and distributing MCP servers with MCPB** --- 📄 [MCPB_BUILDING_GUIDE.md](MCPB_BUILDING_GUIDE.md) **Complete 1,900+ line comprehensive guide** **What it covers**: - ✅ MCPB ...
+> > **Purpose**: Comprehensive GitHub configuration guide to avoid hours of trial-and-error setup. > > **Copy this to new MCP repos** to get everything right the first time! --- 1. [Quick Setup Checklis...
 
 This project includes automated llms.txt generation for AI accessibility.
 
 ## Docs
-- [Readme](docs\mcpb-packaging\README.md): **Complete guide to packaging and distributing MCP servers with MCPB**
 - [Readme](docs\github\README.md): > **Purpose**: Comprehensive GitHub configuration guide to avoid hours of trial-and-error setup.
-- [Readme](README.md): > Automated generation and management of llms.txt documentation files for AI accessibility
 - [Readme](docs\glama\README.md): This directory contains documentation related to achieving GLAMA AI Gold standard status for the LLM...
+- [Readme](README.md): > Automated generation and management of llms.txt documentation files for AI accessibility
+- [Readme](docs\mcpb-packaging\README.md): **Complete guide to packaging and distributing MCP servers with MCPB**
 - [Complete Setup Guide](docs\github\COMPLETE_SETUP_GUIDE.md): > **6 hours of pain distilled into 30 minutes of setup**
-- [Glama Ai Requirements](docs\glama\GLAMA_AI_REQUIREMENTS.md): This document outlines the requirements and recommendations for listing LLM.txt MCP on Glama.ai's MC...
+- [Megatest Framework Complete](docs\testing\MEGATEST_FRAMEWORK_COMPLETE.md): After extensive design and documentation, the **Universal MCP Megatest Framework** is production-rea...
+- [Qbert Memory](docs\QBERT_MEMORY.md): **Objective**: Create an exact clone of the arcade game Q*bert using HTML5 Canvas and Vanilla JavaSc...
 - [Dependency Management](docs\github\DEPENDENCY_MANAGEMENT.md): > **Single source of truth** - How to avoid "missing dependency" disasters
-- [Complete Type Fix Guide](docs\github\COMPLETE_TYPE_FIX_GUIDE.md): > **From 130+ type errors to 0** - The systematic approach that actually works!
-- [Megatest Quick Reference](docs\testing\MEGATEST_QUICK_REFERENCE.md): | Scenario | Level | Time | Command |
-- [Tool Docstring Standard](docs\TOOL_DOCSTRING_STANDARD.md): **Version:** 1.0.0
+- [Pypi Publishing Guide](docs\mcpb-packaging\PYPI_PUBLISHING_GUIDE.md): **Complete guide to publishing llm-txt-mcp on the Python Package Index (PyPI)**
+- [Contributing](CONTRIBUTING.md): Thank you for your interest in contributing to LLM.txt MCP Server! This document provides guidelines...
 
 ## Api
 - [Service](src\llm_txt_mcp\models\service.py): Models definitions and implementations

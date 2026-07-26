@@ -1,38 +1,72 @@
-﻿# resolume-mcp
+# resolume-mcp
+
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
+
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
 **MCP server for Resolume Arena VJ software control and automation - Live video mixing from natural language commands**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![FastMCP](https://img.shields.io/badge/FastMCP-3.1.1+%2B-green.svg)](https://github.com/jlowin/fastmcp)
+[![FastMCP](https://img.shields.io/badge/FastMCP-2.12%2B-green.svg)](https://github.com/jlowin/fastmcp)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Resolume](https://img.shields.io/badge/Resolume-Arena-orange.svg)](https://resolume.com/)
 
 ---
 
-## âœ¨ Features
+## Quick Start
 
-- ðŸŽ¬ **Real-time Clip Control** - Load, trigger, position, and opacity control for video clips
-- ðŸŽ›ï¸ **Layer Management** - Opacity, blending modes, transitions, and bypass control
-- âœ¨ **Effect Automation** - Parameter control and effect bypassing for visual effects
-- ðŸŽµ **Performance Tools** - BPM synchronization and atomic batch operations
-- ðŸ”„ **OSC Integration** - Direct communication with Resolume Arena via OSC protocol
-- ðŸŽ­ **Live VJ Support** - Optimized for live video performances and real-time mixing
+```powershell
+git clone https://github.com/sandraschi/resolume-mcp
+cd resolume-mcp
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
+
+##  Features
+
+-  **Real-time Clip Control** - Load, trigger, position, and opacity control for video clips
+-  **Layer Management** - Opacity, blending modes, transitions, and bypass control
+-  **Effect Automation** - Parameter control and effect bypassing for visual effects
+-  **Performance Tools** - BPM synchronization and atomic batch operations
+-  **OSC Integration** - Direct communication with Resolume Arena via OSC protocol
+-  **Live VJ Support** - Optimized for live video performances and real-time mixing
 
 ---
 
-## ðŸš€ Installation
+## Resolume Arena (host app): demo vs license
+
+**Resolume Arena** is not included in this repoit is the VJ application you control via OSC.
+
+There is **no** separate perpetual free tier. Resolume provides **fully functional demos** (Avenue and Arena) from the [official download page](https://resolume.com/download/): you may use them **as long as you like**; the main limits are a **watermark on output** and **voice reminders** until you purchase a license. See Resolumes [Difference between Avenue and Arena](https://resolume.com/support/en/avenue-arena-difference) (section Demo).
+
+More detail: [docs/user-guide/RESOLUME_ARENA_DEMO_AND_LICENSING.md](docs/user-guide/RESOLUME_ARENA_DEMO_AND_LICENSING.md).
+
+---
+
+##  Installation
 
 ### Prerequisites
 - [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
 - Python 3.12+
 
-### ðŸ“¦ Quick Start
+###  Quick Start
 Run immediately via `uvx`:
 ```bash
 uvx resolume-mcp
 ```
 
-### ðŸŽ¯ Claude Desktop Integration
+###  Claude Desktop Integration
 Add to your `claude_desktop_config.json`:
 ```json
 "mcpServers": {
@@ -69,7 +103,7 @@ pip install -e .
 
 ---
 
-## ðŸš€ Quick Start
+##  Quick Start
 
 ### Claude Desktop Configuration
 
@@ -87,8 +121,8 @@ Add to `%APPDATA%\Claude\claude_desktop_config.json`:
 ```
 
 **Resolume Setup:**
-1. Open Resolume Arena â†’ **Preferences** â†’ **OSC**
-2. Enable OSC: âœ…
+1. Open Resolume Arena  **Preferences**  **OSC**
+2. Enable OSC: 
 3. **Incoming Port**: 7000
 4. **Outgoing Port**: 7001
 
@@ -107,13 +141,13 @@ Ask Claude: "Load C:/videos/my_clip.mp4 into layer 1, clip 1"
 
 ---
 
-## ðŸ”§ Configuration
+##  Configuration
 
 ### Resolume OSC Setup
 
 **Required Configuration in Resolume Arena:**
 
-1. **Enable OSC**: Preferences â†’ OSC â†’ Enable OSC
+1. **Enable OSC**: Preferences  OSC  Enable OSC
 2. **Ports**:
    - Incoming Port: `7000`
    - Outgoing Port: `7001`
@@ -133,10 +167,11 @@ See [docs/user-guide/](docs/user-guide/) for detailed setup guides.
 
 ---
 
-## ðŸ“š Documentation
+##  Documentation
 
 | Document | Description |
 |----------|-------------|
+| [Resolume demo & licensing](docs/user-guide/RESOLUME_ARENA_DEMO_AND_LICENSING.md) | Official demo mode (watermark), Avenue vs Arena, links |
 | [Integration Guide](docs/integration-guide.md) | Setup with Claude Desktop |
 | [Architecture](docs/architecture.md) | System design and components |
 | [Tool Reference](docs/tools-reference.md) | Complete API documentation |
@@ -145,7 +180,7 @@ See [docs/user-guide/](docs/user-guide/) for detailed setup guides.
 
 ---
 
-## ðŸŽ¯ Usage Examples
+##  Usage Examples
 
 ### Basic VJ Operations
 
@@ -181,7 +216,7 @@ See [docs/user-guide/](docs/user-guide/) for complete VJ workflow examples.
 
 ---
 
-## ðŸ—ï¸ Development
+##  Development
 
 ### Setup Development Environment
 
@@ -225,35 +260,46 @@ uv run mypy .
 
 ---
 
-## ðŸ¤ Contributing
+##  Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ### Development Workflow
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feature/-feature`)
 3. Make your changes
 4. Run tests and linters
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
+5. Commit your changes (`git commit -m 'Add  feature'`)
+6. Push to the branch (`git push origin feature/-feature`)
 7. Open a Pull Request
 
 ---
 
-## ðŸ“‹ Changelog
+##  Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history and changes.
 
 ---
 
-## ðŸ“„ License
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
+
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## ðŸ™ Acknowledgments
+##  Acknowledgments
 
 - [FastMCP](https://github.com/jlowin/fastmcp) - Modern MCP server framework
 - [Claude Desktop](https://claude.ai/desktop) - AI assistant platform
@@ -261,7 +307,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## ðŸ“ž Support
+##  Support
 
 - **Issues:** [GitHub Issues](https://github.com/sandr/resolume-mcp/issues)
 - **Discussions:** [GitHub Discussions](https://github.com/sandr/resolume-mcp/discussions)
@@ -270,9 +316,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Status:** Beta - Ready for live VJ performances  
-**MCP Version:** FastMCP 3.1.1++  
+**MCP Version:** FastMCP 3.1.0+  
 **Maintained by:** Sandra Schipal  
 **Last Updated:** 2025-12-24
-
-
-

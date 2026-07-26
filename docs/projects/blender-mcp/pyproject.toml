@@ -10,10 +10,10 @@ readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.12"
 authors = [
-    {name = "FlowEngineer sandraschi", email = "sandraschi@example.com"}
+    {name = "Blender MCP Contributors"}
 ]
 maintainers = [
-    {name = "FlowEngineer sandraschi", email = "sandraschi@example.com"}
+    {name = "sandraschi", email = "sandraschi@users.noreply.github.com"}
 ]
 keywords = [
     "mcp", "mcp-server", "fastmcp", "ai", "automation",
@@ -28,27 +28,20 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
     "Operating System :: MacOS",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: System :: Distributed Computing",
     "Framework :: AsyncIO",
 ]
+urls = {Homepage = "https://github.com/sandraschi/blender-mcp", Repository = "https://github.com/sandraschi/blender-mcp", "Bug Tracker" = "https://github.com/sandraschi/blender-mcp/issues", Documentation = "https://github.com/sandraschi/blender-mcp#readme"}
+
 dependencies = [
-    "black>=23.0.0",
-    "fastmcp>=3.1.0,<4",
-    "flake8>=6.0.0",
+    "fastmcp>=3.4.4,<4",
     "httpx>=0.25.0",
-    "isort>=5.12.0",
-    "mypy>=1.0.0",
-    "pre-commit>=3.0.0",
+    "prefab-ui>=0.14.0",
+    "psutil>=5.9",
     "pydantic>=2.0.0",
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "ruff>=0.14.0",
     "typing-extensions>=4.8.0",
 ]
 
@@ -61,11 +54,9 @@ dev = [
         "pytest-asyncio>=0.24.0",
         "pytest-xdist>=3.0.0",
 
-        # Linting & Formatting
-        "ruff>=0.1.6",
+        # Linting & Formatting (ruff replaces black, flake8, isort)
+        "ruff>=0.14.0",
         "mypy>=1.8.0",
-        "black>=24.0.0",
-        "isort>=5.13.0",
 
         # Type Checking
         "pyright>=1.1.390",
@@ -77,6 +68,10 @@ dev = [
         # Building & Publishing
         "build>=1.0.0",
         "twine>=5.0.0",
+        "pyinstaller>=6.21.0",
+        "pefile>=2023.2.7",
+        "altgraph>=0.17.4",
+        "pyinstaller-hooks-contrib>=2026.6",
 
         # Pre-commit
         "pre-commit>=3.6.0",
@@ -86,6 +81,9 @@ docs = [
     "sphinx-rtd-theme>=1.3.0",
     "myst-parser>=2.0.0",
 ]
+monitoring = [
+    "prometheus-client>=0.21.0",
+]
 
 [project.scripts]
 blender-mcp = "blender_mcp.cli:main"
@@ -94,46 +92,15 @@ blender-mcp-server = "blender_mcp.server:main_stdio"
 [project.entry-points."mcp.servers"]
 blender-mcp = "blender_mcp.server:create_server"
 
-[tool.setuptools]
-package-dir = { "" = "src" }
+[tool.hatch.build.targets.wheel]
+packages = ["src/blender_mcp"]
 
 # ========================================================================================
 # Tool Configurations for CI/CD
 # ========================================================================================
 
-[tool.ruff]
-line-length = 100
-target-version = "py38"
-
-[tool.ruff.lint]
-select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "I",  # isort
-    "B",  # flake8-bugbear
-    "C4", # flake8-comprehensions
-    "UP", # pyupgrade
-]
-ignore = [
-    "E501", # line too long, handled by black
-    "B008", # do not perform function calls in argument defaults
-    "C901", # too complex
-]
-
-[tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]
-"tests/**/*" = ["B011"]
-
-[tool.ruff.lint.isort]
-known-first-party = ["blender_mcp"]
-
-[tool.black]
-line-length = 100
-target-version = ['py38']
-
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.12"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
@@ -150,6 +117,7 @@ strict_equality = true
 [tool.pytest.ini_options]
 minversion = "7.0"
 addopts = "-ra -q --strict-markers --strict-config"
+asyncio_mode = "auto"
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
@@ -158,6 +126,7 @@ markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests as integration tests",
     "unit: marks tests as unit tests",
+    "asyncio: marks tests as asynchronous",
 ]
 filterwarnings = [
     "error",
@@ -198,3 +167,53 @@ path = "src/blender_mcp/__init__.py"
 [tool.pyright]
 include = ["src/"]
 pythonVersion = "3.11"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "S", "UP", "RUF", "T201"]
+ignore = ["S101", "B008", "E501", "E402", "B904", "S110", "S603", "S602", "S307", "S202", "S310", "S608"]
+
+[tool.ruff.lint.per-file-ignores]
+"run_server.py" = ["F401"]
+"src/blender_mcp/cli.py" = ["T201"]
+"src/blender_mcp/config.py" = ["F403", "F405"]
+"src/blender_mcp/decorators.py" = ["F403", "F405"]
+"src/blender_mcp/exceptions.py" = ["F403", "F405"]
+"src/blender_mcp/help.py" = ["F403", "F405"]
+"src/blender_mcp/handlers/**" = ["F403", "F405"]
+"src/blender_mcp/tools/**" = ["F403", "F405"]
+"src/blender_mcp/utils/**" = ["F403", "F405"]
+"webapp/backend/tests/**" = ["T201"]
+"webapp/backend/tests/run_tests.py" = ["T201"]
+"verify_tools.py" = ["T201"]
+"setup.py" = ["T201"]
+"examples/**" = ["T201"]
+"scripts/**" = ["T201"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-xdist>=3.0.0",
+    "ruff>=0.14.0",
+    "mypy>=1.8.0",
+    "pyright>=1.1.390",
+    "bandit>=1.7.0",
+    "safety>=3.0.0",
+    "build>=1.0.0",
+    "twine>=5.0.0",
+    "pyinstaller>=6.21.0",
+    "pefile>=2023.2.7",
+    "altgraph>=0.17.4",
+    "pyinstaller-hooks-contrib>=2026.6",
+    "pre-commit>=3.6.0",
+]

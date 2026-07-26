@@ -1,0 +1,18 @@
+{
+  "mcp": {
+    "resonite": {
+      "command": "python",
+      "args": ["-m", "resonite_mcp", "--stdio"],
+      "cwd": "D:\\Dev\\repos\\resonite-mcp",
+      "env": {
+        "PYTHONPATH": "src"
+      }
+    }
+  }
+}
+
+
+
+
+
+

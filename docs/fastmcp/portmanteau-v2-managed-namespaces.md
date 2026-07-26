@@ -1,6 +1,7 @@
-# FastMCP Portmanteau V2: Managed Namespaces
+# [HISTORICAL] Portmanteau V2: Managed Namespaces
 
-**Last Updated:** 2026-04-21
+**Last Updated:** 2026-04-21  
+**Status:** HISTORICAL — never adopted fleet-wide. Current SOTA is Industrial Portmanteau (see `TOOL_DESIGN_STANDARDS.md` §1).
 **Standard:** FastMCP 3.2+
 **Pattern:** Sub-server Composition (Managed Namespaces)
 

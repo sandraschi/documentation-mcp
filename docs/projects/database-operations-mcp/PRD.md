@@ -1,4 +1,4 @@
-﻿# Database Operations MCP - Product Requirements Document (PRD)
+# Database Operations MCP - Product Requirements Document (PRD)
 
 ## 1. Overview
 
@@ -9,7 +9,7 @@
 
 ## 2. Product Purpose
 
-Database Operations MCP is a FastMCP 3.1.1+.1 compliant server that provides a unified interface for managing and interacting with multiple database systems, including PostgreSQL, MongoDB, and ChromaDB. It enables secure, efficient, and consistent database operations across different database technologies.
+Database Operations MCP is a FastMCP 2.10.1 compliant server that provides a unified interface for managing and interacting with multiple database systems, including PostgreSQL, MongoDB, and ChromaDB. It enables secure, efficient, and consistent database operations across different database technologies.
 
 ## 3. Target Audience
 
@@ -44,7 +44,7 @@ Database Operations MCP is a FastMCP 3.1.1+.1 compliant server that provides a u
 
 ### 4.2 Technical Specifications
 
-- **Framework**: FastMCP 3.1.1+.1
+- **Framework**: FastMCP 2.10.1
 - **Language**: Python 3.9+
 - **Dependencies**:
   - pymongo
@@ -235,4 +235,3 @@ docker run -p 8000:8000 database-operations-mcp
 - **JWT**: JSON Web Token
 - **RBAC**: Role-Based Access Control
 - **TLS**: Transport Layer Security
-

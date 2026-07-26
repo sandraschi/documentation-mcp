@@ -1,18 +1,42 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.1] — 2026-07-11
 
-### Planned
-- Consolidate duplicate server implementations
-- Persistent storage for OSC client/server state
-- OSC connection health monitoring
-- OSCQuery service discovery
-- Enhanced docstrings with examples for all tools
+### Fixed
+- **Tool Registration**: Unified `server.py` and `mcp_server.py` to register all 25 creative app integration tools (Ableton, TouchDesigner, VRChat, etc.) on a single FastMCP instance, correcting the frontend integration tool failures.
+- **MCPB Dual Transport**: Overhauled `run_server.py` and `mcpb/run_server.py` to run stdio transport under Claude Desktop/MCPB, preventing uvicorn stdout logs from corrupting the JSON-RPC channel.
+- **Documentation Errors**: Corrected package name references (`osc_mcp` -> `oscmcp`) in `INSTALL.md` execution guidelines.
+- **Package Restructuring**: Updated `mcpb/src` to nest code under the correct `oscmcp` package directory to avoid `ModuleNotFoundError` during MCPB import.
+- **Metadata Sync**: Updated `glama.json` framework mapping to `FastMCP 3.4` and tool count.
+
+## [0.3.0] - 2026-06-14
+
+### Added
+- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
+- PyInstaller frozen backend embedded in NSIS installer
+- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
+- `just cua-nsis-test` recipe
+- Tauri CORS: `tauri://localhost` origins for WebView API access
+- `GET /api/v1/diagnostics` endpoint for CUA verification
+
+### Changed
+- **FastMCP Upgrade** - Bumped minimum version to `3.1.1` (FastMCP 3.1 GA)
+- **Web Dashboard Restoration** - Fully restored `web_sota` dashboard functionality:
+  - Fixed React 19 / Vite 7 build resolution for Shadcn components
+  - Implemented missing `DropdownMenu` component and fixed `Input` imports
+  - Resolved `useCallback` and `useEffect` cascading render patterns in Settings
+  - Fixed TypeScript `unknown` casts for `Badge` component in all orchestration pages
+  - Cleaned up unused imports and variables across the frontend
+- **Port Allocation** - Standardized on port portmanteau: **10766** (Frontend) / **10767** (Backend)
+
+### Fixed
+- **Build Failures** - Restored production build capability (Verified 1833 modules transformed)
+- **Settings Synchronization** - Corrected async state updates for Ollama connection checks
 
 ## [0.2.2] - 2025-12-14
 
@@ -125,9 +149,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Roadmap and metrics
 
 ### Changed
-- **FastMCP 3.1.1+.1 Compatibility Fixes**
-  - Removed `ResponseCachingMiddleware` import (not available in 3.1.1+.1)
-  - Removed `@server.lifespan` decorator (not supported in 3.1.1+.1)
+- **FastMCP 2.13.1 Compatibility Fixes**
+  - Removed `ResponseCachingMiddleware` import (not available in 2.13.1)
+  - Removed `@server.lifespan` decorator (not supported in 2.13.1)
   - Server now starts successfully without errors
 
 - **README.md Updates**
@@ -186,7 +210,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.1] - 2025-11-25
 
 ### Added
-- **FastMCP 3.1.1+.1 Compliance** - Upgraded from 3.1.1+.0
+- **FastMCP 2.13.1 Compliance** - Upgraded from 2.10.0
   - Server lifespan hooks with async context managers
   - Response caching middleware (60s TTL)
   - Pydantic input validation models
@@ -198,7 +222,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Detailed upgrade instructions and testing recommendations
 
 ### Changed
-- **pyproject.toml** - Updated FastMCP dependency to `>=3.1.1+.1`
+- **pyproject.toml** - Updated FastMCP dependency to `>=2.13.1`
 - **mcp_server.py** - Added lifespan hooks, caching, Pydantic models
 - **stdio_server.py** - Added lifespan hooks, caching, Pydantic models
 - **server.py** - Added lifespan hooks, caching, Pydantic models
@@ -215,7 +239,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2025-11-24
 
 ### Added
-- **Initial Release** - FastMCP 3.1.1+ compliant OSC-MCP server
+- **Initial Release** - FastMCP 2.10 compliant OSC-MCP server
 - **Core Features**
   - `send_osc()` - Send OSC messages to applications
   - `start_osc_server()` - Start OSC listener for incoming messages
@@ -252,7 +276,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - mypy type checking
 
 ### Dependencies
-- fastmcp[all]>=3.1.1+.0 (later upgraded to 3.1.1+.1)
+- fastmcp[all]>=2.10.0 (later upgraded to 2.13.1)
 - python-osc>=1.8.0
 - python-rtmidi>=1.5.0
 - numpy>=1.21.0
@@ -261,9 +285,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version History
 
 ### [0.2.0] - Documentation & Compliance Update
-Major documentation improvements and FastMCP 3.1.1+ full compliance.
+Major documentation improvements and FastMCP 2.13 full compliance.
 
-### [0.1.1] - FastMCP 3.1.1+ Upgrade
+### [0.1.1] - FastMCP 2.13 Upgrade
 Critical infrastructure upgrade for production readiness.
 
 ### [0.1.0] - Initial Release
@@ -284,7 +308,7 @@ First public release with core OSC functionality.
 
 ## Migration Guides
 
-- [FastMCP 3.1.1+ â†’ 3.1.1+](UPGRADE_NOTES.md) - Detailed migration instructions
+- [FastMCP 2.10 → 2.13](UPGRADE_NOTES.md) - Detailed migration instructions
 - [Repository Roadmap](.claude/REPO_STATUS_AND_ROADMAP.md) - Future plans
 
 ## Links

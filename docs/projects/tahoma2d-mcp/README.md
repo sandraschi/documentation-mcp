@@ -1,67 +1,120 @@
-# tahoma2d-mcp — Tahoma2D Render Engine (fleet note)
+# tahoma2d-mcp
 
-**Upstream repo:** `D:\Dev\repos\tahoma2d-mcp`
+**MCP + web dashboard for headless Tahoma2D rendering** — batch-render existing `.tnz` scenes with `tcomposer.exe`, then stitch frames to MP4 with ffmpeg.
 
-**FastMCP 3.2** — Headless .tnz scene rendering via tcomposer.exe + ffmpeg export.
+> **Tahoma2D** is a free, open-source **2D animation program** — a fork of [OpenToonz](https://opentoonz.github.io/), which itself descends from **Toonz** (Digital Video) and the **Studio Ghibli** production branch used for ink & paint on films such as *Spirited Away* and *Princess Mononoke*. Download: [tahoma2d.org](https://tahoma2d.org)
 
-> Pivot from "2D animation compositor" to "render orchestrator." ToonzScript
-> (ECMAScript automation) is not available in the current Tahoma2D 1.6.1 build.
-> Instead: create/edit .tnz scenes in the Tahoma2D GUI, render them headlessly
-> via tcomposer.exe, export frames to video via ffmpeg.
+## Lineage (Toonz → Ghibli → OpenToonz → Tahoma2D)
 
-| Item | Details |
+| Step | What happened |
+|------|----------------|
+| **Toonz** | Commercial 2D animation system (Italy); raster ink/paint, Xsheet, compositing. |
+| **Ghibli** | Studio Ghibli used and co-developed a customized Toonz pipeline for traditional feature animation (~1990s–2010s). |
+| **OpenToonz** | Ghibli-supported **open-source release** (2016) of that codebase. |
+| **Tahoma2D** | Independent **fork of OpenToonz** — what you install for day-to-day work today. |
+
+Scene files (`.tnz`), the Xsheet, and `tcomposer.exe` all come from this family. **tahoma2d-mcp** only batch-renders those scenes; it does not implement a separate animation engine.
+
+Details: [docs/TAHOMA2D_GUIDE.md](docs/TAHOMA2D_GUIDE.md#lineage-toonz--ghibli--opentoonz--tahoma2d)
+
+## What Tahoma2D is (the desktop app)
+
+| You do in **Tahoma2D.exe** | You get |
+|----------------------------|---------|
+| Draw / import artwork on levels | Raster or vector layers |
+| Build scenes (`.tnz`) | Timeline, camera, effects stack |
+| Preview & polish | Full GUI compositor + playback |
+
+Tahoma2D is the **authoring tool**. This repo is **not** a replacement for that GUI.
+
+## What this MCP server does
+
+| Tool | Purpose |
 |------|---------|
-| **Repo** | `D:\Dev\repos\tahoma2d-mcp` |
-| **Ports** | Backend **11013**, Dashboard **11012** |
-| **Start** | `just start` or `start.ps1` |
-| **Depends on** | Tahoma2D 1.6+ (tahooma2d.org), ffmpeg (for export) |
+| `tahoma2d_status` | Server health + `tcomposer.exe` detection |
+| `tahoma2d_project` | List / inspect `.tnz` files; open a scene in the GUI |
+| `tahoma2d_render` | Headless frame render via `tcomposer.exe` |
+| `tahoma2d_export` | Frame sequence → MP4 (or other) via ffmpeg |
 
-## Tools
-
-| Tool | Annotation | Description |
-|------|------------|-------------|
-| `tahooma2d_status` | READ_ONLY | Server + tcomposer health check |
-| `tahooma2d_project` | READ_ONLY | List, inspect, open .tnz scene files |
-| `tahooma2d_render` | MUTATING | Headless rendering via tcomposer.exe |
-| `tahooma2d_export` | MUTATING | Frame sequences → MP4 via ffmpeg |
-
-## Workflow
+**Workflow:** edit in Tahoma2D GUI → render frames here → export video.
 
 ```
-blender-mcp GP (create 2D) → .tnz → tahoma2d-mcp (render frames) → resolveops (final edit)
+Tahoma2D GUI  →  .tnz scene on disk
+       ↓
+tahoma2d_render(scene_path, start_frame, end_frame, output_path)
+       ↓
+tahoma2d_export(input_pattern, output_path)   # optional MP4
 ```
 
-## Webapp Pages
+## What this does **not** do
 
-| Route | Page | Description |
-|-------|------|-------------|
-| `/` | Dashboard | tcomposer status, workflow overview |
-| `/render` | Render | Submit .tnz scenes to tcomposer |
-| `/export` | Export | Convert frames to video via ffmpeg |
-| `/projects` | Projects | Browse .tnz scene files |
-| `/settings` | Settings | Server config |
-| `/help` | Help | Tool reference |
+- Create or edit scenes programmatically (no working ToonzScript in Tahoma2D 1.6.1 builds shipped today)
+- Replace Blender Grease Pencil, TVPaint, or Krita animation
+- Run as a live “compositor MCP” inside the editor
 
-## MCP Client Config
+Confirmed headless ops on **Tahoma2D 1.6.1**:
+
+```text
+tcomposer.exe scene.tnz -o frame.png -range 1 24 -step 1
+tcomposer.exe -version
+```
+
+## Requirements
+
+- **Tahoma2D 1.6+** — [tahoma2d.org](https://tahoma2d.org) (installs `Tahoma2D.exe` + `tcomposer.exe`)
+- **ffmpeg** in PATH (export tool only)
+- **Python 3.12+** (`uv sync`)
+- **Node.js 20+** (webapp dev)
+
+## Quick start
+
+```powershell
+uv sync
+.\start.ps1
+# Webapp: http://127.0.0.1:11012
+# Backend: http://127.0.0.1:11013
+```
+
+Open **Dashboard → Help** in the webapp for the full “what is this?” guide.
+
+## Claude Desktop / Cursor
 
 ```json
 {
   "mcpServers": {
     "tahoma2d": {
       "command": "uv",
-      "args": ["--directory", "D:/Dev/repos/tahooma2d-mcp", "run", "tahooma2d-mcp-server"]
+      "args": ["--directory", "D:/Dev/repos/tahoma2d-mcp", "run", "tahoma2d-mcp-server"]
     }
   }
 }
 ```
 
-## Fleet Integration
+## Ports
 
-- **blender-mcp** — Grease Pencil 2D creation, exports to .tnz format
-- **resolveops** — Final color grade and edit of rendered frames
+| Port | Role |
+|------|------|
+| 11012 | Vite frontend (dashboard) |
+| 11013 | FastAPI + FastMCP HTTP (`/mcp`) |
 
-## See Also
+## Fleet role
 
-- [tahooma2d.org](https://tahooma2d.org)
-- [WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md)
-- [FLEET_INDEX.md](../FLEET_INDEX.md)
+```text
+(blender-mcp GP / hand-drawn assets) → .tnz in Tahoma2D GUI
+        → tahoma2d-mcp (batch render)
+        → davinci-resolve-mcp / ffmpeg (final grade & edit)
+```
+
+## Docs
+
+| File | Contents |
+|------|----------|
+| [docs/TAHOMA2D_GUIDE.md](docs/TAHOMA2D_GUIDE.md) | **Tahoma2D install + GUI usage + MCP workflow** |
+| [INSTALL.md](INSTALL.md) | MCP server setup |
+| [docs/TOOL_REFERENCE.md](docs/TOOL_REFERENCE.md) | MCP operations |
+| [docs/README_DASHBOARD.md](docs/README_DASHBOARD.md) | Webapp pages |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Stack diagram |
+
+## License
+
+MIT

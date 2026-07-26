@@ -1,15 +1,15 @@
-﻿# VirtualDJ MCP - Status Report
+﻿# VirtualDJ MCP — Status
 
-**Last Updated:** 2025-11-28  
-**Version:** 1.0.1  
-**Status:** Production Ready  
+**Last Updated:** 2026-07-22
+**Version:** 2.0.0b1
+**Status:** Active Development
 **Source Repo:** `D:\Dev\repos\virtualdj-mcp`
 
 ---
 
 ## Overview
 
-Professional DJ automation MCP server for VirtualDJ integration. Provides deck control, mixing, library management, audio analysis, and recording capabilities through Claude and other MCP-compatible AI assistants.
+Professional DJ automation MCP server for VirtualDJ integration. Provides deck control, mixing, library management, audio analysis, stem separation, video mixing, Plex integration, and recording through 13 portmanteau tools (62+ operations consolidated).
 
 ---
 
@@ -17,63 +17,15 @@ Professional DJ automation MCP server for VirtualDJ integration. Provides deck c
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| MCP Server | âœ… Healthy | FastMCP 3.1.1+.1, stdio mode |
-| Deck Control | âœ… Healthy | 5 tools (play, pause, load, seek, volume) |
-| Mixing Tools | âœ… Healthy | Crossfader, auto-sync |
-| Library Tools | âœ… Healthy | Search, browse, track info |
-| Audio Analysis | âœ… Healthy | aubio-powered BPM/key detection |
-| Automation | âœ… Healthy | Auto-DJ, suggestions |
-| Recording | âœ… Healthy | Start/stop, list recordings |
-| Performance | âœ… Healthy | Metrics, session stats |
-| Skin Control | âœ… Healthy | Load skins, toggle panels |
-| Help System | âœ… Healthy | Multi-level documentation |
-
----
-
-## Recent Changes (2025-11-28)
-
-### v1.0.1 - Bug Fixes
-
-**Fixed:**
-- `VDJError` import in `tools/shared/exceptions.py` (was empty, now re-exports from core)
-- `aubio` integration for DJ-grade BPM/pitch detection
-- `mutagen` moved from dev to main dependencies
-
-**Changed:**
-- Python version pinned to `>=3.10,<3.12` (aubio lacks wheels for 3.12+)
-- Audio analysis now uses aubio with librosa fallback
-- Improved key detection using librosa chroma features
-
-**Technical:**
-- aubio provides real-time accurate BPM detection (critical for beatmatching)
-- Python 3.11 recommended (fast, stable, wide library support)
-
----
-
-## Key Features
-
-### MCP Tools (25+)
-
-| Category | Tools | Description |
-|----------|-------|-------------|
-| Deck Control | 5 | play_pause_deck, load_track, seek_deck, set_volume, get_status |
-| Mixing | 2 | set_crossfader_position, auto_sync_decks |
-| Library | 2 | search_tracks, analyze_track_audio |
-| Automation | 4 | auto_dj_mode, stop_auto_dj, get_auto_dj_status, suggest_next_track |
-| Recording | 5 | start/stop_recording, get_status, list, delete, export_history |
-| Performance | 4 | get_metrics, session_stats, analyze_trends, get_recommendations |
-| Skin | 5 | get_skin_info, load_skin, switch_variation, set_panel, toggle_window |
-| System | 2 | get_system_status, show_help |
-
-### Audio Analysis (aubio-powered)
-
-| Feature | Engine | Accuracy |
-|---------|--------|----------|
-| BPM Detection | aubio | DJ-grade, real-time |
-| Key Detection | aubio + librosa chroma | Good |
-| Beat Tracking | aubio | DJ-grade |
-| Energy Analysis | librosa | Good |
-| Onset Detection | librosa | Good |
+| MCP Server | ✅ Healthy | FastMCP 3.4.4, stdio + HTTP dual transport |
+| Tools (Portmanteau) | ✅ 13 tools | 62+ ops: deck, mixer, library, stems, beatgrid, video, Plex, automation, recording, performance, show control, skin, system |
+| REST API | ✅ Healthy | Cross-MCP deck handoff at /api/v1/deck/{id}/{action} |
+| Health Endpoint | ✅ /health + /api/v1/diagnostics | System metrics + tool list for CUA smoke test |
+| Tauri Native | ✅ Built | NSIS installer, embedded backend, CUA-NSIS smoke test |
+| Web Dashboard | ✅ SOTA-grade | React 19, Vite 7, 9 pages, dark theme |
+| CUA Smoke Test | ✅ Implemented | 11-phase config-driven script |
+| Plex Integration | ✅ Implemented | Search, load to decks |
+| Cross-MCP Handoff | ✅ Implemented | REST endpoints for songgeneration-mcp |
 
 ---
 
@@ -81,108 +33,58 @@ Professional DJ automation MCP server for VirtualDJ integration. Provides deck c
 
 | Requirement | Details |
 |-------------|---------|
-| Python | 3.10 or 3.11 (NOT 3.12+) |
+| Python | 3.12+ (aubio optional — librosa fallback) |
 | VirtualDJ | 2023 or later |
 | License | VirtualDJ Pro (for Network Control Plugin) |
 | Plugin | Network Control Plugin enabled |
 
 ---
 
-## Configuration
+## Key Features (vs 1.0.1)
 
-### Environment Variables
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `VDJ_HTTP_HOST` | No | Plugin host (default: 127.0.0.1) |
-| `VDJ_HTTP_PORT` | No | Plugin port (default: 80) |
-| `VDJ_HTTP_PASSWORD` | No | Optional authentication |
-| `VDJ_PATH` | No | VirtualDJ executable path |
-| `VDJ_LIBRARY_PATH` | No | Music library path |
-
-### MCP Configuration
-
-```json
-{
-  "virtualdj-mcp": {
-    "command": "uv",
-    "args": ["run", "--python", "3.11", "python", "-m", "virtualdj_mcp"],
-    "cwd": "D:/Dev/repos/virtualdj-mcp",
-    "env": {
-      "PYTHONUNBUFFERED": "1"
-    }
-  }
-}
-```
+| Feature | 1.0.1 | 2.0.0b1 |
+|---------|-------|----------|
+| Tool count | 25 individual | 13 portmanteau (62 ops) |
+| Architecture | Flat tool modules | Portmanteau + legacy preserved |
+| FastMCP | 3.1.1 | 3.4.4 |
+| Stems | Not supported | Real-time isolation, mashups |
+| Video mixing | Not supported | Transitions, effects, text, karaoke |
+| Plex integration | Not supported | Search + load to decks |
+| Tauri native | Not supported | Full NSIS build, embedded backend |
+| CUA smoke test | Not supported | 11-phase automated |
+| Cross-MCP handoff | Not supported | REST API for other servers |
 
 ---
 
-## Architecture
+## Port Allocation
 
-```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                        Claude / Cursor                          â”‚
-â”‚                         (MCP Client)                            â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                          â”‚ MCP Protocol (stdio)
-                          â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                      VirtualDJ-MCP Server                       â”‚
-â”‚                       (FastMCP 3.1.1+.1)                          â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚
-â”‚  â”‚ Deck Tools  â”‚  â”‚ Mixer Tools â”‚  â”‚ Library/Auto/Recording  â”‚  â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
-â”‚         â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜               â”‚
-â”‚                          â–¼                                      â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚
-â”‚  â”‚ Services: AudioAnalyzer (aubio), LibraryScanner (mutagen)â”‚   â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚
-â”‚                          â”‚                                      â”‚
-â”‚              â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                            â”‚
-â”‚              â”‚   VirtualDJ Client  â”‚                            â”‚
-â”‚              â”‚    (HTTP/httpx)     â”‚                            â”‚
-â”‚              â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                            â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                          â”‚ HTTP POST (localhost:80)
-                          â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                    VirtualDJ Application                        â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚
-â”‚  â”‚              Network Control Plugin                        â”‚  â”‚
-â”‚  â”‚         /execute  â”‚  /query                               â”‚  â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-```
+| Service | Port | Status |
+|---------|------|--------|
+| Backend (FastAPI) | 10877 | ✅ Registered in WEBAPP_PORTS.md |
+| Frontend (Vite) | 10876 | ✅ Registered in WEBAPP_PORTS.md |
+| VDJ Network Plugin | 80 | External (target) |
+| OSC | 40100 | External (configurable) |
+| Plex | 32400 | External (target) |
 
 ---
 
 ## Known Issues
 
-1. **Python 3.12+ Not Supported**: aubio lacks wheels for Python 3.12+
-2. **Pydantic Deprecation Warning**: `class Config` in models.py (cosmetic)
-3. **Network Control Plugin Required**: VirtualDJ Pro license needed
+1. **aubio optional** — Python 3.13 lacks aubio wheels; librosa fallback is functional but less accurate for BPM
+2. **README churn** — Has had multiple passes; currently clean
+3. **MCD STRUCTURE.md** — Describes v1.0.1 layout; needs update to match portmanteau architecture
 
 ---
 
 ## Roadmap
 
 ### Short-term
-- [ ] Fix Pydantic v2 deprecation warnings
-- [ ] Add EQ control tools
-- [ ] Improve harmonic mixing suggestions
+- [ ] Cut v2.1.0 stable release
+- [ ] Add Playwright e2e tests
+- [ ] Migrate package manager to bun (fleet standard)
 
 ### Medium-term
-- [ ] Effects control tools
+- [ ] Effects control via individual tool mode
 - [ ] Sampler integration
-- [ ] Video deck support
-
----
-
-## Related Documentation
-
-- **Source Repo**: `D:\Dev\repos\virtualdj-mcp`
-- **CHANGELOG**: `CHANGELOG.md` in source repo
-- **Network Control Setup**: `docs/NETWORK_CONTROL_SETUP.md`
-- **VDJScript Reference**: `docs/VIRTUALDJ_REFERENCE.md`
-
-
+- [ ] Video deck support expansion
+- [ ] Improved harmonic mixing suggestions
