@@ -4,6 +4,8 @@
 **Reference macro**: `agentic_macros.md` → `assess and fix`
 **Scope**: Full-stack repo audit, standards compliance, fixes, documentation sync, and MCPB build.
 
+**New repos:** Scaffold must aim for **assfix-zero** ([NEW_REPO_BUILD_COMPLETE.md](../standards/NEW_REPO_BUILD_COMPLETE.md)). If the first assess after a *brand-new* build finds CRITICAL/HIGH gaps, that is a gate failure — fix the build process, not only the symptoms.
+
 ---
 
 ## Phase 0: Pre-Flight
@@ -128,7 +130,17 @@ Read `webapp/` or `web_sota/` structure, `package.json`, `vite.config.ts`, `App.
 |-------|--------|
 | Stack | React + Vite + Tailwind + Lucide + Framer Motion + **Zustand**? (No Bootstrap, no jQuery, no Redux, no MobX) |
 | Dark theme | `color-scheme: dark` on body? No light backgrounds? |
-| Pages | Dashboard, Chat, Tools, Skills, Logs, Settings, Help, Apps Hub — which exist? |
+| Pages | **Catch-them-all** per `WEBAPP_SOTA_STANDARDS.md` §III: Dashboard (hero+KPIs), Inbox, Tools, Skills, Chat, Settings (LLM), Help **page**, Logs — plus domain pages. Domain-only runt = HIGH. |
+| Tools | No `planned` / stub ops in README or portmanteau. Every advertised op works (dry-run OK). Missing = **HIGH**. |
+| Webhooks | Inbound receive + secret (or host webhook CRUD). Missing when product has events = **HIGH**. |
+| docs/ | CONFIGURATION, DEVELOPMENT, TOOLS, TROUBLESHOOTING present. Missing = **HIGH**. |
+| Lint/CI | `ruff` + `biome` green; Windows `ci.yml` + `just ci`. Missing = **HIGH**. |
+| Undeclared mocks | Silent fakes / hardcoded KPIs / undeclared test doubles = **HIGH**. Declared dry-run + named fixtures OK when live host needs setup first. See `TESTING_GUIDE.md` § Declared doubles + FakeFind. |
+| Onboarding | **Default required.** Wrappee and/or online account → `docs/ONBOARDING.md` + big red under-hero CTA + MOCK-until-onboarded per `ONBOARDING_STANDARD.md`. Missing = **HIGH**. N/A only for **rare: no wrappee and no online account necessary** (rationale required); otherwise **HIGH**. |
+| `.gitignore` | Must block `node_modules/`, `target/`, `.venv/`, Tauri build dirs, **`mcpb/src/`** (pack staging copy of `src/`), `.env`, DBs, **`*.bak` + `*.bak.*`** per `GITIGNORE_STANDARDS.md`. Tracked junk = **CRITICAL**. |
+| `.mcpbignore` | Must exist; exclude venv/node_modules/webapp/tauri/tests/data/`*.bak`/`*.bak.*` per `MCPB_PACKAGING_STANDARDS.md` §2.4. Missing = **HIGH**. |
+| MCPB fresh stage | Pack script must wipe+recopy `src/` → `mcpb/src/` before pack. Bare `mcpb pack` without refresh = **HIGH** (stale-bundle incident class). |
+| MCPB 3-4-100 prompts | `system.md` ≥ 3000 words, `user.md` ≥ 4000 words, `examples.json` ≥ 100 entries. Runt/stub prompts = **HIGH**. |
 | Chat | Skill-first (fetch `GET /api/skills`)? 4+ personalities? localStorage history (100 cap)? Export? data-testid? |
 | Local LLM glom-on | Ollama `:11434` / LM Studio `:1234` auto-detection on mount? Settings page for providers? GPU prompt? |
 | data-testid | `kpi-{name}`, `dashboard`, `backend-dot`, `chat-*`, `personality-select`, `search-*`? **Coverage check:** `rg "data-testid" webapp/src/pages/ | Measure-Object | Select-Object -ExpandProperty Count` — each page should have ≥3 data-testid attributes. Pages missing any: grep for page component names without data-testid. <3 per page = MEDIUM. |
@@ -546,12 +558,32 @@ Iterate until clean.
 Per `MCPB_PACKAGING_STANDARDS.md`:
 
 - Verify `manifest.json` structure (correct identifier, version, assets paths)
-- Verify `src/` is self-contained
+- **Verify `mcpb/src` layout is NOT flattened** (per `MCPB_PACKAGING_STANDARDS.md` §2.5).
+  The package dir must exist: `mcpb/src/<package>/`, not bare modules in `mcpb/src/`.
+  Do not eyeball this. Resolve the entry point's top-level import with only `mcpb/src`
+  on `sys.path` and assert the origin is inside that directory:
+```powershell
+# fails loudly if the bundle cannot import itself
+uv run python -c "import sys,importlib.util as u; sys.path.insert(0,r'mcpb\src'); s=u.find_spec('<package>'); print(s.origin if s else 'NOT FOUND'); assert s and r'mcpb\src' in s.origin"
+```
+- **AST-check the entry point**: every module used at a call site must be imported.
+  (Catches the `uvicorn.run(...)` without `import uvicorn` class of bug.)
+- **Assert no `__pycache__`, `*.pyc`, `*.bak` under `mcpb/`**
 - Verify `assets/icon.png` present (256x256px)
 - Exclude `glama.json` from bundle
 - **If `.nopublish` present**: skip MCPB pack (reason: private repo, no distributable output)
 - Run: `mcpb pack . dist/{name}-v{version}.mcpb`
 - Verify output exists and is non-trivial
+- **Smoke-launch the packed bundle in a clean environment and assert it serves.** A bundle
+  that packs successfully can still fail to import; packing is not proof of function.
+
+> [!CAUTION]
+> `mcpb/src` is a build artifact. Never edit it directly — fix `src/` and rebuild.
+> On 2026-07-26 two repos (`fleet-agent-mcp`, `advanced-memory-mcp`) were found shipping
+> bundles that could not import themselves, because the copy step flattened
+> `src/<package>/*` into `mcpb/src/` instead of copying `src/<package>/` to
+> `mcpb/src/<package>/`. The old wording here ("Verify `src/` is self-contained") was
+> correct but had no mechanism, so it was never actually checked.
 
 ---
 

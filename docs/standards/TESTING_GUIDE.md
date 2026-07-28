@@ -2,7 +2,36 @@
 
 **Status:** Active
 **Last updated:** 2026-07-12
-**Related:** `rules/playwright_e2e_sota.md`, `rules/cua_nsis_smoke_testing.md`, `VERIFICATION_STANDARDS.md`, `FLEET_BUILD_TEST_PIPELINE.md`, `testing.md`, `testing-tdd-red-green.md`, `testing-environment-aware.md`
+**Related:** `rules/playwright_e2e_sota.md`, `rules/cua_nsis_smoke_testing.md`, `VERIFICATION_STANDARDS.md`, `FLEET_BUILD_TEST_PIPELINE.md`, `testing.md`, `testing-tdd-red-green.md`, `testing-environment-aware.md`, `patterns/FAKEFIND_AUDIT_SOP.md`
+
+---
+
+## Declared doubles only (HARD — new-repo gate)
+
+Mocks, fakes, dry-run short-circuits, and empty-without-credentials paths are allowed **only when declared**. Silent fakes that look like production behavior fail the gate.
+
+### Allowed (must be named)
+
+| Kind | When OK | How to declare |
+|------|---------|----------------|
+| pytest fixtures (`respx`, `httpx` mock, temp DB) | Unit/CI without live host | Fixture name + docstring in `conftest.py`; list in `docs/DEVELOPMENT.md` § Declared doubles |
+| Product **dry_run** | Real instance needs token / web app setup first | Env var documented; API responses include `"dry_run": true` (or equivalent flag) |
+| Empty list when unconfigured | Cannot call host without setup | Explicit `message` / `error: not configured` — not fabricated rows **in API responses**. Webapp **MOCK-badged** sample UI until onboarding is a separate, declared pattern (`ONBOARDING_STANDARD.md` § Mock-until-onboarded) |
+| Playwright stubs | E2E without secrets | Marked in e2e README or test name (`@pytest.mark` / `test_*_dry`) |
+
+### Forbidden (undeclared)
+
+- Webapp KPIs / charts from hardcoded arrays with no API
+- `fetch` wrappers that return fabricated success when the backend is down
+- `setTimeout` progress bars pretending to call tools
+- Test helpers that patch production modules without a named fixture or comment
+- README claiming "live" behavior that only works via hidden mocks
+
+### Rule of thumb
+
+If running the repo **in practice** needs web/instance setup first (OAuth, Mastodon token, Discord bot, Blender GUI), CI may use dry-run + fixtures — **document them**. Do not invent a parallel fake universe in the UI.
+
+Agents: before "done", grep for `mock`/`MagicMock`/`respx`/`planned`/`fake` and ensure each hit is declared. FakeFind (`patterns/FAKEFIND_AUDIT_SOP.md`) covers the webapp side.
 
 ---
 

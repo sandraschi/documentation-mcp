@@ -91,14 +91,23 @@ from typing import Dict, Optional
 
 
 def get_package_install_location() -> Path:
-    '''Get the installation location for the package.'''
+    '''Get the installation location for the package.
+
+    NOTE: Path.home() is correct HERE because this resolves a per-user
+    install location for an IDE deeplink, and is always run in the user's
+    own context.
+
+    Do NOT copy this idiom into a server that may run as a Windows service.
+    Under NSSM/LocalSystem, Path.home() resolves to
+    C:\\WINDOWS\\system32\\config\\systemprofile and you get a second, silent,
+    invisible data store. See standards/TRAPS_AND_PITFALLS.md trap 14.
+    For anything a server writes, anchor on Path(__file__).resolve().parents[N].
+    '''
     if platform.system() == 'Windows':
         appdata = Path.home() / 'AppData' / 'Local' / 'Programs'
         return appdata / 'YOUR-PACKAGE-mcp'
     else:
         return Path.home() / '.local' / 'share' / 'YOUR-PACKAGE-mcp'
-
-
 def generate_cursor_deeplink(
     package_name: str = 'YOUR-PACKAGE',
     install_path: Optional[Path] = None,

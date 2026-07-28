@@ -16,7 +16,7 @@ last_updated: 2026-04-20
 `uv` is the mandatory dependency orchestrator and execution engine for all Python-based MCP servers in the Antigravity fleet. It replaces `pip`, `venv`, and `pipx` for industrial-grade reliability.
 
 ## 2. Canonical Configuration
-- **Absolute Path**: `C:\Users\sandr\.local\bin\uv.exe`
+- **Absolute Path**: `%USERPROFILE%\.local\bin\uv.exe`
 - **Installation**: Managed via `D:\Dev\repos\uv-install`.
 
 ## 3. The Universal Connect Safety Pattern
@@ -32,7 +32,7 @@ last_updated: 2026-04-20
 ### ✅ REQUIRED (Safe module execution)
 Launch via `python -m` to ensure the running image is `python.exe`, which supports concurrent access.
 ```json
-"command": "C:/Users/sandr/.local/bin/uv.exe",
+"command": "%USERPROFILE%/.local/bin/uv.exe",
 "args": [
   "--directory", "D:/Dev/repos/your-mcp",
   "run", "python", "-m", "your_package.cli.main", "mcp", "--transport", "stdio"

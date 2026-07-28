@@ -3,6 +3,8 @@
 > **Mandatory for all MCP repos** (Python + optional Node/webapp + Rust + Docker). Prevents bloated remotes, leaked secrets, and broken clones.
 >
 > **ALWAYS create `.gitignore` BEFORE `git add -A`.** LLMs habitually skip this step and commit node_modules, target/, and data/. It's the #1 most common and most expensive rookie mistake.
+>
+> **New-repo gate:** `standards/AGENTS.md` §4.1 ship checklist items **9–10** — good `.gitignore` + `.mcpbignore` are HARD. No `node_modules`, Tauri `target/`, or `.venv` on the remote.
 
 ## 1. Never commit these paths
 
@@ -13,9 +15,9 @@
 | **Rust** | `target/` | Build output. **Fleet:** include this even in **Python-only** repos — **Zed** (and other editors running **rust-analyzer** / LSP) may create a root `target/` directory for workspace metadata; it must not be committed. |
 | **Secrets** | `.env`, `.env.*`, `*.pem`, key stores | **Never** in git; use `.env.example` only. |
 | **OS / IDE** | `.DS_Store`, `Thumbs.db`, `.idea/`, `.vscode/` (optional team policy) | Noise; align per repo. |
-| **Build / dist** | `dist/` (when generated), `build/`, `*.egg-info/` | Regenerable; exception: **committed** `dist/` only if project policy explicitly requires it (rare). |
+| **MCPB staging** | `mcpb/src/`, often whole `mcpb/` | Exact copy of `src/` for `mcpb pack` — build artifact, goes stale if committed |
 | **Logs / caches** | `*.log`, `logs/`, project-specific cache dirs | Unbounded size. |
-| **Fleet mass-fix backups** | `*.bak`, `*.bak.*` | Timestamped backups from `mcp-central-docs/scripts/*mass*` / `wire-fleet-startmode.ps1` (pattern: `file.<yyyyMMdd-HHmmss>.bak`; legacy `file.bak.<timestamp>` via `*.bak.*`). |
+| **Fleet mass-fix / sneak-in backups** | **`*.bak`** and **`*.bak.*`** (both required) | Timestamped specialist backups accumulate fast: `file.20260701_030123.bak`, `file.bak.20260701`, `*_YYYYMMDD_HHMMSS.md.bak`. Always ignore both patterns — never commit them. |
 
 **Rule:** If it is **installable** or **regenerable** from a lockfile or package manifest, it does **not** belong in Git.
 
@@ -60,6 +62,11 @@ build/
 *.spec
 *.exe
 !run_server.py
+*.mcpb
+
+# MCPB pack staging (exact copy of src/ for packing — never commit)
+mcpb/src/
+mcpb/
 
 # Tauri resources (PyInstaller binaries — gitignored, bundled at build)
 native/resources/*.exe
@@ -102,7 +109,7 @@ logs/
 ## 2. Root `.gitignore` requirements
 
 - Every repo MUST have a **root** `.gitignore` covering at least **Python + Node** if the tree contains both (e.g. `web_sota/`, `frontend/`).
-- Include **`*.bak`** (and **`*.bak.*`** if older mass-fix runs created `file.bak.timestamp` names) so fleet launcher repair backups never get committed.
+- Include **`*.bak` and `*.bak.*`** (both) so sneak-in specialist / mass-fix timestamped backups never get committed. `*.bak` alone misses `foo.bak.20260701`; `*.bak.*` alone misses `foo.20260701.bak`.
 - **Rust `target/` (mandatory on fleet):** Add **`target/`** at repo root even when the project is not a Rust crate — **Zed IDE** integration and **rust-analyzer** often emit `target/` at the repository root; without this line, `git status` fills with build artifacts.
 - **Before** `git add .` on a large change, run:
   - `git status` and spot-check for `node_modules`, `venv`, `.env`.

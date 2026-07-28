@@ -64,6 +64,7 @@ console script output — use judgment on severity level.
 - **NEVER use `$pid` as a variable name**: `$pid` is PowerShell's automatic variable for the current process ID. Assigning to `$pid` (`$pid = ...`) overwrites it, corrupting subsequent calls. Use `$targetPid` or `$owningPid` instead.
 - **Script Line Endings**: Git hooks (`.git/hooks/*`) must use **LF** line endings. CRLF will break bash execution in Windows.
 - **Quote Paths**: Wrap file paths in double quotes if they contain spaces.
+- **NEVER use `Start-Process -Title`**: The `-Title` parameter was added in PowerShell 7 (Core). Windows PowerShell 5.1 has no such parameter and will crash with `A parameter cannot be found that matches parameter name 'Title'`. Use `Start-Process -FilePath $exe -ArgumentList $args -NoNewWindow:$false` without `-Title`, or use `Start-Process` in PS7-only scripts guarded by `$PSVersionTable.PSEdition`.
 
 ## Dry-Run First Pattern
 

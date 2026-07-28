@@ -1,48 +1,48 @@
-# GitHub Actions — no CI on private repositories
+# GitHub Actions — no billable CI on private repositories
 
 **Status:** Active (fleet mandatory)  
-**Version:** 1.0 (2026-06-02)  
-**Reason:** Private-repo Actions minutes bill to the account card; public repos use free standard runners. A 2025–2026 CI runaway produced a large Actions backlog.
+**Version:** 1.1 (2026-07-26)  
+**Reason:** Private-repo Actions minutes bill to the account card; public repos use free standard runners.
 
 ## Rule
 
-| Repo visibility | GitHub Actions |
-|-----------------|----------------|
-| **Private** | **Disabled** — no workflows, no `workflow_dispatch`, no scheduled runs |
-| **Public** | Allowed when needed — prefer **one** job, **Windows or Linux** (not both), no macOS, no Tauri/PyInstaller in CI unless explicitly approved |
+| Repo visibility | Workflow **file** in repo | GitHub runs it? |
+|-----------------|---------------------------|-----------------|
+| **Private** | **Mandatory** — lightweight Windows-only `ci.yml` | **No** — keep Actions **disabled** for private repos (account setting / `disable-actions-on-private-repos.ps1`) |
+| **Public** | **Mandatory** — same Windows-only template | **Yes** — single job, no macOS, no Tauri in CI |
 
-## Account settings (do once after card update)
+Agents MUST still ship `.github/workflows/ci.yml` and a local **`just ci`** (or equivalent) that runs the same checks. Private = no cloud minutes; quality gate is local.
 
-1. GitHub → **Settings** → **Billing and plans** — pay backlog, set a **monthly spending limit** (e.g. $0–10).
-2. GitHub → **Settings** → **Actions** → **General**:
-   - Under *Actions permissions*, choose **Disable actions** for **private repositories** (or “Disable actions for all repositories” if you only use public fleet repos for CI).
-3. Optional org equivalent if repos live under an organization.
+## Lightweight Windows-only CI (mandatory shape)
 
-## Per-repo enforcement (API)
+One job on `windows-latest`:
 
-```powershell
-# Fleet script (idempotent):
-pwsh -File D:\Dev\repos\mcp-central-docs\scripts\disable-actions-on-private-repos.ps1
-```
+1. `uv sync` (+ dev extras)
+2. `ruff check` + `ruff format --check`
+3. `pytest` (mocks / dry-run; no live network secrets)
+4. webapp `npm ci` + `tsc --noEmit` + `biome check` (when webapp exists)
 
-Sets `PUT /repos/{owner}/{repo}/actions/permissions` → `enabled: false` for every **private** repo you own.
+No Ubuntu dual matrix. No Codecov required. No Tauri/NSIS/PyInstaller in CI.
 
-Workflow files may remain in git for reference; **GitHub will not run them** while disabled.
+Canonical template: `mcp-central-docs/templates/ci.yml.template`  
+Reference: `speech-mcp` / `mastodon-mcp` `.github/workflows/ci.yml`
+
+## Account settings (do once)
+
+1. GitHub → Settings → Billing — spending limit (e.g. $0–10).
+2. Actions → General → **Disable actions for private repositories**.
+3. Enforce: `mcp-central-docs/scripts/disable-actions-on-private-repos.ps1`
 
 ## Agents and new repos
 
-- **Do not** add `.github/workflows/*.yml` to new **private** `*-mcp` repos.
+- **Do** add Windows-only `.github/workflows/ci.yml` to every new `*-mcp` (public or private).
+- **Do** add `just ci` and document it in `docs/DEVELOPMENT.md`.
 - **Do not** re-enable Actions on a private repo without explicit user request.
-- Quality gates: run **locally** — `just check`, `uv run pytest`, `just build-native` (Windows), `just mcpb-pack`.
-- When a repo must have CI: make it **public** or use an external runner (self-hosted on your PC, not GitHub-hosted).
-
-## Public repo CI hygiene (when CI is allowed)
-
-- Single workflow job per event where possible.
-- Tag-only release builds; no Windows Tauri in CI (build locally, upload to Releases).
-- See `speech-mcp` `.github/workflows/` as a minimal Windows-only example.
+- **Do not** add Linux+Windows matrices or release-build jobs without approval.
+- Before "done": **`just ci` must be green locally**.
 
 ## Related
 
 - [GIT_REPOSITORY_SAFETY.md](./GIT_REPOSITORY_SAFETY.md)
-- [AGENT_INSTALL_REFERENCE.md](./AGENT_INSTALL_REFERENCE.md) — local install tiers, Tauri local build
+- [AGENTS.md](./AGENTS.md) §4.1 New Repo Gate ship checklist
+- [AGENT_INSTALL_REFERENCE.md](./AGENT_INSTALL_REFERENCE.md)

@@ -319,9 +319,9 @@ Expands to:
    - Config drift: stale paths that need cleanup
    - Known issues: list dead servers with recovery hints
 
-### `list expansions`
+### `list expansions` (alias: `list macros`)
 
-Trigger: "list expansions" or "what expansions do you have?".
+Trigger: "list expansions", "list macros", or "what expansions do you have?".
 
 Expands to:
 
@@ -357,6 +357,7 @@ Print all registered macros with their trigger phrases and a one-line summary. C
 | `env sync` | "env sync" | Sync .env.example with actual env vars used in source |
 | `tag` | "tag <version>" | Create annotated git tag, push, verify CI triggered |
 | `drift` | "drift" | Fleet-wide gap analysis: compare all repos against SOP without fixing |
+| `fakefind` | "fakefind <repo>" / "find fakes <repo>" | Read-only audit of webapp for mock data, dead buttons, placeholder content, fake UI. Report only — no auto-fix. |
 | `onboard` | "onboard <repo>" | First-time setup: install deps, start stack, open browser |
 | `template sync` | "template sync" | Compare boilerplate files against reference repos, show diffs |
 | `ci check` | "ci check <repo>" | List recent CI workflow runs, identify failures, report pass/fail per workflow |
@@ -541,6 +542,23 @@ Expands to:
 4. Compare against previous run if `.benchmark-last.json` exists in repo root
 5. Report: pass/fail, regressions, improvements, save results to `.benchmark-last.json`
 6. Do NOT fail CI over performance regressions — just report them
+
+### `fakefind`
+
+Trigger: "fakefind <repo>" or "find fakes <repo>" — audit a webapp for hardcoded mock data, dead buttons, placeholder content, and fake UI.
+
+Expands to:
+
+Full SOP: `mcp-central-docs/patterns/FAKEFIND_AUDIT_SOP.md`
+
+1. Read `patterns/FAKEFIND_AUDIT_SOP.md` — the full SOP
+2. Execute all audit phases against the repo's webapp (read-only, no edits)
+3. Write report to `reports/fakefind-{repo}-{date}.md` + `.fakefind-timestamp`
+4. Present findings grouped by severity with file+line references
+5. **Auto-fix endpoint mismatches**: For findings where the frontend calls a wrong port, missing URL path, or non-existent endpoint (e.g. `fetch('http://localhost:10787/...')` when registry says `10831`), fix the endpoint URL in the frontend directly — these are objectively verifiable and safe to correct. Do NOT fabricate new API responses.
+6. For all other findings (fake data, dead buttons, placeholder content), do NOT fix — ask the user if they want fixes applied
+7. If user approves, execute fixes per SOP severity order (CRITICAL→HIGH→MEDIUM)
+7. Run linter and typecheck after any fixes
 
 ## Adding New Macros
 

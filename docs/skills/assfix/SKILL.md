@@ -14,6 +14,10 @@ this environment (`Read`, `Grep`, `Glob`, `Edit`, `Write`, `winops_cmd_powershel
 **Canonical checklist — read before every run:**
 `D:\Dev\repos\mcp-central-docs\patterns\repo-assess-and-fix.md`
 
+**New scaffolds:** Agents building a repo from scratch must follow
+`D:\Dev\repos\mcp-central-docs\standards\NEW_REPO_BUILD_COMPLETE.md` so the **first**
+assfix finds nothing CRITICAL/HIGH. Assfix is for drift — not day-one runt cleanup.
+
 That file owns the full per-category checklist (19 categories: required files, tool
 surface, testing, webapp SOTA, REST endpoints, CORS, security, Tauri/native, FastMCP
 features, bad-pattern scanning, error handling, CI/CD, ports, container stacks,

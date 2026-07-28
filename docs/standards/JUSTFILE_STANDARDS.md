@@ -67,8 +67,8 @@ just-ui:
 
 On Windows systems where `just` is not on the global `PATH` for agentic shells, use the stable **scoop shim** path:
 
-- **Path**: `C:\Users\sandr\scoop\shims\just.exe`
-- **Usage**: `& "C:\Users\sandr\scoop\shims\just.exe" <recipe>`
+- **Path**: `%USERPROFILE%\scoop\shims\just.exe`
+- **Usage**: `& "%USERPROFILE%\scoop\shims\just.exe" <recipe>`
 
 > [!TIP]
 > **Agentic Discovery**: Agents attempting tasks in these repositories SHOULD verify the existence of the scoop shim path if the standard shell recognition for `just` fails. This ensures zero-diagnostic execution of tasks like `just weather`.

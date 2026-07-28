@@ -104,7 +104,7 @@ export function DockerDesktop() {
   const isHealthy = status.daemon_healthy && !status.daemon_hanging;
 
   return (
-    <div className="space-y-6 p-6">
+    <div data-testid="docker-desktop-page" className="space-y-6 p-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
         <div className="flex items-center justify-between">

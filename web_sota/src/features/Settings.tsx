@@ -166,7 +166,7 @@ export function Settings() {
     }
 
     return (
-        <div className="container max-w-4xl mx-auto py-8 px-6 space-y-8">
+        <div data-testid="settings-page" className="container max-w-4xl mx-auto py-8 px-6 space-y-8">
             <div>
                 <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
                     <SettingsIcon className="w-8 h-8 text-primary" />
@@ -272,7 +272,7 @@ export function Settings() {
                             </Button>
                         </div>
                         {lmstudioModels.length === 0 && lmstudioUrl.trim() && !lmstudioModelsLoading && (
-                            <p className="text-xs text-muted-foreground">No models returned. Start LM Studio, load a model, and ensure local server is running.</p>
+                            <p className="text-sm text-muted-foreground">No models returned. Start LM Studio, load a model, and ensure local server is running.</p>
                         )}
                     </div>
                     <div className="flex flex-wrap gap-4">
@@ -340,7 +340,7 @@ export function Settings() {
                             </Button>
                         </div>
                         {ollamaModels.length === 0 && ollamaUrl.trim() && !modelsLoading && (
-                            <p className="text-xs text-muted-foreground">{ollamaMessage ?? "No models returned. Check URL and that Ollama is running."}</p>
+                            <p className="text-sm text-muted-foreground">{ollamaMessage ?? "No models returned. Check URL and that Ollama is running."}</p>
                         )}
                     </div>
                 </CardContent>
@@ -374,7 +374,7 @@ export function Settings() {
                             value={ragExtraPaths}
                             onChange={(e) => setRagExtraPaths(e.target.value)}
                         />
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-sm text-muted-foreground">
                             Each path is scanned recursively for <code>.md</code> files. Env var <code>DOCS_EXTRA_PATHS</code> is merged at runtime.
                         </p>
                     </div>

@@ -132,8 +132,8 @@ function ArchitectureHelp() {
                 </ul>
             </div>
             <div className="p-4 bg-muted/30 rounded-lg border border-border/50">
-                <h5 className="text-xs font-bold mb-2">Design Philosophy</h5>
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <h5 className="text-sm font-bold mb-2">Design Philosophy</h5>
+                <p className="text-sm text-muted-foreground leading-relaxed">
                     Strict adherence to the Materialist/Reductionist aesthetic: data-driven, neutral tones, high contrast, and zero-friction navigation. All UI components are verified for industrial-grade stability.
                 </p>
             </div>

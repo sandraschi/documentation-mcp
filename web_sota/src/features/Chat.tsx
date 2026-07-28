@@ -188,7 +188,7 @@ export function ChatView() {
     const availableModels = currentProvider?.models || []
 
     return (
-        <div className="flex-1 flex flex-col min-h-0 container max-w-5xl mx-auto py-4 md:py-6 px-4 md:px-6">
+        <div data-testid="chat-page" className="flex-1 flex flex-col min-h-0 container max-w-5xl mx-auto py-4 md:py-6 px-4 md:px-6">
             {/* Header */}
             <div className="mb-4 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-card/30 backdrop-blur-md p-4 rounded-xl border border-primary/10">
                 <div className="flex items-center gap-3">
@@ -197,7 +197,7 @@ export function ChatView() {
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold tracking-tight">AI Assistant</h1>
-                        <p className="text-xs text-muted-foreground font-medium uppercase tracking-widest">Conversational RAG</p>
+                        <p className="text-sm text-muted-foreground font-medium uppercase tracking-widest">Conversational RAG</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2 flex-wrap self-end md:self-auto">
@@ -207,8 +207,8 @@ export function ChatView() {
                             {discoveredLmstudio && <Badge variant="outline" className="text-[9px] border-blue-500/30 text-blue-500">LM Studio</Badge>}
                         </div>
                     )}
-                    <Select value={persona} onValueChange={setPersona}>
-                        <SelectTrigger className="w-[130px] h-9 bg-background/50 border-primary/20">
+                        <Select value={persona} onValueChange={setPersona}>
+                        <SelectTrigger data-testid="personality-select" className="w-[130px] h-9 bg-background/50 border-primary/20">
                             <SelectValue placeholder="Persona" />
                         </SelectTrigger>
                         <SelectContent>
@@ -220,10 +220,10 @@ export function ChatView() {
                     <Button variant="outline" size="sm" onClick={() => setShowSettings(!showSettings)} className="h-9 gap-1 border-primary/20">
                         <SettingsIcon className="w-3.5 h-3.5" /> Models
                     </Button>
-                    <Button variant="outline" size="sm" onClick={exportChat} className="h-9 gap-2 border-primary/20">
+                    <Button data-testid="chat-export" variant="outline" size="sm" onClick={exportChat} className="h-9 gap-2 border-primary/20">
                         <Download className="w-3.5 h-3.5" /> Export
                     </Button>
-                    <Button variant="outline" size="sm" onClick={clearChat} className="h-9 gap-2 border-destructive/20 hover:bg-destructive/5 hover:text-destructive">
+                    <Button data-testid="chat-clear" variant="outline" size="sm" onClick={clearChat} className="h-9 gap-2 border-destructive/20 hover:bg-destructive/5 hover:text-destructive">
                         <Trash2 className="w-3.5 h-3.5" /> Clear
                     </Button>
                 </div>
@@ -234,7 +234,7 @@ export function ChatView() {
                 <Card className="mb-4 p-4 space-y-3 border-primary/10">
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Provider</label>
+                            <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Provider</label>
                             <Select value={provider} onValueChange={(v) => { setProvider(v); setModel('') }}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select provider" />
@@ -248,7 +248,7 @@ export function ChatView() {
                         </div>
                         {availableModels.length > 0 && (
                             <div className="space-y-2">
-                                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Model</label>
+                                <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Model</label>
                                 <Select value={model} onValueChange={setModel}>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select model" />
@@ -263,25 +263,25 @@ export function ChatView() {
                         )}
                         {(provider === "openai" || provider === "anthropic" || provider === "gemini") && (
                             <div className="space-y-2">
-                                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">API Key</label>
+                                <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">API Key</label>
                                 <input
                                     type="password"
                                     placeholder="sk-..."
                                     value={apiKey}
                                     onChange={(e) => setApiKey(e.target.value)}
-                                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-xs font-mono"
+                                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm font-mono"
                                 />
                             </div>
                         )}
                         {provider === "local" && (
                             <div className="space-y-2">
-                                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Server URL</label>
+                                <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Server URL</label>
                                 <input
                                     type="text"
                                     placeholder="http://localhost:1234/v1"
                                     value={apiUrl}
                                     onChange={(e) => setApiUrl(e.target.value)}
-                                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-xs font-mono"
+                                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm font-mono"
                                 />
                             </div>
                         )}
@@ -311,7 +311,7 @@ export function ChatView() {
 
             {/* Chat area */}
             <Card className="flex-1 flex flex-col min-h-0 border-primary/20 shadow-[0_0_50px_-12px_rgba(0,0,0,0.3)] overflow-hidden bg-background/40 backdrop-blur-sm relative">
-                <ScrollArea className="flex-1 p-6">
+                <ScrollArea data-testid="chat-messages" className="flex-1 p-6">
                     <div className="space-y-6">
                         {messages.map((msg) => (
                             <div key={msg.id} className={cn("flex gap-4 max-w-[85%]", msg.role === 'user' ? "ml-auto flex-row-reverse" : "")}>
@@ -381,6 +381,7 @@ export function ChatView() {
                 <div className="p-4 border-t bg-card/50 backdrop-blur-md">
                     <form className="flex gap-2 items-end" onSubmit={(e) => { e.preventDefault(); handleSend(); }}>
                         <AutoResizeTextarea
+                            data-testid="chat-input"
                             placeholder="Ask about MCP architecture, tools, or patterns..."
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
@@ -389,7 +390,7 @@ export function ChatView() {
                             disabled={loading}
                             rows={1}
                         />
-                        <Button type="submit" disabled={loading || !input.trim()} className="shrink-0">
+                        <Button data-testid="chat-send" type="submit" disabled={loading || !input.trim()} className="shrink-0">
                             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                         </Button>
                     </form>

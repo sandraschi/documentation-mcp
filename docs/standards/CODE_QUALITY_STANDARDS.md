@@ -75,8 +75,8 @@ Recommended: local pre-commit hook (example in unicode_safety.md).
 
 On Windows systems where `ruff` is not on the global `PATH`, use the absolute path to the Python-managed executable:
 
-- **Path**: `C:\Users\sandr\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe`
-- **Usage**: `& "C:\Users\sandr\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe" check <path>`
+- **Path**: `%USERPROFILE%\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe`
+- **Usage**: `& "%USERPROFILE%\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe" check <path>`
 
 ## 2. TypeScript/JavaScript Standards (Biome)
 

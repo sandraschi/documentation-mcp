@@ -25,12 +25,14 @@ repo-root/
 ├── AGENTS.md                  ← OpenAI Codex context
 ├── CLAUDE.md                  ← Claude Code context
 └── docs/
+    ├── ONBOARDING.md          ← First-timer wrappee/account (DEFAULT — see ONBOARDING_STANDARD.md)
     ├── CONFIGURATION.md       ← All env vars and config options
     ├── DEVELOPMENT.md         ← Dev setup, tools, contributing
     ├── TOOLS.md               ← Full MCP tool reference (MCP repos only)
     └── TROUBLESHOOTING.md     ← FAQ, common errors, diagnostics
 ```
 
+When the product wraps a host app or needs a vendor account (**default for fleet MCPs** — even Notepad++), **`docs/ONBOARDING.md` is mandatory**, plus webapp big-red CTA and MOCK-until-onboarded. See [ONBOARDING_STANDARD.md](./ONBOARDING_STANDARD.md).
 ---
 
 ## Primary README.md
@@ -103,6 +105,7 @@ Link to INSTALL.md for other methods.
 | Doc | Contents |
 |-----|----------|
 | [Installation](INSTALL.md) | All install methods, prerequisites |
+| [Onboarding](docs/ONBOARDING.md) | First-timer account/host setup, money/CC, pitfalls (when applicable) |
 | [Configuration](docs/CONFIGURATION.md) | Env vars, config options |
 | [Tool Reference](docs/TOOLS.md) | All available tools |
 | [Development](docs/DEVELOPMENT.md) | Contributing, local setup |

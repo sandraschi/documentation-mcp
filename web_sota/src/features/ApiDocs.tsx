@@ -7,7 +7,7 @@ export function ApiDocs() {
   const navigate = useNavigate()
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 container max-w-6xl mx-auto py-8 px-6 space-y-6">
+    <div data-testid="api-docs-page" className="flex-1 flex flex-col min-h-0 container max-w-6xl mx-auto py-8 px-6 space-y-6">
       <div className="flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
           <Code2 className="w-8 h-8 text-primary" />

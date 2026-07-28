@@ -54,7 +54,7 @@ const faq = [
 export function Help() {
   const navigate = useNavigate()
   return (
-    <div className="flex-1 flex flex-col min-h-0 container max-w-5xl mx-auto py-8 px-6 space-y-8 overflow-y-auto">
+    <div data-testid="help-page" className="flex-1 flex flex-col min-h-0 container max-w-5xl mx-auto py-8 px-6 space-y-8 overflow-y-auto">
       <div className="space-y-2 shrink-0">
         <h1 className="text-3xl font-bold tracking-tight">Help & Guide</h1>
         <p className="text-muted-foreground">Quick reference for using the Documentation MCP webapp and server.</p>
@@ -67,9 +67,9 @@ export function Help() {
               <item.icon className="w-6 h-6 text-primary mb-1" />
               <CardTitle className="text-sm">{item.title}</CardTitle>
             </CardHeader>
-            <CardContent className="text-xs text-muted-foreground space-y-3">
+            <CardContent className="text-sm text-muted-foreground space-y-3">
               <p>{item.desc}</p>
-              <Button variant="outline" size="sm" className="w-full text-xs gap-1">
+              <Button variant="outline" size="sm" className="w-full text-sm gap-1">
                 {item.action} <ExternalLink className="w-3 h-3" />
               </Button>
             </CardContent>

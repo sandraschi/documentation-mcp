@@ -62,6 +62,7 @@
 | Issue | Doc |
 |-------|-----|
 | `run_http_async()` drops CORSMiddleware | `standards/CORS_STANDARD.md` |
+| ASGI lifespan not passed to parent FastAPI (3.4.4+) | `3.4-features.md` §ASGI Lifespan Pitfall |
 | 3.4.3 Host/Origin guard broke deployments | [CHANGELOG.md](CHANGELOG.md) |
 | PyInstaller + PYZ archive unreliable | `standards/rules/tauri_nsis_building.md` |
 | `--mode` flag not stripped before transport argparser | `patterns/TAURI_PRODUCTION_PITFALLS.md` |

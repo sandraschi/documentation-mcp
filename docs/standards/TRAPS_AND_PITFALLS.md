@@ -16,6 +16,7 @@
 6. [JSON Schema Validation in Tool Calls](#6-json-schema-validation-in-tool-calls)
 8. [`localhost` vs `127.0.0.1` on Goliath - silent 404 instead of connection-refused](#8-localhost-vs-1270011-on-goliath--silent-404-instead-of-connection-refused)
 13. [Windows PowerShell 5.1 `Set-Content -Encoding UTF8` Always Writes a BOM - Fleet-Wide, 344 Occurrences](#13-windows-powershell-51-set-content--encoding-utf8-always-writes-a-bom--fleet-wide-344-occurrences)
+14. [NSSM services run as LocalSystem, so `Path.home()` silently resolves to `systemprofile`](#14-nssm-services-run-as-localsystem-so-pathhome-silently-resolves-to-systemprofile--two-databases-zero-errors)
 
 ---
 
@@ -457,3 +458,54 @@ Replace every `Set-Content -Path X -Value Y -Encoding UTF8` with `Write-Utf8NoBo
 
 - **Mojibake/double-encoded emoji desyncs the PS 5.1 tokenizer.** A Write-Host string containing a double-encoded/mojibake Unicode emoji (garbage bytes from a prior bad encoding round-trip) can desync PowerShell 5.1's parser via OEM-codepage misreading of a UTF-8-no-BOM `.ps1` file, causing an unrelated here-string later in the *same file* to fail to parse - the error message points nowhere near the actual cause. Fix: strip all emoji/decorative Unicode from generated script output; use plain ASCII (`[OK]`, `====` banners) in any `.ps1` that will be read by PS 5.1.
 - **AV/EDR secret scanners silently delete freshly-written files that look credential-shaped.** A generated `docs/CONFIGURATION.md` containing a JSON block like `"env": {"TODO_VAR": "your-value"}` was quarantined/deleted immediately after `Set-Content` reported success - no error, no warning, the write call itself returns clean. Confirmed by ruling out cmdlet choice, variable naming, path syntax, and exact filename (a fully hardcoded trivial write at the same script position also silently failed). Fix: avoid emitting credential-shaped `"key": "value"` JSON in generated docs/config examples; use plain prose instead (`Set the FOO_API_KEY environment variable to your value.`) for anything that reads like a secret even when it obviously isn't one.
+
+---
+
+## 14. NSSM services run as LocalSystem, so `Path.home()` silently resolves to `systemprofile` - two databases, zero errors
+
+**Symptom:** data written through one interface is invisible in another. No error anywhere. Writes report `success: true`. The service is RUNNING and healthy. Restarting Claude Desktop changes nothing.
+
+**Cause:** an app resolves a storage path from ambient process state instead of explicit config:
+
+```python
+base = os.getenv("APP_HOME") or Path.home()     # <-- the trap
+db = base / ".app" / "app.db"
+```
+
+`Path.home()` on Windows reads `USERPROFILE`. Under an NSSM service running as `LocalSystem` that is `C:\WINDOWS\system32\config\systemprofile`, not `C:\Users\sandr`. The service and your dev-shell process then use two different databases from one codebase.
+
+**Why it hides so well (all four of these applied in the 2026-07-26 incident):**
+
+1. **Write success is not read visibility.** The write genuinely succeeded, to the other store. An API returning bare `success: true` tells you nothing about where.
+2. **`LocalSystem` has more rights than you**, so nothing fails on the way down. There is no permission error to notice. The resulting directory then needs elevation to even read, which obstructs diagnosis.
+3. **Restarting the MCP host does not restart the NSSM service.** It is an independent process with its own lifetime. Check the PID before and after: if unchanged, you restarted the wrong thing.
+4. **Different vars can govern different paths.** In advanced-memory-mcp the SQLite index honoured `ADVANCED_MEMORY_HOME` but the markdown vault keyed off `Path.home()` directly. Setting only the app variable moved the DB but not the files, which reads like a partial fix and sends you chasing a second phantom.
+
+**`Path.cwd()` is the same trap with a different variable.** NSSM's `AppDirectory` masks it for the service, so it looks fine until any other launch path (a Claude Desktop stdio instance, another shell, a scheduled task) has a different working directory.
+
+**Empty env vars are a third variant.** `ARXIV_MCP_DATA_DIR=` with no value does not mean unset. Pydantic coerces `""` on a `Path | None` field to `Path(".")`, which is not `None`, so the intended fallback never fires and the resolved data dir becomes a *relative* path that follows CWD at runtime. This forked arxiv-mcp's corpus into two SQLite files.
+
+**Rules:**
+
+> 1. Never use `Path.home()` or `Path.cwd()` to locate anything a server writes. Anchor on the module instead: `Path(__file__).resolve().parents[N]`. `aiwatcher-mcp/src/aiwatcher_mcp/config.py` is the reference implementation.
+> 2. When registering an NSSM service, pin the environment explicitly and decide the service account deliberately. `LocalSystem` is the default, not a choice. Most fleet servers need no privilege beyond the user's.
+>    ```
+>    nssm set <svc> AppEnvironmentExtra APP_HOME=C:\Users\sandr<newline>USERPROFILE=C:\Users\sandr
+>    ```
+>    Pin `USERPROFILE` too, not just the app variable, whenever `Path.home()` appears anywhere in the codebase.
+> 3. Treat empty-string env vars as unset. Add a validator coercing `""` to `None` on optional `Path` fields.
+> 4. **Log the resolved absolute storage path once at INFO on startup.** This is the single highest-value line of code here. It would have turned a four-hour investigation into one glance.
+> 5. Expose the resolved storage path in the server's `status`/`health` tool.
+> 6. Never return bare `success: true` from a write whose visibility depends on a separate index or sync step. Report the target path or the index status alongside.
+
+**Diagnostic sequence when data "disappears":**
+
+1. `sc qc <service>` - is `SERVICE_START_NAME` `LocalSystem`?
+2. `reg query HKLM\SYSTEM\CurrentControlSet\Services\<svc>\Parameters /v AppEnvironmentExtra`
+3. `netstat -ano | findstr :<port>` then `Get-CimInstance Win32_Process -Filter "ProcessId=<pid>"`. Confirm which binary and which account actually holds the port. Do not assume.
+4. Compare PID across a restart.
+5. Look for the same data dir under both `C:\Users\<user>\` and `C:\WINDOWS\system32\config\systemprofile\`.
+
+**Fleet scope (audited 2026-07-26):** all 11 fleet services run as `LocalSystem`, 10 NSSM-wrapped, so the precondition is universal. Confirmed affected: `advanced-memory-mcp` (fixed, 71 notes recovered), `fleet-agent-mcp` (active split across `.fleet-agent` and `.fleet-intel`, touches agent identity), `arxiv-mcp` (two corpus DBs), `devices-mcp` (stale user-profile dir under a running service). Clean: `aiwatcher-mcp`. Note that `standards/DEEPLINK_STANDARD.md` currently *recommends* `Path.home()` for install locations and should be corrected.
+
+Full postmortem: `troubleshooting/2026-07-26_nssm-localsystem-ambient-path-resolution.md`

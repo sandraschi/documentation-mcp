@@ -134,13 +134,13 @@ export function Dashboard() {
                             <button
                                 onClick={restartBackend}
                                 disabled={restarting}
-                                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs font-medium text-amber-500 hover:bg-amber-500/20 transition-colors disabled:opacity-50"
+                                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-sm font-medium text-amber-500 hover:bg-amber-500/20 transition-colors disabled:opacity-50"
                             >
                                 {restarting ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
                                 Restart Backend
                             </button>
                         )}
-                        <p className="text-xs text-muted-foreground font-mono uppercase tracking-tighter opacity-60">
+                        <p className="text-sm text-muted-foreground font-mono uppercase tracking-tighter opacity-60">
                             Provider: {status?.provider || "Detecting..."} | Nodes: {status?.fleet_count || 0}
                         </p>
                     </div>
@@ -182,7 +182,7 @@ export function Dashboard() {
                         <div className="text-2xl font-bold">
                             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : status?.chunk_count.toLocaleString() || "0"}
                         </div>
-                        <p className="text-xs text-muted-foreground">From {status?.source_count || 0} document sources</p>
+                        <p className="text-sm text-muted-foreground">From {status?.source_count || 0} document sources</p>
                     </CardContent>
                 </Card>
                 <Card data-testid="kpi-registry">
@@ -192,7 +192,7 @@ export function Dashboard() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold text-emerald-500">OPERATIONAL</div>
-                        <p className="text-xs text-muted-foreground">Vector Engine Active</p>
+                        <p className="text-sm text-muted-foreground">Vector Engine Active</p>
                     </CardContent>
                 </Card>
                 <Card data-testid="kpi-apps">
@@ -202,7 +202,7 @@ export function Dashboard() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{status?.fleet_count || 0} Registered</div>
-                        <p className="text-xs text-muted-foreground">Direct service coordination</p>
+                        <p className="text-sm text-muted-foreground">Direct service coordination</p>
                     </CardContent>
                 </Card>
                 <Card data-testid="kpi-model">
@@ -212,7 +212,7 @@ export function Dashboard() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{status?.model || "None"}</div>
-                        <p className="text-xs text-muted-foreground">Active LLM endpoint</p>
+                        <p className="text-sm text-muted-foreground">Active LLM endpoint</p>
                     </CardContent>
                 </Card>
             </div>
@@ -254,14 +254,14 @@ export function Dashboard() {
                             <div className="p-3 bg-primary/10 rounded-lg group-hover:bg-primary group-hover:text-primary-foreground transition-colors"><Book className="w-5 h-5 text-primary group-hover:text-inherit" /></div>
                             <div>
                                 <div className="font-semibold">Technical Docs</div>
-                                <div className="text-xs text-muted-foreground">Browse standards and protocols</div>
+                                <div className="text-sm text-muted-foreground">Browse standards and protocols</div>
                             </div>
                         </div>
                         <div className="p-3 border rounded-xl hover:bg-accent cursor-pointer transition-all flex items-center gap-4 group" onClick={() => to("semantic")}>
                             <div className="p-3 bg-primary/10 rounded-lg group-hover:bg-primary group-hover:text-primary-foreground transition-colors"><Activity className="w-5 h-5 text-primary group-hover:text-inherit" /></div>
                             <div>
                                 <div className="font-semibold">Vector Retrieval</div>
-                                <div className="text-xs text-muted-foreground">Direct semantic search operations</div>
+                                <div className="text-sm text-muted-foreground">Direct semantic search operations</div>
                             </div>
                         </div>
                     </CardContent>

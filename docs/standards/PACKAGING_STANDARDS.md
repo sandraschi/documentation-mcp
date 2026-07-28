@@ -27,12 +27,17 @@ Every fleet server has **two distinct install surfaces** that solve different pr
 - **NO Dependencies**: Do not bundle external libraries in the package.
 - **FORBIDDEN**: Never use `mcpb init` or `mcpb create` (generates broken manifests).
 
-## 2. SOTA Prompting (3-4-100 Rule)
+## 2. SOTA Prompting (3-4-100 Rule) — HARD
 
-A SOTA package is defined by its prompts:
-- **system.md**: 3,000+ words of core capabilities.
-- **user.md**: 4,000+ words of natural language tutorials.
-- **examples.json**: 100+ structured tool call mappings.
+A SOTA package is defined by its prompts. **Runt / stub prompt sets fail the gate.**
+
+| File | Minimum |
+|------|---------|
+| `assets/prompts/system.md` | **3,000+ words** of core capabilities |
+| `assets/prompts/user.md` | **4,000+ words** of natural language tutorials |
+| `assets/prompts/examples.json` | **100+** structured tool call mappings |
+
+Full verification + shape: [MCPB_PACKAGING_STANDARDS.md](./MCPB_PACKAGING_STANDARDS.md) §2.3b. New-repo ship checklist item **11**.
 
 ## 3. Global Discovery
 

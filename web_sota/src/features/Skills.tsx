@@ -63,7 +63,7 @@ export function Skills() {
     }
 
     return (
-        <div className="container max-w-4xl mx-auto py-12 px-6">
+        <div data-testid="skills-page" className="container max-w-4xl mx-auto py-12 px-6">
             <div className="mb-10 space-y-4">
                 <h1 className="text-4xl font-bold tracking-tight flex items-center gap-3">
                     <BookMarked className="w-10 h-10 text-primary" />
@@ -92,7 +92,7 @@ export function Skills() {
                     </CardContent>
                 </Card>
             ) : (
-                <div className="space-y-4">
+                <div data-testid="skills-list" className="space-y-4">
                     {skills.map((skill) => (
                         <Card key={skill.id}>
                             <CardHeader className="pb-2">
@@ -215,7 +215,7 @@ export function Skills() {
                                         )}
                                     </div>
                                     {m.install_hint && (
-                                        <p className="text-xs text-muted-foreground">{m.install_hint}</p>
+                                        <p className="text-sm text-muted-foreground">{m.install_hint}</p>
                                     )}
                                 </CardContent>
                             </Card>

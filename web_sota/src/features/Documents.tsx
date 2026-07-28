@@ -89,7 +89,7 @@ export function Documents() {
     const displayedTree = searchQuery ? filterTree(docTree, searchQuery) : docTree
 
     return (
-        <div className={cn(
+        <div data-testid="documents-page" className={cn(
             "mx-auto py-6 px-4 flex-1 h-0 min-h-0 flex gap-6 transition-all duration-300",
             isFullScreen ? "max-w-[98vw]" : "container max-w-7xl"
         )}>
@@ -169,7 +169,7 @@ export function Documents() {
                             <Search className="absolute left-2.5 top-2.5 h-3 w-3 text-muted-foreground" />
                             <Input
                                 placeholder="Search registry..."
-                                className="h-9 pl-9 bg-background/50 text-xs border-white/5"
+                                className="h-9 pl-9 bg-background/50 text-sm border-white/5"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />

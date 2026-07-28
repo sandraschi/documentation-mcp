@@ -107,7 +107,7 @@ export function ToolsHub() {
     }
 
     return (
-        <div className="container max-w-6xl mx-auto py-12 px-6">
+        <div data-testid="tools-page" className="container max-w-6xl mx-auto py-12 px-6">
             <div className="mb-10 space-y-4">
                 <h1 className="text-4xl font-bold tracking-tight">Tools Hub</h1>
                 <p className="text-lg text-muted-foreground">Direct access to registered MCP tools and utilities.</p>
@@ -136,7 +136,7 @@ export function ToolsHub() {
                                             <Label htmlFor={`${tool.name}-${key}`} className="block">
                                                 {key}
                                                 {description && (
-                                                    <span className="block text-muted-foreground font-normal text-xs">{description}</span>
+                                                    <span className="block text-muted-foreground font-normal text-sm">{description}</span>
                                                 )}
                                             </Label>
                                             <Input

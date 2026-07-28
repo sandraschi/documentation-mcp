@@ -91,6 +91,7 @@ Agents constantly merge these. **Do not.**
 |------|----------|----------|----------|
 | `README.md` | Evaluator / first visit | ~100–200 lines | Features, quick install (one path), example prompts, doc table |
 | `INSTALL.md` | All installers | ~150–300 lines | **All** install paths, winget prerequisites, Options A–D |
+| `docs/ONBOARDING.md` | First-timers joining a host/vendor world | ~80–200 lines | What for, money/CC, pitfalls, sanity check — [ONBOARDING_STANDARD.md](./ONBOARDING_STANDARD.md) |
 | `docs/CONFIGURATION.md` | Configuring after install | flexible | Env var tables, Claude `env` block |
 | `docs/DEVELOPMENT.md` | Contributors | flexible | `just`, ruff, biome, tests, `mcpb pack`, Tauri build |
 | `docs/TROUBLESHOOTING.md` | Support | flexible | Symptom → fix |

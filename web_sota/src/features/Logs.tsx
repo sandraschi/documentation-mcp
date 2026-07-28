@@ -105,7 +105,7 @@ export function Logs() {
     }
 
     return (
-        <div className="flex flex-col h-[calc(100vh-4rem)] bg-zinc-950 text-zinc-300 font-mono">
+        <div data-testid="logs-page" className="flex flex-col h-[calc(100vh-4rem)] bg-zinc-950 text-zinc-300 font-mono">
             {/* Control Bar */}
             <header className="h-14 border-b border-zinc-800 bg-zinc-900/50 flex items-center px-4 gap-4 shrink-0">
                 <div className="flex items-center gap-2 mr-4">
@@ -120,7 +120,7 @@ export function Logs() {
                         placeholder="Filter trace..." 
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="bg-transparent border-none outline-none text-xs w-full focus:ring-0"
+                        className="bg-transparent border-none outline-none text-sm w-full focus:ring-0"
                     />
                 </div>
 
@@ -146,7 +146,7 @@ export function Logs() {
                         variant="ghost" 
                         size="sm" 
                         onClick={() => setAutoScroll(!autoScroll)}
-                        className={cn("h-8 gap-2 text-xs", autoScroll && "text-emerald-500")}
+                        className={cn("h-8 gap-2 text-sm", autoScroll && "text-emerald-500")}
                     >
                         <ArrowDown className={cn("w-3 h-3 transition-transform", autoScroll ? "translate-y-0" : "-translate-y-1")} />
                         Auto-scroll
@@ -192,7 +192,7 @@ export function Logs() {
                             {processes.map((proc) => (
                                 <Card key={proc.id} className="bg-zinc-950/50 border-zinc-800 shadow-none hover:border-emerald-500/30 transition-colors overflow-hidden">
                                     <CardHeader className="p-3 pb-0">
-                                        <CardTitle className="text-xs flex items-center justify-between">
+                                        <CardTitle className="text-sm flex items-center justify-between">
                                             <span className="truncate max-w-[120px] text-emerald-500 font-mono">{proc.id}</span>
                                             <Badge variant="outline" className="text-[9px] h-4 py-0 font-normal border-emerald-500/20 text-emerald-500/80">
                                                 PID: {proc.pid}

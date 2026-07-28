@@ -71,7 +71,7 @@ export function VerificationMatrix() {
     }
 
     return (
-        <div className="container max-w-6xl mx-auto py-12 px-6">
+        <div data-testid="verification-matrix-page" className="container max-w-6xl mx-auto py-12 px-6">
             <div className="mb-10 space-y-4">
                 <h1 className="text-4xl font-bold tracking-tight">Multi-Client Verification Matrix</h1>
                 <p className="text-lg text-muted-foreground">Compatibility status of MCP features across agentic IDEs and clients. Data from operations/verification_matrix.json.</p>
@@ -121,21 +121,21 @@ export function VerificationMatrix() {
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-1" />
                     <div>
                         <h4 className="font-bold text-sm">Pass</h4>
-                        <p className="text-xs text-muted-foreground">100% compliant with operational standards.</p>
+                        <p className="text-sm text-muted-foreground">100% compliant with operational standards.</p>
                     </div>
                 </div>
                 <div className="p-4 rounded-xl border bg-card/30 flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-yellow-500 mt-1" />
                     <div>
                         <h4 className="font-bold text-sm">Partial</h4>
-                        <p className="text-xs text-muted-foreground">Limited support or known edge cases.</p>
+                        <p className="text-sm text-muted-foreground">Limited support or known edge cases.</p>
                     </div>
                 </div>
                 <div className="p-4 rounded-xl border bg-card/30 flex items-start gap-3">
                     <XCircle className="w-5 h-5 text-destructive mt-1" />
                     <div>
                         <h4 className="font-bold text-sm">Fail</h4>
-                        <p className="text-xs text-muted-foreground">Feature not implemented or broken.</p>
+                        <p className="text-sm text-muted-foreground">Feature not implemented or broken.</p>
                     </div>
                 </div>
             </div>

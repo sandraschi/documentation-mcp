@@ -36,7 +36,7 @@ These are **baseline discovery**, not spam — maintain once, update on releases
 | **Glama** | `glama.json` + submit/update listing | [REGISTRY_GUIDE](../ecosystem/glama/REGISTRY_GUIDE.md) |
 | **Smithery** | Badge + install one-liner in README | When packaged |
 | **`llms.txt`** | Accurate tool + artifact summary for indexers | Required fleet bar |
-| **GitHub** | Topics (`mcp`, `fastmcp`, host-app tag), Releases with `.mcpb` | Per repo |
+| **GitHub** | Topics (`mcp`, `fastmcp`, host-app tag), **About description** with concrete capabilities, Releases with `.mcpb` | Per repo — see [GitHub discovery](#github-discovery-stars-vs-search) |
 | **mcp-central-docs** | `projects/{repo}/README.md` project page | Fleet mirror |
 
 Only after the stack is honest and tested should you post outward.
@@ -160,7 +160,44 @@ Technical posts age well; “🚀 AI MCP” tweets do not.
 - [ ] Includes **one concrete example** (file type, command, screenshot)
 - [ ] Offers feedback channel (GitHub issue), not “DM me for beta”
 - [ ] If AI-adjacent: say **“MCP / Claude Desktop / Cursor”** plainly — don’t hide the agent angle
+- [ ] Do **not** AI-self-promote the *post*: no “written by AI”, “no human involved”, “I am an AI posting this” — that puts off skeptics; name the product, not the authorship theater
 - [ ] If community is AI-skeptic: lead with **automation/scripting** angle, mention MCP second
+- [ ] **Allowed and encouraged:** architecture sketch, tool/capability list, honest strong points, **mild** competition analysis (factual diffs vs other MCPs — headless vs GUI-addon, portmanteau vs N tools, Windows fleet vs cloud-only). Not dunking, not “we’re #1”
+
+---
+
+## GitHub discovery (stars vs search)
+
+Generic queries like `blender-mcp` are **star-sorted name collisions**. A 15k-star repo will bury a median-2 fleet repo on page 1 no matter how good the README is. That is not a tone failure — it is ranking math.
+
+| Lever | Helps when | Limits |
+|-------|------------|--------|
+| **About description** (repo sidebar) | Keyword match + hover text in search/lists; first impression when someone *does* land | Does not outrank 15k stars on the same short name |
+| **Topics** | Filters (`mcp` + `blender` + `fastmcp`); related-repo graphs | Crowded topics still star-skewed |
+| **README H1 + first 2 lines** | Social cards, Google, Glama crawlers | Same collision problem for exact-name search |
+| **Releases + `.mcpb`** | “Recently updated” / package seekers | Not a star substitute |
+| **Long-tail queries** | `blender mcp headless grease pencil`, `mixxx mcp stems` — you often **do** make page 1 | Need description/topics/README to include those phrases honestly |
+
+**Description field formula** (≤350 chars, no hype):
+
+```
+{Host} automation via FastMCP — {N} tools. {2–3 concrete capabilities}. {Headless|bridge|webapp}. For Cursor / Claude Desktop.
+```
+
+**Worked examples (applied 2026-07-26):**
+
+| Repo | About lead |
+|------|------------|
+| `blender-mcp` | Headless Blender… batch mesh/VSE/Grease Pencil; optional live bridge |
+| `mixx-dj-mcp` | Mixxx… stems (Demucs), video decks… pair with mixxxxx |
+| `gimp-mcp` | Batch raster… without GUI tour |
+| `kicad-mcp` | Headless Gerber/export + agent inspect; not official plugin |
+
+**Topics (pick 8–12):** always `mcp`, `fastmcp`, `mcp-server`; always host tag (`blender`, `kicad`, …); add capability tags seekers actually type (`headless`, `vrm`, `gaussian-splatting`, …). Avoid vanity-only tags.
+
+**Compete on differentiation, not on the short name:** in posts and README, lead with the *distinct* job (“headless Blender batch + VSE”, “video Mixxx fork + Demucs stems”) so obscure/long-tail search and wrappee discussions find you when exact `*-mcp` is hopeless.
+
+**Execution plan (waves, tracking table):** [projects/VISIBILITY_OPTIMIZATION_PLAN.md](../projects/VISIBILITY_OPTIMIZATION_PLAN.md)
 
 ---
 

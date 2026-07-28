@@ -13,11 +13,11 @@
 - **Host**: Windows 11, Goliath (AMD Ryzen 9 5900X, RTX 4090 24GB, 64GB RAM)
 - **Repos root**: `D:\Dev\repos\`
 - **Fleet hub (mcd)**: `D:\Dev\repos\mcp-central-docs\`
-- **Python**: `C:\Users\sandr\AppData\Local\Programs\Python\Python313\python.exe`
-- **uv**: `C:\Users\sandr\.local\bin\uv.exe` — ALWAYS use full path, never naked `uv`
+- **Python**: `%USERPROFILE%\AppData\Local\Programs\Python\Python313\python.exe`
+- **uv**: `%USERPROFILE%\.local\bin\uv.exe` — ALWAYS use full path, never naked `uv`
 - **Run Python**: `uv run python` — NEVER naked `python` or `python3`
 - **Node**: available via scoop; use `npx` for one-offs
-- **bun**: `C:\Users\sandr\.bun\bin\bun.exe` — JS package manager, fleet standard for webapps
+- **bun**: `%USERPROFILE%\.bun\bin\bun.exe` — JS package manager, fleet standard for webapps
 - **Shell**: PowerShell 7 (`pwsh`) — never `cmd`, never `bash` for Windows paths
 - **Git**: `C:\Program Files\Git\cmd\git.exe` — NOT the scoop shim (swallows stdout)
 
@@ -97,6 +97,66 @@ dir     # use Get-ChildItem
 
 ---
 
+## 4.1 New Repo Gate (HARD RULE)
+
+**North star — assfix-zero:** The initial build must be so complete that the first
+`assfix <repo>` / `assess and fix <repo>` finds **nothing CRITICAL or HIGH** to criticize.
+Assfix is for drift later — not a cleanup pass for a runt scaffold.
+Full target map: **`standards/NEW_REPO_BUILD_COMPLETE.md`**.
+
+When asked to create, scaffold, or build a new MCP server repo from scratch:
+
+**PAUSE. Do NOT write any files yet.** Read ALL of these FIRST:
+
+| # | Standard | Why |
+|---|----------|-----|
+| 0 | `standards/NEW_REPO_BUILD_COMPLETE.md` | **Assfix-zero** — build so first assess finds nothing CRITICAL/HIGH |
+| 1 | `standards/AGENT_PROTOCOLS.md` | Full protocol tree |
+| 2 | `standards/JUNE_2026_STANDARDS_BAR.md` | Version floor, retired tools |
+| 3 | `standards/SOTA_REQUIREMENTS.md` | FastMCP 3.4.4 mandatory features |
+| 4 | `standards/TOOL_DESIGN_STANDARDS.md` | Portmanteau, annotations, Prefab, pagination |
+| 5 | `standards/README_STRUCTURE.md` | README, INSTALL, **docs/** stack including **ONBOARDING** (default — wrappees need install) |
+| 6 | `standards/NAKED_PC_INSTALL_STANDARD.md` | start.ps1 Require-Command, winget |
+| 6b | `standards/START_SCRIPT_STANDARD.md` | `start.ps1` + **`start.bat`** + **`mcp-central-docs/starts/{repo}-start.bat`** (Sandra QoL) |
+| 6c | `standards/ONBOARDING_STANDARD.md` | **Default gate:** first-timer wrappee/account flow + **big red under-hero CTA** + **MOCK-until-onboarded** UI |
+| 7 | `standards/WEBAPP_SOTA_STANDARDS.md` | AppLayout + **catch-them-all** pages + Local LLM + data-testid |
+| 8 | `standards/BUN_STANDARDS.md` | bun / npm lockfile; Biome for JS/TS |
+| 9 | `standards/PACKAGING_STANDARDS.md` | Two-track (MCPB + Tauri) |
+| 10 | `standards/MCPB_PACKAGING_STANDARDS.md` | .mcpb layout, manifest, prompts 3-4-100, **`.mcpbignore` mandatory** |
+| 10b | `standards/GITIGNORE_STANDARDS.md` | **`.gitignore` BEFORE first `git add`** — no node_modules, target/, .venv, data DBs |
+| 11 | `standards/rules/tauri_nsis_building.md` | Tauri 2.0, embedded backend, NSIS, CORS |
+| 12 | `standards/rules/chat_skills_prefab_standard.md` | Chat page, personalities, memory |
+| 13 | `fastmcp/3.4-features.md` | Lifespan, prompts, resources, sampling |
+| 14 | `standards/GITHUB_ACTIONS_NO_PRIVATE_CI.md` | Private: Actions disabled; still ship Windows CI file + `just ci` |
+| 15 | `standards/TOOL_DESIGN_STANDARDS.md` | **No "planned" stubs** — every advertised op must work (dry-run OK) |
+| 16 | `standards/TESTING_GUIDE.md` | **No undeclared mocks** — fixtures/dry-run/fakes must be named and documented |
+
+Report: "Read N standards. Building to assfix-zero spec." Build the complete repo in one pass.
+Do **not** leave CRITICAL/HIGH gaps for a later assfix.
+
+**Ship checklist (HARD — before calling done):**
+
+0. **Assfix-zero self-check** — Mentally (or actually) run `patterns/repo-assess-and-fix.md` Phase 1 against the new tree. Zero CRITICAL, zero HIGH. Residual MEDIUM/LOW only with explicit rationale. See `NEW_REPO_BUILD_COMPLETE.md`.
+1. **Tools fully implemented** — README must not say "planned". Portmanteau ops return real behavior (dry-run short-circuit OK). No `planned: true` stubs.
+2. **Webhooks installed** — inbound receive endpoint + secret env + list/ops (or domain-native webhook CRUD when the host API has them). Document in TOOLS.md.
+3. **docs/ stack** — `CONFIGURATION.md`, `DEVELOPMENT.md`, `TOOLS.md`, `TROUBLESHOOTING.md` (+ docs/README index).
+4. **Lint green** — `ruff check` + `ruff format --check` + webapp `biome check` + `tsc --noEmit`.
+5. **CI** — `.github/workflows/ci.yml` Windows-only lightweight (ruff, biome, pytest, tsc). Private: Actions stay account-disabled; agents run `just ci` locally and it must pass.
+6. **Webapp catch-them-all** — Dashboard hero+KPIs, Inbox, Tools, Skills, Chat, Settings LLM, Help page, Logs, domain pages.
+7. **No undeclared mocks** — Test doubles, dry-run paths, and empty-without-credentials API responses MUST be declared. Undeclared fake KPIs that look live fail FakeFind. **Allowed (declared):** MOCK-badged sample UI until onboarding succeeds (`ONBOARDING_STANDARD.md` § Mock-until-onboarded).
+8. **Onboarding (DEFAULT — nearly always)** — Assume onboarding is required. Wrappees must be installed/runnable for the user to get joy (**even `notepadpp-mcp` needs Notepad++**; same for Blender, Unity, Mastodon, World Labs, Plex, …). Ship all of:
+   - `docs/ONBOARDING.md` (what for, money/CC, pitfalls, sanity check)
+   - INSTALL link to ONBOARDING near the top
+   - Webapp: **big red onboarding button under Dashboard hero** (`data-testid="onboarding-cue"`)
+   - Webapp: **MOCK-until-onboarded** sample KPIs/lists (visible **MOCK** badges; fake names e.g. Joe Mocky / Sandra Mockinger) that **clear after successful onboarding**
+   - Health/probe signal that flips “configured” when the wrappee/account is ready  
+   **N/A only (rare):** no wrappee **and** no online account necessary — write `Onboarding: N/A` + one-line rationale in `docs/DEVELOPMENT.md`. If either a wrappee or an online account exists, onboarding is mandatory. Missing = **gate fail**.
+9. **Good `.gitignore` (HARD)** — Exists **before** first `git add`. Must ignore at least: `node_modules/` / `**/node_modules/`, `.venv/`, `target/` / `**/target/` (Tauri + rust-analyzer), `webapp/dist/`, `src-tauri/target/`, `src-tauri/binaries/`, **`mcpb/src/`** (MCPB pack staging — exact copy of `src/`, never commit), `data/` or `*.sqlite3` / `*.db*`, `.env` (keep `.env.example`), `.coverage`, `*.mcpb`, **`*.bak` and `*.bak.*`** (timestamped sneak-in specialist backups accumulate — both patterns required). Copy from `GITIGNORE_STANDARDS.md` §1b. Spot-check `git status` for `node_modules` / `target` / `mcpb/src` / `*.bak*` before commit. Committing those = **gate fail**.
+10. **Good `.mcpbignore` (HARD)** — Exists on every MCPB-packaged repo. Must exclude `.venv/`, `node_modules/`, `webapp/`, `src-tauri/`, `tests/`, `data/`, `target/`, build artifacts, **`*.bak` and `*.bak.*`**. Pack script **MUST wipe+recopy** `src/` → `mcpb/src/` immediately before `mcpb pack` (gitignore alone does not stop a stale local twin from shipping). See `MCPB_PACKAGING_STANDARDS.md` § Fresh copy before pack. Packing `.venv` or `node_modules` into `.mcpb` = **gate fail**.
+11. **MCPB prompts 3-4-100 (HARD)** — Not a runt: `assets/prompts/system.md` **≥ 3,000 words**, `assets/prompts/user.md` **≥ 4,000 words**, `assets/prompts/examples.json` **≥ 100** tool-call example objects. Verify with word-count + JSON length before pack (see `MCPB_PACKAGING_STANDARDS.md` §2.3b). Stub/TODO prompts = **gate fail**.
+
+**Webapp ship check:** Do **not** ship a domain-only runt. See `WEBAPP_SOTA_STANDARDS.md` §III.
+
 ## 5. Git / GitHub
 
 **ALWAYS use `gitops` MCP tools. NEVER use fileops or winops for git.**
@@ -119,14 +179,15 @@ All new webapps MUST use (see `WEBAPP_SOTA_STANDARDS.md` for full spec):
 - React + Vite + TypeScript
 - TailwindCSS dark theme (Slate-950 / Zinc-950 backgrounds)
 - Lucide React icons
-- Zustand state management
+- Zustand state management (`store/llm.ts` + `lib/provider.ts` for LLM probe)
 - Framer Motion for animations
 - Backend: Starlette (default) or FastAPI (when REST surface warrants it)
 - Adjacent port pairs: backend on N, frontend on N+1 (e.g. 10762/10763)
 - `start.ps1` MUST clear port before binding; `start.bat` is the double-click wrapper
+- **Catch-them-all pages** (not optional): Dashboard hero+KPIs, Inbox, Tools, Skills, Chat, Settings (LLM providers), Help page, Logs — plus domain pages
 
 No white/light backgrounds. No Bootstrap. No jQuery. No hardcoded tool lists — always
-discover dynamically from the MCP server.
+discover dynamically from the MCP server. A thin "Outbox + stub Settings" webapp fails the gate.
 
 ---
 
@@ -197,5 +258,5 @@ Never use bash_tool for Windows paths (C:\, D:\) — bash_tool runs in a Linux c
 | PowerShell patterns | `mcp-central-docs\standards\POWERSHELL_STANDARDS.md` |
 | Backend framework choice | `mcp-central-docs\standards\STARLETTE_NO_PYDANTIC_STANDARD.md` |
 | Known bugs | `mcp-central-docs\troubleshooting\BUGS_DEPOT.md` |
-| Claude Desktop config | `C:\Users\sandr\AppData\Roaming\Claude\claude_desktop_config.json` |
-| MCP server logs | `C:\Users\sandr\AppData\Roaming\Claude\logs\mcp-server-{name}.log` (encoding: latin-1) |
+| Claude Desktop config | `%USERPROFILE%\AppData\Roaming\Claude\claude_desktop_config.json` |
+| MCP server logs | `%USERPROFILE%\AppData\Roaming\Claude\logs\mcp-server-{name}.log` (encoding: latin-1) |

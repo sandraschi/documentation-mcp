@@ -85,7 +85,7 @@ export function ProjectPortfolio() {
     }
 
     return (
-        <div className="flex-1 flex flex-col min-h-0 container max-w-7xl mx-auto py-8 px-6">
+        <div data-testid="project-portfolio-page" className="flex-1 flex flex-col min-h-0 container max-w-7xl mx-auto py-8 px-6">
             <div className="mb-10 space-y-4 shrink-0">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div className="space-y-1">

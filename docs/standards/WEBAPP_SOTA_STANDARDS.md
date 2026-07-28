@@ -62,14 +62,38 @@ To prevent "runts" (low-quality generated apps), EVERY webapp MUST use:
 
 Every SOTA WebApp MUST implement a dynamic discovery layer. It is forbidden to "hardcode" tool lists.
 
+### Catch-them-all gate (HARD — new repos)
+
+A webapp that only ships domain pages (e.g. Outbox + Settings stub) is a **runt** and fails the new-repo gate. Before calling a scaffold "done", verify **all** of the following exist as routes with real UI (not empty placeholders):
+
+| # | Page / surface | Min bar | Backend |
+|---|----------------|---------|---------|
+| 1 | **Dashboard** | Hero (brand + one headline + one CTA) + KPI stat cards | `GET /api/dashboard` or equivalent stats |
+| 2 | **Inbox** (or domain inbox) | List + empty state | domain notifications/list API |
+| 3 | **Tools** | Dynamic tool list; portmanteau drill-down | `GET /api/tools` |
+| 4 | **Skills** | List + render `SKILL.md` | `GET /api/skills` |
+| 5 | **Chat** | Skill-first, personalities, localStorage history | local LLM and/or `POST /api/llm/chat` |
+| 6 | **Settings** | Backend health + **LLM provider/model** probe (Ollama/LM Studio/vLLM) | `GET /api/health`, `GET /api/llm/providers` |
+| 7 | **Help** | Full **page** (architecture, ports, env, troubleshooting) — Help **modal** alone is not enough | optional |
+| 8 | **Logs** | Logger modal or page (Ctrl+L) | `GET /api/logs` |
+| 9 | Domain pages | Whatever the product needs (Compose, Outbox, …) | as required |
+| 10 | **AI-assisted compose** (when Compose exists) | Assist button → local LLM rewrite | `POST /api/compose/assist` or chat proxy |
+
+**Also mandatory:** retractable AppLayout sidebar + topbar health dot; `data-testid` on primary controls; Zustand LLM store (`lib/provider.ts` + `store/llm.ts`).
+
+**Apps Hub** remains mandatory when the fleet discovery helper is available; otherwise ship a stub route labeled Experimental and file a follow-up — do **not** drop Chat/Settings/Help to "finish faster."
+
 | Page | Requirement | Depth |
 | :--- | :--- | :--- |
-| **Dashboard** | Mandatory | Live stats, health, and port reservation status. |
+| **Dashboard** | Mandatory | Hero + live KPIs, health, dry-run/config badges. |
 | **Apps Hub** | Mandatory | **Dynamic Fleet Discovery**: Must scan for other active MCP webapps (via `fleet_discovery.py` or equivalent) to populate cards. |
 | **Tools Hub** | Mandatory | **Dynamic Analysis**: Must elicit tools from the host server. |
 | **Skill** | Mandatory (when server exposes skills) | When the MCP server exposes FastMCP 3.1 skills (Anthropic-style `SKILL.md` as resources), list and display skill content so users and clients know how to use the server. See [§ V. Skill Page](#v-skill-page-fastmcp-31). |
-| **LLM Chat** | Mandatory | Context-aware chat with direct server tool-calling. |
-| **Status/Audit** | Mandatory | JSON-RPC log viewer and system resources. |
+| **LLM Chat** | Mandatory | Context-aware chat; skill-first; local provider. See `rules/chat_skills_prefab_standard.md`. |
+| **Settings** | Mandatory | Health + Local Intelligence provider/model UI (§ VI). |
+| **Help** | Mandatory | Dedicated Help **page** plus optional Help modal. |
+| **Inbox** | Mandatory when the product has inbound events | Notifications / queue / messages UI. |
+| **Status/Audit** | Mandatory | JSON-RPC / ring log viewer (modal OK). |
 
 ---
 
@@ -120,33 +144,95 @@ When the MCP server exposes **skills** (e.g. via FastMCP 3.1 `SkillsDirectoryPro
 
 ## VI. Local Intelligence Integration (MANDATORY)
 
-To leverage the user's existing compute investment (RTX 4090/3090), every SOTA WebApp MUST implement **Local Intelligence Auto-Discovery**.
+To leverage the user's existing compute investment (RTX 4090/3090), every SOTA WebApp MUST implement **Local Intelligence Auto-Discovery** with a switchable provider UI and model selection populated from the detected engine.
 
-### 1. The "Glom On" Pattern
-- **Detection**: The webapp must scan standard local ports to detect running inference engines:
-  - `11434` (Ollama)
-  - `1234` (LM Studio)
-  - `8000` (vLLM/Compat)
-- **Zero-Config Binding**: If a local LLM is detected, the webapp MUST automatically configure itself to use it for semantic operations (summarization, tagging, analysis) without forcing the user to manually enter API keys or URLs.
-- **Graceful Fallback**: If no local LLM is found, features requiring intelligence should disable gracefully.
+### 1. Provider Detection ("Glom On")
 
-### 2. The "GPU Opportunity" Pattern
+The webapp MUST probe these standard ports on mount and display results in the Settings UI:
+
+| Provider | Port | Probe endpoint | Timeout |
+|----------|------|----------------|---------|
+| **Ollama** | `11434` | `GET /api/tags` | 3s |
+| **LM Studio** | `1234` | `GET /v1/models` | 3s |
+| **vLLM** | `8000` | `GET /v1/models` | 3s |
+
+Each provider is shown with a status indicator (Detected / Not found / Probing...).
+
+**UI requirements:**
+- Show provider name, port, and a colored status icon:
+  - Green check + "Detected" when the probe succeeds
+  - Gray "Not found" when the probe fails or times out
+  - Animated pulse while probing
+- If NO provider is detected, show a non-intrusive amber prompt: *"Install Ollama or LM Studio to enable AI features."*
+
+### 2. Provider Selection (Switchable)
+
+The user MUST be able to select which detected provider to use as the active inference engine:
+
+- **Provider dropdown**: `<select>` element populated with all detected providers. Label: "Provider". `data-testid="llm-provider-select"`.
+- **Default selection**: The first detected provider in priority order (Ollama > LM Studio > vLLM).
+- **Persistence**: Selected provider is saved to `localStorage` (key: `llm_provider`) and restored on page load.
+- **No detected provider**: Dropdown shows "No local LLM detected" as disabled option.
+
+### 3. Model Discovery & Selection
+
+When a provider is selected, the webapp MUST fetch the available models from that provider and populate a model dropdown:
+
+- **Model fetch endpoint**:
+  - Ollama: `GET {base}:11434/api/tags` → extract `models[].name`
+  - LM Studio: `GET {base}:1234/v1/models` → extract `data[].id`
+  - vLLM: `GET {base}:8000/v1/models` → extract `data[].id`
+- **Model dropdown**: `<select>` element populated with model names. Label: "Model". `data-testid="llm-model-select"`.
+- **Default selection**: The first model in the list. If a model is already saved in `localStorage` (key: `llm_model`) and still exists in the fetched list, restore that one.
+- **Persistence**: Selected model is saved to `localStorage` and restored on page load.
+- **Re-fetch on provider change**: When the user switches providers, re-fetch the model list and reset the selection.
+
+### 4. Data Flow
+
+```
+onMount → probe all providers (parallel, 3s timeout)
+       → set detected provider list
+       → if saved provider is still detected, select it; else select first detected
+       → fetch models for selected provider
+       → if saved model exists in list, restore it; else select first model
+
+onProviderChange → save to localStorage
+                → fetch models for new provider
+                → reset model selection to first
+
+onModelChange → save to localStorage
+```
+
+### 5. The "GPU Opportunity" Pattern
+
 - **Hardware Awareness**: If the webapp detects a high-performance GPU (NVIDIA RTX 3060+) but *no* running local LLM:
   - **Prompt**: It MUST display a non-intrusive suggestion: *"High-performance GPU detected. Install Ollama/LM Studio to unlock AI features for free."*
   - **Education**: Link to `mcp-central-docs/standards/LOCAL_LLM_STANDARDS.md` or provide a brief "Getting Started" guide to save the user cloud API costs.
 
-### 3. Semantic Features
-- **Usage**: Use the discovered local LLM for:
-  - Content summaries.
-  - Smart filtering/sorting.
-  - Natural language querying of the dataset.
-  - Context-aware chat with direct server tool-calling.
+### 6. Chat Integration
 
-### 4. Hybrid Intelligence Strategy (Cloud + Local)
-- **Mandatory Settings**: The "AI Settings" page MUST explicitly support configuration for:
-  - **Local**: Ollama/LM Studio (Auto-Discovered)
-  - **Cloud**: OpenAI, Anthropic, Google/Gemini
-- **Routing**: The webapp should intelligently route requests (e.g., Local for bulk summarization, Cloud for complex reasoning) or allow user preference overrides.
+The selected provider + model pair is used as the chat completion backend for the Chat page (see [Chat, Skills, and Prefab UI Standard](rules/chat_skills_prefab_standard.md)):
+
+- Chat sends requests to `{provider_base}:{port}/v1/chat/completions` with the selected model
+- If no provider is detected, the Chat page shows a disabled state: "No local LLM detected. Start Ollama or LM Studio."
+- The Chat page MUST include a provider/model status indicator in the controls bar
+
+### 7. Settings UI Data Contract
+
+```typescript
+interface SettingsLLMSection {
+  // Detection results
+  detectedProviders: Array<{ name: string; port: number; base: string }>;
+  providerStatus: Record<string, "probing" | "detected" | "not_found">;
+
+  // Selection (persisted to localStorage)
+  selectedProvider: string;   // key: "llm_provider"
+  selectedModel: string;       // key: "llm_model"
+
+  // Model list (fetched from selected provider)
+  availableModels: string[];
+}
+```
 
 ---
 

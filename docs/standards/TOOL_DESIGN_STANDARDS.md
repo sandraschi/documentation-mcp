@@ -8,6 +8,18 @@ To prevent "Tool Explosion" while maintaining discoverability, the fleet standar
 - **Rationale**: Portmanteaus stay within IDE/registry tool limits (Cursor 100-tool cap) while keeping related operations grouped.
 - **Discovery**: The operation enum serves as a built-in catalog — agents see all valid operations in the schema.
 
+### 1.0 No "planned" stubs (HARD — new-repo gate)
+
+Every operation listed in the portmanteau schema, README, or `docs/TOOLS.md` MUST be implemented before the repo is called done.
+
+| Forbidden | Required |
+|-----------|----------|
+| `planned: true` / "stubbed in v0.x" returns | Real behavior for every advertised op |
+| README section titled "MCP tools (planned)" | Document **implemented** ops only |
+| Empty `NotImplementedError` for listed ops | Dry-run short-circuit is OK when credentials absent |
+
+Webhooks: if the product has inbound events or the host API supports webhooks, ship receive/list (and create/delete when applicable) in the same pass — do not defer to "v0.2".
+
 ### 1.1 The Transform Rule
 For existing legacy portmanteaus, use **FastMCP Transforms** to project individual operations as atomic tools to the host. This provides the best of both worlds: centralized logic and transparent discovery.
 

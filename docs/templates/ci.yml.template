@@ -1,109 +1,64 @@
-# Standard CI/CD Workflow Template
-# For MCP servers and Python projects
-# Uses: uv, ruff, pytest
-# Version: 1.0 (2025-10-21)
+# Standard CI — Windows-only lightweight (fleet 2026)
 
-name: CI/CD
+# Copy to: {repo}/.github/workflows/ci.yml
+# Private repos: file is mandatory; Actions stay disabled at account level (no billing).
+# Public repos: this job runs on push/PR.
+# Agents: always pass `just ci` locally before calling done.
+
+name: CI
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
+  workflow_dispatch:
 
 jobs:
-  lint:
-    name: Lint with Ruff
-    runs-on: ubuntu-latest
-    
+  check:
+    name: Lint & Test (Windows)
+    runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
+      - uses: actions/checkout@v4
+
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: "latest"
-      
+          enable-cache: true
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      
-      - name: Install dependencies
-        run: uv sync --dev
-      
-      - name: Run ruff linting
-        run: uv run ruff check .
-        continue-on-error: true
-      
-      - name: Run ruff format check
-        run: uv run ruff format --check .
-        continue-on-error: true
+          python-version: "3.12"
 
-  test:
-    name: Test with pytest
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          version: "latest"
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      
-      - name: Install dependencies
-        run: uv sync --dev
-      
-      - name: Verify pytest installation
-        run: uv run python -m pytest --version
-      
-      - name: Run tests with coverage
-        run: |
-          uv run python -m pytest \
-            --cov=src \
-            --cov-report=xml \
-            --cov-report=term-missing \
-            -v \
-            --maxfail=10 \
-            --tb=short || echo "Tests completed with warnings"
-        continue-on-error: true
-      
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        if: always()
-        with:
-          file: ./coverage.xml
-          fail_ci_if_error: false
-        continue-on-error: true
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: webapp/package-lock.json
 
-  build:
-    name: Build package
-    runs-on: ubuntu-latest
-    needs: [lint, test]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-        with:
-          version: "latest"
-      
-      - name: Build package
-        run: uv build
-      
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: python-package
-          path: dist/*
+      - name: Install Python dependencies
+        run: uv sync --extra dev
 
+      - name: Ruff check
+        run: uv run ruff check src tests
+
+      - name: Ruff format check
+        run: uv run ruff format --check src tests
+
+      - name: Pytest
+        run: uv run python -m pytest -q --tb=short
+
+      - name: Install web dependencies
+        run: npm ci
+        working-directory: webapp
+
+      - name: Typecheck
+        run: npm run check
+        working-directory: webapp
+
+      - name: Biome check
+        run: npm run biome:ci
+        working-directory: webapp

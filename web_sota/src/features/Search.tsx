@@ -158,7 +158,7 @@ export function SearchView() {
     }
 
     return (
-        <div className="flex-1 flex flex-col min-h-0 container max-w-6xl mx-auto py-12 px-6 overflow-y-auto">
+        <div data-testid="search-page" className="flex-1 flex flex-col min-h-0 container max-w-6xl mx-auto py-12 px-6 overflow-y-auto">
             <div className="mb-12 text-center space-y-4">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 mb-2">
                     <Database className="w-3.5 h-3.5 text-primary" />
@@ -194,7 +194,7 @@ export function SearchView() {
                     <div className="flex flex-col">
                         <div className="flex items-center p-2 pl-4">
                             <Select value={source} onValueChange={(val: any) => setSource(val)}>
-                                <SelectTrigger className="w-[140px] border-none shadow-none focus:ring-0 text-muted-foreground font-semibold uppercase tracking-wider text-xs bg-muted/30">
+                                <SelectTrigger className="w-[140px] border-none shadow-none focus:ring-0 text-muted-foreground font-semibold uppercase tracking-wider text-sm bg-muted/30">
                                     <SelectValue placeholder="Source" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -209,6 +209,7 @@ export function SearchView() {
 
                             <Search className="w-6 h-6 text-muted-foreground mr-2" />
                             <Input
+                                data-testid="search-input"
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                                 placeholder={`Search ${source.toUpperCase()} organically...`}
@@ -225,7 +226,7 @@ export function SearchView() {
                                     onChange={(e) => setIsNeural(e.target.checked)}
                                     className="w-4 h-4 accent-primary"
                                 />
-                                <label htmlFor="neural-mode" className="text-xs font-semibold uppercase tracking-widest text-muted-foreground cursor-pointer select-none">
+                                <label htmlFor="neural-mode" className="text-sm font-semibold uppercase tracking-widest text-muted-foreground cursor-pointer select-none">
                                     Autonomous Synthesis & Analysis
                                 </label>
                             </div>
@@ -256,7 +257,7 @@ export function SearchView() {
                         <p className="text-lg leading-relaxed text-foreground/90 font-medium">
                             {answer}
                         </p>
-                        <div className="mt-4 pt-4 border-t border-primary/20 flex gap-4 text-xs text-muted-foreground">
+                        <div className="mt-4 pt-4 border-t border-primary/20 flex gap-4 text-sm text-muted-foreground">
                             <span>Context Chunks: {results.length}</span>
                             <span>Target Engine: {source.toUpperCase()}</span>
                         </div>
@@ -314,7 +315,7 @@ export function SearchView() {
                         </CardContent>
                         {source !== 'plex' && (
                             <CardFooter className="pt-0 pb-4 border-t border-border/50 mt-4 bg-muted/10 h-12">
-                                <div className="w-full flex items-center justify-between text-xs font-semibold text-muted-foreground group-hover:text-primary transition-colors mt-4">
+                                <div className="w-full flex items-center justify-between text-sm font-semibold text-muted-foreground group-hover:text-primary transition-colors mt-4">
                                     <span>{source === 'calibre' ? 'Read Metadata' : 'View Documentation'}</span>
                                     <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                                 </div>

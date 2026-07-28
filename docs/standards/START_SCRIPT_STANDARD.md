@@ -114,6 +114,19 @@ powershell -ExecutionPolicy Bypass -File "%~dp0start.ps1" %*
 
 This is the double-click entry point for users who don't know about PowerShell.
 
+### Fleet launcher in `mcp-central-docs/starts/` (MANDATORY for new webapp MCP repos)
+
+Sandra QoL: every new `*-mcp` with a webapp MUST also get a real `.bat` under
+[`mcp-central-docs/starts/`](../starts/) (e.g. `mastodon-mcp-start.bat`) that `cd`s into the
+repo (or `webapp/` / `web_sota/` as appropriate) and runs `start.ps1`.
+
+Rules:
+
+- Prefer a **real `.bat` file**, not a symlink (so `%~dp0` / relative paths stay sane for the Starts UI).
+- Name: `{repo}-start.bat` or `{short}-start.bat` matching the table in [`starts/README.md`](../starts/README.md).
+- Register the row in `starts/README.md` (ports + path).
+- Do this in the **same session** as scaffolding the repo — not a follow-up “sometime”.
+
 ---
 
 ## Parameter Contract

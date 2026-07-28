@@ -56,7 +56,7 @@ export function SemanticSearchView() {
     }
 
     return (
-        <div className="container max-w-4xl mx-auto py-8 px-6">
+        <div data-testid="semantic-search-page" className="container max-w-4xl mx-auto py-8 px-6">
             <div className="mb-8 text-center space-y-2">
                 <Badge variant="outline" className="text-[10px] uppercase tracking-wider">Docs only</Badge>
                 <h1 className="text-3xl font-bold tracking-tight">Semantic Search</h1>
@@ -115,7 +115,7 @@ export function SemanticSearchView() {
                             <p className="text-sm text-muted-foreground line-clamp-3">{r.excerpt || "No excerpt."}</p>
                         </CardContent>
                         <CardFooter className="pt-0 pb-4 border-t mt-4">
-                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                            <span className="text-sm text-muted-foreground flex items-center gap-1">
                                 <FileText className="w-3 h-3" /> View in Documentation
                                 <ArrowRight className="w-3 h-3" />
                             </span>

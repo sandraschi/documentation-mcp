@@ -39,8 +39,8 @@ export function Admin() {
 
   const uptime = health?.uptime_seconds ? `${Math.floor(health.uptime_seconds / 60)}m ${health.uptime_seconds % 60}s` : "N/A"
 
-  return (
-    <div className="flex-1 flex flex-col min-h-0 container max-w-5xl mx-auto py-8 px-6 space-y-6 overflow-y-auto">
+    return (
+        <div data-testid="admin-page" className="flex-1 flex flex-col min-h-0 container max-w-5xl mx-auto py-8 px-6 space-y-6 overflow-y-auto">
       <div className="flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
           <Activity className="w-8 h-8 text-primary" />
@@ -56,22 +56,22 @@ export function Admin() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 shrink-0">
         <Card data-testid="kpi-server">
-          <CardHeader className="pb-2"><CardTitle className="text-xs font-medium text-muted-foreground">Server</CardTitle></CardHeader>
-          <CardContent><div className="text-2xl font-bold">{health?.server || "N/A"}</div><p className="text-xs text-muted-foreground">v{health?.version || "?"}</p></CardContent>
+          <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Server</CardTitle></CardHeader>
+          <CardContent><div className="text-2xl font-bold">{health?.server || "N/A"}</div><p className="text-sm text-muted-foreground">v{health?.version || "?"}</p></CardContent>
         </Card>
         <Card data-testid="kpi-status">
-          <CardHeader className="pb-2"><CardTitle className="text-xs font-medium text-muted-foreground">Status</CardTitle></CardHeader>
-          <CardContent><div className="text-2xl font-bold text-emerald-500">{health?.status || "?"}</div><p className="text-xs text-muted-foreground">Uptime: {uptime}</p></CardContent>
+          <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Status</CardTitle></CardHeader>
+          <CardContent><div className="text-2xl font-bold text-emerald-500">{health?.status || "?"}</div><p className="text-sm text-muted-foreground">Uptime: {uptime}</p></CardContent>
         </Card>
         <Card data-testid="kpi-tools">
-          <CardHeader className="pb-2"><CardTitle className="text-xs font-medium text-muted-foreground">Tools</CardTitle></CardHeader>
-          <CardContent><div className="text-2xl font-bold">{tools}</div><p className="text-xs text-muted-foreground">Registered MCP tools</p></CardContent>
+          <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Tools</CardTitle></CardHeader>
+          <CardContent><div className="text-2xl font-bold">{tools}</div><p className="text-sm text-muted-foreground">Registered MCP tools</p></CardContent>
         </Card>
         <Card data-testid="kpi-providers">
-          <CardHeader className="pb-2"><CardTitle className="text-xs font-medium text-muted-foreground">Vector DB</CardTitle></CardHeader>
+          <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Vector DB</CardTitle></CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{health?.providers?.vector_db?.chunks || 0}</div>
-            <p className="text-xs text-muted-foreground">Chunks · {health?.providers?.vector_db?.sources || 0} sources</p>
+            <p className="text-sm text-muted-foreground">Chunks · {health?.providers?.vector_db?.sources || 0} sources</p>
           </CardContent>
         </Card>
       </div>
@@ -86,7 +86,7 @@ export function Admin() {
               {Object.entries(health.providers).map(([name, info]: [string, any]) => (
                 <div key={name} className="flex items-center justify-between border-b pb-2 last:border-0">
                   <span className="text-sm font-medium capitalize">{name.replace("_", " ")}</span>
-                  <span className={`text-xs font-mono ${info?.status === "ok" ? "text-emerald-500" : "text-amber-500"}`}>
+                  <span className={`text-sm font-mono ${info?.status === "ok" ? "text-emerald-500" : "text-amber-500"}`}>
                     {info?.status || "unknown"}
                   </span>
                 </div>

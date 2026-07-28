@@ -69,7 +69,7 @@ export function Memory() {
     }
 
     return (
-        <div className="flex-1 flex flex-col min-h-0 container max-w-5xl mx-auto py-8 px-6 space-y-8">
+        <div data-testid="memory-page" className="flex-1 flex flex-col min-h-0 container max-w-5xl mx-auto py-8 px-6 space-y-8">
             <div className="space-y-2 shrink-0">
                 <div className="flex items-center gap-3">
                     <Database className="w-8 h-8 text-primary" />
@@ -82,7 +82,7 @@ export function Memory() {
             </div>
 
             <div className="flex-1 overflow-y-auto min-h-0 space-y-4">
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                     Namespaces isolate data between use cases. Store content under a namespace,
                     then recall it later with a semantic query. Compaction reports show per-namespace stats.
                 </p>
@@ -90,7 +90,7 @@ export function Memory() {
                 <Card className="flex flex-col border-white/10 shadow-xl overflow-hidden">
                     <CardHeader className="bg-muted/30 border-b shrink-0">
                         <CardTitle className="text-lg">Tools</CardTitle>
-                        <CardDescription className="text-xs">
+                        <CardDescription className="text-sm">
                             Loaded from the backend tool registry. Execute directly from this page.
                         </CardDescription>
                     </CardHeader>
@@ -105,14 +105,14 @@ export function Memory() {
                                     <Card key={tool.name} className="border-white/5 bg-muted/20">
                                         <CardHeader className="pb-3 border-b border-white/5">
                                             <CardTitle className="text-sm font-mono text-primary">{tool.name}</CardTitle>
-                                            <CardDescription className="text-xs leading-relaxed">
+                                            <CardDescription className="text-sm leading-relaxed">
                                                 {tool.description}
                                             </CardDescription>
                                         </CardHeader>
                                         <CardContent className="space-y-4 pt-4">
                                             {getParamFields(tool).map(({ key, type }) => (
                                                 <div key={key} className="space-y-1.5">
-                                                    <Label htmlFor={`mem-${tool.name}-${key}`} className="text-xs font-bold text-muted-foreground/80">
+                                                    <Label htmlFor={`mem-${tool.name}-${key}`} className="text-sm font-bold text-muted-foreground/80">
                                                         {key}
                                                     </Label>
                                                     <Input
@@ -125,7 +125,7 @@ export function Memory() {
                                                                 [tool.name]: { ...(prev[tool.name] ?? {}), [key]: e.target.value },
                                                             }))
                                                         }
-                                                        className="font-mono text-xs h-9 bg-background/50"
+                                                        className="font-mono text-sm h-9 bg-background/50"
                                                     />
                                                 </div>
                                             ))}
@@ -136,7 +136,7 @@ export function Memory() {
                                             )}
                                             <Button
                                                 size="sm"
-                                                className="w-full gap-2 text-xs"
+                                                className="w-full gap-2 text-sm"
                                                 onClick={() => handleExecute(tool.name)}
                                                 disabled={executing === tool.name}
                                             >
@@ -155,7 +155,7 @@ export function Memory() {
                             <div className="rounded-xl border border-dashed border-white/10 bg-muted/10 p-8 text-center space-y-4">
                                 <Database className="w-10 h-10 text-muted-foreground/30 mx-auto" />
                                 <p className="font-bold text-sm">No persistence tools registered</p>
-                                <p className="text-xs text-muted-foreground">
+                                <p className="text-sm text-muted-foreground">
                                     The backend is running but does not expose any persistence tools.
                                     Check that the memory store initialized correctly.
                                 </p>
