@@ -1,31 +1,12 @@
 name: CI
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
 jobs:
-  lint-python:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
-      - run: uv sync --extra dev
-      - run: uv run ruff check src/
-
-  lint-ts:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: web_sota
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: "20" }
-      - run: npm ci
-      - run: npx tsc --noEmit
-      - run: npx biome ci .
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
-      - run: uv sync --extra dev
-      - run: uv run pytest
+  ci:
+    uses: sandraschi/fleet-ci/.github/workflows/hybrid.yml@v1
