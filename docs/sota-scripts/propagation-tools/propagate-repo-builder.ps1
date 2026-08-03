@@ -10,8 +10,8 @@
 
 param([switch]$DryRun = $false)
 
-Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
-Write-Host "â•‘      ðŸ“¦ SOTA Builder - Ready for Use! ðŸ“¦             â•‘" -ForegroundColor Cyan  
+Write-Host "`nâ•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+Write-Host "â•'      ðŸ"¦ SOTA Builder - Ready for Use! ðŸ"¦             â•'" -ForegroundColor Cyan  
 Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Cyan
 
 $sourceScript = Join-Path $PSScriptRoot "..\templates\scripts\new-mcp-server.ps1"
@@ -26,11 +26,11 @@ if ($DryRun) {
     Write-Host "[DRY RUN] Would copy builder to scripts/" -ForegroundColor Yellow
 } else {
     Copy-Item $sourceScript $destScript -Force
-    Write-Host "âœ… Builder available: mcp-central-docs/scripts/new-mcp-server.ps1" -ForegroundColor Green
+    Write-Host "âœ... Builder available: mcp-central-docs/scripts/new-mcp-server.ps1" -ForegroundColor Green
 }
 
 Write-Host ""
-Write-Host "ðŸ“‹ Usage:" -ForegroundColor Cyan
+Write-Host "ðŸ"‹ Usage:" -ForegroundColor Cyan
 Write-Host '  .\scripts\new-mcp-server.ps1 -ServerName "your-server" -Description "What it does"' -ForegroundColor White
 Write-Host ""
 Write-Host "ðŸŽ¯ Creates complete MCP server with:" -ForegroundColor Yellow
@@ -42,5 +42,5 @@ Write-Host "  - SOTA scripts (backup, standards checker)" -ForegroundColor White
 Write-Host "  - Complete documentation" -ForegroundColor White
 Write-Host "  - Modern tooling (ruff, uv, pytest)" -ForegroundColor White
 Write-Host ""
-Write-Host "ðŸ“Š Expected score: 9.8/10 (Excellent) out of the box!" -ForegroundColor Green
+Write-Host "ðŸ"Š Expected score: 9.8/10 (Excellent) out of the box!" -ForegroundColor Green
 

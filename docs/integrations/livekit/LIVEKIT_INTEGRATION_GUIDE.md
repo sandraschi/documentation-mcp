@@ -2,7 +2,7 @@
 
 **Last Updated:** 2026-04-06 (v2.0.0 Teams++)
 **Status:** SOTA Compliance
-**Reference Implementation:** myconf (Teams++) at `d:/Dev/repos/myconf`
+**Reference Implementation:** teleconference-mcp (Teams++) at `D:\Dev\repos\teleconference-mcp`
 
 ---
 
@@ -83,9 +83,9 @@ LiveKit is an open-source **WebRTC SFU (Selective Forwarding Unit)** that provid
 ## LiveKit Server
 
 > **Fleet deployment (Goliath, 2026-08-03):** the fleet SFU runs as a **Windows service**
-> (`LiveKitSFU`, NSSM, native `livekit-server` 1.7.0, config `myconf/livekit.yaml`, auto-start +
+> (`LiveKitSFU`, NSSM, native `livekit-server` 1.7.0, config `teleconference-mcp/livekit.yaml`, auto-start +
 > crash-restart) — **not** Docker. Verify: `Get-Service LiveKitSFU`; logs:
-> `D:\Dev\repos\myconf\logs\livekit.out.log`; reinstall (elevated):
+> `D:\Dev\repos\teleconference-mcp\logs\livekit.out.log`; reinstall (elevated):
 > `D:\Dev\repos\teleoperator-mcp\scripts\install-livekit-service.ps1`.
 > The Docker instructions below remain valid for non-Windows / dev machines.
 
@@ -334,7 +334,7 @@ Run: `python agent.py dev`
 
 ### MCP Server Placement (Teams++ Standard)
 
-In a modernized monorepo (e.g. `myconf`):
+In a modernized monorepo (e.g. `teleconference-mcp`):
 
 ```
 packages/remoting_mcp/       # Python FastMCP 3.2+
@@ -367,7 +367,7 @@ Implementation would call LiveKit HTTP API (room list) or Redis for room state.
     "ag-visio-mcp": {
       "command": "node",
       "args": ["packages/mcp-server/dist/index.js"],
-      "cwd": "d:/Dev/repos/myconf"
+      "cwd": "D:\Dev\repos\teleconference-mcp"
     }
   }
 }
@@ -425,7 +425,7 @@ npm run dev --workspace=web
 - [ ] Monitor agent logs and room metrics
 - [ ] Consider LiveKit Cloud for scaling (optional)
 
-### Docker Compose Full Stack (myconf reference)
+### Docker Compose Full Stack (teleconference-mcp reference)
 
 Full dockerization: livekit, redis, web, and **agent** in one stack. **Ollama runs outside Docker on your PC**; the agent container reaches it via `OLLAMA_BASE_URL=http://host.docker.internal:11434/v1`. On Linux use `extra_hosts: host.docker.internal:host-gateway`. Optional: add `ollama` service and set agent `OLLAMA_BASE_URL=http://ollama:11434/v1` for all-in-Docker.
 
@@ -524,7 +524,7 @@ services:
 
 ---
 
-## Roadmap (Reference: myconf / AG-Visio)
+## Roadmap (Reference: teleconference-mcp / AG-Visio)
 
 **Phase 2.5: Full self-host calendaring & invitations**
 
@@ -534,7 +534,7 @@ services:
 - **No external calendar dependency** – No Google/Microsoft OAuth; optional CalDAV sync for clients
 - **MCP tools** – List today's meetings, create meeting, send invite (for Claude/Cursor)
 
-See reference implementation (myconf) `PRD.md` for full Phase 2, 2.5, and 3 roadmap.
+See reference implementation (teleconference-mcp) `PRD.md` for full Phase 2, 2.5, and 3 roadmap.
 
 ---
 
@@ -545,3 +545,5 @@ See reference implementation (myconf) `PRD.md` for full Phase 2, 2.5, and 3 road
 - [livekit-server-sdk (Node)](https://www.npmjs.com/package/livekit-server-sdk)
 - [@livekit/components-react](https://www.npmjs.com/package/@livekit/components-react)
 - [Turborepo MCP Monorepo Pattern](../../docs/patterns/TURBOREPO_MCP_MONOREPO_PATTERN.md)
+
+

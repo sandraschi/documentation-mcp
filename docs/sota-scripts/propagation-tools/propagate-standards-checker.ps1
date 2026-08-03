@@ -12,8 +12,8 @@
 
 param([switch]$DryRun = $false)
 
-Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
-Write-Host "â•‘   ðŸ“¦ SOTA Script Propagation: check-repo-standards ðŸ“¦  â•‘" -ForegroundColor Cyan
+Write-Host "`nâ•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+Write-Host "â•'   ðŸ"¦ SOTA Script Propagation: check-repo-standards ðŸ"¦  â•'" -ForegroundColor Cyan
 Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Cyan
 
 $sourceScript = Join-Path $PSScriptRoot "..\templates\scripts\check-repo-standards.ps1"
@@ -23,7 +23,7 @@ if (-not (Test-Path $sourceScript)) {
     exit 1
 }
 
-Write-Host "ðŸ“‹ Source: $sourceScript`n" -ForegroundColor White
+Write-Host "ðŸ"‹ Source: $sourceScript`n" -ForegroundColor White
 
 # Find all MCP repos
 $reposRoot = "D:\Dev\repos"
@@ -49,7 +49,7 @@ foreach ($repo in $mcpRepos) {
         } else {
             New-Item -ItemType Directory -Path $scriptsDir -Force | Out-Null
             Copy-Item $sourceScript $targetScript -Force
-            Write-Host "  âœ… Created scripts/ and copied: $($repo.Name)" -ForegroundColor Green
+            Write-Host "  âœ... Created scripts/ and copied: $($repo.Name)" -ForegroundColor Green
             $created++
         }
         continue
@@ -67,7 +67,7 @@ foreach ($repo in $mcpRepos) {
                 Write-Host "  [DRY RUN] Would update: $($repo.Name)" -ForegroundColor Yellow
             } else {
                 Copy-Item $sourceScript $targetScript -Force
-                Write-Host "  âœ… Updated: $($repo.Name)" -ForegroundColor Green
+                Write-Host "  âœ... Updated: $($repo.Name)" -ForegroundColor Green
                 $updated++
             }
         }
@@ -76,17 +76,17 @@ foreach ($repo in $mcpRepos) {
             Write-Host "  [DRY RUN] Would copy to: $($repo.Name)" -ForegroundColor Yellow
         } else {
             Copy-Item $sourceScript $targetScript -Force
-            Write-Host "  âœ… Copied to: $($repo.Name)" -ForegroundColor Green
+            Write-Host "  âœ... Copied to: $($repo.Name)" -ForegroundColor Green
             $created++
         }
     }
 }
 
-Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
-Write-Host "â•‘            ðŸ“¦ Propagation Complete! ðŸ“¦                 â•‘" -ForegroundColor Cyan
+Write-Host "`nâ•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+Write-Host "â•'            ðŸ"¦ Propagation Complete! ðŸ"¦                 â•'" -ForegroundColor Cyan
 Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Cyan
 
-Write-Host "ðŸ“Š Summary:" -ForegroundColor White
+Write-Host "ðŸ"Š Summary:" -ForegroundColor White
 Write-Host "  Total repos:      $($mcpRepos.Count)" -ForegroundColor White
 Write-Host "  Updated:          $updated" -ForegroundColor Green
 Write-Host "  Newly created:    $created" -ForegroundColor Cyan
@@ -94,8 +94,8 @@ Write-Host "  Already current:  $skipped" -ForegroundColor Gray
 Write-Host ""
 
 if (-not $DryRun -and ($updated -gt 0 -or $created -gt 0)) {
-    Write-Host "âœ… Done! Updated $(($updated + $created)) repositories" -ForegroundColor Green
+    Write-Host "âœ... Done! Updated $(($updated + $created)) repositories" -ForegroundColor Green
     Write-Host ""
-    Write-Host "ðŸ’¡ Next: Run check-repo-standards.ps1 in any repo to analyze!" -ForegroundColor Yellow
+    Write-Host "ðŸ'¡ Next: Run check-repo-standards.ps1 in any repo to analyze!" -ForegroundColor Yellow
 }
 

@@ -15,7 +15,7 @@ Fleet comms coverage:
 |---------|-----|-----|
 | Email | email-mcp | ✓ |
 | Discord | discord-mcp | ✓ |
-| Video | myconf | ✓ |
+| Video | teleconference-mcp | ✓ |
 | Emergency voice/SMS | telephony-mcp | ✓ dispatch only |
 | WhatsApp | — | **Missing** |
 | Signal | — | **Missing** |
@@ -123,3 +123,4 @@ comms-mcp (FastMCP 3.2)
 - email-mcp sanitization patterns
 - telephony-mcp E.164 / provider abstraction
 - external/hermes-agent messaging plugins (research only)
+

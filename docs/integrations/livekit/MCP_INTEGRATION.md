@@ -7,7 +7,7 @@
 
 ## Overview
 
-LiveKit projects (e.g. AG-Visio/myconf) often combine:
+LiveKit projects (e.g. AG-Visio/teleconference-mcp) often combine:
 
 - **Web app** - Next.js + LiveKit React components
 - **Voice agent** - Python livekit-agents worker
@@ -19,7 +19,7 @@ The MCP server provides tools that help AI assistants understand and operate the
 
 ## Recommended Tools
 
-### Implemented (myconf reference)
+### Implemented (teleconference-mcp reference)
 
 | Tool | Description |
 |------|-------------|
@@ -91,7 +91,7 @@ async def livekit_room_list() -> dict:
     "ag-visio-mcp": {
       "command": "node",
       "args": ["packages/mcp-server/dist/index.js"],
-      "cwd": "D:/Dev/repos/myconf"
+      "cwd": "D:\Dev\repos\teleconference-mcp"
     }
   }
 }
@@ -105,7 +105,7 @@ async def livekit_room_list() -> dict:
     "ag-visio-mcp": {
       "command": "node",
       "args": ["packages/mcp-server/dist/index.js"],
-      "cwd": "D:/Dev/repos/myconf"
+      "cwd": "D:\Dev\repos\teleconference-mcp"
     }
   }
 }
@@ -118,7 +118,7 @@ async def livekit_room_list() -> dict:
 The MCP servers live in `packages/remoting_mcp/` and `packages/conferencing_mcp/`. They are managed via `uv` and orchestrated by `just`.
 
 ```
-myconf/
+teleconference-mcp/
 ├── packages/
 │   ├── remoting_mcp/      # Python FastMCP (Input Injection)
 │   └── conferencing_mcp/  # Python FastMCP (Meeting Intelligence)
@@ -135,3 +135,6 @@ myconf/
 
 - [LIVEKIT_INTEGRATION_GUIDE.md](LIVEKIT_INTEGRATION_GUIDE.md) - Full LiveKit integration
 - [TURBOREPO_MCP_MONOREPO_PATTERN.md](../../docs/patterns/TURBOREPO_MCP_MONOREPO_PATTERN.md) - Monorepo structure
+
+
+

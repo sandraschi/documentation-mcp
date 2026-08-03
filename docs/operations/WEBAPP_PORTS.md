@@ -7,7 +7,7 @@ skill_candidate: false
 related:
   - operations/SOTA_MASTER_INVENTORY.md
   - operations/webapp-registry.json
-last_updated: 2026-05-25
+last_updated: 2026-07-22
 ---
 
 # Webapp Port Reservoir
@@ -52,6 +52,7 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10704 | advanced-memory-mcp | Webapp |
 | 10705 | advanced-memory-mcp | Bridge server |
 | 10706 | robotics-mcp | Web dashboard |
+| 10707 | ai-producer-hub | Frontend (Vite dev; single-page dashboard, no backend API) |
 | 10708 | database-operations-mcp | Web dashboard |
 | 10710 | unity3d-mcp | Web dashboard |
 | 10712 | vrchat-mcp | Web dashboard |
@@ -90,10 +91,14 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10751 | reversing-mcp | Frontend |
 | 10752 | nest-protect-mcp | Frontend |
 | 10753 | nest-protect-mcp | Backend |
+| 10754 | mastodon-mcp | Backend (FastAPI + FastMCP HTTP `/mcp` + outbox REST; Fediverse / ActivityPub) |
+| 10755 | mastodon-mcp | Frontend (Vite React — Compose, Timelines, Outbox, Accounts) |
 | 10756 | discord-mcp | Backend (MCP streamable HTTP `/mcp` + REST) |
 | 10757 | discord-mcp | Frontend |
 | 10758 | openbci-mcp | Web dashboard frontend (Vite) |
 | 10759 | openbci-mcp | Backend (REST + MCP HTTP `/mcp` + WebSocket EEG) |
+| 10760 | bluesky-mcp | Backend (FastAPI + FastMCP HTTP `/mcp` + outbox REST; AT Proto / Bluesky) |
+| 10761 | bluesky-mcp | Frontend (Vite React — Compose, Timelines, Outbox, Accounts) |
 | 10762 | winrar-mcp | Backend |
 | 10763 | winrar-mcp | Frontend |
 | 10764 | openclaw-molt-mcp | Frontend |
@@ -114,11 +119,19 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10777 | glance-mcp | Frontend (Vite) |
 | 10778 | xkcd-mcp | Backend (FastAPI + MCP HTTP `/mcp`) |
 | 10779 | xkcd-mcp | Frontend (Vite) |
-| 10780 | browser-mcp | Backend (FastAPI + MCP HTTP `/mcp`) |
-| 10781 | browser-mcp | Frontend (Vite; browser control + bookmarks dashboard) |
-| 10782 | home-assistant-mcp | MCP HTTP |
+| 10775 | ai-games-collection (mohex) | MoHex Hex AI engine (Docker) |
+| 10776 | browser-mcp | Backend (FastAPI + MCP HTTP `/mcp`) |
+| 10777 | browser-mcp | Frontend (Vite; browser control + bookmarks dashboard) |
+| 10778 | home-assistant-mcp | MCP HTTP |
+| 10779 | (reserved) | |
+| 10780 | ai-games-collection | Stockfish chess engine (Docker) |
+| 10781 | ai-games-collection | YaneuraOu shogi engine (Docker) |
+| 10782 | ai-games-collection | KataGo Go engine (Docker) |
 | 10783 | notebooklm-fleet-mcp | Backend (FastAPI + MCP HTTP `/mcp`) |
 | 10784 | notebooklm-fleet-mcp | Frontend (Vite glass) |
+| 10785 | ai-games-collection (edax) | Edax Othello AI engine (Docker) |
+| 10786 | ai-games-collection (gnubg) | GNU Backgammon engine (Docker) |
+| 10787 | ai-games-collection (openspiel) | OpenSpiel 119-game AI engine (Docker) |
 | 10788 | windows-computer-use-mcp | Web dashboard frontend |
 | 10789 | windows-computer-use-mcp | Web dashboard backend |
 | 10790 | avatar-mcp | Prometheus metrics (METRICS_PORT; not the MCP HTTP surface) |
@@ -176,6 +189,7 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10844 | fastsearch-mcp | Web dashboard frontend |
 | 10845 | fastsearch-mcp | Web dashboard backend |
 | 10846 | readly-mcp | Web dashboard (Vite; proxies to readly-mcp REST) |
+| 10847 | obs-mcp | MCP HTTP transport (`/mcp`; separate from 10819 REST) |
 | 10848 | blender-mcp | Web dashboard frontend |
 | 10849 | blender-mcp | Web dashboard backend |
 | 10850 | monitoring-mcp | Web dashboard frontend |
@@ -197,20 +211,19 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10870 | robofang | Web dashboard frontend |
 | 10871 | robofang | Bridge server |
 | 10872 | robofang | Supervisor |
+| 10873 | robofang-mcp | Webapp frontend (Vite; robofang sub-project) |
 | 10874 | handbrake-mcp | Web dashboard frontend |
 | 10875 | handbrake-mcp | Web dashboard backend |
 | 10876 | virtualdj-mcp | Web dashboard frontend |
 | 10877 | virtualdj-mcp | Web dashboard backend |
-| 10878 | vienna-live-mcp | Web dashboard frontend |
-| 10879 | vienna-live-mcp | Web dashboard backend |
 | 10880 | vroidstudio-mcp | Web dashboard frontend |
 | 10881 | vroidstudio-mcp | Web dashboard backend |
 | 10882 | suno-mcp | Web dashboard frontend |
 | 10883 | suno-mcp | Web dashboard backend |
 | 10884 | songgeneration-mcp | Web dashboard frontend |
 | 10885 | songgeneration-mcp | Web dashboard backend |
-| 10886 | myconf | Webapp frontend |
-| 10887 | myconf | Webapp backend |
+| 10886 | teleconference-mcp | Webapp frontend |
+| 10887 | teleconference-mcp | Webapp backend |
 | 10888 | myai | Webapp frontend |
 | 10889 | myai | webapp_api backend |
 | 10890 | obsidian-mcp | Web dashboard frontend (Vite) |
@@ -301,10 +314,10 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10983 | libreoffice-mcp | Frontend (Vite webapp — template gallery, job queue, PDF preview) |
 | 10984 | wall-flower | Web dashboard (Vite) |
 | 10985 | logic-analyzer-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; sigrok + simulator LA bridge) |
-| 10986 | games-app | Web dashboard (Vite) |
-| 10987 | games-app | Backend (FastAPI + FastMCP HTTP `/mcp` + REST `/api/*`) |
+| 10986 | ai-games-collection | Web dashboard (Vite) |
+| 10987 | ai-games-collection | Backend (FastAPI + FastMCP HTTP `/mcp` + REST `/api/*`) |
 | 10988 | logic-analyzer-mcp | Frontend (Vite React; trace + decode viewers; proxies `/api` → 10985) |
-| 10989 | vienna-life-assistant | Web dashboard (Vite) |
+| 10988 | vienna-life-assistant | Web dashboard (Vite) |
 | 10990 | gazebo-mcp | Frontend (Vite React dashboard; proxies `/api` + `/mcp` → 10991) |
 | 10991 | gazebo-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; general-purpose Gazebo sim server) |
 | 10992 | godot-mcp | Web dashboard frontend (Vite) |
@@ -372,6 +385,8 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 11055 | ittybitty (videogen-mcp) | Frontend (Vite dev; static dist placeholder until storyboard editor) |
 | 11056 | giskard-mcp | Backend (Starlette + FastMCP HTTP `/mcp`; Giskard red-team scanning) |
 | 11057 | giskard-mcp | Frontend (Vite React dashboard; scan history + report viewer) |
+| 11058 | quicknotes-mcp | Backend (FastAPI + SQLite; notes CRUD, import/export, converter) |
+| 11059 | quicknotes-mcp | Frontend (Vite + React + Tailwind; notes editor, converter, options, help) |
 | 11060 | tailscale-mcp | Logging backend (FastAPI; ring-buffer log query, stats, export, clear) |
 | 11061 | worldlabs-mcp | Logging backend (FastAPI; ring-buffer log query, stats, export, clear) |
 | 11062 | inkscape-mcp | Logging backend (FastAPI; ring-buffer log query, stats, export, clear) |
@@ -381,6 +396,17 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 11066 | system-admin-mcp | Logging backend (FastAPI; ring-buffer log query, stats, export, clear) |
 | 11067 | winrar-mcp | Logging backend (FastAPI; ring-buffer log query, stats, export, clear) |
 | 11068 | rustdesk-mcp | Logging backend (FastAPI; ring-buffer log query, stats, export, clear) |
+| 11070 | musicpaint-mcp | Backend (FastAPI + SQLite; audio player, paintings, playlists, sync engine) |
+| 11071 | musicpaint-mcp | Frontend (Vite + React; player, slideshow, browse, admin) |
+| 10916 | vcv-rack-mcp | Backend (FastMCP + FastAPI; patch depot, catalog API) |
+| 10917 | vcv-rack-mcp | Frontend (Vite React dashboard; Depot, Catalog, Modules, Jobs) |
+| 10918 | fleetwatcher-mcp | Backend (FastMCP HTTP + REST; repo pulse, builds, sessions, graph) |
+| 10919 | fleetwatcher-mcp | Frontend (Fleet Pulse dashboard; Vite + React + Tailwind) |
+| 10920 | packetsniffer-mcp | Backend (FastAPI + FastMCP HTTP `/mcp` + REST `/api/v1/*`; Scapy packet capture + PCAP analysis) [registered 2026-07-31 - moved off 10800 alexa-mcp collision] |
+| 10921 | packetsniffer-mcp | Frontend (reserved -- webapp not yet built) |
+| 11072 | glama-status-mcp | Backend (FastAPI + MCP HTTP `/mcp`; Glama score scraper + API) |
+| 11072 | glama-status-mcp | Backend (FastAPI + MCP HTTP `/mcp`; Glama score scraper + API) |
+| 11073 | glama-status-mcp | Frontend (Vite React dashboard; fleet score table, per-tool breakdown) |
 | 11700 | myai | dashboard container (Starlette/Flask, internal :11700) |
 | 11701 | myai | traefik reverse proxy (HTTP, internal :80) |
 | 11702 | myai | traefik dashboard (internal :8080) |
@@ -489,3 +515,65 @@ while ($true) {
 cd /d "%~dp0"
 powershell -ExecutionPolicy Bypass -File "%~dp0start.ps1"
 ```
+
+| 11074 | sysinternals-mcp | MCP HTTP transport (FastMCP dual-transport) |
+| 11076 | ahk-linter | Backend (FastAPI + ahk_lint wrapper) |
+| 11077 | ahk-linter | Frontend (Vite React: Dashboard, Paper, Lab pages) |
+| 11078 | vbot-mind-mcp | Backend (Starlette + FastMCP HTTP `/mcp` + REST `/health`) |
+| 11079 | vbot-mind-mcp | Frontend (Vite React dashboard; proxies `/api` → 11078) |
+| 11080 | mathops-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; SymPy/SciPy computational mathematics) |
+| 11081 | mathops-mcp | Frontend (Vite React dashboard; proxies `/api` + `/mcp` → 11080) |
+| 10902 | health-mcp | MCP HTTP transport (FastMCP dual-transport; no webapp) |
+| 10903 | health-mcp | (reserved — future webapp) |
+| 11082 | codecad-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; build123d parametric CAD) |
+| 11083 | codecad-mcp | Frontend (Vite React dashboard; proxies `/api` + `/mcp` → 11082) |
+| 11084 | simbench-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; cross-simulator benchmark layer) |
+| 11085 | simbench-mcp | Frontend (Vite React dashboard; proxies `/api` + `/mcp` → 11084) |
+| 11086 | comfyops-mcp | ComfyUI sidecar (API mode; workflow-JSON generation) |
+| 11087 | comfyops-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; local generative engine) |
+| 11088 | comfyops-mcp | Frontend (Vite React dashboard; Gallery, Generate, Workflows, Models, Jobs) |
+| 11089 | admiral-mcp | Backend (FastMCP 3.4+ HTTP `/mcp` + Starlette relay + REST; agent-approval/pager bridge) [retroactive fix 2026-07-13 — server built 2026-07-12, port never registered here] |
+| 11090 | admiral-mcp | Frontend (React/Vite dashboard) [retroactive fix 2026-07-13] |
+| 11091 | splatmaker-mcp | Backend (FastMCP 3.2+ HTTP `/mcp` + Starlette REST; self-hosted FOSS Gaussian-splat generation) |
+| 11092 | splatmaker-mcp | Frontend (Vite React dashboard) |
+| 11094 | fleet-public-relations-mcp | Backend (Starlette + FastMCP HTTP `/mcp`; infrastructure -- no webapp) |
+| 11095 | fleet-public-relations-mcp | Frontend (Vite React dashboard) |
+| 11096 | cline-mcp | Backend (Node.js MCP server wrapping @cline/sdk; stdio-only, no webapp) |
+| 11097 | agy-mcp | Backend (FastMCP server for Antigravity IDE; stdio-only, no webapp) |
+| 11098 | zed-mcp | Backend (FastMCP server for Zed editor; stdio-only, no webapp) |
+| 11099 | travelprep-mcp | Backend (FastMCP 3.2+ dual transport stdio + HTTP `/mcp`; stays + destination tools) |
+| 11100 | travelprep-mcp | Frontend (reserved -- webapp not yet built as of v0.1.0) |
+| 11101 | learnbot-mcp | Backend (REST API + SPA; personas, lessons, TTS, robot orchestration) [retroactive registration 2026-07-17 - running here since ~07-15 but never registered; collided with sketchboard-excalidraw-mcp's day-1 registration, which moved to 11107/11108] |
+| 11102 | (free) | Freed 2026-07-17 - was sketchboard-excalidraw-mcp frontend for one day; keep free briefly to avoid stale-config confusion |
+| 11103 | (free) | |
+| 11104 | (avoid) | learnbot-mcp legacy port before the 2026-07-16 port-drift fix - stale configs may still point here; do not reassign yet |
+| 11105 | classroom-mcp | Backend (Starlette REST + SPA; students, classes, courses, assignments, progress) [retroactive registration 2026-07-17] |
+| 11106 | classroom-mcp | Frontend (reserved; webapp not yet built) [retroactive registration 2026-07-17] |
+| 11107 | sketchboard-excalidraw-mcp | Backend (FastMCP HTTP `/mcp` + REST; Excalidraw canvas bridge + headless render) [moved 2026-07-17 from 11101 - collision with learnbot-mcp] |
+| 11108 | sketchboard-excalidraw-mcp | Frontend (Vite React canvas; not yet built as of day 1 scaffold) [moved 2026-07-17 from 11102] |
+| 11110 | overte-mcp | Backend (REST + FastMCP) |
+| 11111 | overte-mcp | Frontend (Vite React dashboard) |
+| 11112 | podman-mcp | Frontend (Vite React dashboard) |
+| 11113 | podman-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`) |
+| 11114 | disk-usage-mcp | Backend (Starlette REST + FastMCP HTTP `/mcp`) |
+| 11115 | disk-usage-mcp | Frontend (Vite React dashboard) |
+| 11116 | mixx-dj-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; OSC bridge listener port 11118) |
+| 11117 | mixx-dj-mcp | Frontend (Vite React webapp) |
+| 11120 | sfx-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; FreeSound API wrapper) |
+| 11121 | sfx-mcp | Frontend (Vite; reserved) |
+| 11122 | vfx-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; FFmpeg video effects) |
+| 11123 | vfx-mcp | Frontend (Vite; reserved) |
+| 11124 | civitai-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; Civitai catalog + comfyops depot pin) |
+| 11125 | civitai-mcp | Frontend (Vite React — Browse, Download queue, Depot) |
+| 11126 | stems-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; ONNX HTDemucs v4 stem separation) |
+| 11127 | stems-mcp | Frontend (Vite; reserved) |
+| 11128 | nekomimi-mcp | Backend (FastMCP + MCP SSE `/mcp`; substrate-independent embodiment layer) |
+| 11129 | nekomimi-mcp | Frontend (reserved for Vite React preview webapp) |
+| 11130 | pdf-mcp | Frontend (Vite React dashboard with PDF.js workbench, pipeline, chat, RAG) |
+| 11131 | pdf-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; PyMuPDF + pypdf + LanceDB; PDF extract/manipulate/annotate/convert/validate/RAG) |
+| 11132 | forgejo-mcp | Frontend (Vite React — Forgejo/Codeberg companion) |
+| 11133 | forgejo-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; multi-profile Forgejo API) |
+| 11134 | demo-vid-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; demo video generation pipeline) |
+| 11135 | demo-vid-mcp | Frontend (Vite React gallery — video player, generator, fleet status) |
+| 11142 | benny-the-dog-mcp | Backend (FastAPI + FastMCP HTTP `/mcp`; Benny care plane - dog_ops portmanteau, water/bark/movement/sausage/movie/wake events in SQLite) |
+| 11143 | benny-the-dog-mcp | Frontend (Vite React dashboard; patrol job viewer, Benny event logs) |

@@ -1,7 +1,7 @@
 # Teleconference MCP — Architecture
 
 **Last Updated:** 2026-02-07
-**Source Repo:** `D:\Dev\repos\myconf`
+**Source Repo:** `D:\Dev\repos\teleconference-mcp`
 
 ---
 
@@ -112,3 +112,4 @@ Ollama (gemma2) LLM --> response text --> Piper TTS --> audio track --> room
 - **LiveKit:** Single server for small/medium teams; scale with LiveKit Cloud or multiple SFU nodes for large deployments.
 - **Agent:** One worker per deployment; can scale workers for many concurrent rooms.
 - **Web:** Stateless; scale behind load balancer; token API is lightweight.
+

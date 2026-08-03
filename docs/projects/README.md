@@ -1,7 +1,9 @@
 # Project Documentation Index
 
 **Purpose:** Central documentation for all major projects
-**Last Updated:** 2026-06-17 — publish tier: **mandatory IN** after update ([PUBLISH_UPDATE_CHECKLIST.md](../../PUBLISH_UPDATE_CHECKLIST.md))
+**Last Updated:** 2026-07-26 — publish tier: **mandatory IN** after update ([PUBLISH_UPDATE_CHECKLIST.md](../../PUBLISH_UPDATE_CHECKLIST.md))
+
+**Ideas not yet built:** [POSSIBLE_PROJECTS.md](./POSSIBLE_PROJECTS.md). Recent ship: [civitai-mcp](./civitai-mcp/README.md).
 
 ---
 
@@ -50,8 +52,10 @@
 | [chitchat](./chitchat/) | Conversation starters, archive, and fleet docs crosslink. 64 curated topics, 4 MCP tools. Backend **10974**, frontend **10975**. FastMCP 3.2. | MCP Server + Webapp | **0.1.0** |
 | [fritz-coworker](./fritz-coworker/) | Poor Man's Viktor: pulses, inbox/day prep, devices watch, Intel Hub **11027**, urgent alerts. Agent: [fleet-agent-mcp](./fleet-agent-mcp.md) **10996**. [CHANGELOG](./fritz-coworker/CHANGELOG.md) | Agent plan + pilot | **0.2.1-pre** |
 | [libreoffice-mcp](./libreoffice-mcp/) | Headless LO convert + ODT merge + webapp PDF preview; ports **10981/10983**. FOSS office layer for Fritz coworker flows. [CHANGELOG](./libreoffice-mcp/CHANGELOG.md) | MCP Server + Webapp | **0.1.0** |
+| [buzz](./buzz/) | Block OSS Nostr relay + Tauri desktop + buzz-cli/acp; local Podman infra; Phases 1–3 complete; Apache-2.0 | Agent workspace (not MCP) | **Eval (0.4.x desktop)** |
+| [security-gym](./security-gym/) | Gymnasium cyber-defense RL (log/eBPF streams); j-klawson/security-gym; pytest green; not MCP | Research / eval | **Eval (0.5.1)** |
 | **[apple/](./apple/)** | **CalFolio** iPad app + fleet iOS ideation — [CALFOLIO.md](./apple/CALFOLIO.md), [EPUB_READER.md](./apple/EPUB_READER.md), [IOS_PUBLISHING.md](./apple/IOS_PUBLISHING.md) | iPad app (SwiftUI) | **Pre-scaffold** |
-| [games-app](./games-app/) | 150+ games, AI engines (Stockfish/KataGo/YaneuraOu), Japanese learning, FastMCP 3.2, Tauri 2.0 desktop, P2P multiplayer | MCP Server + Webapp + Tauri | Active (v2.5.1) |
+| [ai-games-collection](./ai-games-collection/) | 150+ games, AI engines (Stockfish/KataGo/YaneuraOu), Japanese learning, FastMCP 3.2, Tauri 2.0 desktop, P2P multiplayer | MCP Server + Webapp + Tauri | Active (v2.5.1) |
 | [getbooks-mcp](./getbooks-mcp/) | Multiâ€“safe-source book discovery (Gutenberg, Open Library, IA, â€¦) â€” **not** Annaâ€™s Archive | MCP Server | **Planned** (design only) |
 | [antigravity-cli-mcp](./antigravity-cli-mcp.md) | Cursor ↔ `agy` CLI MCP bridge — goal/subagent/skills/MCP introspection; **not** SDK (token cost) | MCP Bridge | **Planned** (design only) |
 | [agy-fleet-mcp](./agy-fleet-mcp/) | Antigravity MCP **config sync** — Cursor↔Gemini diff/sync/validate, tool budget ~50; **10825** HTTP `/mcp`; **not** PyPI agy-mcp | MCP Server | **0.1.0** |
@@ -121,7 +125,7 @@ Each project folder contains:
 - **Status:** Active (Nov 28, 2025)
 
 ### Teleconference MCP
-- **Source Repo:** `D:\Dev\repos\myconf` (renamed to `teleconference-mcp`)
+- **Source Repo:** `D:\Dev\repos\teleconference-mcp` (renamed to `teleconference-mcp`)
 - **Web UI:** http://localhost:10886 | **Health:** http://localhost:10886/health | **Meetings:** http://localhost:10886/meetings | **Test:** http://localhost:10886/test
 - **Type:** Self-hosted AI-powered video conferencing; LiveKit WebRTC + voice agent
 - **Version:** 0.1.0 — 30+ MCP tools, scheduling UI, screen sharing, recording, remote desktop
@@ -417,5 +421,6 @@ Each project folder contains:
 - **Docs Location:** `mcp-central-docs/autohotkey/` (special case - extensive docs)
 - **Source Repo:** `D:\Dev\repos\autohotkey-test`
 - **Key Tech:** AutoHotkey v2, Migration tools, Compatibility scanner
+
 
 

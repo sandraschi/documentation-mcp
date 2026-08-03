@@ -175,8 +175,8 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10883 | suno-mcp | Web dashboard backend |
 | 10884 | songgeneration-mcp | Web dashboard frontend |
 | 10885 | songgeneration-mcp | Web dashboard backend |
-| 10886 | myconf | web_sota frontend |
-| 10887 | myconf | web_sota backend |
+| 10886 | teleconference-mcp | web_sota frontend |
+| 10887 | teleconference-mcp | web_sota backend |
 | 10888 | myai | web_sota frontend |
 | 10889 | myai | webapp_api backend |
 | 10892 | yahboom-mcp | Web dashboard backend (API) |
@@ -219,3 +219,4 @@ npx --yes kill-port $WebPort 2>$null
 cd /d "%~dp0"
 powershell -ExecutionPolicy Bypass -File "%~dp0start.ps1"
 ```
+

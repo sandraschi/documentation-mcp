@@ -1,7 +1,7 @@
 # Turborepo MCP Monorepo Pattern
 
 **Status:** Production-proven  
-**Reference Implementation:** `myconf`  
+**Reference Implementation:** `teleconference-mcp`  
 **Last Updated:** 2025-01-28
 
 ---
@@ -33,7 +33,7 @@ Turborepo provides dependency-aware task execution, caching, and parallel builds
 ## Workspace Layout
 
 ```
-myconf/
+teleconference-mcp/
 ├── package.json              # Root: workspaces, turbo scripts
 ├── turbo.json                # Task pipeline, caching
 ├── apps/
@@ -58,7 +58,7 @@ myconf/
 
 ```json
 {
-  "name": "myconf",
+  "name": "teleconference-mcp",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -113,7 +113,7 @@ The MCP server is a normal workspace package:
 ```json
 // packages/mcp-server/package.json
 {
-  "name": "@myconf/mcp-server",
+  "name": "@fleet/teleconference-mcp",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js"
@@ -195,6 +195,9 @@ Turborepo caches task outputs by:
 
 ## Reference
 
-- **myconf:** `d:/Dev/repos/myconf` – LiveKit video conferencing with MCP, Next.js web app, Python agent
+- **teleconference-mcp:** `D:\Dev\repos\teleconference-mcp` – LiveKit video conferencing with MCP, Next.js web app, Python agent
 - **Turborepo docs:** https://turbo.build/repo/docs
 - **Related:** [MULTI_SERVER_ORCHESTRATION.md](./MULTI_SERVER_ORCHESTRATION.md), [webapp-integration-pattern.md](./webapp-integration-pattern.md)
+
+
+

@@ -8,7 +8,7 @@ Updated: 2026-05-14
 |------------|-------------|---------------|
 | [robofang](file:///D:/Dev/repos/robofang) | **Fleet supervisor and agentic node controller.** Supervisor 10872, bridge 10871, hub 10870. Fleet Installer: gh-only clone, uv sync/pip install -e ., configurable GitHub owner (settings or ROBOFANG_GITHUB_OWNER); MCP servers must implement /health, GET /tools, POST /tool. Start: POST /api/connector/launch/{name}; health: GET /api/connectors/{id}/status. [projects/robofang/README.md](projects/robofang/README.md). | 2026-03-12 |
 | [myai](file:///D:/Dev/repos/myai) | **By FlowEngineer sandraschi** Dual-mode AI microservices platform that ships a FastAPI control plane, an MCP server with production-grade tooling, and a fleet of AI applications orchestrated with Docker, Traefik, and a full monitoring stack. | 2026-02-12 |
-| [teleconference-mcp](file:///D:/Dev/repos/myconf) | **AI-powered video conferencing** with LiveKit WebRTC, voice agent, and remote desktop control. 30+ MCP tools, FastMCP 3.4+, Next.js 16 dashboard, full observability. ## Stability & SOTA Alignment | 2026-07-13 |
+| [teleconference-mcp](file:///D:\Dev\repos\teleconference-mcp) | **AI-powered video conferencing** with LiveKit WebRTC, voice agent, and remote desktop control. 30+ MCP tools, FastMCP 3.4+, Next.js 16 dashboard, full observability. ## Stability & SOTA Alignment | 2026-07-13 |
 | [myhomeserver](file:///D:/Dev/repos/myhomeserver) | A modern, beautiful home automation dashboard built with React, Tailwind CSS, and MCP (Model Context Protocol) integration. ## ðŸš€ Overview | 2026-02-13 |
 | [myscripts](file:///D:/Dev/repos/myscripts) | This repository contains a collection of personal PowerShell scripts. ## Folders | 2026-01-01 |
 | [myvrworlds](file:///D:/Dev/repos/myvrworlds) | Beautiful React Tailwind VR Worlds Control Center - Integrating Avatar MCP, Blender MCP, VRChat MCP, Resonite MCP, OSC MCP, Unity3D MCP with ikubaysan dual-STT AI chatbot architecture | 2026-02-06 |
@@ -46,7 +46,7 @@ Updated: 2026-05-14
 | [fastsearch-mcp](file:///D:/Dev/repos/fastsearch-mcp) | Lightning-fast file search using NTFS Master File Table - MCP Server | 2026-02-12 |
 | [filesystem-mcp](file:///D:/Dev/repos/filesystem-mcp) | **SOTA File System Operations (v1.2.0)** - Comprehensive file manipulation, Git repository management, and Docker container orchestration with Austrian efficiency. | 2026-02-15 |
 | [fullstack-demo](file:///D:/Dev/repos/fullstack-demo) | A **professional fullstack application** with AI, MCP integration, and comprehensive monitoring. ## ðŸŒŸ Features | 2026-01-01 |
-| [games-app](file:///D:/Dev/repos/games-app) | Games Collection - 75+ games with optional AI | 2026-02-07 |
+| [ai-games-collection](file:///D:/Dev/repos/ai-games-collection) | Games Collection - 75+ games with optional AI | 2026-02-07 |
 | [gimp-mcp](file:///D:/Dev/repos/gimp-mcp) | **Professional GIMP orchestrator (v3.0.0)** with 8 portmanteau tools and integrated AI image generation (Flux/nano-banana). | 2026-02-15 |
 | [git-github-mcp](file:///D:/Dev/repos/git-github-mcp) | FastMCP 3.1.1+ portmanteau server for Git and GitHub operations. Uses `gh` CLI for GitHub; avoids the 40-tool explosion. ## Features | 2026-02-09 |
 | [gtfs-mcp](file:///D:/Dev/repos/gtfs-mcp) | A FastMCP 3.1.1+ compliant server for downloading, parsing, and serving GTFS (General Transit Feed Specification) data. This server provides a standardized API | 2026-02-12 |
@@ -160,5 +160,6 @@ Updated: 2026-05-14
 | [wakan-plus](file:///D:/Dev/repos/wakan-plus) | No description available. | 2026-01-01 |
 | [workspaces](file:///D:/Dev/repos/workspaces) | No description available. | 2026-01-01 |
 | [zed-extension-template](file:///D:/Dev/repos/zed-extension-template) | **Template for adding Zed IDE extensions to MCP servers** This template provides a standardized way to add Zed IDE extension support to any MCP server. Even if your MCP server is experimental or "wild", having a Zed extension makes it discoverable and usable within Zed's AI assistant. | 2026-01-15 |
+
 
 

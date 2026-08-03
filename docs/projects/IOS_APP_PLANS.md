@@ -93,7 +93,7 @@ New tool op `notify`: `{title, body, category?, thread_id?, payload?, live_activ
 
 **Architecture:**
 - Goliath composer: a scheduled job in **fleet-agent-mcp (Fritz)** — this is persona-layer work per ORCHESTRATION_HIERARCHY.md, so it belongs to Fritz, not a new repo. New tool `fritz_briefing`: ops `compose_now`, `schedule` (Windows Scheduled Task via winops), `history`.
-  - Sources (each optional, degrade gracefully — a source being down produces a one-line "no news from X", never a failed briefing): gitops `fleet_morning_digest`; arxiv-mcp `codehunt_stats_tool` + firefront digest; aiwatcher; netatmo-weather-mcp; calendar/todo if myconf exposes one.
+  - Sources (each optional, degrade gracefully — a source being down produces a one-line "no news from X", never a failed briefing): gitops `fleet_morning_digest`; arxiv-mcp `codehunt_stats_tool` + firefront digest; aiwatcher; netatmo-weather-mcp; calendar/todo if teleconference-mcp exposes one.
   - Compose: local model (Qwen3.5 via Ollama) writes the script from structured source JSON with a fixed rundown (cold open → fleet → papers/code → AI news → weather → sign-off). Script + audio archived to SQLite + a static `briefings/` dir.
   - Voice: speech-mcp TTS (pick the default voice once, config not code). Jingle: pre-generate a handful with songgeneration-mcp, rotate — do NOT generate per-briefing (slow, pointless).
   - Deliver: admiral-mcp `notify` (§0.3) with the audio URL; file served from Fritz's existing HTTP surface or a static mount.
@@ -176,3 +176,4 @@ plex-mcp knows what's playing and the timestamp; tvtropes-mcp knows the tropes; 
 **Recommended order:** FleetKit + notify → Benny FM (proves the whole chassis end-to-end with the least risk) → Pocket Patch the moment vcv P2 clears → Leash A → Ekphrasis alongside comfyops remediation → Leash B with nav N1.
 
 **Running-plan hygiene:** when a plan starts, its section gets a STATUS line with repo links; when it ships, move acceptance evidence pointers here; when an idea dies, mark it DROPPED with one line of why — do not delete.
+

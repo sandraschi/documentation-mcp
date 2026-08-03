@@ -20,8 +20,8 @@ param(
     [switch]$DryRun = $false
 )
 
-Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
-Write-Host "â•‘     ðŸ“¦ SOTA Script Propagation: backup-repo.ps1 ðŸ“¦     â•‘" -ForegroundColor Cyan
+Write-Host "`nâ•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+Write-Host "â•'     ðŸ"¦ SOTA Script Propagation: backup-repo.ps1 ðŸ"¦     â•'" -ForegroundColor Cyan
 Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Cyan
 
 # Source script
@@ -32,7 +32,7 @@ if (-not (Test-Path $sourceScript)) {
     exit 1
 }
 
-Write-Host "ðŸ“‹ Source: $sourceScript" -ForegroundColor White
+Write-Host "ðŸ"‹ Source: $sourceScript" -ForegroundColor White
 Write-Host ""
 
 # Find all MCP repos
@@ -63,7 +63,7 @@ foreach ($repo in $mcpRepos) {
         else {
             New-Item -ItemType Directory -Path $scriptsDir -Force | Out-Null
             Copy-Item $sourceScript $targetScript -Force
-            Write-Host "  âœ… Created scripts/ and copied: $($repo.Name)" -ForegroundColor Green
+            Write-Host "  âœ... Created scripts/ and copied: $($repo.Name)" -ForegroundColor Green
             $created++
         }
         continue
@@ -85,7 +85,7 @@ foreach ($repo in $mcpRepos) {
             }
             else {
                 Copy-Item $sourceScript $targetScript -Force
-                Write-Host "  âœ… Updated: $($repo.Name)" -ForegroundColor Green
+                Write-Host "  âœ... Updated: $($repo.Name)" -ForegroundColor Green
                 $updated++
             }
         }
@@ -96,21 +96,21 @@ foreach ($repo in $mcpRepos) {
         }
         else {
             Copy-Item $sourceScript $targetScript -Force
-            Write-Host "  âœ… Copied to: $($repo.Name)" -ForegroundColor Green
+            Write-Host "  âœ... Copied to: $($repo.Name)" -ForegroundColor Green
             $created++
         }
     }
 }
 
-Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
-Write-Host "â•‘              ðŸ“¦ Propagation Complete! ðŸ“¦               â•‘" -ForegroundColor Cyan
+Write-Host "`nâ•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+Write-Host "â•'              ðŸ"¦ Propagation Complete! ðŸ"¦               â•'" -ForegroundColor Cyan
 Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Cyan
 
 if ($DryRun) {
-    Write-Host "ðŸ” DRY RUN MODE - No changes made`n" -ForegroundColor Yellow
+    Write-Host "ðŸ" DRY RUN MODE - No changes made`n" -ForegroundColor Yellow
 }
 
-Write-Host "ðŸ“Š Summary:" -ForegroundColor White
+Write-Host "ðŸ"Š Summary:" -ForegroundColor White
 Write-Host "  Total repos:      $($mcpRepos.Count)" -ForegroundColor White
 Write-Host "  Updated:          $updated" -ForegroundColor Green
 Write-Host "  Newly created:    $created" -ForegroundColor Cyan
@@ -118,9 +118,9 @@ Write-Host "  Already current:  $skipped" -ForegroundColor Gray
 Write-Host ""
 
 if (-not $DryRun -and ($updated -gt 0 -or $created -gt 0)) {
-    Write-Host "âœ… Done! Updated $(($updated + $created)) repositories" -ForegroundColor Green
+    Write-Host "âœ... Done! Updated $(($updated + $created)) repositories" -ForegroundColor Green
     Write-Host ""
-    Write-Host "ðŸ’¡ Next steps:" -ForegroundColor Yellow
+    Write-Host "ðŸ'¡ Next steps:" -ForegroundColor Yellow
     Write-Host "  1. Test backup script in one repo: .\scripts\backup-repo.ps1" -ForegroundColor White
     Write-Host "  2. Commit changes to affected repos if satisfied" -ForegroundColor White
 }

@@ -76,9 +76,9 @@ Headset URL: `https://goliath.<your-tailnet>.ts.net/` → **Enter VR**.
 | Webapp | Vite 6 + React (Iron Shell) + Three.js WebXR | 10900 |
 | Backend | FastAPI + FastMCP + WebSocket | 10901 |
 | Adapter | `BoomyAdapter` → [yahboom-mcp](https://github.com/sandraschi/yahboom-mcp) | 10892 |
-| Video | [myconf](https://github.com/sandraschi/myconf) LiveKit + Goliath publisher | 15580 |
+| Video | [teleconference-mcp](https://github.com/sandraschi/teleconference-mcp) LiveKit + Goliath publisher | 15580 |
 
-> **LiveKit SFU runs as a Windows service** (`LiveKitSFU`, NSSM, native livekit-server 1.7.0 + `myconf/livekit.yaml`, auto-start).
+> **LiveKit SFU runs as a Windows service** (`LiveKitSFU`, NSSM, native livekit-server 1.7.0 + `teleconference-mcp/livekit.yaml`, auto-start).
 
 ```
   Pico / Meta Quest (Tailscale + Browser)
@@ -148,3 +148,4 @@ just web
 ## License
 
 MIT
+

@@ -17,8 +17,8 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
-Write-Host "â•‘     ðŸš€ Universal SOTA Script Propagation Engine ðŸš€      â•‘" -ForegroundColor Cyan
+Write-Host "`nâ•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+Write-Host "â•'     ðŸš€ Universal SOTA Script Propagation Engine ðŸš€      â•'" -ForegroundColor Cyan
 Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Cyan
 
 # 1. Configuration: Define SOTA Scripts and their sources
@@ -64,7 +64,7 @@ $stats = @{
 
 # 4. Processing
 foreach ($repo in $mcpRepos) {
-    Write-Host "ðŸ“ Processing $($repo.Name)..." -ForegroundColor White
+    Write-Host "ðŸ" Processing $($repo.Name)..." -ForegroundColor White
     $repoPath = $repo.FullName
     $scriptsDir = Join-Path $repoPath "scripts"
     
@@ -74,7 +74,7 @@ foreach ($repo in $mcpRepos) {
         }
         else {
             New-Item -ItemType Directory -Path $scriptsDir -Force | Out-Null
-            Write-Host "  âœ… Created scripts/ directory" -ForegroundColor Green
+            Write-Host "  âœ... Created scripts/ directory" -ForegroundColor Green
         }
     }
 
@@ -95,7 +95,7 @@ foreach ($repo in $mcpRepos) {
                 }
                 else {
                     Copy-Item $script.Source $targetFile -Force
-                    Write-Host "  ðŸ”„ Updated $($script.Name) to SOTA" -ForegroundColor Green
+                    Write-Host "  ðŸ"„ Updated $($script.Name) to SOTA" -ForegroundColor Green
                     $stats.Updated++
                 }
             }
@@ -115,11 +115,11 @@ foreach ($repo in $mcpRepos) {
 }
 
 # 5. Summary
-Write-Host "â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
-Write-Host "â•‘              ðŸ“Š Propagation Summary ðŸ“Š                 â•‘" -ForegroundColor Cyan
+Write-Host "â•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+Write-Host "â•'              ðŸ"Š Propagation Summary ðŸ"Š                 â•'" -ForegroundColor Cyan
 Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Cyan
 
-if ($DryRun) { Write-Host "ðŸ” DRY RUN: No files were touched.`n" -ForegroundColor Yellow }
+if ($DryRun) { Write-Host "ðŸ" DRY RUN: No files were touched.`n" -ForegroundColor Yellow }
 
 Write-Host "  Total Repos:     $($mcpRepos.Count)"
 Write-Host "  Scripts Updated: $($stats.Updated)" -ForegroundColor Green

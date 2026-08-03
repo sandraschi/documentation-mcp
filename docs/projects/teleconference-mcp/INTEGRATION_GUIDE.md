@@ -1,7 +1,7 @@
 # Teleconference MCP — Integration Guide
 
 **Last Updated:** 2026-07-13
-**Source Repo:** `D:\Dev\repos\myconf` (renamed to `teleconference-mcp`)
+**Source Repo:** `D:\Dev\repos\teleconference-mcp` 
 
 ---
 
@@ -122,7 +122,7 @@ python mcp_server.py
 
 ### Cursor / Claude Desktop configuration
 
-Example (stdio; cwd = myconf repo root):
+Example (stdio; cwd = teleconference-mcp repo root):
 
 ```json
 {
@@ -130,7 +130,7 @@ Example (stdio; cwd = myconf repo root):
     "ag-visio-mcp": {
       "command": "python",
       "args": ["packages/mcp-server/mcp_server.py"],
-      "cwd": "D:/Dev/repos/myconf"
+      "cwd": "D:\Dev\repos\teleconference-mcp"
     }
   }
 }
@@ -184,7 +184,7 @@ Change port in `apps/web/package.json`: `"dev": "next dev --port <NEW_PORT>"`.
 
 1. On Goliath: `Get-Service LiveKitSFU` must be **Running** (Windows service, NSSM). Restart: `Restart-Service LiveKitSFU` (elevated).
 2. Elsewhere: ensure Docker is running: `docker compose ps`.
-3. Check LiveKit logs: `Get-Content D:\Dev\repos\myconf\logs\livekit.out.log -Tail 50` (service) or `docker compose logs livekit`.
+3. Check LiveKit logs: `Get-Content D:\Dev\repos\teleconference-mcp\logs\livekit.out.log -Tail 50` (service) or `docker compose logs livekit`.
 4. Verify `NEXT_PUBLIC_LIVEKIT_URL` matches server (e.g. ws://localhost:15580).
 5. Ensure firewall allows 15580, 15581, 15582.
 
@@ -216,3 +216,5 @@ Change port in `apps/web/package.json`: `"dev": "next dev --port <NEW_PORT>"`.
 - Configure TURN if participants are on restrictive networks.
 - Optionally add monitoring (e.g. Prometheus/Grafana) for LiveKit and app health.
 - See PRD.md and integrations/livekit/LIVEKIT_INTEGRATION_GUIDE.md for full checklist.
+
+

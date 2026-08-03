@@ -7,21 +7,21 @@
     Builds production-ready MCP servers with INTELLIGENT DOMAIN-SPECIFIC CODE!
     
     ðŸ†• NEW in Enhanced Builder:
-    âœ… Interactive wizard (2 min questionnaire)
-    âœ… Pattern library (real code, not TODOs)
-    âœ… Domain-specific modules (CLI wrapper, API client, etc.)
-    âœ… Smart test generation (operation-specific stubs)
-    âœ… Security patterns (path validation, rate limiting)
-    âœ… Integration guides (actual setup instructions)
+    âœ... Interactive wizard (2 min questionnaire)
+    âœ... Pattern library (real code, not TODOs)
+    âœ... Domain-specific modules (CLI wrapper, API client, etc.)
+    âœ... Smart test generation (operation-specific stubs)
+    âœ... Security patterns (path validation, rate limiting)
+    âœ... Integration guides (actual setup instructions)
     
     Plus ALL base builder features:
-    âœ… Complete folder structure
-    âœ… Portmanteau tooling
-    âœ… Test scaffold
-    âœ… MCPB packaging
-    âœ… GitHub CI/CD
-    âœ… SOTA scripts
-    âœ… Modern tooling
+    âœ... Complete folder structure
+    âœ... Portmanteau tooling
+    âœ... Test scaffold
+    âœ... MCPB packaging
+    âœ... GitHub CI/CD
+    âœ... SOTA scripts
+    âœ... Modern tooling
     
     RESULT: 70% less customization time while maintaining quality!
     
@@ -94,8 +94,8 @@ $ErrorActionPreference = "Stop"
 
 function Show-Banner {
     Write-Host ""
-    Write-Host "â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
-    Write-Host "â•‘     ðŸŽ¨ ENHANCED MCP SERVER BUILDER - Intelligent Hybrid ðŸŽ¨      â•‘" -ForegroundColor Cyan
+    Write-Host "â•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+    Write-Host "â•'     ðŸŽ¨ ENHANCED MCP SERVER BUILDER - Intelligent Hybrid ðŸŽ¨      â•'" -ForegroundColor Cyan
     Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•" -ForegroundColor Cyan
     Write-Host ""
 }
@@ -109,7 +109,7 @@ function Get-Choice {
     
     Write-Host "`n$Prompt" -ForegroundColor Yellow
     for ($i = 0; $i -lt $Options.Count; $i++) {
-        $marker = if ($i -eq $Default) { "â†’" } else { " " }
+        $marker = if ($i -eq $Default) { "â†'" } else { " " }
         Write-Host "  $marker [$($i+1)] $($Options[$i])" -ForegroundColor White
     }
     
@@ -126,8 +126,8 @@ function Get-Choice {
 
 function Invoke-InteractiveWizard {
     Write-Host ""
-    Write-Host "â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Magenta
-    Write-Host "â•‘              ðŸ§™ INTERACTIVE TOOL DESIGNER ðŸ§™                      â•‘" -ForegroundColor Magenta
+    Write-Host "â•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Magenta
+    Write-Host "â•'              ðŸ§™ INTERACTIVE TOOL DESIGNER ðŸ§™                      â•'" -ForegroundColor Magenta
     Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•" -ForegroundColor Magenta
     
     Write-Host "`nLet's design your MCP server intelligently!" -ForegroundColor Green
@@ -185,37 +185,37 @@ function Invoke-InteractiveWizard {
     switch ($wrapper) {
         'CLI' { 
             $modules += @('executor.py', 'cli_parser.py')
-            Write-Host "  âœ… executor.py (subprocess management)" -ForegroundColor Green
-            Write-Host "  âœ… cli_parser.py (output parsing)" -ForegroundColor Green
+            Write-Host "  âœ... executor.py (subprocess management)" -ForegroundColor Green
+            Write-Host "  âœ... cli_parser.py (output parsing)" -ForegroundColor Green
         }
         'API' { 
             $modules += @('api_client.py', 'auth.py')
-            Write-Host "  âœ… api_client.py (HTTP client wrapper)" -ForegroundColor Green
-            Write-Host "  âœ… auth.py (API authentication)" -ForegroundColor Green
+            Write-Host "  âœ... api_client.py (HTTP client wrapper)" -ForegroundColor Green
+            Write-Host "  âœ... auth.py (API authentication)" -ForegroundColor Green
         }
         'Library' { 
             $modules += @('library_interface.py', 'data_converters.py')
-            Write-Host "  âœ… library_interface.py (library wrapper)" -ForegroundColor Green
-            Write-Host "  âœ… data_converters.py (format conversion)" -ForegroundColor Green
+            Write-Host "  âœ... library_interface.py (library wrapper)" -ForegroundColor Green
+            Write-Host "  âœ... data_converters.py (format conversion)" -ForegroundColor Green
         }
         'System' { 
             $modules += @('file_handler.py', 'validator.py')
-            Write-Host "  âœ… file_handler.py (file operations)" -ForegroundColor Green
-            Write-Host "  âœ… validator.py (path/permission validation)" -ForegroundColor Green
+            Write-Host "  âœ... file_handler.py (file operations)" -ForegroundColor Green
+            Write-Host "  âœ... validator.py (path/permission validation)" -ForegroundColor Green
         }
     }
     
     if ($sec -eq 'high') {
         $modules += 'safety.py'
-        Write-Host "  âœ… safety.py (security validation)" -ForegroundColor Green
+        Write-Host "  âœ... safety.py (security validation)" -ForegroundColor Green
     }
     
     # 6. Summary
-    Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Green
-    Write-Host "â•‘                 âœ… CONFIGURATION COMPLETE âœ…                       â•‘" -ForegroundColor Green
+    Write-Host "`nâ•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Green
+    Write-Host "â•'                 âœ... CONFIGURATION COMPLETE âœ...                       â•'" -ForegroundColor Green
     Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•" -ForegroundColor Green
     
-    Write-Host "`nðŸ“‹ Configuration Summary:" -ForegroundColor Yellow
+    Write-Host "`nðŸ"‹ Configuration Summary:" -ForegroundColor Yellow
     Write-Host "  Wrapper Type:    $wrapper" -ForegroundColor White
     if ($cliCommand) {
         Write-Host "  CLI Command:     $cliCommand" -ForegroundColor White
@@ -916,7 +916,7 @@ result = await resource_manager(
 
 ---
 
-## ðŸ”- CLI Command Mapping
+## ðŸ"- CLI Command Mapping
 
 | MCP Operation | CLI Command |
 |---------------|-------------|
@@ -931,7 +931,7 @@ result = await resource_manager(
 
 ---
 
-## ðŸ” Troubleshooting
+## ðŸ" Troubleshooting
 
 ### Common Issues
 
@@ -972,7 +972,7 @@ result = await resource_manager(
 
 ---
 
-## ðŸ“š References
+## ðŸ"š References
 
 - **MCP Server Docs:** See README.md
 - **$AppName Docs:** [Link to official docs]
@@ -1018,7 +1018,7 @@ if (-not $normalizedName.EndsWith("-mcp")) {
 $pythonPackage = $normalizedName -replace '-', '_'
 $repoPath = Join-Path $OutputPath $normalizedName
 
-Write-Host "ðŸ“‹ Configuration:" -ForegroundColor Yellow
+Write-Host "ðŸ"‹ Configuration:" -ForegroundColor Yellow
 Write-Host "  Server Name:     $normalizedName" -ForegroundColor White
 Write-Host "  Python Package:  $pythonPackage" -ForegroundColor White
 Write-Host "  Description:     $Description" -ForegroundColor White
@@ -1049,7 +1049,7 @@ Set-Location $repoPath
 # NOTE: Continuing from base builder...
 # I'll now include ALL the base builder logic with enhancements
 
-Write-Host "`nðŸ“ Creating folder structure..." -ForegroundColor Yellow
+Write-Host "`nðŸ" Creating folder structure..." -ForegroundColor Yellow
 
 $folders = @(
     "src/$pythonPackage",
@@ -1075,7 +1075,7 @@ $folders = @(
 
 foreach ($folder in $folders) {
     New-Item -ItemType Directory -Path $folder -Force | Out-Null
-    Write-Host "  âœ… $folder/" -ForegroundColor Green
+    Write-Host "  âœ... $folder/" -ForegroundColor Green
 }
 
 # ============================================================================
@@ -1104,7 +1104,7 @@ if ($config -and $config.Modules) {
         }
         
         Set-Content -Path $modulePath -Value $moduleCode -Encoding UTF8
-        Write-Host "  âœ… $module (domain-specific!)" -ForegroundColor Green
+        Write-Host "  âœ... $module (domain-specific!)" -ForegroundColor Green
     }
 }
 
@@ -1113,7 +1113,7 @@ if ($config -and $config.Modules) {
 # Due to length, we'll reference the base builder and call it
 # ============================================================================
 
-Write-Host "`nðŸ“¦ Running base repository scaffold..." -ForegroundColor Cyan
+Write-Host "`nðŸ"¦ Running base repository scaffold..." -ForegroundColor Cyan
 
 # Call base builder non-interactively to create standard structure
 $baseBuilderPath = Join-Path (Split-Path $PSCommandPath) "new-mcp-server.ps1"
@@ -1136,7 +1136,7 @@ if (Test-Path $baseBuilderPath) {
         -CLICommand $config.CLICommand
     
     Set-Content -Path "src/$pythonPackage/tools/resource_manager.py" -Value $smartTool -Encoding UTF8
-    Write-Host "  âœ… Enhanced resource_manager.py with $WrapperType patterns" -ForegroundColor Green
+    Write-Host "  âœ... Enhanced resource_manager.py with $WrapperType patterns" -ForegroundColor Green
     
     # Add smart tests
     $smartTests = New-OperationTests `
@@ -1145,7 +1145,7 @@ if (Test-Path $baseBuilderPath) {
         -PythonPackage $pythonPackage
     
     Set-Content -Path "tests/tools/test_resource_manager.py" -Value $smartTests -Encoding UTF8
-    Write-Host "  âœ… Generated operation-specific tests" -ForegroundColor Green
+    Write-Host "  âœ... Generated operation-specific tests" -ForegroundColor Green
     
     # Add integration guide
     $integrationGuide = New-IntegrationGuide `
@@ -1156,12 +1156,12 @@ if (Test-Path $baseBuilderPath) {
         -PythonPackage $pythonPackage
     
     Set-Content -Path "docs/user-guide/INTEGRATION_GUIDE.md" -Value $integrationGuide -Encoding UTF8
-    Write-Host "  âœ… Created domain-specific integration guide" -ForegroundColor Green
+    Write-Host "  âœ... Created domain-specific integration guide" -ForegroundColor Green
     
     # Update requirements if needed
     if ($WrapperType -eq 'API') {
         Add-Content -Path "requirements.txt" "`nhttpx>=0.27.0"
-        Write-Host "  âœ… Added httpx dependency for API wrapper" -ForegroundColor Green
+        Write-Host "  âœ... Added httpx dependency for API wrapper" -ForegroundColor Green
     }
     
 } else {
@@ -1174,31 +1174,31 @@ if (Test-Path $baseBuilderPath) {
 # FINAL SUMMARY
 # ============================================================================
 
-Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Magenta
-Write-Host "â•‘         ðŸŽ‰ ENHANCED REPOSITORY CREATED! ðŸŽ‰                        â•‘" -ForegroundColor Magenta
+Write-Host "`nâ•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Magenta
+Write-Host "â•'         ðŸŽ‰ ENHANCED REPOSITORY CREATED! ðŸŽ‰                        â•'" -ForegroundColor Magenta
 Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Magenta
 
-Write-Host "âœ… Created: $normalizedName" -ForegroundColor Green
-Write-Host "ðŸ“ Location: $repoPath`n" -ForegroundColor White
+Write-Host "âœ... Created: $normalizedName" -ForegroundColor Green
+Write-Host "ðŸ" Location: $repoPath`n" -ForegroundColor White
 
 Write-Host "ðŸŽ¨ Enhanced Features Generated:" -ForegroundColor Cyan
-Write-Host "  âœ… Domain-specific modules ($($config.Modules.Count) modules)" -ForegroundColor Green
-Write-Host "  âœ… Smart portmanteau tool ($($operationsArray.Count) operations)" -ForegroundColor Green
-Write-Host "  âœ… Operation-specific tests ($($operationsArray.Count * 2) test cases)" -ForegroundColor Green
-Write-Host "  âœ… Integration guide with setup instructions" -ForegroundColor Green
+Write-Host "  âœ... Domain-specific modules ($($config.Modules.Count) modules)" -ForegroundColor Green
+Write-Host "  âœ... Smart portmanteau tool ($($operationsArray.Count) operations)" -ForegroundColor Green
+Write-Host "  âœ... Operation-specific tests ($($operationsArray.Count * 2) test cases)" -ForegroundColor Green
+Write-Host "  âœ... Integration guide with setup instructions" -ForegroundColor Green
 if ($SecurityLevel -eq 'high') {
-    Write-Host "  âœ… Security module (path validation, rate limiting, audit log)" -ForegroundColor Green
+    Write-Host "  âœ... Security module (path validation, rate limiting, audit log)" -ForegroundColor Green
 }
 Write-Host ""
 
-Write-Host "ðŸ“¦ Plus ALL Base Builder Features:" -ForegroundColor Cyan
-Write-Host "  âœ… Complete folder structure" -ForegroundColor White
-Write-Host "  âœ… Test scaffold with working tests" -ForegroundColor White
-Write-Host "  âœ… MCPB packaging structure" -ForegroundColor White
-Write-Host "  âœ… GitHub CI/CD workflows" -ForegroundColor White
-Write-Host "  âœ… SOTA scripts (backup, standards checker)" -ForegroundColor White
-Write-Host "  âœ… Modern tooling (pyproject.toml, ruff, uv)" -ForegroundColor White
-Write-Host "  âœ… Documentation (README, CONTRIBUTING, CHANGELOG)" -ForegroundColor White
+Write-Host "ðŸ"¦ Plus ALL Base Builder Features:" -ForegroundColor Cyan
+Write-Host "  âœ... Complete folder structure" -ForegroundColor White
+Write-Host "  âœ... Test scaffold with working tests" -ForegroundColor White
+Write-Host "  âœ... MCPB packaging structure" -ForegroundColor White
+Write-Host "  âœ... GitHub CI/CD workflows" -ForegroundColor White
+Write-Host "  âœ... SOTA scripts (backup, standards checker)" -ForegroundColor White
+Write-Host "  âœ... Modern tooling (pyproject.toml, ruff, uv)" -ForegroundColor White
+Write-Host "  âœ... Documentation (README, CONTRIBUTING, CHANGELOG)" -ForegroundColor White
 Write-Host ""
 
 Write-Host "âš¡ Time Savings:" -ForegroundColor Yellow
@@ -1217,7 +1217,7 @@ Write-Host "  5. Review docs/user-guide/INTEGRATION_GUIDE.md" -ForegroundColor W
 Write-Host "  6. uv run pytest -v  # Run tests" -ForegroundColor White
 Write-Host ""
 
-Write-Host "ðŸ“š Key Files to Review:" -ForegroundColor Cyan
+Write-Host "ðŸ"š Key Files to Review:" -ForegroundColor Cyan
 Write-Host "  - src/$pythonPackage/tools/resource_manager.py (smart tool with patterns!)" -ForegroundColor White
 Write-Host "  - tests/tools/test_resource_manager.py (operation-specific tests!)" -ForegroundColor White
 Write-Host "  - docs/user-guide/INTEGRATION_GUIDE.md (setup instructions!)" -ForegroundColor White
@@ -1232,8 +1232,8 @@ if ($config.Modules -contains 'safety.py') {
 }
 Write-Host ""
 
-Write-Host "âœ… Repository is 80% production-ready!" -ForegroundColor Green
-Write-Host "ðŸ’¡ Remaining: Complete TODOs in operation logic (30-60 min)" -ForegroundColor Yellow
+Write-Host "âœ... Repository is 80% production-ready!" -ForegroundColor Green
+Write-Host "ðŸ'¡ Remaining: Complete TODOs in operation logic (30-60 min)" -ForegroundColor Yellow
 Write-Host ""
 
 Write-Host "â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•" -ForegroundColor Magenta

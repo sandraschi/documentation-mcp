@@ -68,7 +68,7 @@ hits = store.search("active standards only", limit=10, where="metadata.status = 
 **Why LanceDB + bge-small (not Chroma/Qdrant/Pinecone by default):**
 
 - Zero background process — fits naked-PC and Tauri bundle constraints
-- Same pattern in `docs_mcp`, optional RAG in `plex-mcp`, `calibre-mcp`, `myconf`, `tvtropes-mcp`, `obsidian-mcp`
+- Same pattern in `docs_mcp`, optional RAG in `plex-mcp`, `calibre-mcp`, `teleconference-mcp`, `tvtropes-mcp`, `obsidian-mcp`
 - Sub-50 ms retrieval at fleet doc scale on local NVMe
 - FastEmbed cache under repo `data/cache/fastembed` (see `config.CACHE_PATH`)
 
@@ -191,7 +191,7 @@ Track experiments in repo-local `docs/` or `STATUS.md`; do not expand this stand
 | **mcp-central-docs** | Canonical `BaseVectorStore`, docs MCP tools, web dashboard |
 | **plex-mcp** | Optional LanceDB media metadata |
 | **calibre-mcp** | Library semantic search |
-| **myconf** | Meeting transcripts + insights tables |
+| **teleconference-mcp** | Meeting transcripts + insights tables |
 | **tvtropes-mcp** | Trope/work semantic search |
 | **obsidian-mcp** | Vault reindex |
 | **jellyfin-mcp** | `RAGService` for media context |
@@ -212,3 +212,4 @@ Track experiments in repo-local `docs/` or `STATUS.md`; do not expand this stand
 
 **Owner:** Sandra Schi  
 **Review:** Quarterly or when embedding model / LanceDB major version changes
+

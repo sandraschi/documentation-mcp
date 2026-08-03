@@ -218,7 +218,7 @@ Perfect for:
 - Python agents via custom tasks or Docker
 
 **Reference Implementation:**
-- myconf: LiveKit conferencing with MCP, web app, Python agent
+- teleconference-mcp: LiveKit conferencing with MCP, web app, Python agent
 
 ---
 
@@ -334,5 +334,6 @@ Use the audit checklist to find and fix across all MCP server repos.
 ---
 
 **Last Updated**: 2026-02-11
+
 
 

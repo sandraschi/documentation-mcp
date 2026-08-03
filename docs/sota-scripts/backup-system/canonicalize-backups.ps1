@@ -23,8 +23,8 @@ param(
     [switch]$DryRun = $false
 )
 
-Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
-Write-Host "â•‘        ðŸ”- CANONICALIZE BACKUPS - Symlink Fleet ðŸ”-       â•‘" -ForegroundColor Cyan
+Write-Host "`nâ•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+Write-Host "â•'        ðŸ"- CANONICALIZE BACKUPS - Symlink Fleet ðŸ"-       â•'" -ForegroundColor Cyan
 Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Cyan
 
 if (-not (Test-Path $CanonicalScript)) {
@@ -89,7 +89,7 @@ foreach ($repo in $repos) {
             # 3. If successful, remove backup
             Remove-Item $bakPath -Force
             
-            Write-Host "    âœ… Successfully linked to canonical SOTA script" -ForegroundColor Green
+            Write-Host "    âœ... Successfully linked to canonical SOTA script" -ForegroundColor Green
             $linked++
         }
         catch {

@@ -3,7 +3,7 @@
 **Last Updated:** 2026-07-13
 **Status:** Active Development (SOTA 2026)
 **Version:** 0.1.0
-**Source Repo:** `D:\Dev\repos\myconf`
+**Source Repo:** `D:\Dev\repos\teleconference-mcp`
 
 ---
 
@@ -155,7 +155,7 @@ Self-hosted video conferencing platform with AI voice agent ("Visio"), built on 
 "mcpServers": {
   "teleconference-mcp": {
     "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/myconf", "run", "teleconference-mcp"]
+    "args": ["--directory", "D:\Dev\repos\teleconference-mcp", "run", "teleconference-mcp"]
   }
 }
 ```
@@ -168,3 +168,4 @@ Self-hosted video conferencing platform with AI voice agent ("Visio"), built on 
 - **Fleet registry**: `operations/fleet-registry.json` (id: teleconference-mcp, port: 10886)
 - **Web app registry**: `operations/webapp-registry.json` (port 10886)
 - **Patterns**: `patterns/README.md` (Turborepo MCP Monorepo Pattern reference)
+

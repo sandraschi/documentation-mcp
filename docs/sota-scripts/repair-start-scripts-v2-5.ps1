@@ -1,5 +1,5 @@
 # repair-start-scripts-v2-5.ps1
-# DEPRECATED — this script minified/overwrote fleet start.ps1 and caused instacrash.
+# DEPRECATED - this script minified/overwrote fleet start.ps1 and caused instacrash.
 # Use scripts/repair-fleet-start-unminify.ps1 and scripts/repair-starts-launchers.ps1 instead.
 Write-Host "ERROR: repair-start-scripts-v2-5.ps1 is DEPRECATED and must not be run." -ForegroundColor Red
 Write-Host "Use: .\scripts\repair-fleet-start-unminify.ps1" -ForegroundColor Yellow

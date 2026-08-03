@@ -168,7 +168,7 @@ One-shot script: `teleoperator-mcp/scripts/m1-up.ps1`
 | Vite blocked host | Serve Host header | `allowedHosts` in vite.config |
 | HUD `WS --` | Pose WebSocket down | `webapp\start.bat`; same-origin `wss://…/ws/teleop` |
 | Watchdog voice looping | Old backend + heartbeat/watchdog bug | Restart `webapp\start.bat` (2026-06-04 fix) |
-| Gray view / HUD `vid--` | LiveKit publisher off or SFU broken | Start publisher; rebuild myconf LiveKit if STUN 500 — see [LIVEKIT.md](../../teleoperator-mcp/docs/LIVEKIT.md) |
+| Gray view / HUD `vid--` | LiveKit publisher off or SFU broken | Start publisher; rebuild teleconference-mcp LiveKit if STUN 500 — see [LIVEKIT.md](../../teleoperator-mcp/docs/LIVEKIT.md) |
 | Drive no motion | yahboom-mcp / Pi ROS offline | Check `10892` health; SSH/ROS on Boomy |
 | Tailscale OK, no Goliath | ACL / device approval | Admin console → approve Pico |
 | Session drops | WiFi sleep | Keep browser foreground; exit VR when done |
@@ -209,3 +209,4 @@ Wolvic on Pico Store (v1.8+) or sideload from [Igalia/wolvic releases](https://g
 - [projects/teleoperator-mcp](../projects/teleoperator-mcp/README.md)
 - [projects/yahboom-mcp](../projects/yahboom-mcp/README.md)
 - [projects/tailscale-mcp](../projects/tailscale-mcp/README.md)
+

@@ -112,39 +112,39 @@ if (-not $Interactive) {
 
 function Show-FeatureMenu {
     Write-Host ""
-    Write-Host "â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
-    Write-Host "â•‘      ðŸš€ FULLSTACK APP BUILDER - Feature Selection       â•‘" -ForegroundColor Cyan
+    Write-Host "â•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Cyan
+    Write-Host "â•'      ðŸš€ FULLSTACK APP BUILDER - Feature Selection       â•'" -ForegroundColor Cyan
     Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "Building: " -NoNewline -ForegroundColor Yellow
     Write-Host $AppName -ForegroundColor White
     Write-Host ""
     
-    Write-Host "ðŸ“¦ CORE FEATURES (Always Included)" -ForegroundColor Green
-    Write-Host "   âœ“ FastAPI Backend + PostgreSQL + Redis" -ForegroundColor Gray
-    Write-Host "   âœ“ React Frontend + TypeScript + Chakra UI" -ForegroundColor Gray
-    Write-Host "   âœ“ Docker Setup + Basic Auth" -ForegroundColor Gray
+    Write-Host "ðŸ"¦ CORE FEATURES (Always Included)" -ForegroundColor Green
+    Write-Host "   âœ" FastAPI Backend + PostgreSQL + Redis" -ForegroundColor Gray
+    Write-Host "   âœ" React Frontend + TypeScript + Chakra UI" -ForegroundColor Gray
+    Write-Host "   âœ" Docker Setup + Basic Auth" -ForegroundColor Gray
     Write-Host ""
     
     Write-Host "Select features to include:" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "  1. ðŸ¤- AI ChatBot (OpenAI, Anthropic, Ollama, LMStudio)" -ForegroundColor Cyan
-    Write-Host "  2. ðŸ”Œ MCP Client Dashboard (Universal MCP Frontend)" -ForegroundColor Cyan
-    Write-Host "  3. ðŸ“ File Upload & Processing (Images/PDFs)" -ForegroundColor Cyan
+    Write-Host "  2. ðŸ"Œ MCP Client Dashboard (Universal MCP Frontend)" -ForegroundColor Cyan
+    Write-Host "  3. ðŸ" File Upload & Processing (Images/PDFs)" -ForegroundColor Cyan
     Write-Host "  4. ðŸŽ¤ Voice Interface (Speech in/out)" -ForegroundColor Cyan
-    Write-Host "  5. ðŸ” 2FA Authentication (TOTP)" -ForegroundColor Cyan
-    Write-Host "  6. ðŸ“± PWA Support (Offline, Installable)" -ForegroundColor Cyan
-    Write-Host "  7. ðŸ“Š Full Monitoring (Prometheus, Grafana, Loki)" -ForegroundColor Cyan
-    Write-Host "  8. ðŸ“ˆ Advanced Analytics Dashboard" -ForegroundColor Cyan
-    Write-Host "  9. ðŸ“§ Email Service Integration" -ForegroundColor Cyan
-    Write-Host " 10. ðŸ”” Real-time Features (WebSockets)" -ForegroundColor Cyan
+    Write-Host "  5. ðŸ" 2FA Authentication (TOTP)" -ForegroundColor Cyan
+    Write-Host "  6. ðŸ"± PWA Support (Offline, Installable)" -ForegroundColor Cyan
+    Write-Host "  7. ðŸ"Š Full Monitoring (Prometheus, Grafana, Loki)" -ForegroundColor Cyan
+    Write-Host "  8. ðŸ"ˆ Advanced Analytics Dashboard" -ForegroundColor Cyan
+    Write-Host "  9. ðŸ"§ Email Service Integration" -ForegroundColor Cyan
+    Write-Host " 10. ðŸ"" Real-time Features (WebSockets)" -ForegroundColor Cyan
     Write-Host " 11. ðŸŒ MCP SERVER (Expose app as MCP server!)" -ForegroundColor Magenta
     Write-Host " 12. ðŸ-¥ï¸  Electron Wrapper (Desktop app)" -ForegroundColor Magenta
-    Write-Host " 13. ðŸ“ Prompt Engineering (Templates, conversations)" -ForegroundColor Cyan
-    Write-Host " 14. ðŸ‘¥ Multi-User Support (Teams, collaboration)" -ForegroundColor Cyan
-    Write-Host " 15. ðŸ“Š Usage Analytics (Cost tracking, metrics)" -ForegroundColor Cyan
+    Write-Host " 13. ðŸ" Prompt Engineering (Templates, conversations)" -ForegroundColor Cyan
+    Write-Host " 14. ðŸ'¥ Multi-User Support (Teams, collaboration)" -ForegroundColor Cyan
+    Write-Host " 15. ðŸ"Š Usage Analytics (Cost tracking, metrics)" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "ðŸ’¼ QUICK BUNDLES:" -ForegroundColor Yellow
+    Write-Host "ðŸ'¼ QUICK BUNDLES:" -ForegroundColor Yellow
     Write-Host "  A. Minimal (Core only)" -ForegroundColor Magenta
     Write-Host "  B. Standard (Core + AI + 2FA + PWA + Monitoring)" -ForegroundColor Magenta
     Write-Host "  C. Enterprise (Everything!)" -ForegroundColor Magenta
@@ -273,17 +273,17 @@ if ($Interactive) {
 # Display selected features
 Write-Host ""
 Write-Host "ðŸŽ¯ Selected Features:" -ForegroundColor Cyan
-if ($IncludeAI) { Write-Host "   âœ“ AI ChatBot" -ForegroundColor Green }
-if ($IncludeMCP) { Write-Host "   âœ“ MCP Client Dashboard" -ForegroundColor Green }
-if ($IncludeFileUpload) { Write-Host "   âœ“ File Upload & Processing" -ForegroundColor Green }
-if ($IncludeVoice) { Write-Host "   âœ“ Voice Interface" -ForegroundColor Green }
-if ($Include2FA) { Write-Host "   âœ“ 2FA Authentication" -ForegroundColor Green }
-if ($IncludePWA) { Write-Host "   âœ“ PWA Support" -ForegroundColor Green }
-if ($IncludeMonitoring) { Write-Host "   âœ“ Full Monitoring Stack" -ForegroundColor Green }
-if ($IncludeAdvancedAnalytics) { Write-Host "   âœ“ Advanced Analytics" -ForegroundColor Green }
-if ($IncludeEmail) { Write-Host "   âœ“ Email Service" -ForegroundColor Green }
-if ($IncludeRealtime) { Write-Host "   âœ“ Real-time Features" -ForegroundColor Green }
-if ($IncludeMCPServer) { Write-Host "   âœ“ MCP SERVER (App exposes MCP tools!)" -ForegroundColor Magenta }
+if ($IncludeAI) { Write-Host "   âœ" AI ChatBot" -ForegroundColor Green }
+if ($IncludeMCP) { Write-Host "   âœ" MCP Client Dashboard" -ForegroundColor Green }
+if ($IncludeFileUpload) { Write-Host "   âœ" File Upload & Processing" -ForegroundColor Green }
+if ($IncludeVoice) { Write-Host "   âœ" Voice Interface" -ForegroundColor Green }
+if ($Include2FA) { Write-Host "   âœ" 2FA Authentication" -ForegroundColor Green }
+if ($IncludePWA) { Write-Host "   âœ" PWA Support" -ForegroundColor Green }
+if ($IncludeMonitoring) { Write-Host "   âœ" Full Monitoring Stack" -ForegroundColor Green }
+if ($IncludeAdvancedAnalytics) { Write-Host "   âœ" Advanced Analytics" -ForegroundColor Green }
+if ($IncludeEmail) { Write-Host "   âœ" Email Service" -ForegroundColor Green }
+if ($IncludeRealtime) { Write-Host "   âœ" Real-time Features" -ForegroundColor Green }
+if ($IncludeMCPServer) { Write-Host "   âœ" MCP SERVER (App exposes MCP tools!)" -ForegroundColor Magenta }
 Write-Host ""
 
 # =============================================================================
@@ -315,7 +315,7 @@ Write-Host ""
 # CREATE PROJECT STRUCTURE
 # =============================================================================
 
-Write-Host "ðŸ“ Creating project structure..." -ForegroundColor Cyan
+Write-Host "ðŸ" Creating project structure..." -ForegroundColor Cyan
 
 $directories = @(
     "frontend",
@@ -418,7 +418,7 @@ $packageJsonPath = Join-Path $AppPath "frontend/package.json"
 $packageJson | Out-File -FilePath $packageJsonPath -Encoding UTF8
 
 # Generate package-lock.json
-Write-Host "ðŸ“¦ Generating package-lock.json..." -ForegroundColor Cyan
+Write-Host "ðŸ"¦ Generating package-lock.json..." -ForegroundColor Cyan
 Push-Location (Join-Path $AppPath "frontend")
 npm install --package-lock-only --silent 2>&1 | Out-Null
 Pop-Location
@@ -556,7 +556,7 @@ $tsConfig | Out-File -FilePath $tsConfigPath -Encoding UTF8
 # =============================================================================
 
 if ($IncludePWA) {
-    Write-Host "ðŸ“± Generating PWA files..." -ForegroundColor Cyan
+    Write-Host "ðŸ"± Generating PWA files..." -ForegroundColor Cyan
 
 # PWA Manifest
 $pwaManifest = @"
@@ -651,7 +651,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker
       .register('/sw.js')
       .then((registration) => {
-        console.log('âœ… Service Worker registered:', registration);
+        console.log('âœ... Service Worker registered:', registration);
       })
       .catch((error) => {
         console.error('âŒ Service Worker registration failed:', error);
@@ -1086,7 +1086,7 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
                         <Text fontSize="sm">Docker + Redis + Monitoring</Text>
                       </Box>
                       <Box p={4} borderWidth="1px" borderRadius="lg">
-                        <Heading size="sm" mb={2}>ðŸ”„ CI/CD</Heading>
+                        <Heading size="sm" mb={2}>ðŸ"„ CI/CD</Heading>
                         <Text fontSize="sm">GitHub Actions + Testing</Text>
                       </Box>
                     </SimpleGrid>
@@ -1200,7 +1200,7 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
               <TabPanel>
                 <VStack align="start" spacing={6}>
                   <Box>
-                    <Heading size="md" mb={3}>ðŸ“ Adding New Pages</Heading>
+                    <Heading size="md" mb={3}>ðŸ" Adding New Pages</Heading>
                     <Text mb={3}>Create a new page component in <Code>frontend/src/pages/</Code></Text>
                     <Box bg="gray.900" p={4} borderRadius="md" color="white" fontFamily="mono" fontSize="sm">
                       <Text>{'// frontend/src/pages/NewPage.tsx'}</Text>
@@ -1217,7 +1217,7 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
                   <Divider />
 
                   <Box>
-                    <Heading size="md" mb={3}>ðŸ”Œ Adding API Endpoints</Heading>
+                    <Heading size="md" mb={3}>ðŸ"Œ Adding API Endpoints</Heading>
                     <Text mb={3}>Create new routes in <Code>backend/app/api/v1/</Code></Text>
                     <Box bg="gray.900" p={4} borderRadius="md" color="white" fontFamily="mono" fontSize="sm">
                       <Text>{'# backend/app/api/v1/items.py'}</Text>
@@ -1264,7 +1264,7 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
                   <Divider />
 
                   <Box>
-                    <Heading size="md" mb={3}>ðŸ“š Documentation</Heading>
+                    <Heading size="md" mb={3}>ðŸ"š Documentation</Heading>
                     <VStack align="start" spacing={2}>
                       <Text>â€¢ <Code>README.md</Code> - Project overview and setup</Text>
                       <Text>â€¢ <Code>docs/api/</Code> - API documentation</Text>
@@ -2371,7 +2371,7 @@ $aiSettingsComponent | Out-File -FilePath $aiSettingsComponentPath -Encoding UTF
 # =============================================================================
 
 if ($IncludeMCP) {
-    Write-Host "ðŸ”Œ Generating MCP Client components..." -ForegroundColor Cyan
+    Write-Host "ðŸ"Œ Generating MCP Client components..." -ForegroundColor Cyan
 
 # MCP Client Dashboard Component
 $mcpDashboardComponent = @"
@@ -2571,7 +2571,7 @@ const MCPDashboard: React.FC = () => {
       if (data.status === 'success') {
         setToolResults({ ...toolResults, [toolName]: data });
         toast({
-          title: ``âœ… $`{toolName} executed``,
+          title: ``âœ... $`{toolName} executed``,
           description: ``Executed on $`{selectedServer.name}``,
           status: 'success',
           duration: 3000,
@@ -2602,7 +2602,7 @@ const MCPDashboard: React.FC = () => {
     <Box>
       <VStack spacing={6} align="stretch">
         <HStack justify="space-between">
-          <Heading size="lg">ðŸ”Œ MCP Client Dashboard</Heading>
+          <Heading size="lg">ðŸ"Œ MCP Client Dashboard</Heading>
           <Button
             leftIcon={<FiRefreshCw />}
             onClick={loadServers}
@@ -2753,7 +2753,7 @@ $mcpDashboardComponent | Out-File -FilePath $mcpDashboardComponentPath -Encoding
 # =============================================================================
 
 if ($IncludeFileUpload) {
-    Write-Host "ðŸ“ Generating File Upload components..." -ForegroundColor Cyan
+    Write-Host "ðŸ" Generating File Upload components..." -ForegroundColor Cyan
 
 # File Upload Component
 $fileUploadComponent = @"
@@ -2851,7 +2851,7 @@ const FileUpload: React.FC = () => {
   return (
     <Box>
       <VStack spacing={6} align="stretch">
-        <Heading size="lg">ðŸ“ File Upload & Processing</Heading>
+        <Heading size="lg">ðŸ" File Upload & Processing</Heading>
 
         {/* Drop Zone */}
         <Box
@@ -3141,12 +3141,12 @@ const VoiceInterface: React.FC = () => {
         <HStack justify="center">
           {isListening && (
             <Badge colorScheme="red" fontSize="md" px={4} py={2}>
-              ðŸ”´ Listening...
+              ðŸ"´ Listening...
             </Badge>
           )}
           {isSpeaking && (
             <Badge colorScheme="orange" fontSize="md" px={4} py={2}>
-              ðŸ”Š Speaking...
+              ðŸ"Š Speaking...
             </Badge>
           )}
         </HStack>
@@ -3216,7 +3216,7 @@ $voiceInterfaceComponent | Out-File -FilePath $voiceInterfaceComponentPath -Enco
 # =============================================================================
 
 if ($IncludePromptEngineering) {
-    Write-Host "ðŸ“ Generating Prompt Engineering UI..." -ForegroundColor Cyan
+    Write-Host "ðŸ" Generating Prompt Engineering UI..." -ForegroundColor Cyan
 
 # Prompt Engineering Component
 $promptEngineeringComponent = @"
@@ -3347,7 +3347,7 @@ const PromptEngineering: React.FC = () => {
   return (
     <Box>
       <VStack spacing={6} align="stretch">
-        <Heading size="lg">ðŸ“ Prompt Engineering</Heading>
+        <Heading size="lg">ðŸ" Prompt Engineering</Heading>
 
         {/* Prompt Templates */}
         <Box>
@@ -3474,7 +3474,7 @@ $promptEngineeringComponent | Out-File -FilePath $promptEngineeringComponentPath
 # =============================================================================
 
 if ($IncludeAnalytics) {
-    Write-Host "ðŸ“Š Generating Usage Analytics..." -ForegroundColor Cyan
+    Write-Host "ðŸ"Š Generating Usage Analytics..." -ForegroundColor Cyan
 
 # Usage Analytics Component
 $usageAnalyticsComponent = @"
@@ -3531,7 +3531,7 @@ const UsageAnalytics: React.FC = () => {
   return (
     <Box>
       <VStack spacing={6} align="stretch">
-        <Heading size="lg">ðŸ“Š Usage Analytics & Cost Tracking</Heading>
+        <Heading size="lg">ðŸ"Š Usage Analytics & Cost Tracking</Heading>
 
         {/* Usage Stats */}
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4}>
@@ -3772,7 +3772,7 @@ $dashboardPage | Out-File -FilePath $dashboardPagePath -Encoding UTF8
 # =============================================================================
 
 if ($Include2FA) {
-    Write-Host "ðŸ” Generating 2FA components..." -ForegroundColor Cyan
+    Write-Host "ðŸ" Generating 2FA components..." -ForegroundColor Cyan
 
 # 2FA Setup Page
 $twoFactorSetupPage = @"
@@ -3978,7 +3978,7 @@ const TwoFactorSetup: React.FC = () => {
                   You'll need to enter a code from your authenticator app when logging in.
                 </Text>
                 <Badge colorScheme="green" fontSize="md" px={4} py={2}>
-                  âœ“ Account Secured
+                  âœ" Account Secured
                 </Badge>
               </VStack>
             </CardBody>
@@ -3988,7 +3988,7 @@ const TwoFactorSetup: React.FC = () => {
         <Card bg="blue.50" borderWidth="1px" borderColor="blue.200">
           <CardBody>
             <VStack spacing={2} align="stretch">
-              <Heading size="sm">ðŸ“± Recommended Authenticator Apps</Heading>
+              <Heading size="sm">ðŸ"± Recommended Authenticator Apps</Heading>
               <Text fontSize="sm">â€¢ Google Authenticator (iOS/Android)</Text>
               <Text fontSize="sm">â€¢ Microsoft Authenticator (iOS/Android)</Text>
               <Text fontSize="sm">â€¢ Authy (iOS/Android/Desktop)</Text>
@@ -4009,7 +4009,7 @@ $twoFactorSetupPage | Out-File -FilePath $twoFactorSetupPagePath -Encoding UTF8
 }
 
 # Monitoring Page (always included)
-Write-Host "ðŸ“Š Generating Monitoring page..." -ForegroundColor Cyan
+Write-Host "ðŸ"Š Generating Monitoring page..." -ForegroundColor Cyan
 
 $monitoringPage = @"
 import React, { useState } from 'react';
@@ -4052,7 +4052,7 @@ const Monitoring: React.FC = () => {
       <VStack spacing={8} align="stretch">
         {/* Header */}
         <Box>
-          <Heading size="xl" mb={2}>ðŸ“Š Monitoring Dashboard</Heading>
+          <Heading size="xl" mb={2}>ðŸ"Š Monitoring Dashboard</Heading>
           <Text color="gray.600">
             Real-time monitoring and observability for your fullstack application
           </Text>
@@ -4061,7 +4061,7 @@ const Monitoring: React.FC = () => {
         {/* Stack Overview */}
         <Card bg={bgColor} borderColor={borderColor}>
           <CardHeader>
-            <Heading size="md">ðŸ” Monitoring Stack</Heading>
+            <Heading size="md">ðŸ" Monitoring Stack</Heading>
           </CardHeader>
           <CardBody>
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
@@ -4109,7 +4109,7 @@ const Monitoring: React.FC = () => {
             </SimpleGrid>
 
             <Box mt={6} p={4} bg={useColorModeValue('blue.50', 'blue.900')} borderRadius="md">
-              <Text fontSize="sm" fontWeight="bold" mb={2}>ðŸ” Grafana Credentials:</Text>
+              <Text fontSize="sm" fontWeight="bold" mb={2}>ðŸ" Grafana Credentials:</Text>
               <Code fontSize="sm">Username: admin | Password: admin</Code>
             </Box>
           </CardBody>
@@ -4118,7 +4118,7 @@ const Monitoring: React.FC = () => {
         {/* Embedded Dashboards */}
         <Card bg={bgColor} borderColor={borderColor}>
           <CardHeader>
-            <Heading size="md">ðŸ“ˆ Live Dashboards</Heading>
+            <Heading size="md">ðŸ"ˆ Live Dashboards</Heading>
           </CardHeader>
           <CardBody>
             <Tabs index={activeTab} onChange={setActiveTab} variant="enclosed" colorScheme="blue">
@@ -4237,7 +4237,7 @@ const Monitoring: React.FC = () => {
         {/* Monitoring Documentation */}
         <Card bg={bgColor} borderColor={borderColor}>
           <CardHeader>
-            <Heading size="md">ðŸ“š How It Works</Heading>
+            <Heading size="md">ðŸ"š How It Works</Heading>
           </CardHeader>
           <CardBody>
             <VStack align="stretch" spacing={4}>
@@ -5453,7 +5453,7 @@ def create_image_generation_studio():
                 generator=torch.Generator().manual_seed(seed) if seed >= 0 else None
             ).images[0]
             
-            return image, f"âœ… Generated with {model}"
+            return image, f"âœ... Generated with {model}"
             
         except Exception as e:
             return None, f"âŒ Error: {str(e)}"
@@ -5490,7 +5490,7 @@ def create_image_generation_studio():
                 num_inference_steps=steps
             ).images[0]
             
-            return result, f"âœ… Transformed with {model}"
+            return result, f"âœ... Transformed with {model}"
             
         except Exception as e:
             return None, f"âŒ Error: {str(e)}"
@@ -5502,7 +5502,7 @@ def create_image_generation_studio():
         
         with gr.Tabs():
             # TEXT TO IMAGE
-            with gr.Tab("ðŸ“ Text to Image"):
+            with gr.Tab("ðŸ" Text to Image"):
                 with gr.Row():
                     with gr.Column(scale=1):
                         txt_prompt = gr.Textbox(
@@ -5641,7 +5641,7 @@ def create_image_generation_studio():
                 ```
                 """)
                 
-                gr.Markdown("### ðŸ“Š System Info")
+                gr.Markdown("### ðŸ"Š System Info")
                 import torch
                 device_info = "CUDA Available" if torch.cuda.is_available() else "CPU Only (Slow)"
                 gr.Textbox(label="Device", value=device_info, interactive=False)
@@ -5661,7 +5661,7 @@ $mainAppPath = Join-Path $AppPath "backend/app/main.py"
 $mainApp | Out-File -FilePath $mainAppPath -Encoding UTF8
 
 # Email Service Module
-Write-Host "ðŸ“§ Generating Email service..." -ForegroundColor Cyan
+Write-Host "ðŸ"§ Generating Email service..." -ForegroundColor Cyan
 
 $emailService = @"
 """
@@ -5725,7 +5725,7 @@ async def send_password_reset_email(email: EmailStr, reset_token: str):
     html = f"""
     <html>
         <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #3182CE;">Password Reset Request ðŸ”</h2>
+            <h2 style="color: #3182CE;">Password Reset Request ðŸ"</h2>
             <p>We received a request to reset your password.</p>
             <p>Click the button below to reset your password:</p>
             <p style="text-align: center; margin: 30px 0;">
@@ -5795,7 +5795,7 @@ $emailServicePath = Join-Path $AppPath "backend/app/email.py"
 $emailService | Out-File -FilePath $emailServicePath -Encoding UTF8
 
 # MCP Client Configuration (for connecting TO other MCP servers)
-Write-Host "ðŸ”Œ Generating MCP Client config..." -ForegroundColor Cyan
+Write-Host "ðŸ"Œ Generating MCP Client config..." -ForegroundColor Cyan
 
 $mcpServersConfig = @"
 {
@@ -6048,7 +6048,7 @@ $mcpRunScript = @"
 
 Write-Host "ðŸŒ Starting $AppName MCP Server..." -ForegroundColor Cyan
 Write-Host ""
-Write-Host "ðŸ“‹ Exposed MCP Tools:" -ForegroundColor Yellow
+Write-Host "ðŸ"‹ Exposed MCP Tools:" -ForegroundColor Yellow
 Write-Host "   - query_database" -ForegroundColor Gray
 Write-Host "   - process_image_mcp" -ForegroundColor Gray
 Write-Host "   - send_notification" -ForegroundColor Gray
@@ -6056,7 +6056,7 @@ Write-Host "   - get_app_status" -ForegroundColor Gray
 Write-Host "   - analyze_logs" -ForegroundColor Gray
 Write-Host "   - execute_workflow" -ForegroundColor Gray
 Write-Host ""
-Write-Host "ðŸ”- To use in Claude Desktop:" -ForegroundColor Yellow
+Write-Host "ðŸ"- To use in Claude Desktop:" -ForegroundColor Yellow
 Write-Host "   Add the config from mcp-config.json to:" -ForegroundColor Gray
 Write-Host "   %APPDATA%\Claude\claude_desktop_config.json" -ForegroundColor Gray
 Write-Host ""
@@ -6247,12 +6247,12 @@ if (!(Get-Command docker -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
-Write-Host "âœ“ Docker found" -ForegroundColor Green
+Write-Host "âœ" Docker found" -ForegroundColor Green
 
 # Check if Docker is running
 try {
     docker ps | Out-Null
-    Write-Host "âœ“ Docker is running" -ForegroundColor Green
+    Write-Host "âœ" Docker is running" -ForegroundColor Green
 } catch {
     Write-Host "âš ï¸  Docker not running - starting Docker Desktop..." -ForegroundColor Yellow
     Start-Process "Docker Desktop"
@@ -6275,7 +6275,7 @@ Write-Host "ðŸŒ Opening $AppName..." -ForegroundColor Cyan
 Start-Process "http://localhost:9132"
 
 Write-Host ""
-Write-Host "âœ… $AppName is running!" -ForegroundColor Green
+Write-Host "âœ... $AppName is running!" -ForegroundColor Green
 Write-Host ""
 Write-Host "Access points:" -ForegroundColor Cyan
 Write-Host "  â€¢ Frontend:  http://localhost:9132" -ForegroundColor White
@@ -6302,7 +6302,7 @@ $createShortcut = @"
 `$Shortcut.Description = "Start $AppName"
 `$Shortcut.Save()
 
-Write-Host "âœ… Desktop shortcut created!" -ForegroundColor Green
+Write-Host "âœ... Desktop shortcut created!" -ForegroundColor Green
 "@
 
 $createShortcutPath = Join-Path $AppPath "scripts/create-shortcut.ps1"
@@ -6709,7 +6709,7 @@ $grafanaDashboard = @"
       },
       {
         "id": 2,
-        "title": "ðŸ“Š Total Requests (1h)",
+        "title": "ðŸ"Š Total Requests (1h)",
         "type": "stat",
         "datasource": "Prometheus",
         "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
@@ -6805,7 +6805,7 @@ $grafanaDashboard = @"
       },
       {
         "id": 5,
-        "title": "ðŸ“ˆ Request Rate (req/sec)",
+        "title": "ðŸ"ˆ Request Rate (req/sec)",
         "type": "timeseries",
         "datasource": "Prometheus",
         "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
@@ -6881,7 +6881,7 @@ $grafanaDashboard = @"
       },
       {
         "id": 8,
-        "title": "ðŸ“Š HTTP Status Codes",
+        "title": "ðŸ"Š HTTP Status Codes",
         "type": "bargauge",
         "datasource": "Prometheus",
         "gridPos": {"h": 8, "w": 8, "x": 8, "y": 12},
@@ -6912,7 +6912,7 @@ $grafanaDashboard = @"
       },
       {
         "id": 9,
-        "title": "ðŸ’¾ Cache Performance",
+        "title": "ðŸ'¾ Cache Performance",
         "type": "timeseries",
         "datasource": "Prometheus",
         "gridPos": {"h": 8, "w": 8, "x": 16, "y": 12},
@@ -6941,7 +6941,7 @@ $grafanaDashboard = @"
       },
       {
         "id": 10,
-        "title": "ðŸ“ Application Logs (Live Stream)",
+        "title": "ðŸ" Application Logs (Live Stream)",
         "type": "logs",
         "datasource": "Loki",
         "gridPos": {"h": 10, "w": 24, "x": 0, "y": 20},
@@ -6963,7 +6963,7 @@ $grafanaDashboard = @"
       },
       {
         "id": 11,
-        "title": "ðŸ”¥ Error Logs (Last Hour)",
+        "title": "ðŸ"¥ Error Logs (Last Hour)",
         "type": "logs",
         "datasource": "Loki",
         "gridPos": {"h": 8, "w": 24, "x": 0, "y": 30},
@@ -7000,7 +7000,7 @@ $grafanaDashboard | Out-File -FilePath $grafanaDashboardPath -Encoding UTF8
 # =============================================================================
 
 if ($IncludeCI) {
-    Write-Host "ðŸ”„ Setting up CI/CD pipelines..." -ForegroundColor Cyan
+    Write-Host "ðŸ"„ Setting up CI/CD pipelines..." -ForegroundColor Cyan
     
     # GitHub Actions workflow
     $workflow = @"
@@ -7079,7 +7079,7 @@ jobs:
 # DOCUMENTATION
 # =============================================================================
 
-Write-Host "ðŸ“š Creating documentation..." -ForegroundColor Cyan
+Write-Host "ðŸ"š Creating documentation..." -ForegroundColor Cyan
 
 # README
 $readme = @"
@@ -7172,7 +7172,7 @@ $Description
 - **Model Management** - Load/unload local models
 - **Streaming Responses** - Real-time AI output
 
-### ðŸ”Œ MCP Client Dashboard
+### ðŸ"Œ MCP Client Dashboard
 - **Server Discovery** - Auto-detect Claude Desktop servers
 - **Tool Execution** - Run any MCP tool visually
 - **Server Connection** - Connect to any MCP server
@@ -7193,7 +7193,7 @@ $Description
 - **Auto Config** - mcp-config.json for Claude Desktop
 - **Dual Mode** - Client AND Server in one app!
 
-### ðŸ“ File Upload & Processing
+### ðŸ" File Upload & Processing
 - **Drag-Drop Upload** - Beautiful drop zone
 - **Image Processing** - Resize, thumbnail, grayscale
 - **PDF Extraction** - Text extraction, page count
@@ -7209,7 +7209,7 @@ $Description
 - **Voice Selection** - Choose from system voices
 - **Hands-Free** - Complete voice control
 
-### ðŸ” Security Features
+### ðŸ" Security Features
 - **2FA Setup** - TOTP authenticator support
 - **QR Code Generation** - Easy mobile setup
 - **Token Verification** - 6-digit code verification
@@ -7218,7 +7218,7 @@ $Description
 - **Authy** - Compatible
 - **1Password** - Compatible (Premium)
 
-### ðŸ“± PWA Support
+### ðŸ"± PWA Support
 - **Installable** - Add to home screen
 - **Offline Mode** - Service worker caching
 - **App-Like Experience** - Standalone display
@@ -7246,7 +7246,7 @@ cd frontend
 npm test
 ```
 
-## ðŸ“Š Monitoring
+## ðŸ"Š Monitoring
 
 The application includes comprehensive monitoring:
 
@@ -7259,7 +7259,7 @@ The application includes comprehensive monitoring:
 
 See `docs/deployment.md` for production deployment guides.
 
-## ðŸ“ API Documentation
+## ðŸ" API Documentation
 
 Interactive API documentation is available at `/docs` when running the backend.
 
@@ -7271,7 +7271,7 @@ Interactive API documentation is available at `/docs` when running the backend.
 4. Add tests
 5. Submit a pull request
 
-## ðŸ“„ License
+## ðŸ"„ License
 
 MIT License - see LICENSE file for details.
 "@
@@ -7311,14 +7311,14 @@ cd ../frontend
 npm run dev &
 FRONTEND_PID=`$!
 
-echo "âœ… Development environment started!"
+echo "âœ... Development environment started!"
 echo "Frontend: http://localhost:9132"
 echo "Backend: http://localhost:8000"
 echo "API Docs: http://localhost:8000/api/v1/docs"
 echo "Grafana: http://localhost:3001"
 
 # Wait for user interrupt
-trap "echo 'ðŸ›‘ Shutting down...'; kill `$BACKEND_PID `$FRONTEND_PID; exit" INT
+trap "echo 'ðŸ›' Shutting down...'; kill `$BACKEND_PID `$FRONTEND_PID; exit" INT
 wait
 "@
 
@@ -7330,14 +7330,14 @@ $setupScript = @"
 #!/bin/bash
 # Setup script for Loki Docker logging plugin
 
-echo "ðŸ”§ Setting up Loki Docker logging plugin..."
+echo "ðŸ"§ Setting up Loki Docker logging plugin..."
 
 # Install Loki Docker driver
 docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions
 
-echo "âœ… Loki Docker plugin installed successfully!"
+echo "âœ... Loki Docker plugin installed successfully!"
 echo ""
-echo "ðŸ“‹ To verify installation:"
+echo "ðŸ"‹ To verify installation:"
 echo "   docker plugin ls"
 echo ""
 echo "ðŸš€ Now you can start the application:"
@@ -7351,14 +7351,14 @@ $setupScript | Out-File -FilePath $setupScriptPath -Encoding UTF8
 $setupScriptWin = @"
 # Setup script for Loki Docker logging plugin (Windows)
 
-Write-Host "ðŸ”§ Setting up Loki Docker logging plugin..." -ForegroundColor Cyan
+Write-Host "ðŸ"§ Setting up Loki Docker logging plugin..." -ForegroundColor Cyan
 
 # Install Loki Docker driver
 docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions
 
-Write-Host "âœ… Loki Docker plugin installed successfully!" -ForegroundColor Green
+Write-Host "âœ... Loki Docker plugin installed successfully!" -ForegroundColor Green
 Write-Host ""
-Write-Host "ðŸ“‹ To verify installation:" -ForegroundColor Cyan
+Write-Host "ðŸ"‹ To verify installation:" -ForegroundColor Cyan
 Write-Host "   docker plugin ls" -ForegroundColor White
 Write-Host ""
 Write-Host "ðŸš€ Now you can start the application:" -ForegroundColor Cyan
@@ -7475,12 +7475,12 @@ $envExample | Out-File -FilePath $envExamplePath -Encoding UTF8
 Write-Host ""
 Write-Host "ðŸŽ‰ FULLSTACK APP '$AppName' CREATED SUCCESSFULLY!" -ForegroundColor Green
 Write-Host ""
-Write-Host "ðŸ“ Project Structure:" -ForegroundColor Cyan
-Write-Host "  â”œâ”€â”€ frontend/          # React + TypeScript + Chakra UI" -ForegroundColor Yellow
-Write-Host "  â”œâ”€â”€ backend/           # FastAPI + PostgreSQL + Redis" -ForegroundColor Yellow
-Write-Host "  â”œâ”€â”€ infrastructure/    # Docker + Monitoring + Nginx" -ForegroundColor Yellow
-Write-Host "  â”œâ”€â”€ docs/              # Documentation" -ForegroundColor Yellow
-Write-Host "  â””â”€â”€ scripts/           # Utility scripts" -ForegroundColor Yellow
+Write-Host "ðŸ" Project Structure:" -ForegroundColor Cyan
+Write-Host "  â"œâ"€â"€ frontend/          # React + TypeScript + Chakra UI" -ForegroundColor Yellow
+Write-Host "  â"œâ"€â"€ backend/           # FastAPI + PostgreSQL + Redis" -ForegroundColor Yellow
+Write-Host "  â"œâ"€â"€ infrastructure/    # Docker + Monitoring + Nginx" -ForegroundColor Yellow
+Write-Host "  â"œâ"€â"€ docs/              # Documentation" -ForegroundColor Yellow
+Write-Host "  â""â"€â"€ scripts/           # Utility scripts" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "ðŸš€ Next Steps:" -ForegroundColor Cyan
 Write-Host "  1. cd $AppName" -ForegroundColor White
@@ -7489,7 +7489,7 @@ Write-Host "  3. scripts/setup-loki.ps1  # Install Loki Docker plugin" -Foregrou
 Write-Host "  4. docker-compose up -d" -ForegroundColor White
 Write-Host "  5. Visit http://localhost:9132" -ForegroundColor White
 Write-Host ""
-Write-Host "ðŸ“Š Access Points:" -ForegroundColor Cyan
+Write-Host "ðŸ"Š Access Points:" -ForegroundColor Cyan
 Write-Host "  â€¢ Frontend: http://localhost:9132" -ForegroundColor White
 Write-Host "  â€¢ Backend API: http://localhost:8888" -ForegroundColor White
 Write-Host "  â€¢ API Docs: http://localhost:8888/api/v1/docs" -ForegroundColor White
@@ -7498,34 +7498,34 @@ Write-Host "  â€¢ Prometheus: http://localhost:9191" -ForegroundColor White
 Write-Host "  â€¢ Loki Logs: http://localhost:3199" -ForegroundColor White
 Write-Host ""
 Write-Host "âœ¨ Features Included:" -ForegroundColor Cyan
-Write-Host "  âœ… Modern React frontend with Chakra UI" -ForegroundColor Green
-Write-Host "  âœ… FastAPI backend with async support" -ForegroundColor Green
-if ($IncludeAI) { Write-Host "  âœ… AI ChatBot (4 providers: OpenAI, Anthropic, Ollama, LMStudio) ðŸ¤-" -ForegroundColor Green }
-if ($IncludeMCP) { Write-Host "  âœ… MCP Client Dashboard (Universal MCP Frontend) ðŸ”Œ" -ForegroundColor Green }
+Write-Host "  âœ... Modern React frontend with Chakra UI" -ForegroundColor Green
+Write-Host "  âœ... FastAPI backend with async support" -ForegroundColor Green
+if ($IncludeAI) { Write-Host "  âœ... AI ChatBot (4 providers: OpenAI, Anthropic, Ollama, LMStudio) ðŸ¤-" -ForegroundColor Green }
+if ($IncludeMCP) { Write-Host "  âœ... MCP Client Dashboard (Universal MCP Frontend) ðŸ"Œ" -ForegroundColor Green }
 if ($IncludeMCPServer) { 
-    Write-Host "  âœ… MCP SERVER - App exposes 6 MCP tools! ðŸŒ" -ForegroundColor Magenta
-    Write-Host "     â†’ Run: scripts/run-mcp-server.ps1" -ForegroundColor Gray
-    Write-Host "     â†’ Config: mcp-config.json (for Claude Desktop)" -ForegroundColor Gray
+    Write-Host "  âœ... MCP SERVER - App exposes 6 MCP tools! ðŸŒ" -ForegroundColor Magenta
+    Write-Host "     â†' Run: scripts/run-mcp-server.ps1" -ForegroundColor Gray
+    Write-Host "     â†' Config: mcp-config.json (for Claude Desktop)" -ForegroundColor Gray
 }
-if ($IncludeFileUpload) { Write-Host "  âœ… File Upload & Processing (Images/PDFs) ðŸ“" -ForegroundColor Green }
-if ($IncludeVoice) { Write-Host "  âœ… Voice Interface (Speech in/out) ðŸŽ¤" -ForegroundColor Green }
-if ($Include2FA) { Write-Host "  âœ… 2FA Authentication (TOTP) ðŸ”" -ForegroundColor Green }
-if ($IncludePWA) { Write-Host "  âœ… PWA Support (Installable, Offline) ðŸ“±" -ForegroundColor Green }
-Write-Host "  âœ… Comprehensive Help Modal ðŸ“š" -ForegroundColor Green
-Write-Host "  âœ… Professional Log Viewer ðŸ“Š" -ForegroundColor Green
-Write-Host "  âœ… Monitoring Dashboard (Grafana/Prometheus/Loki) ðŸ“ˆ" -ForegroundColor Green
-Write-Host "  âœ… Image Studio (Flux, Stable Diffusion, Text/Image-to-Image) ðŸŽ¨" -ForegroundColor Green
-Write-Host "  âœ… Email System (Welcome, Password Reset, Verification) ðŸ“§" -ForegroundColor Green
-Write-Host "  âœ… PostgreSQL database with migrations" -ForegroundColor Green
-Write-Host "  âœ… Redis caching and sessions" -ForegroundColor Green
+if ($IncludeFileUpload) { Write-Host "  âœ... File Upload & Processing (Images/PDFs) ðŸ"" -ForegroundColor Green }
+if ($IncludeVoice) { Write-Host "  âœ... Voice Interface (Speech in/out) ðŸŽ¤" -ForegroundColor Green }
+if ($Include2FA) { Write-Host "  âœ... 2FA Authentication (TOTP) ðŸ"" -ForegroundColor Green }
+if ($IncludePWA) { Write-Host "  âœ... PWA Support (Installable, Offline) ðŸ"±" -ForegroundColor Green }
+Write-Host "  âœ... Comprehensive Help Modal ðŸ"š" -ForegroundColor Green
+Write-Host "  âœ... Professional Log Viewer ðŸ"Š" -ForegroundColor Green
+Write-Host "  âœ... Monitoring Dashboard (Grafana/Prometheus/Loki) ðŸ"ˆ" -ForegroundColor Green
+Write-Host "  âœ... Image Studio (Flux, Stable Diffusion, Text/Image-to-Image) ðŸŽ¨" -ForegroundColor Green
+Write-Host "  âœ... Email System (Welcome, Password Reset, Verification) ðŸ"§" -ForegroundColor Green
+Write-Host "  âœ... PostgreSQL database with migrations" -ForegroundColor Green
+Write-Host "  âœ... Redis caching and sessions" -ForegroundColor Green
 if ($IncludeMonitoring) { 
-    Write-Host "  âœ… Loki log aggregation" -ForegroundColor Green 
-    Write-Host "  âœ… Prometheus metrics + Grafana dashboards" -ForegroundColor Green
+    Write-Host "  âœ... Loki log aggregation" -ForegroundColor Green 
+    Write-Host "  âœ... Prometheus metrics + Grafana dashboards" -ForegroundColor Green
 }
-Write-Host "  âœ… Docker containerization" -ForegroundColor Green
-Write-Host "  âœ… CI/CD pipelines" -ForegroundColor Green
-Write-Host "  âœ… Comprehensive testing" -ForegroundColor Green
-Write-Host "  âœ… Production-ready configuration" -ForegroundColor Green
+Write-Host "  âœ... Docker containerization" -ForegroundColor Green
+Write-Host "  âœ... CI/CD pipelines" -ForegroundColor Green
+Write-Host "  âœ... Comprehensive testing" -ForegroundColor Green
+Write-Host "  âœ... Production-ready configuration" -ForegroundColor Green
 Write-Host ""
 if ($IncludeMCPServer) {
     Write-Host "ðŸŒ MCP SERVER MODE ENABLED!" -ForegroundColor Magenta

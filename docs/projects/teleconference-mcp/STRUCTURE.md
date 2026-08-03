@@ -1,18 +1,17 @@
-﻿# Teleconference MCP — Directory Structure
+# Teleconference MCP — Directory Structure
 
-**Last Updated:** 2026-07-13
-**Source Repo:** `D:\Dev\repos\myconf` (renamed to `teleconference-mcp`)
+**Last Updated:** 2026-08-03
+**Source Repo:** `D:\Dev\repos\teleconference-mcp`
 **Version:** 0.1.0
 
 ---
 
 ## Top-Level Layout
 
-```
-myconf/
-├── myconf/                         # Python package (entry point)
+``nteleconference-mcp/
+├── teleconference_mcp/               # Python package (entry point)
 │   ├── __init__.py                  # Package marker
-│   ├── __main__.py                  # uv run -m myconf [conferencing|remoting|agent|web|all]
+│   ├── __main__.py                  # uv run -m teleconference_mcp [conferencing|remoting|agent|web|all]
 │   └── health.py                    # Shared health check utilities (LiveKit, Ollama, TCP)
 ├── apps/
 │   ├── agent/                       # Visio AI voice agent (Python)
@@ -192,3 +191,5 @@ FastMCP 3.2 MCP server with 8 tools. All tools accept `ctx: Context` with correl
 | `turbo.json` | Turborepo: build, lint, test, dev, type-check, check-sec, audit-deps |
 | `apps/web/.env.local` | `NEXT_PUBLIC_LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET` |
 | `apps/agent/.env` | `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET` (optional) |
+
+

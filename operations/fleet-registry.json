@@ -1,913 +1,913 @@
 {
-    "fleet": [
-        {
-            "id": "kyutai-mcp",
-            "name": "kyutai-mcp",
-            "description": "Run Kyutai Moshi locally. Drive it from a glass dashboard, and plug the same surface into your agent stack via FastMCP.",
-            "port": 10924,
-            "repo_path": "D:/Dev/repos/kyutai-mcp",
-            "category": "AI",
-            "icon": "Mic",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "local-llm-mcp",
-            "name": "Local LLM MCP Server",
-            "description": "A production-ready FastMCP 2.12+ compliant server for comprehensive LLM management and integration with 6 working providers and 5 SOTA portmanteau tools.",
-            "port": 10832,
-            "repo_path": "D:/Dev/repos/local-llm-mcp",
-            "category": "AI",
-            "icon": "Cpu",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "myai",
-            "name": "MyAI Platform",
-            "description": "Dual-mode AI microservices platform: FastAPI dashboard (3060), Docker/Traefik subapps, FastMCP 3.1 myai_platform_mcp with fleet web_sota (10888/10889), and a full monitoring stack. By FlowEngineer sandraschi.",
-            "port": 10888,
-            "repo_path": "D:/Dev/repos/myai",
-            "category": "AI",
-            "icon": "Layers",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "ocr-mcp",
-            "name": "OCR-MCP",
-            "description": "Complete AI OCR webapp and MCP server. A web app for people (draganddrop OCR, scanner, batch) and a FastMCP 3.1 MCP server for agentic IDEsClaude, Cursor, Windsurfso agents can run OCR, preprocessing, and workflows as tools. Same 10+ engines, WIA scanner (Windows), and pipelines; one repo.",
-            "port": 10858,
-            "repo_path": "D:/Dev/repos/ocr-mcp",
-            "category": "AI",
-            "fastmcp": "3.1"
-        },
-        {
-            "id": "sakana-mcp",
-            "name": "sakana-mcp",
-            "description": "MCP server that wraps Sakana AI Scientist v2 so Cursor can act as a research director for autonomous scientific loops.",
-            "port": 10862,
-            "repo_path": "D:/Dev/repos/sakana-mcp",
-            "category": "AI",
-            "icon": "BrainCircuit",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "speech-mcp",
-            "name": "Speech-MCP (Multi-Provider Speech Gateway)",
-            "description": "SOTA-grade MCP server and web application for industrial voice orchestration, leveraging the latest February 2026 AI stack.",
-            "port": 10917,
-            "repo_path": "D:/Dev/repos/speech-mcp",
-            "category": "AI",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "games-app",
-            "name": "Games Collection",
-            "description": "150+ browser games Japanese learning suite AI game analysis MCP server",
-            "port": 10895,
-            "repo_path": "D:/Dev/repos/games-app",
-            "category": "Command",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "mcp-federation-hub",
-            "name": "MCP Federation Hub",
-            "description": "A local orchestration layer for managing multiple MCP servers. Provides a unified dashboard, health monitoring, tool execution, and hub-to-hub mesh peering.",
-            "port": 10856,
-            "repo_path": "D:/Dev/repos/mcp-federation-hub",
-            "category": "Command",
-            "icon": "Shield",
-            "aliases": [
-                "federation"
-            ]
-        },
-        {
-            "id": "meta_mcp",
-            "name": "MetaMCP Control Center",
-            "description": "MetaMCP (MetaMCP) is a professional orchestrator for managing a fleet of MCP server nodes from a centralized interface. It provides comprehensive tools for discovery, diagnostics, scaffolding, toolchains, token analysis, and state orchestrationexposed via stdio MCP and a modern web dashboard.",
-            "port": 10718,
-            "repo_path": "D:/Dev/repos/meta_mcp",
-            "category": "Command",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "moltbot-mcp",
-            "name": "Moltbot MCP",
-            "description": "MCP server for Moltbot (ClawdBot) Gateway: status, health, send, agent, channels. FastMCP 2.14+.",
-            "port": 10730,
-            "repo_path": "D:/Dev/repos/moltbot-mcp",
-            "category": "Command",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "robofang",
-            "name": "RoboFang Multi-Agent Coordination Hub",
-            "description": "RoboFang is an orchestration layer for local AI agents, designed to bridge a federated fleet of MCP servers with physical robotics and virtual environments.",
-            "port": 10870,
-            "repo_path": "D:/Dev/repos/robofang",
-            "category": "Command",
-            "icon": "ShieldCheck",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "discord-mcp",
-            "name": "Discord MCP",
-            "description": "Repository: github.com/sandraschi/discord-mcp",
-            "port": 10756,
-            "repo_path": "D:/Dev/repos/discord-mcp",
-            "category": "Comms",
-            "icon": "MessageCircle",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "email-mcp",
-            "name": "MiniMail MCP Server",
-            "description": "Multi-service email platform for MCP-compatible clients.",
-            "port": 10812,
-            "repo_path": "D:/Dev/repos/email-mcp",
-            "category": "Comms",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "readly-mcp",
-            "name": "Readly MCP Server",
-            "description": "A specialized MCP server for automating reading and scraping tasks on the Readly web platform (go.readly.com).",
-            "port": 10911,
-            "repo_path": "D:/Dev/repos/readly-mcp",
-            "category": "Comms",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "tailscale-mcp",
-            "name": "Tailscale MCP",
-            "description": "Operate your tailnet from the AI tools you already use. Tailscale MCP is a FastMCP 3.1+ server that exposes the Tailscale Admin API to assistants and automation: devices, DNS, services, monitoring, Funnel, Taildrop-related flows, and more through a small set of portmanteau tools (many operations each, so your client does not drown in hundreds of tiny tool names). Optional SEP-1577 agentic workflows (run_agentic_tailnet_workflow) let a capable ...",
-            "port": 10820,
-            "repo_path": "D:/Dev/repos/tailscale-mcp",
-            "category": "Comms",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "devices-mcp",
-            "name": "Home Security MCP Platform",
-            "description": "This repository serves two complementary roles in the smart home ecosystem:",
-            "port": 10716,
-            "repo_path": "D:/Dev/repos/devices-mcp",
-            "category": "Control",
-            "icon": "Smartphone",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "home-assistant-mcp",
-            "name": "Home Assistant MCP Server",
-            "description": "FastMCP 3.1 MCP server and webapp for Home Assistant. Portmanteau tool, sampling, agentic workflow, prompts, and skills. Webapp follows SOTA standards (React, Tailwind, dark theme, ports 10796/10797).",
-            "port": 10782,
-            "repo_path": "D:/Dev/repos/home-assistant-mcp",
-            "category": "Control",
-            "icon": "Home",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "nest-protect-mcp",
-            "name": "Nest Protect MCP Server",
-            "description": "The Nest Protect MCP Server is a production-ready FastMCP 3.1 compatible server that provides seamless integration between Google Nest Protect devices and the Model Context Protocol (MCP). It offers comprehensive monitoring and control capabilities for your Nest Protect smoke and carbon monoxide detectors through Claude Desktop and other MCP clients.",
-            "port": 10752,
-            "repo_path": "D:/Dev/repos/nest-protect-mcp",
-            "category": "Control",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "osc-mcp",
-            "name": "OSC-MCP - Open Sound Control MCP Server",
-            "description": "By FlowEngineer sandraschi",
-            "port": 10766,
-            "repo_path": "D:/Dev/repos/osc-mcp",
-            "category": "Control",
-            "icon": "Waves",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "ring-mcp",
-            "name": "Ring MCP",
-            "description": "Universal Ring Security Ecosystem Control - FastMCP 3.1 server for comprehensive Ring device management including doorbells, security cameras, and alarm systems. Supports sampling, agentic workflows, and MCP prompts/skills.",
-            "port": 10728,
-            "repo_path": "D:/Dev/repos/ring-mcp",
-            "category": "Control",
-            "fastmcp": "3.1"
-        },
-        {
-            "id": "audiotool-nexus-mcp",
-            "name": "audiotool-nexus-mcp",
-            "description": "MCP server (Node, stdio) plus a local React webapp that use the Audiotool NEXUS SDK (@audiotool/nexus). It exposes project/device/timeline/cable operations to Claude (and similar) and gives you a browser UI to connect and inspect state.",
-            "port": 0,
-            "repo_path": "D:/Dev/repos/audiotool-nexus-mcp",
-            "category": "Creative"
-        },
-        {
-            "id": "avatar-mcp",
-            "name": "AvatarMCP",
-            "description": "By FlowEngineer sandraschi",
-            "port": 10792,
-            "repo_path": "D:/Dev/repos/avatar-mcp",
-            "category": "Creative",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "blender-mcp",
-            "name": "Blender MCP - AI-Powered 3D Creation",
-            "description": "Transform natural language into 3D objects. Tell Claude \"create a steampunk robot with glowing red eyes\" and watch it build your vision in Blender automatically.",
-            "port": 10848,
-            "repo_path": "D:/Dev/repos/blender-mcp",
-            "category": "Creative",
-            "icon": "Box",
-            "fastmcp": "3.1.1"
-        },
-        {
-            "id": "davinci-resolve-mcp",
-            "name": "DaVinci Resolve MCP",
-            "description": "> DaVinci Resolve is Blackmagic Designs post-production suite: editing, Fusion VFX, color grading, Fairlight audio, and delivery in one timeline. > Its used for everything from YouTube cuts to theatrical finishthis repo automates a running session through Resolves Python scripting API, not a separate cloud service.",
-            "port": 10842,
-            "repo_path": "D:/Dev/repos/davinci-resolve-mcp",
-            "category": "Creative",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "gimp-mcp",
-            "name": "GIMP MCP Server",
-            "description": "By FlowEngineer sandraschi",
-            "port": 10772,
-            "repo_path": "D:/Dev/repos/gimp-mcp",
-            "category": "Creative",
-            "fastmcp": "3.1.1"
-        },
-        {
-            "id": "inkscape-mcp",
-            "name": "Inkscape MCP",
-            "description": "MCP server for Inkscape: agents call portmanteau tools (inkscape_file, inkscape_vector, inkscape_analysis, inkscape_system) that drive the Inkscape CLI. Built with FastMCP 3.1+.",
-            "port": 10899,
-            "repo_path": "D:/Dev/repos/inkscape-mcp",
-            "category": "Creative",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "resolume-mcp",
-            "name": "resolume-mcp",
-            "description": "MCP server for Resolume Arena VJ software control and automation - Live video mixing from natural language commands",
-            "port": 10770,
-            "repo_path": "D:/Dev/repos/resolume-mcp",
-            "category": "Creative",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "resonite-mcp",
-            "name": "Resonite MCP Server",
-            "description": "FastMCP 2.14.3+ compliant server for natural language control of Resonite social VR platform.",
-            "port": 10714,
-            "repo_path": "D:/Dev/repos/resonite-mcp",
-            "category": "Creative",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "unity3d-mcp",
-            "name": "Unity3D MCP Server",
-            "description": "FastMCP 3.2.0+ Compliant - Comprehensive Unity 3D automation with VRM avatar pipeline and VRChat integration.",
-            "port": 10830,
-            "repo_path": "D:/Dev/repos/unity3d-mcp",
-            "category": "Creative",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "vroidstudio-mcp",
-            "name": "VRoid Studio MCP",
-            "description": "ALPHA STATUS FastMCP 2.14.1+ SOTA Compliant Server for VRoid Studio Automation",
-            "port": 10880,
-            "repo_path": "D:/Dev/repos/vroidstudio-mcp",
-            "category": "Creative",
-            "icon": "User",
-            "priority": "weak",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "worldlabs-mcp",
-            "name": "worldlabs-mcp",
-            "description": "MCP server wrapping the World Labs Marble API generate navigable 3D worlds from text, images, and video.",
-            "port": 10864,
-            "repo_path": "D:/Dev/repos/worldlabs-mcp",
-            "category": "Creative",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "alexa-mcp",
-            "name": "Alexa MCP Server",
-            "description": "An MCP server that acts as an acoustic bridge to control an Alexa device. It uses Text-to-Speech (TTS) to issue commands to a physical Alexa device via speakers, and Speech-to-Text (STT) to listen to Alexa's responses via a microphone.",
-            "port": 10800,
-            "repo_path": "D:/Dev/repos/alexa-mcp",
-            "category": "Dev",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "beyondcompare-mcp",
-            "name": "Beyond Compare MCP",
-            "description": "A modern MCP server that provides comprehensive file comparison, multimedia management, and developer workspace tools using Beyond Compare. Features 13 powerful tools for everything from file comparison to repository backup and workspace analysis.",
-            "port": 10840,
-            "repo_path": "D:/Dev/repos/beyondcompare-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "bookmarks-mcp",
-            "name": "Browser Bookmarks Tools (MCP)",
-            "description": "FastMCP 2.13 compliant MCP server providing a unified bookmarks portmanteau tool for CRUD operations, organization, sync, and AI-powered helpers.",
-            "port": 10802,
-            "repo_path": "D:/Dev/repos/bookmarks-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "dark-app-factory",
-            "name": "Dark App Factory",
-            "description": "\"Software Factories for the Rest of Us.\"",
-            "port": 10738,
-            "repo_path": "D:/Dev/repos/dark-app-factory",
-            "category": "Dev",
-            "icon": "Factory"
-        },
-        {
-            "id": "database-operations-mcp",
-            "name": "Database Operations MCP",
-            "description": "FastMCP 3.1 MCP server for database operations on Windows, with bookmark management tools. Includes MCP prompts and a bundled database-expert skill.",
-            "port": 10708,
-            "repo_path": "D:/Dev/repos/database-operations-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "directmedia-mcp",
-            "name": "Directmedia MCP",
-            "description": "FastMCP 2.13+ server for accessing Directmedia Publishing \"Digitale Bibliothek\" - TEXT EXTRACTION WORKING!",
-            "port": 10826,
-            "repo_path": "D:/Dev/repos/directmedia-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "edge-bookmark-mcp-server",
-            "name": "Edge Bookmark MCP Server",
-            "description": "A comprehensive Model Context Protocol (MCP) server for Microsoft Edge bookmark management, built with FastMCP 2.12.2.",
-            "port": 10891,
-            "repo_path": "D:/Dev/repos/edge-bookmark-mcp-server",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "fastsearch-mcp",
-            "name": "FastSearch MCP",
-            "description": "Lightning-fast file search for Claude Desktop via direct NTFS Master File Table access no indexing, no caching, no compromises.",
-            "port": 10844,
-            "repo_path": "D:/Dev/repos/fastsearch-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "fullstack-demo",
-            "name": "fullstack-demo",
-            "description": "A professional fullstack application with AI, MCP integration, and comprehensive monitoring.",
-            "port": 10893,
-            "repo_path": "D:/Dev/repos/fullstack-demo",
-            "category": "Dev"
-        },
-        {
-            "id": "git-github-mcp",
-            "name": "Git & GitHub CLI MCP Server (v0.4.0)",
-            "description": "A reliable, integrated toolset for local Git and GitHub CLI orchestration. Built for developers who need their AI agents to interact with repositories without environment configuration overhead.",
-            "port": 10702,
-            "repo_path": "D:/Dev/repos/git-github-mcp",
-            "category": "Dev",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "glance-mcp",
-            "name": "glance-mcp",
-            "description": "At-a-glance information in one MCP",
-            "port": 10776,
-            "repo_path": "D:/Dev/repos/glance-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1"
-        },
-        {
-            "id": "iflow-mcp-catalog-backend",
-            "name": "iflow-mcp-catalog",
-            "description": "Repo: github.com/sandraschi/iflow-mcp-catalog",
-            "port": 10808,
-            "repo_path": "D:/Dev/repos/iflow-mcp-catalog",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "immich-mcp",
-            "name": "Immich MCP Server",
-            "description": "FastMCP 3.1 | Austrian Efficiency | Conversational AI & Sampling",
-            "port": 10838,
-            "repo_path": "D:/Dev/repos/immich-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1"
-        },
-        {
-            "id": "lewm-mcp",
-            "name": "LeWM-MCP",
-            "description": "FastMCP 3.1 server bridging LeWorldModel (LeWM) the compact JEPA world model from Maes et al. (arXiv:2603.19312) into the fleet: train + infer hooks, agentic workflow prep, and a glass Vite dashboard.",
-            "port": 10927,
-            "repo_path": "D:/Dev/repos/lewm-mcp",
-            "category": "Dev",
-            "icon": "Globe",
-            "fastmcp": "3.1"
-        },
-        {
-            "id": "mcp-studio",
-            "name": "MCP Studio",
-            "description": "By FlowEngineer sandraschi",
-            "port": 10724,
-            "repo_path": "D:/Dev/repos/mcp-studio",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "myconf",
-            "name": "myconf (AG-Visio)",
-            "description": "A modern video conferencing framework with integrated AI assistance and remote collaboration tools.",
-            "port": 10886,
-            "repo_path": "D:/Dev/repos/myconf",
-            "category": "Dev",
-            "fastmcp": "0.4.1"
-        },
-        {
-            "id": "notepadpp-mcp",
-            "name": "Notepad++ MCP Server",
-            "description": "MCP server for Notepad++ on Windows. Uses FastMCP 3.1 with portmanteau tools (fewer tools, same coverage), optional HTTP bridge, sampling (Ollama-compatible HTTP or client LLM), prompts, skill:// resources, and agentic workflows.",
-            "port": 10814,
-            "repo_path": "D:/Dev/repos/notepadpp-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "nuki-mcp",
-            "name": "Nuki MCP Server",
-            "description": "2026 SOTA MCP Server for Nuki Smart Lock devices using Home Assistant as a bridge.",
-            "port": 10892,
-            "repo_path": "D:/Dev/repos/nuki-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "onenote-mcp",
-            "name": "OneNote MCP Server",
-            "description": "A Model Context Protocol (MCP) server implementation that enables AI language models like Claude and other LLMs to interact with Microsoft OneNote.",
-            "port": 10905,
-            "repo_path": "D:/Dev/repos/onenote-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "openclaude-mcp",
-            "name": "OpenClaude MCP Server",
-            "description": "A high-performance control plane for Ollama-based local LLM sessions and background memory consolidation. Optimized for RTX 4090 environments and large-context model orchestration.",
-            "port": 10932,
-            "repo_path": "D:/Dev/repos/openclaude-mcp",
-            "category": "Dev",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "openclaw-molt-mcp",
-            "name": "openclaw-molt-mcp",
-            "description": "MCP server + webapp that bridge Cursor and Claude Desktop to OpenClaw and Moltbook. openclaw-molt-mcp uses those platforms (Gateway, APIs); it does not implement or replace them. Alpha. Ingest for LLMs: gitingest.com/sandraschi/openclaw-molt-mcp.",
-            "port": 10764,
-            "repo_path": "D:/Dev/repos/openclaw-molt-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "openmanus-mcp",
-            "name": "openmanus-mcp: Process Interface Relay",
-            "description": "A high-performance Model Context Protocol (MCP) server and React/SOTA dashboard for OpenManus.",
-            "port": 10768,
-            "repo_path": "D:/Dev/repos/openmanus-mcp",
-            "category": "Dev",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "pinokio-mcp",
-            "name": "pinokio-mcp",
-            "description": "MCP server for controlling Pinokio - the 1-click localhost cloud for AI apps.",
-            "port": 10907,
-            "repo_path": "D:/Dev/repos/pinokio-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "pywinauto-mcp",
-            "name": "PyWinAuto MCP",
-            "description": "Let an AI assistant control real Windows apps through a single MCP server that wraps window, UI, mouse, keyboard, screenshots, OCR, and optional face checks behind a small set of portmanteau tools (many operations, few entry points so models stay focused).",
-            "port": 10788,
-            "repo_path": "D:/Dev/repos/pywinauto-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "qbt-mcp",
-            "name": "rTorrent MCP Server",
-            "description": "rTorrent MCP FastMCP 3.1 server for anime BitTorrent automation with Austrian legal context, talking to rTorrent over XML-RPC/SCGI (not a generic site scraper).",
-            "port": 10909,
-            "repo_path": "D:/Dev/repos/qbt-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "repomix-mcp",
-            "name": "Repomix MCP Server",
-            "description": "Pack repositories into AI-friendly formats for comprehensive codebase analysis",
-            "port": 10913,
-            "repo_path": "D:/Dev/repos/repomix-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "reversing-mcp",
-            "name": "Reversing MCP - Reverse Engineering Toolkit",
-            "description": "FastMCP 3.1 server for static binary analysis and Directmedia/DKI helpers. ReVas MCP tools are not implemented here ReVa is a separate MCP server (reverse-engineering-assistant); configure both servers in your IDE if you want static tools plus interactive Ghidra.",
-            "port": 10750,
-            "repo_path": "D:/Dev/repos/reversing-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "sdr-mcp",
-            "name": "SDR MCP Server",
-            "description": "Conversational AI SDR Control via Model Context Protocol 2.14.3",
-            "port": 10915,
-            "repo_path": "D:/Dev/repos/sdr-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "toolbench-mcp",
-            "name": "toolbench-mcp",
-            "description": "FastMCP 3.1 helper for Arcade ToolBench: curated links, rescoring steps, Glama vs ToolBench notes, and an optional explanation of Arcades own MCP product (their hosted integrations runtime separate from grading).",
-            "port": 10816,
-            "repo_path": "D:/Dev/repos/toolbench-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1"
-        },
-        {
-            "id": "universal-actuator-mcp",
-            "name": "Universal Actuator MCP Hub (Federation Gateway)",
-            "description": "> Federated consumption router and live-dashboard hub for the RoboFang fleet (Plex, Calibre, Immich).",
-            "port": 10919,
-            "repo_path": "D:/Dev/repos/universal-actuator-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "vrchat-mcp",
-            "name": "VRChat MCP",
-            "description": "By FlowEngineer sandraschi",
-            "port": 10712,
-            "repo_path": "D:/Dev/repos/vrchat-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "web-development-mcp",
-            "name": "Web Development MCP",
-            "description": "Universal web development operations MCP server supporting modern frontend frameworks, build tools, and development workflows.",
-            "port": 10852,
-            "repo_path": "D:/Dev/repos/web-development-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "winrar-mcp",
-            "name": "WinRAR MCP",
-            "description": "A FastMCP 3.1 server that provides programmatic access to WinRAR functionality.",
-            "port": 10762,
-            "repo_path": "D:/Dev/repos/winrar-mcp",
-            "category": "Dev",
-            "fastmcp": "3.1"
-        },
-        {
-            "id": "xkcd-mcp",
-            "name": "xkcd-mcp",
-            "description": "MODEL CONTEXT PROTOCOL fine print sold separately",
-            "port": 10778,
-            "repo_path": "D:/Dev/repos/xkcd-mcp",
-            "category": "Dev",
-            "fastmcp": "3.2",
-            "version": "0.2.0"
-        },
-        {
-            "id": "docker-mcp",
-            "name": "docker-mcp",
-            "description": "![FastMCP](https://github.com/jlowin/fastmcp) ![Python](https://python.org) ![Docker](https://www.docker.com/) ![License: MIT](https://opensource.org/licenses/MIT) ![CI/CD](https://github.com/sandraschi/dockermcp/actions)",
-            "port": 10806,
-            "repo_path": "D:/Dev/repos/docker-mcp",
-            "category": "Infra",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "filesystem-mcp",
-            "name": "Filesystem MCP",
-            "description": "A FastMCP 3.2+ compliant MCP server using the portmanteau pattern for comprehensive file system operations, Git repository management, and Docker container management with concurrency safety.",
-            "port": 10742,
-            "repo_path": "D:/Dev/repos/filesystem-mcp",
-            "category": "Infra",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "monitoring-mcp",
-            "name": "Monitoring MCP Server",
-            "description": "A comprehensive FastMCP 2.14.3-powered monitoring server providing intelligent operations across Grafana, Prometheus, and Loki ecosystems with conversational AI assistance for DevOps workflows.",
-            "port": 10850,
-            "repo_path": "D:/Dev/repos/monitoring-mcp",
-            "category": "Infra",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "multi-backup-mcp",
-            "name": "Multi Backup MCP Server",
-            "description": "STATUS: ALPHA - FastMCP 3.1 compliant. Single backend: REST + MCP at /mcp. Agentic workflow tool for multi-step backup orchestration.",
-            "port": 10798,
-            "repo_path": "D:/Dev/repos/multi-backup-mcp",
-            "category": "Infra",
-            "fastmcp": "3.1"
-        },
-        {
-            "id": "netatmo-weather-mcp",
-            "name": "Netatmo Weather MCP Server",
-            "description": "AI-powered weather monitoring with sampling and predictive analytics for Netatmo weather stations.",
-            "port": 10822,
-            "repo_path": "D:/Dev/repos/netatmo-weather-mcp",
-            "category": "Infra",
-            "fastmcp": "3.1"
-        },
-        {
-            "id": "rustdesk-mcp",
-            "name": "RustDesk MCP Server",
-            "description": "FastMCP 2.14.1 compliant server for managing RustDesk remote desktop connections via the lejianwen/rustdesk-api.",
-            "port": 10804,
-            "repo_path": "D:/Dev/repos/rustdesk-mcp",
-            "category": "Infra",
-            "icon": "MonitorSmartphone",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "system-admin-mcp",
-            "name": "System Admin MCP",
-            "description": "A FastMCP 3.1+ compatible MCP service for elevated system administration tasks on Windows.",
-            "port": 10860,
-            "repo_path": "D:/Dev/repos/system-admin-mcp",
-            "category": "Infra",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "virtualization-mcp",
-            "name": "virtualization-mcp - Professional Multi-Provider VM Management",
-            "description": "v1.1.0 - Multi-provider virtualization management (VirtualBox & Hyper-V) with advanced lifecycle controls",
-            "port": 10700,
-            "repo_path": "D:/Dev/repos/virtualization-mcp",
-            "category": "Infra",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "windows-operations-mcp",
-            "name": "🪟 Windows Operations MCP — SOTA v14.0",
-            "description": "Native Windows Control Plane & Data Surgery for Agentic Ecosystems",
-            "port": 10748,
-            "repo_path": "D:/Dev/repos/windows-operations-mcp",
-            "category": "Infra",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "advanced-memory-mcp",
-            "name": "Advanced Memory (Memops)",
-            "description": "Reliable Memory Tool - A dual-purpose system serving as both a Model Context Protocol (MCP) server and a standalone React-based web application. Optimized for personal knowledge management, semantic search (RAG), and data portability.",
-            "port": 10704,
-            "repo_path": "D:/Dev/repos/advanced-memory-mcp",
-            "category": "Knowledge",
-            "icon": "BrainCircuit",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "arxiv-mcp",
-            "name": "arxiv-mcp",
-            "description": "arXiv MCP server search papers, pull clean text when experimental HTML exists, follow citations, and stash ingested text in a local corpus (SQLite FTS5).",
-            "port": 10770,
-            "repo_path": "D:/Dev/repos/arxiv-mcp",
-            "category": "Knowledge",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "calibre-mcp",
-            "name": "CalibreMCP",
-            "description": "FastMCP 3.2+ server for Calibre e-book library management with sampling, agentic workflows, skills, prompts, universal connect pattern, and LanceDB metadata RAG",
-            "port": 10721,
-            "repo_path": "D:/Dev/repos/calibre-mcp",
-            "category": "Knowledge",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "docs-mcp",
-            "name": "Documentation MCP Hub (Docs-MCP)",
-            "description": "Federated RAG engine and SOTA dashboard for the MCP fleet documentation. Features multi-root discovery across internal docs and Advanced Memory repositories.",
-            "port": 11033,
-            "repo_path": "D:/Dev/repos/documentation-mcp",
-            "category": "Knowledge",
-            "icon": "Library",
-            "aliases": [
-                "docs-mcp",
-                "mcd"
-            ],
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "llm-txt-mcp",
-            "name": "LLM.txt MCP Server",
-            "description": "> Automated generation and management of llms.txt documentation files for AI accessibility",
-            "port": 10836,
-            "repo_path": "D:/Dev/repos/llm-txt-mcp",
-            "category": "Knowledge",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "notion-mcp",
-            "name": "NotionMCP - Comprehensive Notion Knowledge Orchestrator",
-            "description": "FastMCP 3.1 Implementation with Austrian Efficiency",
-            "port": 10810,
-            "repo_path": "D:/Dev/repos/notion-mcp",
-            "category": "Knowledge",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "handbrake-mcp",
-            "name": "HandBrake MCP Server",
-            "description": "A production-ready, FastMCP 3.2.0-compliant server for professional video transcoding using HandBrakeCLI. Features an Industrial SOTA Dashboard (v13.1), enterprise-grade CI/CD, and robust 127.0.0.1 networking for maximum stability.",
-            "port": 10874,
-            "repo_path": "D:/Dev/repos/handbrake-mcp",
-            "category": "Media",
-            "icon": "Video",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "obs-mcp",
-            "name": "OBS Studio MCP Server",
-            "description": "State-of-the-Art MCP server for automating OBS Studio with AI-powered scene management and streaming control.",
-            "port": 10818,
-            "repo_path": "D:/Dev/repos/obs-mcp",
-            "category": "Media",
-            "icon": "Radio",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "observability-mcp",
-            "name": "Observability MCP Server",
-            "description": "FastMCP 2.14.1-powered observability server for monitoring MCP ecosystems",
-            "port": 10901,
-            "repo_path": "D:/Dev/repos/observability-mcp",
-            "category": "Media",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "obsidian-mcp",
-            "name": "ObsidianMCP",
-            "description": "FastMCP 3.1 server for Obsidian vault knowledge management",
-            "port": 10903,
-            "repo_path": "D:/Dev/repos/obsidian-mcp",
-            "category": "Media",
-            "icon": "BookOpen",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "plex-mcp",
-            "name": "PlexMCP",
-            "description": "FastMCP 3.2 MCP server for Plex Media Server portmanteau tools, optional sampling and agentic workflows, optional RAG, universal connect pattern support, and a glassmorphism webapp (FastAPI + Next.js).",
-            "port": 10741,
-            "repo_path": "D:/Dev/repos/plex-mcp",
-            "category": "Media",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "reaper-mcp",
-            "name": "Reaper MCP Server",
-            "description": "Austrian precision DAW automation via Reaper with OSC control.",
-            "port": 10796,
-            "repo_path": "D:/Dev/repos/reaper-mcp",
-            "category": "Media",
-            "fastmcp": "3.1"
-        },
-        {
-            "id": "songgeneration-mcp",
-            "name": "SonggenerationMcp",
-            "description": "Repository: github.com/sandraschi/songgeneration-mcp",
-            "port": 10884,
-            "repo_path": "D:/Dev/repos/songgeneration-mcp",
-            "category": "Media",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "suno-mcp",
-            "name": "Suno-MCP",
-            "description": "MCP server that drives suno.com in a browser via Playwright. There is no official Suno API in this projectonly brittle UI automation against a site that changes whenever Suno ships an update.",
-            "port": 10882,
-            "repo_path": "D:/Dev/repos/suno-mcp",
-            "category": "Media",
-            "icon": "Music2",
-            "priority": "weak",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "virtualdj-mcp",
-            "name": "VirtualDJ-MCP",
-            "description": "Professional DJ automation MCP server with Austrian efficiency for Sandra's music mixing needs.",
-            "port": 10876,
-            "repo_path": "D:/Dev/repos/virtualdj-mcp",
-            "category": "Media",
-            "icon": "Music",
-            "priority": "weak",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "bumi-mcp",
-            "name": "bumi-mcp",
-            "description": "Canonical repo: github.com/sandraschi/bumi-mcp git clone https://github.com/sandraschi/bumi-mcp.git",
-            "port": 10774,
-            "repo_path": "D:/Dev/repos/bumi-mcp",
-            "category": "Robotics",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "dreame-mcp",
-            "name": "Dreame D20 Pro Plus MCP Server",
-            "description": "FastMCP 3.1 MCP server and webapp for the Dreame D20 Pro Plus robot vacuum. Uses the DreameHome cloud API no local token or miio required. Protocol layer extracted from Tasshack/dreame-vacuum.",
-            "port": 10894,
-            "repo_path": "D:/Dev/repos/dreame-mcp",
-            "category": "Robotics",
-            "icon": "Bot",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "robotics-mcp",
-            "name": "Robotics MCP Server",
-            "description": "Author: FlowEngineer sandraschi",
-            "port": 10706,
-            "repo_path": "D:/Dev/repos/robotics-mcp",
-            "category": "Robotics",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "yahboom-mcp",
-            "name": "Yahboom ROS 2 MCP Server (v2.0.0-alpha.1)",
-            "description": "Industrial-grade agentic control interface for the Yahboom Raspbot v2 (Raspberry Pi 5 / ROS 2 Humble). This project is a core component of the Robotics Fleet.",
-            "port": 10892,
-            "repo_path": "D:/Dev/repos/yahboom-mcp",
-            "category": "Robotics",
-            "icon": "Bot",
-            "fastmcp": "3.2.0"
-        },
-        {
-            "id": "gtfs-mcp",
-            "name": "GTFS MCP Server",
-            "description": "A FastMCP 2.10 compliant server for downloading, parsing, and serving GTFS (General Transit Feed Specification) data. This server provides a standardized API for accessing transit data from various agencies, handling the quirks and inconsistencies of real-world GTFS feeds.",
-            "port": 10922,
-            "repo_path": "D:/Dev/repos/gtfs-mcp",
-            "category": "Transit",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "mywienerlinien",
-            "name": "Vienna Transit - Dual Standard Application",
-            "description": "Last Updated: 2025-12-27 Status: Production Ready | SOTA Compliant | Fully Operational Version: 2.0.1 (Phase 1-5 Complete + Schema Migration)",
-            "port": 10722,
-            "repo_path": "D:/Dev/repos/mywienerlinien",
-            "category": "Transit",
-            "icon": "Map",
-            "fastmcp": "3.1.0"
-        },
-        {
-            "id": "vienna-life-assistant",
-            "name": "Vienna Life Assistant",
-            "description": "Timestamp: 2025-12-15 Status: Beta Version Version: 3.0-beta - AI-Powered Life Management",
-            "port": 10921,
-            "repo_path": "D:/Dev/repos/vienna-life-assistant",
-            "category": "Transit",
-            "aliases": [
-                "vienna-life"
-            ]
-        },
-        {
-            "id": "vienna-live-mcp",
-            "name": "Vienna Live MCP Server",
-            "description": "A comprehensive MCP server providing programmatic access to Vienna Life Assistant functionality through consolidated portmanteau tools.",
-            "port": 10878,
-            "repo_path": "D:/Dev/repos/vienna-live-mcp",
-            "category": "Transit",
-            "icon": "TrainFront",
-            "priority": "weak",
-            "fastmcp": "3.1.0"
-        }
-    ]
+  "fleet": [
+    {
+      "id": "kyutai-mcp",
+      "name": "kyutai-mcp",
+      "description": "Run Kyutai Moshi locally. Drive it from a glass dashboard, and plug the same surface into your agent stack via FastMCP.",
+      "port": 10924,
+      "repo_path": "D:/Dev/repos/kyutai-mcp",
+      "category": "AI",
+      "icon": "Mic",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "local-llm-mcp",
+      "name": "Local LLM MCP Server",
+      "description": "A production-ready FastMCP 2.12+ compliant server for comprehensive LLM management and integration with 6 working providers and 5 SOTA portmanteau tools.",
+      "port": 10832,
+      "repo_path": "D:/Dev/repos/local-llm-mcp",
+      "category": "AI",
+      "icon": "Cpu",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "myai",
+      "name": "MyAI Platform",
+      "description": "Dual-mode AI microservices platform: FastAPI dashboard (3060), Docker/Traefik subapps, FastMCP 3.1 myai_platform_mcp with fleet web_sota (10888/10889), and a full monitoring stack. By FlowEngineer sandraschi.",
+      "port": 10888,
+      "repo_path": "D:/Dev/repos/myai",
+      "category": "AI",
+      "icon": "Layers",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "ocr-mcp",
+      "name": "OCR-MCP",
+      "description": "Complete AI OCR webapp and MCP server. A web app for people (draganddrop OCR, scanner, batch) and a FastMCP 3.1 MCP server for agentic IDEsClaude, Cursor, Windsurfso agents can run OCR, preprocessing, and workflows as tools. Same 10+ engines, WIA scanner (Windows), and pipelines; one repo.",
+      "port": 10858,
+      "repo_path": "D:/Dev/repos/ocr-mcp",
+      "category": "AI",
+      "fastmcp": "3.1"
+    },
+    {
+      "id": "sakana-mcp",
+      "name": "sakana-mcp",
+      "description": "MCP server that wraps Sakana AI Scientist v2 so Cursor can act as a research director for autonomous scientific loops.",
+      "port": 10862,
+      "repo_path": "D:/Dev/repos/sakana-mcp",
+      "category": "AI",
+      "icon": "BrainCircuit",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "speech-mcp",
+      "name": "Speech-MCP (Multi-Provider Speech Gateway)",
+      "description": "SOTA-grade MCP server and web application for industrial voice orchestration, leveraging the latest February 2026 AI stack.",
+      "port": 10917,
+      "repo_path": "D:/Dev/repos/speech-mcp",
+      "category": "AI",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "games-app",
+      "name": "Games Collection",
+      "description": "150+ browser games Japanese learning suite AI game analysis MCP server",
+      "port": 10895,
+      "repo_path": "D:/Dev/repos/games-app",
+      "category": "Command",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "mcp-federation-hub",
+      "name": "MCP Federation Hub",
+      "description": "A local orchestration layer for managing multiple MCP servers. Provides a unified dashboard, health monitoring, tool execution, and hub-to-hub mesh peering.",
+      "port": 10856,
+      "repo_path": "D:/Dev/repos/mcp-federation-hub",
+      "category": "Command",
+      "icon": "Shield",
+      "aliases": [
+        "federation"
+      ]
+    },
+    {
+      "id": "meta_mcp",
+      "name": "MetaMCP Control Center",
+      "description": "MetaMCP (MetaMCP) is a professional orchestrator for managing a fleet of MCP server nodes from a centralized interface. It provides comprehensive tools for discovery, diagnostics, scaffolding, toolchains, token analysis, and state orchestrationexposed via stdio MCP and a modern web dashboard.",
+      "port": 10718,
+      "repo_path": "D:/Dev/repos/meta_mcp",
+      "category": "Command",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "moltbot-mcp",
+      "name": "Moltbot MCP",
+      "description": "MCP server for Moltbot (ClawdBot) Gateway: status, health, send, agent, channels. FastMCP 2.14+.",
+      "port": 10730,
+      "repo_path": "D:/Dev/repos/moltbot-mcp",
+      "category": "Command",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "robofang",
+      "name": "RoboFang Multi-Agent Coordination Hub",
+      "description": "RoboFang is an orchestration layer for local AI agents, designed to bridge a federated fleet of MCP servers with physical robotics and virtual environments.",
+      "port": 10870,
+      "repo_path": "D:/Dev/repos/robofang",
+      "category": "Command",
+      "icon": "ShieldCheck",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "discord-mcp",
+      "name": "Discord MCP",
+      "description": "Repository: github.com/sandraschi/discord-mcp",
+      "port": 10756,
+      "repo_path": "D:/Dev/repos/discord-mcp",
+      "category": "Comms",
+      "icon": "MessageCircle",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "email-mcp",
+      "name": "MiniMail MCP Server",
+      "description": "Multi-service email platform for MCP-compatible clients.",
+      "port": 10812,
+      "repo_path": "D:/Dev/repos/email-mcp",
+      "category": "Comms",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "readly-mcp",
+      "name": "Readly MCP Server",
+      "description": "A specialized MCP server for automating reading and scraping tasks on the Readly web platform (go.readly.com).",
+      "port": 10911,
+      "repo_path": "D:/Dev/repos/readly-mcp",
+      "category": "Comms",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "tailscale-mcp",
+      "name": "Tailscale MCP",
+      "description": "Operate your tailnet from the AI tools you already use. Tailscale MCP is a FastMCP 3.1+ server that exposes the Tailscale Admin API to assistants and automation: devices, DNS, services, monitoring, Funnel, Taildrop-related flows, and more through a small set of portmanteau tools (many operations each, so your client does not drown in hundreds of tiny tool names). Optional SEP-1577 agentic workflows (run_agentic_tailnet_workflow) let a capable ...",
+      "port": 10820,
+      "repo_path": "D:/Dev/repos/tailscale-mcp",
+      "category": "Comms",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "devices-mcp",
+      "name": "Home Security MCP Platform",
+      "description": "This repository serves two complementary roles in the smart home ecosystem:",
+      "port": 10716,
+      "repo_path": "D:/Dev/repos/devices-mcp",
+      "category": "Control",
+      "icon": "Smartphone",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "home-assistant-mcp",
+      "name": "Home Assistant MCP Server",
+      "description": "FastMCP 3.1 MCP server and webapp for Home Assistant. Portmanteau tool, sampling, agentic workflow, prompts, and skills. Webapp follows SOTA standards (React, Tailwind, dark theme, ports 10796/10797).",
+      "port": 10782,
+      "repo_path": "D:/Dev/repos/home-assistant-mcp",
+      "category": "Control",
+      "icon": "Home",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "nest-protect-mcp",
+      "name": "Nest Protect MCP Server",
+      "description": "The Nest Protect MCP Server is a production-ready FastMCP 3.1 compatible server that provides seamless integration between Google Nest Protect devices and the Model Context Protocol (MCP). It offers comprehensive monitoring and control capabilities for your Nest Protect smoke and carbon monoxide detectors through Claude Desktop and other MCP clients.",
+      "port": 10752,
+      "repo_path": "D:/Dev/repos/nest-protect-mcp",
+      "category": "Control",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "osc-mcp",
+      "name": "OSC-MCP - Open Sound Control MCP Server",
+      "description": "By FlowEngineer sandraschi",
+      "port": 10766,
+      "repo_path": "D:/Dev/repos/osc-mcp",
+      "category": "Control",
+      "icon": "Waves",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "ring-mcp",
+      "name": "Ring MCP",
+      "description": "Universal Ring Security Ecosystem Control - FastMCP 3.1 server for comprehensive Ring device management including doorbells, security cameras, and alarm systems. Supports sampling, agentic workflows, and MCP prompts/skills.",
+      "port": 10728,
+      "repo_path": "D:/Dev/repos/ring-mcp",
+      "category": "Control",
+      "fastmcp": "3.1"
+    },
+    {
+      "id": "audiotool-nexus-mcp",
+      "name": "audiotool-nexus-mcp",
+      "description": "MCP server (Node, stdio) plus a local React webapp that use the Audiotool NEXUS SDK (@audiotool/nexus). It exposes project/device/timeline/cable operations to Claude (and similar) and gives you a browser UI to connect and inspect state.",
+      "port": 0,
+      "repo_path": "D:/Dev/repos/audiotool-nexus-mcp",
+      "category": "Creative"
+    },
+    {
+      "id": "avatar-mcp",
+      "name": "AvatarMCP",
+      "description": "By FlowEngineer sandraschi",
+      "port": 10792,
+      "repo_path": "D:/Dev/repos/avatar-mcp",
+      "category": "Creative",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "blender-mcp",
+      "name": "Blender MCP - AI-Powered 3D Creation",
+      "description": "Transform natural language into 3D objects. Tell Claude \"create a steampunk robot with glowing red eyes\" and watch it build your vision in Blender automatically.",
+      "port": 10848,
+      "repo_path": "D:/Dev/repos/blender-mcp",
+      "category": "Creative",
+      "icon": "Box",
+      "fastmcp": "3.1.1"
+    },
+    {
+      "id": "davinci-resolve-mcp",
+      "name": "DaVinci Resolve MCP",
+      "description": "> DaVinci Resolve is Blackmagic Designs post-production suite: editing, Fusion VFX, color grading, Fairlight audio, and delivery in one timeline. > Its used for everything from YouTube cuts to theatrical finishthis repo automates a running session through Resolves Python scripting API, not a separate cloud service.",
+      "port": 10842,
+      "repo_path": "D:/Dev/repos/davinci-resolve-mcp",
+      "category": "Creative",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "gimp-mcp",
+      "name": "GIMP MCP Server",
+      "description": "By FlowEngineer sandraschi",
+      "port": 10772,
+      "repo_path": "D:/Dev/repos/gimp-mcp",
+      "category": "Creative",
+      "fastmcp": "3.1.1"
+    },
+    {
+      "id": "inkscape-mcp",
+      "name": "Inkscape MCP",
+      "description": "MCP server for Inkscape: agents call portmanteau tools (inkscape_file, inkscape_vector, inkscape_analysis, inkscape_system) that drive the Inkscape CLI. Built with FastMCP 3.1+.",
+      "port": 10899,
+      "repo_path": "D:/Dev/repos/inkscape-mcp",
+      "category": "Creative",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "resolume-mcp",
+      "name": "resolume-mcp",
+      "description": "MCP server for Resolume Arena VJ software control and automation - Live video mixing from natural language commands",
+      "port": 10770,
+      "repo_path": "D:/Dev/repos/resolume-mcp",
+      "category": "Creative",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "resonite-mcp",
+      "name": "Resonite MCP Server",
+      "description": "FastMCP 2.14.3+ compliant server for natural language control of Resonite social VR platform.",
+      "port": 10714,
+      "repo_path": "D:/Dev/repos/resonite-mcp",
+      "category": "Creative",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "unity3d-mcp",
+      "name": "Unity3D MCP Server",
+      "description": "FastMCP 3.2.0+ Compliant - Comprehensive Unity 3D automation with VRM avatar pipeline and VRChat integration.",
+      "port": 10830,
+      "repo_path": "D:/Dev/repos/unity3d-mcp",
+      "category": "Creative",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "vroidstudio-mcp",
+      "name": "VRoid Studio MCP",
+      "description": "ALPHA STATUS FastMCP 2.14.1+ SOTA Compliant Server for VRoid Studio Automation",
+      "port": 10880,
+      "repo_path": "D:/Dev/repos/vroidstudio-mcp",
+      "category": "Creative",
+      "icon": "User",
+      "priority": "weak",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "worldlabs-mcp",
+      "name": "worldlabs-mcp",
+      "description": "MCP server wrapping the World Labs Marble API generate navigable 3D worlds from text, images, and video.",
+      "port": 10864,
+      "repo_path": "D:/Dev/repos/worldlabs-mcp",
+      "category": "Creative",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "alexa-mcp",
+      "name": "Alexa MCP Server",
+      "description": "An MCP server that acts as an acoustic bridge to control an Alexa device. It uses Text-to-Speech (TTS) to issue commands to a physical Alexa device via speakers, and Speech-to-Text (STT) to listen to Alexa's responses via a microphone.",
+      "port": 10800,
+      "repo_path": "D:/Dev/repos/alexa-mcp",
+      "category": "Dev",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "beyondcompare-mcp",
+      "name": "Beyond Compare MCP",
+      "description": "A modern MCP server that provides comprehensive file comparison, multimedia management, and developer workspace tools using Beyond Compare. Features 13 powerful tools for everything from file comparison to repository backup and workspace analysis.",
+      "port": 10840,
+      "repo_path": "D:/Dev/repos/beyondcompare-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "bookmarks-mcp",
+      "name": "Browser Bookmarks Tools (MCP)",
+      "description": "FastMCP 2.13 compliant MCP server providing a unified bookmarks portmanteau tool for CRUD operations, organization, sync, and AI-powered helpers.",
+      "port": 10802,
+      "repo_path": "D:/Dev/repos/bookmarks-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "dark-app-factory",
+      "name": "Dark App Factory",
+      "description": "\"Software Factories for the Rest of Us.\"",
+      "port": 10738,
+      "repo_path": "D:/Dev/repos/dark-app-factory",
+      "category": "Dev",
+      "icon": "Factory"
+    },
+    {
+      "id": "database-operations-mcp",
+      "name": "Database Operations MCP",
+      "description": "FastMCP 3.1 MCP server for database operations on Windows, with bookmark management tools. Includes MCP prompts and a bundled database-expert skill.",
+      "port": 10708,
+      "repo_path": "D:/Dev/repos/database-operations-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "directmedia-mcp",
+      "name": "Directmedia MCP",
+      "description": "FastMCP 2.13+ server for accessing Directmedia Publishing \"Digitale Bibliothek\" - TEXT EXTRACTION WORKING!",
+      "port": 10826,
+      "repo_path": "D:/Dev/repos/directmedia-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "edge-bookmark-mcp-server",
+      "name": "Edge Bookmark MCP Server",
+      "description": "A comprehensive Model Context Protocol (MCP) server for Microsoft Edge bookmark management, built with FastMCP 2.12.2.",
+      "port": 10891,
+      "repo_path": "D:/Dev/repos/edge-bookmark-mcp-server",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "fastsearch-mcp",
+      "name": "FastSearch MCP",
+      "description": "Lightning-fast file search for Claude Desktop via direct NTFS Master File Table access no indexing, no caching, no compromises.",
+      "port": 10844,
+      "repo_path": "D:/Dev/repos/fastsearch-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "fullstack-demo",
+      "name": "fullstack-demo",
+      "description": "A professional fullstack application with AI, MCP integration, and comprehensive monitoring.",
+      "port": 10893,
+      "repo_path": "D:/Dev/repos/fullstack-demo",
+      "category": "Dev"
+    },
+    {
+      "id": "git-github-mcp",
+      "name": "Git & GitHub CLI MCP Server (v0.4.0)",
+      "description": "A reliable, integrated toolset for local Git and GitHub CLI orchestration. Built for developers who need their AI agents to interact with repositories without environment configuration overhead.",
+      "port": 10702,
+      "repo_path": "D:/Dev/repos/git-github-mcp",
+      "category": "Dev",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "glance-mcp",
+      "name": "glance-mcp",
+      "description": "At-a-glance information in one MCP",
+      "port": 10776,
+      "repo_path": "D:/Dev/repos/glance-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1"
+    },
+    {
+      "id": "iflow-mcp-catalog-backend",
+      "name": "iflow-mcp-catalog",
+      "description": "Repo: github.com/sandraschi/iflow-mcp-catalog",
+      "port": 10808,
+      "repo_path": "D:/Dev/repos/iflow-mcp-catalog",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "immich-mcp",
+      "name": "Immich MCP Server",
+      "description": "FastMCP 3.1 | Austrian Efficiency | Conversational AI & Sampling",
+      "port": 10838,
+      "repo_path": "D:/Dev/repos/immich-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1"
+    },
+    {
+      "id": "lewm-mcp",
+      "name": "LeWM-MCP",
+      "description": "FastMCP 3.1 server bridging LeWorldModel (LeWM) the compact JEPA world model from Maes et al. (arXiv:2603.19312) into the fleet: train + infer hooks, agentic workflow prep, and a glass Vite dashboard.",
+      "port": 10927,
+      "repo_path": "D:/Dev/repos/lewm-mcp",
+      "category": "Dev",
+      "icon": "Globe",
+      "fastmcp": "3.1"
+    },
+    {
+      "id": "mcp-studio",
+      "name": "MCP Studio",
+      "description": "By FlowEngineer sandraschi",
+      "port": 10724,
+      "repo_path": "D:/Dev/repos/mcp-studio",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "teleconference-mcp",
+      "name": "teleconference-mcp",
+      "description": "A modern video conferencing framework with integrated AI assistance and remote collaboration tools.",
+      "port": 10886,
+      "repo_path": "D:/Dev/repos/teleconference-mcp",
+      "category": "Dev",
+      "fastmcp": "0.4.1"
+    },
+    {
+      "id": "notepadpp-mcp",
+      "name": "Notepad++ MCP Server",
+      "description": "MCP server for Notepad++ on Windows. Uses FastMCP 3.1 with portmanteau tools (fewer tools, same coverage), optional HTTP bridge, sampling (Ollama-compatible HTTP or client LLM), prompts, skill:// resources, and agentic workflows.",
+      "port": 10814,
+      "repo_path": "D:/Dev/repos/notepadpp-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "nuki-mcp",
+      "name": "Nuki MCP Server",
+      "description": "2026 SOTA MCP Server for Nuki Smart Lock devices using Home Assistant as a bridge.",
+      "port": 10892,
+      "repo_path": "D:/Dev/repos/nuki-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "onenote-mcp",
+      "name": "OneNote MCP Server",
+      "description": "A Model Context Protocol (MCP) server implementation that enables AI language models like Claude and other LLMs to interact with Microsoft OneNote.",
+      "port": 10905,
+      "repo_path": "D:/Dev/repos/onenote-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "openclaude-mcp",
+      "name": "OpenClaude MCP Server",
+      "description": "A high-performance control plane for Ollama-based local LLM sessions and background memory consolidation. Optimized for RTX 4090 environments and large-context model orchestration.",
+      "port": 10932,
+      "repo_path": "D:/Dev/repos/openclaude-mcp",
+      "category": "Dev",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "openclaw-molt-mcp",
+      "name": "openclaw-molt-mcp",
+      "description": "MCP server + webapp that bridge Cursor and Claude Desktop to OpenClaw and Moltbook. openclaw-molt-mcp uses those platforms (Gateway, APIs); it does not implement or replace them. Alpha. Ingest for LLMs: gitingest.com/sandraschi/openclaw-molt-mcp.",
+      "port": 10764,
+      "repo_path": "D:/Dev/repos/openclaw-molt-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "openmanus-mcp",
+      "name": "openmanus-mcp: Process Interface Relay",
+      "description": "A high-performance Model Context Protocol (MCP) server and React/SOTA dashboard for OpenManus.",
+      "port": 10768,
+      "repo_path": "D:/Dev/repos/openmanus-mcp",
+      "category": "Dev",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "pinokio-mcp",
+      "name": "pinokio-mcp",
+      "description": "MCP server for controlling Pinokio - the 1-click localhost cloud for AI apps.",
+      "port": 10907,
+      "repo_path": "D:/Dev/repos/pinokio-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "pywinauto-mcp",
+      "name": "PyWinAuto MCP",
+      "description": "Let an AI assistant control real Windows apps through a single MCP server that wraps window, UI, mouse, keyboard, screenshots, OCR, and optional face checks behind a small set of portmanteau tools (many operations, few entry points so models stay focused).",
+      "port": 10788,
+      "repo_path": "D:/Dev/repos/pywinauto-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "qbt-mcp",
+      "name": "rTorrent MCP Server",
+      "description": "rTorrent MCP FastMCP 3.1 server for anime BitTorrent automation with Austrian legal context, talking to rTorrent over XML-RPC/SCGI (not a generic site scraper).",
+      "port": 10909,
+      "repo_path": "D:/Dev/repos/qbt-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "repomix-mcp",
+      "name": "Repomix MCP Server",
+      "description": "Pack repositories into AI-friendly formats for comprehensive codebase analysis",
+      "port": 10913,
+      "repo_path": "D:/Dev/repos/repomix-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "reversing-mcp",
+      "name": "Reversing MCP - Reverse Engineering Toolkit",
+      "description": "FastMCP 3.1 server for static binary analysis and Directmedia/DKI helpers. ReVas MCP tools are not implemented here ReVa is a separate MCP server (reverse-engineering-assistant); configure both servers in your IDE if you want static tools plus interactive Ghidra.",
+      "port": 10750,
+      "repo_path": "D:/Dev/repos/reversing-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "sdr-mcp",
+      "name": "SDR MCP Server",
+      "description": "Conversational AI SDR Control via Model Context Protocol 2.14.3",
+      "port": 10915,
+      "repo_path": "D:/Dev/repos/sdr-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "toolbench-mcp",
+      "name": "toolbench-mcp",
+      "description": "FastMCP 3.1 helper for Arcade ToolBench: curated links, rescoring steps, Glama vs ToolBench notes, and an optional explanation of Arcades own MCP product (their hosted integrations runtime separate from grading).",
+      "port": 10816,
+      "repo_path": "D:/Dev/repos/toolbench-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1"
+    },
+    {
+      "id": "universal-actuator-mcp",
+      "name": "Universal Actuator MCP Hub (Federation Gateway)",
+      "description": "> Federated consumption router and live-dashboard hub for the RoboFang fleet (Plex, Calibre, Immich).",
+      "port": 10919,
+      "repo_path": "D:/Dev/repos/universal-actuator-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "vrchat-mcp",
+      "name": "VRChat MCP",
+      "description": "By FlowEngineer sandraschi",
+      "port": 10712,
+      "repo_path": "D:/Dev/repos/vrchat-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "web-development-mcp",
+      "name": "Web Development MCP",
+      "description": "Universal web development operations MCP server supporting modern frontend frameworks, build tools, and development workflows.",
+      "port": 10852,
+      "repo_path": "D:/Dev/repos/web-development-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "winrar-mcp",
+      "name": "WinRAR MCP",
+      "description": "A FastMCP 3.1 server that provides programmatic access to WinRAR functionality.",
+      "port": 10762,
+      "repo_path": "D:/Dev/repos/winrar-mcp",
+      "category": "Dev",
+      "fastmcp": "3.1"
+    },
+    {
+      "id": "xkcd-mcp",
+      "name": "xkcd-mcp",
+      "description": "MODEL CONTEXT PROTOCOL fine print sold separately",
+      "port": 10778,
+      "repo_path": "D:/Dev/repos/xkcd-mcp",
+      "category": "Dev",
+      "fastmcp": "3.2",
+      "version": "0.2.0"
+    },
+    {
+      "id": "docker-mcp",
+      "name": "docker-mcp",
+      "description": "![FastMCP](https://github.com/jlowin/fastmcp) ![Python](https://python.org) ![Docker](https://www.docker.com/) ![License: MIT](https://opensource.org/licenses/MIT) ![CI/CD](https://github.com/sandraschi/dockermcp/actions)",
+      "port": 10806,
+      "repo_path": "D:/Dev/repos/docker-mcp",
+      "category": "Infra",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "filesystem-mcp",
+      "name": "Filesystem MCP",
+      "description": "A FastMCP 3.2+ compliant MCP server using the portmanteau pattern for comprehensive file system operations, Git repository management, and Docker container management with concurrency safety.",
+      "port": 10742,
+      "repo_path": "D:/Dev/repos/filesystem-mcp",
+      "category": "Infra",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "monitoring-mcp",
+      "name": "Monitoring MCP Server",
+      "description": "A comprehensive FastMCP 2.14.3-powered monitoring server providing intelligent operations across Grafana, Prometheus, and Loki ecosystems with conversational AI assistance for DevOps workflows.",
+      "port": 10850,
+      "repo_path": "D:/Dev/repos/monitoring-mcp",
+      "category": "Infra",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "multi-backup-mcp",
+      "name": "Multi Backup MCP Server",
+      "description": "STATUS: ALPHA - FastMCP 3.1 compliant. Single backend: REST + MCP at /mcp. Agentic workflow tool for multi-step backup orchestration.",
+      "port": 10798,
+      "repo_path": "D:/Dev/repos/multi-backup-mcp",
+      "category": "Infra",
+      "fastmcp": "3.1"
+    },
+    {
+      "id": "netatmo-weather-mcp",
+      "name": "Netatmo Weather MCP Server",
+      "description": "AI-powered weather monitoring with sampling and predictive analytics for Netatmo weather stations.",
+      "port": 10822,
+      "repo_path": "D:/Dev/repos/netatmo-weather-mcp",
+      "category": "Infra",
+      "fastmcp": "3.1"
+    },
+    {
+      "id": "rustdesk-mcp",
+      "name": "RustDesk MCP Server",
+      "description": "FastMCP 2.14.1 compliant server for managing RustDesk remote desktop connections via the lejianwen/rustdesk-api.",
+      "port": 10804,
+      "repo_path": "D:/Dev/repos/rustdesk-mcp",
+      "category": "Infra",
+      "icon": "MonitorSmartphone",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "system-admin-mcp",
+      "name": "System Admin MCP",
+      "description": "A FastMCP 3.1+ compatible MCP service for elevated system administration tasks on Windows.",
+      "port": 10860,
+      "repo_path": "D:/Dev/repos/system-admin-mcp",
+      "category": "Infra",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "virtualization-mcp",
+      "name": "virtualization-mcp - Professional Multi-Provider VM Management",
+      "description": "v1.1.0 - Multi-provider virtualization management (VirtualBox & Hyper-V) with advanced lifecycle controls",
+      "port": 10700,
+      "repo_path": "D:/Dev/repos/virtualization-mcp",
+      "category": "Infra",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "windows-operations-mcp",
+      "name": "🪟 Windows Operations MCP — SOTA v14.0",
+      "description": "Native Windows Control Plane & Data Surgery for Agentic Ecosystems",
+      "port": 10748,
+      "repo_path": "D:/Dev/repos/windows-operations-mcp",
+      "category": "Infra",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "advanced-memory-mcp",
+      "name": "Advanced Memory (Memops)",
+      "description": "Reliable Memory Tool - A dual-purpose system serving as both a Model Context Protocol (MCP) server and a standalone React-based web application. Optimized for personal knowledge management, semantic search (RAG), and data portability.",
+      "port": 10704,
+      "repo_path": "D:/Dev/repos/advanced-memory-mcp",
+      "category": "Knowledge",
+      "icon": "BrainCircuit",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "arxiv-mcp",
+      "name": "arxiv-mcp",
+      "description": "arXiv MCP server search papers, pull clean text when experimental HTML exists, follow citations, and stash ingested text in a local corpus (SQLite FTS5).",
+      "port": 10770,
+      "repo_path": "D:/Dev/repos/arxiv-mcp",
+      "category": "Knowledge",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "calibre-mcp",
+      "name": "CalibreMCP",
+      "description": "FastMCP 3.2+ server for Calibre e-book library management with sampling, agentic workflows, skills, prompts, universal connect pattern, and LanceDB metadata RAG",
+      "port": 10721,
+      "repo_path": "D:/Dev/repos/calibre-mcp",
+      "category": "Knowledge",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "docs-mcp",
+      "name": "Documentation MCP Hub (Docs-MCP)",
+      "description": "Federated RAG engine and SOTA dashboard for the MCP fleet documentation. Features multi-root discovery across internal docs and Advanced Memory repositories.",
+      "port": 11033,
+      "repo_path": "D:/Dev/repos/documentation-mcp",
+      "category": "Knowledge",
+      "icon": "Library",
+      "aliases": [
+        "docs-mcp",
+        "mcd"
+      ],
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "llm-txt-mcp",
+      "name": "LLM.txt MCP Server",
+      "description": "> Automated generation and management of llms.txt documentation files for AI accessibility",
+      "port": 10836,
+      "repo_path": "D:/Dev/repos/llm-txt-mcp",
+      "category": "Knowledge",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "notion-mcp",
+      "name": "NotionMCP - Comprehensive Notion Knowledge Orchestrator",
+      "description": "FastMCP 3.1 Implementation with Austrian Efficiency",
+      "port": 10810,
+      "repo_path": "D:/Dev/repos/notion-mcp",
+      "category": "Knowledge",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "handbrake-mcp",
+      "name": "HandBrake MCP Server",
+      "description": "A production-ready, FastMCP 3.2.0-compliant server for professional video transcoding using HandBrakeCLI. Features an Industrial SOTA Dashboard (v13.1), enterprise-grade CI/CD, and robust 127.0.0.1 networking for maximum stability.",
+      "port": 10874,
+      "repo_path": "D:/Dev/repos/handbrake-mcp",
+      "category": "Media",
+      "icon": "Video",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "obs-mcp",
+      "name": "OBS Studio MCP Server",
+      "description": "State-of-the-Art MCP server for automating OBS Studio with AI-powered scene management and streaming control.",
+      "port": 10818,
+      "repo_path": "D:/Dev/repos/obs-mcp",
+      "category": "Media",
+      "icon": "Radio",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "observability-mcp",
+      "name": "Observability MCP Server",
+      "description": "FastMCP 2.14.1-powered observability server for monitoring MCP ecosystems",
+      "port": 10901,
+      "repo_path": "D:/Dev/repos/observability-mcp",
+      "category": "Media",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "obsidian-mcp",
+      "name": "ObsidianMCP",
+      "description": "FastMCP 3.1 server for Obsidian vault knowledge management",
+      "port": 10903,
+      "repo_path": "D:/Dev/repos/obsidian-mcp",
+      "category": "Media",
+      "icon": "BookOpen",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "plex-mcp",
+      "name": "PlexMCP",
+      "description": "FastMCP 3.2 MCP server for Plex Media Server portmanteau tools, optional sampling and agentic workflows, optional RAG, universal connect pattern support, and a glassmorphism webapp (FastAPI + Next.js).",
+      "port": 10741,
+      "repo_path": "D:/Dev/repos/plex-mcp",
+      "category": "Media",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "reaper-mcp",
+      "name": "Reaper MCP Server",
+      "description": "Austrian precision DAW automation via Reaper with OSC control.",
+      "port": 10796,
+      "repo_path": "D:/Dev/repos/reaper-mcp",
+      "category": "Media",
+      "fastmcp": "3.1"
+    },
+    {
+      "id": "songgeneration-mcp",
+      "name": "SonggenerationMcp",
+      "description": "Repository: github.com/sandraschi/songgeneration-mcp",
+      "port": 10884,
+      "repo_path": "D:/Dev/repos/songgeneration-mcp",
+      "category": "Media",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "suno-mcp",
+      "name": "Suno-MCP",
+      "description": "MCP server that drives suno.com in a browser via Playwright. There is no official Suno API in this projectonly brittle UI automation against a site that changes whenever Suno ships an update.",
+      "port": 10882,
+      "repo_path": "D:/Dev/repos/suno-mcp",
+      "category": "Media",
+      "icon": "Music2",
+      "priority": "weak",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "virtualdj-mcp",
+      "name": "VirtualDJ-MCP",
+      "description": "Professional DJ automation MCP server with Austrian efficiency for Sandra's music mixing needs.",
+      "port": 10876,
+      "repo_path": "D:/Dev/repos/virtualdj-mcp",
+      "category": "Media",
+      "icon": "Music",
+      "priority": "weak",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "bumi-mcp",
+      "name": "bumi-mcp",
+      "description": "Canonical repo: github.com/sandraschi/bumi-mcp git clone https://github.com/sandraschi/bumi-mcp.git",
+      "port": 10774,
+      "repo_path": "D:/Dev/repos/bumi-mcp",
+      "category": "Robotics",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "dreame-mcp",
+      "name": "Dreame D20 Pro Plus MCP Server",
+      "description": "FastMCP 3.1 MCP server and webapp for the Dreame D20 Pro Plus robot vacuum. Uses the DreameHome cloud API no local token or miio required. Protocol layer extracted from Tasshack/dreame-vacuum.",
+      "port": 10894,
+      "repo_path": "D:/Dev/repos/dreame-mcp",
+      "category": "Robotics",
+      "icon": "Bot",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "robotics-mcp",
+      "name": "Robotics MCP Server",
+      "description": "Author: FlowEngineer sandraschi",
+      "port": 10706,
+      "repo_path": "D:/Dev/repos/robotics-mcp",
+      "category": "Robotics",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "yahboom-mcp",
+      "name": "Yahboom ROS 2 MCP Server (v2.0.0-alpha.1)",
+      "description": "Industrial-grade agentic control interface for the Yahboom Raspbot v2 (Raspberry Pi 5 / ROS 2 Humble). This project is a core component of the Robotics Fleet.",
+      "port": 10892,
+      "repo_path": "D:/Dev/repos/yahboom-mcp",
+      "category": "Robotics",
+      "icon": "Bot",
+      "fastmcp": "3.2.0"
+    },
+    {
+      "id": "gtfs-mcp",
+      "name": "GTFS MCP Server",
+      "description": "A FastMCP 2.10 compliant server for downloading, parsing, and serving GTFS (General Transit Feed Specification) data. This server provides a standardized API for accessing transit data from various agencies, handling the quirks and inconsistencies of real-world GTFS feeds.",
+      "port": 10922,
+      "repo_path": "D:/Dev/repos/gtfs-mcp",
+      "category": "Transit",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "mywienerlinien",
+      "name": "Vienna Transit - Dual Standard Application",
+      "description": "Last Updated: 2025-12-27 Status: Production Ready | SOTA Compliant | Fully Operational Version: 2.0.1 (Phase 1-5 Complete + Schema Migration)",
+      "port": 10722,
+      "repo_path": "D:/Dev/repos/mywienerlinien",
+      "category": "Transit",
+      "icon": "Map",
+      "fastmcp": "3.1.0"
+    },
+    {
+      "id": "vienna-life-assistant",
+      "name": "Vienna Life Assistant",
+      "description": "Timestamp: 2025-12-15 Status: Beta Version Version: 3.0-beta - AI-Powered Life Management",
+      "port": 10921,
+      "repo_path": "D:/Dev/repos/vienna-life-assistant",
+      "category": "Transit",
+      "aliases": [
+        "vienna-life"
+      ]
+    },
+    {
+      "id": "vienna-live-mcp",
+      "name": "Vienna Live MCP Server",
+      "description": "A comprehensive MCP server providing programmatic access to Vienna Life Assistant functionality through consolidated portmanteau tools.",
+      "port": 10878,
+      "repo_path": "D:/Dev/repos/vienna-live-mcp",
+      "category": "Transit",
+      "icon": "TrainFront",
+      "priority": "weak",
+      "fastmcp": "3.1.0"
+    }
+  ]
 }

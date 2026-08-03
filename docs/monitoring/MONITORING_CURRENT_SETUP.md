@@ -18,7 +18,7 @@
 
 Override ports in `monitoring/.env` (see `.env.example`). Registered in `operations/WEBAPP_PORTS.md` under **Unified observability stack**.
 
-**Do not** bind 3000 / 9090 / 3100 on the host — other stacks (tailscale-mcp, myconf, etc.) already use them.
+**Do not** bind 3000 / 9090 / 3100 on the host — other stacks (tailscale-mcp, teleconference-mcp, etc.) already use them.
 
 ## Start / stop
 
@@ -136,7 +136,7 @@ Implement once per repo (middleware or decorator on FastMCP tools), expose on th
 | Web UI | **12008** | `web_sota/start.ps1` |
 | Process `/metrics` exporter | **12009** (`PROMETHEUS_PORT`) | **Not** the Prometheus *server* — do not confuse with unified **12001** |
 
-**Bundled `docker-compose.yml` in observability-mcp** binds Grafana **3000**, Prometheus **9091**, Loki **3100** — same conflicts as tailscale-mcp / myconf. **Do not run it** when unified monitoring is up.
+**Bundled `docker-compose.yml` in observability-mcp** binds Grafana **3000**, Prometheus **9091**, Loki **3100** — same conflicts as tailscale-mcp / teleconference-mcp. **Do not run it** when unified monitoring is up.
 
 **Recommended wiring:**
 
@@ -163,3 +163,5 @@ Template for tool metrics middleware: `monitoring/templates/fleet_tool_metrics.p
 | [LOGURU_APPLICATION_LOGGING.md](./LOGURU_APPLICATION_LOGGING.md) | Python logging → files → Loki |
 
 Historical / deep-dive (may mention old ports): `UNIFIED_MONITORING_STACK.md`, `SHARED_MONITORING_STACK_GUIDE.md`, `HOW_TO_USE.md`.
+
+
