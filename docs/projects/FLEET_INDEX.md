@@ -1,7 +1,7 @@
 # Repository Fleet Index
 
-**Total Repositories Found:** 150 (+ 3 planned)
-**Last Updated:** 2026-07-17
+**Total Repositories Found:** 151 (+ 3 planned)
+**Last Updated:** 2026-08-03
 
 ## Recently Revived
 
@@ -155,6 +155,7 @@
 | [speech-mcp](file:///D:/Dev/repos/speech-mcp) | MCP Server | **Active — fleet voice layer** | **Multi-provider speech gateway (FastMCP 3.2)** — wake → understand → fleet act → speak, built for embodied agents and humanoid-scale voice. **FunASR (Alibaba) local STT is the default**: unified VAD+ASR+punctuation+diarization in one call, up to ~170× realtime on GPU, structured transcripts (timestamps, speaker labels), OpenAI-compatible sidecar **10910**. Cloud providers: Gemini Live (real-time conversation), Gemini 3.1 Flash TTS (31 voices, 100+ languages, expressive tags), Gemma 4 native multimodal (local, A4B throughput 100+ t/s), Hume AI Octave, ElevenLabs (voice cloning, IVC). Offline wake-word via openWakeWord (Apache 2.0, no API key). **Fleet Voice Command Bus** (`FLEET_VOICE_DELEGATE=1`): wake → utterance STT → `POST` fleet-agent `/api/voice/intent` for robot mission dispatch — see `docs/VOICE_COMMAND_BUS.md` and the architecture thesis in `docs/HUMANOID_VOICE.md`. RAG/semantic search over project docs (LanceDB + FastEmbed). Dual-core: MCP server + React webapp cockpit (Creative Labs polyglot synthesis demo, 19 languages; voice clone management; system monitoring). MCPB + Tauri 2.0 native distribution. Backend **10909**, frontend **10908**. See `docs/HUMANOID_VOICE.md` for why this is fleet-critical, not a convenience wrapper. |
 | [suno-mcp](file:///D:/Dev/repos/suno-mcp) | MCP Server | **Deprecated** | Playwright UI automation of suno.com (no official API exists). Selector-rot fragile by design; core code untouched since 2025-09-28; subscription cancelled. README's own verdict: do not depend on it. Kept as Playwright+cookie/recon reference shell. Stemming need moved to Demucs op on ai-producer-hub. |
 | [system-admin-mcp](file:///D:/Dev/repos/system-admin-mcp) | MCP Server | Active | Windows system administration via MCP. Python 3.8+, MIT. |
+| [teleoperator-mcp](file:///D:/Dev/repos/teleoperator-mcp) | MCP Server | **Active (v0.1.0)** | **WebXR teleoperation gateway** — VR pose (Pico 4/Quest) → fleet robots (Boomy via yahboom-mcp); 12 MCP tools (status, estop, authority DIRECT/AUTO, gaze, LiveKit, shutdown) + Prefab card; LeRobot JSONL recording; headless WS integration harness (`just integration-test`). Ports **10900/10901**, LiveKit SFU **15580** as Windows service `LiveKitSFU`. |
 | [telephony-mcp](file:///D:/Dev/repos/telephony-mcp) | MCP Server | Active | **Telephony Bridge (v0.1.0)** — FastMCP 3.2; Twilio + Asterisk/SIP providers; 3 tools: `make_emergency_call`, `send_emergency_sms`, `telephony_dispatch_test`; E.164 format (+43…); German TTS messages; provider via `TELEPHONY_PROVIDER` env var (asterisk/twilio). No webapp. |
 | [tailscale-mcp](file:///D:/Dev/repos/tailscale-mcp) | MCP Server | Active | FastMCP **3.1+**, Tailscale Admin API; **Webapp** **10820/10821**; Partner tailnets; **v2.0.2**. |
 | [tahoma2d-mcp](file:///D:/Dev/repos/tahoma2d-mcp) | MCP Server | **Active** | **Tahoma2D Render Engine (v0.2.0)** — FastMCP 3.2; headless .tnz rendering via tcomposer.exe + ffmpeg export. 4 portmanteau tools (status, project, render, export). React dashboard (6 pages). ToonzScript not available in this build — scene creation happens in Tahoma2D GUI. Fleet role: render orchestrator for blender-mcp GP output. Ports **11012/11013**. See `projects/tahoma2d-mcp/README.md`. |

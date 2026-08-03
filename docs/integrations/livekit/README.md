@@ -58,10 +58,23 @@ This documentation hub serves as the central source of truth for:
 1. **Read Integration Guide**: Understand architecture and patterns
 2. **Reference myconf**: Clone and run the reference implementation
 3. **Configure MCP**: Add LiveKit-aware tools to your MCP server
-4. **Deploy**: Use Docker Compose for full stack
+4. **Deploy**: Use the fleet Windows service `LiveKitSFU` (see below), or Docker Compose for non-Windows / dev machines
 
 ---
 
+## Fleet deployment (Goliath)
+
+> **2026-08-03: LiveKit now runs as a Windows service — not Docker.**
+
+| Deployment | Command / status | Notes |
+|-----------|------------------|-------|
+| **Windows service (fleet)** | `Get-Service LiveKitSFU` | NSSM-wrapped native `livekit-server` 1.7.0, config from `myconf/livekit.yaml`, auto-start + crash-restart. Canonical on Goliath |
+| Service logs | `Get-Content D:\Dev\repos\myconf\logs\livekit.out.log -Tail 50` | Rotated by NSSM |
+| Service reinstall/repair (elevated) | `powershell -File D:\Dev\repos\teleoperator-mcp\scripts\install-livekit-service.ps1` | UAC prompt |
+| Docker alternative | `docker compose -f docker-compose.yaml up -d livekit` | Non-Windows / dev machines only |
+
+**Consumers** (as of 2026-08): `teleoperator-mcp` (video return, port 15580, room `teleop-boomy`) and `teleconference-mcp` (conferencing stack). Key: `devkey`/`secret` in `livekit.yaml` must match consumer env vars.
+
 **Status:** Active
-**Last Updated:** 2025-01-28
+**Last Updated:** 2026-08-03
 **Related:** [TURBOREPO_MCP_MONOREPO_PATTERN.md](../../docs/patterns/TURBOREPO_MCP_MONOREPO_PATTERN.md)

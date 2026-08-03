@@ -137,6 +137,8 @@ docker compose up -d livekit redis
 .\start.ps1 all
 ```
 
+> **LiveKit SFU (2026-08-03):** on Goliath the SFU runs as a **Windows service** (`LiveKitSFU`, NSSM, native `livekit-server` 1.7.0 + `livekit.yaml`, auto-start). `docker compose up -d livekit` is only needed on non-Windows/dev machines. Verify: `Get-Service LiveKitSFU`; logs: `D:\Dev\repos\myconf\logs\livekit.out.log`; reinstall: `teleoperator-mcp/scripts/install-livekit-service.ps1` (elevated). See `integrations/livekit/README.md`.
+
 ### Access Points
 | Service | URL |
 |---------|-----|

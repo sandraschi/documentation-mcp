@@ -82,6 +82,13 @@ LiveKit is an open-source **WebRTC SFU (Selective Forwarding Unit)** that provid
 
 ## LiveKit Server
 
+> **Fleet deployment (Goliath, 2026-08-03):** the fleet SFU runs as a **Windows service**
+> (`LiveKitSFU`, NSSM, native `livekit-server` 1.7.0, config `myconf/livekit.yaml`, auto-start +
+> crash-restart) — **not** Docker. Verify: `Get-Service LiveKitSFU`; logs:
+> `D:\Dev\repos\myconf\logs\livekit.out.log`; reinstall (elevated):
+> `D:\Dev\repos\teleoperator-mcp\scripts\install-livekit-service.ps1`.
+> The Docker instructions below remain valid for non-Windows / dev machines.
+
 ### Docker Setup
 
 ```yaml

@@ -182,10 +182,11 @@ Change port in `apps/web/package.json`: `"dev": "next dev --port <NEW_PORT>"`.
 
 ### LiveKit connection fails
 
-1. Ensure Docker is running: `docker compose ps`.
-2. Check LiveKit logs: `docker compose logs livekit`.
-3. Verify `NEXT_PUBLIC_LIVEKIT_URL` matches server (e.g. ws://localhost:7880).
-4. Ensure firewall allows 7880, 7881, 7882.
+1. On Goliath: `Get-Service LiveKitSFU` must be **Running** (Windows service, NSSM). Restart: `Restart-Service LiveKitSFU` (elevated).
+2. Elsewhere: ensure Docker is running: `docker compose ps`.
+3. Check LiveKit logs: `Get-Content D:\Dev\repos\myconf\logs\livekit.out.log -Tail 50` (service) or `docker compose logs livekit`.
+4. Verify `NEXT_PUBLIC_LIVEKIT_URL` matches server (e.g. ws://localhost:15580).
+5. Ensure firewall allows 15580, 15581, 15582.
 
 ### Agent not joining / not responding
 

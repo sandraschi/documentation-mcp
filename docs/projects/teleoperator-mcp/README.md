@@ -78,6 +78,8 @@ Headset URL: `https://goliath.<your-tailnet>.ts.net/` → **Enter VR**.
 | Adapter | `BoomyAdapter` → [yahboom-mcp](https://github.com/sandraschi/yahboom-mcp) | 10892 |
 | Video | [myconf](https://github.com/sandraschi/myconf) LiveKit + Goliath publisher | 15580 |
 
+> **LiveKit SFU runs as a Windows service** (`LiveKitSFU`, NSSM, native livekit-server 1.7.0 + `myconf/livekit.yaml`, auto-start).
+
 ```
   Pico / Meta Quest (Tailscale + Browser)
      |  HTTPS/WSS pose (:10900 → :10901)
@@ -104,6 +106,8 @@ Headset URL: `https://goliath.<your-tailnet>.ts.net/` → **Enter VR**.
 | `teleop_gaze_center` | shipped |
 | `teleop_livekit_status` | shipped (M5) |
 | `teleop_livekit_publisher_start` / `_stop` | shipped (M5) |
+| `show_teleop_status_card` | shipped (Prefab) |
+| `teleop_shutdown` | shipped |
 | `teleop_task_dispatch` | planned |
 
 ---

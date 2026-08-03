@@ -95,9 +95,11 @@ git clone https://github.com/sandraschi/myconf.git
 cd myconf
 uv sync
 npm install
-docker compose up -d livekit redis
+docker compose up -d livekit redis   # non-Windows / dev machines only
 .\start.ps1 all
 ```
+
+> **On Goliath (fleet):** the LiveKit SFU is a **Windows service** (`LiveKitSFU`, NSSM, native livekit-server 1.7.0 + `livekit.yaml`, auto-start) — skip the `docker compose up -d livekit` line. Verify: `Get-Service LiveKitSFU`; reinstall: `teleoperator-mcp/scripts/install-livekit-service.ps1` (elevated).
 
 ### Individual Services
 
