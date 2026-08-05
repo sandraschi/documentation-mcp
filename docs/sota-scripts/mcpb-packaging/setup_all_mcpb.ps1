@@ -41,7 +41,7 @@ $mcpRepos = @(
     "pinokio-mcp",
     "plex-mcp",
     "pywinauto-mcp",
-    "qbt-mcp",
+    "rtorrent-mcp",
     "reaper-mcp",
     "resolume-mcp",
     "resonite-mcp",

@@ -1,4 +1,4 @@
-# Webapp Start - Standardized SOTA (Auto-Repaired V2.5)
+﻿# Webapp Start - Standardized SOTA (Auto-Repaired V2.5)
 # Usage: .\start.ps1              interactive (backend in new window, frontend in foreground)
 #        .\start.ps1 -Automated   headless: start backend, wait, start frontend, wait, open browser, exit
 param([switch]$Automated,
@@ -43,7 +43,7 @@ $backendLog = Join-Path $logDir "backend-startup.log"
 
 # Backend (docs_mcp) lives in repo root src/docs_mcp; run from repo root so paths resolve
 # Backend stderr is captured to a log file so crash details can be surfaced.
-# NOTE: $ErrorActionPreference = 'Stop' is NOT set — it would turn native
+# NOTE: $ErrorActionPreference = 'Stop' is NOT set - it would turn native
 # stderr (uv/uvicorn errors) into a terminating error that bypasses 2>>
 # redirection, making crashes invisible.
 $backendCmd = "`$env:PYTHONPATH = '$ProjectRoot;$ProjectRoot\src'; "`

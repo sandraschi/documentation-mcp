@@ -120,5 +120,5 @@ def log_to_file(msg: str):
     try:
         with open("debug.log", "a") as f:
             f.write(msg + "\n")
-    except Exception:  # noqa: S110
+    except Exception:
         pass

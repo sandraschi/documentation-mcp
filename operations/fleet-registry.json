@@ -510,11 +510,11 @@
       "fastmcp": "3.1.0"
     },
     {
-      "id": "qbt-mcp",
+      "id": "rtorrent-mcp",
       "name": "rTorrent MCP Server",
       "description": "rTorrent MCP FastMCP 3.1 server for anime BitTorrent automation with Austrian legal context, talking to rTorrent over XML-RPC/SCGI (not a generic site scraper).",
       "port": 10909,
-      "repo_path": "D:/Dev/repos/qbt-mcp",
+      "repo_path": "D:/Dev/repos/rtorrent-mcp",
       "category": "Dev",
       "fastmcp": "3.1.0"
     },

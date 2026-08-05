@@ -90,7 +90,7 @@ Crucial configuration files for MCP clients.
 - **rustdesk-mcp**: `D:/Dev/repos/rustdesk-mcp`
 - **tailscale-mcp**: `d:/dev/repos/tailscale-mcp`
 - **devices-mcp**: `D:/Dev/repos/devices-mcp`
-- **torrent-mcp**: `D:/Dev/repos/qbt-mcp`
+- **rtorrent-mcp**: `D:/Dev/repos/rtorrent-mcp`
 - **virtualization-mcp**: `D:/Dev/repos/virtualization-mcp`
 - **vienna-transit**: `D:\Dev\repos\mywienerlinien`
 - **winrar-mcp**: `D:/Dev/repos/winrar-mcp`

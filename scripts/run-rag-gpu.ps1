@@ -1,4 +1,4 @@
-# Full doc reindex on GPU — venv python (not uv run).
+# Full doc reindex on GPU - venv python (not uv run).
 $ErrorActionPreference = "Stop"
 $RepoRoot = Split-Path $PSScriptRoot -Parent
 Set-Location $RepoRoot

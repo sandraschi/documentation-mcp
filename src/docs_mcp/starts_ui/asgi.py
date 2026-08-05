@@ -16,7 +16,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 _tools_root = Path(__file__).resolve().parents[3] / "tools"
 if str(_tools_root) not in sys.path:
     sys.path.insert(0, str(_tools_root))
-from fastmcp_version import parse_fastmcp_version_from_pyproject  # noqa: E402
+from fastmcp_version import parse_fastmcp_version_from_pyproject
 
 
 @dataclass(frozen=True)
@@ -894,7 +894,7 @@ def create_app() -> FastAPI:
         try:
             # S607: Use absolute path for cmd.exe to prevent path injection
             # S603: input 'resolved' is from the local 'starts' dir, which is audited
-            subprocess.Popen(  # noqa: S603
+            subprocess.Popen(
                 ["C:\\Windows\\System32\\cmd.exe", "/c", str(resolved)],
                 cwd=str(resolved.parent),
                 creationflags=_windows_creationflags_new_console(),

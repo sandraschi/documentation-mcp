@@ -49,7 +49,7 @@
   { "repo": "pinokio-mcp", "startPath": "web_sota/start.ps1", "port": 10908, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "plex-mcp", "startPath": "webapp/start.ps1", "port": 10742, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "pywinauto-mcp", "startPath": "web_sota/start.ps1", "port": 10789, "healthPath": "/health", "timeoutSec": 90 },
-  { "repo": "qbt-mcp", "startPath": "web_sota/start.ps1", "port": 10910, "healthPath": "/health", "timeoutSec": 90 },
+  { "repo": "rtorrent-mcp", "startPath": "web_sota/start.ps1", "port": 10910, "healthPath": "/api/health", "timeoutSec": 90, "startsBats": ["rtorrent-mcp-start.bat"], "frontendPort": 10911, "proxyHealthPath": "/api/health" },
   { "repo": "readly-mcp", "startPath": "web_sota/start.ps1", "port": 10912, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "reaper-mcp", "startPath": "web_sota/start.ps1", "port": 10797, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "repomix-mcp", "startPath": "web_sota/start.ps1", "port": 10914, "healthPath": "/health", "timeoutSec": 90 },

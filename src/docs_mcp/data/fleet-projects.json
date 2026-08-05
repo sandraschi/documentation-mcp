@@ -1,4 +1,4 @@
-﻿[
+[
     {
         "id":  "advanced-memory-mcp",
         "name":  "advanced-memory-mcp",
@@ -657,12 +657,12 @@
         "status":  "Active"
     },
     {
-        "id":  "qbt-mcp",
-        "name":  "qbt-mcp",
+        "id":  "rtorrent-mcp",
+        "name":  "rtorrent-mcp",
         "description":  "qBittorrent management via MCP. FastMCP 3.1.1+, Python 3.10+, MIT.",
         "type":  "MCP Server",
-        "localPath":  "file:///D:/Dev/repos/qbt-mcp",
-        "docsPath":  "/docs/projects/qbt-mcp/README.md",
+        "localPath":  "file:///D:/Dev/repos/rtorrent-mcp",
+        "docsPath":  "/docs/projects/rtorrent-mcp/README.md",
         "status":  "Active"
     },
     {

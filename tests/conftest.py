@@ -42,6 +42,7 @@ def document_store(test_mode, mock_document_store, tmp_path_factory):
     """Fixture that provides the DocumentStore based on the test mode."""
     if test_mode == "live":
         from docs_mcp.backend.vector_store import DocumentStore
+
         test_db_dir = tmp_path_factory.mktemp("test_db")
         os.environ["LANCEDB_URI"] = str(test_db_dir)
         return DocumentStore()

@@ -48,8 +48,8 @@ param(
 
 # Show help if requested
 if ($Help) {
-    Write-Host "`nðŸ“‹ BACKUP_ALL_REPOS.PS1 HELP`n" -ForegroundColor Cyan
-    Write-Host "ðŸ”§ PARAMETERS:" -ForegroundColor White
+    Write-Host "`nðŸ"‹ BACKUP_ALL_REPOS.PS1 HELP`n" -ForegroundColor Cyan
+    Write-Host "ðŸ"§ PARAMETERS:" -ForegroundColor White
     Write-Host "  -ReposRoot     Root directory containing all repos (default: D:\Dev\repos)" -ForegroundColor Gray
     Write-Host "  -MCPOnly       Only backup MCP-related repositories (default: true)" -ForegroundColor Gray
     Write-Host "  -IncludeBuild  Include build artifacts in backups (default: false)" -ForegroundColor Gray
@@ -58,7 +58,7 @@ if ($Help) {
     Write-Host "  -DryRun        Show what would be backed up without executing (default: false)" -ForegroundColor Gray
     Write-Host "  -Help          Show this help message (default: false)" -ForegroundColor Gray
     Write-Host ""
-    Write-Host "ðŸ“- EXAMPLES:" -ForegroundColor White
+    Write-Host "ðŸ"- EXAMPLES:" -ForegroundColor White
     Write-Host "  .\backup_all_repos.ps1" -ForegroundColor Green
     Write-Host "  # Backs up only MCP repos to default locations (Desktop, N: Drive, OneDrive)" -ForegroundColor Gray
     Write-Host ""
@@ -82,18 +82,18 @@ if ($Help) {
     Write-Host "  - Names matching MCP patterns (mcp, docker, email, notion, etc.)" -ForegroundColor Gray
     Write-Host "  - 'mcp' or 'MCP' in pyproject.toml or package.json files" -ForegroundColor Gray
     Write-Host ""
-    Write-Host "ðŸ’¾ IDENTICAL BACKUP HANDLING:" -ForegroundColor White
+    Write-Host "ðŸ'¾ IDENTICAL BACKUP HANDLING:" -ForegroundColor White
     Write-Host "  When -SaveIdent is false (default): Identical backups are skipped and removed" -ForegroundColor Gray
     Write-Host "  When -SaveIdent is true: Identical backups are preserved with timestamps" -ForegroundColor Gray
     Write-Host ""
     exit 0
 }
 
-Write-Host "`nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Magenta
-Write-Host "â•‘     ðŸ“¦ ADVANCED BACKUP - All Repositories ðŸ“¦           â•‘" -ForegroundColor Magenta
+Write-Host "`nâ•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor Magenta
+Write-Host "â•'     ðŸ"¦ ADVANCED BACKUP - All Repositories ðŸ"¦           â•'" -ForegroundColor Magenta
 Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor Magenta
 
-Write-Host "ðŸ“‹ Configuration:" -ForegroundColor Cyan
+Write-Host "ðŸ"‹ Configuration:" -ForegroundColor Cyan
 Write-Host "  Repos Root:      $ReposRoot" -ForegroundColor White
 Write-Host "  MCP Only:        $MCPOnly" -ForegroundColor White
 Write-Host "  Include Build:   $IncludeBuild" -ForegroundColor White
@@ -199,14 +199,14 @@ if ($MCPOnly) {
 
 # Display repositories to be processed
 if ($DryRun) {
-    Write-Host "ðŸ” DRY RUN MODE - Repositories to backup:`n" -ForegroundColor Yellow
+    Write-Host "ðŸ" DRY RUN MODE - Repositories to backup:`n" -ForegroundColor Yellow
     foreach ($repo in $repos) {
         $isMCP = Test-MCPRepository -RepoName $repo.Name
         $type = if ($isMCP) { "MCP" } else { "Other" }
         $color = if ($isMCP) { "Green" } else { "Cyan" }
-        Write-Host "  âœ… $($repo.Name) ($type)" -ForegroundColor $color
+        Write-Host "  âœ... $($repo.Name) ($type)" -ForegroundColor $color
     }
-    Write-Host "`nâœ… Dry run complete - $($repos.Count) repositories would be backed up`n" -ForegroundColor Yellow
+    Write-Host "`nâœ... Dry run complete - $($repos.Count) repositories would be backed up`n" -ForegroundColor Yellow
     exit 0
 }
 
@@ -244,8 +244,8 @@ $startTime = Get-Date
 $backupTargets = Get-BackupTargets
 
 foreach ($repo in $repos) {
-    Write-Host "â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”" -ForegroundColor Gray
-    Write-Host "ðŸ“¦ Repository: $($repo.Name)" -ForegroundColor Cyan
+    Write-Host "â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"â"" -ForegroundColor Gray
+    Write-Host "ðŸ"¦ Repository: $($repo.Name)" -ForegroundColor Cyan
     
     $isMCP = Test-MCPRepository -RepoName $repo.Name
     $type = if ($isMCP) { "MCP" } else { "Other" }
@@ -270,8 +270,8 @@ foreach ($repo in $repos) {
         $primaryTarget = $backupTargets[0]
         $primaryBackupPath = Join-Path $primaryTarget.Path $backupName
         
-        Write-Host "  ðŸ”„ Creating backup in primary target: $($primaryTarget.Name)" -ForegroundColor Gray
-        Write-Host "  ðŸ“‚ Primary path: $primaryBackupPath" -ForegroundColor DarkGray
+        Write-Host "  ðŸ"„ Creating backup in primary target: $($primaryTarget.Name)" -ForegroundColor Gray
+        Write-Host "  ðŸ"‚ Primary path: $primaryBackupPath" -ForegroundColor DarkGray
         
         # Ensure primary target directory exists
         if (-not (Test-Path $primaryTarget.Path)) {
@@ -332,11 +332,11 @@ foreach ($repo in $repos) {
         Remove-Item $tempBackupScript -Force -ErrorAction SilentlyContinue
         
         if ($LASTEXITCODE -eq 0 -or $null -eq $LASTEXITCODE) {
-            Write-Host "  âœ… Primary backup created: $($repo.Name)" -ForegroundColor Green
+            Write-Host "  âœ... Primary backup created: $($repo.Name)" -ForegroundColor Green
             
             # Copy to additional targets if not using custom TargetDir
             if (-not $TargetDir -and $backupTargets.Count -gt 1) {
-                Write-Host "  ðŸ“‹ Copying to additional targets..." -ForegroundColor Gray
+                Write-Host "  ðŸ"‹ Copying to additional targets..." -ForegroundColor Gray
                 
                 for ($i = 1; $i -lt $backupTargets.Count; $i++) {
                     $target = $backupTargets[$i]
@@ -350,7 +350,7 @@ foreach ($repo in $repos) {
                         
                         # Copy the backup file
                         Copy-Item $primaryBackupPath $targetBackupPath -Force
-                        Write-Host "    âœ… Copied to $($target.Name): $($target.Path)" -ForegroundColor Green
+                        Write-Host "    âœ... Copied to $($target.Name): $($target.Path)" -ForegroundColor Green
                     }
                     catch {
                         Write-Host "    âŒ Failed to copy to $($target.Name): $($_.Exception.Message)" -ForegroundColor Red
@@ -380,11 +380,11 @@ foreach ($repo in $repos) {
 $endTime = Get-Date
 $duration = $endTime - $startTime
 
-Write-Host "â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor $(if ($failed -eq 0) { "Green" } else { "Yellow" })
-Write-Host "â•‘           ðŸ“¦ BACKUP OPERATION COMPLETE! ðŸ“¦                â•‘" -ForegroundColor $(if ($failed -eq 0) { "Green" } else { "Yellow" })
+Write-Host "â•"â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•-" -ForegroundColor $(if ($failed -eq 0) { "Green" } else { "Yellow" })
+Write-Host "â•'           ðŸ"¦ BACKUP OPERATION COMPLETE! ðŸ"¦                â•'" -ForegroundColor $(if ($failed -eq 0) { "Green" } else { "Yellow" })
 Write-Host "â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•`n" -ForegroundColor $(if ($failed -eq 0) { "Green" } else { "Yellow" })
 
-Write-Host "ðŸ“Š Summary:" -ForegroundColor White
+Write-Host "ðŸ"Š Summary:" -ForegroundColor White
 Write-Host "  Total repos found:    $($allRepos.Count)" -ForegroundColor Gray
 Write-Host "  Repos processed:      $($repos.Count)" -ForegroundColor White
 Write-Host "  Successful:           $success" -ForegroundColor Green
@@ -400,7 +400,7 @@ if ($MCPOnly) {
 }
 Write-Host ""
 
-Write-Host "ðŸ’¾ Backup locations:" -ForegroundColor Cyan
+Write-Host "ðŸ'¾ Backup locations:" -ForegroundColor Cyan
 if ($TargetDir) {
     Write-Host "  Custom:              $TargetDir" -ForegroundColor White
 } else {
@@ -418,10 +418,10 @@ if ($failed -gt 0) {
     exit 1
 }
 elseif ($skipped -gt 0) {
-    Write-Host "âœ… Backup process completed with some repos skipped.`n" -ForegroundColor Green
+    Write-Host "âœ... Backup process completed with some repos skipped.`n" -ForegroundColor Green
     exit 0
 }
 else {
-    Write-Host "âœ… All backups completed successfully!`n" -ForegroundColor Green
+    Write-Host "âœ... All backups completed successfully!`n" -ForegroundColor Green
     exit 0
 }

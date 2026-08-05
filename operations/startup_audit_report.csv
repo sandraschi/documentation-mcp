@@ -74,7 +74,7 @@
 "pinokio-mcp","pinokio-mcp\web_sota\start.ps1","10816","False","True"
 "plex-mcp","plex-mcp\webapp\start.ps1","Unknown","True","True"
 "pywinauto-mcp","pywinauto-mcp\web_sota\start.ps1","10788","False","True"
-"qbt-mcp","qbt-mcp\web_sota\start.ps1","10706","False","True"
+"rtorrent-mcp","rtorrent-mcp\web_sota\start.ps1","10706","False","True"
 "readly-mcp","readly-mcp\start.ps1","Unknown","False","True"
 "readly-mcp","readly-mcp\web_sota\start.ps1","Unknown","False","True"
 "reaper-mcp","reaper-mcp\start.ps1","Unknown","False","True"

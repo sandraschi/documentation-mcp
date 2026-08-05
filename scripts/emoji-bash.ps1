@@ -19,21 +19,21 @@ param(
 )
 
 # Allowed emojis (from cursor rules) - these render safely everywhere
-$Allowed = 'âœ…âŒâš ï¸âœ“âœ-ðŸ“šðŸ“ðŸ“‹ðŸ“¦ðŸ“ŠðŸ“„ðŸŽ¯ðŸš€ðŸ’¡ðŸ”-ðŸ”§âš™ï¸ðŸ› ï¸ðŸ§ªðŸ-ï¸ðŸ’»âœ¨ðŸŽ‰ðŸŽµâ-¶â-€â-²â-¼â†’â†â†‘â†“ðŸ’ªðŸ¤-ðŸŒðŸ’¬ðŸ”’ðŸ”‘'
+$Allowed = 'âœ...âŒâš ï¸âœ"âœ-ðŸ"šðŸ"ðŸ"‹ðŸ"¦ðŸ"ŠðŸ"„ðŸŽ¯ðŸš€ðŸ'¡ðŸ"-ðŸ"§âš™ï¸ðŸ› ï¸ðŸ§ªðŸ-ï¸ðŸ'»âœ¨ðŸŽ‰ðŸŽµâ-¶â-€â-²â-¼â†'â†â†'â†"ðŸ'ªðŸ¤-ðŸŒðŸ'¬ðŸ"'ðŸ"''
 
 # Replacement table: illegal emoji -> meaningful text
 # NOTE: This file excludes itself from scanning to preserve this table!
 $ReplacementTable = @{
     # Search/View
-    'ðŸ”' = '[search]'
-    'ðŸ‘' = '[view]'
-    'ðŸ‘€' = '[look]'
+    'ðŸ"' = '[search]'
+    'ðŸ'' = '[view]'
+    'ðŸ'€' = '[look]'
     
     # Status indicators
-    'ðŸ”´' = '[red]'
+    'ðŸ"´' = '[red]'
     'ðŸŸ¡' = '[yellow]'
     'ðŸŸ¢' = '[green]'
-    'ðŸ”µ' = '[blue]'
+    'ðŸ"µ' = '[blue]'
     'âšª' = '[white]'
     'âš«' = '[black]'
     'ðŸŸ ' = '[orange]'
@@ -42,38 +42,38 @@ $ReplacementTable = @{
     # Alerts/Warnings
     'ðŸš¨' = '[alert]'
     'ðŸš«' = '[prohibited]'
-    'â›”' = '[stop]'
-    'ðŸ›‘' = '[stop]'
+    'â›"' = '[stop]'
+    'ðŸ›'' = '[stop]'
     'âš¡' = '[fast]'
-    'ðŸ’¥' = '[impact]'
+    'ðŸ'¥' = '[impact]'
     
     # Actions
-    'ðŸ”„' = '[sync]'
-    'ðŸ”ƒ' = '[refresh]'
+    'ðŸ"„' = '[sync]'
+    'ðŸ"ƒ' = '[refresh]'
     'âž•' = '[add]'
     'âž-' = '[remove]'
     'âœï¸' = '[edit]'
-    'ðŸ“' = '[note]'
-    'ðŸ’¾' = '[save]'
-    'ðŸ-‘' = '[delete]'
-    'ðŸ“¤' = '[upload]'
-    'ðŸ“¥' = '[download]'
+    'ðŸ"' = '[note]'
+    'ðŸ'¾' = '[save]'
+    'ðŸ-'' = '[delete]'
+    'ðŸ"¤' = '[upload]'
+    'ðŸ"¥' = '[download]'
     
     # Development
     'ðŸ›' = '[bug]'
     'ðŸ' = '[python]'
     'ðŸ¦€' = '[rust]'
     'â˜•' = '[java]'
-    'ðŸ’Ž' = '[ruby]'
-    'ðŸ”¨' = '[build]'
-    'ðŸ”©' = '[config]'
+    'ðŸ'Ž' = '[ruby]'
+    'ðŸ"¨' = '[build]'
+    'ðŸ"©' = '[config]'
     'ðŸ§ ' = '[ai]'
     'ðŸ¤' = '[handshake]'
-    'ðŸ”¥' = '[hot]'
-    'ðŸ’°' = '[money]'
-    'ðŸ“ˆ' = '[up]'
-    'ðŸ“‰' = '[down]'
-    'ðŸ“-' = '[docs]'
+    'ðŸ"¥' = '[hot]'
+    'ðŸ'°' = '[money]'
+    'ðŸ"ˆ' = '[up]'
+    'ðŸ"‰' = '[down]'
+    'ðŸ"-' = '[docs]'
     'ðŸ†•' = '[new]'
     'ðŸ†š' = '[vs]'
     
@@ -84,20 +84,20 @@ $ReplacementTable = @{
     'ðŸŽ¹' = '[music]'
     'ðŸŽ²' = '[random]'
     'ðŸ-¼' = '[image]'
-    'ðŸ“±' = '[mobile]'
-    'ðŸ“ž' = '[call]'
-    'ðŸ“¢' = '[announce]'
+    'ðŸ"±' = '[mobile]'
+    'ðŸ"ž' = '[call]'
+    'ðŸ"¢' = '[announce]'
     'ðŸ•' = '[time]'
     'ðŸ-º' = '[map]'
     'ðŸ›¡' = '[shield]'
-    'ðŸ”®' = '[predict]'
+    'ðŸ"®' = '[predict]'
     
     # Achievement
     'ðŸ†' = '[trophy]'
-    'ðŸ…' = '[medal]'
+    'ðŸ...' = '[medal]'
     'ðŸŒŸ' = '[star]'
     'â­' = '[star]'
-    'ðŸŽ“' = '[graduate]'
+    'ðŸŽ"' = '[graduate]'
     
     # DJ/Audio
     'ðŸŽ§' = '[headphones]'
@@ -105,8 +105,8 @@ $ReplacementTable = @{
     'ðŸŽš' = '[fader]'
     'ðŸŽ¶' = '[music]'
     'ðŸŽ™' = '[mic]'
-    'ðŸ“€' = '[disc]'
-    'ðŸ”Š' = '[speaker]'
+    'ðŸ"€' = '[disc]'
+    'ðŸ"Š' = '[speaker]'
     'ðŸ-¥' = '[screen]'
     'â¹' = '[stop]'
     'â¸' = '[pause]'
@@ -117,20 +117,20 @@ $ReplacementTable = @{
     'ðŸ‡¹' = ''  # Flag component (remove)
     
     # Misc
-    'ðŸ‘¶' = '[baby]'
+    'ðŸ'¶' = '[baby]'
     'ðŸ˜„' = '[smile]'
     'ðŸŽ­' = '[theater]'
     'ðŸ•' = '[pizza]'
     'ðŸº' = '[beer]'
     'ðŸ›' = '[bath]'
     'â˜€' = '[sun]'
-    'ðŸ”¤' = '[text]'
-    'ðŸ”“' = '[unlock]'
+    'ðŸ"¤' = '[text]'
+    'ðŸ""' = '[unlock]'
     'ðŸ§¹' = '[clean]'
-    'ðŸ“' = '[measure]'
+    'ðŸ"' = '[measure]'
 }
 
-Write-Host "`nðŸ” EMOJI BASH - Encoding Safety Scanner" -ForegroundColor Cyan
+Write-Host "`nðŸ" EMOJI BASH - Encoding Safety Scanner" -ForegroundColor Cyan
 Write-Host "=" * 50
 Write-Host "Mode: $(if ($Fix) { 'FIX (replace with text)' } else { 'REPORT ONLY' })" -ForegroundColor $(if ($Fix) { 'Yellow' } else { 'Cyan' })
 Write-Host ""
@@ -188,7 +188,7 @@ foreach ($File in $Files) {
         
         if ($Fix -and ($Content -ne $OriginalContent)) {
             Set-Content -Path $File.FullName -Value $Content -NoNewline -Encoding UTF8
-            Write-Host "   âœ… Fixed!" -ForegroundColor Green
+            Write-Host "   âœ... Fixed!" -ForegroundColor Green
             $FilesFixed++
         }
     }
@@ -197,7 +197,7 @@ foreach ($File in $Files) {
 # Summary
 Write-Host ""
 Write-Host "=" * 50
-Write-Host "ðŸ“Š SUMMARY" -ForegroundColor Cyan
+Write-Host "ðŸ"Š SUMMARY" -ForegroundColor Cyan
 Write-Host "   Illegal emojis found: $TotalIssues" -ForegroundColor $(if ($TotalIssues -gt 0) { 'Red' } else { 'Green' })
 
 if ($Fix -and $FilesFixed -gt 0) {
@@ -219,7 +219,7 @@ if ($UnknownEmojis.Count -gt 0) {
 
 if ($TotalIssues -eq 0) {
     Write-Host ""
-    Write-Host "âœ… All clear! No illegal emojis." -ForegroundColor Green
+    Write-Host "âœ... All clear! No illegal emojis." -ForegroundColor Green
 } elseif (-not $Fix) {
     Write-Host ""
     Write-Host "To fix, run:" -ForegroundColor Yellow
@@ -231,5 +231,5 @@ Write-Host ""
 # Show replacement table summary
 if ($Fix) {
     Write-Host "Replacement examples:" -ForegroundColor DarkGray
-    Write-Host "   ðŸ”â†’[search]  ðŸ”´â†’[red]  ðŸš¨â†’[alert]  ðŸ“â†’[note]  ðŸ›â†’[bug]" -ForegroundColor DarkGray
+    Write-Host "   ðŸ"â†'[search]  ðŸ"´â†'[red]  ðŸš¨â†'[alert]  ðŸ"â†'[note]  ðŸ›â†'[bug]" -ForegroundColor DarkGray
 }

@@ -398,7 +398,7 @@ Write-Host "4. Update README.md" -ForegroundColor Cyan
 
 ### Tier 1: Immediate (Week 1)
 1. advanced-memory-mcp ✅ (Reference implementation)
-2. qbt-mcp 📋
+2. rtorrent-mcp 📋
 3. notepadpp-mcp 📋
 4. mcp-studio 📋
 5. immich-mcp 📋

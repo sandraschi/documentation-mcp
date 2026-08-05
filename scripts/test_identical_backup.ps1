@@ -19,17 +19,17 @@ if (-not (Test-Path $testDir)) {
 # Test with a small repo - rustdesk-mcp
 $repoPath = "d:\Dev\repos\rustdesk-mcp"
 if (Test-Path $repoPath) {
-    Write-Host "ðŸ“¦ Testing with rustdesk-mcp repository..." -ForegroundColor Yellow
+    Write-Host "ðŸ"¦ Testing with rustdesk-mcp repository..." -ForegroundColor Yellow
     
     Push-Location $repoPath
     
     # First backup
-    Write-Host "`nðŸ”„ === FIRST BACKUP ===" -ForegroundColor Green
+    Write-Host "`nðŸ"„ === FIRST BACKUP ===" -ForegroundColor Green
     $timestamp1 = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
     $backupName1 = "rustdesk-mcp_test_${timestamp1}.zip"
     $backupPath1 = Join-Path $testDir $backupName1
     
-    Write-Host "  ðŸ“‚ Creating first backup: $backupName1" -ForegroundColor Gray
+    Write-Host "  ðŸ"‚ Creating first backup: $backupName1" -ForegroundColor Gray
     
     # Create temporary backup script
     $tempScript1 = Join-Path $env:TEMP "rustdesk-test-backup-1.ps1"
@@ -87,7 +87,7 @@ Write-Host "ðŸš« Excluding locked files and problematic patterns..." -Foregr
     -not `$shouldExclude
 }
 
-Write-Host "ðŸ“Š Found `$(`$backupFiles.Count) files to backup" -ForegroundColor Green
+Write-Host "ðŸ"Š Found `$(`$backupFiles.Count) files to backup" -ForegroundColor Green
 
 # Create ZIP
 if (`$backupFiles.Count -gt 0) {
@@ -122,7 +122,7 @@ if (`$backupFiles.Count -gt 0) {
         
         if (Test-Path `$backupPath1) {
             `$size = [math]::Round((Get-Item `$backupPath1).Length / 1MB, 2)
-            Write-Host "âœ… Backup created: `$size MB (`$filesAdded files, `$filesFailed failed)" -ForegroundColor Green
+            Write-Host "âœ... Backup created: `$size MB (`$filesAdded files, `$filesFailed failed)" -ForegroundColor Green
         } else {
             Write-Host "âŒ Backup file not created" -ForegroundColor Red
         }
@@ -143,13 +143,13 @@ if (`$backupFiles.Count -gt 0) {
     Start-Sleep -Seconds 2
     
     # Second backup
-    Write-Host "`nðŸ”„ === SECOND BACKUP ===" -ForegroundColor Green
+    Write-Host "`nðŸ"„ === SECOND BACKUP ===" -ForegroundColor Green
     $timestamp2 = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
     $backupName2 = "rustdesk-mcp_test_${timestamp2}.zip"
     $backupPath2 = Join-Path $testDir $backupName2
     
-    Write-Host "  ðŸ“‚ Creating second backup: $backupName2" -ForegroundColor Gray
-    Write-Host "  ðŸ”§ SaveIdent: $SaveIdent" -ForegroundColor Gray
+    Write-Host "  ðŸ"‚ Creating second backup: $backupName2" -ForegroundColor Gray
+    Write-Host "  ðŸ"§ SaveIdent: $SaveIdent" -ForegroundColor Gray
     
     # Create second temporary backup script (identical content)
     $tempScript2 = Join-Path $env:TEMP "rustdesk-test-backup-2.ps1"
@@ -207,7 +207,7 @@ Write-Host "ðŸš« Excluding locked files and problematic patterns..." -Foregr
     -not `$shouldExclude
 }
 
-Write-Host "ðŸ“Š Found `$(`$backupFiles.Count) files to backup" -ForegroundColor Green
+Write-Host "ðŸ"Š Found `$(`$backupFiles.Count) files to backup" -ForegroundColor Green
 
 # Create ZIP
 if (`$backupFiles.Count -gt 0) {
@@ -242,7 +242,7 @@ if (`$backupFiles.Count -gt 0) {
         
         if (Test-Path "$backupPath2") {
             `$size = [math]::Round((Get-Item "$backupPath2").Length / 1MB, 2)
-            Write-Host "âœ… Backup created: `$size MB (`$filesAdded files, `$filesFailed failed)" -ForegroundColor Green
+            Write-Host "âœ... Backup created: `$size MB (`$filesAdded files, `$filesFailed failed)" -ForegroundColor Green
         } else {
             Write-Host "âŒ Backup file not created" -ForegroundColor Red
         }
@@ -259,10 +259,10 @@ if (`$backupFiles.Count -gt 0) {
     Remove-Item $tempScript2 -Force -ErrorAction SilentlyContinue
     
     # Test identical backup detection
-    Write-Host "`nðŸ” === TESTING IDENTICAL DETECTION ===" -ForegroundColor Yellow
+    Write-Host "`nðŸ" === TESTING IDENTICAL DETECTION ===" -ForegroundColor Yellow
     
     if ((Test-Path $backupPath1) -and (Test-Path $backupPath2)) {
-        Write-Host "  ðŸ“ Both backups created successfully" -ForegroundColor Green
+        Write-Host "  ðŸ" Both backups created successfully" -ForegroundColor Green
         
         # Compute hashes
         $hash1 = [System.Security.Cryptography.SHA256]::Create().ComputeHash([System.IO.File]::ReadAllBytes($backupPath1))
@@ -271,25 +271,25 @@ if (`$backupFiles.Count -gt 0) {
         $hash2 = [System.Security.Cryptography.SHA256]::Create().ComputeHash([System.IO.File]::ReadAllBytes($backupPath2))
         $hash2Str = [System.BitConverter]::ToString($hash2) -replace '-', ''
         
-        Write-Host "  ðŸ” Hash 1: $hash1Str" -ForegroundColor DarkGray
-        Write-Host "  ðŸ” Hash 2: $hash2Str" -ForegroundColor DarkGray
+        Write-Host "  ðŸ" Hash 1: $hash1Str" -ForegroundColor DarkGray
+        Write-Host "  ðŸ" Hash 2: $hash2Str" -ForegroundColor DarkGray
         
         $isIdentical = ($hash1Str -eq $hash2Str)
         
         if ($isIdentical) {
-            Write-Host "  âœ… Hashes match - backups are identical" -ForegroundColor Yellow
+            Write-Host "  âœ... Hashes match - backups are identical" -ForegroundColor Yellow
             
             if (-not $SaveIdent) {
-                Write-Host "  ðŸ-‘ï¸  Simulating removal of identical backup..." -ForegroundColor Yellow
+                Write-Host "  ðŸ-'ï¸  Simulating removal of identical backup..." -ForegroundColor Yellow
                 try {
                     Remove-Item $backupPath2 -Force
-                    Write-Host "  âœ… Identical backup removed" -ForegroundColor Green
+                    Write-Host "  âœ... Identical backup removed" -ForegroundColor Green
                 }
                 catch {
                     Write-Host "  âŒ Failed to remove: $($_.Exception.Message)" -ForegroundColor Red
                 }
             } else {
-                Write-Host "  ðŸ’¾ Preserving identical backup (SaveIdent enabled)" -ForegroundColor Green
+                Write-Host "  ðŸ'¾ Preserving identical backup (SaveIdent enabled)" -ForegroundColor Green
             }
         } else {
             Write-Host "  âŒ Hashes differ - backups are different" -ForegroundColor Red
@@ -299,9 +299,9 @@ if (`$backupFiles.Count -gt 0) {
     }
     
     # Show final state
-    Write-Host "`nðŸ“‹ === FINAL STATE ===" -ForegroundColor Cyan
+    Write-Host "`nðŸ"‹ === FINAL STATE ===" -ForegroundColor Cyan
     $finalBackups = Get-ChildItem -Path $testDir -Filter "*.zip" -File | Sort-Object LastWriteTime -Descending
-    Write-Host "  ðŸ“¦ Remaining backups: $($finalBackups.Count)" -ForegroundColor White
+    Write-Host "  ðŸ"¦ Remaining backups: $($finalBackups.Count)" -ForegroundColor White
     
     foreach ($backup in $finalBackups) {
         $size = [math]::Round((Get-Item $backup.FullName).Length / 1MB, 2)

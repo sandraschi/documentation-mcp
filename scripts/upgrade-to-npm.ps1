@@ -345,7 +345,7 @@ asyncio_mode = "auto"
 "@
     
     Set-Content -Path $PyProjectPath -Value $PyProjectContent -Encoding UTF8
-    Write-Host "✓ Created/updated pyproject.toml" -ForegroundColor Green
+    Write-Host "OK Created/updated pyproject.toml" -ForegroundColor Green
 }
 
 # Step 2: Create bin/ directory
@@ -646,7 +646,7 @@ npx $ServerName
             # Combine sections
             $newReadmeContent = $beforeInstallation + $npmInstallSection + $renumberedSection + $afterInstallation
             Set-Content -Path $ReadmePath -Value $newReadmeContent -Encoding UTF8
-            Write-Host "✓ Updated README.md with npm/npx installation" -ForegroundColor Green
+            Write-Host "OK Updated README.md with npm/npx installation" -ForegroundColor Green
         } else {
             Write-Warning "Could not find Installation section in README.md - manual update may be needed"
         }
@@ -660,11 +660,11 @@ npx $ServerName
 Write-Host ""
 Write-Host "=== Files Created/Updated ===" -ForegroundColor Cyan
 if (-not (Test-Path $PyProjectPath) -or $Force) {
-    Write-Host "✓ pyproject.toml (SOTA requirement)" -ForegroundColor Green
+    Write-Host "OK pyproject.toml (SOTA requirement)" -ForegroundColor Green
 }
-Write-Host "✓ package.json" -ForegroundColor Green
-Write-Host "✓ bin/$BinScriptName" -ForegroundColor Green
-Write-Host "✓ src/check-python.js" -ForegroundColor Green
+Write-Host "OK package.json" -ForegroundColor Green
+Write-Host "OK bin/$BinScriptName" -ForegroundColor Green
+Write-Host "OK src/check-python.js" -ForegroundColor Green
 Write-Host ""
 
 # Step 8: Test locally if requested
@@ -679,7 +679,7 @@ if ($TestOnly -or $Publish) {
         npm install . 2>&1 | Out-Null
         
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "✓ Package installed successfully" -ForegroundColor Green
+            Write-Host "OK Package installed successfully" -ForegroundColor Green
         } else {
             Write-Warning "Package installation had warnings (this is OK)"
         }
@@ -688,7 +688,7 @@ if ($TestOnly -or $Publish) {
         Write-Host "Testing npx command..." -ForegroundColor Yellow
         $npxTest = Get-Command "npx" -ErrorAction SilentlyContinue
         if ($npxTest) {
-            Write-Host "✓ npx is available" -ForegroundColor Green
+            Write-Host "OK npx is available" -ForegroundColor Green
         } else {
             Write-Warning "npx not found - install Node.js to test"
         }
@@ -736,7 +736,7 @@ if ($Publish) {
         
         if ($LASTEXITCODE -eq 0) {
             Write-Host ""
-            Write-Host "✓ Successfully published to npm!" -ForegroundColor Green
+            Write-Host "OK Successfully published to npm!" -ForegroundColor Green
             Write-Host "  Package: $NpmPackageName" -ForegroundColor Cyan
             Write-Host "  Version: $Version" -ForegroundColor Cyan
             Write-Host "  Install: npm install -g $NpmPackageName" -ForegroundColor Cyan
@@ -762,6 +762,6 @@ if (-not $Publish) {
     Write-Host "3. Publish: npm publish --access public" -ForegroundColor Yellow
 }
 Write-Host ""
-Write-Host "Done! ✓" -ForegroundColor Green
+Write-Host "Done! OK" -ForegroundColor Green
 
 

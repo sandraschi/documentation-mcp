@@ -866,18 +866,18 @@
       },
       "disabled": true
     },
-    "qbt-mcp": {
+    "rtorrent-mcp": {
       "command": "uv",
       "args": [
         "--directory",
-        "D:/Dev/repos/qbt-mcp",
+        "D:/Dev/repos/rtorrent-mcp",
         "run",
         "python",
         "-m",
         "rtorrent_mcp.__main__"
       ],
       "env": {
-        "PYTHONPATH": "D:/Dev/repos/qbt-mcp/src",
+        "PYTHONPATH": "D:/Dev/repos/rtorrent-mcp/src",
         "PYTHONUNBUFFERED": "1"
       },
       "disabled": true

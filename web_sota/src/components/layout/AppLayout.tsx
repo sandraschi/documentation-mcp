@@ -51,19 +51,14 @@ export function AppLayout() {
     
     const cleanupLayers = () => {
         const allElements = document.querySelectorAll('*');
-        let count = 0;
         allElements.forEach((el) => {
             const style = window.getComputedStyle(el);
             const zIndex = parseInt(style.zIndex);
             // Hide anything with extreme z-index that isn't part of our app (we use up to 100 usually, Sheets/Dialogs use ~50-100)
             if (zIndex > 1000 && !el.closest('#root') && !el.closest('[data-radix-portal]')) {
                 (el as HTMLElement).style.display = 'none';
-                count++;
             }
         });
-        if (count > 0) {
-            console.log(`Cleaned up ${count} invasive layers.`);
-        }
     }
 
     return (

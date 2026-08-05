@@ -17,11 +17,11 @@ function Test-Command {
 
 # ------------------- 1️⃣ Install Ollama -----------------------
 if (-not (Test-Command ollama)) {
-    Write-Host "Ollama not found. Installing…" -ForegroundColor Yellow
+    Write-Host "Ollama not found. Installing..." -ForegroundColor Yellow
     $installer = "$env:TEMP\ollama_windows.exe"
-    Write-Host "Downloading installer…" -ForegroundColor Cyan
+    Write-Host "Downloading installer..." -ForegroundColor Cyan
     Invoke-WebRequest -Uri "https://ollama.com/download/ollama_windows.exe" -OutFile $installer
-    Write-Host "Running installer…" -ForegroundColor Cyan
+    Write-Host "Running installer..." -ForegroundColor Cyan
     Start-Process -FilePath $installer -ArgumentList "/S" -Wait
     Remove-Item $installer -Force
     # Ensure Ollama is in PATH
@@ -37,13 +37,13 @@ if (-not (Test-Command python)) {
     exit 1
 }
 if (-not (Test-Command pip)) {
-    Write-Host "pip not found. Installing via ensurepip…" -ForegroundColor Yellow
+    Write-Host "pip not found. Installing via ensurepip..." -ForegroundColor Yellow
     python -m ensurepip --upgrade
 }
 $bitsandbytesPresent = $false
 try { python -c "import bitsandbytes" 2>$null; $bitsandbytesPresent = $true } catch {}
 if (-not $bitsandbytesPresent) {
-    Write-Host "Installing bitsandbytes (CUDA 12+)…" -ForegroundColor Cyan
+    Write-Host "Installing bitsandbytes (CUDA 12+)..." -ForegroundColor Cyan
     pip install --upgrade bitsandbytes==0.41.2
 }
 
@@ -54,7 +54,7 @@ $publicName       = "codellama:34b-codeinstruct"   # name used in Ollama
 
 # Clean any previous quantised folder
 if (Test-Path $quantDir) {
-    Write-Host "Removing old quantised folder $quantDir…" -ForegroundColor Yellow
+    Write-Host "Removing old quantised folder $quantDir..." -ForegroundColor Yellow
     Remove-Item -Recurse -Force $quantDir
 }
 New-Item -ItemType Directory -Path $quantDir | Out-Null
@@ -95,7 +95,7 @@ print(f"✅ 4‑bit model saved to {output_dir}")
 # Write & run script
 $tempPy = "$env:TEMP\quantise_codellama.py"
 Set-Content -Path $tempPy -Value $pyScript -Encoding UTF8
-Write-Host "Quantising model – this may take ~30‑60 s (GPU)..." -ForegroundColor Cyan
+Write-Host "Quantising model - this may take ~30‑60 s (GPU)..." -ForegroundColor Cyan
 & python $tempPy $quantDir
 Remove-Item $tempPy -Force
 
@@ -104,16 +104,16 @@ $existingModels = ollama list --format json | ConvertFrom-Json
 $oldExists = ($existingModels | Where-Object { $_.model -eq $publicName }).Count -gt 0
 
 if ($oldExists) {
-    Write-Host "Removing existing non‑quantised model `$publicName`…" -ForegroundColor Yellow
+    Write-Host "Removing existing non‑quantised model `$publicName`..." -ForegroundColor Yellow
     try { ollama rm $publicName -y } catch {
-        Write-Host "  ❌  Could not remove – maybe already deleted." -ForegroundColor Red
+        Write-Host "  ❌  Could not remove - maybe already deleted." -ForegroundColor Red
     }
 } else {
     Write-Host "No pre‑existing non‑quantised model found. Skipping deletion." -ForegroundColor Green
 }
 
 # ------------------- 5️⃣ Register the 4‑bit model --------------------
-Write-Host "Registering 4‑bit model as `$publicName`…" -ForegroundColor Cyan
+Write-Host "Registering 4‑bit model as `$publicName`..." -ForegroundColor Cyan
 ollama add $publicName $quantDir
 
 # ------------------- 6️⃣ Interactive session ------------------------

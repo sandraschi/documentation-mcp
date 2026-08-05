@@ -45,8 +45,6 @@ export function ThemeProvider({
         }
 
         root.classList.add(theme)
-        console.log("Theme changed to:", theme)
-        console.log("Classes on root:", root.classList.toString())
     }, [theme])
 
     const value = {

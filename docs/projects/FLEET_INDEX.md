@@ -134,7 +134,7 @@
 | [podman-mcp](https://github.com/sandraschi/podman-mcp) | MCP Server | Active | **Daemonless Podman Control Plane (v3.5.0)** — 9 portmanteau tools (70+ ops): containers, pods, images, compose, backup, migrate, agentic. FastMCP 3.5, React 19. Ports **11112/11113**. Start: `starts/podman-mcp-start.bat`. |
 | [plex-mcp](file:///D:/Dev/repos/plex-mcp) | MCP Server | Active | **Deep Media RAG & Repair Hub (v2.4.0)** - Industrial-grade recursive indexing (TV/Music), Alsergrund Industrial dashboard, and real-time telemetry. |
 | [windows-computer-use-mcp](file:///D:/Dev/repos/windows-computer-use-mcp) | MCP Server | Active | **v0.4.2** | **8+ portmanteau tools** | **FastMCP 3.2+** | **SOTA 2026**; `web_sota` **10788/10789**; root `start.ps1` waits for API |
-| [qbt-mcp](file:///D:/Dev/repos/qbt-mcp) | MCP Server | Active | qBittorrent management via MCP. FastMCP 3.1.1+, Python 3.10+, MIT. |
+| [rtorrent-mcp](file:///D:/Dev/repos/rtorrent-mcp) | MCP Server | Active | rTorrentt management via MCP. FastMCP 3.1.1+, Python 3.10+, MIT. |
 | [qcad-mcp](file:///D:/Dev/repos/qcad-mcp) | MCP Server | **v0.3.0** | **AI-driven 2D CAD automation** — DXF/DWG parsing, SVG preview, STL extrusion, room analysis, 28 MCP tools, persistent depot, QCAD Pro ECMAScript bridge, 16-page React dashboard. Ports **10966/10967**. |
 | [readly-mcp](file:///D:/Dev/repos/readly-mcp) | MCP Server | Active | A specialized MCP server for automating reading and scraping tasks on the Readly web platform (`go.readly.com`). |
 | [reaper-mcp](file:///D:/Dev/repos/reaper-mcp) | MCP Server | Active | Reaper DAW automation via MCP. FastMCP 3.1.1+, portmanteau tools. |

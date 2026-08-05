@@ -256,7 +256,7 @@ function New-OrganizationPlan {
 **Generated:** $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 **Total Repositories:** $($Repos.Count)
 
-## ðŸ“Š Current State
+## ðŸ"Š Current State
 
 - **Total Repositories:** $($Repos.Count)
 - **MCP Servers:** $($categories['MCP'].Count)
@@ -291,7 +291,7 @@ $($categories['MCP'] | ForEach-Object { "- [$($_.name)]($($_.url))" } | Out-Stri
 - `automation` - Automation tools
 - `windows` - Windows-specific tools
 
-## ðŸ“‹ Repository Categories
+## ðŸ"‹ Repository Categories
 
 ### MCP Servers ($($categories['MCP'].Count))
 
@@ -335,7 +335,7 @@ $($categories['Projects'] | ForEach-Object {
 4. **Create Organization README**
    - If creating organization, add README.md to organization profile
 
-## ðŸ“ Next Steps
+## ðŸ" Next Steps
 
 1. Review this plan
 2. Decide on organization strategy
@@ -461,19 +461,19 @@ function Scan-LocalDirectories {
     }
     
     # Display results
-    Write-Host "ðŸ“Š Summary" -ForegroundColor Green
+    Write-Host "ðŸ"Š Summary" -ForegroundColor Green
     Write-Host ("  Total Directories: {0}" -f $directories.Count)
-    Write-Host ("  âœ… Has Git + GitHub: {0}" -f $results.HasGitHub.Count) -ForegroundColor Green
+    Write-Host ("  âœ... Has Git + GitHub: {0}" -f $results.HasGitHub.Count) -ForegroundColor Green
     Write-Host ("  âš ï¸  Has Git (no GitHub): {0}" -f $results.HasGit.Count) -ForegroundColor Yellow
     Write-Host ("  âŒ No Git: {0}" -f $results.NoGit.Count) -ForegroundColor Red
     Write-Host ""
     
     # Has Git + GitHub
     if ($results.HasGitHub.Count -gt 0) {
-        Write-Host "âœ… Has Git + GitHub Remote ($($results.HasGitHub.Count))" -ForegroundColor Green
+        Write-Host "âœ... Has Git + GitHub Remote ($($results.HasGitHub.Count))" -ForegroundColor Green
         Write-Host ("-" * 80) -ForegroundColor DarkGray
         foreach ($item in $results.HasGitHub | Sort-Object Name) {
-            $onGitHub = if ($item.OnGitHub) { "âœ“" } else { "âœ-" }
+            $onGitHub = if ($item.OnGitHub) { "âœ"" } else { "âœ-" }
             Write-Host ("  {0,-35} {1} {2}" -f $item.Name, $onGitHub, $item.Remote) -ForegroundColor White
         }
         Write-Host ""
@@ -502,7 +502,7 @@ function Scan-LocalDirectories {
     
     # Local repos not on GitHub
     if ($results.LocalNotGitHub.Count -gt 0) {
-        Write-Host "ðŸ“¤ Local Git Repos Not on GitHub ($($results.LocalNotGitHub.Count))" -ForegroundColor Cyan
+        Write-Host "ðŸ"¤ Local Git Repos Not on GitHub ($($results.LocalNotGitHub.Count))" -ForegroundColor Cyan
         Write-Host ("-" * 80) -ForegroundColor DarkGray
         foreach ($item in $results.LocalNotGitHub | Sort-Object Name) {
             Write-Host ("  {0,-35} {1}" -f $item.Name, $item.Remote) -ForegroundColor Cyan
@@ -512,7 +512,7 @@ function Scan-LocalDirectories {
     
     # GitHub repos not local
     if ($results.GitHubNotLocal.Count -gt 0) {
-        Write-Host "ðŸ“¥ GitHub Repos Not in Local ($($results.GitHubNotLocal.Count))" -ForegroundColor Magenta
+        Write-Host "ðŸ"¥ GitHub Repos Not in Local ($($results.GitHubNotLocal.Count))" -ForegroundColor Magenta
         Write-Host ("-" * 80) -ForegroundColor DarkGray
         foreach ($repo in $results.GitHubNotLocal) {
             Write-Host ("  {0}" -f $repo) -ForegroundColor Magenta
@@ -651,11 +651,11 @@ try {
 ## Summary
 
 - **Total Directories:** $($scanResults.HasGitHub.Count + $scanResults.HasGit.Count + $scanResults.NoGit.Count)
-- **âœ… Has Git + GitHub:** $($scanResults.HasGitHub.Count)
+- **âœ... Has Git + GitHub:** $($scanResults.HasGitHub.Count)
 - **âš ï¸ Has Git (no GitHub):** $($scanResults.HasGit.Count)
 - **âŒ No Git:** $($scanResults.NoGit.Count)
 
-## âœ… Has Git + GitHub Remote
+## âœ... Has Git + GitHub Remote
 
 $($scanResults.HasGitHub | ForEach-Object { "- **$($_.Name)** - $($_.Remote)" } | Out-String)
 
@@ -670,11 +670,11 @@ $($scanResults.HasGit | ForEach-Object {
 
 $($scanResults.NoGit | ForEach-Object { "- **$($_.Name)**" } | Out-String)
 
-## ðŸ“¤ Local Git Repos Not on GitHub
+## ðŸ"¤ Local Git Repos Not on GitHub
 
 $($scanResults.LocalNotGitHub | ForEach-Object { "- **$($_.Name)** - $($_.Remote)" } | Out-String)
 
-## ðŸ“¥ GitHub Repos Not in Local
+## ðŸ"¥ GitHub Repos Not in Local
 
 $($scanResults.GitHubNotLocal | ForEach-Object { "- **$_**" } | Out-String)
 

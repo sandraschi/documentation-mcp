@@ -7,7 +7,7 @@ Write-Host ""
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $scriptDir
 
-# Host ports (from .env or defaults — never bind 3000/9090/3100 on the host)
+# Host ports (from .env or defaults - never bind 3000/9090/3100 on the host)
 function Get-UnifiedPort {
     param([string]$Name, [int]$Default)
     $fromEnv = [Environment]::GetEnvironmentVariable($Name)
@@ -213,7 +213,7 @@ foreach ($service in $services) {
 Write-Host ""
 Write-Host "🎉 Unified Monitoring Stack is ready!" -ForegroundColor Green
 Write-Host ""
-Write-Host "📊 Access URLs (host ports — see monitoring/.env.example):" -ForegroundColor Cyan
+Write-Host "📊 Access URLs (host ports - see monitoring/.env.example):" -ForegroundColor Cyan
 Write-Host "  • Grafana: http://localhost:$portGrafana (admin/admin)" -ForegroundColor White
 Write-Host "  • Prometheus: http://localhost:$portPrometheus" -ForegroundColor White
 Write-Host "  • Loki: http://localhost:$portLoki" -ForegroundColor White

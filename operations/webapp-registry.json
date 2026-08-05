@@ -1138,10 +1138,10 @@
       ]
     },
     {
-      "id": "qbt-mcp",
+      "id": "rtorrent-mcp",
       "label": "Qbt MCP",
       "port": 10909,
-      "repo_path": "D:/Dev/repos/qbt-mcp",
+      "repo_path": "D:/Dev/repos/rtorrent-mcp",
       "start_command": "powershell ./web_sota/start.ps1",
       "tags": [
         "frontend",

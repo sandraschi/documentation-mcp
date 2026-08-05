@@ -62,7 +62,7 @@ class ProcessManager:
             try:
                 # Use taskkill for Windows to ensure tree cleanup
                 logger.info(f"Stopping process {target_key} (PID: {target_pid})")
-                subprocess.run(["taskkill", "/F", "/T", "/PID", str(target_pid)], check=False)  # noqa: S603, S607
+                subprocess.run(["taskkill", "/F", "/T", "/PID", str(target_pid)], check=False)
                 if target_key:
                     del self.registry[target_key]
                 return True

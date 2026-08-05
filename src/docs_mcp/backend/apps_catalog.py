@@ -405,7 +405,7 @@ APPS_CATALOG: list[AppEntry] = [
         "port": None,
         "whatItIs": "Specialized Qbt MCP service for enhanced technical workflows.",
         "whatYouCanDo": "Enable autonomous qbt operations and data integration within your fleet.",
-        "startScript": "qbt-mcp/start.bat",
+        "startScript": "rtorrent-mcp/start.bat",
     },
     {
         "label": "Readly",

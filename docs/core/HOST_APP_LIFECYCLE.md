@@ -410,7 +410,7 @@ The card MUST:
 | plex-mcp | Plex Media Server | HTTP 32400 | LOW |
 | docker-mcp | Docker Desktop | socket | LOW |
 | virtualization-mcp | VirtualBox | VBoxManage binary | LOW |
-| qbt-mcp | qBittorrent | HTTP 8080 | LOW |
+| rtorrent-mcp | rTorrent | XML-RPC 12224 | LOW |
 | pinokio-mcp | Pinokio | HTTP port | LOW |
 | handbrake-mcp | HandBrakeCLI | binary only | LOW |
 

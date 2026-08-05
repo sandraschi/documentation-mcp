@@ -33,7 +33,7 @@ MANUAL_SCRIPT_TARGETS: dict[str, tuple[str, list[str]]] = {
     "avatarmcp": ("avatarmcp", ["--stdio"]),
     "tapo-camera-mcp": ("devices_mcp.cli_v2", []),  # master used stale script name
     "email-mcp": ("email_mcp.server", []),
-    "qbt-mcp": ("rtorrent_mcp.__main__", []),  # pyproject script is rtorrent-mcp
+    "rtorrent-mcp": ("rtorrent_mcp.__main__", []),
 }
 
 

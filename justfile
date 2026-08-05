@@ -1,13 +1,13 @@
-set windows-shell := ["pwsh.exe", "-NoLogo", "-Command"]
+set windows-shell := ["powershell.exe", "-NoProfile", "-Command"]
 import 'scripts/just/fleet.just'
 
-# ── Dashboard ─────────────────────────────────────────────────────────────────
+# --- Dashboard ---
 
 # Open the interactive recipe dashboard in the browser
 default:
     @just --list
 
-# ── Quality ───────────────────────────────────────────────────────────────────
+# --- Quality ---
 
 # Execute Ruff SOTA v13.1 linting
 lint:
@@ -24,7 +24,7 @@ fix:
     Set-Location '{{justfile_directory()}}\web_sota'
     npx @biomejs/biome check --write .
 
-# ── Hardening ─────────────────────────────────────────────────────────────────
+# --- Hardening ---
 
 # Execute Bandit security audit
 check-sec:
@@ -42,7 +42,7 @@ audit-deps:
 # Rule: JUST-SOTA-2026-04
 # Standard: PowerShell 7.4+ core-compliant
 
-# ── Infrastructure ────────────────────────────────────────────────────────────
+# --- Infrastructure ---
 
 # Quantitative snapshot of documentation and tools
 stats:
@@ -81,7 +81,7 @@ web-auto:
 docs-open:
     Start-Process 'http://127.0.0.1:11032/'
 
-# ── Backend ──────────────────────────────────────────────────────────────────
+# --- Backend ---
 
 # Start Uvicorn API (port 11033)
 backend:
@@ -89,7 +89,7 @@ backend:
     $env:PYTHONPATH = '{{justfile_directory()}};{{justfile_directory()}}\src'
     uv run uvicorn docs_mcp.server:app --host 127.0.0.1 --port 11033 --log-level info
 
-# ── Transport ────────────────────────────────────────────────────────────────
+# --- Transport ---
 
 # Start FastMCP stdio interface
 mcp-stdio:
@@ -97,7 +97,7 @@ mcp-stdio:
     $env:PYTHONPATH = '{{justfile_directory()}};{{justfile_directory()}}\src'
     uv run python -m docs_mcp.stdio_main
 
-# ── Fleet Management ──────────────────────────────────────────────────────────
+# --- Fleet Management ---
 
 # Regenerate fleet registry artifacts
 fleet-registry:
@@ -110,25 +110,25 @@ fleet-fastmcp:
 
 fleet: fleet-registry fleet-fastmcp
 
-# ── RAG (LanceDB doc index) ───────────────────────────────────────────────────
+# --- RAG  LanceDB doc index ---
 
 # Full documentation reindex (CPU)
 rag:
-    @pwsh.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag.ps1
+    @powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag.ps1
 
 # Full documentation reindex on GPU (after rag-gpu-install)
 rag-gpu:
-    @pwsh.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag-gpu.ps1
+    @powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag-gpu.ps1
 
 # One-time: install fastembed-gpu + onnxruntime-gpu + NVIDIA CUDA 12 runtimes (~1.5 GB)
 rag-gpu-install:
-    @pwsh.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag-gpu-install.ps1
+    @powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag-gpu-install.ps1
 
 # Revert to CPU onnxruntime stack
 rag-cpu-install:
-    @pwsh.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag-cpu-install.ps1
+    @powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/just/rag-cpu-install.ps1
 
-# ── Docker ───────────────────────────────────────────────────────────────────
+# --- Docker ---
 # Check Docker Desktop status
 docker-status:
     & '{{justfile_directory()}}/docker/check-docker-status.ps1'
@@ -142,7 +142,7 @@ docker-update-full:
 docker-fix:
     & '{{justfile_directory()}}/docker/fix-docker-daemon.ps1'
 
-# ── Misc Tools ───────────────────────────────────────────────────────────────
+# --- Misc Tools ---
 # Generate readme-hero
 readme-hero:
     Set-Location '{{justfile_directory()}}'
@@ -152,14 +152,9 @@ toolbench-drift:
 	Set-Location '{{justfile_directory()}}'
 	uv run python toolbench/scripts/report_reference_drift.py
 
-# ── MCPB Packaging ──────────────────────────────────────────────────────────
+# --- MCPB Packaging ---
 
-# Build MCPB bundle for Claude Desktop distribution
-mcpb-pack:
-    Set-Location '{{justfile_directory()}}'
-    uv run mcpb pack . dist/documentation-mcp-v$(uv run python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])").mcpb
-
-# ── Native (Tauri) ──────────────────────────────────────────────────────────
+# --- Native  Tauri ---
 
 # Build the Tauri NSIS desktop installer (full pipeline: frontend -> Rust -> NSIS)
 build-native:
@@ -167,6 +162,9 @@ build-native:
 	Set-Location '{{justfile_directory()}}\native'
 	npx @tauri-apps/cli build --bundles nsis
 
-# Run the CUA smoke test against the installed NSIS app
-cua-nsis-test:
-	C:\Windows\py.exe scripts/cua-smoke.py
+
+# Bootstrap: install dev deps + pre-commit hook
+bootstrap:
+    uv sync --group dev
+    uv run pre-commit install
+    Write-Host "Pre-commit hooks installed." -ForegroundColor Green
