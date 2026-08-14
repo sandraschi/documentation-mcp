@@ -20,6 +20,7 @@
 | [aiwatcher-mcp](./aiwatcher-mcp/) | AI news distillation, fleet ingest, Intel Hub digest publish (**10946/10947**) | MCP Server + Webapp | **0.1.8** |
 | [fleet-agent-mcp](./fleet-agent-mcp.md) | Fritz self-evolving agent; coworker + Intel Hub **11027** (**10996/10997**) | MCP Server + Webapp | **0.2.1-pre** |
 | [fritz-coworker](./fritz-coworker/) | Poor Man's Viktor orchestration plan + pilot flows | Agent program | **0.2.1-pre** |
+| [sandrafleetbot](./sandrafleetbot/) | **Zero-pay GrokBot plan** — fleet agent, private board + inbox, Discord human layer, Muse Glimmer brain, pack-based distribution | Agent program (spec) | **SPEC v2** |
 | [cursor-mcp](./cursor-mcp/) | Cursor platform API — spend guardrails, cloud agents, inbox (**11000**) | MCP Server | **0.2.0** |
 | [meta_mcp](./meta_mcp/) | Fleet orchestrator, probes, builders, repo inspiration (**10718/10719**) | MCP Server + Dashboard | **0.3.0** |
 | [plexmcp](./plexmcp/) | Plex Media Server MCP (FastMCP 3.1+, webapp 10740/10741, [PRD](./plexmcp/PRD.md)) | MCP Server + Webapp | Alpha |
@@ -51,6 +52,7 @@
 | [calibre-mcp](./calibre-mcp/) | Calibre library MCP â€” metadata RAG, FTS phrase jump, webapp **10720/10721** | MCP Server + Dashboard | Active |
 | [chitchat](./chitchat/) | Conversation starters, archive, and fleet docs crosslink. 64 curated topics, 4 MCP tools. Backend **10974**, frontend **10975**. FastMCP 3.2. | MCP Server + Webapp | **0.1.0** |
 | [fritz-coworker](./fritz-coworker/) | Poor Man's Viktor: pulses, inbox/day prep, devices watch, Intel Hub **11027**, urgent alerts. Agent: [fleet-agent-mcp](./fleet-agent-mcp.md) **10996**. [CHANGELOG](./fritz-coworker/CHANGELOG.md) | Agent plan + pilot | **0.2.1-pre** |
+| [sandrafleetbot](./sandrafleetbot/) | Zero-pay GrokBot plan: fleet agent, board+inbox, Discord human layer, Muse Glimmer brain, pack distribution + naked-PC gate. [README](./sandrafleetbot/README.md) | Agent plan (spec) | **SPEC v2** |
 | [libreoffice-mcp](./libreoffice-mcp/) | Headless LO convert + ODT merge + webapp PDF preview; ports **10981/10983**. FOSS office layer for Fritz coworker flows. [CHANGELOG](./libreoffice-mcp/CHANGELOG.md) | MCP Server + Webapp | **0.1.0** |
 | [buzz](./buzz/) | Block OSS Nostr relay + Tauri desktop + buzz-cli/acp; local Podman infra; Phases 1–3 complete; Apache-2.0 | Agent workspace (not MCP) | **Eval (0.4.x desktop)** |
 | [security-gym](./security-gym/) | Gymnasium cyber-defense RL (log/eBPF streams); j-klawson/security-gym; pytest green; not MCP | Research / eval | **Eval (0.5.1)** |

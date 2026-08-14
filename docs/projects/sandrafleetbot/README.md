@@ -1,6 +1,6 @@
 # Sandrafleetbot — Zero-Pay GrokBot
 
-> **Status: SPEC v2 (pre-approval)** — no code written yet. This document is the architecture spec + buildout plan + gap register. Approve it, then build P0→P7 in order.
+> **Status: SPEC v2 (pre-approval)** — no code written yet. This document is the architecture spec + buildout plan + gap register. Approve it, then build P0→P8 in order.
 > **Goal:** Beat xAI GrokBot (powerful, metered, cloud-locked) with the sandraschi fleet: Muse Glimmer 30B on the RTX 4090, Fritz as the agent, cline-mcp as the spawner, the federation hub as comm bus + board, aiwatcher/arxiv as the senses, and ~190 MCP wrappers as the hands. Zero per-token cost, everything private.
 > **Positioning (ratified):** GrokBot = horizontal SaaS (millions of tenants, ~$0 marginal cost/user, metered forever). Sandrafleetbot = vertical sovereign agent (1 user on a 4090 → ~dozen users on one H200-class). Sweet spot 1–20 users.
 
@@ -158,7 +158,7 @@ Gate: steps 1–7 green on the sandbox before any SFB release ships.
 
 ---
 
-## 6. Buildout plan (P0→P7, each phase = one gate, ≤ 5 repos touched)
+## 6. Buildout plan (P0→P8, each phase = one gate, ≤ 5 repos touched)
 
 ### P0 — Local brain tier (Muse Glimmer) · ~1 day
 | Task | Repo / file |
