@@ -100,7 +100,7 @@ Rules (ratified ORCHESTRATION_HIERARCHY.md applies unchanged):
 | `ctx.sample()` (server-side sampling) | Not used. Brain tier = **direct local LLM calls** (Ollama muse-glimmer via local-llm-mcp, `fleet-llm` post-sampling pattern — protocol-independent, Anthropic-independent) |
 | SSE transport | Not used — all fleet transports are streamable HTTP (`/mcp`) |
 | Sessions / roots | Stateless by design — hub routes stateless tool calls; state lives in SQLite (board.db, inbox, memory), not protocol sessions |
-| MRTR (`InputRequiredResult`) | Not adopted — probe (2026-08-02) showed Claude Desktop does not implement MRTR; fleet stays on 3.x until FastMCP 4 stable |
+| MRTR (`InputRequiredResult`) | Not adopted — spec + both official SDKs (Python 2.0.0, TypeScript 2.0.0) implement it, but **no shipping client does** (verified 2026-08-14: Claude Desktop ✗ probe, Zed ✗ still on 2025-11-25, opencode ✗, Cline ✗). It's a dependency-bump away for clients, not a hard gap — but today a server emitting it gets ignored. Fleet stays on 3.x + direct LLM calls |
 
 **FastMCP 4 / SDK v2 actually help SFB when adopted:** enterprise auth + Client ID Metadata Documents → mode-C tenancy (§4) gets first-class protocol hooks; background tasks / stateless interactivity → fritz_surveil + surge candidates; `server/discover` → hub capability discovery (versions, caps, identity — future hub registry upgrade); multi-era serving → one binary serves 2025-11-25 and 2026-07-28 clients during transition; CacheableResult → cacheable `tools/list` (hub tool router cache).
 
