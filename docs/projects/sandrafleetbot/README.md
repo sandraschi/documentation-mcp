@@ -62,6 +62,37 @@ Rules (ratified ORCHESTRATION_HIERARCHY.md applies unchanged):
 4. One agent inbox + one board (see P2) — no ad-hoc point-to-point REST between agents.
 5. No new repos unless a phase proves one necessary. P6 is pre-justified (comms-mcp P4 spec exists, ports 11028/11029 already reserved).
 
+### 3.1 Installer & pack distribution (design)
+
+**Do NOT embed 20 backends in one Tauri.** Sizing reality: PyInstaller onefile backends run ~30–90 MB each (light MCP ~15 MB, pywinauto/OpenCV ~90 MB) → a 20-server installer is **0.6–1.8 GB**, rebuilt in full on every release, and 20 resident uvicorn processes idle at ~40–80 MB RAM each (1–1.6 GB) — violating the ratified demand-only lifecycle pattern.
+
+**Two-layer model: one shell, managed packs.**
+
+```
+SFB Operator (Tauri 2.0, ~15 MB shell + one small supervisor backend, embedded)
+  ├── SFB UI = hub control plane (dashboard, board, inbox, agent console, pack manager)
+  ├── Supervisor = spawn on demand / idle-shutdown / health / update (hub supervisor pattern)
+  └── Pack registry → spawns servers from the installed pack (mcpb-style, NOT embedded)
+        ├── SFB Core            (everyone)
+        └── + interest packs    (opt-in, per user)
+```
+
+- **The Tauri app embeds ONE backend** (the hub/supervisor, ~15–30 MB). The 20 MCP servers are **not embedded** — they install from pack manifests (`.mcpb` bundles / release assets) into a pack directory and are spawned on demand, killed when idle (existing `POST /api/shutdown` mandate + fritz_surveil idle-timeout).
+- **One operator, many packs.** The shell is identical for everyone; the *pack selection* is the personalization. This is the "robotics-centered SFB version" — it is not a separate product, it is Core + Robotics pack.
+- **Install UX:** NSIS installer asks "which packs?" (component selection) OR ships Core and adds packs via the pack-manager UI at first run (download from GitHub Releases, checksum-verified). Packs update independently of the shell — a freecad fix does not rebuild the operator.
+- **Pack definitions** (overlaps allowed; curated from the hub bootstrap tiers, not exhaustive):
+
+| Pack | Servers |
+|---|---|
+| **Core** (everyone) | hub (control plane + board + inbox), fritz, cline, memops, local-llm (muse-glimmer brain), filesystem, winops, gitops, email, discord, libreoffice, speech, aiwatcher, arxiv, secrets |
+| **Robotics** | yahboom, ros-mcp, mujoco, gazebo, vla, teleoperator, windows-computer-use |
+| **Engineering** | freecad (CFD/FEM), qcad, kicad, chip-design, codecad, mathops |
+| **Creative/Media** | blender, gimp, davinci-resolve, plex, calibre, jellyfin, immich, comfyops, speech |
+| **Home** | home-assistant, devices, nuki, nest-protect, telephony, dreame |
+
+- **Mode C (startup):** same packs, per-tenant activation — one H200 runs Core + selected packs for the tenant; auth boundary (§4) decides who may spawn what.
+- **Naked-PC bar:** operator installer follows the existing NSIS pipeline (hooks, `.env.example` only, size gates); first-run pack manager is the same pattern as the first-run MCP-registration dialog.
+
 ## 4. Auth & tenancy model (deployment-mode-dependent)
 
 **Principle (ratified): auth is a deployment property, not a code property.** The same single-repo server ships authless standalone; in a SFB multi-tenant install it never sees an unauthenticated request because the hub is the only ingress. Do NOT build auth code into every wrapper — build one auth boundary.
@@ -225,6 +256,8 @@ Known crunchy inventory (honest, dated — verify before trusting):
 
 **Hardening pass order:** (1) myconf/teleconference test + Tauri bug fixes, (2) monitoring liveness + fritz NSSM, (3) gate-sweep FAIL repos assfix, (4) verify hub core (bridge + supervisor) under SFB load. Never more than 5 repos per batch.
 
+**Packaging (P8, follows §3.1):** operator shell (hub + supervisor embedded) → pack manifests per §3.1 table → NSIS installer with pack component selection → pack-manager UI for post-install packs. Gate: clean-PC install of Core; pack add without shell rebuild.
+
 **Gate:** `fleet_board` health post shows all P7 items with status; every SFB-critical repo passes its `assfix` terminal gate + cua test where applicable.
 
 ---
@@ -295,6 +328,7 @@ Honest boundary: a user *could* wire Grok's API to local MCP servers manually �
 - [ ] SFB-critical repos all green on the terminal assfix gate
 - [ ] (mode C) two users on the same hub have fully isolated boards/memory/diaries; policy enforced via hub identity — no per-server auth code
 - [ ] Discord human layer live: task start/end posts in `#sfb-work`, at least one agent "thought" in `#sfb-thoughts`, alert in `#sfb-alerts` — all sanitized summaries, no raw tool output
+- [ ] Installer demo: Core pack installs on a clean PC in one NSIS run; Robotics pack adds yahboom/mujoco/gazebo without reinstalling the shell; idle servers shut down and cold-start in < 60 s
 
 ## 11. Related docs
 
