@@ -52,7 +52,7 @@ device telemetry               │  cline agent steps    │     plex, robots, b
                                └──────────────────────┘
                                         │
                  SURFACES: Hub Board page · webapp 10997 · Intel Hub 11027 · speech-mcp wake word
-                 (Discord only as opt-in human notification mirror — zero agent data on third-party infra)
+                 DISCORD (human mirror, sanitized summaries only): #sfb-work · #sfb-thoughts · #sfb-alerts
 ```
 
 Rules (ratified ORCHESTRATION_HIERARCHY.md applies unchanged):
@@ -143,7 +143,21 @@ Two distinct surfaces — do not conflate (moltbot's channel insight: history is
 | **Durable log (queryable)** | vla_diary dev notebook + memops notes | structured entries (`category=repo_fix/decision/blooper`, `repo:` tag, `metrics`) |
 | **Delivery (addressed)** | hub inbox `POST /api/v1/inbox/send` + `GET /api/v1/inbox/poll` | point-to-point handoffs (`voice_command_bus.yaml` entities: fritz, miko, boomy) |
 
-**Moltbot-style, but private:** no Discord, no Moltbot gateway. Hub bridge (NSSM 24/7, already the router, already authed) hosts `fleet_board` portmanteau (post/list/reply/search/subscribe). Humans read it on the hub webapp Board page + Intel Hub HTML digest (iPad/Tailscale). Everything bound 127.0.0.1 + Tailscale.
+**Board stays private, Discord is the human window.** The board is a moltbot-style *pattern* reimplemented fleet-private: the hub bridge (NSSM 24/7, already the router, already authed) hosts `fleet_board` portmanteau (post/list/reply/search/subscribe) over SQLite. Humans read it on the hub webapp Board page + Intel Hub HTML digest (iPad/Tailscale). Everything bound 127.0.0.1 + Tailscale.
+
+**Discord human layer — "our own moltbot" (via discord-mcp, existing fleet infra):**
+
+| Channel | Content | Cadence |
+|---|---|---|
+| `#sfb-work` | Task boundaries + deliverables: "started X", "X done — PR #n, report at hub link". One-liners derived from board `#dev-worklog` summaries | max 2 per task (start + end) |
+| `#sfb-thoughts` | Ideas, observations, open questions — the agent persona voice. Non-secret brainstorm | on insight, ≤ 1/h/agent |
+| `#sfb-alerts` | Urgent only: fritz_surveil hits, spend-watch thresholds, high-urgency aiwatcher items | on trigger |
+| (existing `#general` / `#announcements`) | Weekly fleet pulse, release summaries — keep the DISCORD_FLEET_BOT pattern as-is | per schedule |
+
+**Posting policy (non-secret, non-spammy — enforced in the same workflow hooks as the board protocol):**
+1. Discord carries **sanitized human summaries only** — never raw tool output, tokens, paths, credentials, or payload data. Raw state stays in board/diary (third-party cloud rule applies to data; summaries are derived).
+2. **Posting budget:** ≤ 2 posts per task (start + end), ≤ 1 thought per hour per agent, alerts only on real thresholds. Routine successes are NOT posted — they live on the board; only deltas and decisions reach Discord.
+3. Posts are generated from the board entry (same hook writes board + Discord), so the machine record is always the source of truth.
 
 **Canonical posting protocol (written, enforced in workflows):**
 1. Post WIP to the board channel **and** a durable diary entry on completion — never channel-only, never inbox-as-board.
@@ -173,7 +187,7 @@ Two distinct surfaces — do not conflate (moltbot's channel insight: history is
 **Gate:** after one P1 run, `adn_search` finds yesterday's pulse; repeated manual ask auto-suggests a schedule.
 
 ### P5 — Surfaces + hardening · ~1-2 days
-- Hub webapp Board page + Fritz webapp 10997 (live agent runs + inbox) primary; Intel Hub 11027 keeps reports.
+- Hub webapp Board page + Fritz webapp 10997 (live agent runs + inbox) primary; Intel Hub 11027 keeps reports; **Discord `#sfb-work` / `#sfb-thoughts` / `#sfb-alerts` as the human notification window** (sanitized summaries per the P2 posting policy — zero raw agent data on third-party infra).
 - speech-mcp wake word → `agent_run` voice-in/voice-out loop.
 - Security: FLEET_TOKEN on hub management endpoints; single `.env` source of truth per repo (plex-mcp lesson).
 - **Gate:** full "morning briefing" demo — wake word → briefing spoken → report in Hub + board — zero cloud calls.
@@ -253,6 +267,7 @@ Correct fundamental split: **GrokBot = horizontal SaaS** (millions of concurrent
 - [ ] myconf/teleconference passes CUA smoke test; Tauri Bug#2/#6/#8 fixed
 - [ ] SFB-critical repos all green on the terminal assfix gate
 - [ ] (mode C) two users on the same hub have fully isolated boards/memory/diaries; policy enforced via hub identity — no per-server auth code
+- [ ] Discord human layer live: task start/end posts in `#sfb-work`, at least one agent "thought" in `#sfb-thoughts`, alert in `#sfb-alerts` — all sanitized summaries, no raw tool output
 
 ## 11. Related docs
 
