@@ -256,6 +256,22 @@ Correct fundamental split: **GrokBot = horizontal SaaS** (millions of concurrent
 
 **Sweet spot:** 1–20 users, where cloud metering hurts and integration depth + data locality matter. Beyond that, the model+serving moat wins and SFB's position is privacy/sovereignty, not cost.
 
+### 8.1 Capability asymmetry — hands GrokBot does not have
+
+Beyond cost, SFB ships capabilities GrokBot structurally lacks: its hands are a cloud sandbox; ours are the local hardware, the licensed toolchain, and the physical world. GrokBot's model may be 50× bigger — it still cannot click your EDA tool or drive your robot.
+
+| Capability class | Fleet repos (all exist) | Why GrokBot can't |
+|---|---|---|
+| **EDA / VLSI** | kicad-mcp (11016/11017, schematic/PCB via KiCad), chip-design-mcp (11022/11023, EDA orchestration) | Cloud agent has no KiCad install, no license seat, no local project tree |
+| **CAD / CFD / FEM / BIM** | freecad-mcp (10944/10945 — CAD, CFD velocity fields, FEM, BIM), qcad-mcp, codecad-mcp (build123d) | Multi-hour meshing/solving loops on local cores; results are files on this disk |
+| **Robotics / simulation** | yahboom-mcp (10892/10893), ros-mcp (11050/11051), mujoco-mcp (11046/11047), gazebo-mcp (10990/10991), vla-mcp | Physical actuators + local sim state; no cloud round-trip can steer a real wheel |
+| **Computer use (Win32)** | windows-computer-use-mcp (10788/10789), ocr-mcp, pywinauto | GrokBot's ToS sandbox ≠ your session; CUA runs on the actual desktop |
+| **Home / devices** | home-assistant-mcp (10778/10834), devices-mcp (10716/10717), nuki-mcp, nest-protect-mcp | Your house is not in their datacenter |
+| **Local media + content** | plex-mcp, calibre-mcp (full-text RAG), jellyfin-mcp, immich-mcp | Private libraries the cloud never sees |
+| **OS control plane** | winops-mcp, filesystem-mcp, system-admin-mcp, virtualization-mcp | Cloud agent gets no admin over this box |
+
+Honest boundary: a user *could* wire Grok's API to local MCP servers manually — the asymmetry is not that Grok can never touch these, it's that SFB ships the entire chain **pre-wired and priced at zero**, while Grok requires assembling MCP configs and paying per token for every step of every long-horizon task (an EDA run is hundreds of reasoning calls). The model-ceiling tradeoff (muse-glimmer 30B vs 1.5T) is real, but it operates *within* a capability envelope the competitor cannot enter at all — the "kicad or CFD work" argument is the strongest line in the pitch.
+
 ## 9. Risks & guardrails
 
 - **Model quality ceiling:** muse-glimmer (30B, Spark-distilled) is NOT Grok 4.6 (1.5T). Accept and weaponize: GrokBot cannot touch the fleet's local surfaces; we compete on integration sovereignty + zero cost, not raw benchmark. Glimmer's MCP Atlas 75.5 / SWE-V 76.0 is already agent-grade; heavy single-shot reasoning stays a documented cloud fallback.
