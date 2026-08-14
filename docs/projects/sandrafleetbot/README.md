@@ -1,6 +1,6 @@
 # Sandrafleetbot — Zero-Pay GrokBot
 
-> **Status: SPEC v2 (pre-approval)** — no code written yet. This document is the architecture spec + buildout plan + gap register. Approve it, then build P0→P8 in order.
+> **Status: SPEC v2 — buildout in progress.** **P0 (brain tier) DONE 2026-08-14**: Muse Glimmer 30B live on the 4090 (chat/tools/vision verified), cline-mcp + local-llm-mcp default to it, ComfyUI sidecar GPU-verified. Next: P1 (Fritz reasoning loop). This document is the architecture spec + buildout plan + gap register.
 > **Goal:** Beat xAI GrokBot (powerful, metered, cloud-locked) with the sandraschi fleet: Muse Glimmer 30B on the RTX 4090, Fritz as the agent, cline-mcp as the spawner, the federation hub as comm bus + board, aiwatcher/arxiv as the senses, and ~190 MCP wrappers as the hands. Zero per-token cost, everything private.
 > **Positioning (ratified):** GrokBot = horizontal SaaS (millions of tenants, ~$0 marginal cost/user, metered forever). Sandrafleetbot = vertical sovereign agent (1 user on a 4090 → ~dozen users on one H200-class). Sweet spot 1–20 users.
 
@@ -160,17 +160,14 @@ Gate: steps 1–7 green on the sandbox before any SFB release ships.
 
 ## 6. Buildout plan (P0→P8, each phase = one gate, ≤ 5 repos touched)
 
-### P0 — Local brain tier (Muse Glimmer) · ~1 day
-| Task | Repo / file |
-|---|---|
-| Update Ollama v0.32.9 → v0.32.11 (drops the llama-server workaround; NVIDIA support landed v0.32.8) | host |
-| `ollama pull muse-glimmer` (18 GB → fits 24 GB 4090, ~5 GB headroom; BF16/FP8 of Spark is what does NOT fit) | host |
-| Smoke test: chat + vision (screenshot) + function calling + long context | host |
-| cline-mcp: default provider `ollama`, default model `muse-glimmer` | `cline-mcp/src/index.ts`, README |
-| local-llm-mcp: tier routing (muse-glimmer=heavy, qwen3.5-9b distil=fast) | `local-llm-mcp/src/...` |
-| comfyops-mcp: verify ComfyUI sidecar on 4090 for local image gen; google-ai-mcp becomes documented cloud fallback | `comfyops-mcp` |
-
-**Gate:** `agent_run("2+2", provider=ollama, model=muse-glimmer)` sane in < 30 s; vision round-trips; `ollama list` shows muse-glimmer.
+### P0 — Local brain tier (Muse Glimmer) · ✅ DONE 2026-08-14
+- ✅ Ollama **v0.32.9 → v0.32.11** (winget) — llama-server workaround obsolete; NVIDIA support landed v0.32.8
+- ✅ `muse-glimmer:latest` pulled (18 GB; 16 GB weights + 1.4 GB mmproj) — fits 24 GB 4090
+- ✅ Smoke tests: chat (21 s cold, correct), **tool calling** (`get_weather(city=Vienna)` schema-correct), **vision** (image → "HELLO 42"), `agent_run` via cline-mcp (muse-glimmer, 77 in / 51 out tokens, $0)
+- ✅ cline-mcp: default provider `ollama`, default model `muse-glimmer` (env-overridable: `CLINE_MCP_DEFAULT_PROVIDER`, `OLLAMA_DEFAULT_MODEL`)
+- ✅ local-llm-mcp: default provider `ollama`, default model `muse-glimmer`; fast tier (qwen3.5-9b distil) documented in `.env.example`
+- ✅ comfyops/ComfyUI sidecar verified: ComfyUI 0.27.0 boots on :11086, **cuda:0 RTX 4090** visible (note: `--api` flag is gone in this version — API mode is default; comfyops start.ps1 should not pass it)
+- ⚠️ Carry-over: `uv run llm-mcp` restart needed to pick up new defaults; pyright line 127 pre-existing error (ConfigDict typing quirk, unrelated)
 
 ### P1 — Fritz reasoning loop (the brain) · ~2-3 days
 | Task | Repo / file |
