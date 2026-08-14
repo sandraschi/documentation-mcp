@@ -93,6 +93,23 @@ SFB Operator (Tauri 2.0, ~15 MB shell + one small supervisor backend, embedded)
 - **Mode C (startup):** same packs, per-tenant activation — one H200 runs Core + selected packs for the tenant; auth boundary (§4) decides who may spawn what.
 - **Naked-PC bar:** operator installer follows the existing NSIS pipeline (hooks, `.env.example` only, size gates); first-run pack manager is the same pattern as the first-run MCP-registration dialog.
 
+**Naked-PC sandbox gate (P8, mandatory before any release) — via the existing cold-install probe infrastructure:**
+
+Reuse `FLEET_COLD_INSTALL_PROBE.md` (meta_mcp orchestrates, virtualization-mcp consumer sandbox executes, Broken\* reinstall-after-fix loop, `fleet-cold-install-report.json` + markdown reports) — SFB is one more "repo" in the probe, but with a pack-aware test matrix:
+
+| # | Step | Verify |
+|---|---|---|
+| 1 | virtualization-mcp provisions fresh Windows VM (ISO, no dev tools) + baseline snapshot | clean/naked baseline |
+| 2 | Install SFB Core NSIS (`/S` silent) | exit 0; **no Python/Node/uv/winget required**; WebView2 bootstrapper path; operator launches |
+| 3 | Hub health + board/inbox up | `GET /api/health` 200; `fleet_board` post round-trip |
+| 4 | Add Robotics pack via pack-manager UI (checksum-verified download from Releases) | yahboom/mujoco/gazebo spawn on demand; idle shutdown via `POST /api/shutdown` |
+| 5 | Reboot VM | supervisor auto-restarts pack (NSSM/task), hub returns, board history intact |
+| 6 | Uninstall | clean registry + process kill hooks; no orphan backends |
+| 7 | Any failed step → fix → **reinstall-after-fix on fresh snapshot** | probe loop closes |
+| 8 | (mode C, later) second tenant on same VM | isolation holds |
+
+Gate: steps 1–7 green on the sandbox before any SFB release ships.
+
 ## 4. Auth & tenancy model (deployment-mode-dependent)
 
 **Principle (ratified): auth is a deployment property, not a code property.** The same single-repo server ships authless standalone; in a SFB multi-tenant install it never sees an unauthenticated request because the hub is the only ingress. Do NOT build auth code into every wrapper — build one auth boundary.
@@ -256,7 +273,7 @@ Known crunchy inventory (honest, dated — verify before trusting):
 
 **Hardening pass order:** (1) myconf/teleconference test + Tauri bug fixes, (2) monitoring liveness + fritz NSSM, (3) gate-sweep FAIL repos assfix, (4) verify hub core (bridge + supervisor) under SFB load. Never more than 5 repos per batch.
 
-**Packaging (P8, follows §3.1):** operator shell (hub + supervisor embedded) → pack manifests per §3.1 table → NSIS installer with pack component selection → pack-manager UI for post-install packs. Gate: clean-PC install of Core; pack add without shell rebuild.
+**Packaging (P8, follows §3.1):** operator shell (hub + supervisor embedded) → pack manifests per §3.1 table → NSIS installer with pack component selection → pack-manager UI for post-install packs. Gate: clean-PC install of Core; pack add without shell rebuild — both run in the virtualization-mcp consumer sandbox (naked-PC matrix above) before any release.
 
 **Gate:** `fleet_board` health post shows all P7 items with status; every SFB-critical repo passes its `assfix` terminal gate + cua test where applicable.
 
