@@ -83,22 +83,30 @@ Rules (ratified ORCHESTRATION_HIERARCHY.md applies unchanged):
 
 ## 5. Protocol posture — preparing for MCP 2026-07-28 & FastMCP 4
 
-**Timeline (fleet-verified):** MCP spec **2026-07-28** (RC) — stateless core, `sampling/createMessage` deprecated (SEP-2577), MRTR (`InputRequiredResult`) replaces sampling/roots, SSE deprecated. **FastMCP 4.0.0b1** (beta, built on MCP Python SDK v2) removes `ctx.sample()` — ~55 fleet repos currently call it. Fleet pin today: `fastmcp>=3.4.4,<4` (standards bar).
+**Status (verified 2026-08-14 — corrects fleet docs, which still call it "RC"):**
+
+| Layer | Version | Status |
+|---|---|---|
+| MCP spec | **2026-07-28** | **STABLE** since 2026-07-28 (RC was 05-29). Stateless core, no sessions/`initialize`, `server/discover`, `subscriptions/listen`, MRTR, CacheableResult (`ttlMs`/`cacheScope`), deterministic `tools/list` order |
+| MCP Python SDK | **2.0.0** | **STABLE** since 2026-07-28 — this is the "MCP v2" (v1.29.0 was the last 1.x, same day) |
+| FastMCP | **3.4.7** | latest stable remains 3.x; **FastMCP 4.0 stable NOT shipped** (4.0.0b1 beta exists, built on SDK v2) |
+
+**Deprecations (all have a minimum 12-month deprecation window — no panic):** Sampling, Roots, Logging (SEP-2577), HTTP+SSE transport, `includeContext` `thisServer`/`allServers`. `ctx.sample()` keeps working on FastMCP 3.x through the window; migration is planned, not urgent.
 
 **SFB is protocol-forward by design — nothing in the new spec breaks it:**
 
-| Deprecated / removed in MCP 2026-07-28 / FastMCP 4 | SFB posture |
+| Deprecated / removed | SFB posture |
 |---|---|
 | `ctx.sample()` (server-side sampling) | Not used. Brain tier = **direct local LLM calls** (Ollama muse-glimmer via local-llm-mcp, `fleet-llm` post-sampling pattern — protocol-independent, Anthropic-independent) |
 | SSE transport | Not used — all fleet transports are streamable HTTP (`/mcp`) |
 | Sessions / roots | Stateless by design — hub routes stateless tool calls; state lives in SQLite (board.db, inbox, memory), not protocol sessions |
 | MRTR (`InputRequiredResult`) | Not adopted — probe (2026-08-02) showed Claude Desktop does not implement MRTR; fleet stays on 3.x until FastMCP 4 stable |
 
-**FastMCP 4 actually helps SFB when it lands stable:** enterprise auth → mode-C tenancy (§4) gets a first-class protocol hook; background tasks / stateless interactivity → fritz_surveil + surge candidates; multi-era serving → one binary serves 2025-11-25 and 2026-07-28 clients during transition.
+**FastMCP 4 / SDK v2 actually help SFB when adopted:** enterprise auth + Client ID Metadata Documents → mode-C tenancy (§4) gets first-class protocol hooks; background tasks / stateless interactivity → fritz_surveil + surge candidates; `server/discover` → hub capability discovery (versions, caps, identity — future hub registry upgrade); multi-era serving → one binary serves 2025-11-25 and 2026-07-28 clients during transition; CacheableResult → cacheable `tools/list` (hub tool router cache).
 
 **Migration triggers (fleet decision, `fastmcp/fastmcp-4-assessment.md`):** do NOT adopt beta. When FastMCP 4.0 stable ships → canary learnbot-mcp (2 weeks) → mechanical fleet upgrade. SFB rule: P0–P5 build against 3.4.x; P6/P7 must not introduce new `ctx.sample()` usage; only adopt FastMCP 4 post-canary.
 
-**References (fleet-internal, mcp-central-docs):** `fastmcp/2026-07-28-spec-migration.md` · `fastmcp/fastmcp-4-assessment.md` · `fastmcp/sampling-migration-plan.md` · `analysis/mcp-2026-07-28-fastmcp-4-fleet-impact.md` · `analysis/fleet-llm-post-sampling-design.md` · `operations/MCP4_MRTR_PROBE_CASE_REPORT.md`
+**References (fleet-internal, mcp-central-docs):** `fastmcp/2026-07-28-spec-migration.md` · `fastmcp/fastmcp-4-assessment.md` · `fastmcp/sampling-migration-plan.md` · `analysis/mcp-2026-07-28-fastmcp-4-fleet-impact.md` · `analysis/fleet-llm-post-sampling-design.md` · `operations/MCP4_MRTR_PROBE_CASE_REPORT.md`. Spec canonical: `modelcontextprotocol.io/specification/2026-07-28` (+ `/changelog`).
 
 ---
 
