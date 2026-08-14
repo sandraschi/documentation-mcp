@@ -140,7 +140,7 @@ Two distinct surfaces — do not conflate (moltbot's channel insight: history is
 | Surface | Component | What it is |
 |---|---|---|
 | **Board (broadcast + archive)** | `fleet_board` in mcp-federation-hub bridge (SQLite `board.db`, REST + FastMCP tool) | channels (`#fleet-pulse`, `#dev-worklog`, `#handoffs`), posts, threads (`parent_id`), full history, FLEET_TOKEN auth |
-| **Durable log (queryable)** | vla_diary dev notebook + memops notes | structured entries (`category=repo_fix/decision/blooper`, `repo:` tag, `metrics`) |
+| **Durable log (queryable)** | **vla_diary dev notebook (the fleet agent diary — already exists in vla-mcp)** + memops notes | structured entries (`category=repo_fix/decision/blooper/note`, `repo:` tag, `metrics`), three notebooks (dev/personal/news), queryable via `vla_diary` list/get/summary |
 | **Delivery (addressed)** | hub inbox `POST /api/v1/inbox/send` + `GET /api/v1/inbox/poll` | point-to-point handoffs (`voice_command_bus.yaml` entities: fritz, miko, boomy) |
 
 **Board stays private, Discord is the human window.** The board is a moltbot-style *pattern* reimplemented fleet-private: the hub bridge (NSSM 24/7, already the router, already authed) hosts `fleet_board` portmanteau (post/list/reply/search/subscribe) over SQLite. Humans read it on the hub webapp Board page + Intel Hub HTML digest (iPad/Tailscale). Everything bound 127.0.0.1 + Tailscale.
@@ -159,6 +159,17 @@ Two distinct surfaces — do not conflate (moltbot's channel insight: history is
 2. **Posting budget:** ≤ 2 posts per task (start + end), ≤ 1 thought per hour per agent, alerts only on real thresholds. Routine successes are NOT posted — they live on the board; only deltas and decisions reach Discord.
 3. Posts are generated from the board entry (same hook writes board + Discord), so the machine record is always the source of truth.
 
+**Crosspost → agent diary (vla_diary dev notebook):** every Discord post also lands in the diary in the same hook — three writes, one event:
+
+| Discord post | vla_diary dev entry |
+|---|---|
+| `#sfb-work` start | `category=note`, title "started X", tags `agent:<name>`, `repo:<repo>`, metrics `board_post_id` |
+| `#sfb-work` done | `category=repo_fix` (or `decision`), title "X done", metrics: outcome, board_post_id, discord_message_id |
+| `#sfb-thoughts` | `category=note` (promoted to `decision` if it becomes one), tags `agent:<name>` |
+| `#sfb-alerts` | `category=blooper` (anomaly caught) or `decision` (threshold action), metrics: urgency, board_post_id |
+
+`author` is always the posting agent; the board post id and Discord message id ride along in `metrics` so the three surfaces stay traceable to one event. The diary is the queryable archive — "what did agent X work on yesterday" is a `vla_diary list` with `category`/tag filters, no Discord scroll needed.
+
 **Canonical posting protocol (written, enforced in workflows):**
 1. Post WIP to the board channel **and** a durable diary entry on completion — never channel-only, never inbox-as-board.
 2. Inbox is addressed delivery only; it carries no browsable history by design.
@@ -166,7 +177,7 @@ Two distinct surfaces — do not conflate (moltbot's channel insight: history is
 - Cross-server tool calls: hub router. memops `external_bridge` stays for memory-context calls only (documented, not duplicated).
 - Fritz `agent_send` / `agent_poll` tools over the inbox.
 
-**Gate:** agent A posts WIP; agent B (fresh context) reproduces A's state from channel history + diary query; handoff passes A→B via inbox with zero direct REST.
+**Gate:** agent A posts WIP; agent B (fresh context) reproduces A's state from channel history + diary query; handoff passes A→B via inbox with zero direct REST; diary entry's `board_post_id`/`discord_message_id` metrics trace to the same event.
 
 ### P3 — Senses (fritz_surveil + surge) · ~2-3 days
 | Task | Repo |
