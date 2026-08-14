@@ -81,7 +81,28 @@ Rules (ratified ORCHESTRATION_HIERARCHY.md applies unchanged):
 
 ---
 
-## 5. Buildout plan (P0→P7, each phase = one gate, ≤ 5 repos touched)
+## 5. Protocol posture — preparing for MCP 2026-07-28 & FastMCP 4
+
+**Timeline (fleet-verified):** MCP spec **2026-07-28** (RC) — stateless core, `sampling/createMessage` deprecated (SEP-2577), MRTR (`InputRequiredResult`) replaces sampling/roots, SSE deprecated. **FastMCP 4.0.0b1** (beta, built on MCP Python SDK v2) removes `ctx.sample()` — ~55 fleet repos currently call it. Fleet pin today: `fastmcp>=3.4.4,<4` (standards bar).
+
+**SFB is protocol-forward by design — nothing in the new spec breaks it:**
+
+| Deprecated / removed in MCP 2026-07-28 / FastMCP 4 | SFB posture |
+|---|---|
+| `ctx.sample()` (server-side sampling) | Not used. Brain tier = **direct local LLM calls** (Ollama muse-glimmer via local-llm-mcp, `fleet-llm` post-sampling pattern — protocol-independent, Anthropic-independent) |
+| SSE transport | Not used — all fleet transports are streamable HTTP (`/mcp`) |
+| Sessions / roots | Stateless by design — hub routes stateless tool calls; state lives in SQLite (board.db, inbox, memory), not protocol sessions |
+| MRTR (`InputRequiredResult`) | Not adopted — probe (2026-08-02) showed Claude Desktop does not implement MRTR; fleet stays on 3.x until FastMCP 4 stable |
+
+**FastMCP 4 actually helps SFB when it lands stable:** enterprise auth → mode-C tenancy (§4) gets a first-class protocol hook; background tasks / stateless interactivity → fritz_surveil + surge candidates; multi-era serving → one binary serves 2025-11-25 and 2026-07-28 clients during transition.
+
+**Migration triggers (fleet decision, `fastmcp/fastmcp-4-assessment.md`):** do NOT adopt beta. When FastMCP 4.0 stable ships → canary learnbot-mcp (2 weeks) → mechanical fleet upgrade. SFB rule: P0–P5 build against 3.4.x; P6/P7 must not introduce new `ctx.sample()` usage; only adopt FastMCP 4 post-canary.
+
+**References (fleet-internal, mcp-central-docs):** `fastmcp/2026-07-28-spec-migration.md` · `fastmcp/fastmcp-4-assessment.md` · `fastmcp/sampling-migration-plan.md` · `analysis/mcp-2026-07-28-fastmcp-4-fleet-impact.md` · `analysis/fleet-llm-post-sampling-design.md` · `operations/MCP4_MRTR_PROBE_CASE_REPORT.md`
+
+---
+
+## 6. Buildout plan (P0→P7, each phase = one gate, ≤ 5 repos touched)
 
 ### P0 — Local brain tier (Muse Glimmer) · ~1 day
 | Task | Repo / file |
@@ -175,7 +196,7 @@ Known crunchy inventory (honest, dated — verify before trusting):
 
 ---
 
-## 6. Cost model (the zeropay claim)
+## 7. Cost model (the zeropay claim)
 
 | Item | GrokBot | Sandrafleetbot |
 |---|---|---|
@@ -190,7 +211,7 @@ Known crunchy inventory (honest, dated — verify before trusting):
 
 Cloud fallback (cursor-mcp spend watch already exists): budget < $20/mo, alert at threshold — mirror of `coworker_cursor_spend_watch`.
 
-## 7. Positioning & scaling envelope (vs GrokBot)
+## 8. Positioning & scaling envelope (vs GrokBot)
 
 Correct fundamental split: **GrokBot = horizontal SaaS** (millions of concurrent tenants, hyperscale serving, marginal cost ~0/user); **Sandrafleetbot = vertical sovereign agent** (single-tenant local, integration-depth moat, zero metering).
 
@@ -202,7 +223,7 @@ Correct fundamental split: **GrokBot = horizontal SaaS** (millions of concurrent
 
 **Sweet spot:** 1–20 users, where cloud metering hurts and integration depth + data locality matter. Beyond that, the model+serving moat wins and SFB's position is privacy/sovereignty, not cost.
 
-## 8. Risks & guardrails
+## 9. Risks & guardrails
 
 - **Model quality ceiling:** muse-glimmer (30B, Spark-distilled) is NOT Grok 4.6 (1.5T). Accept and weaponize: GrokBot cannot touch the fleet's local surfaces; we compete on integration sovereignty + zero cost, not raw benchmark. Glimmer's MCP Atlas 75.5 / SWE-V 76.0 is already agent-grade; heavy single-shot reasoning stays a documented cloud fallback.
 - **VRAM pressure:** ComfyUI + muse + whisper on one 24 GB card — P0 verifies headroom; if tight, time-share (comfyops on demand + shutdown hook).
@@ -212,7 +233,7 @@ Correct fundamental split: **GrokBot = horizontal SaaS** (millions of concurrent
 - **Batch rule:** each phase touches ≤ 5 repos; `.bak` copies for batch edits; checkpoint commits.
 - **No new repos** beyond the pre-justified comms-mcp (P6) — everything else is glue over existing infra.
 
-## 9. Success criteria (measurable)
+## 10. Success criteria (measurable)
 
 - [ ] muse-glimmer serves all fleet LLM calls; monthly cloud spend **€0** (or documented exception)
 - [ ] `coworker_fleet_pulse` runs 7 days unattended with an agent-composed (not template) report
@@ -225,7 +246,7 @@ Correct fundamental split: **GrokBot = horizontal SaaS** (millions of concurrent
 - [ ] SFB-critical repos all green on the terminal assfix gate
 - [ ] (mode C) two users on the same hub have fully isolated boards/memory/diaries; policy enforced via hub identity — no per-server auth code
 
-## 10. Related docs
+## 11. Related docs
 
 | Location | Content |
 |---|---|
