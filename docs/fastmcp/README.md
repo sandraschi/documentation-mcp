@@ -17,6 +17,7 @@
 | [3.2-features.md](3.2-features.md) | FastMCP 3.2 GA — providers, transforms, CodeMode, Prefab UI, prompts, skills |
 | [3.4-features.md](3.4-features.md) | FastMCP 3.4 — remote bridge, fail-loud proxies, returnable errors |
 | [3.5-features.md](3.5-features.md) | FastMCP 3.5 — pluggable storage, response caching middleware, Azure/HF OAuth, SDK pinning |
+| [mrtr-guide.md](mrtr-guide.md) | **New** — MRTR (SEP-2322) deep dive: wire shape, SDK support matrix, client adoption status, fleet decision table, sampling-lesson risk |
 | [fastmcp-32-fleet-capability-map.md](fastmcp-32-fleet-capability-map.md) | Capability ladder from baseline to autonomous orchestration |
 
 ## Architecture & Patterns
