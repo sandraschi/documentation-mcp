@@ -8,13 +8,13 @@
 
 <sub>*Sandra's workshop, Alsergrund, Vienna. Benny is real. The [Noetix Bumi](https://www.noetix.ai/) humanoid is aspirational (arriving soon).*</sub>
 
-I'm a retired and vibe-reactivated software engineer living in the 9th District (Alsergrund), Vienna. I build DIY robotics, maintain a fleet of 130+ MCP servers, and hang out with my German Shepherd Benny — and soon, a Noetix Bumi humanoid robot.
+I'm a retired and vibe-reactivated software engineer living in the 9th District (Alsergrund), Vienna. I build DIY robotics, maintain a fleet of 190+ MCP servers, and hang out with my German Shepherd Benny — and soon, a Noetix Bumi humanoid robot.
 
 ---
 
 ## 🌐 The MCP Fleet
 
-I maintain a homespun fleet of **130+ repos**, each an MCP server with an associated webapp. MCP for agents, webapp for humans — files, git, Plex, Calibre, robotics, 3D tools, music production, Vienna transit, and a lot more. Built on [FastMCP 3.2](https://gofastmcp.com).
+I maintain a homespun fleet of **190+ repos**, each an MCP server with an associated webapp. MCP for agents, webapp for humans — files, git, Plex, Calibre, robotics, 3D tools, music production, Vienna transit, and a lot more. Built on [FastMCP 3.4](https://gofastmcp.com).
 
 > 🌙 **All webapps are permanently dark mode. Night-owl approved.** No light toggle, no plans for one. Dim your OLEDs accordingly.
 
@@ -26,15 +26,67 @@ I maintain a homespun fleet of **130+ repos**, each an MCP server with an associ
 
 ## 🔥 Current highlight
 
-<!-- Rotate this section when a new project deserves the spotlight. -->
+### mixx-dj-mcp: an MCP server, a webapp, and a fork that changed everything
 
-| Project | What |
-| :--- | :--- |
-| **[leanforge-mcp](https://github.com/sandraschi/leanforge-mcp)** | Lean 4 formal proof search pipeline. Submit a conjecture, get a machine-verified proof via LLM + compiler feedback loop. Inspired by AlphaProof Nexus. |
-| **[godot-mcp](https://github.com/sandraschi/godot-mcp)** | Godot 4 engine control via MCP. STL import, CFD velocity fields, GPU particles, PBR materials, HTML5 export. Fleet visualization endpoint. |
-| **[calibre-mcp](https://github.com/sandraschi/calibre-mcp)** | Ebook library with semantic RAG search, arXiv/Gutenberg import, and full-text indexing. |
+[mixx-dj-mcp](https://github.com/sandraschi/mixx-dj-mcp) is a new MCP server and
+webapp for Mixxx — OSC bridge, deck control, BPM sync, full remote DJ dashboard.
+But the bigger story is what it unlocked.
 
-→ **[Full catalog →](MCP_CATALOG.md)** • **[Workshop & Hardware](WORKSHOP.md)**
+[Mixxx](https://mixxx.org) is a 300,000-line C++ DJ application, grown slowly over
+years by conservative greybeard devs. Solid, respected, missing crucial features
+its users begged for: video mixing, stem separation, AI-assisted automation. The
+dev team wanted to add them. Nobody had the bandwidth.
+
+DeepSeek V4 on opencode added **5,000 lines of C++** to the [mixxxx fork](https://github.com/sandraschi/mixxxxx)
+and filled every gap:
+
+- *"We need VFX."* — "Use FFmpeg. It's fast, battle-tested, ships everywhere."
+- *"We need synced video like Resolume."* — "Use MilkDrop / [ButterChurn](https://github.com/jberg/butterchurn). It's WebGL, FOSS, and already handles audio-reactive visuals."
+- *"We need stem separation."* — "ONNX HTDemucs v4. Runs on the GPU. Zero cloud."
+
+The [mixxxx fork](https://github.com/sandraschi/mixxxxx) is the integration testbed.
+It's not a toy — it's Mixxx with video, stems, and AI control, implemented by an AI
+that has never been to a club. The greybeards are impressed. The users have features.
+The AI doesn't need domain expertise. It needs a clear spec.
+
+**I am not a DJ.** I don't know how to beatmatch. But I know what the software should
+do, and that was enough. This is SHN in practice: a
+non-expert directing an AI to extend a 300K-line C++ codebase, and the AI delivering
+production-quality features that the expert dev team couldn't prioritize.
+
+<!-- -->
+
+### leanforge-mcp: formal proofs, no math degree
+
+[Lean 4](https://lean-lang.org) is a proof assistant — a programming language where
+the compiler verifies that your code is mathematically correct. Using it traditionally
+requires a PhD in logic or months of study. [leanforge-mcp](https://github.com/sandraschi/leanforge-mcp) automates the hard part:
+an LLM proposes a proof, the Lean compiler checks it, the LLM reads the error and
+tries again. Loop until verified.
+
+**I am not a math wiz.** I can't write a Lean proof by hand. But I can frame the
+conjecture, and the AI + compiler feedback loop handles the rest. This is the same
+pattern as AlphaProof but running on a consumer GPU with open-weight models.
+
+Two repos, same story: domain-specific superhuman performance, directed by someone who
+isn't an expert in either domain. Architecture and taste are the human contribution.
+The AI handles the part that used to take a degree.
+
+→ **[Superhuman Narrow →](docs/SUPERHUMAN_NARROW.md)** — the full argument
+
+→ **[Full catalog →](MCP_CATALOG.md)** • **[Workshop & Hardware](WORKSHOP.md)** • **[Shenzhen Robotics →](docs/SHENZHEN_ROBOTICS.md)** • **[Bloopers →](docs/BLOOPERS.md)**
+
+---
+
+## 🔮 Coming next: sandrafleetbot — the free GrokBot
+
+[GrokBot](https://x.ai) is a marvel and a subscription: frontier agentic coding, real-time news, voice, image generation, tool use — metered per token, cloud-locked, served to millions at once.
+
+**Sandrafleetbot** is the inverse bet: the same job, running entirely on one consumer GPU (RTX 4090), Apache 2.0, fully private, **€0 per token**. The brain is [Muse Glimmer 30B](https://ollama.com/library/muse-glimmer) — Meta's open agentic model, distilled from Muse Spark for single-GPU agents (MCP Atlas 75.5, SWE-Bench Verified 76.0, native Ollama support). The hands are this fleet: **190+ MCP servers become the agent's tool surface** — my files, my Plex, my Calibre library, my robots, my Windows control plane. No API key, no metering, no cloud round-trip, no data leaving the box.
+
+GrokBot serves millions of users shallowly; sandrafleetbot serves one user deeply (or a dozen, on a single H200-class GPU). Same agent loop — sense → reason → act → remember — different economics: horizontal SaaS vs vertical sovereignty. The fleet's own glue does the rest: a private agent board + inbox (moltbot-style, self-hosted), news surge from the AIWatcher pipeline, arXiv codehunt as a second sense, and an RTX 4090 doing the thinking, the voice, and the image generation.
+
+**Status: spec ratified, buildout planned (P0→P7: brain tier → agent loop → board/inbox → senses → memory → surfaces → channels → hardening). No code shipped yet — this is the plan, in the open.** [Spec →](https://github.com/sandraschi/documentation-mcp/blob/main/docs/projects/sandrafleetbot/README.md)
 
 ---
 
