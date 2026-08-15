@@ -1,6 +1,6 @@
 # Sandrafleetbot — Zero-Pay GrokBot
 
-> **Status: SPEC v2 — buildout in progress.** **P0 (brain tier) DONE 2026-08-14**: Muse Glimmer 30B live on the 4090 (chat/tools/vision verified), cline-mcp + local-llm-mcp default to it, ComfyUI sidecar GPU-verified. Next: P1 (Fritz reasoning loop). This document is the architecture spec + buildout plan + gap register.
+> **Status: SPEC v2 — buildout in progress.** **P0 (brain tier) DONE 2026-08-14**: Muse Glimmer 30B live on the 4090 (chat/tools/vision verified), cline-mcp + local-llm-mcp default to it, ComfyUI sidecar GPU-verified. **P1 (Fritz reasoning loop) DONE 2026-08-15**: flowforge `gent step via cline-mcp `gent_run, hub discovery refresh, heartbeat_wake trigger, `gent-demo E2E passed. Next: P2 (agent comm bus + private bulletin board). This document is the architecture spec + buildout plan + gap register.
 > **Goal:** Beat xAI GrokBot (powerful, metered, cloud-locked) with the sandraschi fleet: Muse Glimmer 30B on the RTX 4090, Fritz as the agent, cline-mcp as the spawner, the federation hub as comm bus + board, aiwatcher/arxiv as the senses, and ~190 MCP wrappers as the hands. Zero per-token cost, everything private.
 > **Positioning (ratified):** GrokBot = horizontal SaaS (millions of tenants, ~$0 marginal cost/user, metered forever). Sandrafleetbot = vertical sovereign agent (1 user on a 4090 → ~dozen users on one H200-class). Sweet spot 1–20 users.
 
@@ -169,7 +169,7 @@ Gate: steps 1–7 green on the sandbox before any SFB release ships.
 - ✅ comfyops/ComfyUI sidecar verified: ComfyUI 0.27.0 boots on :11086, **cuda:0 RTX 4090** visible (note: `--api` flag is gone in this version — API mode is default; comfyops start.ps1 should not pass it)
 - ⚠️ Carry-over: `uv run llm-mcp` restart needed to pick up new defaults; pyright line 127 pre-existing error (ConfigDict typing quirk, unrelated)
 
-### P1 — Fritz reasoning loop (the brain) · ~2-3 days
+### P1 — Fritz reasoning loop (the brain) · ✅ DONE 2026-08-15
 | Task | Repo / file |
 |---|---|
 | flowforge YAML: new step type `agent` → cline-mcp `agent_run` (ollama/muse-glimmer); JSON output feeds next step | `fleet-agent-mcp/workflows/`, step executor |
@@ -177,7 +177,7 @@ Gate: steps 1–7 green on the sandbox before any SFB release ships.
 | Wire `heartbeat_wake` → `workflow_start('coworker')` (known gap) | `fleet-agent-mcp` scheduler |
 | Bonus: `ollama launch opencode --model muse-glimmer` scaffold as dev-day loop | host |
 
-**Gate:** `coworker_fleet_pulse` runs end-to-end with an `agent` step composing the report (not a hand-written template); deliverable lands by 07:15.
+**Gate:** `coworker_fleet_pulse` runs end-to-end with an `agent` step composing the report (not a hand-written template); deliverable lands by 07:15. — ✅ PASSED 2026-08-15 (`agent-demo` E2E: cline-mcp REST `agent_run` → muse-glimmer → flowforge `agent` step, node_outputs persisted, hub refresh 69 servers)
 
 ### P2 — Agent comm bus + private bulletin board · ~2-3 days
 Two distinct surfaces — do not conflate (moltbot's channel insight: history is first-class, delivery is not a board):
@@ -358,3 +358,4 @@ Honest boundary: a user *could* wire Grok's API to local MCP servers manually �
 | *(fleet-internal)* `audits/gate-sweep-2026-08-06.csv` + `logs/tauri-pitfalls-scan.csv` | Crunchy-repo evidence — mcp-central-docs, private |
 
 *Tags: #sandrafleetbot #grokbot #zeropay #agent #orchestration #spec*
+
