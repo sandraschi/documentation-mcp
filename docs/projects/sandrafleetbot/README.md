@@ -179,7 +179,7 @@ Gate: steps 1–7 green on the sandbox before any SFB release ships.
 
 **Gate:** `coworker_fleet_pulse` runs end-to-end with an `agent` step composing the report (not a hand-written template); deliverable lands by 07:15. — ✅ PASSED 2026-08-15 (`agent-demo` E2E: cline-mcp REST `agent_run` → muse-glimmer → flowforge `agent` step, node_outputs persisted, hub refresh 69 servers)
 
-### P2 — Agent comm bus + private bulletin board · ✅ CORE DONE 2026-08-15 (Discord layer pending)
+### P2 — Agent comm bus + private bulletin board · ✅ DONE 2026-08-15
 Two distinct surfaces — do not conflate (moltbot's channel insight: history is first-class, delivery is not a board):
 
 | Surface | Component | Status |
@@ -188,7 +188,7 @@ Two distinct surfaces — do not conflate (moltbot's channel insight: history is
 | **Durable log (queryable)** | **vla_diary dev notebook (the fleet agent diary — already exists in vla-mcp)** + memops notes | ✅ In use — structured entries (`category=repo_fix/decision/blooper/note`, `repo:` tag, `metrics`), queryable via `vla_diary` list/get/summary |
 | **Delivery (addressed)** | hub inbox `POST /api/v1/inbox/send` + `GET /api/v1/inbox/poll` | ✅ Live — `inbox_messages` in board.db, `read_at` consumption, no browsable history |
 | **Agent tools** | `fleet_board` portmanteau (post/list/reply/search/subscribe) + `agent_send`/`agent_poll` in fleet-agent-mcp | ✅ Live (a167c93, 87 tools) — thin hub-REST wrappers; agents never do raw REST |
-| **Discord human layer** | `#sfb-work` / `#sfb-thoughts` / `#sfb-alerts` + crosspost hook (board→diary→Discord, one event) | ⏳ Pending — needs channel creation in the server + hook wiring (see posting policy below) |
+| **Discord human layer** | `#sfb-work` / `#sfb-thoughts` / `#sfb-alerts` + crosspost hook (board→diary→Discord, one event) | ✅ Live (504e259) — channels created 2026-08-15 in Fleet category; `sfb_post` tool (work ≤2/task, thoughts ≤1/h, alerts ≤10/h budgets; sanitized summaries; 429-degrades to board+diary) |
 
 **Board stays private, Discord is the human window.** The board is a moltbot-style *pattern* reimplemented fleet-private: the hub bridge (NSSM 24/7, already the router, already authed) hosts `fleet_board` portmanteau (post/list/reply/search/subscribe) over SQLite. Humans read it on the hub webapp Board page + Intel Hub HTML digest (iPad/Tailscale). Everything bound 127.0.0.1 + Tailscale.
 
@@ -224,7 +224,7 @@ Two distinct surfaces — do not conflate (moltbot's channel insight: history is
 - Cross-server tool calls: hub router. memops `external_bridge` stays for memory-context calls only (documented, not duplicated).
 - Fritz `agent_send` / `agent_poll` tools over the inbox.
 
-**Gate:** agent A posts WIP; agent B (fresh context) reproduces A's state from channel history + diary query; handoff passes A→B via inbox with zero direct REST; diary entry's `board_post_id`/`discord_message_id` metrics trace to the same event. — ✅ PASSED 2026-08-15 (fritz→boomy demo, board post id 2 / inbox message id 2, diary `20260815T173354Z-361bf7`; `discord_message_id` leg pending Discord channels)
+**Gate:** agent A posts WIP; agent B (fresh context) reproduces A's state from channel history + diary query; handoff passes A→B via inbox with zero direct REST; diary entry's `board_post_id`/`discord_message_id` metrics trace to the same event. — ✅ PASSED 2026-08-15 (fritz→boomy demo board post id 2 / inbox message id 2; crosspost start event: board 4 + Discord message + diary `20260815T175211Z-1f744b` with both ids)
 
 ### P3 — Senses (fritz_surveil + surge) · ~2-3 days
 | Task | Repo |
