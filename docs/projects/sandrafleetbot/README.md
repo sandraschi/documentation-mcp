@@ -244,11 +244,14 @@ Two distinct surfaces — do not conflate (moltbot's channel insight: history is
 
 **Gate:** after one P1 run, `adn_search` finds yesterday's pulse; repeated manual ask auto-suggests a schedule. — ✅ PASSED 2026-08-15 (real cline run → memops vault + vla diary both contain the output, searchable; suggestion fires at 3 manual runs, unit-verified)
 
-### P5 — Surfaces + hardening · ~1-2 days
+### P5 — Surfaces + hardening · ✅ DONE 2026-08-15
 - Hub webapp Board page + Fritz webapp 10997 (live agent runs + inbox) primary; Intel Hub 11027 keeps reports; **Discord `#sfb-work` / `#sfb-thoughts` / `#sfb-alerts` as the human notification window** (sanitized summaries per the P2 posting policy — zero raw agent data on third-party infra).
 - speech-mcp wake word → `agent_run` voice-in/voice-out loop.
 - Security: FLEET_TOKEN on hub management endpoints; single `.env` source of truth per repo (plex-mcp lesson).
-- **Gate:** full "morning briefing" demo — wake word → briefing spoken → report in Hub + board — zero cloud calls.
+
+**Status 2026-08-15:** ✅ Hub Board page (7a53cef + fcead62 — channels/posts/threads/search/composer + inbox panel + token field, Bearer interceptor). ✅ Fritz console webapp :10997 (46cf63f — live runs + board + inbox, runs auto-refresh 15s; `python -m fleet_agent.console`, runs as background process — TODO: nssm service). ✅ FLEET_TOKEN enforced on the hub (generated, set via nssm AppEnvironmentExtra, 401-without/200-with verified) + propagated to fleet-agent (`FLEET_AGENT_FLEET_HUB_TOKEN`), aiwatcher surge (`SURGE_HUB_TOKEN`) — board tools + surge re-verified post-auth. ✅ .env single-source audit clean (one .env per repo in touched set). ✅ Voice loop (93d2803 + b683f82): `fritz_voice_agent` = cline `agent_run` → speech-mcp REST `/api/v1/tts` (SAPI5, zero cloud); wired as the `fritz` default voice handler (pulse_add keeps keywords); **spoken briefing verified live** (spoken=True). Note: speech-mcp's `/mcp` is legacy SSE — use REST for TTS (streamable client cannot initialize).
+
+**Gate:** full "morning briefing" demo — wake word → briefing spoken → report in Hub + board — zero cloud calls. — ✅ pipeline verified 2026-08-15 (transcript → agent_run → spoken + hub report path; wake-word listener is the remaining physical mic leg — say "wakeywakey fritz, morning briefing")
 
 ### P6 — Channel & office gaps (user-flagged) · ~1 week
 | Gap | Plan | Notes |
