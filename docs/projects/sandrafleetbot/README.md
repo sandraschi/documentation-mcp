@@ -226,14 +226,14 @@ Two distinct surfaces — do not conflate (moltbot's channel insight: history is
 
 **Gate:** agent A posts WIP; agent B (fresh context) reproduces A's state from channel history + diary query; handoff passes A→B via inbox with zero direct REST; diary entry's `board_post_id`/`discord_message_id` metrics trace to the same event. — ✅ PASSED 2026-08-15 (fritz→boomy demo board post id 2 / inbox message id 2; crosspost start event: board 4 + Discord message + diary `20260815T175211Z-1f744b` with both ids)
 
-### P3 — Senses (fritz_surveil + surge) · ~2-3 days
-| Task | Repo |
-|---|---|
-| Build `fritz_surveil` per FLEET_DEEP_ANALYSIS_2026-07-13 §1: one triage engine, two domains (`external` news, `fleet` logs/health precursors); urgency → inbox → admiral notify. Triage router, NOT a SIEM | `fleet-agent-mcp` |
-| aiwatcher surge mode: urgency ≥ threshold → inbox immediately (not only daily digest) | `aiwatcher-mcp` |
-| arxiv codehunt repoll hits → inbox fan-out (already push to aiwatcher) | `arxiv-mcp` |
+### P3 — Senses (fritz_surveil + surge) · ✅ DONE 2026-08-15
+| Task | Repo | Status |
+|---|---|---|
+| Build `fritz_surveil` per FLEET_DEEP_ANALYSIS_2026-07-13 §1: one triage engine, two domains (`external` news, `fleet` logs/health precursors); urgency → inbox → admiral notify. Triage router, NOT a SIEM | `fleet-agent-mcp` | ✅ `fritz_surveil` portmanteau (scan_all/scan_now/set_thresholds/history/ack, d377cde): fleet domain over hub supervisor/uptime; restart-loop ≥3/10min → urgent; unreachable/degraded notice→urgent, **transition-aware** (fires only when the server was healthy in the window — permanent dead servers are registry hygiene, not alerts); urgent → hub inbox to admiral + #sfb-alerts crosspost; notice → inbox to fritz; dedupe 60min w/ escalation override |
+| aiwatcher surge mode: urgency ≥ threshold → inbox immediately (not only daily digest) | `aiwatcher-mcp` | ✅ `surge.py` (6919cb6): urgency ≥ 8.5 → hub inbox to fritz at ingest (fleet events + inbox_add) and post-score (distillation); best-effort, never fails ingestion; SURGE_* env knobs; 4 unit tests |
+| arxiv codehunt repoll hits → inbox fan-out (already push to aiwatcher) | `arxiv-mcp` | ✅ covered — codehunt live drops already push via aiwatcher `ingest_fleet_event`, which now inherits the surge fan-out |
 
-**Gate:** test high-urgency event (`ingest_fleet_event` urgency 9) reaches a surface in < 5 min.
+**Gate:** test high-urgency event (`ingest_fleet_event` urgency 9) reaches a surface in < 5 min. — ✅ PASSED 2026-08-15 (**3.4s**: REST ingest → hub inbox for fritz)
 
 ### P4 — Memory + persona · ~2 days
 | Task | Repo |
