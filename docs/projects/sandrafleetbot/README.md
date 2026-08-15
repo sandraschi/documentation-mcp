@@ -1,6 +1,6 @@
 # Sandrafleetbot — Zero-Pay GrokBot
 
-> **Status: SPEC v2 - buildout in progress.** **P0 (brain tier) DONE 2026-08-14**: Muse Glimmer 30B live on the 4090 (chat/tools/vision verified), cline-mcp + local-llm-mcp default to it, ComfyUI sidecar GPU-verified. **P1 (Fritz reasoning loop) DONE 2026-08-15**: flowforge agent step via cline-mcp agent_run, hub discovery refresh, heartbeat_wake trigger, agent-demo E2E passed. **P2 (comm bus + board) DONE 2026-08-15**: hub board + inbox + agent tools + Discord #sfb-* crosspost hook, gate passed. **P3 (senses) DONE 2026-08-15**: aiwatcher surge (urgency>=8.5 -> inbox in 3.4s) + fritz_surveil fleet triage. Next: P4 (memory + persona). This document is the architecture spec + buildout plan + gap register.
+> **Status: SPEC v2 - buildout in progress.** **P0 (brain tier) DONE 2026-08-14**: Muse Glimmer 30B live on the 4090 (chat/tools/vision verified), cline-mcp + local-llm-mcp default to it, ComfyUI sidecar GPU-verified. **P1 (Fritz reasoning loop) DONE 2026-08-15**: flowforge agent step via cline-mcp agent_run, hub discovery refresh, heartbeat_wake trigger, agent-demo E2E passed. **P2 (comm bus + board) DONE 2026-08-15**: hub board + inbox + agent tools + Discord #sfb-* crosspost hook, gate passed. **P3 (senses) DONE 2026-08-15**: aiwatcher surge (urgency>=8.5 -> inbox in 3.4s) + fritz_surveil fleet triage. Next: P5 (surfaces + hardening). This document is the architecture spec + buildout plan + gap register.
 > **Goal:** Beat xAI GrokBot (powerful, metered, cloud-locked) with the sandraschi fleet: Muse Glimmer 30B on the RTX 4090, Fritz as the agent, cline-mcp as the spawner, the federation hub as comm bus + board, aiwatcher/arxiv as the senses, and ~190 MCP wrappers as the hands. Zero per-token cost, everything private.
 > **Positioning (ratified):** GrokBot = horizontal SaaS (millions of tenants, ~$0 marginal cost/user, metered forever). Sandrafleetbot = vertical sovereign agent (1 user on a 4090 → ~dozen users on one H200-class). Sweet spot 1–20 users.
 
@@ -235,14 +235,14 @@ Two distinct surfaces — do not conflate (moltbot's channel insight: history is
 
 **Gate:** test high-urgency event (`ingest_fleet_event` urgency 9) reaches a surface in < 5 min. — ✅ PASSED 2026-08-15 (**3.4s**: REST ingest → hub inbox for fritz)
 
-### P4 — Memory + persona · ~2 days
-| Task | Repo |
-|---|---|
-| End-of-task memory hooks: every cline agent task ends with memops `adn_notes quick` + `vla_diary` dev entry (`repo:` tag) | `cline-mcp` (wrap agent loop) |
-| Skills as first-class memory (Viktor steal #2): Fritz `memory_card_create(type=skill)`; proactive cron suggestions (steal #1) on repeated manual asks | `fleet-agent-mcp` |
-| learnbot persona `fritz` for chat surface | `learnbot-mcp` |
+### P4 — Memory + persona · ✅ DONE 2026-08-15
+| Task | Repo | Status |
+|---|---|---|
+| End-of-task memory hooks: every cline agent task ends with memops `adn_notes quick` + `vla_diary` dev entry (`repo:` tag) | `cline-mcp` (wrap agent loop) | ✅ `src/memory-hook.ts` (14d63dd) — `runAgentOnce` fires memops quick note (MCP streamable :10732) + vla diary insert (node:sqlite WAL, agent:cline, provider/model metrics) on every completion (agent_run, sessions, schedules); best-effort; env `CLINE_MCP_MEMORY_ENABLED/MEMOPS_URL/VLA_DIARY_DB/REPO_TAG`; verified live with a real muse-glimmer run |
+| Skills as first-class memory (Viktor steal #2): Fritz `memory_card_create(type=skill)`; proactive cron suggestions (steal #1) on repeated manual asks | `fleet-agent-mcp` | ✅ (e654098) — `card_type=skill` (category 'skill' + type:skill tag); `memory/suggestions.py` tracks manual coworker/wake runs, after 3 in 7 days posts a one-time cron suggestion; `suggestion_list`/`suggestion_ack` tools; wired into coworker_execute + heartbeat_wake |
+| learnbot persona `fritz` for chat surface | `learnbot-mcp` | ✅ created 2026-08-15 (orchestrator backstory, dry voice, constraints, knowledge base) — note: persona `constraints` must be a JSON array string (server does `json.loads`) |
 
-**Gate:** after one P1 run, `adn_search` finds yesterday's pulse; repeated manual ask auto-suggests a schedule.
+**Gate:** after one P1 run, `adn_search` finds yesterday's pulse; repeated manual ask auto-suggests a schedule. — ✅ PASSED 2026-08-15 (real cline run → memops vault + vla diary both contain the output, searchable; suggestion fires at 3 manual runs, unit-verified)
 
 ### P5 — Surfaces + hardening · ~1-2 days
 - Hub webapp Board page + Fritz webapp 10997 (live agent runs + inbox) primary; Intel Hub 11027 keeps reports; **Discord `#sfb-work` / `#sfb-thoughts` / `#sfb-alerts` as the human notification window** (sanitized summaries per the P2 posting policy — zero raw agent data on third-party infra).
