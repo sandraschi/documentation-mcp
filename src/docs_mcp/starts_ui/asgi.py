@@ -155,7 +155,7 @@ def _default_github_owner() -> str:
 
 
 def _github_owner_repositories_url() -> str:
-    """Used when no specific repo URL is known: opens the owner’s Repositories tab."""
+    """Used when no specific repo URL is known: opens the owner's Repositories tab."""
     return f"https://github.com/{_default_github_owner()}?tab=repositories"
 
 

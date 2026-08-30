@@ -500,7 +500,7 @@ APPS_CATALOG: list[AppEntry] = [
         "url": "#",
         "port": None,
         "whatItIs": "LeVo 2 / SG2 music MCP (SongGeneration-Studio): local open-weight generation, dual-track WAV; see docs://lyria-vs-sg2 vs Gemini Lyria 3 Pro.",
-        "whatYouCanDo": "Generate with SG2 tags; optional style prompt; compare cloud Lyria (~$0.08/song—verify) vs local GPU path.",
+        "whatYouCanDo": "Generate with SG2 tags; optional style prompt; compare cloud Lyria (~$0.08/song-verify) vs local GPU path.",
         "startScript": "songgeneration-mcp/web_sota/start.ps1",
     },
     {

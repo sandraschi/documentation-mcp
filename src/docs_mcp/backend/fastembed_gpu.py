@@ -1,4 +1,4 @@
-"""Fleet-standard FastEmbed GPU bootstrap — see mcp-central-docs standards/patterns/FLEET_RAG_GPU.md."""
+"""Fleet-standard FastEmbed GPU bootstrap - see mcp-central-docs standards/patterns/FLEET_RAG_GPU.md."""
 
 from __future__ import annotations
 

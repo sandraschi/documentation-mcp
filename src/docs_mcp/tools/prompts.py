@@ -80,7 +80,7 @@ def register_tools(mcp: FastMCP):
             if not skill_md.is_file():
                 continue
             name = subdir.name
-            lines.append(f"- `skill://{name}/SKILL.md` — {name}")
+            lines.append(f"- `skill://{name}/SKILL.md` - {name}")
             with open(skill_md, encoding="utf-8") as f:
                 content = f.read()
             lines.append("")

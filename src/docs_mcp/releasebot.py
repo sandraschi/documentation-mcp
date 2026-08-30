@@ -198,7 +198,7 @@ async def query_releasebot_http(
             "releases": [],
         }
 
-    lines = [f"{d} — {h}" for d, h in rows]
+    lines = [f"{d} - {h}" for d, h in rows]
     summary = "Recent releases: " + "; ".join(lines)
     return {
         "success": True,

@@ -58,7 +58,7 @@ class DocsConfig(BaseModel):
 
     @property
     def DOCS_ROOT(self) -> Path:
-        """Primary RAG root — defaults to this repo's docs/ folder."""
+        """Primary RAG root - defaults to this repo's docs/ folder."""
         env_root = os.environ.get("DOCS_ROOT", "").strip()
         if env_root:
             resolved = Path(env_root).resolve()

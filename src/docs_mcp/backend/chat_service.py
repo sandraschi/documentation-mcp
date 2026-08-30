@@ -146,7 +146,7 @@ async def stream_chat(
                 yield json.dumps({"type": "token", "content": chunk}) + "\n"
 
         else:
-            # No provider configured — return RAG-only response
+            # No provider configured - return RAG-only response
             fallback = f"Found {len(sources)} relevant documentation sources. Enable an LLM provider in Settings for AI-synthesized answers."
             yield json.dumps({"type": "token", "content": fallback}) + "\n"
 
