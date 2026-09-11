@@ -49,6 +49,16 @@ stats:
     Set-Location '{{justfile_directory()}}'
     uv run python tools/repo_stats.py
 
+# Preview what a sync from private mcp-central-docs would change (no writes)
+sync-docs-dry:
+    Set-Location '{{justfile_directory()}}'
+    .\scripts\sync-from-mcd.ps1
+
+# Sync docs/ from private mcp-central-docs, gated by scripts/hygiene-gate.ps1
+sync-docs:
+    Set-Location '{{justfile_directory()}}'
+    .\scripts\sync-from-mcd.ps1 -Apply
+
 # Sync all environment dependencies
 sync:
     Set-Location '{{justfile_directory()}}'
