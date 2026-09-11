@@ -9,7 +9,7 @@ description = "Public MCP Documentation Server - Federated RAG for the MCP ecosy
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "FlowEngineer sandraschi", email = "sandraschipal@gmail.com"}
+    {name = "FlowEngineer sandraschi", email = "sandra.schipal@example.com"}
 ]
 keywords = [
     "mcp", "documentation", "search", "federated-rag", "fastmcp",
@@ -106,3 +106,9 @@ ignore = ["S101", "B008", "S106", "S110", "S112", "S101", "B008", "S106", "S110"
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.22.2",
+    "pywin32>=311",
+]
