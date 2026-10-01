@@ -74,10 +74,10 @@ New portmanteau `mixx_stems` with operations:
 
 ### Model Distribution
 
-The ONNX model (~200MB) is NOT bundled in the installer. On first `stem_separate` trigger, the binary downloads from HuggingFace:
+The ONNX model (316 MB) is NOT bundled in the installer. On first `stem_separate` trigger, the binary downloads from HuggingFace (the earlier `dhunstack/demucs-onnx` URL does not exist; this is the StemSplit single-file export, MIT, SHA-256 `68d0bf16428ef66e692cdff8a9ccf28f1ef3f69440d57e58605a4cc55fcc5e74`):
 
 ```
-https://huggingface.co/dhunstack/demucs-onnx/resolve/main/htdemucs.onnx
+https://huggingface.co/StemSplitio/htdemucs-onnx/resolve/main/htdemucs.onnx
 ```
 
 Cached at `%LOCALAPPDATA%\mixxxxx\models\htdemucs.onnx`. Users can opt out by setting `MIXXXX_NO_STEMS=1`.
