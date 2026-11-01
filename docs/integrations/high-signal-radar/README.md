@@ -57,3 +57,19 @@ yt-dlp -x --audio-format mp3 -o "audio.mp3" "URL"
 # 3. Model Prompt (Bonsai / Glimmer):
 # "Extract: 1. Core thesis/admissions; 2. Hard technical numbers/timeline dates; 3. Direct answers vs. evasive hedges; 4. Novel tools/repos mentioned. Strip all conversational pauses, ums/ahs, boilerplate intros, and sponsor banter."
 ```
+
+---
+
+## 🌏 4. Sinosphere Reality & Industrial Ground Truth (Anti-"Sinophobe Lies")
+Cutting through western tabloid sensationalism, apocalyptic "China collapse" predictions, and state-sponsored hype. Focus strictly on on-the-ground engineering reality, supply-chain physics, and verified infrastructure.
+
+### The Ground-Truth Principle
+Western media headlines routinely misreport Chinese infrastructure out of sensationalism or technical illiteracy.
+* **Case in Point**: The massive Motuo / Yarlung Tsangpo hydropower project in Tibet is widely misreported in western press as an "apocalyptic mega-dam blocking downstream rivers." Ground truth: it is an engineering **run-of-river cascading bypass tunnel** exploiting a 2,000m elevation drop through a horseshoe bend, **not a conventional reservoir blockage/dam**. 
+* Always look for the engineering schematics, hydrology data, and spatial satellite mapping over opinion headlines.
+
+### High-Signal Creators & Analysts (No "Rah-Rah", No Sensationalism)
+* **Kyle Ellicott / Asianometry**: Deep technical, historically rigorous case studies on semiconductor fabrication (SMIC, ASML, Huawei), supply chain geopolitics, and industrial planning without political cheerleading.
+* **On-the-Ground Tech & Infrastructure Observers** (e.g., *Walk East*, *Living in China*, *Jerry's Take on China*): Direct, unedited 4K walk-throughs of industrial manufacturing hubs (Shenzhen Huaqiangbei, EV gigafactories, automated high-speed rail terminals). Zero talking heads, just visual ground truth.
+* **Geopolitical & Macro Physics (e.g., Cyrus Janssen, Daniel Dumbrill)**: Fact-checking mainstream press misrepresentations by citing original Ministry of Water Resources and State Grid whitepapers rather than third-hand editorial re-writes.
+* **Hardware Sourcing & Shenzhen Maker Culture**: Tracking raw component evolution (RISC-V boards, Lidar sensors, Yahboom kits) directly from Taobao/Bilibili engineering channels.
