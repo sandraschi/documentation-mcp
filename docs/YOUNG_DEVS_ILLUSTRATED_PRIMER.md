@@ -24,6 +24,8 @@ flowchart TD
   Fleet --> C10["📻 Ch 10: Kosmos Radiobasteln Reborn (SDR)"]
   Fleet --> C11["⚡ Ch 11: The Heathkit Dream Lab in Resonite VR"]
   Fleet --> C12["📏 Ch 12: Rechenschieber: From Schoolkid to 4D"]
+  Fleet --> C13["📖 Ch 13: Attic Byte, Altair & 1970s BASIC"]
+  Fleet --> C14["🎨 Ch 14: Vintage Comics: Wunderwelt & Métal Hurlant"]
 ```
 
 ---
@@ -304,6 +306,40 @@ flowchart TD
 
 Daddy wanted you to use your Rechenschieber. So we gave it to the agents, gave it infinite precision, and projected it into 4D space.
 
+
+
+---
+
+## Chapter 13: Attic Archaeologist: Savoring 1970s *Byte*, *Popular Electronics*, & Homebrew BASIC
+*“Robert Tinney’s surreal covers, the Altair 8800 breakthrough, and typing in 500 lines of spaghetti BASIC.”*
+
+Up in the attic, inside cardboard banana boxes smelling of dry dust and aged paper pulp, lies the true sacred scripture of our tribe:
+* **The Legendary January 1975 *Popular Electronics***: The cover that launched personal computing—an artist's painting of the **Altair 8800** with toggle switches and red LEDs, whispering to every hobbyist: *“Project Breakthrough! World’s First Minicomputer Kit to Rival Commercial Models... Save over \!”*
+* **The Golden Age of *Byte* Magazine (1975–1985)**: Those sublime, whimsical, surrealist watercolor covers by **Robert Tinney**—floppy disks as flying saucers, microprocessors as ancient Greek temples, and tiny robotic figures building castles out of silicon wafers.
+* **The Homebrew Computer Club Spirit**: Gordon French’s garage in Menlo Park; Lee Felsenstein moderating; Steve Wozniak handing out schematics on loose-leaf paper because information wanted to be free.
+
+### The Modern Resurrection Pipeline: From Yellowed Pulp to Interactive Code
+With **ocr-mcp** + **calibremcp** + **dosbox-mcp**:
+1. **Pulp to Token (ocr-mcp)**: Feed the agent scans of old, smudged magazine pages. Modern vision models extract the magazine articles, strip the 1978 mail-order ads for 1KB static RAM boards (\!), and transcribe the raw BASIC type-in listings with zero typo drift.
+2. **Smile at the Predictions**: Let Claude contrast 1981 editorial predictions (*“Why 640K will satisfy desktop memory for a generation”*) against our current 24GB VRAM reality on Goliath.
+3. **Run the 1979 Type-In Game**: Claude pipes the transcribed BASIC code directly into an emulated Microsoft BASIC / GW-BASIC runtime. Within seconds, you are playing *Lunar Lander* or *Hamurabi*, complete with authentic uppercase prompt nostalgia: HOW MANY BUSHELS OF GRAIN DO YOU WISH TO FEED YOUR PEOPLE?
+
+---
+
+## Chapter 14: The Pulp Renaissance: Reviving Vintage Comics, *Wunderwelt*, & *Métal Hurlant*
+*“From Austrian childhood fairy tales to Moebius's wild sci-fi neon dreams.”*
+
+Tucked right beside the technical journals in the attic trunk was the visual nourishment of your youth:
+* **The DACH Childhood Treasury: *Wunderwelt* & *Kiddie Comics***: Those gentle, beautifully illustrated mid-century Austrian magazines (*Die Wunderwelt*, 1948–1986)—tales of forest sprites, whimsical clockwork toys, and cozy illustrated puzzles that taught generations of children how to wonder before screens took over.
+* **The Sci-Fi Revolution: *Métal Hurlant* & *Heavy Metal* (1975+)**: The earth-shattering arrival of Moebius (Jean Giraud), Philippe Druillet, and Enki Bilal. Gone were the sterile superheroes; in came gritty, cosmic, psychedelic cyberpunk landscapes, bio-mechanical flying galleons, and existential neon odysseys that inspired *Blade Runner* and *Alien*.
+
+### The AI Comic Conservator & Digital Diorama Pipeline
+How does a sovereign fleet treat vintage illustrated art?
+* **Deep Restoration (ocr-mcp + photocraft)**: AI extracts comic panels from vintage yellowed scans, cleans ink bleed-through, de-mottles pulp paper, and reconstructs the authentic offset-print halftone dot matrix (*Ben-Day dots*) with pristine high-DPI clarity.
+* **From 2D Panel to 3D Metaverse (lender-mcp + esonite-mcp)**: 
+  Take Moebius’s floating desert gliders from *Arzach* or the whimsical fairy-tale cottages of *Wunderwelt*. Claude parses the line art, drives Blender to generate depth-displaced 3D mesh geometry, textures it with procedural watercolor or airbrush shaders, and deploys it as an explorable, walk-through diorama inside Resonite VR.
+
+You don't just read the comic on a flat tablet. You step into the panel, feel the alien desert breeze, and watch the twin suns set over Moebius's horizon.
 
 > 💡 **For the mathematically fearless:** If your brain craves the rigorous academic history, Hilbert's 13th Problem, Kolmogorov-Arnold Representation Theorem, and Hyperdimensional Computing (HDC), see the companion research paper: **[The Theory of Higher-Dimensional Slide Rules](THEORY_OF_HIGHER_DIMENSIONAL_SLIDE_RULES.md)**. Junior devs may safely skip this to prevent their lids from flipping!
 
