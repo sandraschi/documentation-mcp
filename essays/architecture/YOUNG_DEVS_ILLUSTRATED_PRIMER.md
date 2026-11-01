@@ -20,6 +20,8 @@ flowchart TD
   Fleet --> C6["📦 Ch 6: Shop Shenzhen like Li Mingxing"]
   Fleet --> C7["📐 Ch 7: Lean 4 Proofs without a Math PhD"]
   Fleet --> C8["🤖 Ch 8: The 15-Repo Mesh: From Idea to Startup"]
+  Fleet --> C9["💾 Ch 9: Retro Classics: Turbo Pascal & Framework"]
+  Fleet --> C10["📻 Ch 10: Kosmos Radiobasteln Reborn (SDR)"]
 ```
 
 ---
@@ -152,6 +154,53 @@ flowchart TD
 6. **The Pitch (dark-app-factory + demo-vid-mcp)**: By Sunday evening, the web dashboard is live with real-time LIDAR streaming, an automated narrated demo video is rendered, and you have a working hardware prototype ready for demo day.
 
 Total headcount: **1 human, 1 GPU, 15 MCP servers.** Total capital spent: **\ in parts and electricity.**
+
+
+---
+
+## Chapter 9: Retro-Computing Time Travel: Resurrecting 1980s/90s Junior-Genius Classics
+*“Because Turbo Pascal 5.5 in Borland blue, Ashton-Tate Framework, and Deluxe Paint still hit different.”*
+
+Every veteran coder remembers the golden age of desktop craft:
+* **Turbo Pascal 5.5 / 7.0**: That glorious royal-blue Borland text-UI with yellow status text that compiled 10,000 lines a second on a 386SX with 4MB of RAM.
+* **Ashton-Tate Framework III / IV**: The legendary integrated environment (outliner, spreadsheet, database, word processor, M-language) that ran rings around modern memory-hogging Electron bloatware.
+* **Electronic Arts Deluxe Paint II (DPaint)**: The pixel-art god-tier tool on the Commodore Amiga and DOS with cycling color palettes and copper effects.
+* **Norton Commander / XTree Gold**: The twin-pane blue kings of keyboard-only file management.
+
+**The Sovereign Retro-Resurrection Loop**:
+You don't just run an abandonware emulator in a clunky window. You bridge it into the modern agentic bus via **eversing-mcp** + **dosbox-mcp**:
+1. You feed Claude a forgotten .PAS codebase or ancient .FW3 frame file.
+2. The agent launches headless DOSBox or an x86 real-mode emulator via MCP, injects keystrokes, compiles the units, and reads the VGA frame buffer.
+3. If you want to bring it to 2026: Claude transpiles the Turbo Pascal procedural units or Framework FRED macros directly into safe, zero-panic Rust with an immediate-mode gui retro-blue theme! You get modern 64-bit binaries that preserve the sacred keyboard shortcuts and aesthetics of 1991.
+
+---
+
+## Chapter 10: Virtual Radiobasteln: The Kosmos Electronic Experimenter Kit Lives Again!
+*“Spring terminals, germanium diodes, and MW coil winding in a software-defined world.”*
+
+Anyone growing up in Germany, Austria, or Switzerland (DACH) in the 70s, 80s, or 90s remembers the holy grail in the cardboard box with the blue styrofoam inlay: the **Kosmos Radiomann** (or the Philips EE / Schuco ABC electronic experiment kits). 
+
+You carefully wedged hair-thin copper wire into coiled spring terminals (*Schraubfedern*), hooked up a crystal earphone, tuned a ferrite-rod inductor, and caught the faint crackle of Radio Luxembourg or Österreich 1 out of thin air. No batteries. Pure physics. Pure magic.
+
+**The 21st-Century Virtual Radiobasteln Lab**:
+You don't need a soldering iron burning a hole in your carpet to relive the magic. You connect **sdr-mcp** (RTL-SDR software-defined radio) + **multimeter-mcp** + **cv-rack-mcp**:
+
+`mermaid
+flowchart LR
+  Antenna["Real RF Airwaves<br/>(RTL-SDR USB Dongle)"]
+  SDR["sdr-mcp<br/>(Waterfall, I/Q Demod, DSP)"]
+  Synth["vcv-rack-mcp<br/>(Modular Patching & Filters)"]
+  Audio["Earphone Out<br/>(MW/SW DXing in Vienna)"]
+
+  Antenna --> SDR
+  SDR --> Synth
+  Synth --> Audio
+`
+
+1. **Software-Defined Spring Terminals**: Claude acts as your master electrical engineer. You say: *"Let's build an audion receiver with regenerative feedback like in Experiment 42 of the Kosmos manual."*
+2. **Real Airwaves, Zero Static**: An \ RTL-SDR USB dongle captures real spectrum. sdr-mcp streams the high-frequency I/Q samples into local DSP filters.
+3. **Modular Patching (cv-rack-mcp)**: Claude patches virtual envelope followers, bandpass filters, and heterodyne mixers into VCV Rack 2, generating the authentic warm vacuum-tube or germanium-diode acoustic resonance.
+4. **DX Hunting Across the Globe**: You sit in your 9th-district apartment, turn virtual brass dials, and let the agent scan shortwave bands for Morse beacons, aviation ATIS, and distant amateur radio operators. The smell of rosin flux is optional, but the magic is 100% back.
 
 ## Epilogue: The Creed of the Sovereign Architect
 
