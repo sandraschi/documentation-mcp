@@ -1,3 +1,13 @@
+---
+title: "Gitignore & VCS hygiene (SOTA)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-08-06
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Gitignore & VCS hygiene (SOTA)
 
 > **Mandatory for all MCP repos** (Python + optional Node/webapp + Rust + Docker). Prevents bloated remotes, leaked secrets, and broken clones.
@@ -136,3 +146,43 @@ logs/
 - **Trigger:** New subproject (webapp, extension) added to a repo → extend `.gitignore` in the **same PR**.
 
 **Version:** 1.1 (2026-03-23) — fleet `target/` + Zed / rust-analyzer note
+
+## 2b. ANCHOR EVERY DIRECTORY PATTERN (2026-08-05 fleet incident)
+
+**Incident:** bare directory patterns like `config/`, `lib/`, `tools/`, `docs/`, `scripts/`,
+`hooks/`, `target/` in a root `.gitignore` match **any** directory of that name at any depth.
+Three fleet repos were silently broken by this:
+
+- `rtorrent-mcp`: bare `config/` swallowed `src/rtorrent_mcp/config/` (settings.py + __init__.py
+  **never committed**) - fresh clones could not import `rtorrent_mcp.config.settings`:
+  pyright `reportMissingImports` in CI, pytest `ModuleNotFoundError`. 25 repos had the bare
+  `lib/` pattern swallowing webapp `src/lib/` (api.ts etc. untracked -> `tsc -b` TS2307
+  `@/lib/api` on fresh CI checkouts).
+
+**Rule:** anchor **every** directory pattern to the repo root unless it is intended to match
+at any depth: `/config/`, `/lib/`, `/tools/`, `/docs/`, `/scripts/`, `/hooks/`. A bare
+`lib/` in a Python template (packaging section) will eat a React `src/lib/`.
+
+**Verification (per repo, cheap):**
+```powershell
+# tracked files inside a package dir that should exist:
+git ls-files src/<pkg>/config/
+# find repos with bare patterns + matching dirs:
+rg -l "^config/$|^lib/$" D:\Dev\repos -g ".gitignore"
+```
+**Fix:** anchor the pattern, then `git add -f` the swallowed directory, commit, push
+(force-add is required for files ignored by the current pattern).
+
+## 6. Line endings: fleet LF normalization
+
+AI file tools write LF, always. Without normalization, one CRLF checkout (or one
+CRLF-pasting editor) reflows every line and the next formatter run produces a
+100%-file diff that buries the real change (tvtropes-mcp 2026-10-25: 15 web files
+reflowed; the fix commit was line-ending churn plus lint).
+
+**Rule:** every repo carries root `.gitattributes` copied from
+`templates/fleet.gitattributes`: `* text=auto eol=lf`, binaries marked `binary`,
+Windows-only scripts kept CRLF (`*.bat`, `*.cmd` — cmd.exe misparses LF paren
+blocks, see `TRAPS_AND_PITFALLS.md` #43). git applies this on every add/checkout —
+no per-file discipline required. Assfix checks presence per
+`repo-assess-and-fix.md` §1A (missing with a webapp = MEDIUM: Biome CRLF CI risk).

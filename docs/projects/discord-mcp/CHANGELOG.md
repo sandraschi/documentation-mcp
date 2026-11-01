@@ -1,17 +1,80 @@
 
-## [Unreleased] — 2026-06-14
-
-### Fixed
-- Tauri build: resolved Rust crate conflict (brotli/alloc-no-stdlib)
-- Tauri build: fixed PyInstaller path mismatch (hyphen to underscore in src dirs)
-- Tauri build: fixed TypeScript errors (unused imports, useRef arg, import.meta.env)
-- Tauri CORS: allow_origins includes tauri://localhost for WebView access
+## [Unreleased]
+### Added
+- **Full channel/category permission-overwrite coverage (44 -> 46 operations): `set_channel_permission`, `delete_channel_permission`.**
+  - Role management (`create_role`/`assign_role`/`remove_role`) controls what a role grants
+    server-wide, but not what it can do in a *specific* channel or category -- that's a separate
+    Discord mechanism (permission overwrites on the channel/category itself), which had no
+    coverage until now.
+  - `set_channel_permission(channel_id, overwrite_id, overwrite_type, allow, deny)`: PUT
+    `/channels/{id}/permissions/{overwrite_id}`. `overwrite_type` 0=role, 1=member. `allow`/`deny`
+    accept either a raw bitfield string or comma-separated flag names (`VIEW_CHANNEL,SEND_MESSAGES`)
+    resolved against a `_PERMISSION_FLAGS` table, so callers don't hand-compute Discord's bitfield
+    values. Category overwrites cascade to channels inside unless the channel has its own overwrite
+    for the same role/member.
+  - `delete_channel_permission(channel_id, overwrite_id)`: DELETE the overwrite, reverting to
+    whatever the parent category or the role's other grants provide. Added to `_DESTRUCTIVE_OPS`
+    (DeepFang preflight-gateable) since removing a restriction can open access unexpectedly;
+    `set_channel_permission` is not gated, matching `assign_role`/`create_role`.
+  - `get_channel`/`list_channels` now also return each channel's `permission_overwrites`, so
+    existing access can be audited without a separate call.
+  - Tests: `tests/test_portmanteau_ops.py` (8 new cases -- named-flag resolution, raw bitfield
+    passthrough, unknown-flag rejection, missing-param validation, 403/404 handling, overwrite
+    surfaced on `get_channel`).
 
 ### Added
-- CUA-NSIS: just cua-nsis-test recipe, smoke script, config
-- CUA-NSIS: build.ps1 now copies NSIS installer to dist/
-- CUA-NSIS: 11-phase smoke test (install, launch, WebView OCR, diagnostics, uninstall)
-- CUA-NSIS: local certification — all 11 phases pass locally (2026-06-14)
+- **Comms watcher: active-window schedule + auto-RAG UI toggle.**
+  - Watcher can be restricted to time windows (`schedule: {tz, windows:[{days, start, end}]}`)
+    - days: `wd` / `we` / `all` / `0,2,4` (Mon=0); end <= start wraps overnight.
+    - Outside windows the gateway stays connected but nothing dispatches
+      (webhook, auto-reply, RAG, rules) - single gate in `_dispatch_inbound`.
+  - Webapp Comms page: auto-RAG checkbox (default off) + schedule editor
+    (tz, days, start/end) + status readout; REST body + status extended.
+  - Env autostart now honors `DISCORD_COMMS_AUTO_RAG`.
+  - Tests: `tests/test_watcher_schedule.py` (6 cases).
+
+### Housekeeping (2026-08-05)
+- Commit `5fee45f` (gitignore lib/ anchor fix) also carries the repo's pre-existing uncommitted
+  WIP (cua webapp test scripts, TopBar theme work, index.css, lib helpers) - reviewed and kept.
+
+### Added
+- **7 new portmanteau operations (36 -> 43):** `get_channel`, `update_channel` (rename/topic/move-to-category/position/nsfw/slowmode), `update_guild`, `pin_message`, `unpin_message`, `get_pinned_messages`, `create_thread` (standalone or from a message). REST mirrors for all of them (`GET|PATCH /api/v1/channels/{id}`, `PATCH /api/v1/guilds/{id}`, `/api/v1/channels/{id}/pins`, `/api/v1/channels/{id}/threads`).
+- **`list_channels` now returns `parent_id`** so the webapp can render the server hierarchy.
+- **Server tree page** (`/tree`): collapsible category -> channel -> thread hierarchy with icons, plus a copyable ASCII view.
+- **Servers catalog page** (`/guilds`): categorized "My servers" vs "Following" cards with curated descriptions/tags for known servers (opencode, ollama, lm studio, cursor), favorites, and **global server selection** via a Zustand store — one pick updates every page and persists to localStorage.
+- **Human-readable audit log**: backend resolves action labels, actor and target names; frontend renders color-coded action badges and snowflake-derived timestamps.
+- **Sampling model auto-resolution**: when `DISCORD_SAMPLING_MODEL` is unset, the server probes Ollama `/api/tags` and picks an installed model (prefers `llama3.2:3b`, excludes `:cloud` tags) instead of 404ing on a stale default.
+- **2000-char content guard**: `send_message`/`edit_message`/`send_webhook` reject over-limit content with a structured `content_too_long` error instead of silently truncating.
+- **Biome config + gate** (`webapp/biome.jsonc`, `biome:ci` npm script): Tailwind at-rule support; the fleet CI biome step now passes.
+
+### Fixed
+- **LLM completion 404**: agentic/sampling used the uninstalled default model `llama3.2`; agentic errors now include HTTP status + provider body.
+- **Nested `<button>`** in the servers catalog (card vs favorite toggle).
+
+## [0.3.0] — 2026-07-24
+
+### Added
+- **Prefab UI cards:** `show_guilds_card` and `show_guild_channels_card` with rich in-chat cards, `ToolResult(is_error=True)` on failure paths.
+- **Skills REST endpoint:** `GET /api/v1/skills/{name}` returns full SKILL.md content.
+- **Skills page rewrite:** Expandable cards load full content from REST, rendered with react-markdown (proper headings, code blocks, lists).
+- **Chat skill-first architecture:** Fetches skills on mount, shows active skill badge in controls bar, Ollama online/offline status indicator.
+- **SOTA provider detection:** Settings page probes Ollama (:11434), LM Studio (:1234), vLLM (:8000) in parallel with per-provider status, provider/model selector, model discovery, GPU opportunity prompt.
+- **Governance files:** MIT license, CONTRIBUTING.md, SECURITY.md, CODE_OF_CONDUCT.md, issue/PR templates.
+- **MCPB bundle scaffold:** manifest.json, assets/icon.png, prompts (system.md 3000+w, user.md 4000+w, examples.json 100+).
+- **Channel CRUD:** `delete_channel` operation; REST endpoints; Create/Delete on Channels page.
+- **Help page rewrite:** 6 substantive tabs — About Discord, What You Can Do, MCP Tools, RAG, Env & Setup, FAQ.
+- **Markdown export:** `export_messages` operation for Notion/Obsidian. REST `/export`. Copy button on Messages page.
+- **Channel navigation:** Click channel name → Messages page with channel pre-loaded.
+- **Create invite form:** Invites page with channel selector, max age/uses, one-click copy.
+- **Invite usage badges:** Green "Used Nx" badge for used invites, refresh button.
+- **Live test suite:** 8 integration tests against real Discord API.
+- **docs/PLATFORMS.md:** Discord vs Slack, Reddit, Telegram, Teams.
+- **Docs:** AI & LLM policy, rate limits, bot verification, guild master flow, permissions clarification.
+
+### Fixed
+- **`webapp/start.ps1`:** Added missing `$Root` definition — `Split-Path $PSScriptRoot -Parent` was missing, causing `Join-Path` to resolve `scripts\FleetStartMode.ps1` as a relative path. Fixed `Split-Path -LiteralPath` + `-Parent` parameter set conflict.
+- **Empty message validation:** 422 instead of 502 on empty content.
+- **Invite REST endpoints:** Added create + revoke endpoints.
 
 # Changelog
 
@@ -20,6 +83,9 @@ All notable changes to **discord-mcp** are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). Versioning is semantic for releases.
 
 ## [Unreleased]
+### Housekeeping (2026-08-05)
+- Commit `5fee45f` (gitignore lib/ anchor fix) also carries the repo's pre-existing uncommitted
+  WIP (cua webapp test scripts, TopBar theme work, index.css, lib helpers) - reviewed and kept.
 
 ### Changed
 

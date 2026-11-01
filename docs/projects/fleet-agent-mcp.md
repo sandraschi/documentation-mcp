@@ -2,9 +2,9 @@
 project: fleet-agent-mcp
 status: active
 priority: high
-tags: [agent, self-evolving, state-machine, flowforge, pulse, memory, identity, teleport, kagura, fastmcp, harness, mechanical-gates, opc]
+tags: [agent, self-evolving, state-machine, flowforge, pulse, memory, identity, teleport, kagura, fastmcp, harness, mechanical-gates, opc, sfb, discord, surveillance]
 created: 2026-05-19
-updated: 2026-07-01
+updated: 2026-09-08
 ports: [10996, 10997, 11027]
 repo: D:\Dev\repos\fleet-agent-mcp
 inspiration: https://github.com/kagura-agent
@@ -24,11 +24,19 @@ fleet-agent-mcp brings the same architecture to the fleet ecosystem, running on 
 
 ## Status
 
-`active — v0.2.1-pre: 69 tools, 15 subsystems, Intel Hub (11027), coworker + home-safety watch, fleet_bridge (20 servers incl. devices)`
+`active — v0.2.4 (2026-09-08): 103 tools (verified — see below), 24 tool subsystems, Intel Hub (11027), coworker + home-safety watch (16 flows), fleet_bridge (20 servers incl. devices), SFB Discord comms layer (P2), improved contribution pipeline (job_finder.py), stuck-loop reaper hardening`
+
+**2026-09-08 session (major)**: fixed a real production incident — a leftover test workflow instance had been looping forever (since 2026-08-30) and starving the real task queue for over a week, permanently pinning VRAM. Root-caused, fixed (hard-ceiling reaper in `agentic_loop.py`, test-DB isolation via `tests/conftest.py`), and used the same session to substantially rebuild the contribution pipeline: own-repo push mode (no fork needed), a `gemma4:12b` LLM-timeout root-cause fix (`"think": false` on Ollama calls — a verbose reasoning trace was pushing real prompts past the timeout for no benefit, since nothing reads the thinking output), an expanded no-LLM fallback safety net, and a new `job_finder.py` module that replaces gogetajob's label-only issue classification with real local-LLM analysis (age/maintainer-engagement signal, unlinted-repo proactive scanning, a genuinely non-preachy friendly-issue generator). Landed two real dogfood PRs (own repo + a purpose-built test fixture), both end-to-end automated. Full writeup: memops note "Fritz Contribution and Job-Finder Pipeline" and "Taming the VRAM — Fritz Stuck-Loop Bug".
+
+**Full re-audit, same session**: SPEC.md's tool inventory had drifted badly — it documented 7 of the repo's 24 actual tool-registering modules (roughly a fifth of the real surface) and was internally inconsistent even within those (header said "21 tools", FlowForge's own subsection listed 9 tools under an "(8 tools)" heading, real count is 12). Re-audited every module directly (`@mcp.tool` grep cross-checked against the live server's `tool_count`) and rewrote SPEC.md §5 to cover all 24 modules / 103 tools. One real bug found in the process: `agentic.py` (`agentic_start`/`stop`/`status` — manual control of the main loop) had never been imported into `mcp/tools/__init__.py`, so those 3 tools existed in source with `@mcp.tool` decorators but were never actually registered — fixed, live count went 100 → 103.
+
+**New doc, same session**: [`docs/AGENT_ARCHITECTURE_AND_SAFETY.md`](https://github.com/sandraschi/fleet-agent-mcp/blob/main/docs/AGENT_ARCHITECTURE_AND_SAFETY.md) — answers a direct question asked this session: does Fritz actually release, control, and supervise sub-agents? At the time of writing: **no**. Investigated all three real execution paths (coworker flows run in-process; ad-hoc task routing is one stateless LLM completion; flowforge "agent" nodes made one fire-and-forget call to a separate service, `cline-mcp`, which itself has real session/team primitives — `agent_session_start/status/stop`, `agent_team_run` — that weren't being used, and which wasn't even running when checked).
+
+**Built the same day**: the flowforge "agent" node path now uses cline-mcp's real session API instead of one-shot `agent_run` — start/poll/abort across separate agentic-loop ticks, real token/cost accounting recovered from the session output, failed/timed-out sessions now trigger the existing anti-spin guard (`sm.failure_record()`) instead of silently advancing. Verified end-to-end against a live cline-mcp instance (had to be started manually — it isn't NSSM-managed yet, a noted remaining gap). Found and fixed one real bug in the process: aborting a session doesn't flip cline-mcp's outer status to "stopped" — the real outcome is nested at `output.status` and would have been misread as a successful completion otherwise. `v0.2.5`, see CHANGELOG.md.
 
 | Component | Status |
 |---|---|
-| State machine engine | done — YAML + SQLite, 4 workflows (incl. coworker) |
+| State machine engine | done — YAML + SQLite, 4 workflows (incl. coworker); **hardened 2026-09-08**: `_reap_if_stalled()` hard ceiling (age/cycle-count) prevents any future instance from starving the task queue the way the 2026-08-30 incident did |
 | Task management (pulse) | done — groups, priorities, stale detection, alignment, Vienna recurrence |
 | Knowledge wiki (memory) | done — cards, projects, evolution log, lint |
 | Identity system | done — SOUL.md, NORTH_STAR.md, USER.md, cascading override |
@@ -40,7 +48,34 @@ fleet-agent-mcp brings the same architecture to the fleet ecosystem, running on 
 | **AIWatcher ingest** | **done** — auto after Pulse/Day Prep; `aiwatcher_push_event` |
 | **Urgent notifications** | **done** — email + cursor inbox on degradation / home safety |
 | Fleet bridge | done — 20 server aliases incl. email, libreoffice, devices, notion, onenote |
-| Dashboard (webapp) | active — port 10997 (Vite + React) |
+| Dashboard (webapp) | active — port 10997 (Vite + React). **2026-09-08**: Tasks page got search/filter/sort/CSV export (was a flat unsorted list); Automaton page's stats bug fixed (`/api/status` shape mismatch caused literal "?" display) + schedule board got search/sort/pagination; sidebar collapse toggle moved to a top-header chevron (was a bottom text button); Contributions/PRs page got a "Find Work" panel (target-a-repo + auto-crawler modes) |
+| **SFB comms layer (P2)** | **done (0.2.3)** — crosspost hook + [agent] attribution + involuntary harness lifecycle posting — see section below |
+| **Contribution pipeline** | **hardened (2026-09-08)** — `fritz_contribute` own-repo push mode, extended no-LLM fallback safety net, `gemma4` timeout root-cause fixed. Two real dogfood PRs landed. |
+| **job_finder.py (new)** | **done (2026-09-08)** — `fritz_analyze_repo`, `fritz_discover_and_analyze`, `fritz_act_on_finding`. Local-LLM issue analysis, age/engagement signal, unlinted-repo scanning, friendly-tone issue filing, `analysis_log` postmortem trail |
+| Coworker watches | **expanded (2026-09-08)** — added `gpu_vram_watch`, `workflow_health_watch`, `task_backlog_watch`, `disk_watch`, `contribution_dogfood` (disabled by default — 233 repos on the account, needs scoping first); removed `activity_pulse` (unused vanity ping) |
+
+## SFB Comms Layer (P2) — surveillable agent comms on Discord
+
+One event, three surfaces: hub board (source of truth) + Discord (sanitized human-readable mirror) + vla diary (trace ids). Implemented in `coworker/crosspost.py`; agents post via the `sfb_post` MCP tool; the workflow harness posts lifecycle events involuntarily.
+
+**Channels** (guild Sandra's Fleet HQ, category SFB, created 2026-08-15):
+
+| Channel | Purpose | Budget |
+|---|---|---|
+| #sfb-work | task lifecycle (start/end) | 2 per task_id |
+| #sfb-thoughts | agent musings | 1 per agent per hour |
+| #sfb-alerts | urgent events, fleet pulse, BLOCKED workflows | 10 per agent per hour |
+
+**Design rules:**
+- Board is source of truth; the Discord leg is best effort (429/downtime never fails board+diary), so Discord alone under-reports. Reconciliation via diary `discord_error` metrics.
+- Secrets stripped before Discord (`_sanitize`); raw state stays on board/diary. Known quirk: the 32-64 alnum blob rule also redacts 40-hex commit SHAs.
+- **Attribution (0.2.3):** every Discord message carries an `[agent]` prefix; `sfb_post` takes an `agent` param (defaults to Fritz).
+- **Involuntary posting (0.2.3):** the flowforge harness crossposts `workflow_start` and completion (with gate verdict) to #sfb-work and BLOCKED instances to #sfb-alerts via `autopost_workflow_event()`. Agents are surveillable regardless of whether they choose to report. task_id = `wf:<name>:<started_at>`, unique per instance.
+- Inbound Discord is untrusted data (discord-mcp wraps all reads in UNTRUSTED banners); the SFB layer is write-mostly by design.
+
+**Status honesty (audited 2026-08-29):** alerts leg VERIFIED in daily production use since 08-15 (fleet pulse, day prep, arxiv code-drops). work/thoughts legs were dead until 0.2.3 made lifecycle posting harness-driven; attribution VERIFIED live (msg 1543174003240337499). Blocked-hook path is test-covered but not yet driven to BLOCKED in a live workflow (HYPOTHESIS).
+
+**Open hardening backlog:** split bot tokens or drop Manage Channels from the agent bot; surveil rules for channel-map drift and rogue webhook URLs in agent code; daily discord_error reconciliation; budget key expiry + move `sfb_budget.json` off `Path.home()` (LocalSystem trap).
 
 ## Architecture
 
@@ -73,7 +108,8 @@ fleet-agent-mcp/
 │   │   ├── fleet_bridge.py           # 3 tools: list, call, inspect (19 servers)
 │   │   ├── codegen.py                # 3 tools: generate, write, edit
 │   │   ├── github.py                 # 9 tools: PR lifecycle
-│   │   ├── contribute.py             # 1 tool: autonomous contribution
+│   │   ├── contribute.py             # fritz_contribute + gogetajob_* wrappers (own-repo push mode)
+│   │   ├── job_finder.py             # fritz_analyze_repo, fritz_discover_and_analyze, fritz_act_on_finding — local-LLM issue analysis (2026-09-08)
 │   │   ├── coworker.py               # 11 tools: scheduled office + fleet flows
 │   │   ├── intel_hub.py              # 3 tools: publish, list, aiwatcher_push_event
 │   │   ├── voice.py                  # 1 tool: route_voice_command
@@ -135,9 +171,9 @@ Three roles, one agent:
 
 This is the key insight from kagura-agent: the agent doesn't decide what to do — the workflow YAML does. The agent coordinates execution.
 
-## MCP Tools (69)
+## MCP Tools (103 as of 2026-09-08, fully re-audited — see `/api/health` `tool_count` for current live number, and repo `SPEC.md` §5 for the complete per-module breakdown)
 
-### Coworker — Scheduled flows (11 tools)
+### Coworker — Scheduled flows (16 flows as of 2026-09-08)
 
 | Tool | Default schedule (Europe/Vienna) |
 |------|----------------------------------|
@@ -150,8 +186,18 @@ This is the key insight from kagura-agent: the agent doesn't decide what to do �
 | `coworker_weekly_report_pdf` | Friday `fri:17:00` |
 | `coworker_board_pack` | Monthly `d1:09:00` |
 | `coworker_artifact_pack` | Sunday `sun:18:00` |
+| `coworker_scribe_watch` | Every `2h` — session-scribe capture freshness |
+| `coworker_surveillance_watch` | Every `15m` — NSSM service health |
+| `coworker_check_email` | Every `15m` — security scan |
+| `coworker_gpu_vram_watch` | Every `15m` — nvidia-smi + ollama ps, added 2026-09-08 |
+| `coworker_workflow_health_watch` | Every `30m` — early warning before the stall reaper fires, added 2026-09-08 |
+| `coworker_task_backlog_watch` | Every `6h` — oldest pending task age, added 2026-09-08 |
+| `coworker_disk_watch` | Every `6h` — free space C:\ / D:\, added 2026-09-08 |
+| `coworker_contribution_dogfood` | Weekly `sun:20:00`, **disabled by default** — added 2026-09-08, needs a repo allowlist before enabling (233 repos on the account) |
 | `coworker_list_flows` | — |
 | `coworker_bootstrap` | Seeds pulse tasks on boot |
+
+`activity_pulse` (self-status ping) was removed 2026-09-08 — vanity metric, nothing consumed it.
 
 ### Harness — Mechanical Gate Engine (standalone library)
 
@@ -222,8 +268,9 @@ See [fritz-coworker](./fritz-coworker/README.md), [intel-reports-hub](../pattern
 - `notify_schedule` — Interval + time-of-day scheduler
 - Built-in 60s executor with Vienna TZ recurrence
 
-### Codegen (3) · GitHub (9) · Contribute (1)
-- Autonomous PR pipeline: `fritz_contribute` + full GitHub tool surface
+### Codegen (3) · GitHub (9) · Contribute · Job Finder (new 2026-09-08)
+- Autonomous PR pipeline: `fritz_contribute` (own-repo push mode, no fork needed for repos we own) + `gogetajob_scan/feed/start/submit/stats/sync` wrappers (real npm package `@kagura-agent/gogetajob`, now logs to `contribution_log` so gogetajob-driven work shows on the webapp too) + full GitHub tool surface.
+- **Job Finder** (`job_finder.py`, new): `fritz_analyze_repo` (read-only analysis — local-LLM issue tractability/age/engagement signal, unlinted-repo scan), `fritz_discover_and_analyze` (gh-search-based crawler, gogetajob-shaped query params), `fritz_act_on_finding` (explicit, separate acting step — issue always; PR only on own repos). Every decision logged to `analysis_log` for postmortem, not just acted-on outcomes.
 
 ## Ports
 
@@ -355,7 +402,13 @@ No LLM gets to decide whether a finding "matters." The code does.
 ### v0.3.0
 - [ ] Multi-agent social (Moltbook equivalent)
 - [ ] ABTI (Agent Behavioral Type Indicator)
-- [ ] Open source contribution pipeline (gogetajob equivalent)
+- [x] Open source contribution pipeline (gogetajob equivalent) — done 2026-09-08, see job_finder.py above
+
+### Aspirational contribution targets (named 2026-09-08, deliberately not attempted yet)
+- [ ] **Calibre** (`kovidgoyal/calibre`) — land one good, real PR that Kovid Goyal merges. The clean "prove the pipeline works" case.
+- [ ] **Mixxx** (`mixxxdj/mixxx`) — video support. Sandra already has substantial fork infrastructure (`D:\Dev\repos\mixxxxx` — FFmpeg video decode, VideoMixer, NDI output, Rekordbox export; `D:\Dev\repos\mixx-dj-mcp` — 80+ op AI control layer). NOT a clean case like Calibre: upstream has refused hundreds of video-support requests historically. Needs research into *why* before any attempt — likely reputation-building via small unrelated fixes first, not leading with the contentious ask.
+
+Both deferred per explicit instruction: test the pipeline on the fleet more first, to avoid overconfidence/cheekiness.
 
 ## Standards Alignment
 

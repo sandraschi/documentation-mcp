@@ -1,6 +1,6 @@
 # How to view MCD content and run semantic search
 
-**Last updated:** 2026-06-06  
+**Last updated:** 2026-06-17  
 **Problem this solves:** Confusion between **mcp-central-docs** (private MCD), **documentation-mcp** (public extract), **docs_mcp** (Python package), and **web_sota** (Vite UI).
 
 ---
@@ -41,13 +41,25 @@ From **`D:\Dev\repos\mcp-central-docs`**:
 Set-Location D:\Dev\repos\mcp-central-docs
 just search "RTX Spark GB10"
 just semantic "What is OpenShell on Windows?"
+just report "topic"
 just stats
-just mcd-sync
+just rag              # full re-index (CPU; uses uv run)
+just rag-recent       # incremental: git + mtime, last 4h
+just rag-path projects/foo
+just rag-stats        # tally: just_reports/rag-tally.md
 ```
 
+**GPU (Goliath / RTX only)** — one-time `just rag-gpu-install`, then:
+
+```powershell
+just rag-gpu          # full re-index on CUDA (~52k chunks in ~1 min)
+```
+
+While GPU stack is active, avoid `just rag` / `uv run` (reinstalls CPU onnxruntime). Revert with `just rag-cpu-install`.
+
 - **`search`** — vectors only (LanceDB + BGE), no Ollama.
-- **`semantic`** / **`report`** — needs **Ollama** running; see `scripts/README.md`.
-- Indexes **this repo’s** docs after `mcd-sync`.
+- **`semantic`** / **`report`** — needs **Ollama** running; run **`just rag`** or **`just rag-recent`** first if the index is stale.
+- **`just rag`** / **`just rag-gpu`** — full re-index of all sources in this repo (+ depot paths configured in ingestor).
 
 **Best for:** daily work, agents, no broken Vite UI.
 
@@ -114,7 +126,7 @@ Then open **http://127.0.0.1:10794** (frontend). API: **http://127.0.0.1:10795**
 pwsh -File web_sota\start.ps1 -BackendOnly
 ```
 
-**First-time slow?** Run `just mcd-sync` once (embedding ingest). Backend loads FastEmbed model on first query.
+**First-time slow?** Run `just rag` once (embedding ingest). Backend loads FastEmbed model on first query.
 
 **Why it feels like a “runt” webapp:** `web_sota` predates current **WEBAPP_STANDARDS** (Biome shell, prefab-ui, portmanteau dashboard). It works but is not the fleet chrome template. **CLI + Cursor** are the supported happy path until webapp Phase 5 refresh.
 
@@ -151,7 +163,7 @@ See **[DOCS_MCP_MAAS.md](DOCS_MCP_MAAS.md)**.
 
 | Symptom | Fix |
 |---------|-----|
-| Empty search / no nvidia hits | `just mcd-sync` from **mcp-central-docs** |
+| Empty search / no nvidia hits | `just rag` or `just rag-recent` from **mcp-central-docs** |
 | 10794 loads, search 500 | Backend not on 10795 — check `http://127.0.0.1:10795/health` |
 | Port in use | Check which stack: MCD **10794/10795** vs public hub **11032/11033**; stop stale `start.ps1` jobs |
 | `just mcd-ui` fails | Fleet recipe calls missing `start-webapp` — use `web_sota\start.ps1` or `just start-webapp` after recipe added |
@@ -165,10 +177,10 @@ See **[DOCS_MCP_MAAS.md](DOCS_MCP_MAAS.md)**.
 ```powershell
 Set-Location D:\Dev\repos\mcp-central-docs
 just search "DGX Spark FP4"
-just mcd-sync
+just rag
 pwsh -File web_sota\start.ps1
 ```
 
 **Fleet webapp health:** Cold-start probe (full fleet / single repo / **Broken\*** retry) — [FLEET_WEBAPP_PROBE.md](../docs/operations/FLEET_WEBAPP_PROBE.md). MetaMCP → Fleet Status → Cold start. Reports: `mcp-central-docs/scripts/out/fleet-webapp-report.json`.
 
-**New content you added:** `nvidia/COMPUTEX_2026_ASSESSMENT.md` — visible in Cursor immediately; in RAG after `just mcd-sync`.
+**New content you added:** `nvidia/COMPUTEX_2026_ASSESSMENT.md` — visible in Cursor immediately; in RAG after `just rag`.

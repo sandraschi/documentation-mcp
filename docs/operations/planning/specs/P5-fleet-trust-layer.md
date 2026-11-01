@@ -1,6 +1,6 @@
 # P5 — Fleet trust layer (PRD sketch)
 
-**Status:** Draft  
+**Status:** Completed (Revival & Smoke test suite active)  
 **Priority:** P5 (can start immediately — no secrets dependency)  
 **Targets:** `mcp-test-suite` (revive), `mcp-central-docs/operations/` (scripts), MetaMCP (optional runner)
 
@@ -13,7 +13,7 @@
 | Registry drift | ~167 meaningful repos vs 119 in `fleet-registry.json` |
 | Index drift | FLEET_INDEX 140 vs disk ~167 |
 | Dead servers in catalog | `sdr-mcp`, `ednaficator`, `vbox-mcp`, `mcp-links-service` |
-| No contract tests | `mcp-test-suite` inactive |
+| No contract tests | `mcp-test-suite` active (T0 & T1 smoke verified) |
 | Agent false confidence | 120 tools listed, unknown % broken |
 
 Agents waste context and user trust on **phantom capabilities**.
@@ -86,15 +86,15 @@ advanced-memory-mcp, devices-mcp, virtualization-mcp, git-github-mcp, docker-mcp
 
 ### Phase 1 — Registry sync (1 week)
 
-- [ ] `sync-fleet-registry.ps1` + document in planning README
-- [ ] Manual review PR for ~58 missing entries
-- [ ] Quarantine bit for known runts
+- [x] `sync-fleet-registry.ps1` + document in planning README
+- [x] Manual review PR for ~58 missing entries
+- [x] Quarantine bit for known runts
 
 ### Phase 2 — Smoke harness (2 weeks)
 
-- [ ] Revive mcp-test-suite with pytest + JSON report
-- [ ] Golden 20 T1 tests
-- [ ] `just smoke` in mcp-central-docs
+- [x] Revive mcp-test-suite with pytest + JSON report
+- [x] Golden 20 T1 tests
+- [x] `just smoke` in mcp-central-docs
 
 ### Phase 3 — CI + Fritz (1 week)
 

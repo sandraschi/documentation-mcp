@@ -1,3 +1,13 @@
+---
+title: "SOTA Requirements (Service-Oriented Thinking Architecture)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-18
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # SOTA Requirements (Service-Oriented Thinking Architecture)
 
 ## 1. Core Principles
@@ -8,7 +18,7 @@ To maintain peer technical contributor status, all MCP servers must adhere to th
 2.  **Behavior**: High-quality tool documentation (including the [agentic checklist & pagination](./TOOL_DESIGN_STANDARDS.md) §4–§9) and iterative sampling patterns.
 3.  **Operations**: Complete lifecycle management (Lifespans) and correlation tracing.
 4.  **Strategy**: Adherence to the [Container Orchestration Strategy](../patterns/CONTAINER_ORCHESTRATION_STRATEGY.md) (Docker Compose vs. K8s).
-5.  **Networking**: MANDATORY port range **10700-11500** for all webapps. Frontend and Backend ports MUST be kept together (Adjacent Rule). See [WEBAPP_PORTS.md](../operations/WEBAPP_PORTS.md) and [WEBAPP_STANDARDS.md](./WEBAPP_STANDARDS.md) for full specifications.
+5.  **Networking**: MANDATORY port reservoir in [WEBAPP_PORTS.md](../operations/WEBAPP_PORTS.md) for all webapps (currently 10700-12000 — check the file, do not hardcode the range). Frontend and Backend ports MUST be kept together (Adjacent Rule). See [WEBAPP_PORTS.md](../operations/WEBAPP_PORTS.md) and [WEBAPP_STANDARDS.md](./WEBAPP_STANDARDS.md) for full specifications.
     - [Bugs Depot](../troubleshooting/BUGS_DEPOT.md) - Registry of critical bugs and race conditions.
     - [React Hardening Standards](./REACT_HARDENING.md) - Proactive stability patterns.
     - [REPO_SOTA_BASH](./REPO_SOTA_BASH.md) - Official recipe for repo modernization sprints.
@@ -21,6 +31,12 @@ To maintain peer technical contributor status, all MCP servers must adhere to th
 - **Prompts**: Context-aware instruction sets registered via `@mcp.prompt()`.
 - **Resources**: Dynamic data streams via `@mcp.resource()`.
 - **Async Sampling**: Non-blocking tool orchestration using `ctx.sample()`.
+  > ⚠️ **`ctx.sample()` is deprecated by the MCP 2026-07-28 spec**, which moves to a
+  > stateless core and replaces sampling and roots with **MRTR** (Multi Round-Trip
+  > Requests). FastMCP 4 ships first-class support. Do not build new work on
+  > `ctx.sample()`; see [fastmcp/2026-07-28-spec-migration.md](../fastmcp/2026-07-28-spec-migration.md)
+  > and the FastMCP row in [JUNE_2026_STANDARDS_BAR.md](./JUNE_2026_STANDARDS_BAR.md).
+  > Existing servers keep working until FastMCP 4 lands.
 - **Skills Provider**: Ability to register and discover local skill directories.
 - **Vibe Coding XR**: Approved rapid-prototyping workflow for spatial interactions (Gemini + XR Blocks) — **[VIBE_CODING_XR.md](./VIBE_CODING_XR.md)**.
 
@@ -85,6 +101,10 @@ def main():
 **When NOT to probe:**
 - Stateless servers (fetch, playwright, git-github) — no DB, no contention
 - Single-client servers that never run a 24/7 HTTP daemon
+
+**NSSM + stdio duality (fleet ops):** When the same repo runs as an NSSM HTTP daemon **and** as a Cursor stdio server, the stdio path MUST proxy to the daemon whenever it is reachable. Never run two full stacks against one SQLite/LanceDB path. For LocalSystem services, NSSM `AppEnvironment` MUST pin `USERPROFILE` and any repo home env (`ADVANCED_MEMORY_HOME`, etc.) to match the interactive user; otherwise MCP can report success while the webapp shows an empty index. See `advanced-memory-mcp/docs/troubleshooting/BUG_REPORT_NSSM_SPLIT_BRAIN.md`, `mcp-central-docs/scripts/Start-MemopsDaemon.ps1`, and [NEW_REPO_BUILD_COMPLETE.md](./NEW_REPO_BUILD_COMPLETE.md) §G.
+
+**Assess severity:** Missing probe when the repo has persistent state = MEDIUM; missing probe **with** a documented NSSM HTTP service for the same binary = HIGH (`repo-assess-and-fix.md` §1B).
 
 ### 2.4. Native Desktop Installer (NSIS/Tauri)
 

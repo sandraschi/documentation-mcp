@@ -5,6 +5,80 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3] — 2026-09-05
+
+### Fixed
+- **Packaging CM-2 FAIL** — Root `manifest.json` was CMS fiction (`name: oscmcp`, CMS keywords, `main: server/server.py`, `fastmcp >=2.10`); rewired to `manifest_version 0.2`, `entry_point src/oscmcp/server.py`, `47` tools with real descriptions, `version 0.3.3`, `author sandraschi` — now matches `mcpb/manifest.json`.
+- **`mcpb/manifest.json` CM-2** — Tool table was placeholder echoes + fake entries (`main_stdio`, `health`); regenerated from `await server.list_tools()` (47 real tools).
+- **`.mcpbignore` missing** — Added root + `mcpb/.mcpbignore` (covers `.venv/`, `node_modules/`, `tests/`, `dist/`, `*.bak`, Tauri `target/`, web `dist/`).
+- **Frontend lint CM-3** — `web_sota` had `useExhaustiveDependencies` on `fetchApps`/`fetchTools`/`fetchData`; wrapped all three in `useCallback`.
+- **Dashboard onboarding CM-1** — Added big-red `data-testid="onboarding-cue"` CTA under hero (→ `docs/ONBOARDING.md`) + `MOCK`-until-onboarded banner (`data-testid="mock-banner"`) with fake names Joe Mocky/Sandra Mockinger that clears when `/api/v1/onboarding/apps` reports healthy.
+- **`native/tauri.conf.json` version drift** — `0.1.0 → 0.3.3` (matches `pyproject.toml`).
+- **`start.ps1` — NAKED_PC** — Added `Require-Command` guards for `uv`/`node`/`npx`; fixed `.env.example` port `57120 → 57110` + VCV note.
+- **`justfile`** — Added `mcpb-pack` recipe (`scripts/mcpb-pack.ps1` fresh wipe+recopy per `PACKAGING_STANDARDS.md §2.5`).
+- **`assets/prompts` CM-6** — Rewrote `system.md` (3245w), `user.md` (4238w), regenerated `examples.json` (105 entries) covering full 47-tool surface — passes 3-4-100 word-count + JSON-length gates. Mirrored to `mcpb/assets/prompts/` and added `assets/icon.png` 256×256.
+- **`pyproject.toml`** — `version 0.3.0 → 0.3.3`, `fastmcp` floor `3.4` description, `[tool.fastmcp]` `0.3.3`.
+- **`scripts/cua-nsis-config.json`** — `feature_smoke_path /api/v1/system/info → /api/v1/stats` (real route).
+- **CUA webapp** — Added `web_sota/e2e/dashboard.spec.ts` (hero, onboarding-cue, KPIs, backend-dot, MOCK banner) + `playwright.config.ts` (port 10766, `reuseExistingServer`).
+
+## [Unreleased]
+
+### Added
+- **`src/oscmcp/patchstorage_client.py`**, **`api/v1/endpoints/patchstorage.py`**, **`web_sota/src/pages/community-patches.tsx`**: a "Community Patches" page browsing the real Patchstorage.com Beta REST API (`https://patchstorage.com/api/beta/patches` - live-verified, no auth needed to read). Thin proxy, no local sync/cache step like the VCV Library page needs, since Patchstorage already does server-side search/filter/sort/pagination. Covers all 92 platforms it hosts (VCV Rack, SuperCollider, Max for Live, TouchOSC, Bitwig, and 88 others) via a platform dropdown, defaulting to VCV Rack; sortable by newest/most liked/most downloaded/most viewed. Cards link out to the real Patchstorage page to download, matching the VCV Library page's click-through pattern.
+- **`src/oscmcp/vcv_library.py`**, **`api/v1/endpoints/vcv_library.py`**, **`web_sota/src/pages/vcv-library.tsx`**: a "VCV Module Library" catalog page — scrapes the official `library.vcvrack.com` (fully server-rendered HTML with real query-string filters, no login needed to browse) into a local SQLite cache, exposed via search/brand/license filters and its own sidebar page, separate from onboarding. Full catalog: 4,468 modules, 345 brands. Popularity/last-updated/license are only on individual detail pages (not the bulk listing) - `fetch_module_detail()` fetches one on demand rather than eagerly fetching all ~4,500.
+- **`src/oscmcp/vcv_patch_builder.py`**, **`src/oscmcp/vcv_presets.py`**: generates real, loadable `.vcv` patch files - modules *and* cables - entirely as JSON, no GUI automation. Port indices (undocumented anywhere except each module's own C++ `InputIds`/`OutputIds` enum) were extracted from real source (Fundamental, Bogaudio, VCV Core on GitHub) via `scripts/vcv_port_schema_extract.py`, covering 18 modules including SEQ3 (a free-running 3-lane step sequencer). Seven presets included, from a minimal 3-module FM bell to `grand_generative_patch` - a fully self-playing, no-MIDI 19-module/23-cable patch combining a SEQ3-driven 3-voice arpeggio (with a detuned unison double via an 8vert attenuverter), a free-running noise/LFO percussion layer, and a Scope tap on the final mix. Live-verified: every new preset loaded in a real running VCV Rack with all cables correctly wired, zero errors, and (for the flagship) a live moving waveform on the Scope confirming real audio flow - two wrong guesses at the patch's Y-axis row-spacing unit (15, then 380) were both caught by reading back a real Rack save rather than shipping either.
+
+### Fixed
+- **`scripts/vcv_port_schema_extract.py`**: a `// added in X.Y.Z` full-line comment sitting *before* an enum member (no comma between them) caused `line.split("//")[0]` to silently eat the real member that followed on the next line - found while extracting SEQ3, which lost `RUN_INPUT` and had `STEPS_OUTPUT`/`CLOCK_OUTPUT`/`RUN_OUTPUT`/`RESET_OUTPUT` all shifted one index low. Re-auditing every already-shipped schema against this fix (per the fleet bug-discovery protocol) found the same bug had already corrupted two committed, live-tested entries: Fundamental **LFO** was missing `RESET_INPUT`/`CLOCK_INPUT` with `PW_INPUT` at the wrong index (2 instead of 3), and Fundamental **Scope** had lost both of its real outputs entirely (shipped as an empty list). Neither had been wired into by any preset, so nothing broke in practice, but both were wrong in the schema table. Fixed the extractor (comments are now stripped per physical line, not across the whole comma-delimited chunk) and re-verified all 18 module schemas against real source; only these two needed correction.
+- **`vcv_library.py` detail-page regexes**: Author:/License: are wrapped in `<a href="...">text</a>` - the parser's `[^<]` character class couldn't match through the tag, so both always returned `None`. Last updated:/Created: aren't plain text at all - they're `<span data-timestamp="UNIX_EPOCH">` rendered client-side; the regex expected literal text and never matched.
+- **`vcv_manager`**: Sent OSC addresses (`/param`, `/cv`, `/light`, `/midi/*`, `/transport/*`) that don't exist anywhere in OSCelot's real, documented protocol. Rewritten to send `/fader`, `/encoder`, `/button` — the only three address types OSCelot actually implements — each addressed by a manually-assigned mapping-slot `Id`. The 9 operations with no verified real address (`send_cv`, `set_light`, `play_midi`, `stop_midi`, `send_midi_cc`, `start_transport`, `stop_transport`, `reset_transport`, `set_transport_position`) now return a clear `UNSUPPORTED_OPERATION` error instead of silently firing a guessed address into the void.
+- **`resolume_manager`**: `set_layer_opacity` sent to `/composition/layers/{layer}/opacity` — the real Resolume OSC address is `/composition/layers/{layer}/video/opacity`.
+- **`supercollider_manager`**: defaulted to port `57120` (nothing in SuperCollider listens there) instead of `57110` (scsynth's real default).
+- **`music_orchestrator`**: MIDI parsing was completely fabricated (invented tempo/notes rather than reading the file). Now uses real `mido` parsing via a new `_parse_midi_file()` helper.
+- **`app_detect.py`**: VCV Rack's `default_osc_port` was a made-up `7000` — OSCelot's receive port has no fixed default, so this is now `None` with a note pointing at the real setup steps.
+
+### Documentation
+- **`docs/OSCELOT_MAPPING_GUIDE.md`**, **`docs/OSCELOT_UI_MAPPING_EXPLAINED.md`**: Rewritten against OSCelot's real, primary-source manual (`github.com/The-Modular-Mind/oscelot`). The previous versions described a fabricated `/param [ModuleID, ParamID, Value]` addressing mode and a right-click "choose slider/button/encoder" workflow — neither exists in the real plugin.
+- **`docs/OSCELOT_MAPPING_GUIDE.md`**: Documented two easy-to-miss OSCelot behaviors found via live testing against a real running VCV Rack instance: (1) a freshly-placed OSCelot module has its Send/Receive toggles OFF by default, so every OSC message is silently dropped with no error until they're enabled; (2) the first OSC message to a newly-mapped slot only creates and types the slot — the identical message must be sent a second time to actually apply the value, per OSCelot's own `processOscMessage` source.
+- **`docs/VCV_RACK_OSC_MODULES_COMPARISON.md`**: Flagged as unverified — it recommended switching away from OSCelot to `cvOSCcv` based on "confusing UI" and an invented OSC address, without ever running either module. `vcv_manager` targets OSCelot's real protocol and needs no module swap.
+- Live end-to-end validation: mapped a real Organ Three parameter in OSCelot, drove it with a real `/button` message sent via `vcv_manager`'s fixed address format, and visually confirmed it changing state in VCV Rack. Separately confirmed a full MIDI-file-to-audio pipeline in the same patch (Entrian Free's "Player: Timeline" module → V/Oct + Gate into Organ Three → VCV's core Audio module → real speakers) — this path is orthogonal to OSCelot/OSC entirely and not part of osc-mcp's own toolset, but documents a working way to get an actual MIDI file playing in VCV Rack.
+
+## [0.3.2] — 2026-07-21
+
+### Security
+- **CORS**: Replaced `allow_origins=["*"]` with explicit fleet origins + Tailscale/LAN regex in `api/main.py` and `web_sota/backend/server.py` (CRITICAL)
+- **run_http_async**: Replaced with `uvicorn.Server` on `mcp.http_app()` with CORS middleware to prevent middleware being dropped (CRITICAL)
+- **.env bundling**: Fixed `native/build.ps1` to bundle `.env.example` instead of `.env` (CRITICAL — prevented API key leakage in NSIS installer)
+- **tauri.conf.json**: Resources now point to `.env.example` instead of `.env` (CRITICAL)
+- **Created `.env.example`** at repo root with template configuration vars (HIGH)
+- **Updated `.gitignore`** to add `*.mcpb`, `native/target/`, `native/gen/`, `*.bak`, and `.env` patterns
+
+### Fixed
+- **start.ps1**: Added port zombie clearing, TCP readiness health poll, and auto-open browser (was missing fleet-standard startup protocol)
+- **backend.rs**: Added multi-layer `free_port()` with Stop-Process → taskkill → UAC elevated → 240s poll; added stdout/stderr stream watching with `emit("backend-status", "ready")` on backend ready
+- **justfile**: Added `serve`, `test`, `fmt`, `types`, `gates-green`, `build-native`, `cua-nsis-test`, `mcpb-pack`, `e2e` recipes
+- **pyproject.toml**: Fixed invalid `fastmcp[all]` extra (removed `[all]`); fixed mypy `python_version` from "3.10" to "3.12"
+- **Created CLAUDE.md**: Per-repo agent behavioral instructions
+
+### Added
+- **Skills system**: `GET /api/v1/skills`, `GET /api/v1/skills/{name}` endpoints + `skills/osc-mcp-expert/SKILL.md` with 190-line comprehensive skill
+- **LLM discovery**: `GET /api/v1/llm/discover` endpoint probing Ollama on localhost:11434
+- **Diagnostics**: `GET /api/v1/diagnostics` endpoint with tool count, version, system info
+- **Error response**: `src/oscmcp/tools/_error_response()` with auto-logging via `logger.exception()`
+- **Webapp**: Zustand state management, Ctrl+Scroll zoom hook (`useZoom`), `color-scheme: dark`, `data-testid` attributes on all dashboard KPIs, exponential backoff health check (1s→2s→4s→8s→16s), Skills page, 6 example prompts, localStorage chat persistence, personality selector with 4 options, .txt export
+- **Tests**: 9 unit tests covering imports, error response, health, diagnostics endpoints
+- **Session context**: `.opencode/skills/session-context/SKILL.md` for tool-awareness injection
+- **CLAUDE.md**: Per-repo agent behavioral instructions
+
+### Fixed
+- **print()→logging**: Converted 35 `print()` calls to `logger.info()` across 9 app files
+- **Router prefixes**: Fixed API endpoint path double-v1 issue (simplified router prefix chain)
+- **Removed 8 stale .bak files** across the repo
+- **Cleaned up** pre-existing ruff lint issues (unused imports, type annotations)
+
+### Documentation
+- Added `docs/assess-reports/2026-07-21.md` — full SOTA compliance assessment
+
 ## [0.3.1] — 2026-07-11
 
 ### Fixed
@@ -316,4 +390,3 @@ First public release with core OSC functionality.
 - [Repository](https://github.com/sandraschi/osc-mcp)
 - [FastMCP](https://github.com/jlowin/fastmcp)
 - [OSC Specification](http://opensoundcontrol.org/spec-1_0)
-

@@ -1,6 +1,6 @@
 # Status — qcad-mcp
 
-**Status**: v0.4.0 — 26 tools, zero lint errors, 39 tests, SOTA annotations.
+**Status**: v0.3.0 — 28+ tools, zero lint errors, 39 tests, SOTA annotations.
 
 **Repo**: `D:\Dev\repos\qcad-mcp`
 **Ports**: Backend 10966, Frontend 10967

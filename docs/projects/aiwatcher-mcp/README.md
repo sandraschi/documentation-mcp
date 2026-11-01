@@ -39,12 +39,32 @@ The `aiwatcher-mcp` is a FastMCP 3.2-compliant fleet server that acts as a centr
 
 ## Documentation
 
+**Index:** [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md) — start here (webapp pages, bundles, CI, staleness watchlist).
+
 - [ARCHITECTURE.md](docs/ARCHITECTURE.md): Deep dive into system flows, pipelines, and the SQLite schema.
-- [API.md](docs/API.md): MCP tools / prompts / resources + HTTP REST index (`/api/capabilities` for live tool names).
+- [API.md](docs/API.md): MCP tools / prompts / resources + HTTP REST index (`/api/capabilities`, `/api/scheduler`).
+- [IDE_HOST_SIGNAL_BUNDLE.md](docs/IDE_HOST_SIGNAL_BUNDLE.md): Fleet preset — Reddit/HN/forum host IDE buzz.
 - [PRD.md](docs/PRD.md): Product requirements and roadmap.
-- [ASSESSMENT.md](ASSESSMENT.md): Code assessment (updated 2026-06-03)
+- [ASSESSMENT.md](ASSESSMENT.md): Code assessment (refresh periodically)
 - [TODO.md](TODO.md): Action items and progress tracking
-- [SPEC_0.2.md](SPEC_0.2.md): v0.2 implementation plan
+
+## Webapp (operator UI)
+
+| Route | Purpose |
+|-------|---------|
+| `/` | Dashboard — KPIs, manual Poll / Distill / Alerts |
+| `/bundles` | Interest bundles + **health panel** + feed linking |
+| `/status` | **Scheduled runs** + fleet pipeline liveness |
+| `/feeds` | Source list and feed health |
+| `/logs` | Backend log ring buffer |
+
+## Interest bundles
+
+Fleet-maintained presets live in `src/aiwatcher_mcp/bundle_presets.py` (applied on startup). Key bundle:
+
+- **IDE Host Signal** — Cursor/Zed/Windsurf MCP host UX, `changelog-gap` tagging ([runbook](https://github.com/sandraschi/mcp-central-docs/blob/main/patterns/AIWATCHER_IDE_HOST_SIGNAL.md))
+
+Create ad-hoc bundles via webapp wizard or MCP `create_bundle_from_topic`; use **presets** for critical fleet watches.
 
 ## Quick Start
 
@@ -95,22 +115,28 @@ copy .env.example .env
 
 | Variable | Default | Notes |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | — | **Required** for scoring + digest generation |
-| `LLM_PROVIDER` | anthropic | anthropic, ollama, or lmstudio |
-| `LLM_BASE_URL` | — | Custom base URL for OpenAI-compatible providers |
-| `ALERT_THRESHOLD` | 8.5 | Urgency score threshold for TTS wake-up |
-| `ALERT_HOUR_UTC` | 4 | Time (UTC) to trigger the morning alert |
-| `ROBOFANG_ENABLED` | true | Push breaking alerts to `robofang` |
-| `EMAIL_ENABLED` | false | Send digest to Sandra + Steve via `email-mcp` |
-| `CALIBRE_ENABLED` | false | Archive digests to `calibre-mcp` |
-| `GMAIL_ENABLED` | false | Parse newsletters from Gmail |
-| `ARXIV_ENABLED` | false | Ingest latest papers (`ARXIV_MCP_URL` default **10770**) |
-| `READLY_ENABLED` | false | Readly (blocked on upstream MCP tool) |
-| `AIWATCHER_API_KEY` | — | Optional REST auth on `/api/*` (exempt: health, `/mcp`). When set, mirror on `ARXIV_MCP_AIWATCHER_API_KEY` and `VLA_AIWATCHER_API_KEY` |
-| `VLA_MCP_ENABLED` | true | Probe vla-mcp pipeline liveness (`VLA_MCP_URL` default **11024**) |
-| `DIGEST_CACHE_TTL_MINUTES` | 60 | Reuse recent digest without LLM |
-| `just seed-feeds` | — | Baseline RSS if feeds table empty |
-
+| ANTHROPIC_API_KEY | - | Optional cloud scoring (gated by CLOUD_PROVIDERS_ALLOWED) |
+| LLM_PROVIDER | ollama | ollama, lmstudio, anthropic, or deepseek (cloud gated by CLOUD_PROVIDERS_ALLOWED) |
+| LLM_BASE_URL | http://127.0.0.1:11434/v1 | Ollama OpenAI-compat; native /api/chat + 	hink:false used for ollama (thinking models) |
+| DISTILLATION_MODEL | muse-glimmer-131k:latest | 30B multimodal workhorse (131K ctx, vision) |
+| DISTILLATION_FLASH_MODEL | muse-glimmer-131k:latest | Flash-pass scorer (cheaper model recommended for large backlogs) |
+| DISTILLATION_INTERVAL_HOURS | 4 | Hours between distill jobs |
+| ALERT_THRESHOLD | 8.5 | Urgency score threshold for TTS wake-up |
+| ALERT_HOUR_UTC | 4 | Time (UTC) to trigger the morning alert |
+| ROBOFANG_ENABLED | true | Push breaking alerts to obofang |
+| EMAIL_ENABLED | false | Send digest to recipients via mail-mcp |
+| EMAIL_RECIPIENTS | sandras@hotmail.com,stephans@hotmail.com | Comma-separated digest recipients (configurable) |
+| EMAIL_MCP_URL | http://127.0.0.1:10813 | email-mcp backend REST (/api/send, Basic auth EMAIL_MCP_USER/EMAIL_MCP_PASSWORD) |
+| DISCORD_MCP_URL / DISCORD_DIGEST_CHANNEL_ID | - | Opt-in: post digest summary to a Discord channel via discord-mcp REST |
+| INTEL_REPORTS_HUB_URL / _USER / _PASS | http://127.0.0.1:11027 / leet / intel | Publish digest to Intel Reports Hub (Basic auth) |
+| CALIBRE_ENABLED | false | Archive digests to calibre-mcp |
+| GMAIL_ENABLED | false | Parse newsletters from Gmail |
+| ARXIV_ENABLED | false | Ingest latest papers (ARXIV_MCP_URL default **10770**) |
+| READLY_ENABLED | false | Readly (blocked on upstream MCP tool) |
+| AIWATCHER_API_KEY | - | Optional REST auth on /api/* (exempt: health, /mcp). When set, mirror on ARXIV_MCP_AIWATCHER_API_KEY and VLA_AIWATCHER_API_KEY |
+| VLA_MCP_ENABLED | true | Probe vla-mcp pipeline liveness (VLA_MCP_URL default **11024**) |
+| DIGEST_CACHE_TTL_MINUTES | 60 | Reuse recent digest without LLM |
+| just seed-feeds | - | Baseline RSS if feeds table empty |
 ## Fleet Integrations & Ports
 
 | Service | Port | Description |
@@ -119,7 +145,7 @@ copy .env.example .env
 | **aiwatcher Frontend** | `10947` | Vite/React Web App |
 | **robofang** | `10871` | Breaking event POSTs to Council bridge |
 | **speechops** | `10895` | TTS wake-up HTTP API |
-| **email-mcp** | `10812` | Digest delivery mechanism |
+| **email-mcp** | `10813` | Digest delivery mechanism (`/api/send`, Basic auth) |
 | **calibre-mcp** | `10720` | Digest archival to eBook library |
 | **arxiv-mcp** | `10770` | ArXiv paper ingestion + code-hunt fleet push |
 | **vla-mcp** | `11024` | VLA robotics pipeline fleet push + liveness probe |
@@ -130,8 +156,11 @@ copy .env.example .env
 
 ```powershell
 just test          # pytest (unit/integration)
+just install       # deps + pre-commit hooks (run once per clone)
 just e2e           # Playwright — starts backend :10946 + Vite :10947, runs webapp/e2e
 ```
+
+Test layout: `tests/conftest.py` (session temp SQLite), `tests/test_bundle_presets.py` (fleet presets), `tests/test_api.py` (REST). Mark slow tests with `@pytest.mark.slow` (excluded from CI).
 
 First-time e2e setup (from repo root):
 
@@ -170,4 +199,4 @@ Extra tools may appear when **`MCP_BRIDGE_URLS`** is set (proxied remote tools).
 
 ---
 
-*Fleet server — Sandra Schipal · **aiwatcher-mcp** `0.1.6` (see `pyproject.toml` / `_version.py`)*
+*Fleet server — Sandra S. · **aiwatcher-mcp** `0.1.6` (see `pyproject.toml` / `_version.py`)*

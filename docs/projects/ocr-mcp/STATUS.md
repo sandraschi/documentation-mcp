@@ -1,124 +1,109 @@
-﻿# OCR-MCP Status Report
+# OCR-MCP — Project Status
 
-**Last Updated**: 2026-05-12
-**Version**: 0.3.0-beta
-**Status**: 🟢 BETA — OCR verified working (scan → OCR pipeline)
+**Last Updated:** 2026-08-25
+**Version:** 0.3.0-beta
+**Status:** Beta
 
-## Project Overview
+## Current Build
 
-OCR-MCP is a comprehensive OCR server built on **FastMCP 3.1**, with sampling, agentic workflow tool (SEP-1577), prompts, skills resource, and capabilities resource. 12 SOTA OCR engines, WIA scanner integration (Windows), and professional web interface with backend model management.
+| Gate | Status |
+|------|--------|
+| Python lint (ruff) | Pass |
+| TypeScript (tsc --noEmit) | Pass |
+| Vite build | Pass |
+| Tests | Pass (156 unit tests) |
+| NSIS build | Pass |
+| CUA smoke test | Pass |
+| Pre-commit hooks | Configured (ruff, file hygiene) |
+| CI workflow | Windows CI (ruff, pytest, tsc, vite build) |
 
-## Architecture
+## What's Working
 
-### Core Components
+### Webapp
+- Dashboard: file drop zone, scanner selector, backend selector, Quick Scan & OCR button, **Quick Scan (Raw)** button, **Auto-Scan toggle**
+- **Form Filler page (`/forms`)**: 4-step workflow for preprinted paper forms (e.g. **Austrian Meldezettel**). Elicit field boxes, query text inputs, print overlay-only on physical preprinted paper, and save templates to Corpus Depot.
+- **Corpus Depot page (`/depot`)**: Searchable, sortable, filterable SQLite repository for raws, OCR results, and saved form templates with 1-click reload.
+- **Raw Scan page (`/scan-viewer`)**: Interactive raw scan viewer with Print, Export, Email, Discord Link, and Copy URL action bar.
+- Inline OCR result with Copy / .txt / .md export
+- Live KPI cards from `/api/health` (server, tool count, backend availability)
+- Backend health indicator in topbar (green ping / red / gray)
+- Sidebar: Dashboard, Form Filler, Corpus Depot, Raw Scan, Book Pipeline, Editor, Activity, Settings, Help
+- **Book Pipeline page**: select page images, OCR batch, detect chapters, assemble EPUB & Markdown
+- Editor page: standalone text view with JSON/CSV/XML export
+- Activity page: job status polling and history
+- Settings: default backend, Mistral API key + test, backend and scanner lists, **Auto-Scan settings**
 
-- **FastMCP 3.1 Server**: Sampling handler, agentic_document_workflow (ctx.sample_step + tools), prompts (5), resources (logs, capabilities, skills).
-- **Multi-Engine OCR Backend**: 12 backends (PaddleOCR-VL-1.5, MinerU2.5-Pro, DeepSeek-OCR-2, olmOCR-2, Mistral OCR, Qwen2.5-VL, GOT-OCR 2.0, DOTS.OCR, PP-OCRv5, DeepSeek-OCR, EasyOCR, Tesseract) with lazy-loading and intelligent auto-selection.
-- **WIA Scanner Integration**: Direct Windows scanner control (WIA 2.0); single-thread executor for stable discovery.
-- **Document Processing Pipeline**: PDF, CBZ, image processing; portmanteau tools (document_processing, image_management, scanner_operations, workflow_management).
-- **Tool Portmanteau Pattern**: 7 tool groups + agentic_document_workflow.
+### MCP Server
+- Dual transport: stdio + HTTP
+- 8 portmanteau tools: `process_document`, `manage_image`, `operate_scanner`, `manage_workflow`, `manage_corpus`, `get_help`, `get_status`, **`ingest_book`**
+- **2 Prefab UI tools**: `show_health_card`, `show_backends_card`
+- Agentic workflow tool (`execute_agentic_workflow`) with `ctx.sample()` + `sample_step()` fallback
+- 5 parameterized prompts (process-instructions, quality-assessment, scanner-workflow, batch-processing, agentic-workflow)
+- 3 resources (`resource://ocr/logs`, `resource://ocr/capabilities`, `resource://ocr/skills`)
+- **Skills directory** with `skill://{name}` parameterized resource
+- 14 OCR backends with fast dependency-spec probing + lazy loading + auto-selection
 
-### OCR Engine Tiers
+### OCR Backends
+- 14 backends registered: Unlimited-OCR, PaddleOCR-VL-1.5, MinerU2.5-Pro, Nemotron VL 8B, DeepSeek-OCR-2, olmOCR-2, Mistral OCR, Qwen2.5-VL, GOT-OCR 2.0, DOTS.OCR, PP-OCRv5, EasyOCR, Tesseract
+- Intelligent auto-selection with fallback chain
+- Per-backend model caching and GPU memory management
 
-1. **🔥 PaddleOCR-VL-1.5 (Jan 2026)** - SOTA compact VLM, 0.9B params, 94.5% OmniDocBench
-2. **🔥 MinerU2.5-Pro (Apr 2026)** - opendatalab coarse-to-fine VLM, 1.2B params, SOTA multi-benchmark
-3. **🔥 DeepSeek-OCR-2 (Jan 2026)** - Visual Causal Flow, 3B params, structured markdown
-4. **⚡ olmOCR-2 (Oct 2025)** - Allen AI, 7B params, best for academic PDFs
-5. **☁️ Mistral OCR 3** - Cloud API, 94.9% claimed accuracy
-6. **📊 Qwen2.5-VL** - Alibaba multimodal VLM, complex layouts
-7. **🚀 GOT-OCR 2.0** - 580M params, fast and lean
-8. **🔧 DeepSeek-OCR** - API cloud backend (original)
-9. **📑 DOTS.OCR** - Table specialist
-10. **⚙️ PP-OCRv5** - Baidu pipeline, CJK, lightweight
-11. **💡 EasyOCR** - 80+ languages, handwriting
-12. **🛡️ Tesseract** - CPU-only backstop
+### Backend API
+- `GET /api/health` — server status, version, uptime, tool count
+- `GET /api/backends` — registered backends with availability
+- `GET /api/scanners` — WIA scanner discovery
+- `POST /api/scan` — trigger WIA scan
+- `POST /api/ocr_scanned` — OCR a scanned image
+- `POST /api/upload` — upload and OCR a file
+- `GET /api/job/{id}` — poll job status
+- `GET|POST /api/settings/mistral` — Mistral API key management
+- `POST /api/settings/mistral/test` — validate Mistral key
+- `GET /api/scanner/watch/status` — auto-scan watcher status
+- `POST /api/scanner/watch` — start auto-scan watcher
+- `POST /api/scanner/watch/stop` — stop auto-scan watcher
+- `POST /api/ocr/detect-chapters` — detect chapter headings from OCR text
+- `POST /api/ocr/detect-metadata` — extract title/author from first pages
+- `POST /api/ocr/assemble-epub` — build EPUB from chapter text
+- `POST /api/ocr/book-pipeline` — full OCR-to-EPUB pipeline
+- OpenAPI docs at `/docs`
 
-## Key Features
+### Auto-Scan Watcher
+- Background service polls flatbed for document placement via preview-scan image diff
+- Two modes: `preview` (universal, image-hash comparison) and `button` (WIA button events)
+- Toggle from Dashboard or Settings
+- When detected: full 300 DPI scan + OCR with configurable backend
 
-### OCR Capabilities
-- ✅ Plain Text OCR
-- ✅ Formatted Text OCR with layout preservation
-- ✅ Fine-Grained OCR with coordinate precision
-- ✅ Multi-Crop OCR for complex layouts
-- ✅ HTML Rendering with visual layout preservation
-- ✅ Document Understanding (tables, formulas, layout analysis)
+### Book Pipeline
+- `ingest_book` MCP tool with 4 operations: detect_chapters, detect_metadata, assemble_epub, full_pipeline
+- Rules-based chapter heading detection (supports English, French, German, Spanish, Roman numerals)
+- EPUB assembly via ebooklib with auto-generated TOC and navigation
+- Metadata extraction from title page (title, author)
+- Webapp page with multi-file upload, progress bar, chapter preview
 
-### Scanner Integration
-- ✅ **WIA 2.0 (Windows Image Acquisition)**: Direct, robust scanner control
-- ✅ **Singleton Backend**: Prevents hardware contention and "Device Busy" errors
-- ✅ Flatbed scanner discovery and configuration
-- ✅ Batch scanning with ADF support
-- ✅ Preview scanning for positioning
+## In Progress
 
-### Document Processing
-- ✅ PDF processing with text layer detection
-- ✅ CBZ/CBR comic book processing
-- ✅ Image decomposition with Qwen-Image-Layered
-- ✅ **Synthetic Document Generation**: Automated creation of test cases
-- ✅ **Watch Folder Automation**: Background OCR on file drop
+- Tauri 2.0 NSIS installer (PyInstaller + embedded backend)
+- CUA-NSIS smoke test pipeline
+- Production packaging (MCPB bundle)
 
-### Web UI
-- ✅ **Backends & Models page** (`/backends`): availability dashboard, download/load buttons, progress bars, probe testing
-- ✅ **ScanViewer**: full-width bitmap display with selection-based OCR
-- ✅ Backend model download tracker endpoints with polling support
+## Known Issues
 
-## Development Status
+- PaddleOCR-VL-1.5 requires flash-attn for reasonable VRAM (~3.3GB vs 40GB without)
+- Mistral OCR requires a cloud API key (stored in backend process only)
+- WIA scanner only works on Windows
+- No TWAIN scanner support yet
+- No cloud sync for settings across devices
+- Scanner watcher preview mode requires a WIA-compatible scanner
 
-### ✅ Completed Features (v0.3.0)
-- **12 OCR backends**: PaddleOCR-VL-1.5, MinerU2.5-Pro, DeepSeek-OCR-2, olmOCR-2, Mistral OCR 3, Qwen2.5-VL, GOT-OCR 2.0, DeepSeek-OCR, DOTS.OCR, PP-OCRv5, EasyOCR, Tesseract
-- **FastMCP 3.1.1++ Server**: Complete server architecture with stdio transport.
-- **Robust Hardware Acquisition**: Singleton pattern for WIA 2.0 ensures reliable scanner access.
-- **Synthetic Generator**: Added `document_generator` tool for creating high-complexity test documents.
-- **Portmanteau Tool Ecosystem**: 15+ operations consolidated into 7 logical tool groups.
-- **Watch Folder Service**: Background service for automated processing.
-- **Backend model management UI**: Status, download, probe, progress tracking.
-- **Scan persistence**: Always saves scans to disk for OCR chaining.
-- **158 unit tests**: Full coverage of backends, scanner, manager, webapp API.
+## Recent Milestones
 
-### 🚀 Ready for Production
-- **Server Stability**: Verified startup and operation across all components
-- **Hardware Reliability**: WIA 2.0 integration tested with multiple devices
-- **Documentation**: Complete user and developer documentation
-
-### 🎯 Future Enhancements (v0.4.0)
-- OCR accuracy benchmarking and comparative analysis dashboard
-- Batch processing from the Backends page
-- Automated model recommendation based on document type
-- Multi-GPU model loading for concurrent backend inference
-
-## Repository Information
-
-- **GitHub**: https://github.com/sandraschi/ocr-mcp
-- **Local Path**: `D:\Dev\repos\ocr-mcp`
-- **Python Version**: 3.12+
-- **Dependencies**: FastMCP 3.1+, transformers, torch, Pillow, PyMuPDF, comtypes
-
-## Integration Status
-
-### Claude Desktop
-- ✅ MCP server configured in `.cursor\mcp.json`
-- ✅ All tools exposed and functional
-- ✅ Stdio transport verified
-
-### Cursor IDE
-- ✅ MCP server integration complete
-- ✅ Tool discovery working
-
-## Performance Metrics
-
-- **OCR Accuracy**: State-of-the-art (Mistral OCR-2512 baseline; PaddleOCR-VL-1.5 94.5% OmniDocBench)
-- **Processing Speed (PaddleOCR-VL)**: ~0.5-1s per page (flash-attn, 4090)
-- **Scanner Support**: All WIA-compatible devices (Verified with Canon LiDE 400)
-
-## Success Metrics
-
-- ✅ **12 OCR Engines**: Complete state-of-the-art coverage (2024-2026)
-- ✅ **Scanner Integration**: Full WIA 2.0 API implementation
-- ✅ **Synthetic Generation**: Automated test document creation
-- ✅ **Watch Folder**: Background automated processing
-- ✅ **Backend Management UI**: Model download, status, probe in web interface
-- ✅ **158 Unit Tests**: Comprehensive test coverage
-
----
-
-**Built with Austrian efficiency for comprehensive OCR workflows.** 🇦🇹
+| Date | Milestone |
+|------|-----------|
+| 2026-07-21 | **v0.2.0-beta released** — FastMCP 3.4+ features, skills, Prefab UI, auto-scan, book pipeline |
+| 2026-07-21 | Book scanning pipeline: chapter detection, EPUB assembly, webapp Book Pipeline page |
+| 2026-07-21 | Auto-Scan watcher with preview-poll and WIA button detection |
+| 2026-07-21 | Unlimited-OCR backend added (Baidu, MIT, 3B params) |
+| 2026-07-21 | Webapp streamlined: dashboard-first, removed legacy frontend, 5-page sidebar |
+| 2026-06-14 | Tauri 2.0 NSIS wrapper + CUA smoke test |
+| 2026-05-14 | Nemotron VL 8B backend |
+| 2026-05-12 | MinerU2.5-Pro backend, backend management UI |

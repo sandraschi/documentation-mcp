@@ -20,9 +20,9 @@ so Claude on iOS (claude.ai custom connector) can pick up session context from a
 
 | What | Where |
 |------|-------|
-| Notes vault | `C:\Users\sandr\.advanced-memory\vault` |
+| Notes vault | `C:\Users\<user>\.advanced-memory\vault` |
 | Repos | `D:\Dev\repos` |
-| MCP logs | `C:\Users\sandr\AppData\Roaming\Claude\logs` |
+| MCP logs | `C:\Users\<user>\AppData\Local\Claude\Logs` (pre-2026-08-21: `AppData\Roaming\Claude\logs`) |
 
 ## Configuration (env vars)
 
@@ -49,7 +49,7 @@ $env:STATUS_PATH = "/h4x9q2-mcp"
 python status_mcp.py
 
 # as a service (same pattern as RustDesk)
-nssm install goliath-status "C:\Users\sandr\AppData\Local\Programs\Python\Python313\python.exe" "D:\Dev\repos\status-mcp\status_mcp.py"
+nssm install goliath-status "C:\Users\<user>\AppData\Local\Programs\Python\Python313\python.exe" "D:\Dev\repos\status-mcp\status_mcp.py"
 nssm set goliath-status AppEnvironmentExtra STATUS_PATH=/h4x9q2-mcp
 nssm start goliath-status
 ```

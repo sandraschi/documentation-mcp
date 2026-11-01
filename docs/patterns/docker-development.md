@@ -684,7 +684,7 @@ To implement this pattern in your project:
 
 **Last Updated:** 2025-12-04  
 **Pattern Status:** Production Ready  
-**Adoption:** mywienerlinien, myai, veogen  
+**Adoption:** publictransport-mcp, myai, veogen  
 
 **Never waste time on Docker rebuilds again!** 🚀
 

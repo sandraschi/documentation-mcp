@@ -1,8 +1,19 @@
+---
+title: "Chat, Skills, and Prefab UI Standard (SOTA 2026)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-21
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+# 2026-09-24: §9.4 added (gtfs-mcp agent-loop reference); rest still unverified.
+---
 # Chat, Skills, and Prefab UI Standard (SOTA 2026)
 
 **Established**: 2026-06-26  
-**Updated**: 2026-06-30  
-**Reference impl**: `multi-backup-mcp`, `arxiv-mcp`
+**Updated**: 2026-09-24  
+**Reference impl**: `multi-backup-mcp`, `arxiv-mcp`, `gtfs-mcp` (§9.4 agent loop)
 
 ## 1. Chat Page — SOTA Requirements
 
@@ -101,6 +112,7 @@ For Ollama chat endpoints, this maps to the `system` role natively.
 | Model input | Editable text field showing current model name (default detected from backend `/api/llm/discover`). |
 | Provider status | Live indicator: "Ollama on :11434" (green), "Not detected" (red), or "Detecting..." (neutral). |
 | Detection | On mount, call `/api/llm/discover` for Ollama presence and configured model. |
+| Resident-first default | The default model MUST be resolved **resident-first**: probe Ollama `/api/ps`; use the highest-preference model that is already loaded (`qwen3.8:27b` → `gemma4:12b` → tier table); only if nothing is loaded pick the highest-preference installed model from `/api/tags`. Never default to `tags[0]` or a hardcoded model — that evicts the resident model and forces a ~30s cold reload ("Headers Timeout"). Canonical helpers: `templates/llm-detect/model-preference.ts` (frontend) / `detect.py pick_model` (backend). |
 
 ### 1.8 Input & Send
 
@@ -125,9 +137,9 @@ For Ollama chat endpoints, this maps to the `system` role natively.
 | `personality-select` | Personality dropdown |
 | `example-prompts` | Example suggestion container |
 
-### 1.10 Streaming (recommended)
+### 1.10 Streaming (RECOMMENDED)
 
-Streaming response rendering is RECOMMENDED for SOTA apps. Pattern:
+Streaming response rendering is **RECOMMENDED** for SOTA apps. Pattern:
 
 ```ts
 const r = await fetch(`${OLLAMA}/api/chat`, { /* ... */ });
@@ -142,8 +154,22 @@ while (true) {
 }
 ```
 
-Not a hard requirement (most fleet repos use non-streaming for simplicity), but
-strive for it in new webapps.
+**Tier note (2026-09-21).** This was briefly promoted to MANDATORY and reverted to
+RECOMMENDED the same day, pending a scoped drift pass. The case for eventual
+promotion stands, and the old justification no longer holds: the previous text
+claimed "most fleet repos use non-streaming for simplicity", but a 2026-09-21
+fleet grep found the `getReader()` token-stream client in chat/LLM files across
+roughly **25-30 fleet repos** (arxiv-mcp, aiwatcher-mcp, documentation-mcp,
+docker-mcp, devices-mcp, depot-mcp, inkscape-mcp, fleet-agent-mcp,
+home-assistant-mcp, godot-mcp, handbrake-mcp, gtfs-mcp, grandorgue-mcp,
+git-github-mcp, giskard-mcp, ocr-mcp, podman-mcp, streamfog-mcp, unity3d-mcp,
+tvtropes-mcp, rustdesk-mcp, moltbot-mcp, and others). When most of the fleet
+already ships a practice, leaving it "recommended" gives new repos no signal.
+Promote once the drift impact is scoped, so the gate does not land as a batch of
+unexplained failures.
+
+Resilient / resumable streaming (reconnect on drop, resume from offset) remains
+**RECOMMENDED** - see §9.1.
 
 ---
 
@@ -283,7 +309,7 @@ SHOULD ship a Prefab App surface.
 ### Pattern
 
 ```python
-from fastmcp.server.server import ToolResult
+from fastmcp.tools.base import ToolResult  # canonical home; NOT fastmcp.server.server (re-export trips pyright reportPrivateImportUsage - BUG-042)
 from prefab_ui import PrefabApp
 from prefab_ui.components import Heading, Row, Div
 
@@ -313,9 +339,10 @@ async def show_{name}_app(...) -> ToolResult:
 
 ## 7. Dark Mode
 
-The app MUST be permanently dark. No light mode toggle. The CSS `:root` variables
-use dark values (Slate-950 / Zinc-950 backgrounds). The body sets
-`color-scheme: dark` so native form controls render with dark OS theme.
+The app MUST be **dark by default** — this is the fleet identity, not optional.
+The CSS `:root` variables use dark values (Slate-950 / Zinc-950 backgrounds).
+The body sets `color-scheme: dark` so native form controls render with dark OS
+theme.
 
 ```css
 body {
@@ -329,6 +356,71 @@ select, input, textarea {
 Native `<select>` elements MUST use explicit dark background/foreground classes
 such as `bg-zinc-800 text-zinc-100 border-zinc-600` to ensure readable contrast
 regardless of OS/browser defaults.
+
+### 7.1 OPTIONAL: light-mode toggle (invert hack)
+
+Since 2026-08 (validated on opencode-cli-mcp, then rolled out fleet-wide), a
+webapp MAY ship a light-mode toggle using the **CSS invert hack** - one CSS
+block, no component rewrite. Dark remains the default; the toggle is user
+opt-in and persists.
+
+```css
+/* EXPERIMENTAL light mode — invert hack. Toggling .dark off inverts the UI.
+   Remove this block to revert to permanently-dark. */
+html:not(.dark) {
+  filter: invert(1) hue-rotate(180deg);
+  background: #f4f4f5;
+}
+html:not(.dark) img,
+html:not(.dark) video,
+html:not(.dark) canvas,
+html:not(.dark) iframe {
+  filter: invert(1) hue-rotate(180deg); /* un-invert media */
+}
+```
+
+Toggle implementation (React): flip `document.documentElement.classList`
+`.dark` on/off, persist the choice to `localStorage` (`{repo}-light-mode`),
+restore on load. Topbar button with `Sun`/`Moon` icons.
+
+**Why it works**: the fleet token palette (Zinc/Slate surfaces) is consistent
+enough that full inversion produces a coherent light UI.
+
+**Guardrails (MANDATORY if you ship the toggle):**
+
+1. **Dark is the DEFAULT.** `<html class="dark">` in `index.html`, and the
+   toggle's initial state must be dark. Never default to light.
+2. **Un-invert media**: `img`, `video`, `canvas`, `iframe` MUST be
+   double-inverted (the un-invert block above) or screenshots/covers/players
+   render negative.
+3. **Persistence**: the choice MUST survive reloads (localStorage). No
+   session-only toggle.
+4. **CUA/Playwright verification**: the smoke test and e2e suite MUST run in
+   dark mode. If a test machine has the light choice persisted, the toggle
+   must be reset (`localStorage.removeItem` or `page.addInitScript` forcing
+   `.dark`) before verification — screenshots and OCR checks assume dark.
+5. **Reversible**: the CSS block and hook are marked `EXPERIMENTAL` with
+   comment banners; deleting them restores permanently-dark with no residue.
+6. **Known artifacts (accept them or don't ship)**: accent colors invert
+   (amber→cyan-ish), saturated brand colors look wrong, non-fleet custom
+   themes may invert badly. The hack is a convenience, not a design system.
+
+Reference implementation: `opencode-cli-mcp` — `web_sota/src/index.css` (invert
+block) + `web_sota/src/Layout.tsx` (`useExperimentalTheme` + topbar toggle).
+
+**Fleet rollout (as of 2026-08-01, 42 repos shipped):**
+
+| Mechanism | Repos |
+|-----------|-------|
+| Invert hack (`{repo}-light-mode` key, Sun/Moon topbar button) | opencode-cli-mcp, advanced-memory-mcp, aiwatcher-mcp, arxiv-mcp, calibre-mcp, plex-mcp, discord-mcp, email-mcp, yahboom-mcp, resonite-mcp, mixx-dj-mcp, grandorgue-mcp, gimp-mcp, blender-mcp, inkscape-mcp, godot-mcp, worldlabs-mcp, overte-mcp (new topbar added), unity3d-mcp, system-admin-mcp, database-operations-mcp, robotics-mcp, avatar-mcp, windows-operations-mcp, virtualization-mcp (sidebar header — no desktop topbar exists), multi-backup-mcp, telephony-mcp, mujoco-mcp (sidebar header — no topbar, emoji icons, no lucide dep), meta_mcp, mastodon-mcp, libreoffice-mcp, freecad-mcp, qcad-mcp, forgejo-mcp (JSX webapp), podman-mcp, docker-mcp, osc-mcp, rtorrent-mcp, sdr-mcp, scraper-mcp, devices-mcp (migrated from Tailwind class system 2026-08-01) |
+| Native toggle (app already had a class-based theme system — do NOT invert-hack these) | filesystem-mcp (wired shadcn `ThemeProvider`, added `useTheme()` toggle) |
+
+**Mechanism decision rule:** if the app uses Tailwind `darkMode: ["class"]`
+variants or a wired `ThemeProvider`, add a native toggle
+(`useTheme().setTheme("dark" | "light")`) — the invert hack would
+double-invert. Otherwise use the invert hack. Detection:
+`rg "dark:" <webroot>/src` (any hits = native path) or check for
+`ThemeProvider` usage.
 
 ---
 
@@ -346,10 +438,104 @@ regardless of OS/browser defaults.
 | Skills page | `multi-backup-mcp` | `web_sota/src/pages/skills.tsx` — manifest + ReactMarkdown |
 | Prefab cards | `multi-backup-mcp` | `src/multi_backup_mcp/tools/prefab_cards.py` |
 | Theme | both | `web_sota/src/index.css` — `color-scheme: dark` |
+| Agent chat endpoint | `gtfs-mcp` | `src/gtfs_mcp/api/llm.py` — `/api/llm/chat-agent`, allowlist, prefetch, loop guards, `num_ctx` cap |
+| Tool trace blocks | `gtfs-mcp` | `web_sota/src/pages/chat.tsx` — trace array rendering + export |
+| Agent web_search | `gtfs-mcp` | `src/gtfs_mcp/services/web_search.py` (vendored DDG scraper, no key) |
+| Light toggle (optional) | `opencode-cli-mcp` | `web_sota/src/index.css` (invert block) + `web_sota/src/Layout.tsx` (`useExperimentalTheme`) |
 
 ---
 
-## 9. Verification Checklist
+## 9. Streaming Resilience, Tool Trace, and Conversation Branching (RECOMMENDED)
+
+**Added:** 2026-09-17 — gap-filled from a LibreChat (`danny-avila/LibreChat`, MIT)
+analysis. LibreChat independently converged on the same skill/MCP/agent
+concepts as the fleet but has three chat-UX patterns this standard lacked.
+**Status: RECOMMENDED, not yet MANDATORY** — gtfs-mcp (2026-09-24) is the
+first fleet repo to ship the agent loop and simplified trace blocks (§9.4)
+and is the reference implementation below. Promote §9 to MANDATORY once 3+
+repos ship it; do NOT mass-migrate chat pages — each needs its allowlist and
+domain grounding reviewed individually.
+
+### 9.1 Reconnecting / Resumable Streams
+
+**Problem:** A naive `fetch` + `ReadableStream` (§1.10) loses the entire
+partial response if the network blips or the SSE connection drops mid-token.
+The user sees a dead stream and must resend the whole prompt.
+
+**Requirement:** The chat streaming client MUST track stream progress and
+attempt one automatic reconnect on drop, resuming from the last received
+token rather than restarting the request.
+
+| Requirement | Detail |
+|-------------|--------|
+| Stream identity | Backend's first SSE event includes a `streamId`. |
+| Client state | Client holds `{streamId, lastOffset}` **in memory only** — not `localStorage`. Stream resume is for a network blip, not surviving a page reload. |
+| Reconnect | On `onerror`/close before a terminal event, retry once immediately (then backoff) using `Last-Event-ID` (or an offset query param) so the backend can resume from `lastOffset` instead of replaying the whole response. |
+| Give up | After the retry budget (recommend: 1 immediate + 2 backoff, total <10s) exhausted, render "response interrupted — retry?" as an assistant message per §1.8 error-state rules, not a silent failure. |
+| UI | `data-testid="chat-stream-retrying"` indicator shown during a reconnect attempt. |
+| Scope note | Fleet backends are mostly single-instance/local, not horizontally scaled — only client-side resume-on-blip is in scope. LibreChat's Redis-backed cross-replica/multi-device stream sync is explicitly OUT of scope; don't build that. |
+
+### 9.2 Tool Call / Trace Visualization
+
+**Problem:** When the chat backend proxies MCP tool calls (portmanteau tools,
+multi-step agent turns), the user only sees the final answer — no visibility
+into which tool fired, with what args, or how long it took. This matters more
+for fleet repos than for LibreChat, since every fleet chat page is talking to
+MCP tools by design (§1.2 skill-first architecture).
+
+**Requirement:** The chat message stream MUST render inline tool-activity
+blocks for any tool call made during a turn.
+
+| Requirement | Detail |
+|-------------|--------|
+| Placement | Inline in the assistant message at the point the call occurred — not only a separate debug/logs panel. |
+| Content | Tool name, status (`pending`/`running`/`done`/`error`), collapsed by default; expand to see args and result/error. |
+| Backend contract | Streamed tool-call events distinct from token deltas — SSE event type `tool_call` carrying `{name, args, status}`, emitted before token events resume for that turn. |
+| data-testid | `chat-tool-call` (container), `chat-tool-call-status` (status badge). |
+| Relation to Prefab | If the tool already ships a Prefab card (§6), render the card as the expanded content instead of raw JSON. |
+
+### 9.3 Conversation Branching / Edit-and-Resubmit
+
+**Problem:** Fleet chat pages (§2 schema) are append-only. Editing an earlier
+message re-sends and overwrites history from that point, silently destroying
+the original branch.
+
+**Requirement:** The user MUST be able to edit any of their own prior
+messages and resubmit, creating a new branch; the original branch remains
+reachable via a branch selector on the edited message.
+
+| Requirement | Detail |
+|-------------|--------|
+| Schema | Extend `ChatMessage` (§2) with optional `branchId`/`parentId`. All branches persist in `localStorage`; only the active path renders. |
+| Edit trigger | Hover/click affordance on any user message → inline edit → resubmit creates a sibling branch from that point. |
+| Branch selector | `‹ 1/2 ›`-style control on any message with siblings, switches the active rendered path. |
+| data-testid | `chat-message-edit`, `chat-branch-selector`. |
+| Cap interaction | The 100-message cap (§1.1) applies to the active path's message count, not the total across all branches. |
+
+### 9.4 Server-Side Agent Loop (Reference: gtfs-mcp, 2026-09-24)
+
+§9.2 assumed token streaming with SSE tool events. gtfs-mcp proved a simpler
+shape any fleet repo can copy in ~200 lines with no new dependencies: a
+non-streaming agent endpoint where the model turn happens server-side, with
+tools executed in-process.
+
+| Element | Pattern |
+|---|---|
+| Endpoint | `POST /api/llm/chat-agent` takes `{model, messages, personality, custom_prompt}`, returns `{success, reply, trace}`. |
+| Tools | Ollama native `tools:` on `/api/chat`. Executed in-process against the repo's own `@mcp.tool` functions — FastMCP decorators return plain async functions (verify with `inspect.iscoroutinefunction`), so no MCP client or HTTP-to-self is needed. |
+| Allowlist | Hard name→function map. The model never sees the full tool surface. Read-only tools first; never destructive ones (`remove_*`, `shutdown`, …). |
+| Grounding | System prompt = role + skill content + live depot state (feed ids/counts) + today's date. Home city/feed default stated explicitly so small models stop guessing (observed failure: "Praterstern? never heard of it — Berlin?"). |
+| Deterministic prefetch (recommended) | For the common case, resolve server-side first (e.g. stop-name substring match → `find_stops` → `get_departures`) and inject the results as data. Correct answers then survive even models that fumble the call chain or emit pseudo-calls (`[TOOL_CALLS]{...}`) with invented times. |
+| Loop guards | Bounded turns (6). Nudge turn (max 2) when the model answers with zero data calls; restate turn (no tools) when raw tool JSON leaks into the visible reply. |
+| VRAM | Pass `"options": {"num_ctx": 16384}` on agent calls. Model default windows (up to 262k) make Ollama reserve tens of GB of KV cache on 24GB cards for turns that never exceed a few thousand tokens. |
+| Trace UI | `trace: [{tool, ok, summary}]` rendered as small mono lines above the answer and included in the `.txt` export. Satisfies §9.2's visibility goal without SSE. |
+| web_search | Vendor the dependency-light DuckDuckGo scraper (`advanced-memory-mcp` `services/research_sources.web_search`: httpx, regex extraction, no API key) as an allowlisted agent tool for out-of-depot questions. The skill MUST carry a "recent information" section listing trigger words (`this week`, `latest`, `new`, `review`, `vs`, `compare`) that mean web_search, not the depot. |
+
+Do NOT present this as "just point chat at MCP" — an unscoped tool surface plus a small model is how you get confident fabrications with tool-shaped formatting. The allowlist, the grounding, and the prefetch are the feature; the loop is plumbing.
+
+---
+
+## 10. Verification Checklist
 
 Before certifying a webapp as SOTA-compliant:
 
@@ -369,3 +555,10 @@ Before certifying a webapp as SOTA-compliant:
 - [ ] `data-testid` attributes present on all interactive elements
 - [ ] API call includes system prompt, history, model
 - [ ] No `/v1` in provider base URLs sent to backend
+
+**RECOMMENDED (§1.10 and §9, not yet mandatory):**
+
+- [ ] LLM response streams token-by-token, not a single blocking response (§1.10)
+- [ ] Streaming reconnects once on drop and resumes from last offset (§9.1)
+- [ ] Tool calls render inline as expandable trace blocks, not just in logs (§9.2)
+- [ ] User messages are editable and resubmitting creates a branch, not an overwrite (§9.3)

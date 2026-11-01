@@ -30,6 +30,11 @@ Built for the GrandOrgue community with gratitude for decades of free organ simu
   - [docs/MIDI_SETUP.md](docs/MIDI_SETUP.md) — step-by-step MIDI configuration
   - [docs/MCP_TOOLS.md](docs/MCP_TOOLS.md) — AI agent tool reference
   - [docs/SAMPLE_SETS.md](docs/SAMPLE_SETS.md) — marketplace, free sample sets, installation guide
+  - [docs/CONFIGURATION.md](docs/CONFIGURATION.md) — env vars, ports, endpoints
+  - [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) — dev setup, gates, packaging
+  - [docs/TOOLS.md](docs/TOOLS.md) — tool table
+  - [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) — common failures
+  - [docs/ONBOARDING.md](docs/ONBOARDING.md) — first-timer path (required)
 - [Ports](#ports)
 - [Tech Stack](#tech-stack)
 - [License](#license)
@@ -102,7 +107,7 @@ cd web_sota && bun run dev
 | Backend | Python 3.12+, FastMCP 3.4, FastAPI, uvicorn |
 | MIDI Bridge | mido + python-rtmidi (virtual ports) |
 | Audio Engine | GrandOrgue C++ (untouched — MIDI control only) |
-| Frontend | React 18, TypeScript, Tailwind CSS, Vite (Bun) |
+| Frontend | React 18, TypeScript, Tailwind CSS, Vite (Bun), Zustand, Lucide, react-router-dom, framer-motion, react-markdown |
 | Linting | Ruff (Python), Biome (TypeScript) |
 | Testing | pytest + Playwright e2e |
 

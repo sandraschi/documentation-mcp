@@ -1,3 +1,13 @@
+---
+title: "Error Handling Standards"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 ﻿# Error Handling Standards
 
 ## Overview
@@ -745,9 +755,12 @@ async def failing_tool(ctx: Context) -> Dict[str, Any]:
 from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
 import os
 
+# Absolute, never cwd-relative (BUG-063, see logging.md)
+LOG_DIR = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"), "<repo-name>", "logs")
+
 
 def setup_production_logging(
-    log_dir: str = "logs",
+    log_dir: str = LOG_DIR,
     max_file_size: int = 10 * 1024 * 1024,  # 10MB
     backup_count: int = 30
 ) -> None:

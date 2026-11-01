@@ -1,7 +1,7 @@
-﻿# PRD: robofang Sovereign Orchestration Hub
+# PRD: robofang Sovereign Orchestration Hub
 
 **Status**: ACTIVE DRAFT (Phase 4)  
-**Owner**: Sandra Schipal  
+**Owner**: Sandra S.  
 **Vision**: A [reductionist and materialist](PHILOSOPHY.md), industrial-grade orchestration layer for a federated fleet of MCP servers, enabling autonomous synthesis, hardware synchronization, and sovereign observability.
 
 ---

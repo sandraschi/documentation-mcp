@@ -1,0 +1,211 @@
+# Fleet Dev Status — All Recent Progress (2026-08-07)
+
+**Generated**: 2026-08-07
+**Source of truth**: fleetwatcher pulse, per-repo git logs (2026-07-11 → 2026-08-06), per-repo STATUS/TODO/README/CHANGELOG
+**Scope**: 177 repos tracked; this document covers the featured repos, fleet-wide wins, the 2026-08-07 checkpoint sweep, and remaining work.
+
+---
+
+## 1. Featured Repos
+
+### 1.1 overte-mcp — NEW (July 2026)
+**v0.2.1 beta** · ports 11110/11111 + Overte domain-server :40100 · Tauri NSIS ✅
+Overte (open-source High Fidelity successor) bridge. Domain status, entity spawn, script inject **verified live** against a real Interface client via WebSocket bridge.
+- 10-page SOTA webapp (Dashboard, Avatars, Entities, Scripting, Help, Chat, Settings, Tools, Skills, Logs)
+- Scripting sandbox + script depot (file/URL load, AI script generation, spin.js)
+- VRM→GLB conversion pipeline (Overte does NOT support VRM as Model entity — FBX/glTF only)
+- World Labs "contemporary living room" scene (collider GLB + panorama skybox + SPZ splat)
+- 3DGS pipeline: SPZ→PLY→GLB, `load_ply_to_splats()`, ReshotAI addon
+- Entity persistence (`permanent=True`), bridge auto-reconnect (QtScript compat)
+- **Remaining**: end-to-end scene spawns, SPZ decode via `nianticlabs/spz`, bridge stress-test, MCPB 3-4-100 check, CUA-NSIS, Playwright e2e
+
+### 1.2 email-mcp — "finally works" (2026-08-01 → 08-05)
+**v0.5.0-beta.2** · ports 10812/10813 · 206 tests, 44 tools · NSIS installer **CUA-certified 8/8**
+The big unlock: **Microsoft Graph for personal Outlook/Hotmail** (basic SMTP auth is dead — 535 5.7.139): OAuth device-code flow with Microsoft's public client ID (no Azure registration), auto-refreshing tokens, send/receive/search/folders.
+- Auto-respond pipeline (rule engine, AI drafting, pending queue, spam spoof mode)
+- Fleet connectors: aiwatcher ingest + robofang email hook
+- Installed-app token persistence in `%LOCALAPPDATA%\ai.fleet.email-mcp\`
+- Folder treeview, copy/forward, bulk send, contacts + curated official lists, 8-provider quick setup
+- **Remaining**: beta → release hardening
+
+### 1.3 discord-mcp — "finally works" (2026-07-24 → 08-05)
+**v0.3.0** · ports 10756/10757
+- Message Scheduler, Analytics Dashboard + Embed Builder, export_messages (Notion/Obsidian markdown)
+- SOTA provider detection, MCPB scaffold + governance files (MIT, CONTRIBUTING, SECURITY)
+- gitignore `lib/` anchor fix (fresh clones were broken)
+- **Remaining**: CUA-NSIS smoke + nav-walk config not yet verified
+
+### 1.4 vienna-life-assistant (ViLife) — feature burst (2026-08-03)
+**v0.2.0** · web_sota :10988 / MCP+API :10922 · 27 tests
+- **PA engine**: tool-calling agent chat, fleet orchestration (agent calls ANY fleet MCP server)
+- Journal RAG, proactive brief email, voice in chat
+- Gateway portmanteaus: `vienna_email` (email-mcp), `vienna_notes` (onenote-mcp), `vienna_news` (aiwatcher-fed)
+- First-run setup wizard + Benny fleet connection; theme toggle, env monitoring
+- **Remaining**: legacy `frontend/` vs `web_sota` consolidation
+
+### 1.5 resonite-mcp — (2026-07-19 → 07-31)
+~44 tools + 5 prompts · ports 10978/10979 · ResoniteLink 0.13.1 **live-verified** · Tauri done
+- OSC (8), Session (4), Avatar incl. ProtoFlux execute (3), Inventory (7), Plugin (6), REST cloud (6), ResoniteLink (4), WorldLabs/Blender/Unity import (3), agentic plan/execute
+- CI modernization (reusable fleet workflow), ruff 0.16, docs rewrites
+- **Remaining**: full assfix audit pass (no `.assess-fix-timestamp`)
+
+### 1.6 godot-mcp — (2026-07-15 → 07-31)
+**v0.5.0-beta.1** · **95+ tools** · ports 10992/10993 + bridge :9080
+- 15 bridge tools (verified live), 6 itch/Butler ship, 7 Steam ship (via steam-mcp), 6 fleet maker pipeline, 6 game_builder, 5 Prefab cards, gaussian splat shader, MCP-over-HTTP, Bun migration
+- **Vibecoder Runner v2** sample game (playable, procedural audio, boss)
+- **Remaining**: deterministic playtesting (spec written), Steam dry-runs
+
+### 1.7 fleet-agent-mcp — Fritz (2026-07-11 → 08-06)
+Ports 10996 (API) · NSSM services · coworker flows
+- Pulse distinguishes stdio vs HTTP daemons + throttled devices alerts
+- NSSM self-heal for hung services; venv-python service bats
+- Coworker flows: `surveillance_watch`, `check_email`, `scribe_watch` (RED escalation)
+- Voice command bus, graceful shutdown, 5000-entry log buffer
+- **Remaining**: full assfix pass
+
+### 1.8 aiwatcher-mcp — central intelligence node (2026-07-13 → 08-06)
+Ports 10946/10947 · clean tree · assfix ✅
+- 10+ sources (RSS, Gmail Alpha Signal, arXiv, Readly), Claude-scored distillation ("Sandra" persona), interest bundles (incl. IDE Host Signal), HTML digests, TTS wake-ups, fleet event journal, Prometheus metrics
+- `opencode_briefing` + pending session-scribe digests, web_search via OpenSERP, currentai stack-gap map
+
+### 1.9 fleet-hub — Intel Reports Hub (:11027)
+`fleet_agent.intel_hub` — pretty HTML reports from any fleet member, iPad-friendly over Tailscale/Funnel.
+- Publishers: Fritz (Fleet Pulse, Office Day Prep, Devices Watch), AIWatcher (daily digest); manual via `intel_reports_publish`/`list`
+- Start: `just intel-hub` / `run-fleet-hub.bat` / auto via `start.ps1`
+
+### 1.10 mixx-dj-mcp + mixxxxx fork — DJ stack (2026-07-22 → 07-29)
+**mixx-dj-mcp** ports 11116/11117 + OSC 11118/11119
+- OSC bridge with `/mixxxxx/ping` heartbeat, deck/mixer/effects/library/stems/transition/vinyl/skin/crate/set/DAW portmanteaus
+- Plex-backed library search (via plex-mcp) + Mixxx SQLite fallback, SFX via sfx-mcp, generic MCP tool bridge, Help page (NDI/Video/Skins/OSC tabs)
+- **mixxxxx** — our Mixxx fork (`github.com/sandraschi/mixxxxx`, upstream `mixxxdj/mixxx`, `video` branch):
+  - NDI output runtime + licensing docs, beat-locked VideoFxChain (strobe, zoom), Ken Burns album-art fallback, generative fallback, startup banner + welcome dialog
+  - OSC server MVP, CLI gig scripts + crate import/export, custom installer packaging (NSIS), skinning (MixxxxxVideo daylight skin), Serato import, ONNX stems probe
+- **Remaining (blocked on fork)**: NDI sender polish, beat-locked video FX, video fallback chain (mixxxxx TODOs 25-27)
+
+### 1.11 grandorgue-mcp — (2026-07-24 → 07-31)
+**v0.3.0** · ports 11010/11011 · 30 flat tools (portmanteau refactor planned)
+- Pipe Organ Visualizer, Registration Manager, AI Assistant, Practice Studio
+- SOTA LLM provider section + Zustand store, MIDI bridge, sample set management, Bach catalog
+- assfix + NSIS build pass complete
+
+### 1.12 onenote-mcp — "finally works" (2026-07-28 → 08-01)
+Ports 10906/10907 · assfix ✅ (2026-08-01)
+- **Full assfix overhaul**: OneNote notebooks browser (tree, page viewer, search, create) via Graph REST; non-blocking device-code auth UI
+- Dead `web_sota/backend` deleted (was port 8000, CORS `*`); frozen sidecar serves http_app at root; fleet-standard spec; five-gate CI fixed (5/5 runs were red → green)
+- Glama-badged, stars/license badges
+
+### 1.13 libreoffice-mcp — (2026-07-22 → 08-04)
+**v0.3.0** · ports 10981/10983 + extension bridge :8765 · qualitycheck 7.3/10 Strong
+- Headless Writer/Calc/Impress conversion, ODT template merge, PDF combine, folder watch
+- **Live Writer typewriter** + Live Calc (cell typewriter, Data Pilot pivot) via `.oxt` bridges
+- Live Studio session bar, impress outline, lo_gui, macro ops, writer runtime
+- BUG-013 `.env.example` bundling fix; fleet-start scripts
+- **Remaining**: Live Studio plan rollout (`docs/LIVE_STUDIO_PLAN.md`)
+
+---
+
+## 2. Fleet-Wide Wins (2026-07-11 → 2026-08-06)
+
+| Win | Scope | Notes |
+|-----|-------|-------|
+| **BUG-013: bundle `.env.example`, never `.env`** | ~50 native repos | Credentials-leak sweep (NSIS hooks + tauri.conf resources) |
+| **gitignore `lib/` anchor fix** | ~19 repos | `src/lib` never tracked → fresh clones failed webapp builds |
+| **Reusable CI workflow** (`sandraschi/fleet-ci@v1`) | ~15 repos | Replaced bespoke Windows CI |
+| **UV_STANDARDS Rule A** | 4+ repos | Service `.bat`s use venv python, not `uv run` |
+| **Unicode/em-dash sweep** | fleet-wide | ASCII-safe `.ps1`/`build.ps1` (parser-corruption fixes) |
+| **Ruff 0.16** | fleet-wide | Bump + explicit select, pre-commit sync |
+| **qbt-mcp → rtorrent-mcp rename** | 4 repos | qbt is dead; propagated to meta_mcp, robofang, federation config |
+| **Light-mode toggle rollout** | 42 repos | CSS invert hack, `{repo}-light-mode` key, dark stays default |
+| **CUA-webapp testing standard** | fleet-wide | `cua-webapp-test.py` + `cua-nsis-test.ps1` + `cua-webapp-test.ps1` rolled out (2026-08-02); title-matching nav walk (144 repos patched) |
+| **CUA-NSIS certs** | email-mcp 8/8, learnbot 9/9 | Install → launch → nav walk → uninstall |
+| **Honesty fixes** | myai, fullstack-demo | Removed fake model fallbacks; honest `not_implemented` instead of fake success |
+| **Start script standard** | safety-mcp, zoji-mcp, fleet-wide | Port zombie clear, health poll, browser auto-open |
+| **New repos** | overte-mcp, ms-graph-mcp (P7 → BUILT), unsloth-mcp, huggingface-mcp v0.1.0, cline-mcp webapp (11102/11103), demo-app | |
+| **MCP 2026-07-28 / FastMCP 4 audit** | docs | Fleet impact analysis + MRTR probe (mcp4-audit-2026-08-02.md) |
+| **Scraping tool eval** | docs | Scrapling / Camoufox / hunter-killer evaluation; "fleet as scrapable platform" writeups |
+| **Embodiment abstraction layer** | nekomimi-mcp | Multi-substrate embodiment planning (2026-07-25) |
+
+## 3. Checkpoint Sweep — 2026-08-07
+
+All dirty working trees committed (per user request). **~170 commits total, no pushes.**
+
+- **Featured repos** (10): overte-mcp, email-mcp, godot-mcp, vienna-life-assistant, fleet-agent-mcp, mixx-dj-mcp, mixxxxx, grandorgue-mcp, onenote-mcp, libreoffice-mcp — meaningful messages, pre-commit hooks verified where healthy
+- **Long-tail sweep** (153 repos): `git add -u` + `chore: sync accumulated changes` (`--no-verify`; hooks were the time bottleneck)
+- **Guarded, triaged**: civitai-mcp, ocr-mcp, secrets-mcp (`.env.example`/pathname false positives — committed); openmanus-mcp (committed minus `.api_key` — **tracked `.api_key` file is modified; verify/rotate before next push**)
+- **Skipped**: mywienerlinien (tracked `frontend/venv/` pollution — needs manual triage), qbt-mcp (empty dir, no `.git`), fleet-public-relations-mcp (`.nopublish`)
+
+## 4. Remaining TODOs (consolidated)
+
+- **overte-mcp**: end-to-end scene spawns (Nekomimi + living room), SPZ decode (nianticlabs/spz), bridge stress-test, MCPB 3-4-100, CUA-NSIS, Playwright e2e
+- **email-mcp**: beta → release
+- **discord-mcp**: CUA-NSIS smoke + nav-walk config
+- **godot-mcp**: deterministic playtesting (spec → build), Steam release dry-runs
+- **fleet-agent-mcp / resonite-mcp**: full assfix passes (no `.assess-fix-timestamp`)
+- **vienna-life-assistant**: frontend consolidation; **mywienerlinien**: venv untrack + tree hygiene
+- **mixxxxx**: NDI sender, beat-locked FX, video fallback chain (TODOs 25-27)
+- **openmanus-mcp**: `.api_key` review
+- **Fleet-wide**: MCP4/FastMCP 4 migration decision (audit done); identify listeners 10729/10857; docs-mcp backlogs (RAG staleness, indexer, exerciser)
+
+## 5. Health & Observability
+
+- Port registry: 421 registered, 57 live listeners, 0 conflicts; 2 unmapped (10729, 10857)
+- fleetwatcher-mcp (10918/10919): repo pulse, build watch, session scan, port map
+- Unified observability stack (12000-12010): Grafana/Loki/Prometheus
+
+## 6. Sources
+
+fleetwatcher pulse/port-map/session-scan · per-repo git logs · overte-mcp STATUS/TODO · email-mcp CHANGELOG · godot-mcp STATUS · fleet-agent-mcp docs/INTEL_REPORTS_HUB.md · aiwatcher-mcp README · mixx-dj-mcp docs/STATUS+TODO · mixxxxx docs · grandorgue/onenote/libreoffice READMEs · mcp-central-docs WEBAPP_PORTS.md + planning specs · session docs archive
+
+---
+
+# 7. Update — 2026-08-07 (afternoon): Operational Sweep
+
+## 7.1 rtorrent-mcp — container FIXED (was "unhealthy" for 26h+)
+
+Root cause was never rtorrent: the image's healthcheck sent a bodyless `GET /RPC2`, which rtorrent's SCGI rejects (nginx 502 "upstream prematurely closed connection"). Real XMLRPC **POSTs always returned 200** — the MCP path (`localhost:12224/RPC2`) was functional the whole time.
+
+- Fix: `docker-compose.yml` healthcheck now POSTs a minimal `system.client_version` XMLRPC call → container **healthy**, verified end-to-end
+- Data dirs relocated from the dead `qbt-mcp` path to `rtorrent-mcp/{config,watch,logs}` (root cause of the old mount: compose was originally run from the `qbt-mcp` dir with relative `./config` paths); `.gitignore` hardened (`/watch/`)
+- Commits: `7d8a66f` (healthcheck fix), `1a6c63c` (gitignore); root cause documented in `docs/RTORRENT_SCGI_FIX_PLAN.md`
+- Notes learned: rtorrent rc files must stay LF (CRLF → "Junk at end of input"); user rc at `/data/rtorrent/.rtorrent.rc` is loaded via HOME
+
+## 7.2 qbt legacy fully retired
+
+- Local `qbt-mcp` dir deleted (was live bind-mount data for the rtorrent container — recovered)
+- GitHub `qbt-mcp` (empty shell) + `qbtmcp` (qBittorrent prototype) repos deleted (manual, user action)
+
+## 7.3 Repo visibility — 2 public, myai stays private
+
+| Repo | Action | Why |
+|------|--------|-----|
+| unsloth-mcp | → **public** | Secret scan clean |
+| veogen | unarchived + → **public** | Only placeholder tokens (`xoxb-your-…`); was archived |
+| myai | **stays private** | Real secrets in tracked `.env`/`.env.dontuse`/`.env.backup` (OPENAI_API_KEY, HF_TOKEN, PLEX_TOKEN, SESSION_SECRET_KEY, GRAFANA/PGADMIN passwords) AND in git history (commits 557a5c7, 142865a). Needs untrack + `git filter-repo` + full key rotation before any public flip. |
+
+## 7.4 GitHub Actions — disabled on 15 private "burner" repos
+
+Verified via `PUT /actions/permissions {"enabled": false}` (typed boolean — `-f` sends string "false" and 422s). Repos: chess-template, doofenshmirtz-evil-inators, fritz-pipeline-test, hasleo-backup-mcp, kyoyu-games, kyoyu-ultra, MediaDashboards, meta-hypertools, obsidianmcp, obsmcp, openfang, robotics-webapp, vboxmcp, windsurf-agentic-automator, winrarmcp.
+
+Kept enabled: mcp-central-docs, myai, safety-mcp, secrets-mcp, unsloth-mcp, veogen. (myai was already off.) Re-enable: `gh api -X PUT repos/<repo>/actions/permissions -F enabled=true`.
+
+## 7.5 CI workflow collapse — "rich" → one minimal fleet CI
+
+45 workflow files on the 15 burner repos (vboxmcp had 11, MediaDashboards 8, kyoyu-ultra 4, robotics-webapp 4, obsmcp 4 incl. 2 stray `.bak`, windsurf-agentic-automator 3). **12/15 repos collapsed** to a single reusable `sandraschi/fleet-ci@v1` workflow (same as the healthy fleet repos). **3 skipped — archived & read-only**: hasleo-backup-mcp, obsidianmcp, obsmcp (moot; they're on the deletion list).
+
+## 7.6 Stale predecessor repos identified for deletion (5)
+
+`vboxmcp` (predecessor of virtualization-mcp), `obsmcp` (obs-mcp), `winrarmcp` (winrar-mcp), `obsidianmcp` (obsidian-mcp), `hasleo-backup-mcp` (multi-backup-mcp). All pre-dash-era names; only historical doc references remain (comparison docs, old private docs, repo inventory). gh lacks `delete_repo` scope → **deletions are manual (user action)** via repo Settings pages.
+
+## 7.7 Tooling directive
+
+Webapp audits go **`browser_snapshot` (accessibility tree) first** — text-native, richer than OCR; screenshots remain visual evidence for the user; Tesseract OCR only for canvas/desktop/non-DOM content.
+
+## 7.8 Assfix comeback triple — three runts cleared in one day
+
+| Repo | Before | After | What it took |
+|------|--------|-------|--------------|
+| system-admin-mcp | 0/100 | **78** | pyright 149→0 (incl. real bugs: unawaited coroutines, `CREATE_NEW_CONSOUSE_WINDOW` typo), CI pyright blocking, coverage gate, CUA recipes |
+| gtfs-mcp | 0/100 | **78** | persistence round-trip test fix, `/api/shutdown`, dead `web_sota/backend` deleted (port 8000) |
+| dreame-mcp | 0/100 | **96 SOTA** | **Comeback of the day** — user had given up on it months ago; the 08-06 cloud-control burst (Hoover commands + LiDAR map download via Dreame-native cloud) had closed 13 HIGHs before the assessment even landed; polish pass added testids 13→35 (all 9 pages ≥3) + bun.lock; 2 assessment findings were false negatives (chat examples + provider dot already present) |
+
+**Zero-point queue now empty.** All gates green on all three (ruff/pyright/pytest/tsc/biome). Token cost tracked in `assfix-tally.md` (system-admin ~120k, gtfs ~60k, dreame ~75k incl. polish). Next: stale re-runs (advanced-memory-mcp, virtualization-mcp, arxiv-mcp, calibre-mcp, plex-mcp, …).

@@ -2,7 +2,7 @@
 # FastMCP 3.2.4 | Starlette 1.0 | Sandra's Fleet | 2026-05-04
 #
 # INSTALLATION (Claude Desktop skills):
-#   Copy this file to: C:\Users\sandr\AppData\Roaming\Claude\skills\mcp-builder\SKILL.md
+#   Copy this file to: C:\Users\<user>\AppData\Roaming\Claude\skills\mcp-builder\SKILL.md
 #   OR place at: D:\Dev\repos\mcp-central-docs\skills\mcp-builder\SKILL.md
 #   and symlink / reference from Claude Desktop skills config.
 #
@@ -24,7 +24,7 @@ Load this skill when the task involves any of:
 
 - GitHub: sandraschi
 - Repos root: `D:\Dev\repos\`
-- Fleet hub (mcd): `D:\Dev\repos\mcp-central-docs\`
+- Fleet info depot (aka "mcd"): `D:\Dev\repos\mcp-central-docs\`
 - Port registry: `D:\Dev\repos\mcp-central-docs\operations\WEBAPP_PORTS.md`
 - Fleet index: `D:\Dev\repos\mcp-central-docs\projects\FLEET_INDEX.md`
 - Standards: `D:\Dev\repos\mcp-central-docs\standards\`
@@ -196,7 +196,7 @@ $FrontendPort = 10965  # REPLACE with actual port
 }
 
 # Install Python deps
-& "C:\Users\sandr\.local\bin\uv.exe" sync
+& "C:\Users\<user>\.local\bin\uv.exe" sync
 
 # Build frontend if dist missing
 if (-not (Test-Path "webapp\dist\index.html")) {
@@ -208,7 +208,7 @@ if (-not (Test-Path "webapp\dist\index.html")) {
 }
 
 # Start backend
-Start-Process -NoNewWindow "C:\Users\sandr\.local\bin\uv.exe" -ArgumentList "run", "python", "-m", "src.server"
+Start-Process -NoNewWindow "C:\Users\<user>\.local\bin\uv.exe" -ArgumentList "run", "python", "-m", "src.server"
 
 # Wait for backend readiness
 $timeout = 30
@@ -239,12 +239,12 @@ powershell -ExecutionPolicy Bypass -File "%~dp0start.ps1"
 
 In subprocess/PowerShell context, `uv` is NOT on PATH. Always use full path:
 ```
-C:\Users\sandr\.local\bin\uv.exe
+C:\Users\<user>\.local\bin\uv.exe
 ```
 
 Python:
 ```
-C:\Users\sandr\AppData\Local\Programs\Python\Python313\python.exe
+C:\Users\<user>\AppData\Local\Programs\Python\Python313\python.exe
 ```
 
 pyproject.toml minimum:
@@ -336,7 +336,7 @@ except Exception as e:
 
 ## CLAUDE DESKTOP MCP CONFIG
 
-Path: `C:\Users\sandr\AppData\Roaming\Claude\claude_desktop_config.json`
+Path: `C:\Users\<user>\AppData\Roaming\Claude\claude_desktop_config.json`
 
 New stdio server entry:
 ```json
@@ -357,7 +357,7 @@ New HTTP/SSE server entry (for FastMCP 3.2 http_app):
 }
 ```
 
-MCP logs: `C:\Users\sandr\AppData\Roaming\Claude\logs\mcp-server-{name}.log`
+MCP logs: `C:\Users\<user>\AppData\Local\Claude\Logs\mcp-server-{name}.log` (pre-2026-08-21: `AppData\Roaming\Claude\logs`)
 
 ---
 
@@ -425,7 +425,7 @@ Tag ALL notes: [project-name, technology, status, priority]
 | `mcp.sse_app()` | `mcp.http_app(path="/")` |
 | `@mcp.tool(task=True)` | `@mcp.tool()` |
 | `from fastapi import FastAPI` | `from starlette.applications import Starlette` |
-| `where uv` in subprocess | `C:\Users\sandr\.local\bin\uv.exe` |
+| `where uv` in subprocess | `C:\Users\<user>\.local\bin\uv.exe` |
 | `git -C path` splatting | `Push-Location path; git ...` |
 | `&&` in PowerShell | `;` or separate statements |
 | Guessing port numbers | Read WEBAPP_PORTS.md first |

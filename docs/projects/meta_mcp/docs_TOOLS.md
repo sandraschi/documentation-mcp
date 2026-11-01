@@ -20,6 +20,7 @@ Meta MCP exposes **many tools** grouped into **suites**. Each suite is registere
 | [Repository packing](tools/repo-packing.md) | Pack repos for LLMs |
 | [Repository inspiration](tools/repo-inspiration.md) | Public GitHub study (`inspire_repo_*`; adapted from [Repomuse](https://www.npmjs.com/package/repomuse)) |
 | [Meta / fleet dev](tools/meta-dev.md) | Fleet health, diffs, `MASTER_*` snippets (`meta_dev`) |
+| [Demo capture](tools/demo-capture.md) | Playwright walkthrough + Remotion MP4 (`demo_ops`) |
 
 **Also:** **scheduler** and **heartbeat** suites (scheduled tasks and fleet pulse)--see tool list via **`help`** or `just tools`.
 

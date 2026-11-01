@@ -58,11 +58,11 @@ scope_measure(operation="all", channel_id="A")
 
 ## Cursor MCP config
 
-Add to `C:\Users\sandr\.cursor\mcp.json`:
+Add to `C:\Users\<user>\.cursor\mcp.json`:
 
 ```json
 "oscilloscope-mcp": {
-  "command": "C:/Users/sandr/.local/bin/uv.exe",
+  "command": "C:/Users/<user>/.local/bin/uv.exe",
   "args": [
     "--directory",
     "D:/Dev/repos/oscilloscope-mcp",

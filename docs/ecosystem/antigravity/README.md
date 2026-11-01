@@ -48,6 +48,19 @@ Despite having no public GitHub repo, a surprisingly active third-party ecosyste
 
 See **[THIRD_PARTY_ECOSYSTEM.md](THIRD_PARTY_ECOSYSTEM.md)** for the full directory (10+ projects, including cockpit-tools at 7.9k stars).
 
+## Fleet integration (resolved 2026-08-29)
+
+The "Antigravity fleet" concept referenced elsewhere in fleet tooling (e.g. memops `adn_system`) is **not** a separate mystery integration — it's **[agy-fleet-mcp](../../projects/agy-fleet-mcp/README.md)** (v0.1.0, Beta, port 10825): a config-bridge MCP that syncs the Cursor MCP fleet into Antigravity CLI's Gemini config paths (`~/.gemini/config/mcp_config.json`, `~/.gemini/antigravity-cli/`, `~/.gemini/antigravity/`), diffs configs, validates commands, and enforces Antigravity's ~50-tool budget. Direction matters: **agy-fleet-mcp** pushes fleet config *into* Antigravity; the separate **agy-mcp** (PyPI, unbuilt stub at `projects/agy-mcp`) would go the other direction — wrapping the `agy` CLI itself as MCP tools. Don't confuse the two when grepping.
+
+## Aug 2026 update (not yet reflected above)
+
+Since this doc's pricing table was last touched (Jun 2026), two further Antigravity announcements landed:
+- **Custom Agents** — Aug 12, 2026
+- **IDE Extensions** + Gemini Enterprise integration — Aug 20, 2026
+- **Gemini 3.6 Flash** (Jul 21) then **3.7 Flash** (Aug 13) as the underlying model — check current version before benchmarking, Google is iterating roughly monthly.
+
+Not yet assessed for fleet relevance — flagging so the pricing/appeal verdict above isn't read as current without a re-check.
+
 ## Technical Deep Dive
 For comprehensive hardware integration and Google AI universe details, refer to the specialized documentation:
 - **[Google Ecosystem: Antigravity](../../google-ecosystem/antigravity/README.md)**

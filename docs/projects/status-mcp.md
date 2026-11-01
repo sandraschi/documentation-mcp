@@ -44,7 +44,7 @@ pulls the latest advanced-memory notes.
 
 ## Key Decisions
 
-1. **Filesystem, not DB** — reads markdown from `C:\Users\sandr\.advanced-memory\vault`
+1. **Filesystem, not DB** — reads markdown from `C:\Users\<user>\.advanced-memory\vault`
    directly; never opens `memory.db`. Immune to the SQLite WAL/lock contention between IDEs.
 2. **Port 10765** — fleet range; 8765 collides with Magenta RT host bridge.
 3. **Secret path as auth floor** — claude.ai connector UI may not accept static bearer

@@ -1,3 +1,13 @@
+---
+title: "PowerShell Scripting Standards (SOTA)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # PowerShell Scripting Standards (SOTA)
 
 ## 1. Error Handling (MANDATORY)

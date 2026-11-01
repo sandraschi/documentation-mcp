@@ -36,6 +36,7 @@
 | **meta_mcp** | Fleet orchestrator, probes, repo inspiration | `projects/meta_mcp/` | 10718/10719 | 🟢 | `update_doc_repository` not built | Sync from repo CHANGELOG; ports verified |
 | **fleet-agent-mcp** | Self-evolving agent; Fritz coworker | `projects/fleet-agent-mcp.md` | 10996/10997, Intel 11027 | 🟡 | Single `.md` not folder | Folder + STATUS; link fritz-coworker |
 | **fritz-coworker** | Poor Man's Viktor; pulses, Intel Hub | `projects/fritz-coworker/` | 11027 | 🟡 | Pilot vs prod unclear in index | June 2026 pilot status; device watch flows |
+| **sandrafleetbot** | Zero-pay GrokBot: fleet agent, board+inbox, Discord layer, packs | `projects/sandrafleetbot/` | n/a (packs) | 🟡 | Spec ratified; zero code | P0 brain tier first; P8 packaging |
 | **federation-mcp** | MCP mesh hub; encrypted peer links | `projects/federation-mcp/` | 10856/10857 | 🟡 | Verify vs `mcp-federation-hub` repo | PEERS_AND_MESH summary; 3.2+ |
 | **robotics-mcp** | Physical + virtual robotics composite | `projects/robotics-mcp/` | (composite) | 🟡 | "XMas 2025" hardware note aged | Yahboom/teleoperator cross-links; 3.2+ |
 | **yahboom-mcp** | ROS2 Pi5 embodied baseline | `projects/yahboom-mcp/` | 10892/10893 | 🟡 | — | Align [YAHBOOM_ROBOTICS_STANDARD](../standards/YAHBOOM_ROBOTICS_STANDARD.md) |
@@ -72,7 +73,7 @@
 | **autohotkey-mcp** | Scriptlets MCP | `projects/autohotkey-mcp/` | 10747 | 🟡 | 3.2+ |
 | **godot-mcp** | Indie game ship | `projects/godot-mcp/` | +9080 bridge | 🟡 | itch/steam cross-links |
 | **steam-mcp** | Steam portmanteau | `projects/steam-mcp/` | 11020/11021 | 🟡 | — |
-| **games-app** | Tauri games + AI engines | `projects/games-app/` | (see repo) | 🟡 | 3.2+ badge |
+| **ai-games-collection** | Tauri games + AI engines | `projects/ai-games-collection/` | (see repo) | 🟡 | 3.2+ badge |
 | **mcp-studio** | Mission control UI | `projects/mcp-studio/` | — | 🟡 | vs meta_mcp roles |
 | **openclaw** | Personal assistant gateway | `projects/openclaw/` | — | 🟡 | Feb 2026 security audit ref |
 | **agy-fleet-mcp** | Antigravity config sync | `projects/agy-fleet-mcp/` | 10825 | 🟡 | Tool budget ~50 |
@@ -87,7 +88,7 @@
 
 ## P2 — Light touch (header + links)
 
-Stable production MCPs with infrequent churn: **obs-mcp**, **nest-protect-mcp**, **nest-***, **notion-mcp**, **obsidian-mcp**, **xkcd-mcp**, **mywienerlinien**, **veogen**, **myai**, **dj-media-hub**, **ai-producer-hub**, **getbooks-mcp** (planned banner only).
+Stable production MCPs with infrequent churn: **obs-mcp**, **nest-protect-mcp**, **nest-***, **notion-mcp**, **obsidian-mcp**, **xkcd-mcp**, **publictransport-mcp**, **veogen**, **myai**, **dj-media-hub**, **ai-producer-hub**, **getbooks-mcp** (planned banner only).
 
 **Action:** `Last Updated: 2026-06-17`, ports, 3.2+ if cited, remove any DXT install blocks.
 

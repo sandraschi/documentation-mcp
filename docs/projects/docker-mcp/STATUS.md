@@ -1,15 +1,17 @@
 # Docker MCP — fleet status
 
-**Last reviewed**: 2026-06-24  
-**Upstream version**: 3.3.1-beta  
+**Last reviewed**: 2026-10-03  
+**Upstream version**: 3.5.0  
 **Repo**: `D:\Dev\repos\docker-mcp`
 
 ## Compliance snapshot
 
 | Standard | Status |
 |----------|--------|
-| FastMCP 3.3 | OK |
+| FastMCP 3.5 | OK |
 | WEBAPP_STANDARDS (/logs, settings LLM glom, help tabs) | OK |
+| Tools hub (`/tools` + schema runner) | OK |
+| Dashboard hero CTA + quick actions | OK |
 | MCPB root manifest.json v0.2 | OK |
 | Tauri native build (Windows NSIS) | OK (3.3.1-beta, CUA-certified) |
 | README fleet shape | OK |
@@ -17,9 +19,13 @@
 | Connection health store (zustand) | OK |
 | Ctrl+Scroll zoom | OK |
 | CUA smoke test (9 phases) | OK (pywinauto + OCR + nav click-through) |
-| Docker triple kill recovery | OK (POST /api/docker/recover) |
+| Docker triple kill recovery | OK (POST /api/docker/recover; dashboard Recover Docker) |
 | Diagnostics endpoint | OK (GET /api/v1/diagnostics) |
 | data-testid on connection status | OK |
+| MCP Streamable HTTP live (`POST /mcp`, 43 tools) | OK 2026-10-03 |
+| Reports page + junk endpoint (MD/JSON export) | OK 2026-10-03 |
+| Compose files preload + fleet-root setting | OK 2026-10-03 |
+| List/card + export on all list pages | OK 2026-10-03 |
 
 ## Ports
 

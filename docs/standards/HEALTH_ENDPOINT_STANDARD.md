@@ -1,3 +1,13 @@
+---
+title: "HEALTH_ENDPOINT_STANDARD — version-visible /health"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-07-17
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # HEALTH_ENDPOINT_STANDARD — version-visible /health
 
 **Status**: Fleet standard as of 2026-07-17. Roll out during next assfix pass.
@@ -75,3 +85,51 @@ instance; restart the service (elevated for NSSM/SYSTEM services).
   git_sha freshness after deploys, not just status:ok.
 - See also: fastmcp-3.2-startup-probes.md, INFRASTRUCTURE_RELIABILITY.md,
   START_SCRIPT_STANDARD.md.
+
+## Observed non-compliance (2026-09-25)
+
+Fixing Tauri backend.rs health-check probes (see `TAURI_PRODUCTION_PITFALLS.md`
+#15) surfaced real drift from this standard while checking each repo's actual
+route: `advanced-memory-mcp` serves no `/health` or `/api/health` at all -
+only `/api/v1/system/status`. `aiwatcher-mcp` matches (`/health`).
+`arxiv-mcp` and `tvtropes-mcp` match the secondary form (`/api/health`).
+One data point, not a full audit - but it's the required path, checked live,
+found wrong in the first repo checked. Worth a real fleet-wide grep before
+assuming compliance elsewhere; not done as part of this pass, since it's a
+separate project from the Tauri fix.
+
+**Path standardization is flagged as a longer-term fleet project** (low
+urgency, not blocking anything today): decide the one required path
+(`/health` per this doc's own title, or `/api/health` to match the FastAPI
+routers most repos already prefix with `/api`), then either migrate the
+outliers or add the missing alias everywhere. Until that happens, anything
+reading fleet /health data (Tauri probes, watchdogs, monitoring) has to know
+each repo's actual path rather than relying on this standard being followed.
+
+## Domain-specific status fields (beyond the generic schema)
+
+The required fields above (status/version/uptime/etc.) answer "is the process
+alive and which build." They don't answer the more useful operational
+question for services with real background state: **is the thing this
+service actually does working, and how far along is it right now.**
+
+Where a repo has cheap, already-known operational state, its `/health` (or a
+richer `/status` alongside it) SHOULD surface it - examples:
+
+- A sync/indexing service (advanced-memory-mcp's file watcher, a RAG
+  reindex): percent complete or `syncing: true/false` plus a queue depth,
+  if that number is already being tracked for logging/progress purposes.
+- A media library service (plex-mcp and similar): item/file count already
+  cached from the last scan, last-scan timestamp.
+- Anything with a background task queue: pending/in-flight/failed counts,
+  if already counted somewhere for logging.
+
+**The constraint that makes this safe to mandate**: only surface numbers
+that are already elicitable cheaply - already being logged, already held in
+an in-memory counter, or a single indexed DB query. A health endpoint that
+triggers an expensive live computation (a full table scan, a live external
+API call, a fresh directory walk) to answer a health check defeats the
+purpose - it should stay fast enough to poll frequently without becoming a
+load source itself. If a real number isn't already sitting somewhere cheap
+to read, the honest answer is to leave the field out, not to compute it live
+just to have something to show.

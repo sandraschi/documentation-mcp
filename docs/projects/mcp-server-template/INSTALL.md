@@ -44,10 +44,12 @@ If you prefer not to use `just`:
 4. Start the server:
    ```powershell
    # stdio mode (for MCP clients like Claude Desktop)
-   uv run python -m mcp_server_template.server
+   uv run python -m example_mcp_server
 
    # HTTP mode (for web dashboard)
-   uv run uvicorn mcp_server_template.server:app --port 
+   # The example server ships stdio only. New repos: add the fleet transport
+   # module (uvicorn on mcp.http_app() per CORS_STANDARD.md — reference:
+   # onenote-mcp/src/onenote_mcp/transport.py) during scaffolding.
    ```
 5. Open `http://localhost:` or the frontend URL.
 

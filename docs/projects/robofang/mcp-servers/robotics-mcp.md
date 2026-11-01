@@ -934,7 +934,7 @@ python -c "from robotics_mcp.server import RoboticsMCP; RoboticsMCP(); print('SU
 **Server won't start:**
 - Check Python version: `python --version` (requires 3.10+)
 - Verify dependencies: `pip install -e ".[dev]"`
-- Check logs: `C:\Users\sandr\AppData\Roaming\Cursor\logs\`
+- Check logs: `C:\Users\<user>\AppData\Roaming\Cursor\logs\`
 
 **Tools not appearing:**
 - Verify MCP server is enabled in Cursor IDE settings

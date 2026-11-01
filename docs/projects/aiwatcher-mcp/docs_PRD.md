@@ -3,7 +3,7 @@
 **Status:** ACTIVE  
 **Package version:** **0.1.8** (`pyproject.toml`, `src/aiwatcher_mcp/_version.py`)  
 **Product milestone:** **v0.2 bundle** (interest bundles, OPML, feed discovery, bundle health, dedup, feed auto-heal) + **v0.2.2 ops** (Fritz intel, Intel Hub publish, fleet ingest, pipeline liveness)  
-**Owner:** Sandra Schipal  
+**Owner:** Sandra S.  
 **Ports:** **10946** (HTTP: REST + MCP at `/mcp`) / **10947** (Vite frontend)
 
 ---

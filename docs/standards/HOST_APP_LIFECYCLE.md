@@ -416,6 +416,79 @@ The card MUST:
 
 ---
 
-**Owner:** Sandra Schipal
+**Owner:** Sandra S.
 **Last Updated:** 2026-02-26
 **Reference Implementation:** davinci-resolve-mcp
+
+## V. Webapp UI: Ensure-Before-Open (MANDATORY for all fleet webapps)
+
+**Established**: 2026-08-05 — fleet-wide antipattern audit. Several webapps
+render buttons/links that navigate to a URL/port where nothing is running,
+instead of first starting the service ("dead link to nothing").
+
+### The pattern
+
+A UI action that reaches a local service MUST NOT navigate blind. It must
+reflect the four states of Section II:
+
+| UI state | Render | Action |
+|----------|--------|--------|
+| 
+eady | "Open" link | Plain href/navigate |
+| installed_stopped | **Start** button | Call POST /api/launch/{service} (or the host MCP's launch_host_app), poll the health endpoint, navigate only after 200 |
+| 
+unning_unreachable | "Wait / retry" | Spinner + retry; no link |
+| 
+ot_installed | Download link | Link to vendor download page; never a dead port |
+
+### Rules
+
+1. **Apps Hub cards** (fleet discovery): render the link ONLY for probed-live
+   apps. Offline apps get a Start button (launch -> poll health -> navigate)
+   or an inert dimmed card — never a clickable dead href.
+   Reference impls: FleetCard.tsx template family (avatar/alexa/blender),
+   irtualization-mcp apps.tsx, worldlabs-mcp spark-viewer Overte button
+   (full chain: start overte-mcp -> domain-server -> interface -> spawn).
+2. **Own-backend links in Help/Settings pages**: never hardcode
+   http://localhost:{backend} hrefs that dead-end when the backend is down.
+   Gate on the app's backend health (the store's ackend.ok); when down,
+   render "Backend offline - start the bridge first" instead of the link.
+   Prefer relative URLs via the Vite proxy where the SPA itself is the host.
+3. **Launch must be automatable**: the backend must expose
+   POST /api/launch/{service} (or per-service ensure helpers like
+   dcc_launcher.ensure_* in worldlabs-mcp) so the UI's Start button works.
+   The launch endpoint returns immediately; the UI polls the service health
+   with a bounded retry (30 x 1s) before navigating.
+4. **Never navigate on simulated**: if the backend returns a labeled
+   simulated result (e.g. overte-mcp without its bridge), surface it as a
+   warning; do not pretend the service is live.
+
+### Audit findings (2026-08-05 fleet scan)
+
+Compliant (probe-gated): FleetCard template family (avatar-mcp, alexa-mcp,
+blender-mcp), virtualization-mcp apps hub, aiwatcher-mcp AppsPage,
+advanced-memory-mcp Apps, worldlabs-mcp (Apps hub gated; Overte export
+auto-starts the chain).
+
+Offenders - own-backend links not gated on health (fix per Rule 2):
+- myai (web_sota/src/pages/apps.tsx, src/webapp ProjectsHub.tsx)
+- publictransport-mcp (App.tsx, LinesPage.tsx -> :3079)
+- ai-games-collection (App.tsx -> :10987)
+- dreame-mcp (Help.tsx -> :10894/:10895)
+- yahboom-mcp (Help.tsx, Dashboard.tsx -> :10892)
+- home-assistant-mcp (Help.tsx -> :10796/:10797)
+- opencode-cli-mcp (Help.tsx -> :10951)
+
+### Verification
+
+`powershell
+# Find remaining raw localhost hrefs in fleet webapps:
+rg -n 'href=.*http://localhost:' D:\Dev\repos -g '*.tsx' -g '!**/node_modules/**' -g '!**/dist/**'
+# Each hit must be behind a liveness check or a Start button.
+`
+
+---
+
+**Owner:** Sandra S.
+**Last Updated:** 2026-08-05
+**Reference Implementation:** davinci-resolve-mcp; worldlabs-mcp (step-in chain)

@@ -1,3 +1,13 @@
+---
+title: "Justfile Recipe Patterns (Fleet Standard)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Justfile Recipe Patterns (Fleet Standard)
 
 Every MCP server repo SHOULD have repo-specific `just` recipes beyond the standard `lint`/`test`/`serve` ones. These give the developer (or agent) one-shot access to the server's core functionality without crafting MCP tool calls or opening the webapp.
@@ -109,9 +119,9 @@ if (-not (Test-Path manifest.json)) {
         elseif (Test-Path "src/$pkg/server.py") { "src/$pkg/server.py" } `
         else { "src/$pkg/main.py" }
     $author = if ($proj -match '(?m)authors = \[{ name = "(.*)"') { $matches[1] } else { "sandraschi" }
-    $args = if ($entry -eq "run_server.py") { '["run","--directory","${PWD}","run_server.py"]' } `
-        else { '["run","--directory","${PWD}","python","-m","' + $pkg + '"]' }
-    $json = '{"manifest_version":"0.2","name":"' + $name + '","version":"' + $ver + '","description":"' + $desc + '","author":{"name":"' + $author + '"},"server":{"type":"python","entry_point":"' + $entry + '","mcp_config":{"command":"uv","args":' + $args + ',"env":{"PYTHONPATH":"${PWD}/src","PYTHONUNBUFFERED":"1"}}}}'
+    $args = if ($entry -eq "run_server.py") { '["run","--directory","${__dirname}","run_server.py"]' } `
+        else { '["run","--directory","${__dirname}","python","-m","' + $pkg + '"]' }
+    $json = '{"manifest_version":"0.2","name":"' + $name + '","version":"' + $ver + '","description":"' + $desc + '","author":{"name":"' + $author + '"},"server":{"type":"python","entry_point":"' + $entry + '","mcp_config":{"command":"uv","args":' + $args + ',"env":{"PYTHONPATH":"${__dirname}/src","PYTHONUNBUFFERED":"1"}}}}'
     $json | Set-Content manifest.json -Encoding utf8
     Write-Host "  Generated manifest.json" -ForegroundColor Yellow
 }

@@ -1,10 +1,28 @@
 # MCP Development Patterns
 
+**Private — Sandra S. + collaborators only. Not for public distribution.**
+
 **Reusable patterns and best practices for MCP server development**
 
 ---
 
-## ðŸ“š Patterns
+## 📚 Patterns
+
+### **Repo Rustification & Conversion SOP (`repconv`)** NEW
+
+[REPCONV_SOP.md](REPCONV_SOP.md)
+
+**Low-token 6-phase SOP for converting legacy Python/FastMCP + React/Vite/Tailwind repos to the Pure-Rust ArtCraft 4-Crate Architecture (`<domain>-core`, `<domain>-store`, `rust-<domain>-mcp`, `<domain>-app`).** Enforces the **Token-Miser Rule**: never read legacy frontend/build cruft, clone the **70% reusable fleet kernel** (`bridge.rs`, `llm.rs`, `vault.rs`, `registry.rs`, `egui` shell, `justfile`, `installer.nsi`) from `rust-devices-mcp`, optionally pre-digest Python wire specs via local Ollama `gemma4:12b` (`7.47 GB`, zero VRAM scrubbing on RTX 4090), and write only the 30% domain protocol drivers and `egui` tabs. Links to [FLEET_CONVERSION_STANDARD.md](../standards/rust-artcraft/FLEET_CONVERSION_STANDARD.md) and [FLEET_TRIAGE_AND_PYPI_TRANSPILATION.md](../standards/rust-artcraft/FLEET_TRIAGE_AND_PYPI_TRANSPILATION.md).
+
+---
+
+### **Agentic architecting in 2026 (field guide)** NEW
+
+[AGENTIC_ARCHITECTING_2026.md](AGENTIC_ARCHITECTING_2026.md)
+
+**External landscape, not fleet-internal rules:** cost-tier selection (free/local vs. cheap vs. frontier), honest 2026 IDE comparison (Cursor/Claude Code/Google Antigravity/OpenCode/Cline -- Windsurf's talent left for Antigravity, Cognition kept the brand, and OpenCode is the FOSS terminal-agent leader with 140k+ stars), running real coding models on a single RTX 4090, the fast paid-model pricing/release cadence, the Chinese open-weight challenge (DeepSeek/Qwen/Kimi/GLM now trading blows with the closed frontier), the MoE/agentic architecture convergence, an honest "vibe coding" reality check (most devs don't, and the debugging-skill risk is real), license-aware feature-cribbing from other repos (GitHub and Gitee), and getting a repo found on GitHub search page one. Dated and sourced -- re-verify before citing as current after more than a few months.
+
+---
 
 ### **LLM manifest: `llms.txt` + `llms-full.txt`** NEW
 
@@ -34,7 +52,15 @@
 
 ### **Intel Reports Hub (fleet-wide HTML reports)** NEW
 
-[intel-reports-hub.md](intel-reports-hub.md) — shared HTML reports on port **11027**; Fritz + AIWatcher wired; iPad via Tailscale.
+[intel-reports-hub.md](intel-reports-hub.md) -- shared HTML reports on port **11027**; Fritz + AIWatcher wired; iPad via Tailscale.
+
+---
+
+### **Discord Fleet Bot & Low-Profile PR Pattern** NEW
+
+[DISCORD_FLEET_BOT.md](DISCORD_FLEET_BOT.md)
+
+Inbound signal surveillance and humble developer advocacy across 200+ fleet repos. Connects `discord-mcp` (10756) and `fleet-public-relations-mcp` (11094): detects user troubleshooting questions in community channels (Mixxx, Blender, KiCad, ROS, Cursor), evaluates competency via local Ollama LLM (`qwen3:14b`), escalates bugs to `admiral-mcp` (11089), drafts hype-free value pointers via `pr_tone_lint`, and dispatches human-approved replies via `pr_discord_handoff`.
 
 ---
 
@@ -176,8 +202,8 @@ Perfect for:
 - âš ï¸ **NEVER use `--no-cache` for code changes!** (wastes 15 min downloading internet)
 
 **Time Savings:**
-- Old: 100 changes Ã— 5 min = 8.3 hours wasted
-- New: 100 changes Ã— 1 sec = 1.7 minutes
+- Old: 100 changes Ã-- 5 min = 8.3 hours wasted
+- New: 100 changes Ã-- 1 sec = 1.7 minutes
 - **Saves 8+ hours per project!**
 
 **Patterns Covered:**
@@ -186,6 +212,14 @@ Perfect for:
 3. BuildKit Cache Mounts
 4. Dev/Prod Compose Separation
 5. .dockerignore Best Practices
+
+---
+
+### **AI Subscription Rotation Optimizer** NEW
+
+[AI_SUBSCRIPTION_ROTATION_OPTIMIZER.md](AI_SUBSCRIPTION_ROTATION_OPTIMIZER.md)
+
+**Dev streamlining / how to save money vibecoding.** Round-robin multiple $20/mo AI coding subscriptions (Claude Code, opencode, agy, Cursor) instead of one $200/mo plan, timing handover via 5-hour window / weekly quota % / context remaining. Covers layering in cheap open-weight models (peak/off-peak pricing windows, contributor-tier data-for-discount trades) and a checklist before adding a model to rotation.
 
 ---
 
@@ -243,6 +277,21 @@ Perfect for:
 
 **Reference Implementation:**
 - robotics-webapp: Full React + FastAPI integration with 7+ MCP servers
+
+---
+
+### **MCP Tool Harness (Webapp)** NEW
+
+[MCP_TOOL_HARNESS_WEBAPP.md](MCP_TOOL_HARNESS_WEBAPP.md)
+
+**Two-layer SOTA webapp:** domain browse pages + schema-driven MCP tool harness (catalog, runner, explainer, dashboard CTAs). Same tools agents call; no per-tool custom pages for the full catalog.
+
+Perfect for:
+- Control-plane MCPs (docker, database, virtualization, fileops)
+- Meeting WEBAPP_SOTA Tools Hub without UI drift
+- Human ops/debug with agent parity
+
+**Reference:** `docker-mcp` (`web_sota`, `/api/tools/{name}`). **Pilots:** `database-operations-mcp` (next), then `virtualization-mcp`.
 
 ---
 
@@ -313,6 +362,14 @@ Perfect for:
 **Install:** `uv tool install showboat rodney`
 
 **Source:** [Simon Willison, 2026-02-10](https://simonwillison.net/2026/Feb/10/showboat-and-rodney/)
+
+---
+
+### **Native llama.cpp model serving (bleeding-edge GGUFs)** NEW
+
+[LLAMA_CPP_NATIVE_MODEL_SERVING.md](LLAMA_CPP_NATIVE_MODEL_SERVING.md)
+
+**Run a just-released model at full GPU speed when Ollama and llama.cpp releases do not support it.** Build from master with CUDA, correct server flags (chat-template-file, reasoning budget, speculative drafter), and the truncating proxy that makes opencode integration actually work: system-prompt truncation, last-message pin, tool whitelist, no-tools note. Proven on Muse Glimmer 30B (2026-08-11); model card in [../models/MUSE_GLIMMER_30B.md](../models/MUSE_GLIMMER_30B.md).
 
 ---
 

@@ -48,6 +48,8 @@ A crammable aide-memoire of every tool, library, and runtime in the fleet.
 | **Playwright** | Browser E2E testing. Fleet standard for webapp regression tests. Headless Chromium. | `npx playwright test` |
 | **pywinauto** | Windows GUI automation (CUA smoke tests). Used for pre-release NSIS installer cert. | via `just cua-nsis-test` |
 | **Tesseract** | OCR engine. Used by CUA smoke tests for screenshot verification. | `tesseract image.png stdout` |
+| **wrapt** | Transparent object proxy and decorator wrapper library. Foundation for robust monkeypatching/interception. | `import wrapt` |
+| **wrapture** | Call-site binding and deterministic fault-injection test utility (`wrapt`+`capture`). Dev/testing only (no fleet prod rollout). | See `tools/WRAPTURE.md` |
 
 ## MCP Stack
 
@@ -110,7 +112,7 @@ A crammable aide-memoire of every tool, library, and runtime in the fleet.
 | **NSIS** | Nullsoft Scriptable Install System. Tauri produces NSIS `.exe` installers. Hooks in `windows/hooks.nsh`. | — |
 | **WebView2** | Edge-based webview runtime. Required by Tauri apps. Bundled on Win11+. | — |
 | **WiX** | Windows MSI builder. Optional for enterprise deployment. | — |
-| **Docker Desktop** | Local container runtime. Used for container stack repos (games-app, myai). | `docker compose up` |
+| **Docker Desktop** | Local container runtime. Used for container stack repos (ai-games-collection, myai). | `docker compose up` |
 | **winget** | Windows package manager. | `winget install Tesseract-OCR` |
 | **scoop** | Windows user-mode package manager (without admin). | `scoop install just` |
 | **OpenSSH** | SSH client/server. Built into Win10+. Used for Tailscale + remote access. | `ssh user@host` |
@@ -155,10 +157,9 @@ A crammable aide-memoire of every tool, library, and runtime in the fleet.
 | **Gitingest** | One-shot text bundle of any public GitHub tree. No clone needed. `gitingest.com/owner/repo`. | `gitops` has `gitingest_link` tool. |
 | **fast-embed** | Fast text embeddings (ONNX). Used by LanceDB RAG in arxiv-mcp, advanced-memory-mcp. | `pip install fast-embed` |
 
-| Tool | What | Notes |
-|------|------|-------|
-| **Prometheus** | Metrics collection. Fleet unified stack on ports 12000-12010. | `node_exporter`, `blackbox_exporter` |
-| **Grafana** | Dashboarding. Fleet unified Grafana on port 12000. | — |
-| **Loki** | Log aggregation. Fleet unified Loki on port 12002. | Promtail ships logs |
-| **aiwatcher** | Fleet event router / webhook receiver. `GET /api/fleet/priority` on port 10717. | — |
-| **admiral-mcp** | Alert escalation. Receives high-competency PR alerts. Port 11089. | POST `/api/fleet/alert` |
+## Development Concepts & Patterns
+
+| Concept | What | Fleet Policy / Usage |
+|---------|------|----------------------|
+| **Monkeypatching** | Dynamic runtime modification of a class, function, or module without altering its source code. In Python, dynamically rebinding attributes or call sites (`setattr`, `unittest.mock.patch`, `wrapt.wrap_object`, `wrapture.binding`). | **Prohibited in production fleet servers** (causes non-deterministic state, async event loop overhead, stealth regressions). **Approved for testing & ad-hoc diagnostics** to stub un-injectable OS/Win32 C-extensions, inject network failures, or trace deadlocked processes. |
+

@@ -1,6 +1,16 @@
+---
+title: "README Webapp Screenshots Standard"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-09
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # README Webapp Screenshots Standard
 
-**Status**: ACTIVE — adopt progressively across fleet webapp MCP repos  
+**Status**: ACTIVE - adopt progressively across fleet webapp MCP repos  
 **Adopted**: 2026-05-29  
 **Audience**: Repo maintainers, agents editing READMEs, fleet grading  
 **Related**: [README_STRUCTURE.md](./README_STRUCTURE.md), [README_WRAPPER_MCP.md](./README_WRAPPER_MCP.md), [rules/playwright_e2e_sota.md](./rules/playwright_e2e_sota.md), [WEBAPP_STANDARDS.md](./WEBAPP_STANDARDS.md)
@@ -9,7 +19,7 @@
 
 ## Why this exists
 
-Fleet MCP servers often wrap **host apps with hyper-complicated native UI** (Blender, GIMP, KiCad, DaVinci Resolve, VRoid Studio, etc.). Our value is not “another copy of the host UI” — it is an **AI-oriented control surface**: fewer clicks, clearer status, demo pipelines, tool catalogs, and agent-friendly REST/MCP bridges.
+Fleet MCP servers often wrap **host apps with hyper-complicated native UI** (Blender, GIMP, KiCad, DaVinci Resolve, VRoid Studio, etc.). Our value is not “another copy of the host UI” - it is an **AI-oriented control surface**: fewer clicks, clearer status, demo pipelines, tool catalogs, and agent-friendly REST/MCP bridges.
 
 **Screenshots in READMEs make that contrast obvious in five seconds.**
 
@@ -19,7 +29,7 @@ Fleet MCP servers often wrap **host apps with hyper-complicated native UI** (Ble
 | Glama / Smithery / GitHub scroll-past | Visual hook increases installs and stars |
 | Agents rely on tool lists only | Humans **and** agents get layout context (“Dashboard shows CRUD backend”) |
 
-This is **self-promotion that earns trust** — not decoration. It answers: *“What do I get that I don’t already have in the host app?”*
+This is **self-promotion that earns trust** - not decoration. It answers: *“What do I get that I don't already have in the host app?”*
 
 **Pair with** [README_WRAPPER_MCP.md](./README_WRAPPER_MCP.md): screenshots sell the **webapp**; How it runs + Hands-in/out explain the **host contract** (headless default, pipeline artifacts). Never show only native host UI screenshots without stating headless mode elsewhere in README.
 
@@ -30,7 +40,7 @@ This is **self-promotion that earns trust** — not decoration. It answers: *“
 | Repo type | Requirement | Minimum |
 |-----------|-------------|---------|
 | **Webapp MCP** (Vite/React dashboard on fleet port) | **Required** for README v1.1+ | 1 hero + 1 feature |
-| **Wrapper MCP** (host app UI is complex: Blender, GIMP, KiCad, Resolve, …) | **Required** — emphasize simplified UI | 1 hero + 1 “native vs wrapper” caption |
+| **Wrapper MCP** (host app UI is complex: Blender, GIMP, KiCad, Resolve, …) | **Required** - emphasize simplified UI | 1 hero + 1 “native vs wrapper” caption |
 | **stdio-only MCP** (no meaningful UI) | Optional | Architecture diagram instead |
 | **mcp-central-docs project page** | Recommended thumbnail | Link to `:PORT` or checked-in PNG |
 
@@ -46,7 +56,7 @@ Prioritize **clarity over pixel-perfect marketing**.
 
 - **Dashboard** or primary landing page at default zoom
 - Visible: app name, connection/status KPIs, sidebar or tool list
-- Dark theme OK if that is the default — stay consistent with shipped webapp
+- Dark theme OK if that is the default - stay consistent with shipped webapp
 
 ### Feature shot (required)
 
@@ -65,9 +75,9 @@ Pick **one** differentiator:
 ### Caption pattern (required under each image)
 
 ```markdown
-![KiCad MCP dashboard — export lane + CRUD backend status](docs/screenshots/dashboard.png)
+![KiCad MCP dashboard - export lane + CRUD backend status](docs/screenshots/dashboard.png)
 
-*AI-oriented dashboard: KiCad’s native UI has dozens of panels; this surface exposes MCP tools, upload/export paths, and backend status in one view.*
+*AI-oriented dashboard: KiCad's native UI has dozens of panels; this surface exposes MCP tools, upload/export paths, and backend status in one view.*
 ```
 
 For **wrapper contrast**, name the host app explicitly in the caption.
@@ -94,7 +104,7 @@ repo-root/
 | Format | **PNG** (UI clarity); WebP optional for web-only mirrors |
 | Max width | 1280px (resize in CI or before commit) |
 | Max file size | **300 KB** per image (use pngquant or similar if needed) |
-| Naming | `dashboard.png`, `pcb-viewer.png`, `demo-pipeline.png` — kebab-case |
+| Naming | `dashboard.png`, `pcb-viewer.png`, `demo-pipeline.png` - kebab-case |
 | Do not commit | Full-window 4K dumps, animated GIFs >2 MB, screenshots with secrets/API keys |
 
 Add to repo `.gitignore` if using automated capture:
@@ -112,7 +122,7 @@ Insert **after** the one-line description, **before** Features (see [README_STRU
 ```markdown
 # kicad-mcp
 
-AI-driven KiCad automation — MCP tools + a focused web dashboard (not a KiCad clone).
+AI-driven KiCad automation - MCP tools + a focused web dashboard (not a KiCad clone).
 
 ## Preview
 
@@ -120,13 +130,13 @@ AI-driven KiCad automation — MCP tools + a focused web dashboard (not a KiCad 
 |-----------|---------------|
 | ![Dashboard](docs/screenshots/dashboard.png) | ![Demo](docs/screenshots/demo-pipeline.png) |
 
-*Left: fleet dashboard (11017). Right: one-click 12-step export demo — no KiCad GUI required for exports.*
+*Left: fleet dashboard (11017). Right: one-click 12-step export demo - no KiCad GUI required for exports.*
 
 ## Features
 …
 ```
 
-**Do not** replace the Documentation table or Quick Install with images-only READMEs — text remains primary for agents; images sell the human evaluators.
+**Do not** replace the Documentation table or Quick Install with images-only READMEs - text remains primary for agents; images sell the human evaluators.
 
 ---
 
@@ -134,7 +144,7 @@ AI-driven KiCad automation — MCP tools + a focused web dashboard (not a KiCad 
 
 Screenshots should be **regeneratable**, not one-off manual grabs. Extend existing e2e infra ([playwright_e2e_sota.md](./rules/playwright_e2e_sota.md)).
 
-### Phase 1 — Manual (now)
+### Phase 1 - Manual (now)
 
 1. `just serve` or `webapp/start.ps1`
 2. Open `http://localhost:PORT`
@@ -142,7 +152,7 @@ Screenshots should be **regeneratable**, not one-off manual grabs. Extend existi
 4. Save to `docs/screenshots/`
 5. PR with README update
 
-### Phase 2 — Scripted capture (fleet standard)
+### Phase 2 - Scripted capture (fleet standard)
 
 Add to `webapp/e2e/screenshots.spec.ts` (or `webapp/scripts/capture-readme-screenshots.ps1` calling Playwright):
 
@@ -162,7 +172,7 @@ test('capture readme screenshots', async ({ page }) => {
 
 **Requirements for Phase 2:**
 
-- `data-testid="dashboard-ready"` (and similar) on stable UI anchors — not brittle text selectors
+- `data-testid="dashboard-ready"` (and similar) on stable UI anchors - not brittle text selectors
 - `just screenshots` recipe in `justfile`:
 
 ```just
@@ -171,9 +181,9 @@ screenshots:
 ```
 
 - Optional CI job: on `release` tag or monthly cron, open PR **“chore: refresh README screenshots”** if pixel diff exceeds threshold
-- Never fail main CI on screenshot drift initially — **warn-only** until 3+ repos stable
+- Never fail main CI on screenshot drift initially - **warn-only** until 3+ repos stable
 
-### Phase 3 — Fleet automation (virtualization-mcp / meta)
+### Phase 3 - Fleet automation (virtualization-mcp / meta)
 
 - Install Test webapp page triggers capture inside consumer sandbox (future)
 - Central gallery in mcp-central-docs `projects/*/README.md` thumbnails
@@ -193,11 +203,11 @@ Native host app          →    Our webapp              →    MCP / agent
 
 | Repo | Caption angle |
 |------|----------------|
-| **blender-mcp** | “Blender’s UI spans 20+ editors; this dashboard lists MCP tools and scene status without opening Blender.” |
-| **gimp-mcp** | “GIMP’s toolbox + docks vs a single upload/process/download flow.” |
-| **kicad-mcp** | “Hybrid KiCad install status + demo pipeline — no pcbnew window required for exports.” |
-| **davinci-resolve-mcp** | “Resolve’s page tree vs project/media status for agent-driven renders.” |
-| **vroidstudio-mcp** | “VRoid’s 3D studio vs export/status control plane.” |
+| **blender-mcp** | “Blender's UI spans 20+ editors; this dashboard lists MCP tools and scene status without opening Blender.” |
+| **gimp-mcp** | “GIMP's toolbox + docks vs a single upload/process/download flow.” |
+| **kicad-mcp** | “Hybrid KiCad install status + demo pipeline - no pcbnew window required for exports.” |
+| **davinci-resolve-mcp** | “Resolve's page tree vs project/media status for agent-driven renders.” |
+| **vroidstudio-mcp** | “VRoid's 3D studio vs export/status control plane.” |
 
 Avoid misleading shots: if a feature **requires** the host app open, say so in the caption.
 
@@ -239,13 +249,13 @@ stales them. The standard defers regeneration to release cycles but in practice:
 
 | Stage | Effort | Typical lag |
 |-------|--------|-------------|
-| Manual capture | 15 min | 3–6 releases behind |
-| Scripted (`just screenshots`) | 5 min CI | 1–2 releases behind |
+| Manual capture | 15 min | 3-6 releases behind |
+| Scripted (`just screenshots`) | 5 min CI | 1-2 releases behind |
 | Auto PR on pixel diff | 0 min | Covers only breakage, not intentional redesign |
 
-**Verdict from fleet (2026-06):** Only **games-app** has implemented Phase 2 scripted
+**Verdict from fleet (2026-06):** Only **ai-games-collection** has implemented Phase 2 scripted
 capture. No other repo has shipped screenshots. The standard remains active but
-**not retrofitted fleet-wide** — adopt only if you are personally willing to re-capture
+**not retrofitted fleet-wide** - adopt only if you are personally willing to re-capture
 on every major webapp release. A stale screenshot is worse than no screenshot.
 
 If you adopt, add a `just screenshots` recipe and a CI warn-not-fail gate:
@@ -256,7 +266,7 @@ screenshots:
     cd webapp && npx playwright test e2e/screenshots.spec.ts --project=chromium || echo "WARN: screenshot drift detected"
 ```
 
-Reference implementation: `games-app` (`docs/screenshots/`, `just screenshots`).
+Reference implementation: `ai-games-collection` (`docs/screenshots/`, `just screenshots`).
 
 ---
 
@@ -274,10 +284,10 @@ Reference implementation: `games-app` (`docs/screenshots/`, `just screenshots`).
 
 ## Rollout priority (suggested)
 
-1. **kicad-mcp** — dashboard + demo pipeline (hybrid status story)
-2. **blender-mcp**, **gimp-mcp** — strongest wrapper contrast
+1. **kicad-mcp** - dashboard + demo pipeline (hybrid status story)
+2. **blender-mcp**, **gimp-mcp** - strongest wrapper contrast
 3. **davinci-resolve-mcp**, **vroidstudio-mcp**, **obs-mcp**
-4. Remaining webapp fleet from [SOTA_MASTER_INVENTORY.md](../operations/SOTA_MASTER_INVENTORY.md)
+4. Remaining webapp fleet from [WEBAPP_PORTS.md](../operations/WEBAPP_PORTS.md)
 
 Track completion in fleet inventory notes or per-project STATUS.md.
 
@@ -285,7 +295,8 @@ Track completion in fleet inventory notes or per-project STATUS.md.
 
 ## References
 
-- [README_STRUCTURE.md](./README_STRUCTURE.md) — Primary README sections
-- [rules/playwright_e2e_sota.md](./rules/playwright_e2e_sota.md) — e2e baseline
-- [WEBAPP_SOTA_STANDARDS.md](./WEBAPP_SOTA_STANDARDS.md) — webapp layout conventions
-- [operations/WEBAPP_PORTS.md](../operations/WEBAPP_PORTS.md) — port per repo
+- [README_STRUCTURE.md](./README_STRUCTURE.md) - Primary README sections
+- [rules/playwright_e2e_sota.md](./rules/playwright_e2e_sota.md) - e2e baseline
+- [WEBAPP_SOTA_STANDARDS.md](./WEBAPP_SOTA_STANDARDS.md) - webapp layout conventions
+- [operations/WEBAPP_PORTS.md](../operations/WEBAPP_PORTS.md) - port per repo
+

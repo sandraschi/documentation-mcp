@@ -28,6 +28,7 @@ For each file in the table below, check:
 | `glama.json` | Valid JSON. Must have: id, name, description, categories, tools list. | **Create** from template. |
 | `PRD.md` | 30+ lines (if repo has significant features). Must describe purpose, architecture, shipped features. | **Create** if repo is beyond trivial scaffold. |
 | `AGENTS.md` | 10+ lines. Must have: quick-ref commands, ports, tool patterns, key files table. | **Create**. |
+| `HANDOVER.md` | Only if the repo has one. If its last-updated date is older than the newest commit it describes, it is **stale and worse than absent** — refresh it or delete it. Mirror to `mcp-central-docs/projects/{repo}/HANDOVER.md`. | Do **not** create one speculatively. |
 | `.env.example` | 5+ lines. Must document all env vars used in source. | **Create** from `rg os.getenv src/` (or `fd -e py -x rg os.getenv {}`). |
 
 ## Phase 2 — MCD Project Page (MANDATORY)
@@ -100,6 +101,22 @@ docs: sync documentation for {repo} v{version}
 
 - `{target-repo}`: README, CHANGELOG, PRD, llms-full.txt, glama.json, AGENTS.md, .env.example, etc.
 - `mcp-central-docs`: `projects/{repo}/README.md`, `projects/FLEET_INDEX.md`
+
+## Phase 6 — Announce (NOT automatic)
+
+Syncing docs is a file operation. Telling people about it is an outward-facing one, and
+this SOP does **not** perform it. `update docs` stops at Phase 5.
+
+If the work is worth announcing, that is the `report work` macro
+(`standards/rules/agentic_macros.md`), invoked deliberately:
+
+| Channel | How | When |
+|---|---|---|
+| Discord `fleet-{repo-without-mcp}` | `fleet_ops(operation="work_report", channel=...)` or `git-github-mcp/scripts/run_work_report.py --channel <name>` | A human-visible change landed, not a typo sweep |
+| Fritz (fleet-agent-mcp hub inbox) | `agent_send(to_entity="fritz", subject=..., body=...)` | Another agent needs to act on it, or a fleet invariant changed |
+
+Both post to a place other people read. Confirm before sending; a docs-sync commit is
+rarely worth a notification on its own.
 
 ## Verification
 

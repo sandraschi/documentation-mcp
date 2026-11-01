@@ -1,6 +1,6 @@
 # Ludii General Game System -- Research Assessment
 
-**Status**: Evaluated, deferred | **Date**: 2026-07-03 | **Lead**: Sandra Schipal
+**Status**: Evaluated, deferred | **Date**: 2026-07-03 | **Lead**: Sandra S.
 
 ---
 
@@ -228,8 +228,8 @@ Package the Java HTTP server + Ludii JAR + JDK base image into a Docker containe
 - JAR + wrapper shaded into a single fat JAR
 - Expose HTTP port
 
-### Phase 3 -- games-app Integration
-Register the Ludii service in the **games-app** fleet repo alongside existing game engines:
+### Phase 3 -- ai-games-collection Integration
+Register the Ludii service in the **ai-games-collection** fleet repo alongside existing game engines:
 - Stockfish (chess, 10780)
 - KataGo (Go, 10782)
 - YaneuraOu (shogi, 10781)
@@ -245,14 +245,14 @@ Register the Ludii service in the **games-app** fleet repo alongside existing ga
 | **10783** | Ludii HTTP server | REST API for game sessions, move execution, AI agent selection |
 | **10784** | (reserved) | Future: WebSocket streaming or management interface |
 
-These ports are adjacent to the existing games-app range (10775-10787), maintaining fleet adjacency conventions.
+These ports are adjacent to the existing ai-games-collection range (10775-10787), maintaining fleet adjacency conventions.
 
 ### Integration with WEBAPP_PORTS.md
 Add to the port registry:
 
 ```
-| 10783 | games-app (ludii) | Ludii General Game System HTTP wrapper (Docker) |
-| 10784 | games-app (ludii) | (reserved -- future management interface)        |
+| 10783 | ai-games-collection (ludii) | Ludii General Game System HTTP wrapper (Docker) |
+| 10784 | ai-games-collection (ludii) | (reserved -- future management interface)        |
 ```
 
 ### Technical Requirements for the Java HTTP Wrapper

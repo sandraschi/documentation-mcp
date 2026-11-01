@@ -92,7 +92,7 @@ Agent prompt (for webapp changes):
    showing the pages with screenshots."
 ```
 
-**Target repos**: calibre-mcp/webapp, devices-mcp/webapp, meta_mcp/web, robotics-mcp/web, mywienerlinien/frontend
+**Target repos**: calibre-mcp/webapp, devices-mcp/webapp, meta_mcp/web, robotics-mcp/web, publictransport-mcp/frontend
 
 ### 3. Red/Green TDD Agent Session Opener
 

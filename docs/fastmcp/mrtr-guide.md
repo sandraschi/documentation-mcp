@@ -114,7 +114,7 @@ MRTR looks genuinely useful — interaction patterns are the missing piece of st
 ## 9. Resources
 
 - Spec: [MRTR pattern](https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/mrtr) · [SEP-2322](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2322) · [2026-07-28 changelog](https://modelcontextprotocol.io/specification/2026-07-28/changelog)
-- Fleet probe (Claude Desktop round-trip test, 2026-08-02): *(fleet-internal, mcp-central-docs)* `operations/MCP4_MRTR_PROBE_CASE_REPORT.md`
+- Fleet probe (Claude Desktop round-trip test, 2026-08-02): `operations/MCP4_MRTR_PROBE_CASE_REPORT.md`
 - Migration plan (sampling → direct LLM): `sampling-migration-plan.md`
 - FastMCP 4 decision: `fastmcp-4-assessment.md`
 - Spec migration (stateless core, deprecations): `2026-07-28-spec-migration.md`

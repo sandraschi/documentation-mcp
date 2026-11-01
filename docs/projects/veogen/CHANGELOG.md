@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.1.1-salvage] - 2026-08-04
+
+### Salvage (Phases 0-4)
+- **Decontaminated**: purged committed secrets (API keys, login creds, emails,
+  user DB) from git history; rotated-key reminder in `.env.example`
+- **Rewired**: 19 endpoint modules mounted under `/api/v1` (were orphaned -
+  app served 0 API routes); SQLite replaces the unwired Postgres/Redis/Celery
+  stack; `init_db()` enabled
+- **Ports**: 7655/4700/10730/10731 → **11150/11151** everywhere (10730 was
+  registered to another fleet repo)
+- **Real features**: movie script generation via Gemini (no more client-side
+  mock scripts); lazy provider so the app boots without a key; honest
+  provider-not-wired errors instead of simulated media output
+- **Frontend builds**: CRA→Vite (index.html, esbuild jsx, postcss .cjs),
+  lucide/heroicons renames, process.env define map, bun migration
+- **FastMCP surface**: streamable HTTP at `/mcp` with 6 tools
+- **CI**: lint + typecheck + pytest + Playwright e2e on every push
+- **Docs**: honest README, llms.txt fixed, glama.json
+
 ## [3.1.0-industrial] - 2026-04-18
 
 ### 🚀 Industrial Revolution

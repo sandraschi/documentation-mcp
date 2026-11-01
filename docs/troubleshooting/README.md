@@ -1,5 +1,7 @@
 # MCP Troubleshooting Guide
 
+**Private — Sandra S. + collaborators only. Not for public distribution.**
+
 **Last Updated:** 2025-12-04
 
 Common issues and solutions for MCP servers.

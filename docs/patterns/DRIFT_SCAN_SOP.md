@@ -45,6 +45,7 @@ For each repo, run these lightweight probes. **Do not run `ruff`, `pytest`, or a
 | **Webapp** | `webapp/` or `web_sota/` exists? | `Test-Path webapp/package.json` | INFO |
 | **Tauri** | `native/` exists? | `Test-Path native/Cargo.toml` | INFO |
 | **Docker** | `docker-compose.yml` exists? | `Test-Path docker-compose.yml` | INFO |
+| **MCPB launch contract** | Manifest uses non-spec `${...}` (`${PWD}`), launches the HTTP `run_server.py` sidecar, vendors its own pack script, README lacks the install.ps1 one-liner | ONE fleet-wide call, read-only: `pwsh mcp-central-docs/scripts/audit-mcpb-bundles.ps1` (findings `NONSPEC`, `SIDECAR`, `VENDORED`, `README`) | CRITICAL for `NONSPEC`/`SIDECAR` (bundle cannot start in Claude Desktop), MEDIUM `VENDORED`, HIGH `README` |
 
 ---
 

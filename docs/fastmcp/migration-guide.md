@@ -51,6 +51,23 @@ For persistent storage and lifespan, see [persistent-storage.md](persistent-stor
 
 ---
 
+## Removed constructor kwargs and SSE (3.4.4+)
+
+FastMCP 3.4.4 rejects any unknown constructor kwarg with `TypeError: FastMCP() got unexpected keyword argument(s)` instead of ignoring it. The instance methods `sse_app()` and the `@mcp.command` decorator are also gone.
+
+| Legacy pattern | 3.4.4+ replacement | Symptom if missed |
+| --- | --- | --- |
+| `FastMCP(name, description=..., version=...)` | `FastMCP(name, instructions=..., version=...)` | `TypeError: ... unexpected keyword argument(s): 'description'` |
+| `mcp.sse_app()` | `mcp.http_app()` (streamable HTTP) | `AttributeError: 'FastMCP' object has no attribute 'sse_app'` |
+| `@mcp.command("name")` | `@mcp.tool()` | `AttributeError: ... no attribute 'command'` |
+| `from fastmcp.context import Context` | `from fastmcp import Context` | `ModuleNotFoundError: fastmcp.context` |
+
+Note: `from fastmcp.server.http import create_sse_app` still exists in 3.4.5 (deprecated path, SSE only). Prefer mounting `mcp.http_app()` per the CORS standard.
+
+Server-side symptom: the process crashes at import before any port binds, so `start.ps1` health polls time out and the launcher appears to hang.
+
+---
+
 ## Resources
 
 - [3.4-features.md](3.4-features.md) — Remote bridge, proxy fail-loud, returnable errors

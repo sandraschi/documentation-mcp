@@ -5,6 +5,78 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-08-07
+
+### Fixed
+- **Webapp "Failed to fetch" (CORS)**: the webapp REST routes live on a separate FastAPI app (`_web_app`) from the MCP `http_app()`; CORS was only attached to the MCP app, so browsers blocked every `/api/v1/*` fetch while curl/PowerShell worked. Added the fleet CORS middleware to `_web_app` (immich-mcp + rustdesk-mcp, documented in `CORS_STANDARD.md`).
+- **Health-poll log spam**: `useBackendStatus` reset the backoff counter on every successful poll, so a healthy backend was probed every 1s forever (several requests/sec per open tab). Healthy state now polls every 10s; exponential backoff (1s/2s/4s/8s/16s) only while unreachable.
+- **Timeline showed import dates, filter matched real dates**: the grid grouped by `createdAt` (batch import time) while the date filter matched `fileCreatedAt`/EXIF — for bulk-imported libraries these disagree wildly (e.g. 34k photos imported Jan 2026 but taken 2017-2025). Timeline now displays `fileCreatedAt`.
+- **Rapid filter edits dropped requests**: changing From and To in quick succession discarded the second request (busy-guard), leaving stale-range results on screen. Reset loads now always win; stale in-flight responses are discarded via a request-sequence counter.
+
+### Added
+- **Timeline filters** (`GET /api/v1/photos/timeline`): `asset_type` (IMAGE/VIDEO), `is_favorite`, `with_archived`, `taken_after`/`taken_before` (ISO dates) — all official Immich `/search/metadata` params. Paginated envelope `{items, page, limit, total, has_more}`; real totals from `/server/statistics` on the unfiltered view.
+- **Timeline component** (webapp): month rail with scroll-spy + click-to-jump, year separators, sticky month headers, infinite scroll (IntersectionObserver) with a Load-more fallback.
+- **Photo viewer** (webapp): click a thumbnail to open a lightbox with zoom (wheel zoom-to-cursor, +/- buttons, reset, drag-to-pan, double-click toggle, keyboard `+`/`-`/`0`), fullscreen (Fullscreen API), and a metadata panel (EXIF, camera, dates, dimensions, GPS → maps link, status badges, smart info, people, albums).
+- **`GET /api/v1/photos/{asset_id}/file`**: full-size original proxy (images + videos) via Immich `GET /assets/:id/original`.
+
+## [1.6.2] - 2026-08-06
+
+### Fixed
+- **CRITICAL CORS**: `allow_origins=["*"]` and FastMCP `run_http_async()` (which drops custom middlewares) replaced with the fleet CORS standard: explicit dev/Tauri origins, unconditional Tailscale/LAN/localhost regex, direct `uvicorn.Server` on `mcp.http_app()`.
+- **Multi-user tools broken at runtime**: `switch_immich_user`, `switch_user`, `get_current_user`, `get_user_libraries` referenced an unbound `api_client` global (NameError, silently swallowed). Rewired to `get_api_client()`; switching now actually swaps the client API key.
+- **REST routes TypeError**: `delete_photos`, `share_album`, `search_by_person`, `backup_photos`, `detect_people` passed keyword-only tool parameters positionally. Now keyword args.
+- **Agentic tools crash**: unawaited `ctx.info()` and invalid `ctx.sample(prompt=...)` signature fixed.
+- **httpx 0.28 `delete(json=...)`**: switched to `client.request("DELETE", ...)`.
+- **Pyright: 36 errors -> 0** (unbound vars, optional access, Prefab `cssClass` alias, settings types, None guards).
+- **Native build pipeline**: added `run_server.py` (dual transport) + `immich-mcp-backend.spec`; fixed `native/build.ps1` `$envSrc` bug, added API_BASE check, frozen-binary smoke test, >=5 MB size gate.
+- **Webapp**: live backend status (Tauri event + exponential backoff poll + Restart) replacing hardcoded "System Online"; Ctrl+Scroll zoom; zustand LLM store; `color-scheme: dark`; data-testid coverage on all pages.
+- **MCPB**: pack now from repo root with real 3-4-100 prompts (3065/4186 words, 116 examples), schema-valid manifest, smoke-verified bundle; stale flattened `mcpb/` removed.
+
+### Added
+- `GET /api/v1/capabilities`, `GET /api/v1/diagnostics`, enriched `/api/v1/health` (version, tool_count, providers).
+- `immich_shutdown` MCP tool (confirm-guarded).
+- Session context injection: `.claude-plugin`, `.cursorrules`/`.windsurfrules`, Copilot instructions, opencode skill.
+- pyright to dev dependencies (five-gate).
+
+### Removed
+- Tracked `.bak` dross and stale `mcpb/` staging from the index.
+## [1.6.1] - 2026-08-06
+
+### Fixed
+- **Timeline search (CRITICAL)**: `get_timeline_assets` called three dead endpoints
+  (`POST /search/assets` never existed, `GET /search/metadata` is POST-only, `GET /assets`
+  was removed in v2.7+) and always returned `[]`. Now uses `POST /search/metadata`
+  with `page`/`size`/`order` (verified against the official OpenAPI spec for v2.7.5, v3.0.3, v3.1.0).
+- **Upload payload (CRITICAL)**: `fileCreatedAt`/`fileModifiedAt` were sent as unix
+  epoch floats but the API requires ISO-8601 date-time strings; `duration` was sent as
+  a string on v3 where the schema type is integer. Both now conform, and the correct
+  mimetype is sent per file. Verified against the live server spec (v2.7.5) and v3.1.0.
+- **Delete/trash**: `DELETE /assets/trash` does not exist; trash and permanent delete
+  both go through `DELETE /assets` with `force: false/true` (confirmed in the v2.7.5
+  server source: `status: force ? Deleted : Trashed`).
+- **Asset edits**: `edit_asset` called `POST /assets/{id}/edit` (nonexistent); now uses
+  `PUT /assets/{id}/edits` with the `{edits: [{action, parameters}]}` contract.
+- **Face detection**: `run_face_detection` posted an invalid `FACE_DETECTION` job with
+  a `data` field the schema does not accept, and returned fabricated counts. Now queues
+  the real per-asset job (`POST /assets/jobs`, name `refresh-faces`) and reports
+  submission status honestly.
+- **Server stats**: `get_server_stats` used removed endpoints (`/admin/storage`,
+  `/server-info`) and hardcoded zeros. Now uses `GET /server/storage`,
+  `GET /server/statistics` and a real album count.
+- **OCR**: `get_asset_ocr` passed a nonexistent `bounding_boxes` query param, parsed the
+  response as a dict, and fabricated empty results on 404. The endpoint returns a list
+  of word boxes - now aggregated into `text`/`words`/`confidence`, and 404 raises
+  honestly instead of returning fake data.
+- **Visibility**: `update_asset_visibility` advertised invalid values (`private`,
+  `public`, `archived`). The real enum is `archive`, `timeline`, `hidden`, `locked`;
+  values are now validated before sending.
+- **Libraries**: removed dead endpoints (`refresh`, `optimize`, `locations`,
+  `empty-trash`, `clean-bundles`); `create_library` now resolves the required
+  `ownerId` via `/users/me`; `scan_library` no longer sends a nonexistent body;
+  `get_libraries` handles the plain-array response; added `get_library_statistics`.
+- **Version alignment**: `pyproject.toml` bumped from 1.5.0 to 1.6.1 (STATUS/CHANGELOG
+  already claimed 1.6.0); `mcpb/` packaging copy resynced with `src/`.
+
 ## [1.6.0] - 2026-07-12
 
 ### Added

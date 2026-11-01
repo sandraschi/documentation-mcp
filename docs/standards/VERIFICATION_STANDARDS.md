@@ -1,3 +1,13 @@
+---
+title: "Verification & Testing Standards"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-08-01
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Verification & Testing Standards
 
 ## 1. Visual Verification (SOTA)
@@ -106,6 +116,8 @@ All repos MUST pass these before any merge or build:
 | TypeScript | `tsc` | `web_sota/` or `webapp/` | `tsc --noEmit` (from webapp dir) |
 
 `ruff` and `biome` are the **only** fleet linters. ESLint, Prettier, Flake8, Black are not used. Biome auto-fix with `biome check --write .` before commits.
+
+> **What these four tools catch and why you need all of them**: see [QUALITY_GATES.md](./QUALITY_GATES.md) — ruff/biome (style), pyright (types), pytest (behavior).
 
 ### 3.5. API Resilience Pattern
 

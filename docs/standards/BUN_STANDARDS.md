@@ -9,7 +9,7 @@ related:
   - standards/NAKED_PC_INSTALL_STANDARD.md
   - standards/CODE_QUALITY_STANDARDS.md
   - integrations/bun.md
-last_updated: 2026-05-31
+last_updated: 2026-08-22
 ---
 
 # Bun Adoption Standard (v1.0)
@@ -127,5 +127,5 @@ touched, not a scheduled sprint.
 
 ---
 
-**Owner:** Sandra Schipal
+**Owner:** Sandra S.
 **Last Updated:** 2026-05-31

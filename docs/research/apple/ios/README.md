@@ -1,18 +1,18 @@
-# iOS and iPadOS: Mobile development (May 2026)
+# iOS and iPadOS: Mobile development (October 2026)
 
 ## Platform context
 
 | Release | Notes |
 |---------|-------|
-| **iOS 26** | SDK generation for Xcode 26 |
-| **iOS 26.4** (Mar 2026) | Siri + Google Gemini hybrid |
-| **iOS 27** | Expected WWDC 2026 — Core AI framework |
+| **iOS / iPadOS 27.2** (Oct 2026) | **Current.** More Siri AI languages, Messages/Podcasts changes, Apple Music refresh, Pencil support on iPhone Duo |
+| **iOS / iPadOS 27** (Sep 2026) | 27 generation (WWDC 2026) — Core AI framework, Foundation Models |
+| **iOS 26.4** (Mar 2026) | Siri + Google Gemini hybrid (superseded) |
 
 ## Agentic development (primary change)
 
 iOS app development is **no longer Xcode-click heavy** for greenfield work:
 
-1. **Xcode 26.3** with Claude Agent or Codex — in-IDE agentic loop  
+1. **Xcode 27.2** with in-IDE agents — agentic loop without leaving Xcode
 2. **External agents** via `xcrun mcpbridge` (Cursor, Claude Code on Mac)  
 3. **`AGENTS.md`** — project context both agents read  
 
@@ -56,4 +56,4 @@ Windows cannot code-sign iOS — Mac or Mac CI required for store builds.
 Same Xcode 26 agentic workflow; adjust UI for form factor / spatial layout in prompts.
 
 ---
-*Last updated: 2026-05-28*
+*Last updated: 2026-10-28 (27.2 generation)*

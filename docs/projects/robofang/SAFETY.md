@@ -32,7 +32,7 @@
 
 To prevent an agent from accidentally or maliciously deleting critical system folders (e.g., your Inbox or the root repository), RoboFang implements three levels of defense:
 
-1. **Level 1 (Taboo)**: The Bridge intercepts all command strings (e.g., `rm`, `delete`, `truncate`) and checks them against a hardcoded list of forbidden paths (e.g., `C:/Users/sandr/Inbox`). If a match is found, the command is blocked **before** it reaches the shell.
+1. **Level 1 (Taboo)**: The Bridge intercepts all command strings (e.g., `rm`, `delete`, `truncate`) and checks them against a hardcoded list of forbidden paths (e.g., `C:/Users/<user>/Inbox`). If a match is found, the command is blocked **before** it reaches the shell.
 2. **Level 2 (Shadow Filesystem)**: For any "Labor" task that modifies the filesystem, the agent is spawned in a **Windows Sandbox (.wsb)** with a cloned copy of the relevant files. The agent works in isolation.
 3. **Level 3 (Supervisor Approval)**: No change made in the Sandbox is committed to the "Live" filesystem without a manual approval of the diff in the **Sovereign Dashboard**.
 

@@ -10,7 +10,7 @@
 
 > 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-A modern MCP server that provides comprehensive file comparison, multimedia management, and developer workspace tools using Beyond Compare. Features 13 powerful tools for everything from file comparison to repository backup and workspace analysis.
+A modern MCP server that provides comprehensive file comparison, multimedia management, and developer workspace tools using Beyond Compare. Features 18 tools for everything from file comparison to repository backup and workspace analysis.
 
 ## Quick Start
 
@@ -36,7 +36,7 @@ If you don't have `just` installed:
 - ** Intelligent Cleanup**: Automated artifact cleanup with node_modules filtering and space reclamation
 - ** Code Analysis**: Duplicate code detection and workspace snapshot comparison
 - ** Security First**: Comprehensive input validation and secure subprocess execution  
-- ** MCP Compliant**: Built on the Model Context Protocol standards with 13 powerful tools
+- ** MCP Compliant**: Built on the Model Context Protocol standards with 18 tools
 - ** MCPB Packaging**: Easy deployment with MCPB packages for Claude Desktop (60.4 KB)
 - ** Cross-Platform**: Works on Windows, macOS, and Linux
 
@@ -322,3 +322,4 @@ Fleet ports: **10840** (Vite frontend), **10841** (unified **FastAPI + FastMCP**
 3. Open `http://127.0.0.1:10840` (Vite proxies `/api` and `/mcp` to the gateway).
 
 Operator reference: [docs/FLEET_GATEWAY.md](docs/FLEET_GATEWAY.md). Health probe for automation: `GET http://127.0.0.1:10841/api/v1/health`.
+

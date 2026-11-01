@@ -1,5 +1,7 @@
 # Project Documentation Index
 
+**Private — Sandra S. + collaborators only. Not for public distribution.**
+
 **Purpose:** Central documentation for all major projects
 **Last Updated:** 2026-07-26 — publish tier: **mandatory IN** after update ([PUBLISH_UPDATE_CHECKLIST.md](../../PUBLISH_UPDATE_CHECKLIST.md))
 
@@ -15,7 +17,7 @@
 | [dj-media-hub](./dj-media-hub/) | VirtualDJ + Plex Integration | Composite MCP | Active |
 | [myai](./myai/) | Dual-mode AI microservices platform | Fullstack SaaS | Production-Ready |
 | [veogen](./veogen/) | AI Video Generator | Fullstack SaaS | Production-Ready |
-| [mywienerlinien](./mywienerlinien/) | Vienna Transit Tracker | Fullstack + MCP | Production-Ready |
+| [publictransport-mcp](./publictransport-mcp/) | Vienna Transit Tracker | Fullstack + MCP | Production-Ready |
 | [devices-mcp](./devices-mcp/) | Home IoT MCP + dashboard + Tauri desktop (**10717**); Fritz `GET /api/fleet/priority` | MCP Server + Dashboard | **Beta (v1.21.5)** |
 | [aiwatcher-mcp](./aiwatcher-mcp/) | AI news distillation, fleet ingest, Intel Hub digest publish (**10946/10947**) | MCP Server + Webapp | **0.1.8** |
 | [fleet-agent-mcp](./fleet-agent-mcp.md) | Fritz self-evolving agent; coworker + Intel Hub **11027** (**10996/10997**) | MCP Server + Webapp | **0.2.1-pre** |
@@ -33,6 +35,7 @@
 | [reversing-mcp](./reversing-mcp/README.md) | Static RE + heuristic DKI (**ReVa = separate MCP** for Ghidra); Digibib5/DKI as **small-app test case**; webapp **10750/10751** | MCP Server | **Production-Ready** |
 | **directmedia-mcp** | Directmedia Digitale Bibliothek Decompressor | MCP Server | **Production-Ready** |
 | [mcp-studio](./mcp-studio/) | MCP Mission Control Dashboard (v2.0) | MCP Platform | Production-Ready |
+| [rustification](./rustification/FLEET_PLAN.md) | Fleet Rust conversion: topology (no sibling per repo), Mode A/B split, waves, naming rule, metrics | Program plan | Active |
 | [dark-app-factory](./dark-app-factory/) | Generative factory / build pipeline | Factory Engine | **2026** |
 | [autohotkey](./autohotkey/) | AutoHotkey v2 scripts & migration | Special Case | Active Development |
 | [autohotkey-mcp](./autohotkey-mcp/) | AutoHotkey scriptlets MCP (FastMCP 3.1, SPA 10747, Glama metadata) | MCP Server | Active |
@@ -41,6 +44,8 @@
 | [nest-protect-mcp](./nest-protect-mcp/) | Google Nest Protect Smart Home (20 portmanteau) | MCP Server | Production-Ready |
 | [unity3d-mcp](./unity3d-mcp/) | Unity 3D Automation + VRM Pipeline | MCP Server | Production-Ready |
 | [virtualization-mcp](./virtualization-mcp/) | VirtualBox & Hyper-V MCP (FastMCP 3.1, webapp 10700/10701) | MCP Server | Production-Ready |
+| [zoji-mcp](./zoji-mcp/) | Zojirushi water boiler level tracking by weight - Dymo HID / HX711 MQTT / replay; evening check, consumption report (11144/11145) | MCP Server + Webapp | **0.1.0** |
+| [safety-mcp](./safety-mcp/) | Threat forensics & verdict engine - Defender + event channels + network + aiwatcher intel -> graded verdicts (11146/11147) | MCP Server + Webapp | **0.1.0** |
 | [yahboom-mcp](./yahboom-mcp/) | Yahboom Raspbot v2 ROS 2 MCP (FastMCP 3.2, webapp 10892/10893) | MCP Server | Production-Ready |
 | [teleoperator-mcp](./teleoperator-mcp/) | WebXR VR teleop gateway — Pico/Quest browser → WebSocket pose → yahboom-mcp; webapp **10900/10901**; [Pico hub](../pico/README.md) | MCP + WebXR | Active (M1) |
 | [uitars-mcp](./uitars-mcp/) | UI-TARS Desktop GUI Agent. VLM-powered desktop automation. 4 MCP tools. FastAPI **10976**, Vite **10977**. FastMCP 3.2. Fits RTX 4090. | MCP Server + Webapp | **0.1.0** |
@@ -48,16 +53,19 @@
 | [federation-mcp](./federation-mcp/) | MCP Federation Hub: one API + dashboard for many MCP servers; mesh (peers) with invite links and encrypted hub-to-hub. Bridge 10857, dashboard 10856. | MCP Platform | Active |
 | [robotics-mcp](./robotics-mcp/) | Unified Robotics Control (Physical + Virtual) | Composite MCP | Production-Ready (Beta) |
 | [ittybitty](./ittybitty/) | **ittybitty** — AI narrated video MCP (short + 3–15 min); videographer rules; **11054/11055**; package `videogen-mcp` | MCP Server + Tauri | **0.1.0 MVP** |
+| [open-drone-mcp](./open-drone-mcp/) | FOSS drone control via MCP: safety engine (geofence, speed cap, battery floor, audit), declared simulator + Crazyflie (cflib) backend, web console with STOP on **11221/11222**, simulator-only MCPB; MAVLink later; not DJI. Crazyflie path not yet flown on hardware. MIT | MCP Server + Webapp | **0.1.0 (not flown)** |
 | [bumi-mcp](./bumi-mcp/) | Noetix Bumi humanoid MCP; FastMCP 3.1, webapp **10774/10775**, virtual twin map | MCP Server + Dashboard | **0.1.0** |
 | [calibre-mcp](./calibre-mcp/) | Calibre library MCP â€” metadata RAG, FTS phrase jump, webapp **10720/10721** | MCP Server + Dashboard | Active |
 | [chitchat](./chitchat/) | Conversation starters, archive, and fleet docs crosslink. 64 curated topics, 4 MCP tools. Backend **10974**, frontend **10975**. FastMCP 3.2. | MCP Server + Webapp | **0.1.0** |
 | [fritz-coworker](./fritz-coworker/) | Poor Man's Viktor: pulses, inbox/day prep, devices watch, Intel Hub **11027**, urgent alerts. Agent: [fleet-agent-mcp](./fleet-agent-mcp.md) **10996**. [CHANGELOG](./fritz-coworker/CHANGELOG.md) | Agent plan + pilot | **0.2.1-pre** |
-| [sandrafleetbot](./sandrafleetbot/) | Zero-pay GrokBot plan: fleet agent, board+inbox, Discord human layer, Muse Glimmer brain, pack distribution + naked-PC gate. [README](./sandrafleetbot/README.md) | Agent plan (spec) | **SPEC v2** |
 | [libreoffice-mcp](./libreoffice-mcp/) | Headless LO convert + ODT merge + webapp PDF preview; ports **10981/10983**. FOSS office layer for Fritz coworker flows. [CHANGELOG](./libreoffice-mcp/CHANGELOG.md) | MCP Server + Webapp | **0.1.0** |
 | [buzz](./buzz/) | Block OSS Nostr relay + Tauri desktop + buzz-cli/acp; local Podman infra; Phases 1–3 complete; Apache-2.0 | Agent workspace (not MCP) | **Eval (0.4.x desktop)** |
 | [security-gym](./security-gym/) | Gymnasium cyber-defense RL (log/eBPF streams); j-klawson/security-gym; pytest green; not MCP | Research / eval | **Eval (0.5.1)** |
 | **[apple/](./apple/)** | **CalFolio** iPad app + fleet iOS ideation — [CALFOLIO.md](./apple/CALFOLIO.md), [EPUB_READER.md](./apple/EPUB_READER.md), [IOS_PUBLISHING.md](./apple/IOS_PUBLISHING.md) | iPad app (SwiftUI) | **Pre-scaffold** |
 | [ai-games-collection](./ai-games-collection/) | 150+ games, AI engines (Stockfish/KataGo/YaneuraOu), Japanese learning, FastMCP 3.2, Tauri 2.0 desktop, P2P multiplayer | MCP Server + Webapp + Tauri | Active (v2.5.1) |
+| [japanophile-mcp](./japanophile-mcp/) | First **[-phile](./japanophile-mcp/PHILE_PATTERN.md)** culture workstation — Language/Knowledge/Practice, **11193/11194** | MCP Server + Webapp + NSIS | **0.3.x shipped** |
+| [-phile sisters plan](./PHILE_SISTERS_PLAN.md) | **austrophile-mcp** + **sinophile-mcp** (MCD draft; ports 11195–11198 proposed); sinophile [editorial charter](./sinophile-mcp/EDITORIAL_CHARTER.md) + [Taiwan outline](./sinophile-mcp/TAIWAN_KNOWLEDGE_OUTLINE.md) | Plan | Draft |
+| [Quarantine extremist texts](./QUARANTINE_EXTREMIST_TEXTS.md) | Bullshit-shelf ingestion: Kaczynski, Moreno-Gama (pt 2–3 only), Jim Jones (SDSU archive) | Policy | Active |
 | [getbooks-mcp](./getbooks-mcp/) | Multiâ€“safe-source book discovery (Gutenberg, Open Library, IA, â€¦) â€” **not** Annaâ€™s Archive | MCP Server | **Planned** (design only) |
 | [antigravity-cli-mcp](./antigravity-cli-mcp.md) | Cursor ↔ `agy` CLI MCP bridge — goal/subagent/skills/MCP introspection; **not** SDK (token cost) | MCP Bridge | **Planned** (design only) |
 | [agy-fleet-mcp](./agy-fleet-mcp/) | Antigravity MCP **config sync** — Cursor↔Gemini diff/sync/validate, tool budget ~50; **10825** HTTP `/mcp`; **not** PyPI agy-mcp | MCP Server | **0.1.0** |
@@ -81,6 +89,7 @@
 | **musicpaint-mcp** | VB6 MusicPaint rebuild: synchronized classical music + painting slideshow; 11,916 audio tracks, 8,178 paintings, 1,351 painters, ticketing; ports **11070/11071** | Nostalgia Rebuild | Active |
 | **quicknotes (original)** | VB6 topic-based notes app by ASM (~2004); 56 topics migrated; sits inside MusicPaint as `modQuickNotes` | VB6 Archive | Preserved |
 | **musicpaint (original)** | "Kammerherr" (~2004); 100+ forms, 70+ modules, 30+ classes; BASS audio, LeadTools imaging, DAO/ADO database, ticketing; code review shows 2,734 procedures | VB6 Archive | Preserved |
+| [gods-eye-view](./gods-eye-view/) | Upstream deep-dive: Bilawal Sidhu live 3D globe (CesiumJS, 20 layers, Realtime voice, MCP stdio); clone `_upstream/gods-eye-view` HEAD `8b8ccc9`; [takeaways](./gods-eye-view/FLEET_TAKEAWAYS.md) | Upstream analysis | **2026-10-13** |
 
 ---
 
@@ -195,7 +204,7 @@ Each project folder contains:
 - **Grafana:** http://localhost:4725
 - **Key Tech:** FastAPI, Google Veo AI, MCP Client
 
-### mywienerlinien
+### publictransport-mcp
 - **Frontend:** http://localhost:3079
 - **MCP Server:** 4 tools via FastMCP 3.1.1+
 - **Grafana:** http://localhost:3140

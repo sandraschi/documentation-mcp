@@ -1,18 +1,34 @@
-
-## [Unreleased] — 2026-06-14
-
-### Added
-- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
-- PyInstaller frozen backend embedded in NSIS installer
-- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
-- `just cua-nsis-test` recipe
-- Tauri CORS: `tauri://localhost` origins for WebView API access
-- `GET /api/v1/diagnostics` endpoint for CUA verification
 # Changelog
 
 All notable changes to Notion MCP will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+
+## [1.2.1] — 2026-07-21
+
+### Security
+- **CRITICAL**: Fixed `build.ps1` bundling `.env` (API key leak) — now bundles `.env.example`
+- **CRITICAL**: Fixed `tauri.conf.json` resources referencing `.env` — now references `.env.example`
+- **CRITICAL**: Replaced CORS `allow_origins=["*"]` with fleet-standard explicit origins + unconditional regex
+- **FIXED**: Bare `except: pass` in `get_status()` — now logs warning with traceback
+
+### Added
+- `GET /api/health` endpoint for liveness probes
+- `GET /api/skills` endpoint for skill discovery
+- `llms.txt` and `llms-full.txt` at repo root for LLM discovery
+- `just mcpb-pack` recipe for MCPB bundle building
+- `.gitignore` entries for `*.mcpb`, `*.bak`, `native/target/`, `native/gen/`
+
+### Fixed
+- PyInstaller spec: `upx=True` → `False`, `noarchive=False` → `True`, `console=True` → `False`
+- `backend.rs`: Multi-layer `free_port()` (Stop-Process → taskkill → UAC → 240s poll)
+- `backend.rs`: Added stdout/stderr stream watchers for backend-ready detection
+- Added missing `.bak`, `*.mcpb`, `native/target/`, `native/gen/` to `.gitignore`
+- Removed orphaned `# Changelog` header in CHANGELOG.md
+- Removed `results` unused variable in `get_status()`
+
+### Changed
+- `backend.rs` `free_port()` returns `bool` — fails on port exhaustion
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.2.0] - 2026-05-25

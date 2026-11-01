@@ -38,9 +38,9 @@ four weeks running.
 Consumes: Plex (direct plexapi), **Immich** (Docker, GPU ML — photo faces + CLIP
 search for v1.1 slideshows: "mitm Onkel Franz beim Aussichtsturm im Winter" →
 person ∩ scene ∩ EXIF-season → ffmpeg slideshow into Plex "Diashows" → same play()
-path as everything else), faster-whisper, LM Studio/Ollama. Deferred: mywienerlinien,
+path as everything else), faster-whisper, LM Studio/Ollama. Deferred: publictransport-mcp,
 weather, Calibre. Excluded from family exposure forever: winops, gitops, fileops.
-Roadmap v1.2: `schipal-chronik` corpus (markdown person/event pages, provenance-tagged,
+Roadmap v1.2: `s-chronik` corpus (markdown person/event pages, provenance-tagged,
 Sandra-gated intake) — shared by Ednaficator (RAG), learnbot-mcp, and a thin
 chronik-MCP; Edna's own voice-note stories are the prime ingestion source.
 Not mcpb-packaged (bot + service, not an MCP server); dist/ednaficator-v2.0.0.mcpb is

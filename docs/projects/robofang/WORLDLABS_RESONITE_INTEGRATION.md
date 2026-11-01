@@ -1,7 +1,7 @@
 # robofang ↔ WorldLabs + Resonite Integration
 
 **Status**: Architectural Plan · February 2026  
-**Author**: Sandra Schipal  
+**Author**: Sandra S.  
 **Location**: `d:/Dev/repos/robofang/docs/`
 
 ---

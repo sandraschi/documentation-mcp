@@ -1,140 +1,48 @@
 # reversing-mcp — Next Steps
 
-**Created:** 2026-03-23  
-**Based on:** Assessment session + GHIDRA_SOTA_2026.md (Ghidra/ReVa notes)
+**Rewritten:** 2026-10-12 (Gym G1 shipped; product is the Gym now).
 
----
+## Closed
 
-## Priority 1: Determine Ghidra Version (today)
+- March 2026 plan: companion architecture (ReVa external), install modes, version gate.
+- 2026-10-11: Tier 2 bridge, backend transplant, Next.js kill, chat standard, assfix
+  0→86, fakefind 6/6, ghaudit first run, release v0.4.0, revops registration.
+- 2026-10-11: Hopper CLOSED (unsupported on win32, verified). Tier 3 static half done.
+- 2026-10-12: TEXT.DKI resolved (Opus+Ghidra; decoder in directmedia-mcp, reader live).
+- 2026-10-12: **Gym G1 shipped** (job runner, stages 0/1/4, REST+MCP+`/gym` page, proven
+  on Digibib5). PRD names the Gym as the product.
 
-```powershell
-# Find Ghidra on Goliath — check common install paths
-Get-ChildItem "D:\", "C:\Program Files\" -Filter "ghidra*" -Directory -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
+## Priority 1: Gym G1b + G2 (next)
 
-# Check version once found
-Get-Content "D:\path\to\ghidra\Ghidra\application.properties" | Select-String "application.version"
-```
+- [ ] G1b elicitation: format-spec stubs, help-file mining, generated tour-YAML draft
+  (spec: `docs/ELICITATION_AND_CLICKER.md` Part A; no VM needed).
+- [ ] G2 oracle capture: Frida file-API trace + outputs + screenshots in VM (needs Frida
+  tools installed here + virtualization-mcp handshake).
+- [ ] Ghidra 12.0 → 12.1.x upgrade (unlocks REA-ghidra; own headless works on 12.0).
+- [ ] Cold rescore to confirm 86 (same-context score is self-assessed by SOP rule).
 
-**Decision gate:** Is Ghidra 12.0 available?
-- Yes → ReVa headless is viable
-- No (11.x) → Use ReVa in GUI/assistant mode OR update Ghidra first
+## Priority 2: Gym G3-G5
 
----
+- [ ] G3 clicker tour: live pywinauto driver (read GUITAR/AppAgent/UFO trio first).
+- [ ] G4 UI build: Tauri template + codegen from capture bundle (gate: user approves).
+- [ ] G5 round trip + compare: `--gym-roundtrip` hook, oracle re-open verdict.
+- [ ] Expert-ready gap reports from failed compares (contributor funnel).
 
-## Priority 2: Install ReVa (assistant mode, this week)
+## Priority 3: Later
 
-ReVa in GUI/assistant mode works with Ghidra 11.x and is the least-friction path to a working headless-ish setup.
+- [ ] UIA-to-IPC + file-write-to-offset correlations; version-diff maps.
+- [ ] Webapp "Ask about this app" surface over `rea_investigate` + map viewer.
+- [ ] IDA Free scope check only if a Free-based workflow is ever proposed.
 
-```powershell
-# Download latest ReVa release for your Ghidra version from:
-# https://github.com/cyberkaida/reverse-engineering-assistant/releases
+## Priority 4: Shop window (demo the real thing, never vapor)
 
-# Install into Ghidra:
-# 1. Start Ghidra
-# 2. File → Install Extensions → + button → select ReVa zip
-# 3. Restart Ghidra
-# 4. Enable both plugins (Project view AND Code Browser)
-
-# ReVa serves MCP on http://localhost:8080/mcp/message by default
-```
-
-**Add to `claude_desktop_config.json`:**
-```json
-{
-  "mcpServers": {
-    "ReVa": {
-      "command": "python",
-      "args": ["-m", "mcp.client.http"],
-      "env": {}
-    }
-  }
-}
-```
-(Claude Code is the preferred client: `claude mcp add --transport http ReVa http://localhost:8080/mcp/message`)
-
----
-
-## Priority 3: Test mrphrazer headless with fake backend (this week)
-
-```powershell
-cd D:\Dev\repos\reversing-mcp\external\ghidra-headless-mcp
-
-# Create venv
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-
-# Install
-pip install -e .
-
-# Test fake backend (no Ghidra needed)
-python ghidra_headless_mcp.py --fake-backend
-# Should start, list tools via MCP
-
-# List tools
-# Connect with MCP inspector or Claude Desktop
-```
-
----
-
-## Priority 4: Decide Architecture (end of week)
-
-After testing both, choose:
-
-### Option A: reversing-mcp as companion server
-```
-Claude Desktop
-├── ReVa (or ghidra-headless-mcp) → Ghidra analysis
-└── reversing-mcp (slimmed) → static analysis + Directmedia
-```
-
-**reversing-mcp keeps:**
-- `analyze_binary` (static tools only)
-- `extract_strings`
-- `get_hexdump`
-- `analyze_entropy`
-- `analyze_pe_file`
-- `analyze_directmedia_file`
-- `decompress_directmedia_library`
-
-**reversing-mcp drops:**
-- All `ghidra_*` tools (bridge to LaurieWired)
-- `bridge_mcp_ghidra.py`
-- `start_ghidra` (launch tool)
-- One of the two web frontends
-
-### Option B: Integrate pyghidra directly
-Add pyghidra as optional dep to reversing-mcp, pull in mrphrazer's headless approach.
-More work, more control, single server.
-
-**Recommendation: Option A** — simpler, leverages best-of-breed tools, maintains focus.
-
----
-
-## Cleanup Tasks (any time)
-
-- [ ] Delete `reversing-webapp/` or `web_sota/` — pick one, document which
-- [ ] Fix Python version mismatch — `.venv` uses 3.10, system has 3.13
-- [ ] Update `glama.json` if planning Glama publication
-- [ ] Mark `bridge_mcp_ghidra.py` as deprecated once replacement chosen
-- [ ] Remove `server.py.bak` and `server.bak` files
-- [ ] Add `external/` to `.gitignore` (reference clones, not part of project)
-
----
-
-## glama.json Status
-
-The `glama.json` exists but the server is not Glama-publication-ready:
-- Tool descriptions need review (some are LaurieWired-dependent)
-- Transport config needs updating for FastMCP 3.0 patterns
-- Consider separating static-analysis tools into standalone Glama-publishable server
-
----
+- [ ] `demo-vid-mcp` Gym run on camera: intake → triage → amber verdict → gate go
+  (live `gym` calls, narrated). Then the webapp tour + first-map video as specced.
+- [ ] README Preview screenshots once the Gym page has a real run to show.
 
 ## Reference Resources
 
+- Upstream repo: https://github.com/sandraschi/reversing-mcp (PRD.md, docs/GYM_SPEC.md, docs/ELICITATION_AND_CLICKER.md)
+- REA: https://rea.tools · https://github.com/morluto/rea
 - Ghidra releases: https://github.com/NationalSecurityAgency/ghidra/releases
-- pyghidra docs: https://github.com/NationalSecurityAgency/ghidra/tree/master/Ghidra/Features/PyGhidra
-- ReVa releases: https://github.com/cyberkaida/reverse-engineering-assistant/releases
-- mrphrazer headless: https://github.com/mrphrazer/ghidra-headless-mcp
-- LaurieWired GhidraMCP: https://github.com/LaurieWired/GhidraMCP
-- Ghidra Book: O'Reilly "The Ghidra Book" (Chris Eagle, Kara Nance)
+- Fleet CUA standard: `mcp-central-docs/standards/rules/cua_nsis_smoke_testing.md`

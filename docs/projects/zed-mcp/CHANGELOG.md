@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 (2026-07-21)
+
+### New tools (1)
+- `zed_layout()` -- portmanteau: list_options, get, set for settings-backed layout knobs (pane border size, inactive pane opacity, bottom dock position, split drop-target ratio). `set_preset` (agentic/classic) is an honest-fail: Zed has no CLI/API hook to trigger a layout preset switch from outside a running instance, so it returns success=false with the manual command-palette action name instead of pretending to work.
+- 22 total tools
+- Also fixed a stale tool-count string in `zed_help()` (was hardcoded to 20, actual was already 21 before this release)
+- Added docs/ folder: Zed architecture, cross-platform notes, ACP/MCP agent support, Xcode 27 integration, Cursor/Windsurf migration notes, webapp planning notes
+
 ## 0.3.0 (2026-07-15)
 
 ### New tools (8)

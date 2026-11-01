@@ -55,14 +55,14 @@ docker compose -f docker-compose.yaml -f docker-compose.observability.yaml up -d
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│              Docker Stack (8 containers)             │
+│              Hybrid stack (native + docker)             │
 │                                                      │
 │  Browser (10886/15500) ←→ LiveKit SFU (15580)       │
 │       │                            │                 │
-│       ├── Redis (16379)            └── Agent (10887) │
+│       ├── Redis (16379)            └── Agent (just agent) │
 │       │                                │             │
-│       ├── conferencing-mcp (10720)     ├── Ollama    │
-│       ├── remoting-mcp (10725)         ├── LanceDB   │
+│       ├── conferencing-mcp (10887)     ├── Ollama    │
+│       ├── remoting-mcp (11069)         ├── LanceDB   │
 │       │                                └── MCP Disc  │
 │       │                                              │
 │       └── Observability Stack:                       │
@@ -108,10 +108,10 @@ docker compose -f docker-compose.yaml -f docker-compose.observability.yaml up -d
 | Service | Dev Port | Docker Port |
 |---------|----------|-------------|
 | Web dashboard | 10886 | 15500 |
-| AI agent | 10887 | (container) |
-| Conferencing MCP | 10720 | (dev only) |
-| Conferencing health | 10721 | (dev only) |
-| Remoting MCP | 10725 | (dev only, Win) |
+| AI agent | (via just agent) | (container) |
+| Conferencing MCP (/mcp, /health) | 10887 | native via start.ps1 |
+| Conferencing health/diag | 10891 | native |
+| Remoting MCP (SSE) | 11069 | (dev only, Win) |
 | MCP discovery | 10700–10800 | — |
 | LiveKit WS | 15580 | 15580 |
 | LiveKit WebRTC | 15581 | 15581 |
@@ -133,11 +133,9 @@ docker compose -f docker-compose.yaml -f docker-compose.observability.yaml up -d
 docker compose -f docker-compose.yaml up -d
 
 # Development (local processes, Docker infra only)
-docker compose up -d livekit redis
+docker compose up -d redis  # never a livekit service (native LiveKitSFU owns :15580)
 .\start.ps1 all
 ```
-
-> **LiveKit SFU (2026-08-03):** on Goliath the SFU runs as a **Windows service** (`LiveKitSFU`, NSSM, native `livekit-server` 1.7.0 + `livekit.yaml`, auto-start). `docker compose up -d livekit` is only needed on non-Windows/dev machines. Verify: `Get-Service LiveKitSFU`; logs: `D:\Dev\repos\teleconference-mcp\logs\livekit.out.log`; reinstall: `teleoperator-mcp/scripts/install-livekit-service.ps1` (elevated). See `integrations/livekit/README.md`.
 
 ### Access Points
 | Service | URL |

@@ -76,4 +76,4 @@ All tools use the [portmanteau pattern](https://opencode.ai) — a single tool w
 
 ## License
 
-MIT &mdash; Sandra Schipal, Vienna
+MIT &mdash; Sandra S., Vienna

@@ -1,6 +1,8 @@
 # Apple app projects (fleet portfolio)
 
-Monetizable iOS/macOS app ideas that **reuse sandraschi fleet work** — not generic App Store clones.
+**Private — Sandra S. + collaborators only. Not for public distribution.**
+
+Monetizable iOS/macOS app ideas that **reuse sandraschi fleet work** — not generic App Store clones. Target: Xcode 27.2, iOS/iPadOS 27 SDK (Oct 2026).
 
 **Rules for this portfolio**
 
@@ -11,11 +13,11 @@ Monetizable iOS/macOS app ideas that **reuse sandraschi fleet work** — not gen
 
 ## Fleet iPad apps (separate folder)
 
-New fleet-connected iPad specs live under **[projects/apple/](../../projects/apple/README.md)** — not in this index until shipped.
+New fleet-connected iPad specs live under **[projects/apple/](../../../projects/apple/README.md)** — not in this index until shipped.
 
 | Project | Doc | Status |
 |---------|-----|--------|
-| **CalFolio** (Calibre on iPad) | [CALFOLIO.md](../../projects/apple/CALFOLIO.md) · [EPUB reader](../../projects/apple/EPUB_READER.md) | Pre-scaffold — calibreops backend |
+| **CalFolio** (Calibre on iPad) | [CALFOLIO.md](../../../projects/apple/CALFOLIO.md) · [EPUB reader](../../../projects/apple/EPUB_READER.md) | Pre-scaffold — calibreops backend, no repo yet |
 
 ---
 
@@ -23,7 +25,7 @@ New fleet-connected iPad specs live under **[projects/apple/](../../projects/app
 
 | If you want… | Start with |
 |--------------|------------|
-| **Calibre library on iPad (fleet)** | [CalFolio](../../projects/apple/CALFOLIO.md) |
+| **Calibre library on iPad (fleet)** | [CalFolio](../../../projects/apple/CALFOLIO.md) |
 | Proven consumer niche + creative fleet | [VRMDance](vrmdance.md) |
 | **Raspbot / agentic robot remote** | **[Boomy Commander](boomy-commander.md)** |
 | Fastest paid utility (1–2 weeks) | [Tapo Grid](tapo-grid.md) |
@@ -31,6 +33,7 @@ New fleet-connected iPad specs live under **[projects/apple/](../../projects/app
 | AI differentiation without cloud bills | [On-Device Study Coach](on-device-study-coach.md) |
 | World Labs / 3D showcase | [Marble Pocket](marble-pocket.md) |
 | Media library angle | [Shelf Remote](shelf-remote.md) |
+| Doorbell + cams, fast | [Ring Glance](ring-glance.md) |
 
 ## Portfolio index
 
@@ -56,7 +59,7 @@ New fleet-connected iPad specs live under **[projects/apple/](../../projects/app
 
 | Topic | Doc |
 |-------|-----|
-| Xcode 26 agentic workflow | [../development/AGENTIC_XCODE_26.md](../development/AGENTIC_XCODE_26.md) |
+| Xcode 26–27 agentic workflow | [../development/AGENTIC_XCODE_26.md](../development/AGENTIC_XCODE_26.md) |
 | Install paths, IAP, commission | [../ios/DISTRIBUTION_AND_MONETIZATION.md](../ios/DISTRIBUTION_AND_MONETIZATION.md) |
 | App Store submission | [../publishing/README.md](../publishing/README.md) |
 | Factory-scale list (Vienna/robotics) | [../DARK_APP_FACTORY.md](../DARK_APP_FACTORY.md) |
@@ -84,4 +87,4 @@ Avoid “yet another ChatGPT wrapper” — Apple and users punish redundant clo
 None of this replaces a salary. Goal: **first App Store payouts**, learning StoreKit + review, and apps that justify maintenance via fleet reuse.
 
 ---
-*Last updated: 2026-05-28*
+*Last updated: 2026-10-28 (27.2 generation; fixed CalFolio link depth, added Ring Glance picker row)*

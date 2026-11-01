@@ -1,8 +1,8 @@
 # Cursor IDE - MCP & Agent Integration (SOTA)
 
 **Status:** Active  
-**Updated:** 2026-06-06  
-**Index:** [Jun 2026 changelog](CHANGELOG_DIGEST_JUN_2026.md) · [No local provider](NO_LOCAL_PROVIDER.md) · [Cloud Agents](CLOUD_AGENTS.md) · [Profiles](PROFILES.md) · [cursor-mcp](CURSOR_MCP_PROPOSAL.md)
+**Updated:** 2026-07-27  
+**Index:** [MCP UX 3.13 (Jul 2026)](MCP_UX_3_13_DIGEST.md) · [Jun 2026 changelog](CHANGELOG_DIGEST_JUN_2026.md) · [No local provider](NO_LOCAL_PROVIDER.md) · [Cloud Agents](CLOUD_AGENTS.md) · [Profiles](PROFILES.md) · [cursor-mcp](CURSOR_MCP_PROPOSAL.md)
 **Target:** Cursor 2.x (Oct 2025+), 3.x (2026)
 
 Cursor has evolved rapidly in late 2025 and early 2026, adding multi-agent workflows, native Skills, and deeper MCP integration. This guide covers MCP server setup, Agent modes, Skills, and SOTA patterns for MCP development.
@@ -93,23 +93,26 @@ Use `/migrate-to-skills` to convert:
 
 ## 4. MCP Integration
 
-### Config Location (Windows)
+**Fleet digest (host UX, approval, changelog gaps):** [MCP_UX_3_13_DIGEST.md](MCP_UX_3_13_DIGEST.md)
 
-- **MCP config**: `%APPDATA%\Cursor\User\globalStorage\cursor-storage\mcp_config.json`
-- **Key**: `mcpServers`
+### Config location (Windows)
+
+- **Global:** `%USERPROFILE%\.cursor\mcp.json`
+- **Project:** `<repo>\.cursor\mcp.json` (merged; project keys win)
+- **Key:** `mcpServers`
 
 ### Setup
 
-1. Cursor Settings > Features > MCP
-2. "+ Add New MCP Server"
-3. Set name, transport (stdio or SSE), command/URL
+1. Sidebar **Customize** → **MCPs** (3.9+), or **Cursor Settings → Tools & Integrations → MCP**
+2. Add from marketplace, or edit `mcp.json` directly
+3. Transport: `command` = stdio local; `url` = remote HTTP/SSE
 
 ### Behavior
 
-- MCP tools are available only in Agent (Composer)
-- Agent selects tools when relevant
-- User approval required before execution
-- Not all models support all tools
+- MCP tools available in **Agent** mode; agent picks tools when relevant
+- Default **Auto-review** (3.6+): allowlist → sandbox → classifier → approval prompt; 3.13 adds **timed auto-approve (~60s)** on pending calls (see digest)
+- Toggle servers without deleting config: **Customize → MCPs**
+- Logs: Output → **MCP Logs**
 
 ---
 

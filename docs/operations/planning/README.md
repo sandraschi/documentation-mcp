@@ -9,7 +9,11 @@ MCD did not previously have a single planning home. Strategic docs were scattere
 | Location | Use for |
 |----------|---------|
 | [`operations/planning/`](.) | **Fleet-wide roadmaps and specs** (this folder) |
+| [`operations/planning/backlog/`](backlog/) | Named fleet sweep backlogs (API hardening, docstrings, …) |
+| [`operations/planning/PARKING_LOT.md`](PARKING_LOT.md) | Future ideas — not scheduled |
+| [`operations/docs-mcp/`](../docs-mcp/) | MCD RAG / exerciser / ingest backlogs |
 | [`operations/`](../) | Live ops: ports, control plane, intel stack TODO |
+| [`../../TODO.md`](../../TODO.md) | **Thin index** — links to all of the above |
 | [`adn-notes/`](../../adn-notes/) | Short dated decision records (`ADN-YYYY-MM-DD-NNN`) |
 | [`research/notes/`](../../research/notes/) | MemOps-ingestible summaries (frontmatter + tags) |
 | [`projects/*/TODO.md`](../../projects/) | Per-repo backlogs |
@@ -29,6 +33,9 @@ MCD did not previously have a single planning home. Strategic docs were scattere
 | [specs/P4-comms-mcp.md](specs/P4-comms-mcp.md) | Draft | WhatsApp / Signal / Telegram bridge |
 | [specs/P5-fleet-trust-layer.md](specs/P5-fleet-trust-layer.md) | Draft | Registry sync + contract tests |
 | [specs/P6-memops-stabilization.md](specs/P6-memops-stabilization.md) | **Kickoff** | MemOps stability, cottage industry audit, tiered RAG |
+| [POSSIBLE_PROJECTS.md](../../projects/POSSIBLE_PROJECTS.md) | **Living** | MCP ideas not yet built (e.g. twixxer-mcp / X API) |
+| [PARKING_LOT.md](PARKING_LOT.md) | **Parking** | Future ideas not scheduled — leanforge rename, email intake, … |
+| [backlog/](backlog/) | **Sweeps** | Fleet-wide audit backlogs (API hardening, screenshots, …) |
 
 ## Registry maintenance
 

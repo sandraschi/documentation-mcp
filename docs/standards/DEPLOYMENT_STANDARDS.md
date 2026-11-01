@@ -1,3 +1,13 @@
+---
+title: "Deployment & Installation Patterns"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Deployment & Installation Patterns
 
 ## 1. Zero-Install Execution (Preferred)
@@ -24,4 +34,4 @@ To maintain friction-less operation, all servers should support:
 ## 4. Production Substrate
 
 - Use **Docker Compose** for deployments requiring persistent DBs (Postgres, Redis).
-- Ensure ports fall within the **10700-11500** SOTA range.
+- Ensure ports fall within the SOTA reservoir ([WEBAPP_PORTS.md](../operations/WEBAPP_PORTS.md), currently 10700-12000 — check the file, do not hardcode the range).

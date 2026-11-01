@@ -1,7 +1,7 @@
 # MCP Tool Reference
 
 All tools follow the **portmanteau pattern**: a single `@mcp.tool()` with an `operation` parameter
-that selects the sub-operation. This keeps the tool list manageable.
+that selects the sub-operation. Operations listed below are **implemented** (stubs removed as of the 2026-07 wiring pass).
 
 ## `grafana_management`
 
@@ -16,86 +16,86 @@ that selects the sub-operation. This keeps the tool list manageable.
 | `list_datasources` | List configured Grafana datasources | Implemented |
 | `query_datasource` | Run query against a datasource | Implemented |
 | `analyze_dashboard` | Dashboard structure analysis + scoring | Implemented |
-| `create_panel` | Add panel to dashboard | Not yet implemented |
-| `update_panel` | Modify panel config | Not yet implemented |
-| `create_alert` | Set up alerting rules | Not yet implemented |
-| `export_dashboard` | Export as JSON | Not yet implemented |
-| `import_dashboard` | Import from JSON | Not yet implemented |
-| `list_folders` | List dashboard folders | Not yet implemented |
-| `create_folder` | Create dashboard folder | Not yet implemented |
-| `get_dashboard_permissions` | View permissions | Not yet implemented |
+| `create_panel` | Add panel to dashboard | Implemented |
+| `update_panel` | Modify panel config | Implemented |
+| `create_alert` | Grafana unified alerting rule | Implemented |
+| `export_dashboard` | Export as JSON | Implemented |
+| `import_dashboard` | Import from JSON | Implemented |
+| `list_folders` | List dashboard folders | Implemented |
+| `create_folder` | Create dashboard folder | Implemented |
+| `get_dashboard_permissions` | View permissions | Implemented |
 
 ## `prometheus_monitoring`
 
 | Operation | Description | Status |
 |-----------|-------------|--------|
-| `query_metrics` | Instant PromQL query | Implemented |
-| `query_range` | Range PromQL query with time window | Implemented |
+| `query_metrics` | Instant PromQL query (with sampling) | Implemented |
+| `query_range` | Range PromQL query | Implemented |
 | `list_targets` | List scrape targets + health | Implemented |
-| `get_target_health` | Health summary with up/down counts | Implemented |
+| `get_target_health` | Health by job/instance/URL | Implemented |
 | `list_rules` | Alerting + recording rules | Implemented |
+| `get_rule_groups` | Rule group configs | Implemented |
 | `list_alerts` | Active alerts with state summary | Implemented |
+| `get_alert_details` | Filter alerts by name | Implemented |
 | `get_build_info` | Prometheus version | Implemented |
-| `analyze_metrics` | Detect anomalous patterns in results | Implemented |
+| `get_config` | Runtime config | Implemented |
+| `get_flags` | CLI flags | Implemented |
+| `analyze_metrics` | Anomaly patterns + prometheus-api-client metadata | Implemented |
 | `optimize_queries` | PromQL performance suggestions | Implemented |
-| `get_rule_groups` | Rule group configs | Not yet implemented |
-| `create_alert_rule` | Create new rule | Not yet implemented |
-| `update_alert_rule` | Modify existing rule | Not yet implemented |
-| `delete_alert_rule` | Remove rule | Not yet implemented |
-| `get_alert_details` | Single alert detail | Not yet implemented |
-| `silence_alert` | Suppress alert notifications | Not yet implemented |
-| `list_silences` | Active silences | Not yet implemented |
-| `expire_silence` | Remove silence | Not yet implemented |
-| `get_config` | Prometheus runtime config | Not yet implemented |
-| `get_flags` | CLI flags | Not yet implemented |
+| `create_alert_rule` | Via Grafana unified alerting | Implemented |
+| `update_alert_rule` | Via Grafana unified alerting | Implemented |
+| `delete_alert_rule` | Via Grafana unified alerting | Implemented |
+| `silence_alert` | Alertmanager silences | Implemented |
+| `list_silences` | Active silences | Implemented |
+| `expire_silence` | Remove silence | Implemented |
 
 ## `loki_logging`
 
 | Operation | Description | Status |
 |-----------|-------------|--------|
 | `query_logs` | Instant LogQL query | Implemented |
-| `query_range` | Range LogQL with time window | Implemented |
-| `tail_logs` | Stream recent logs (limited) | Implemented |
-| `get_labels` | List available log labels | Implemented |
-| `get_label_values` | Values for a specific label | Implemented |
-| `get_series` | Series matching stream selectors | Implemented |
-| `analyze_logs` | Pattern recognition in log sample | Implemented |
-| `detect_anomalies` | Error rate, connection, timestamp checks | Implemented |
-| `search_errors` | Find ERROR/Exception/Failed patterns | Implemented |
-| `trace_requests` | Find request/correlation IDs in logs | Implemented |
-| `create_alert_rule` | Log-based alerting | Not yet implemented |
-| `list_alerts` | Active log alerts | Not yet implemented |
-| `optimize_queries` | LogQL perf suggestions | Not yet implemented |
-| `export_logs` | Export in various formats | Not yet implemented |
-| `compare_timeframes` | Diff log patterns between periods | Not yet implemented |
-| `generate_report` | Comprehensive analysis report | Not yet implemented |
+| `query_range` | Range LogQL | Implemented |
+| `tail_logs` | WebSocket tail (query_range fallback) | Implemented |
+| `get_labels` | List labels | Implemented |
+| `get_label_values` | Values for a label | Implemented |
+| `get_series` | Series matching selectors | Implemented |
+| `analyze_logs` | Pattern recognition | Implemented |
+| `detect_anomalies` | Error-rate / anomaly heuristics | Implemented |
+| `search_errors` | ERROR/Exception patterns | Implemented |
+| `trace_requests` | Correlation IDs in logs | Implemented |
+| `create_alert_rule` | Loki ruler API | Implemented |
+| `list_alerts` | Loki ruler rules | Implemented |
+| `optimize_queries` | LogQL suggestions | Implemented |
+| `export_logs` | json / csv / text | Implemented |
+| `compare_timeframes` | Volume delta between windows | Implemented |
+| `generate_report` | Combined patterns + errors report | Implemented |
 
 ## `cross_system_correlation`
 
 | Operation | Description | Status |
 |-----------|-------------|--------|
-| `correlate_incident` | Cross-reference metrics + logs for an incident | Implemented |
-| `find_root_cause` | Heuristic root cause from error metrics + logs | Implemented |
-| `performance_correlation` | Link latency metrics with perf-related logs | Implemented |
-| `error_correlation` | Cluster errors by type and affected service | Implemented |
-| `health_assessment` | Combined health score from all systems | Implemented |
-| `anomaly_correlation` | Connect metric anomalies with log patterns | Not yet implemented |
-| `service_dependency_map` | Map service relationships | Not yet implemented |
-| `impact_analysis` | Analyse change/incident impact | Not yet implemented |
-| `predictive_insights` | Trend-based predictions | Not yet implemented |
-| `bottleneck_detection` | Identify system bottlenecks | Not yet implemented |
+| `correlate_incident` | Cross-reference metrics + logs | Implemented |
+| `find_root_cause` | Heuristic root cause | Implemented |
+| `performance_correlation` | Latency vs perf logs | Implemented |
+| `error_correlation` | Error clusters | Implemented |
+| `health_assessment` | Combined health score | Implemented |
+| `anomaly_correlation` | Metric anomalies vs error logs | Implemented |
+| `service_dependency_map` | From Prometheus scrape topology | Implemented |
+| `impact_analysis` | Affected services | Implemented |
+| `predictive_insights` | Heuristic trend window | Implemented |
+| `bottleneck_detection` | High latency + slow logs | Implemented |
 
 ## `monitoring_status`
 
 | Operation | Description | Status |
 |-----------|-------------|--------|
-| `system_health` | Overall health across all components | Implemented |
-| `connectivity_test` | Test reachability of each system | Implemented |
-| `configuration_validation` | Validate URLs, datasources, labels | Implemented |
-| `performance_metrics` | Prometheus engine query stats | Implemented |
-| `data_flow_status` | Check datasource links in Grafana | Implemented |
-| `alert_status` | Active firing alerts + rule count | Implemented |
-| `storage_status` | Storage health/capacity | Not yet implemented |
-| `backup_status` | Backup/data retention | Not yet implemented |
-| `security_status` | Security health check | Not yet implemented |
-| `capacity_planning` | Growth trends | Not yet implemented |
+| `system_health` | Overall health | Implemented |
+| `connectivity_test` | Reachability | Implemented |
+| `configuration_validation` | URL / config checks | Implemented |
+| `performance_metrics` | Engine query stats | Implemented |
+| `data_flow_status` | Datasource links | Implemented |
+| `alert_status` | Firing alerts + rules | Implemented |
+| `storage_status` | Local disk + Prom TSDB | Implemented |
+| `backup_status` | Retention / integrity token | Implemented |
+| `security_status` | Auth + HTTPS posture | Implemented |
+| `capacity_planning` | Disk free + head series | Implemented |

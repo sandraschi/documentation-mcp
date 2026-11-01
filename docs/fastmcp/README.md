@@ -1,5 +1,7 @@
 # FastMCP Fleet Reference
 
+**Private — Sandra S. + collaborators only. Not for public distribution.**
+
 > Central index of all FastMCP-related documentation in mcp-central-docs.
 
 ## Releases & Changelog
@@ -17,6 +19,8 @@
 | [3.2-features.md](3.2-features.md) | FastMCP 3.2 GA — providers, transforms, CodeMode, Prefab UI, prompts, skills |
 | [3.4-features.md](3.4-features.md) | FastMCP 3.4 — remote bridge, fail-loud proxies, returnable errors |
 | [3.5-features.md](3.5-features.md) | FastMCP 3.5 — pluggable storage, response caching middleware, Azure/HF OAuth, SDK pinning |
+| [2026-07-28-spec-migration.md](2026-07-28-spec-migration.md) | **New** — MCP 2026-07-28 stateless core, MRTR, deprecations (sampling/roots/SSE), FastMCP 4 planning |
+| [fastmcp-4-assessment.md](fastmcp-4-assessment.md) | **New** — FastMCP 4 revised verdict: worth upgrading once fleet-llm removes sampling dependency. Beta proviso. |
 | [mrtr-guide.md](mrtr-guide.md) | **New** — MRTR (SEP-2322) deep dive: wire shape, SDK support matrix, client adoption status, fleet decision table, sampling-lesson risk |
 | [fastmcp-32-fleet-capability-map.md](fastmcp-32-fleet-capability-map.md) | Capability ladder from baseline to autonomous orchestration |
 

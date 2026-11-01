@@ -11,7 +11,7 @@
 
 > 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-![Audiotool Nexus Logo](file:///C:/Users/sandr/.gemini/antigravity/brain/97a950ab-822d-4106-b124-640a786adf30/nexus_logo_premium_1776123216232.png)
+![Audiotool Nexus Logo](file:///C:/Users/<user>/.gemini/antigravity/brain/97a950ab-822d-4106-b124-640a786adf30/nexus_logo_premium_1776123216232.png)
 
 A high-performance **MCP Server** and **Industrial Dashboard** for the **[Audiotool NEXUS SDK](https://developer.audiotool.com)**. This node provides a bidirectional bridge between AI agents and the Audiotool modular DAW ecosystem.
 

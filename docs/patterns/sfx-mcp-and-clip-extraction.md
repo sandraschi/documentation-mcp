@@ -26,7 +26,7 @@ Returns: `{"success": true, "sounds": [{"id": 123, "name": "fire-01.wav", "durat
 
 ```env
 FREESOUND_API_KEY=your_key_here  # FreeSound API token (free registration)
-SFX_LOCAL_PATH=C:/Users/sandr/Music/SFX  # local sound library path
+SFX_LOCAL_PATH=C:/Users/<user>/Music/SFX  # local sound library path
 ```
 
 ### Why CC0?

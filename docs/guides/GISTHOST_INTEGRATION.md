@@ -38,7 +38,7 @@ To create an interactive dashboard for an MCP node:
     <!DOCTYPE html>
     <html>
     <head>
-        <title>MCP Node Status: Alsergrund</title>
+        <title>MCP Node Status: Vienna</title>
         <style>
             body { background: #0d1117; color: #7F77DD; font-family: monospace; padding: 20px; }
             .status-card { border: 1px solid #7F77DD; padding: 15px; border-radius: 8px; }
@@ -46,7 +46,7 @@ To create an interactive dashboard for an MCP node:
         </style>
     </head>
     <body>
-        <h1>🛰️ Node: Alsergrund-1</h1>
+        <h1>🛰️ Node: Vienna-1</h1>
         <div class="status-card">
             <p>Fleet Uptime: <span class="online">99.9%</span></p>
             <p>Active Servers: 32 / 32</p>

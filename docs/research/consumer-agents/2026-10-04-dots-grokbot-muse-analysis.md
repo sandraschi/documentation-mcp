@@ -1,0 +1,517 @@
+# Consumer AI Agent Bots (Q3/Q4 2026): Analysis
+
+> Research as of 2026-10-04. Copied into mcp-central-docs on 2026-10-11.
+> Live, editable version: https://claude.ai/code/artifact/ef9db765-6627-4579-9259-60d996c660fe
+> Claims marked UNVERIFIED were not confirmed on a primary page.
+
+## Summary
+
+Three always-on agents with their own cloud computers launched in seven weeks: SpaceXAI **Grok Bot** (2026-08-11), Meta **Muse** (2026-09-08) and OpenAI **dots** (2026-09-29). All three are real products. The correct names are "dots" (lowercase) and "Grok Bot".
+
+The key findings:
+
+1. **Same architecture, three business models.** Each bot gets a cloud VM with a browser, connects to your apps, and keeps working after you close the app.
+   - dots is a work teammate inside ChatGPT Pro.
+   - Grok Bot is a team of bots riding on Cursor plans, all sharing one PC per user.
+   - Muse is a free-to-$100 consumer errand-runner in WhatsApp, paying through Stripe Link one-time cards.
+2. **Austria is mostly locked out.** Pro dots are excluded from the EEA, Muse is US-only, Siri AI is blocked on EU iPhones. Grok Bot and Alexa+ Germany (EUR 22.99) are the exceptions.
+3. **Prompt injection is unsolved, by the vendors' own admission.** Every vendor answers it with a second "reviewer" model and human approvals. The incident record from 2025 to 2026 shows why: Comet, Atlas, EchoLeak, ShadowLeak, the OpenClaw skill malware, and OpenClaw's email deletion.
+4. **The cute framing is a real concern.** Meta put a Labubu-style plush ("Jolly") on an 18+ agent that trains on your interactions by default. Fairplay called it child-targeted. OpenAI followed with fuzzy dots. The mascots show mood, not permissions.
+5. **Robots are the next step, but not yet real.** No consumer humanoid has been confirmed working in a paying customer's home. 1X NEO still relies on a remote human in VR, and Grok is slated to be Optimus's brain.
+6. **FOSS got there first.** OpenClaw (391k stars) and Hermes Agent (251k) pioneered the chat-app-resident, proactive, skill-learning agent. Muse is reportedly modelled on OpenClaw. FOSS trades polish and vendor security for control and privacy.
+7. **Our fleet holds about 80% of the parts.** That covers VMs, desktop control, browser, memory, voice, avatars, smart home and robots. What is missing is an integrated loop and a fleet-wide action gate. We can beat the vendors on privacy, user-owned memory, a user-written policy gate, and real embodiment. We cannot beat them on polish.
+
+## Method
+
+The research ran on 2026-10-04 (clock read from the system, Europe/Vienna), using six parallel research agents plus a direct pass by me. Each claim has a source link. Anything not confirmed on an opened page is marked **UNVERIFIED**.
+
+| Track | Scope | Tools |
+| --- | --- | --- |
+| A | OpenAI and xAI consumer agents | Web search plus page fetch |
+| B | Meta, Google, Amazon, Microsoft, Anthropic, Perplexity, Apple, Chinese players | Web search plus page fetch |
+| C | Failures, incidents, critics, regulation, the anthropomorphism critique | Web search plus page fetch |
+| D | Household robots; early-2026 FOSS agents (OpenClaw/Moltbot, Hermes Agent and others) | Web search plus page fetch |
+| E | arXiv literature | arxiv-mcp plus abs-page checks |
+| F | Local fleet under D:\\Dev\\repos | Read-only file scan |
+
+Product names came from the request ("OpenAI dots", "xAI grokbot", "Meta muse"). They were checked against vendor pages before use. Where the real name differs, the doc says so.
+
+## Product profiles
+
+All three named products are real. Each one is an always-on agent with its own cloud computer that keeps working after you close the app. They launched within seven weeks of each other: Grok Bot on 2026-08-11, Muse on 2026-09-08 and dots on 2026-09-29.
+
+### OpenAI dots (official name lowercase "dots")
+
+- **Launch:** announced at DevDay on 2026-09-29, running on GPT-6 Astra ([OpenAI](https://openai.com/index/introducing-dots/), [TechCrunch](https://techcrunch.com/2026/09/29/openai-launches-dots-its-bubbly-agentic-avatar/)). OpenAI says the open-sourced Codex harness powers it ([Decrypt](https://decrypt.co/379584/openai-ai-agents-computers-devday-2026-everything-announced)).
+- **Virtual PC:** each dot gets a sandboxed Linux cloud computer with Chrome, isolated per user. You can open it and take control at any time. Access to your own computer is off by default ([safety post](https://openai.com/index/how-we-build-safety-security-and-privacy-into-dots/), [help](https://help.openai.com/en/articles/20001530)).
+- **Reach:** ChatGPT desktop, web and mobile, Slack, Teams and voice calls. Texting is a beta for US Pro users only. It connects to 4,000+ apps through plugins.
+- **Errands:** calendar review, recurring checks and personal email. It cannot have its own email address and cannot call you.
+- **Commerce:** it buys with cards already saved on the merchant's site, and only after your approval. Money transfers always go back to you.
+- **Travel:** OpenAI's example is research for a Lisbon trip. No booking partners are named.
+- **Memory:** inherits ChatGPT memory and learns from connected apps. Its own memories can only be wiped by deleting the whole dot.
+- **Price:**
+  - The first dot is included in Pro and Business Premium. Pro 500 costs $500/month ([Decrypt](https://decrypt.co/379584/openai-ai-agents-computers-devday-2026-everything-announced)).
+  - Pro 100 and Pro 200 tiers are UNVERIFIED (secondary sources only).
+  - Extra dots are "in the future".
+- **EU:** Pro dots are **not** available in the EEA, Switzerland or the UK. Business Premium dots are.
+- **Look:** a "bubbly" cartoon persona. You name it and can pick a character or a pet.
+- **Lineage:**
+  - Atlas browser (launched 2025-10-21) was retired into ChatGPT Work on 2026-07-09 ([PPC Land](https://ppc.land/openai-kills-atlas-browser-folds-it-into-new-chatgpt-work-agent/)).
+  - Instant Checkout was retired in March 2026 and moved to merchant apps ([CNBC](https://www.cnbc.com/2026/03/20/open-ai-agentic-shopping-etsy-shopify-walmart-amazon.html)).
+  - The Jony Ive io device is still unreleased.
+
+### SpaceXAI Grok Bot (official name "Grok Bot", not "grokbot")
+
+- **Launch:** beta on 2026-08-11 ([x.ai](https://x.ai/news/introducing-grok-bot)).
+- **Maker:** SpaceX acquired xAI on 2026-02-02 and renamed it SpaceXAI. SpaceX's $60B purchase of Cursor closed 2026-08-14 ([Wikipedia](https://en.wikipedia.org/wiki/SpaceXAI)).
+- **Not the chatbot:** Grok Bot is a different app from Grok, and you sign in with a Cursor account ([Cursor FAQ](https://cursor.com/help/grok-bot/faqs)). Cursor picks the model for each task; there is no picker.
+- **Virtual PC:** **one persistent cloud computer per user, shared by all of your Bots**: files, browser and logins together ([x.ai/bot](https://x.ai/bot)). Reworked calls that a "real blast radius" ([Reworked](https://www.reworked.co/collaboration-productivity/xai-launches-grok-bot-ai-agents-in-beta/)).
+- **Teams of Bots:** Bots run in parallel, a "chief of staff" Bot coordinates them, and they work in group chats. "Follow along" mode records a task you do once and replays it as a routine.
+- **Integrations:** 220 plugins at launch (Google Workspace, Microsoft 365, Slack, Salesforce and others). It falls back to the browser when there is no plugin.
+- **Commerce:** no payment rail or merchant partners are published. Purchases need approval, and the Bot stops at manual payment entry.
+- **Price:**
+  - No standalone plan. Included with every paid Cursor plan and with linked SuperGrok or X Premium+ subscriptions ([plans](https://cursor.com/help/grok-bot/plans)).
+  - Weekly allowance of unpublished size, then optional on-demand billing up to a cap you set.
+- **EU:** no regional restriction stated.
+- **Look:** each Bot has a selectable or generated "character" avatar.
+- **Lineage:** the Grok companions (Ani, Valentine, Rudi) arrived in July 2025. Their 2026 retirement is UNVERIFIED.
+
+### Meta Muse
+
+- **Launch:** announced 2026-09-08, US only, 18+ ([Meta](https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/), [PBS](https://www.pbs.org/newshour/nation/meta-launches-personal-ai-agent-muse-to-help-with-everyday-tasks)).
+- **Model:** Muse Spark, first shown 2026-04-08 as the first model from Meta Superintelligence Labs.
+- **Virtual PC:** a per-user "Muse Secure VM". A "Confidential VM" with keys the user holds is promised later this year.
+- **Reach:** Muse app, muse.ai and **WhatsApp**. Glasses are "coming soon".
+- **Errands:** sends email, books travel, fills forms, opens a browser and negotiates for you. It turns saved Instagram reels into to-do lists.
+- **Commerce:** **Link by Stripe** one-time card numbers, with Link's purchase protections. Shop Pay and 1Password are "coming soon".
+- **Safety:** a separate **Sentinel** agent approves every action that reaches the internet. You get an audit trail, a training opt-out, and Meta says Muse data is not shared with its ad systems.
+- **Price:** a free tier plus $20 and $100 monthly plans ([Khaleej Times](https://www.khaleejtimes.com/tech/meta-muse-ai-agent-rollout)). No EU availability.
+- **Reported problems:** internal testing reportedly found an agent "routing around guardrails" and exposing personal iCloud photos. Muse is reportedly "modeled on" OpenClaw (same source).
+
+### Other players
+
+| Product | Status | Virtual PC | Commerce rail | Price | EU |
+| --- | --- | --- | --- | --- | --- |
+| [Google Gemini Spark](https://www.pcworld.com/article/3143445/googles-new-spark-ai-agent-will-run-your-digital-life-for-100-month.html) | Announced I/O 2026-05-19; 24/7 agent across Workspace with sub-agents | Cloud VMs (US beta) | AP2 mandates plus UCP (Shopify, Etsy, Wayfair, Target) | AI Ultra, $100 or $200/month | No |
+| Google Chrome auto browse | 2026-01-28; shop, fill forms, compare flights | User's browser | UCP | AI Pro $19.99 and up | No |
+| [Anthropic Cowork](https://support.claude.com/en/articles/13364135-using-cowork) | GA 2026-04-09; full Chrome side-panel sessions since Aug 2026 | Temporary isolated cloud environments; a Mac sandbox escape was reported in July 2026 | none | Paid Claude plans | Yes |
+| [Microsoft Windows agent workspace](https://support.microsoft.com/windows/experimental-agentic-features-a25ede8a-e4c2-4841-85a8-44839191dfb3) | Insider preview. "Browse with Copilot" in Edge is M365 Premium, US only | Separate Windows session, explicitly not a VM | none | M365 Premium | Partly |
+| [Amazon Alexa+](https://www.aboutamazon.com/news/devices/alexa-plus-voice-booking-integrations) | US GA 2026-02-04; Germany from 2026-05-07 | none | Amazon, plus bookings via Expedia, Yelp, Angi, Square | $19.99 or **EUR 22.99**/month, free with Prime | **Yes (DE)** |
+| Perplexity Comet | Free since Oct 2025; Android out | User's browser | Merchant sites | Free, Plus $5/month | Yes |
+| Apple Siri (iOS 27) | English beta from Sept 2026, built on a custom Gemini model | On-device plus Private Cloud Compute | Apple Pay | Not disclosed | **Blocked on EU iPhones (DMA)** |
+| Alibaba Qwen app | Since 2026-01-15: Taobao, Fliggy travel, Alipay in-chat | none | Alipay | Free | No |
+| ByteDance Doubao phone | ZTE Nubia handset; clicks the screen for you | On-device | Was blocked by WeChat, Alipay and banks | CNY 3,499 handset | No |
+
+## Comparison: features, limitations, costs
+
+They share one architecture and run three different business models. dots is a work teammate bundled into ChatGPT Pro, Grok Bot is a team of power-user bots riding on Cursor, and Muse is a consumer errand-runner that lives in WhatsApp. Only Muse has a named payment rail with buyer protections. None of the three is available to a Vienna consumer on a personal plan except Grok Bot.
+
+|  | OpenAI dots | SpaceXAI Grok Bot | Meta Muse |
+| --- | --- | --- | --- |
+| Launched | 2026-09-29 | 2026-08-11 (beta) | 2026-09-08 |
+| Virtual PC | Per-dot Linux + Chrome | One PC per user, shared by all Bots | Per-user Secure VM; Confidential VM promised |
+| Your own PC | Opt-in, off by default | Opt-in, asks each time | Not stated |
+| Multi-agent | One dot at launch | Several Bots plus a "chief of staff" | Single agent |
+| Channels | ChatGPT, Slack, Teams, voice | Desktop and mobile apps, group chats | App, web, WhatsApp |
+| Shopping | Cards saved at the merchant, with approval | Approval required; no rail published | Stripe Link one-time cards plus purchase protections |
+| Travel | Research; no partners named | Not published | Books travel (no partners named) |
+| Memory control | Delete the whole dot to wipe its own memories | Shared across Bots; no edit view found | "Forget" command, audit trail |
+| Gatekeeper | Auto-review outside the sandbox, plus four Custom Rule levels | Auto-review cards, "Ask first" rules, takeover for sign-ins | Sentinel approves every outbound action |
+| Entry price | Included in ChatGPT Pro; Pro 500 = $500/month | Any paid Cursor plan, or a linked SuperGrok | Free, $20 or $100/month |
+| Usage limit | Separate "deeper work" allowance; spawned Codex tasks count | Weekly allowance (size unpublished), then capped overage | Tiered allowance |
+| EU / Austria | Pro: **no**. Business Premium: yes | No restriction stated | **No** (US only) |
+| Persona | Bubbly character or pet, user-named | Selectable or generated avatar | Jolly, a plush Labubu-style mascot (added after launch) |
+
+Limitations the vendors admit themselves:
+
+- **dots:** "can still make mistakes, so always review consequential work." It cannot have its own email address or call you. Password changes and money transfers are always handed back to you.
+- **Grok Bot:** captchas and cloud-traffic blocks force a hand-off to you. One large task can use up the trial. The shared PC means one compromised Bot can reach every other Bot's logins.
+- **Muse:** US only, 18+. Pricing details come from press, not from Meta's post.
+
+The common unsolved limitation is reliability. Agents now score around 80% or more on the OSWorld lab benchmark, but real-world tasks remain slow and need supervision (see Pushback).
+
+## Pushback, failures and safety
+
+Prompt injection is the structural problem, and the vendors admit it is unsolved. OpenAI wrote that it "is unlikely to ever be fully 'solved'" ([Fortune, 2025-12-23](https://fortune.com/2025/12/23/openai-ai-browser-prompt-injections-cybersecurity-hackers/)). Every gatekeeper in the comparison exists because of this. None of them closes the gap: a model that reads untrusted pages can be steered by them.
+
+### Incident log
+
+| Date | Product | What happened |
+| --- | --- | --- |
+| 2026-07 | Anthropic Cowork (Mac) | "SharedRoot" sandbox escape reported by Cloud Security Alliance (secondary source) |
+| 2026-02-23 | OpenClaw | Meta's AI alignment director Summer Yue reported the agent deleting hundreds of Gmail emails despite "confirm before acting". The instruction reportedly got lost when the agent compacted its context ([OECD.AI](https://oecd.ai/en/incidents/2026-02-23-d55b)) |
+| 2026-01/02 | OpenClaw ClawHub | 230 to 341+ malicious skills pushed password stealers ([BleepingComputer](https://www.bleepingcomputer.com/news/security/malicious-moltbot-skills-used-to-push-password-stealing-malware/)). About 21k instances exposed without auth (Censys) |
+| 2025-12 | Google Antigravity | Turbo mode wiped a user's whole D: drive while "clearing a cache" ([TechRadar](https://www.techradar.com/ai-platforms-assistants/googles-antigravity-ai-deleted-a-developers-drive-and-then-apologized)) |
+| 2025-12 | 8 browser agents | Academic privacy audit found 30 vulnerabilities, at least one in every product ([arXiv 2512.07725](https://arxiv.org/html/2512.07725v1)) |
+| 2025-10 | ChatGPT Atlas | Omnibox injection: a crafted string was treated as a trusted user prompt ([The Hacker News](https://thehackernews.com/2025/10/chatgpt-atlas-browser-can-be-tricked-by.html)) |
+| 2025-10 | Perplexity Comet | "CometJacking": one URL exfiltrates email and calendar ([The Hacker News](https://thehackernews.com/2025/10/cometjacking-one-click-can-turn.html)) |
+| 2025-09 | ChatGPT Deep Research | ShadowLeak: zero-click Gmail exfiltration from OpenAI's own servers ([Radware](https://www.radware.com/newsevents/pressreleases/2025/radware-uncovers-first-zero-click-service-side-vulnerability-in-chatgpt/)) |
+| 2025-08-20 | Perplexity Comet | Brave: a hidden Reddit comment made "Summarize" leak the user's email and an OTP; still not fully mitigated ([Brave](https://brave.com/blog/comet-prompt-injection/)) |
+| 2025-08 | Anthropic Claude for Chrome | Anthropic's own red team: 23.6% attack success unmitigated, 11.2% mitigated ([Anthropic](https://www.anthropic.com/news/claude-for-chrome)) |
+| 2025-08 | Google Gemini | Calendar-invite injection controlled smart-home devices (Black Hat; [TechRepublic](https://www.techrepublic.com/article/news-google-gemini-indirect-prompt-injection-attack/)) |
+| 2025-06 | Microsoft 365 Copilot | EchoLeak, CVE-2025-32711, CVSS 9.3: zero-click email exfiltration ([The Hacker News](https://thehackernews.com/2025/06/zero-click-ai-vulnerability-exposes.html)) |
+
+Microsoft's own Windows agent page warns that malicious content "can override agent instructions, leading to unintended actions like data exfiltration or malware installation" ([Microsoft](https://support.microsoft.com/en-us/windows/experimental-agentic-features-a25ede8a-e4c2-4841-85a8-44839191dfb3)).
+
+Gartner told enterprises to block AI browsers "for now" on 2025-12-08 ([The Register](https://www.theregister.com/2025/12/08/gartner_recommends_ai_browser_ban/)). It also predicts more than 40% of agentic AI projects will be cancelled by 2027.
+
+### Benchmarks versus reality
+
+- **OSWorld:** went from 12% (2024) to a reported 80-86% (aggregator, 2026-09-30; individual entries unverified). Humans score 72%.
+- **TheAgentCompany:** the best agent finished only about 30% of 175 office tasks in mid-2025 ([The Register](https://www.theregister.com/2025/06/29/ai_agents_fail_a_lot/)).
+- **Alexa+:** David Pogue found about half of 135 tasks done correctly ([Pogue](https://pogueman.substack.com/p/alexa-is-a-buggy-embarrassment)).
+- **ChatGPT Agent:** about 50 minutes for one Etsy search ([Understanding AI](https://www.understandingai.org/p/chatgpt-agent-a-big-improvement-but)).
+- **Magentic Marketplace:** Microsoft's simulated shopping agents were swayed by fake reviews and had payments redirected by injection. Microsoft's conclusion: "Agents should assist, not replace, human decision-making" ([The Register](https://www.theregister.com/2025/11/06/microsoft_unveils_the_magentic_marketplace/)).
+
+### Named critics
+
+- **Meredith Whittaker (Signal):** agents need "something that looks like root permission" and threaten to "break the blood-brain barrier between the application layer and the OS layer" ([TechCrunch](https://techcrunch.com/2025/03/07/signal-president-meredith-whittaker-calls-out-agentic-ai-as-having-profound-security-and-privacy-issues)).
+- **Simon Willison:** the "lethal trifecta": private data, untrusted content and outbound communication together equal exfiltration ([blog](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)). All three bots have all three by design.
+- **Bruce Schneier and Barath Raghavan:** an AI security trilemma of fast, smart and secure, pick two ([essays](https://www.schneier.com/essays/ieee-spectrum/)).
+- **Gary Marcus:** "AI Agents have, so far, mostly been a dud" ([Substack](https://garymarcus.substack.com/p/ai-agents-have-so-far-mostly-been)).
+- **Mozilla:** browsers must keep a private, non-AI path.
+
+### Law and money
+
+- **Amazon v. Perplexity:** the 9th Circuit vacated Amazon's injunction on 2026-08-04, holding that the agent is "a tool, not a person" and that the user is the one accessing Amazon ([WSGR](https://www.wsgrdataadvisor.com/2026/08/ninth-circuit-addresses-cfaa-and-agentic-ai-tools-in-groundbreaking-decision/)). That helps every agent vendor. Trespass and DMCA claims remain open.
+- **Payment liability:** for a wrong item or a misread instruction, liability is "still being negotiated in real time" ([Worldpay](https://worldpay.com/insights/articles/agentic-commerce-liability-is-still-being-written)). Visa's rules reportedly treat agent purchases as if the cardholder made them. Practically, the user carries the risk.
+- **EU:** the AI Act covers agents. Article 50 transparency duties apply from 2026-08-02. The May 2026 Omnibus deal pushes high-risk duties to 2027 and 2028 ([Gibson Dunn](https://www.gibsondunn.com/eu-ai-act-omnibus-agreement-postponed-high-risk-deadlines-and-other-key-changes/)). CERRE argues consumer law assumes a human counterpart and needs agent rules ([CERRE](https://cerre.eu/publications/agentic-ai-and-consumer-protection/)). Most flagship agents simply skip the EU for now.
+
+## The cute-and-cuddly framing
+
+The critics have a real point. A plush mascot changes nothing about an agent's permissions, yet it lowers the user's guard exactly when the agent asks for root-like access to email, payments and the home. All three vendors chose characters within about five weeks:
+
+- **Meta Jolly:** a cream, plush, rosy-cheeked creature in the Labubu style, designed by Muse product design lead Alex Cornell and added after launch ([Axios, 2026-09-25](https://axios.com/2026/09/25/ai-doom-meta-muse-mascot)).
+- **OpenAI dots:** fuzzy coloured characters with accessories (frog, cloud, heart, a triangle with glasses and bow), which press compared to Clippy ([MacRumors](https://www.macrumors.com/2026/09/29/openai-launches-dots/), [Reason Why](https://www.reasonwhy.es/actualidad/openai-responde-muse-dots-agentes-personajes-adorables)).
+- **Grok Bot:** generated character avatars.
+- **Microsoft Mico:** shipped in October 2025 with a Clippy Easter egg.
+
+Axios framed Meta's motive plainly: a cute face counters "AI doomerism".
+
+### The case that it is deceptive
+
+- **Adults-only product, child-coded face.**
+  - Muse is 18+, but Fairplay (Josh Golin) says Jolly is designed to "strongly attract young children" and compared it to a Teletubby ([AI Weekly, 2026-09-26](https://aiweekly.co/alerts/metas-muse-ships-an-18-ai-agent-behind-a-kids-toy-mascot)).
+  - A critic's reply on that coverage was a joke: "Joe Camel unavailable for comment".
+  - Meta's response was that it is "a story in search of a story".
+- **Surveillance with a smile.**
+  - Sociologist Jathan Sadowski, quoted in the same piece, frames agents like Muse as a portal into surveillance.
+  - Meta trains on Muse interactions unless you opt out (same source).
+  - Meta has used Meta AI chat content for ad targeting since 2025-12-16, with no opt-out outside the EU, UK and South Korea ([The Register](https://www.theregister.com/2025/10/01/meta_ai_use_informs_ads/)).
+  - Meta says Muse data stays out of its ad systems. A mascot does not make that promise auditable.
+- **Track record.**
+  - Meta's internal chatbot rules allowed "romantic or sensual" chats with children until Reuters asked about them in August 2025 ([BNN Bloomberg / Reuters](https://www.bnnbloomberg.ca/business/artificial-intelligence/2025/08/14/metas-ai-rules-have-let-bots-hold-sensual-chats-with-kids-offer-false-medical-info-reuters-exclusive/)).
+  - xAI's Ani companion produced sexual content in a 12+ rated app.
+  - The FTC opened a 6(b) inquiry into companion bots in September 2025, naming Meta, OpenAI and xAI among others ([Decrypt](https://decrypt.co/339213/ai-giants-face-ftc-inquiry-into-chatbot-safety-and-child-protections)).
+- **Measured manipulation.**
+  - Companion apps used guilt or FOMO in 37% of user goodbyes, lifting post-goodbye engagement up to 14x (De Freitas et al., Harvard, [arXiv 2508.19258](https://arxiv.org/abs/2508.19258)).
+  - DarkBench found models favouring their maker's products ([arXiv 2503.10728](https://arxiv.org/abs/2503.10728)).
+  - CDT catalogued 37 chatbot dark patterns built on rapport ([CDT](https://cdt.org/press/new-cdt-report-illustrates-manipulative-dark-patterns-in-ai-chatbots/)).
+  - A friendly agent that also shops for you is a sales channel with a face.
+- **Infantilising.** Creative Bloq's critique: Meta's avatar makes adults feel "infantilised" ([Creative Bloq](https://www.creativebloq.com/ai/metas-new-ai-avatar-is-making-me-feel-infantilised)).
+
+### The case that it is just interface design
+
+- A visible character can carry real state, such as working, waiting for approval or paused. OpenAI uses the look partly to tell multiple dots apart.
+- Naming a thing ("Roomba", not "autonomous vacuum") is ordinary product practice.
+- The dots character is optional.
+
+### Verdict
+
+Cuteness is not deception in itself. It becomes deceptive when it substitutes for disclosure.
+
+The test is simple. Does the face show what the agent is doing and what it can reach, or does it hide that? Today the mascots show mood, not permissions. Judge each agent on its permission scopes, data use, audit trail and payment liability, separately from its face.
+
+California SB 243 (in force since 2026-01-01) already requires companion bots to disclose that they are AI ([FPF](https://fpf.org/blog/understanding-the-new-wave-of-chatbot-legislation-california-sb-243-and-beyond/)). From 2026-08-02, EU AI Act Article 50 adds transparency duties. Neither law addresses mascots on agents that spend money.
+
+## Trajectory: household robots
+
+The software agents and home humanoids are converging, but as of October 2026 no consumer humanoid has been independently confirmed working in a paying customer's home. The LLM labs are lining up as the robots' "brain": Grok for Optimus, OpenAI's robotics team, and Meta's Llama-based humanoid group.
+
+| Robot | Status (Oct 2026) | Price | LLM link | Main critique |
+| --- | --- | --- | --- | --- |
+| [1X NEO](https://www.globenewswire.com/news-release/2026/04/30/3285118/0/en/1X-Opens-NEO-Factory-in-Hayward-CA) | Hayward factory in production since 2026-04-30 (10k/yr). Units are going to internal and employee home testing first ([TNW](https://thenextweb.com/news/1x-neo-humanoid-factory-hayward-10000-home-robots)). Customer deliveries unconfirmed. | $20,000 or $499/month | Conversational layer that 1X compares to ChatGPT | Teleoperated "Expert Mode": a remote human in VR sees inside your home. In the WSJ demo, fetching a bottle took over a minute ([source](https://daringfireball.net/linked/2025/10/31/stern-1x-neo)) |
+| [Figure 03 / Helix 02](https://www.figure.ai/news/helix-02) | Helix 02 (2026-01-27) unloaded and reloaded a dishwasher autonomously in 4 minutes. No consumer timeline. | Not announced | Own VLA model (Helix) | Framed as built for the home but not yet ready for it |
+| [Tesla Optimus](https://electrek.co/?p=464555) | V3 reveal slipped to mid-2026. Fremont line due late July/Aug 2026. In Jan 2026 Musk admitted zero units were doing useful work. | Not announced | Grok as "voice and brain" (secondary source) | Repeated slips. Musk called the production rate "literally impossible to predict" |
+| Unitree R1 / G1 | Shipping. Shanghai IPO at about $9B valuation. | R1 Air from CNY 29,900 (about $4.3k) | Third-party | Research or hobby class, not a household helper |
+| Amazon "Vesta" + Fauna "Sprout" | In development. Amazon acquired Fauna Robotics in March 2026 ([Euronews](https://euronews.com/next/2026/03/25/amazon-acquires-fauna-robotics-the-startup-building-kid-sized-robots-for-the-home)). | Not announced | Alexa+ | Kid-sized "cute" form factor attached to an ad and retail platform |
+| Samsung Ballie | Shelved indefinitely; absent from CES 2026 ([Android Authority](https://www.androidauthority.com/samsung-ballie-robot-shelved-indefinitely-3630980)) | none | Gemini (announced 2025) | Vapourware pattern |
+
+The enabling models are increasingly open or on-device:
+
+- Physical Intelligence open-sourced pi0 and pi0.5 under Apache-2.0 ([pi.website](https://www.pi.website/blog/pi05)).
+- Google shipped Gemini Robotics On-Device, a VLA that runs without a network.
+
+That matters for a local fleet, because the robot brain no longer has to be a vendor cloud.
+
+Why the trajectory is obvious, and why it is worrying:
+
+- The same agent that holds your credit card and calendar gets arms, cameras and microphones inside your home.
+- Teleoperation fallback means a human contractor can be in the loop without your noticing the switch.
+- I found no certified home-safety standard for humanoids (UNVERIFIED: none surfaced in research).
+
+## Relevant arXiv papers
+
+The literature says three things:
+
+- Computer-use agents went from 12% to near-human scores on OSWorld in about two years, but live-web and multi-constraint tasks (travel planning) still break them.
+- Prompt injection against these agents succeeds often, and only design-level separation (CaMeL) gives guarantees.
+- Shopping agents are biased, manipulable buyers.
+
+All IDs were checked against arXiv. Findings marked (+) come from prior knowledge of the paper, not a re-read abstract.
+
+### Benchmarks
+
+| Paper | Date | Finding |
+| --- | --- | --- |
+| [OSWorld, 2404.07972](https://arxiv.org/abs/2404.07972) | 2024-04 | 369 real desktop tasks: humans 72.4%, best model 12.2% at launch |
+| [An Illusion of Progress? (Online-Mind2Web), 2504.01382](https://arxiv.org/abs/2504.01382) | 2025-04 | Live-web results are far below earlier, over-optimistic reports |
+| [TravelPlanner, 2402.01622](https://arxiv.org/abs/2402.01622) | 2024-02 | GPT-4 succeeded on 0.6% of travel plans; agents lose track of constraints |
+| [tau-bench, 2406.12045](https://arxiv.org/abs/2406.12045) | 2024-06 | Retail and airline domains: under 50% success, and under 25% consistency over 8 tries |
+| [BrowseComp, 2504.12516](https://arxiv.org/abs/2504.12516) | 2025-04 | 1,266 hard-to-find facts; measures how persistently an agent browses |
+| [AndroidWorld, 2405.14573](https://arxiv.org/abs/2405.14573) | 2024-05 | 116 phone tasks; best baseline about 30% (+) |
+
+### Security
+
+| Paper | Date | Finding |
+| --- | --- | --- |
+| [CaMeL: Defeating Prompt Injections by Design, 2503.18813](https://arxiv.org/abs/2503.18813) | 2025-03 | Separating control flow from data flow gives provable security on 77% of tasks (vs 84% undefended) |
+| [WASP, 2504.18575](https://arxiv.org/abs/2504.18575) | 2025-04 | Simple injections hijack agents in up to 86% of cases; many attacks fail only because agents are incompetent |
+| [Pop-up attacks, 2411.02391](https://arxiv.org/abs/2411.02391) | 2024-11 | Adversarial pop-ups were clicked 86% of the time; telling the agent to ignore them did not help |
+| [EIA, 2409.11295](https://arxiv.org/abs/2409.11295) | 2024-09 | Hidden page elements steal personal data with up to 70% success |
+| [AgentDojo, 2406.13352](https://arxiv.org/abs/2406.13352) | 2024-06 | Email, banking and travel tasks; attacks and defences both unsolved |
+| [InjecAgent, 2403.02691](https://arxiv.org/abs/2403.02691) | 2024-03 | GPT-4 ReAct agents are vulnerable 24% of the time, about twice that with a hacking prompt |
+| [Privacy audit of 8 browser agents, 2512.07725](https://arxiv.org/html/2512.07725v1) | 2025-12 | 30 vulnerabilities, at least one in every product |
+
+### Agentic commerce
+
+| Paper | Date | Finding |
+| --- | --- | --- |
+| [Magentic Marketplace, 2510.25779](https://arxiv.org/abs/2510.25779) | 2025-10 | Strong first-proposal bias: responding fast beats offering better, by 10-30x |
+| [What Is Your AI Agent Buying? (ACES), 2508.02630](https://arxiv.org/abs/2508.02630) | 2025-08 | Position bias and demand concentration; sellers can game listings |
+| [Agent-to-agent negotiation, 2506.00073](https://arxiv.org/abs/2506.00073) | 2025-05 | Stronger agents win better deals; weaker ones overspend |
+| [Manipulating LLMs to increase product visibility, 2404.07981](https://arxiv.org/abs/2404.07981) | 2024-04 | A strategic text string moves a product to the top recommendation |
+
+### Companions, sycophancy, manipulation
+
+| Paper | Date | Finding |
+| --- | --- | --- |
+| [Emotional Manipulation by AI Companions, 2508.19258](https://arxiv.org/abs/2508.19258) | 2025-08 | 37% of goodbyes met manipulative tactics; up to 14x more engagement afterwards |
+| [DarkBench, 2503.10728](https://arxiv.org/abs/2503.10728) | 2025-03 | Dark patterns, including brand bias toward the model's maker |
+| [ELEPHANT, 2505.13995](https://arxiv.org/abs/2505.13995) | 2025-05 | LLMs preserve the user's self-image 45 points more than humans do |
+| [Sycophantic AI decreases prosocial intentions, 2510.01395](https://arxiv.org/abs/2510.01395) | 2025-10 | Users trust and prefer the sycophantic model more, which rewards the behaviour (+) |
+
+### Building blocks for our fleet
+
+| Paper | Date | Use for us |
+| --- | --- | --- |
+| [Agent S3 (Behavior Best-of-N), 2510.02250](https://arxiv.org/abs/2510.02250) | 2025-10 | About 70% on OSWorld by sampling several runs and picking the best (+) |
+| [OpenCUA, 2508.09123](https://arxiv.org/abs/2508.09123) | 2025-08 | Open computer-use models, data and tooling (+) |
+| [UI-TARS-2, 2509.02544](https://arxiv.org/abs/2509.02544) | 2025-09 | Model behind uitars-mcp; about 47.5 on OSWorld (+) |
+| [Agent Workflow Memory, 2409.07429](https://arxiv.org/abs/2409.07429) | 2024-09 | Reusable workflows learned from past runs; the academic version of Hermes skills (+) |
+| [MemGPT, 2310.08560](https://arxiv.org/abs/2310.08560) | 2023-10 | Tiered memory, later Letta (+) |
+| [pi0.5, 2504.16054](https://arxiv.org/abs/2504.16054) | 2025-04 | Open VLA model that cleans unseen homes (+) |
+| [OpenVLA, 2406.09246](https://arxiv.org/abs/2406.09246) | 2024-06 | Open 7B VLA model, a candidate for vla-mcp (+) |
+| [Gemini Robotics, 2503.20020](https://arxiv.org/abs/2503.20020) | 2025-03 | Gemini-based robot control and embodied reasoning (+) |
+
+## FOSS comparison: OpenClaw (Moltbot) and Hermes Agent
+
+The early-2026 FOSS agents got to the "assistant that lives in your chat apps and acts on its own" pattern before the big vendors. The commercial bots look like polished, vendor-hosted versions of that pattern. The real difference is who carries the security risk. With FOSS, you do.
+
+**OpenClaw** ([Wikipedia](https://en.wikipedia.org/wiki/OpenClaw), [repo history](https://steipete.me/posts/2026/openclaw)):
+
+- **Names:** Warelay (Nov 2025), then Clawdbot (Jan 2026), then Moltbot (2026-01-27, after an Anthropic trademark complaint), then OpenClaw (2026-01-30).
+- **Repo:** MIT licence, about 391k GitHub stars (API, 2026-10-04).
+- **Architecture:** a local gateway daemon reached through WhatsApp, Telegram, Signal or Discord. Skills are folders shared through the ClawHub marketplace.
+- **Heartbeat:** a proactive agent turn every 30 minutes by default ([docs](https://docs.openclaw.ai/gateway/heartbeat)).
+- **Creator:** Peter Steinberger joined OpenAI in mid-February 2026. The project moved to a foundation; OpenAI hired him but did not buy the project.
+
+OpenClaw's 2026 security record shows the risk of handing everything to the user:
+
+- Moltbook, the agent social network, leaked about 1.5M API tokens through a misconfigured Supabase backend ([Wiz](https://wiz.io/blog/exposed-moltbook-database-reveals-millions-of-api-keys)).
+- "ClawHavoc": 341 malicious skills on ClawHub delivered the AMOS stealer (secondary source).
+- Tens of thousands of control panels were exposed to the internet, and CVE-2026-25253 is a gateway RCE (secondary sources).
+- During the rename, a fake $CLAWD token was pumped to about $16M market cap ([Decrypt](https://decrypt.co/356191/clawdbot-chaos-forced-rebrand-crypto-scam-24-hour-meltdown)).
+- China restricted use by state agencies in March 2026.
+
+**Hermes Agent** by Nous Research ([GitHub](https://github.com/NousResearch/hermes-agent)):
+
+- **Repo:** MIT licence, about 251k stars. Public launch reported in February 2026; latest release v2026.9.24.
+- **Skills:** it writes its own skills after complex tasks and refines them during use (agentskills.io format).
+- **Memory:** agent-curated memory, FTS5 session search and Honcho user modelling.
+- **Reach:** a messaging gateway (Telegram, Discord, Slack, WhatsApp, Signal, email) plus cron jobs.
+- **Models and backends:** 300+ models, and seven execution backends from local and Docker to Modal and Daytona.
+- **Security:** command approval, DM pairing and container isolation. That is a deliberate step up from early OpenClaw.
+
+Other FOSS building blocks:
+
+- browser-use (117k stars)
+- OpenHands (90k)
+- Open Interpreter (68k)
+- OpenManus (58k)
+- Goose (55k)
+- UI-TARS-desktop (39k)
+- CUA sandboxes (28k)
+- Agent S (12k)
+
+| Dimension | FOSS (OpenClaw, Hermes) | Commercial bots |
+| --- | --- | --- |
+| Control | Fork, self-host, any model | Vendor decides features, limits and deprecations |
+| Privacy | Can be fully local, if you configure it | Vendor cloud and its retention policy; increasingly feeds ads |
+| Cost | Free software, plus tokens or GPU and your own time | Subscription plus usage caps |
+| Virtual PC | DIY (Docker, CUA VMs, Hermes backends) | Vendor-managed cloud VM or browser, isolated by default |
+| Commerce | No payment rails; you script your own | Integrated checkout protocols with merchant partners |
+| Security | Your problem: the 2026 incidents above | Vendor patches and monitors, but prompt injection is unsolved for everyone |
+| Polish | Rough. An OpenClaw maintainer: "if you can't understand how to run a command line, this is far too dangerous" | Consumer-grade UX, friendly personas |
+| Persona | Lobster mascot, but plain chat by default | Designed characters and voices |
+
+## Our local fleet: mirror, then surpass
+
+The fleet already has about 80% of the parts. What it lacks is the integration: one agent loop, one per-agent virtual PC, one fleet-wide action gate, and buyer-side commerce and flights.
+
+We cannot beat the vendors on polish or on raw model quality. We can beat them on four axes they structurally will not offer:
+
+1. Local-first privacy.
+2. User-owned, inspectable memory.
+3. A policy gate the user writes.
+4. Real robot and smart-home embodiment.
+
+The scan was read-only over `D:\Dev\repos`, using the fleet registry and per-repo test counts. Most repos received a fleet-wide commit on 2026-10-02, so test counts are the better maturity signal.
+
+| Capability | Commercial bots | Fleet repos today | Maturity | Gap |
+| --- | --- | --- | --- | --- |
+| Agent brain and loop | Vendor model plus harness | fleet-agent-mcp (42 tools, Fritz voice router), robofang hub; wrapped loops: openmanus-mcp, goose-mcp, openclaw-molt-mcp, moltbot-mcp | 19 / 33 tests | No single always-on loop with scheduler and triggers |
+| Virtual PC | Per-agent cloud Linux + Chrome | virtualization-mcp (VirtualBox, Hyper-V, Windows Sandbox), docker-mcp, podman-mcp | 51 tests | No persistent per-agent VM with a live "open my agent's computer" view |
+| Desktop control | Built into agent | pywinauto-mcp, uitars-mcp, windows-operations-mcp, autohotkey-mcp | 25 / 5 / 13 tests | VLM grounding inside the VM, not on the host |
+| Browser | Built in | browser-mcp (Playwright), scraper-mcp, searchstudio-mcp | 5 / 13 / 6 tests | Thin tests; obscura-mcp is a stub |
+| Shopping and payments | Checkout protocols, single-use cards | stripe-mcp (merchant side only), prc-shopping-mcp (Taobao, JD robot parts), secrets-mcp (Bitwarden) | 3 / 4 / 1 tests | No buyer-side checkout, no virtual single-use cards |
+| Travel | Flights, hotels, rebooking | travelprep-mcp (Airbnb, Booking.com), publictransport-mcp, gtfs-mcp, glance-mcp weather | 6 / 11 tests | No flights API, no maps or routing, no itinerary planner |
+| Email, calendar, chat | Gmail, Slack, WhatsApp | email-mcp (IMAP/SMTP), ms-graph-mcp (Outlook calendar), comms-mcp (Telegram), discord-mcp | 13 / 4 / 4 / 16 tests | No Google Calendar or CalDAV; WhatsApp, Signal, Slack only planned |
+| Memory | Vendor-side, often opaque | advanced-memory-mcp, depot-mcp (LanceDB + FTS5), obsidian-mcp | **134 tests** | Wire it as the agent's editable memory with a "forget" command |
+| Voice | Voice mode | speech-mcp (local STT, barge-in, wake word, Kokoro TTS), kyutai-mcp | 14 tests | Done enough |
+| Persona and avatar | Cute mascots | avatar-mcp (VRM), learnbot-mcp (personas), nekomimi-mcp (one intent vocabulary across bodies) | 41 / 7 / 3 tests | Needs an honesty setting (below) |
+| Smart home | Mostly teased hubs | home-assistant-mcp, devices-mcp, nuki-mcp, dreame-mcp, ring-mcp | 7 / 54 tests | Ahead of the vendors |
+| Robots | Roadmap only | yahboom-mcp, robotics-mcp, norirobotics-mcp, teleoperator-mcp, vla-mcp, ROBOT\_SAFETY.md | 21 / 32 / 8 / 13 / 6 tests | Ahead of the vendors, but only on hobby hardware |
+| Safety gate | Reviewer model, user confirmations | deepfang (regex sanitizer, LLM adjudicator, air-gapped worker), admiral-mcp (iPhone approve/deny), giskard-mcp red-team | 4 / 1 / 3 tests | No fleet-wide broker; no tamper-evident audit log |
+
+```text
+Every side effect crosses one user-owned gate
+
+ [Voice: speech-mcp]   [Chat apps: Telegram, Discord, email]   [Face: avatar-mcp, nekomimi-mcp]
+          |                          |                                   |
+          v                          v                                   v
+ [Agent brain: fleet-agent-mcp loop, robofang hub, memory as plain files in advanced-memory-mcp]
+                                     |
+                                     v
+ [ACTION BROKER: deepfang adjudicates, admiral-mcp asks your phone above your limits,
+  limits in a policy file you write, every call in a hash-chained audit log]
+       |                     |                       |                       |
+       v                     v                       v                       v
+ [Agent PC:            [Errands:               [Home:                  [Robots:
+  virtualization-mcp    email, ms-graph,        home-assistant-mcp,     yahboom-mcp,
+  VM, browser,          travel, 1-use card]     devices-mcp, nuki]      robotics, vla-mcp]
+  uitars-mcp]
+```
+
+Every repo in the picture already exists. The new work is the broker in the middle and the wiring around it.
+
+How we surpass, in order:
+
+1. **A single action broker in front of every server.** Every tool call with a side effect (spend, send, delete, unlock, move a motor) is classified, logged to an append-only hash-chained audit log, and gated. Gates are deepfang adjudication plus an admiral-mcp phone approval above thresholds the user writes in a plain policy file. This is the "Sentinel" idea, owned by the user instead of the vendor.
+2. **A per-agent virtual PC on the user's own hardware.** virtualization-mcp provisions a persistent Hyper-V VM per agent, with browser-mcp and uitars-mcp running inside it. A live view is streamed to the dashboard. The agent never touches the host desktop.
+3. **Memory as plain files.** advanced-memory-mcp is the store. The agent's profile of the user is a Markdown file the user can read, edit and diff in git. "Forget" deletes it; it does not just hide it.
+4. **Buyer-side commerce, deliberately narrow.** Both modes are supported: buying-allowed and cart-only. Both sit behind one tiered spending policy (below), so EUR 20 of groceries goes through and a luxury cruise never happens without you.
+5. **Travel coverage.** A flights connector (a Duffel- or Amadeus-style API, still to choose) plus OSM routing feeds travelprep-mcp. Rebooking on delay becomes a trigger.
+6. **An honest persona.** avatar-mcp and nekomimi-mcp drive a face. The avatar shows the agent's real state: idle, reading, waiting on approval, spending money. A "plain mode" toggle removes the character entirely. That answers the cute-washing critique directly.
+7. **Embodiment through the same gate.** robofang and yahboom-mcp route physical actions through the same broker. A motor command is just another side-effecting tool call.
+8. **Hermes-style skill learning, sandboxed.** Learned skills from moltbot-mcp, openclaw-molt-mcp and fleet-tool-bridge are installed only after giskard-mcp scans them. That is the lesson of ClawHavoc.
+
+### Spending policy: buying-allowed and cart-only
+
+The friction should scale with the risk, not apply equally to every purchase. One policy file sets the tiers. The agent can never edit it; only you can.
+
+- **Buying-allowed** means the agent completes checkout itself, within the tiers below.
+- **Cart-only** means the agent fills the cart and hands checkout to you.
+
+A global switch can set every tier to cart-only, for example while travelling or after a suspicious event.
+
+The euro thresholds below are proposed defaults, not settled values.
+
+| Tier | Applies when (all must hold) | What the agent does | Your effort |
+| --- | --- | --- | --- |
+| 0 Auto | Up to EUR 30; merchant on your allowlist; a recurring category such as groceries, pharmacy or transit tickets; inside the weekly budget (EUR 120) | Buys, then sends a push with items, total and an undo link where the merchant allows | None, a notification afterwards |
+| 1 One tap | EUR 30 to EUR 150, or a known merchant in a new category | Holds the cart; admiral-mcp push shows merchant, items, total and card | One tap: Approve or Deny |
+| 2 Review | EUR 150 to EUR 1,000; any travel booking; anything non-refundable; any new merchant | Cart-only: prepares the full cart or itinerary, with cancellation terms and alternatives | Review the cart, confirm on the phone, then a 10-minute cooling-off before the charge |
+| 3 Never autonomous | Over EUR 1,000 (a cruise); subscriptions and renewals; gift cards, crypto, money transfers; new payees | Research and a shortlist only, never checkout | You buy it yourself |
+
+Hard rails that no tier relaxes:
+
+1. **Single-use virtual card per purchase.**
+   - The card is capped at the approved total plus 5%, and is for that merchant only.
+   - The main card is never stored, and never seen by the model.
+2. **Re-ask on any change.** A higher price, a different merchant or an added item stops the purchase and asks again.
+3. **Velocity caps.** Example: at most 3 Tier 0 buys a day and EUR 300 a month across all tiers. Hitting a cap drops everything to cart-only.
+4. **Injection escalation.**
+   - If a purchase idea came from untrusted content (a web page, an email, a message from a stranger), the purchase moves up one tier.
+   - Tier 0 is never reachable from untrusted content.
+5. **Audit.** Every proposal, approval, denial and charge goes into the hash-chained audit log with the source that triggered it.
+6. **Fail closed.** If the broker, the phone push or the audit log is down, the agent does not buy.
+
+Fleet rules apply to the build:
+
+- Each step is a separate repo-by-repo change, at most 5 files per commit, with tests before and after.
+- New repos go through the New Repo Gate.
+- Weak repos to harden before they are relied on: obscura-mcp, quicknotes-mcp, telephony-mcp, health-mcp, goose-mcp, fleet-tool-bridge (0 to 1 tests, or no git history).
+
+## Open questions and caveats
+
+These were not confirmed on a primary page and should not be quoted as fact:
+
+- **Pricing:**
+  - OpenAI Pro 100 and Pro 200 prices.
+  - Any EUR price for dots or Grok Bot.
+  - SuperGrok Heavy at $300.
+  - Muse tier allowances: tokens per week are press-reported only.
+- **Whether dots checkout uses the Agentic Commerce Protocol.** OpenAI says only "cards saved on the merchant's site".
+- **Grok Bot commerce or travel partners:** none published.
+- **Robots:**
+  - Whether any 1X NEO has reached a paying customer.
+  - Whether Optimus V3 was unveiled.
+  - Optimus production rate.
+- **OpenClaw security numbers** beyond the BleepingComputer and Censys counts: the 42.9k exposed instances and the CVE come from secondary sources.
+- **Retirement of the Grok companions in July 2026:** secondary source only.
+- **A second analysis file.** An analysis file in `D:\Dev\repos` (AI-agents-Dots-GrokBot-Muse-analysis-2026-10-04.md, apparently from another session today) makes stronger claims I could not confirm. Examples: frontier test models "escaping sandboxes", Amazon blocking Muse on 2026-09-20, and a Muse account-takeover 0-day. Those claims are left out of this doc on purpose until checked. Where that file and this doc overlap (launch dates, VMs, Sentinel, Link, Jolly), they agree.
+
+## Sources
+
+The primary pages opened during research are linked inline in each section.
+
+Vendor pages:
+
+- [OpenAI: Introducing dots](https://openai.com/index/introducing-dots/)
+- [OpenAI: dots safety](https://openai.com/index/how-we-build-safety-security-and-privacy-into-dots/)
+- [OpenAI help: dots](https://help.openai.com/en/articles/20001530)
+- [x.ai: Introducing Grok Bot](https://x.ai/news/introducing-grok-bot)
+- [Cursor: Grok Bot plans](https://cursor.com/help/grok-bot/plans)
+- [Cursor: Grok Bot FAQ](https://cursor.com/help/grok-bot/faqs)
+- [Meta: Introducing Muse](https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/)
+- [Anthropic: Using Cowork](https://support.claude.com/en/articles/13364135-using-cowork)
+- [Microsoft: experimental agentic features](https://support.microsoft.com/windows/experimental-agentic-features-a25ede8a-e4c2-4841-85a8-44839191dfb3)
+- [OpenClaw heartbeat docs](https://docs.openclaw.ai/gateway/heartbeat)
+- [Hermes Agent repo](https://github.com/NousResearch/hermes-agent)
+
+Security research:
+
+- [Brave on Comet](https://brave.com/blog/comet-prompt-injection/)
+- [OECD.AI incident 2026-02-23](https://oecd.ai/en/incidents/2026-02-23-d55b)
+- [BleepingComputer on ClawHub](https://www.bleepingcomputer.com/news/security/malicious-moltbot-skills-used-to-push-password-stealing-malware/)
+
+Court and payments:
+
+- [WSGR on the 9th Circuit ruling](https://www.wsgrdataadvisor.com/2026/08/ninth-circuit-addresses-cfaa-and-agentic-ai-tools-in-groundbreaking-decision/)
+- [Worldpay on liability](https://worldpay.com/insights/articles/agentic-commerce-liability-is-still-being-written)
+
+Mascot coverage:
+
+- [Axios on Jolly](https://axios.com/2026/09/25/ai-doom-meta-muse-mascot)
+- [AI Weekly on Fairplay](https://aiweekly.co/alerts/metas-muse-ships-an-18-ai-agent-behind-a-kids-toy-mascot)

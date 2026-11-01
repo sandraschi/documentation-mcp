@@ -4,22 +4,22 @@
   <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
-  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.4-7c5cfc?style=flat-square" alt="FastMCP"></a>
 </p>
 
 
 > 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-**Universal Ring Security Ecosystem Control** - FastMCP 3.2+ server for comprehensive Ring device management including doorbells, security cameras, and alarm systems. Supports sampling, agentic workflows, and MCP prompts/skills.
+**Universal Ring Security Ecosystem Control** - FastMCP 3.4+ server for comprehensive Ring device management including doorbells, security cameras, and alarm systems.
 
-[![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](https://github.com/sandraschi/ring-mcp/releases)
+[![Version](https://img.shields.io/badge/version-1.0.4-blue.svg)](https://github.com/sandraschi/ring-mcp/releases)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![FastMCP 3.2](https://img.shields.io/badge/FastMCP-3.2-orange.svg)](https://gofastmcp.com/)
+[![FastMCP 3.4](https://img.shields.io/badge/FastMCP-3.4-orange.svg)](https://gofastmcp.com/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-green)](https://github.com/sandraschi/ring-mcp)
 
-> **Latest Version: 1.0.3** - [View Changelog](CHANGELOG.md)
+> **Latest Version: 1.0.4** - [View Changelog](CHANGELOG.md)
 
 **Keywords**: `ring`, `security`, `cameras`, `doorbells`, `mcp`, `fastmcp`, `monitoring`, `automation`, `home-security`, `iot`, `smart-home`
 
@@ -118,7 +118,7 @@ The easiest way to use Ring MCP with Claude Desktop is through our MCPB (MCP Bun
    ring.get_live_stream_url --device_id <camera_id>
    ```
 
-> **Note**: The MCP server now uses lazy authentication - it starts successfully without Ring credentials and only authenticates when tools are actually called. If you encounter authentication issues when using tools, check the Claude Desktop logs at `C:\Users\<username>\AppData\Roaming\Claude\logs\mcp-server-ring-security.log`
+> **Note**: The MCP server now uses lazy authentication - it starts successfully without Ring credentials and only authenticates when tools are actually called. If you encounter authentication issues when using tools, check the Claude Desktop logs at `C:\Users\<username>\AppData\Local\Claude\Logs\mcp-server-ring-security.log` (pre-2026-08-21: `AppData\Roaming\Claude\logs`)
 
 #### Using Docker (Recommended for Server Deployment)
 
@@ -349,7 +349,7 @@ Ring MCP includes a **production-ready monitoring system** that provides complet
 ### ** Advanced Features**
 
 #### **Claude Desktop Logs Integration**
-- **Location**: `C:\Users\sandr\AppData\Roaming\Claude\logs`
+- **Location**: `C:\Users\<user>\AppData\Local\Claude\Logs` (pre-2026-08-21: `AppData\Roaming\Claude\logs`)
 - **Mixed logs**: Server + Client logs in same files
 - **Timeline analysis**: Track "what moved" by date/time
 - **Debug correlation**: Match server errors with client-side issues

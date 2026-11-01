@@ -1,8 +1,18 @@
 # calibre-mcp — Status
 
-**As of:** 2026-07-09
-**Current version:** 1.8.6
-**Status:** Full rebuild certified. CUA-NSIS 7/7 phases pass. Frontend standalone server fixed.
+**As of:** 2026-09-11
+**Current version:** 1.9.0
+**Status:** Full rebuild certified. MCPB v0.2 package and Tauri NSIS installer built. Hybrid search and embedded reader active.
+
+## 2026-09-11: Release v1.9.0 — Content Server Reader Integration + Hybrid RAG + Missing Views
+
+- **In-App Embedded Web Reader**: Built overlay reader inside `BookModal` leveraging Calibre Content Server's native `viewer.js` engine on port 8099 with pop-out and full-frame modes.
+- **Dedicated WebApp Views**: Added `/library-health`, `/duplicates`, `/reading`, and `/collections` with zero TypeScript errors.
+- **Hybrid Search (RRF)**: Reciprocal Rank Fusion ($k=60$) added to `calibre_rag(operation="hybrid_search")` combining SQLite FTS5 lexical matching with LanceDB semantic vectors.
+- **Incremental LanceDB RAG Sync**: Added `upsert_book_metadata` and `remove_book_metadata` hooked directly into `manage_books` operations.
+- **MCPB Package Built**: Generated `dist/calibre-mcp-v1.9.0.mcpb` and `dist/calibre-mcp.mcpb` (0.54 MB) validated against `@anthropic-ai/mcpb@2.1.2`.
+- **Tauri NSIS Built**: Produced self-contained `dist/Calibre MCP_1.9.0_x64-setup.exe` (189.2 MB) containing frozen backend and static frontend.
+- **Pytest collection fixed**: Fixed missing imports in `test_concurrency.py`.
 
 ## 2026-07-09: Tauri rebuild + SOTA gaps closed
 
@@ -162,5 +172,5 @@ Ordered by priority:
 
 ---
 
-*Status maintained by Sandra Schipal. Entry authored by Claude Opus 4.7,
+*Status maintained by Sandra S.. Entry authored by Claude Opus 4.7,
 April 2026.*

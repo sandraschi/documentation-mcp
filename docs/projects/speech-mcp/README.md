@@ -7,8 +7,9 @@
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
   <a href="https://biomejs.dev"><img src="https://img.shields.io/badge/Biome-2.4-60a5fa?style=flat-square" alt="Biome"></a>
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
-  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.4-7c5cfc?style=flat-square" alt="FastMCP"></a>
   <a href="docs/providers/funasr.md"><img src="https://img.shields.io/badge/FunASR-local_STT-orange?style=flat-square" alt="FunASR"></a>
+  <a href="docs/STREAMING_ASR.md"><img src="https://img.shields.io/badge/sherpa--onnx-streaming+barge--in-8b5cf6?style=flat-square" alt="sherpa-onnx streaming + barge-in"></a>
   <a href="docs/HUMANOID_VOICE.md"><img src="https://img.shields.io/badge/Humanoid_voice-thesis-8b5cf6?style=flat-square" alt="Humanoid voice thesis"></a>
 </p>
 
@@ -37,12 +38,12 @@ Chinese open-weight speech stacks are ahead on **industrial ASR**: open weights 
 | What you get | Detail |
 |---|---|
 | **Speed** | Up to ~170× realtime on GPU, ~17× on CPU (vs ~13× for Whisper-large-v3 in published tables) |
-| **Models** | [Fun-ASR-Nano-2512](https://huggingface.co/FunAudioLLM/Fun-ASR-Nano-2512), [SenseVoiceSmall](https://github.com/FunAudioLLM/SenseVoice), Paraformer family |
+| **Models** | [Fun-ASR-MLT-Nano-2512](https://huggingface.co/FunAudioLLM/Fun-ASR-MLT-Nano-2512) (multilingual, 31 langs incl. EN/JA/DE), [SenseVoiceSmall](https://github.com/FunAudioLLM/SenseVoice), Paraformer family |
 | **Structured output** | Timestamps, speaker labels; emotion/event tags via SenseVoice |
-| **Edge** | PyTorch (`cuda`/`cpu`/`mps`), ONNX INT8, Windows runtime SDK, OpenAI-compatible sidecar on **10910** |
+| **Edge** | PyTorch (`cuda`/`cpu`/`mps`), ONNX INT8, Windows runtime SDK, OpenAI-compatible sidecar on **10914** |
 | **MCP tools** | `transcribe_audio_file`, `transcribe_stream_chunk` (default `provider=funasr`) |
 | **REST** | `POST /api/v1/transcribe?provider=funasr` |
-| **Fleet voice bus** | Post-wake utterance STT when `FLEET_VOICE_DELEGATE=1` ([VOICE_COMMAND_BUS.md](docs/VOICE_COMMAND_BUS.md)) |
+| **Fleet voice bus** | Post-wake utterance STT when `FLEET_VOICE_DELEGATE=1` — auto-start listener, spoken wake greeting, sleep word, spoken replies, audible timer announcements ([VOICE_COMMAND_BUS.md](docs/VOICE_COMMAND_BUS.md)) |
 | **Papers** | [Fun-ASR (2509.12508)](https://arxiv.org/abs/2509.12508), [FunAudioLLM (2407.04051)](https://arxiv.org/abs/2407.04051), [SenseVoice (2401.04251)](https://arxiv.org/abs/2401.04251) |
 | **Upstream** | [modelscope/FunASR](https://github.com/modelscope/FunASR) |
 
@@ -53,7 +54,7 @@ uv sync --extra funasr
 Copy-Item .env.example .env
 # In .env:
 # FUNASR_ENABLED=true
-# FUNASR_MODEL=FunAudioLLM/Fun-ASR-Nano-2512
+# FUNASR_MODEL=FunAudioLLM/Fun-ASR-MLT-Nano-2512
 # FUNASR_DEVICE=cuda:0
 ```
 
@@ -62,7 +63,7 @@ Copy-Item .env.example .env
 ```powershell
 uv sync --extra funasr
 uv run python scripts/start_funasr_sidecar.py
-# .env: FUNASR_OPENAI_URL=http://127.0.0.1:10910/v1
+# .env: FUNASR_OPENAI_URL=http://127.0.0.1:10914/v1
 ```
 
 **Full guide (env matrix, benchmarks, licensing, sidecar API):** [**docs/providers/funasr.md**](docs/providers/funasr.md)
@@ -107,7 +108,7 @@ speech-mcp is a **gateway**: cloud TTS/live voice plus **local STT via FunASR**.
 
 ## Key Features
 
-**FunASR Local STT** — Alibaba Tongyi Fun-ASR-Nano / SenseVoice integrated natively. Structured transcripts with speakers and timestamps. OpenAI-compatible sidecar on port 10910. See [FunASR guide](docs/providers/funasr.md).
+**FunASR Local STT** — Alibaba Fun-ASR-MLT-Nano integrated natively (multilingual: EN/JA/DE + 28 more). Structured transcripts with speakers and timestamps. OpenAI-compatible sidecar on port 10914. **Streaming STT with barge-in** (ja/en/de, CPU) via sherpa-onnx: [docs/STREAMING_ASR.md](docs/STREAMING_ASR.md). See [FunASR guide](docs/providers/funasr.md).
 
 **Gemma 4 Native Multimodal** — SOTA 2026 local engine integration. Features native audio/vision encoders for low-latency conversational reasoning. Supports prosody-aware interaction and local-first Zero-STT fallback. Optimized for A4B throughput (100+ t/s).
 
@@ -122,6 +123,8 @@ speech-mcp is a **gateway**: cloud TTS/live voice plus **local STT via FunASR**.
 **Fleet Voice Command Bus** — With `FLEET_VOICE_DELEGATE=1`, wake → utterance STT → `POST` fleet-agent `/api/voice/intent` (e.g. *"boomy go on patrol…"*). Humanoid-scale pattern: [docs/HUMANOID_VOICE.md](docs/HUMANOID_VOICE.md). Ops: [docs/VOICE_COMMAND_BUS.md](docs/VOICE_COMMAND_BUS.md).
 
 **RAG / Semantic Search** — LanceDB + FastEmbed knowledge base over project docs. `ask_docs` tool uses Claude sampling for grounded Q&A.
+
+**Voice Intelligence (2026-08)** — persistent **voice memory** (episodic diary), **voice macros** (spoken phrases → actions), **translation bridge** (FunASR → local LLM → TTS), **sound-event detection**, **voice bank** (named provider-routed voice profiles), **speech analytics** (real latency/cost telemetry), spoken **fleet readouts**, and a skill-first **Chat page** with personalities. Spec: [docs/FEATURE_SPEC_2026.md](docs/FEATURE_SPEC_2026.md).
 
 **Local AI** — Ollama and LM Studio model discovery and grounded generation.
 

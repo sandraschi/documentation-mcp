@@ -154,8 +154,8 @@ contributes 2–5 tools regardless of how many operations it implements.
 ## Claude Desktop — MCP Developer Notes
 
 - Full restart required to reload changed MCP servers
-- Logs at: `C:\Users\sandr\AppData\Roaming\Claude\logs\`
-- Config at: `C:\Users\sandr\AppData\Roaming\Claude\claude_desktop_config.json`
+- Logs at: `C:\Users\<user>\AppData\Local\Claude\Logs\` (pre-2026-08-21: `AppData\Roaming\Claude\logs\`)
+- Config at: `C:\Users\<user>\AppData\Roaming\Claude\claude_desktop_config.json`
 - No documented tool count limit
 - **Sampling not yet supported** — use Antigravity for `ctx.sample()` testing
 - **Known issue: MCP server chain hang** — after long sessions or a misbehaving server

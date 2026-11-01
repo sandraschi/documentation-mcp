@@ -48,7 +48,7 @@ derives `ElevatedFallback` from `$hardRestart = -not $AllowReuse`.
 
 Run an audit scan:
 ```powershell
-rg "Stop-FleetPortSquatters " D:\Dev\repos\ --include "*.ps1" | rg -v "ElevatedFallback"
+rg "Stop-FleetPortSquatters " D:\Dev\repos\ -g "*.ps1" | rg -v "ElevatedFallback"
 ```
 
 ## Affected Repos (fixed)

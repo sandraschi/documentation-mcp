@@ -13,7 +13,7 @@ Set-Location D:\Dev\repos\oscilloscope-mcp
 uv sync --extra dev
 ```
 
-4. Add MCP entry to `C:\Users\sandr\.cursor\mcp.json` (see [README.md](README.md#cursor-mcp-config))
+4. Add MCP entry to `C:\Users\<user>\.cursor\mcp.json` (see [README.md](README.md#cursor-mcp-config))
 5. Restart Cursor
 6. Verify: `scope_help(operation="status")`
 

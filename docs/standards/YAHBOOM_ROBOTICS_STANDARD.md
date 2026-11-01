@@ -1,3 +1,13 @@
+---
+title: "Yahboom Robotics Standard (v1.0) — SOTA 2026"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Yahboom Robotics Standard (v1.0) — SOTA 2026
 
 This standard defines the technical baseline and orchestration patterns for implementing autonomous physical agency using the **Yahboom Raspbot v2** platform (code-named "Boomy") within the Antigravity fleet.

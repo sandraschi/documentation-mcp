@@ -1,3 +1,13 @@
+---
+title: "CLAUDE.md — Agent Behavioral Instructions (SOTA 2026)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # CLAUDE.md — Agent Behavioral Instructions (SOTA 2026)
 
 ## The Trick

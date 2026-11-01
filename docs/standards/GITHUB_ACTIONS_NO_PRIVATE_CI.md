@@ -1,3 +1,13 @@
+---
+title: "GitHub Actions — no billable CI on private repositories"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-08-01
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # GitHub Actions — no billable CI on private repositories
 
 **Status:** Active (fleet mandatory)  
@@ -19,10 +29,18 @@ One job on `windows-latest`:
 
 1. `uv sync` (+ dev extras)
 2. `ruff check` + `ruff format --check`
-3. `pytest` (mocks / dry-run; no live network secrets)
-4. webapp `npm ci` + `tsc --noEmit` + `biome check` (when webapp exists)
+3. **`pyright`** (blocking — the five-gate standard: ruff/biome style, pyright + tsc types, pytest behavior; see [QUALITY_GATES.md](./QUALITY_GATES.md))
+4. `pytest` (mocks / dry-run; no live network secrets)
+5. webapp `npm ci` + `tsc --noEmit` + `biome check` (when webapp exists)
 
 No Ubuntu dual matrix. No Codecov required. No Tauri/NSIS/PyInstaller in CI.
+
+> **Pyright scope**: `uv run pyright src/` (+ `api/` when present). Do NOT run
+> pyright over `tests/`, `scripts/`, or `web_sota/` in CI — test files may use
+> optional deps (pywinauto, PIL) and intentional `None` assertions that are not
+> type-safe; the `src/` scope keeps the gate meaningful without dep-noise.
+> Repos whose tests ARE pyright-clean may add `tests/` locally via
+> `just type-check` (full scan) but the CI step stays scoped.
 
 Canonical template: `mcp-central-docs/templates/ci.yml.template`  
 Reference: `speech-mcp` / `mastodon-mcp` `.github/workflows/ci.yml`

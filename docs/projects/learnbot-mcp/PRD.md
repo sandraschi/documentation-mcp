@@ -2,7 +2,7 @@
 
 **Status**: Draft  
 **Date**: 2026-07-15  
-**Owner**: Sandra Schipal
+**Owner**: Sandra S.
 
 ## Problem
 

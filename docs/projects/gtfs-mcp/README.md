@@ -3,58 +3,92 @@
 <p align="center">
   <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
-  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
-  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.4-7c5cfc?style=flat-square" alt="FastMCP"></a>
 </p>
-
 
 > 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-A FastMCP 3.1.0 compliant server for downloading, parsing, and serving GTFS
-(General Transit Feed Specification) data. This server provides a standardized API
-for accessing transit data from various agencies, handling the quirks and
-inconsistencies of real-world GTFS feeds.
+A FastMCP 3.4 server for downloading, parsing, and serving GTFS (General Transit
+Feed Specification) data. Provides a standardized API for accessing transit data
+from various agencies, handling the quirks of real-world GTFS feeds.
+
+## What is GTFS?
+
+**GTFS** = **General Transit Feed Specification** — the open standard that
+transit agencies worldwide use to publish their schedules as data. A GTFS
+"feed" is a zip archive of CSV tables: stops, routes, trips, stop times, and
+the calendar that decides which trips run on which days. If you can look up a
+departure time in any transit app, a GTFS feed is almost certainly behind it.
+
+### History
+
+| Year | Event |
+|------|-------|
+| 2005 | Google and **TriMet** (Portland) design the format to power Google Maps Transit; Portland is the first launch city |
+| 2006 | Spec published openly (then "Google Transit Feed Specification") |
+| 2010 | Renamed **General Transit Feed Specification**, handed to the transit community |
+| 2022 | Stewardship with **MobilityData** (gtfs.org); ratified as **ISO 17639:2022** |
+
+### Who publishes it
+
+Thousands of agencies and metros: **Wiener Linien (Vienna)**, MTA (New York),
+TfL (London), BVG/VBB (Berlin), RATP/IDFM (Paris), CTA (Chicago), MBTA
+(Boston), TTC (Toronto), SBB (Switzerland), and many more. The MobilityData
+catalog tracks **10,000+ public feeds**. Consumers include Google Maps, Apple
+Maps, Transit, Moovit, Citymapper, and OpenTripPlanner.
+
+### The scale
+
+A single city feed is a small database. The Vienna feed this server uses
+contains **4,624 stops, 681 routes, 326,812 trips, and 6.1 million stop
+times**. Feeds routinely ship as 50-300 MB zips.
+
+### Why parsing is gnarly
+
+- CSV column order and presence vary per agency; optional tables get omitted
+- Midnight-crossing trips use times like `24:15:00` (00:15 the next day)
+- Station hierarchies: platforms, entrances and parent stations are separate
+  stop records linked by ids
+- Some feeds publish only `calendar_dates.txt` exceptions, no regular calendar
+- Malformed rows, BOM markers, duplicate stop names and agency-specific extra
+  columns are common
+
+This server exists to absorb that variety — the parser normalizes, tolerates,
+and indexes the data so you can just ask for departures.
 
 ## Features
 
 - **GTFS Feed Management**: Download and update GTFS feeds from any URL
 - **Robust Parser**: Handles malformed/missing data with grace
-- **FastMCP 3.1.0 Compliant**: Full compatibility with the Model Control Protocol
-- **RESTful API**: Easy integration with web and mobile applications
-- **Real-time Updates**: WebSocket support for live departure information
-- **Geospatial Queries**: Find stops and routes near a location
+- **SQLite Persistence**: Parsed feeds are stored in `data/gtfs_mcp.db` and
+  restored on restart - no re-download, data survives server restarts
+- **Vienna by default**: the Wiener Linien GTFS feed loads automatically as
+  feed id `default` (override via `GTFS_MCP_DEFAULT_FEED_URL`)
+- **7 MCP Tools**: add_feed, list_feeds, find_stops, get_departures, get_stop_info, status, shutdown
+- **RESTful API**: `/v1/feeds`, `/v1/stops/*`, health, capabilities, logs
+- **Local LLM Chat**: Ollama/LM Studio discovery + streaming chat proxy
+- **Webapp**: React dashboard with live health KPIs (web_sota/, port 10912)
 
 ## Quick Start
 
 ```powershell
 git clone https://github.com/sandraschi/gtfs-mcp
 cd gtfs-mcp
-just
+just bootstrap     # uv sync + pre-commit
+just dev           # HTTP mode on 127.0.0.1:10913
 ```
 
-This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+Or run the full stack with the webapp:
 
-### Manual Setup
-
-If you don't have `just` installed:
-### Prerequisites
-- Python 3.10+
-- pip (Python package manager)
-
-##  Installation
-
-### Prerequisites
-- [uv](https://docs.astral.sh/uv/) installed (RECOMMENDED)
-- Python 3.12+
-
-###  Quick Start
-Run immediately via `uvx`:
-```bash
-uvx gtfs-mcp
+```powershell
+.\start.ps1        # backend 10913 + frontend 10912 + auto-open browser
 ```
 
-###  Claude Desktop Integration
+### Claude Desktop Integration
+
 Add to your `claude_desktop_config.json`:
+
 ```json
 "mcpServers": {
   "gtfs-mcp": {
@@ -63,52 +97,82 @@ Add to your `claude_desktop_config.json`:
   }
 }
 ```
-### Running the Server
 
-```bash
-uvicorn gtfs_mcp.main:app --reload
-```
+### Ports
 
-The server will be available at `http://localhost:8000`
+| Port | Service |
+|------|---------|
+| 10913 | Backend (FastAPI + MCP at `/mcp`, health at `/health`) |
+| 10912 | Frontend (Vite dev, proxies to 10913) |
+
+## MCP Tools
+
+| Tool | Description |
+|------|-------------|
+| `add_feed(feed_id, url, update_interval=3600, force_update=False)` | Add or update a GTFS feed |
+| `list_feeds()` | List registered feeds |
+| `find_stops(feed_id, query, limit=10)` | Search stops by name/code/id |
+| `get_departures(feed_id, stop_id, route_id=None, limit=5)` | Upcoming departures for a stop |
+| `get_stop_info(feed_id, stop_id)` | Details for one stop |
+| `status()` | Server + feed status |
+| `shutdown()` | Graceful shutdown |
 
 ## API Documentation
 
-Once the server is running, you can access:
+Once the server is running (HTTP mode):
 
-- **OpenAPI Docs**: `http://localhost:8000/docs`
-- **ReDoc**: `http://localhost:8000/redoc`
-- **MCP Tools**: `http://localhost:8000/mcp/docs`
-
-## Adding a GTFS Feed
-
-1. Find the GTFS feed URL for your transit agency (e.g., [TransitFeeds](https://transitfeeds.com/))
-2. Add the feed using the MCP tool:
-
-   ```bash
-   curl -X POST "http://localhost:8000/v1/feeds" \
-     -H "Content-Type: application/json" \
-     -d '{"id":"my-feed","url":"https://example.com/gtfs.zip","update_interval":3600}'
-   ```
+- **Swagger UI**: `http://127.0.0.1:10913/docs`
+- **ReDoc**: `http://127.0.0.1:10913/redoc`
+- **MCP streamable HTTP**: `http://127.0.0.1:10913/mcp`
+- **Health**: `http://127.0.0.1:10913/health`
 
 ## Example Queries
 
-### Find Stops by Name
-
 ```bash
-curl "http://localhost:8000/v1/stops/search?feed_id=my-feed&query=central"
+# Add a feed (Wiener Linien GTFS)
+curl -X POST "http://127.0.0.1:10913/v1/feeds" \
+  -H "Content-Type: application/json" \
+  -d '{"id":"wien","url":"https://www.wienerlinien.at/ogd_realtime/doku/ogd/gtfs/gtfs.zip"}'
+
+# Search stops
+curl "http://127.0.0.1:10913/v1/stops/search?feed_id=wien&query=praterstern"
+
+# Upcoming departures
+curl "http://127.0.0.1:10913/v1/stops/1234/departures?feed_id=wien&limit=5"
 ```
 
-### Get Stop Information
+## Environment Variables
 
-```bash
-curl "http://localhost:8000/v1/stops/12345?feed_id=my-feed"
-```
+| Var | Default | Purpose |
+|-----|---------|---------|
+| `GTFS_MCP_PORT` | 10913 | HTTP port |
+| `GTFS_MCP_HOST` | 127.0.0.1 | Bind host |
+| `GTFS_MCP_DEFAULT_FEED_URL` | Wiener Linien GTFS zip | Default feed loaded at startup (Vienna) |
+| `GTFS_MCP_DATA_DIR` | `data` | Feed data + `gtfs_mcp.db` persistence store |
+| `GTFS_MCP_DISCOVERY__TRANSITFEEDS_API_KEY` | - | Feed discovery API key |
+| `MCP_TRANSPORT` | stdio | stdio/http/sse transport mode |
+| `MCP_PORT` | - | When set, run_server.py starts HTTP mode |
 
-### Get Upcoming Departures
+Copy `.env.example` to `.env` and adjust as needed.
 
-```bash
-curl "http://localhost:8000/v1/stops/12345/departures?feed_id=my-feed&limit=5"
-```
+## Persistence
+
+Parsed feed data is stored in SQLite at `<data_dir>/gtfs_mcp.db`. On restart
+the server restores every stored feed into memory - feeds are only
+re-downloaded when expired, force-updated, or moved to a different URL. The
+Vienna (Wiener Linien) feed is the default and loads automatically on first
+start.
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| MCP framework | FastMCP 3.4 (`fastmcp>=3.4.4,<4`), Prefab UI (`prefab-ui>=0.14.0`) |
+| Backend | Python 3.12, FastAPI + uvicorn, SQLAlchemy async + aiosqlite, aiohttp |
+| Persistence | SQLite (`data/gtfs_mcp.db`) - parsed feed rows + feed registry |
+| Webapp | React 19, Vite 7, TypeScript 5.9, TailwindCSS 3.4, lucide-react, Radix UI, @tanstack/react-query, @tauri-apps/api |
+| Desktop | Tauri 2 (Rust) + PyInstaller backend + NSIS installer |
+| Tooling | uv, ruff, pyright, pytest (47% coverage), Biome, Playwright (13 e2e), just |
 
 ## Development
 
@@ -116,66 +180,32 @@ curl "http://localhost:8000/v1/stops/12345/departures?feed_id=my-feed&limit=5"
 
 ```text
 gtfs-mcp/
- src/
-    gtfs_mcp/           # Main package
-        __init__.py     # Package initialization
-        main.py         # FastAPI application
-        config.py       # Configuration management
-        api/            # API endpoints
-        core/           # Core functionality
-        services/       # Business logic
- tests/                  # Test suite
- pyproject.toml          # Project metadata and dependencies
- README.md               # This file
+  src/gtfs_mcp/       # Main package (FastAPI app + MCP tools)
+    api/              # REST endpoints (v1, llm proxy)
+    core/             # GTFS parser + feed manager
+    services/         # MCP tools, feed discovery, skills
+  tests/              # pytest suite
+  web_sota/           # React webapp (Vite, Tailwind)
+  native/             # Tauri 2 wrapper (NSIS)
+  scripts/            # CUA smoke tests, mcpb pack, fleet helpers
 ```
 
 ### Running Tests
 
 ```bash
-pytest
+just test            # pytest with coverage
+just certify         # ruff + pyright + pytest + tsc + biome
 ```
 
-### Code Style
+## Related Projects
 
-This project uses:
-
-- **Black** for code formatting
-- **isort** for import sorting
-- **mypy** for type checking
-
-Run the following before committing:
-
-```bash
-black .
-isort .
-mypy .
-```
-
-
-## 🛡️ Industrial Quality Stack
-
-This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
-
-- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
-- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
-- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
-- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
-- **Security**: Automated audits via `bandit` and `safety`.
+- **[publictransport-mcp](https://github.com/sandraschi/publictransport-mcp)** — Vienna
+  Transit Hub. Consumer of the same Wiener Linien GTFS data: loads the feed
+  into PostgreSQL/PostGIS and shows a live map with schedule-interpolated
+  pseudo-vehicle tracking (Wiener Linien publishes no live vehicle
+  positions). Separate repo for historic reasons; gtfs-mcp is the
+  general-purpose schedule server, publictransport-mcp the city-specific app.
 
 ## License
 
 MIT
-
-## Contributing
-
-Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting pull requests.
-
-## Related Projects
-
-- [HandBrake MCP](https://github.com/sandraschi/handbrake-mcp)
-- [LLM MCP](https://github.com/sandraschi/llm-mcp)
-- [RustDesk MCP](https://github.com/sandraschi/rustdesk-mcp)
-
-## Support
-
-For support, please open an issue on the [GitHub repository](https://github.com/sandraschi/gtfs-mcp/issues).

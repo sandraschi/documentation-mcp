@@ -1,3 +1,13 @@
+---
+title: "Tauri fleet — Do / Don't matrix"
+category: reference
+status: review
+audience: mcp-dev
+last_updated: 2026-07-13
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Tauri fleet — Do / Don't matrix
 
 > **Context:** Plex MCP v2.4.1-beta.1 night postmortem (Jun 2026). Use with [TAURI_PRODUCTION_PITFALLS.md](TAURI_PRODUCTION_PITFALLS.md) and skill `tauri-fleet-expert`.

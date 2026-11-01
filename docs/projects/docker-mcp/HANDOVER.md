@@ -51,6 +51,17 @@
 - **Version bump** — 3.3.1-beta → 3.5.0 (manifest.json, __init__.py, justfile)
 - **Tauri dialog plugin** — `tauri-plugin-dialog` in Cargo.toml, `dialog:allow-open` capability, registered in main.rs
 
+### Session 3 additions (2026-10-03)
+- **List/card + export everywhere** — containers/images/networks/volumes: richer columns, sort, filters, CSV/JSON export; containers inline start/stop/restart
+- **Image provenance + upstream brief** — fleet-local vs registries, `GET /api/images/brief` (Hub + GitHub README, cached); `POST /api/images/pull` with already-current reporting
+- **`GET /api/junk` + `/reports` page** — cleanup groups with MD/JSON export and deep links
+- **Compose files preload** — `GET /api/compose/files` (fleet root, cached) with Analyze/Up/Down; `project_dir` passthrough on up/down
+- **Fleet repos setting** — `GET/PUT /api/settings/fleet`, Settings UI, `~/.docker-mcp/settings.json`, `DOCKER_MCP_FLEET_ROOT`
+- **MCP Streamable HTTP live** — `POST /mcp` routes + combined lifespan (was 405); verified 43 tools
+- **Dashboard progressive loading** — per-section skeletons, no global spinner; AI Command → AI Chat
+- **Perf** — `list_images` via raw `/images/json` (31s → ~11s); usage map from list attrs
+- **Ops, same day** — daemon list stalls traced to `tailscale-mcp-server` (broken network record; `docker rm` fixed, 11s → 1s); deepfang stopped (dormant); rtorrent recheck storm settled; robofang unhealthy (`res_pjsip` not loaded); publictransport-mcp half-deployed (db lacks restart policy — `postgres_data`/`gtfs_data` are LIVE, do not prune)
+
 ### Fleet-wide
 - `scan-tauri-pitfalls.ps1` at `mcp-central-docs/scripts/`
 - CSP null → explicit needed on 45 repos (pitfall #13 documented)

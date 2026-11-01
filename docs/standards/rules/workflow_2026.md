@@ -1,3 +1,13 @@
+---
+title: "SOTA 2026 Agentic Workflow"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-10
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # SOTA 2026 Agentic Workflow
 
 This workflow is the "Biggest Unlock" for high-leverage development. It front-loads thinking and maintains context hygiene.
@@ -19,10 +29,12 @@ This workflow is the "Biggest Unlock" for high-leverage development. It front-lo
    - Execute the approved plan phase-by-phase.
    - Clear context between unrelated phases to prevent "Context Drift."
 
-4. **COMMIT & VERIFY**
+4. **COMMIT, VERIFY, PUSH & RELEASE**
    - Run automated tests and verify logic.
    - Run Playwright e2e tests for webapp repos (see `playwright_e2e_sota.md`).
-   - Create conventional commits and PRs.
+   - Create conventional commits in sensible, atomic batches.
+   - **PUSH IMMEDIATELY**: Never hop to another repo while changes remain unpushed (`git push`).
+   - If release tier applies (MCPB / NSIS), tag and publish release artifacts. A fix does not exist until pushed upstream.
 
 ## Context Hygiene
 - **Proactive Compaction**: Run `/compact` at ~75% token capacity.

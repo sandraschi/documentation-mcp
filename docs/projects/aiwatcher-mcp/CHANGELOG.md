@@ -1,4 +1,30 @@
 
+## [Unreleased] — 2026-08-15
+
+### Fixed
+- **Daily digest email delivery** - digest was generated daily but never delivered (`sent_at` null on every row):
+  - `email_delivery.py` posted to the wrong path (`/api/v1/send`; endpoint is `/api/send`) with wrong body keys (`html_body`/`text_body`; endpoint expects `body`/`html`) - both fixed, plus HTTP Basic auth against email-mcp (`EMAIL_MCP_USER` / `EMAIL_MCP_PASSWORD`, defaults `sandra`/`vienna2026`).
+  - `EMAIL_MCP_URL` now points at the backend (`127.0.0.1:10813`), not the Vite frontend port.
+- **Intel Reports Hub publish 401** - `intel_hub_client.py` sent no auth; hub requires Basic (`INTEL_REPORTS_HUB_USER` / `INTEL_REPORTS_HUB_PASS`, defaults `fleet`/`intel`). Hub now receives the daily digest.
+- **Ollama native LLM branch** - `_get_llm_response` for `ollama` now uses the native `/api/chat` with `think: false` (thinking models routed all output to `message.thinking`, leaving `content` empty and killing generation). Also fixed missing return in the branch (returned `None` -> fallback digest) and added empty-response retries.
+- **Digest `item_count`** - cached digests lost `item_count`; fresh digests never set it. Both paths now record the real count.
+
+### Added
+- **Discord digest posting** - digest summary posted to a configured channel via discord-mcp REST (`DISCORD_MCP_URL` + `DISCORD_DIGEST_CHANNEL_ID`, opt-in).
+- `EMAIL_MCP_USER` / `EMAIL_MCP_PASSWORD`, `INTEL_REPORTS_HUB_URL` / `INTEL_REPORTS_HUB_USER` / `INTEL_REPORTS_HUB_PASS` config fields.
+
+### Changed
+- **Local LLM stack**: llama.cpp lane (`:11435` -> `:11439`) retired; Ollama (`11434`) is the single engine. `LLM_PROVIDER=ollama`, `LLM_BASE_URL=http://127.0.0.1:11434/v1`, `DISTILLATION_MODEL=muse-glimmer-131k:latest` (multimodal 30B, vision projector, 131K ctx).
+- `DISTILLATION_INTERVAL_HOURS` default 2 -> 4 (muse 30B flash pass is heavier).
+- Default recipients set to `sandras@hotmail.com,stephans@hotmail.com`.
+- Ollama model store migrated to `N:\AI\ollama\models` (`OLLAMA_MODELS`).
+
+## [Unreleased] — 2026-07-29
+
+### Added
+- `web_search` tool — search web via OpenSERP for live context during distillation
+- `OPENSERP_URL` config (default `http://127.0.0.1:7000`)
+
 ## [Unreleased] — 2026-07-05
 
 ### Added
@@ -136,7 +162,7 @@ All notable changes to **aiwatcher-mcp** are documented here.
 ## [0.1.3] — 2026-04-27
 
 ### Added
-- **Interest Bundles**: 
+- **Interest Bundles**:
     - Custom AI "Personas" that filter global news feeds through specific niche lenses (e.g. "Dogs", "Yachts", "Travel").
     - Bundle-specific scoring for Relevance and Urgency.
     - Dedicated "Bundles" page in the UI for managing personas and viewing filtered insights.
@@ -144,14 +170,14 @@ All notable changes to **aiwatcher-mcp** are documented here.
     - "Bundle Wizard" that takes a simple topic and generates a comprehensive Persona (System Prompt).
     - AI-suggested high-quality RSS/Atom feeds and blogs for new topics.
     - One-click adding and linking of suggested sources to the new bundle.
-- **Bundle Feed Management**: 
+- **Bundle Feed Management**:
     - Ability to link/unlink global feeds to specific bundles.
     - Visual indicators for source connectivity.
 
 ## [0.1.2] — 2026-04-26
 
 ### Added
-- **Industrialized `start.ps1`**: 
+- **Industrialized `start.ps1`**:
     - `-Headless`: Re-launches the script in a hidden window using `Start-Process pwsh -WindowStyle Hidden`.
     - `-BackendOnly`: Starts the Python backend without the Vite frontend (essential for integration testing).
     - `-NoBrowser`: Prevents the script from automatically opening the browser.
@@ -201,4 +227,3 @@ All notable changes to **aiwatcher-mcp** are documented here.
 - Fleet integrations: robofang (:10871), speechops (:10895), email-mcp (:10812),
   calibre-mcp (:10720), Gmail MCP
 - `start.bat` / `start.ps1`: zero-dependency launcher (winget installs uv + Node if absent)
-

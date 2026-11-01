@@ -1,3 +1,13 @@
+---
+title: "Context Bombs: Guardrail Triggering as a Security Primitive"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-07-20
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Context Bombs: Guardrail Triggering as a Security Primitive
 
 **Established**: 2026-07-15

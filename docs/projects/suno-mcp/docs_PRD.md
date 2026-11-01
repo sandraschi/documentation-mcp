@@ -3,7 +3,7 @@
 
 **Version:** 1.0  
 **Date:** January 27, 2025  
-**Author:** Sandra Schipal  
+**Author:** Sandra S.  
 **Status:** Active Development  
 
 ---
@@ -581,5 +581,5 @@ The success of this product will be measured not just by technical metrics, but 
 - **Version**: 1.0
 - **Last Updated**: January 27, 2025
 - **Next Review**: February 10, 2025
-- **Approved By**: Sandra Schipal
+- **Approved By**: Sandra S.
 - **Distribution**: Development Team, Stakeholders

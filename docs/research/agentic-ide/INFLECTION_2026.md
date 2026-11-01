@@ -1,7 +1,7 @@
 # The Agentic IDE Inflection Point: Why It's February 2026, Not November 2025
 
 **Created:** 2026-03-23  
-**Author:** Sandra Schipal + Claude Sonnet 4.6 (collaborative analysis)  
+**Author:** Sandra S. + Claude Sonnet 4.6 (collaborative analysis)  
 **Tags:** agentic-ide, inflection, history, meta, fastmcp, mcp-clients  
 **Status:** Analysis / Reference
 

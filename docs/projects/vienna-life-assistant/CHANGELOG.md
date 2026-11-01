@@ -1,3 +1,73 @@
+### Fixed - Control Tower error resilience and ASCII output hygiene (2026-08-21)
+- **Control Tower fail-soft & crash prevention**: `_probe_many()` catches all probe exceptions so dead ports, protocol disconnects, or socket resets safely mark ports as offline instead of raising a 500 error. Wrapped `build_fleet_section`, `windows_services`, and `goliath_stats` in fail-soft `try...except` blocks in `build_control_tower` and `/api/control-tower` route.
+- **ASCII Output & Unicode Hygiene**: Integrated `_ascii_normalize()` in `control_tower.py` to ensure all returned data (including Win32_Service display names and Goliath stats) normalizes em/en dashes and smart quotes to plain ASCII hyphens and straight quotes, and strips unicode emojis/pictographs. Added ASCII Output Rule to `VIENNA_SYSTEM_PREPROMPT`.
+- **Test suite**: Added unit tests for `_probe_many` exception safety and `build_control_tower` fail-soft behavior (9/9 tests passing).
+
+### Added — fleet orchestration (2026-08-03)
+- **Fleet MCP orchestration**: the agent can call any allowlisted fleet server
+  over MCP streamable HTTP — fleet_tools (discover), fleet_call (invoke),
+  fritz_status (devices-mcp Fritz!Box probe). Registry: plex-mcp, calibre-mcp,
+  gtfs-mcp, aiwatcher-mcp; FLEET_MCP_ALLOWLIST; graceful offline errors.
+  Verified live: agent discovered aiwatcher tools and answered with real
+  get_tag_trends data end-to-end
+- 5 new pytest (68 total)
+### Added — journal RAG + proactive email + voice (2026-08-03)
+- **Journal RAG**: semantic search over the personal log via Ollama
+  embeddings (nomic-embed-text, /v1/embeddings, SQLite-stored vectors) —
+  `vienna_log(operation="search_semantic|reindex")`, `/api/pa/rag/*`, and
+  **journal memory injection** into `/api/pa/ask` ("what did I do last August?")
+- **Proactive email**: PA_BRIEF_EMAIL=1 + PA_BRIEF_RECIPIENT sends the daily
+  brief through the email-mcp gateway after regeneration
+- **Voice**: Web Speech mic input in Chat (STT) + read-aloud on assistant
+  messages and the PA brief (fleet speech standard: speech.ts, MicButton,
+  SpeakButton)
+- Fixed test isolation bug: env vars now set at conftest module level —
+  tests previously wrote to the real DB (collection-time import trap)
+- 6 new pytest (63 total)
+### Added — PA engine + agent chat (2026-08-03)
+- **PA engine**: `/api/pa/*` — LLM morning brief over real life data (context
+  grounding), rule-based alerts (refills, follow-ups, renewals, document expiry,
+  birthdays, overdue tasks), NL ask over context, daily scheduler (persists to
+  data/pa_state.json), Dashboard **PA Brief** widget with read-aloud + ask box
+- **Agent chat**: Chat is now a tool-calling agent — the LLM decides vienna_*
+  calls (24 curated tools), the loop executes them and reflects; tool trace
+  chips rendered per assistant message. Works with Ollama /v1, LM Studio, OpenAI
+- Smart Ollama model pick (prefers gemma4/qwen3.6 local models over
+  reasoning/cloud tags that return empty content)
+- 12 new pytest (57 total), 3 new e2e (15 total)
+### Added — email bridge (2026-08-03)
+- **Email**: inbox (list/unread filter), search, message detail, mark-read, and send — via the email-mcp gateway (:10813, HTTP Basic auth); IMAP/SMTP/Graph credentials stay in email-mcp
+- `vienna_email` portmanteau (status/inbox/get/search/send/mark_read/stats) + `/api/email/*` + Email page (compose form, inbox list, detail pane, unread KPIs)
+- 4 new tests (45 total), 1 new e2e (13 total); EMAIL_MCP_URL/USER/PASSWORD env
+### Added — OneNote bridge (2026-08-03)
+- **Notes**: OneNote via the onenote-mcp gateway (:10907) — the Microsoft Graph token stays in onenote-mcp (device-code flow); ViLife proxies notebooks/search/pages/create
+- **Journal → OneNote export**: per-entry export button + `vienna_notes(operation="export_journal", entry_id=)`; offline-safe when onenote-mcp is down
+- `vienna_notes` portmanteau (status/notebooks/search/page/create/export_journal) + `/api/notes/*` + Notes page
+- 4 new tests (41 total), 1 new e2e (12 total); ONENOTE_MCP_URL env
+### Added — journal + news site (2026-08-03, v0.2.0 continuation)
+- **Journal**: personal log with daily entries (title, body, mood 1-10, tags), streak counter, on-this-day recall from previous years, full-text search — `vienna_log` portmanteau + `/api/life/logs*` + Journal page
+- **News site**: personal news fed by the fleet aiwatcher engine (:10946) — top stories by urgency, weekly trends, search across 12k+ items, morning digest; `/api/news/*` server-to-server bridge with graceful offline state; `vienna_news` portmanteau + News page
+- Journal streak/on-this-day seeded; 10 new tests (37 total); 3 new e2e (11 total)
+## [0.2.0] - 2026-08-03
+
+### Added — real life-assistant domains (SQLite-backed)
+- **Health**: doctor visit log, medical conditions, medications (dose/schedule/refill), vitals (BP, pulse, weight) — `vienna_health` portmanteau + `/api/life/health/*`
+- **Travel**: trips with countdown, per-trip packing checklists, travel documents with expiry alerts — `vienna_travel` portmanteau + `/api/life/travel/*`
+- **Contacts**: people, relationships, upcoming birthdays with age — `vienna_contacts` + `/api/life/contacts`
+- **Household**: subscriptions (monthly total + renewals), home maintenance tasks with frequency, pet care (Benny) — `vienna_household` + `/api/life/subscriptions`, `/home-tasks`, `/pet`
+- **Persistence**: SQLite via SQLAlchemy (`web_sota/vienna_life_assistant/db.py` + `models.py`); first-run seed replaces static mocks; mock endpoints now declare `"mock": true`
+- **Frontend**: Health, Contacts, Household pages; Travel countdown + packing toggle + documents; Calendar add-event; Dashboard KPI row + Life Pulse widget; `data-testid` on KPIs and forms
+- **MCP**: `vienna_life` extended with calendar/todo/expense CRUD; 4 new portmanteau tools (7 total)
+- **Tests**: 27 pytest tests (DB CRUD, REST round-trips, MCP ops) with coverage gate; Playwright fleet-audit e2e
+- **Session injection**: `.claude-plugin/`, refreshed `.cursorrules` + `.windsurfrules`, copilot-instructions, `.opencode/skills/session-context/`, `.agents/skills/`
+- **Infra**: `.github/workflows/ci.yml` (five-gate), `.pre-commit-config.yaml` + `scripts/pre-commit-biome.ps1`, pyright in dev-deps, `.mcpbignore` + `assets/prompts/`, Ctrl+0 zoom reset
+
+### Fixed
+- Tracked junk removed (ps_output.txt, docker_status.txt, ovienna-life-assistantbackend, celerybeat-schedule)
+- CUA smoke config health path (`/api/v1/health` → `/health`)
+- Port registry: frontend 10988 (WEBAPP_PORTS.md corrected from 10989)
+- pyright gate green (0 errors), ruff clean, tsc clean
+- Dead mock scraping block removed from shopping offers endpoint
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -12,14 +82,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`.env` leak**: Created `.env.example` as sanitized template. Tauri build.ps1 now bundles `.env.example` instead of `.env` (which contained real `PLEX_TOKEN` and DB credentials).
 - **`.gitignore`**: `.env` in gitignore confirmed — but file was committed before the rule. Run `git rm --cached .env` to untrack.
 
-### Fixed
-- **Tauri `frontendDist`**: Pointed to `../web_sota/dist` (was `../webapp/dist` — wrong dir).
-- **`backend.rs` port**: Changed from hardcoded `10700` → `10922` to match registry. Upgraded `free_port()` to full 240s multi-layer kill + escalation + TCP health polling.
-- **Error handling**: Added `logger.exception()` to all bare `except` blocks in `capabilities.py`.
-- **Sidebar toggle**: Moved collapse button from bottom to top (after logo/header) — fixes fleet-wide UX defect.
-- **TypeScript lint**: Removed 11 unused imports across 6 files. Added `@tauri-apps/api` dependency.
-- **Python lint**: Removed 7 unused imports in `server.py`.
-
 ### Added
 - `llms.txt`, `llms-full.txt`, `glama.json` — fleet-standard LLM discovery and registry files.
 - `useZoom()` hook (`src/lib/use-zoom.ts`) — Ctrl+Scroll zoom with localStorage persistence and CSS fallback for dev browser.
@@ -30,6 +92,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backend-status Tauri event listener + HTTP polling fallback in AppLayout.
 - `pyproject.toml` at repo root.
 - `color-scheme: dark` in CSS.
+- **FastMCP 3.4.4**: Bumped from `>=0.4.1` to `>=3.4.2,<4`. Prefab UI (`prefab-ui>=0.14.0`) in core deps. Ruff in dev-deps.
+- **Tool annotations**: `READ_ONLY` annotations on all 3 tools per fleet standard.
+- **Tool docstrings**: Added `## Return Format` and `## Examples` sections to all tools.
+- **Shutdown endpoint**: `POST /api/shutdown` for graceful agent-callable server termination.
+- **justfile**: Added `serve`, `serve-frontend`, `up`, `test`, `types`, `e2e`, `gates-green`, `build-native`, `cua-nsis-test`, `mcpb-pack` recipes.
+- **`reports/`**: Added to `.gitignore` for audit trail storage.
+
+### Changed
+- **Tauri `frontendDist`**: Pointed to `../web_sota/dist` (was `../webapp/dist` — wrong dir).
+- **`backend.rs` port**: Changed from hardcoded `10700` → `10922` to match registry. Upgraded `free_port()` to full 240s multi-layer kill + escalation + TCP health polling.
+- **CUA smoke config**: Fixed backend port from `10700` to `10922`.
+- **logging**: Replaced `print()` calls in `server.py` with `logger.info/warning/error`.
+- **TypeScript**: Removed `console.error` from Dashboard.tsx (silent catch).
+- **Python imports**: Fixed E402 (imports at top of file) and replaced `Dict`/`List` with `dict`/`list`.
+- **Dashboard**: Removed hardcoded KPI stats, fake activity feed, fake ecosystem grid, Benny dog monitor.
+
+### Added
+- **Playwright headless Chromium scrapers**: `vienna_scraper.py` with real data from Burgtheater (httpx), Wiener Staatsoper (Playwright), Belvedere exhibitions (httpx), Gasthaus Orlik lunch menu (httpx). Cache TTL: 30min performances, 2h exhibitions, 1h menus.
+- **Live performances**: `GET /api/vienna/music` returns Burgtheater (37) + Staatsoper (14) real performances.
+- **Live exhibitions**: `GET /api/vienna/museums` returns Belvedere (8) real exhibitions.
+- **Lunch menus**: `GET /api/vienna/restaurants` returns restaurant list + Orlik daily lunch menu.
+- **New restaurants**: Steirereck, Enopizzeria Toledo, Mast Weinbar added to reference list.
+- **Dashboard hero**: Time-aware greeting with real metrics (concerts, coffee houses, museums).
+- **Dashboard Quick Actions**: Working nav buttons to Expenses, Calendar, Shopping, Chat, Fleet.
+- **Playwright dep**: `playwright>=1.50.0`, `beautifulsoup4>=4.12.0`, `lxml>=5.0.0`.
+
+### Fixed
+- **Error handling**: Added `logger.exception()` to all bare `except` blocks in `capabilities.py`.
+- **Sidebar toggle**: Moved collapse button from bottom to top (after logo/header) — fixes fleet-wide UX defect.
+- **TypeScript lint**: Removed 11 unused imports across 6 files. Added `@tauri-apps/api` dependency.
+- **Python lint**: Removed 7 unused imports in `server.py`.
 
 ## [0.2.0] - 2026-06-05
 

@@ -8,6 +8,22 @@
 
 ---
 
+## ⚠️ P0 — RAG deps were missing, service restart still pending (2026-08-27)
+
+`uv sync --extra rag` had not been run in this checkout. `ingest_paper_to_corpus` was silently
+falling back to FTS-only (`vector_indexed: false, reason: "deps_missing"`) instead of failing
+loudly — this is the actual gap to fix, the silent fallback should probably be a visible warning
+in the tool result, not just a buried `reason` field.
+
+- [x] Ran `uv sync --extra rag` in `D:\Dev\repos\arxiv-mcp` — installed fastembed 0.8.0,
+      onnxruntime 1.26.0, tokenizers 0.22.2, huggingface-hub 1.16.1
+- [ ] `reindex_depot_vectors` still throws `DLL load failed while importing lib` — the running
+      `arxiv-mcp` Windows service loaded its Python process before the new packages landed and
+      needs a restart. Attempted restart via MCP tooling failed: `Access is denied` (OpenSCManager).
+      Needs a manual/elevated restart of the `arxiv-mcp` service, then rerun `reindex_depot_vectors`.
+- [ ] Consider a startup probe check (same pattern as `startup_probe.py`'s arxiv.org reachability
+      check) that fails loud if `--extra rag` deps are absent, instead of quietly downgrading to FTS.
+
 ## ⚠️ P0 — REINDEX REQUIRED (do this first)
 
 > **If you upgraded to 0.7 and have NOT reindexed, `search_depot_corpus` is returning wrong results.**

@@ -1,0 +1,294 @@
+# Plan: sinophile-mcp and austrophile-mcp (sister -phile repos)
+
+**Status:** DRAFT (MCD only — no repos scaffolded yet)  
+**Owner:** Sandra S.  
+**Last updated:** 2026-09-14  
+**Reference ship:** [japanophile-mcp](./japanophile-mcp/README.md) (v0.3.x, Stages 1–3 done)  
+**Fleet template:** [PHILE_PATTERN.md](./japanophile-mcp/PHILE_PATTERN.md)
+
+---
+
+## 1. Why these two next
+
+**japanophile-mcp** proved the stack: five portmanteau MCP tools, seed DBs, vendored knowledge + language curriculum HTML, Practice games iframe bridge, HTTP + `/mcp`, Vite dashboard, Tauri NSIS, `.mcpb`. Recent IA refresh (**Language · Knowledge · Practice · MCP Tools**) and curriculum tabs (keigo, exams, materials, mobile, bloopers) are the **target UX** for sisters — not the older “Learn · Know · Games” labels in the 2025 pattern doc.
+
+| Sister | Primary personal fit | Existing fleet leverage |
+|--------|----------------------|-------------------------|
+| **austrophile-mcp** | Vienna resident; ÖSD/Deutsch; Kaffeehaus culture | [mywienerlinien](../mywienerlinien/), [gtfs-mcp](../gtfs-mcp/), **Calibre-Bibliothek Deutsch**, contributor **[vienna-living](#48-vienna-living-contributor-repo)** |
+| **sinophile-mcp** | Long-horizon Chinese; HSK; history box ( **high editorial finesse** ) | ai-games-collection (if any CN drills), calibre-mcp; charter [sinophile-mcp/EDITORIAL_CHARTER.md](./sinophile-mcp/EDITORIAL_CHARTER.md) |
+
+**Recommended build order:** **austrophile-mcp first** (smaller language surface, Plan face can delegate transit to existing Vienna MCPs), then **sinophile-mcp** (hanzi + tones + two scripts = larger data and curriculum lift). **Sinophile Knowledge is not a fast fork** — politics/history pages wait until [EDITORIAL_CHARTER.md](./sinophile-mcp/EDITORIAL_CHARTER.md) and Taiwan outline are implemented with human review.
+
+---
+
+## 2. Shared architecture (copy from japanophile, do not reinvent)
+
+### Surfaces (unchanged)
+
+1. **stdio MCP** — Cursor / Claude Desktop  
+2. **HTTP** — FastAPI REST + static games/assets + streamable `/mcp`  
+3. **Human** — Vite React + optional Tauri sidecar + `.mcpb`
+
+Single implementation in `server.py`; HTTP mirrors tools.
+
+### Webapp IA (2026 japanophile standard)
+
+| Sidebar | Role |
+|---------|------|
+| **Dashboard** | Health, corpus KPIs, session progress |
+| **Language** | Curriculum HTML tabs (overview, writing, grammar, vocabulary, phonetics, methods, materials, mobile, exams, culture-specific tabs) |
+| **Knowledge** | Society/history/economy HTML box + cluster tabs |
+| **Travel** | Plan face (stub → tools) |
+| **Diary** | Remember face (stub → SQLite) |
+| **Practice** | Vendored or repo-local drill iframes |
+| **Chat** | local-llm-mcp + `{culture}-expert` skill |
+| **MCP Tools** | Full portmanteau harness |
+| **Settings / Help / Skills / Apps** | Fleet parity |
+
+Keep thin **Learn** route optional (MCP demo quiz only), not in sidebar.
+
+### Data tiers
+
+| Tier | Git | Notes |
+|------|-----|--------|
+| Seeds | Yes (≤5–10 MB each) | Quiz bank, compact lexicon |
+| Big corpora | Fetch script | CC-CEDICT, full frequency lists, audio |
+| Runtime | Gitignored | `progress.db`, diary, SRS |
+
+Missing big data → dialogic fetch hint, never traceback.
+
+### Editorial
+
+Same as japanophile: **sourced, neutral** culture writing; skill refuses propaganda. Sensitive topics (PRC politics, Habsburg nostalgia, etc.) get dates and citations, not hot takes.
+
+### Crossconnects (all sisters)
+
+- **calibre-mcp** — Materials tabs cite owned ebooks; publisher search before duplicate buys. Fleet owner estate (~15k titles, split libraries): [CALIBRE_OWNER_ESTATE.md](./CALIBRE_OWNER_ESTATE.md)  
+- **speech-mcp** — pronunciation drills  
+- **local-llm-mcp** — Chat  
+- **ai-games-collection** — pure arcade stays there; learning canonical in `*-phile-mcp`  
+- **discord-mcp** — reminders, not curriculum  
+
+---
+
+## 3. Proposed ports (register at scaffold time only)
+
+Next free block after japanophile **11193/11194** (11191–11192 squatted by open-webui):
+
+| Repo | Backend | Frontend | Register in |
+|------|---------|----------|-------------|
+| **austrophile-mcp** | **11195** | **11196** | WEBAPP_PORTS.md + fleet-registry.json |
+| **sinophile-mcp** | **11197** | **11198** | WEBAPP_PORTS.md + fleet-registry.json |
+
+Add `starts/austrophile-mcp-start.bat` and `starts/sinophile-mcp-start.bat` mirroring [japanophile-mcp-start.bat](../starts/japanophile-mcp-start.bat).
+
+---
+
+## 4. austrophile-mcp — plan
+
+### 4.1 Product one-liner
+
+Local-first **Austria + German (AT)** workstation: ÖSD-oriented drills, Austrian culture Knowledge box, Vienna-centric Travel crossconnects, diary/progress.
+
+### 4.2 MCP tools (five portmanteaus, names TBD)
+
+| Tool | Purpose |
+|------|---------|
+| `{austro}_help` | Ports, DB paths, knowledge count, fetch hints |
+| `german_*` or `de_*` | Lookup/search vocabulary, grammar tags, CEFR/ÖSD level filters |
+| `exam_*` | ÖSD / Goethe-shaped mock items (seed MCQ); prefer “exam” in UI not unexplained acronyms |
+| `vocab_*` | Phrase search against seed + optional big corpus |
+| `knowledge_*` | list/get HTML culture pages |
+
+No kanji wall — replace with **vocabulary + case/gender drills** in Practice.
+
+### 4.3 Language curriculum tabs (HTML under `assets/language/`)
+
+| Tab | Content focus |
+|-----|----------------|
+| Overview | DE in Austria vs DE in Germany; Sie/du; Austrian lexical shibboleths (Jänner, Paradeiser, …) |
+| Writing | ß/ss, capitalization, umlaut input; no hanzi — **compound nouns** and spelling reform notes |
+| Grammar | Cases, verb position, separable verbs, Konjunktiv II polite |
+| Phonetics | Regional vowels (Viennese), stress; contrast High German vs local color |
+| Vocabulary | Educated lexicon scale; Austrianisms; false friends with English |
+| Materials | **Calibre-Bibliothek Deutsch** + pocket vs course books; Goethe/ÖSD/Hueber; jisui/ebook gap |
+| Mobile | iPhone/iPad: DW, Anki, Der Die Das, ÖSD apps |
+| Exams | ÖSD levels, Goethe equivalence, limits (which skills tested) |
+| Bloopers | Common L1 English errors; **Ohrwurm** vs embarrassing false friends; Servus misuse |
+
+Optional tab: **Kaffeehaus & Alltag** (culture register, not grammar).
+
+### 4.4 Knowledge clusters
+
+History (Habsburg to EU), Bundesländer, politics/economy (neutral), daily life, food (Sachertorte vs tourist traps), music (Klassik, Schlager, Austropop), travel (Wien, Salzkammergut, …), crime/society (Fritzl-level topics handled carefully), sport.
+
+### 4.5 Plan face
+
+Phase 1: static Travel page + deep links to **mywienerlinien** webapp and gtfs-mcp tools.  
+Phase 2: itinerary MCP tools (reuse patterns from japanophile Stage 4 PRD).
+
+### 4.6 Data seeds
+
+- ÖSD/CEFR vocabulary seed (JSON/SQLite)  
+- 500–800 MCQ grammar/vocab items  
+- 25–40 knowledge HTML pages (vendored or authored)  
+- Optional: hook **directmedia-mcp** for DigiBib German references (crosslink only)
+
+### 4.7 Scaffold checklist
+
+1. `git init` + initial commit per [GIT_REPOSITORY_SAFETY.md](../standards/GIT_REPOSITORY_SAFETY.md)  
+2. Fork japanophile tree: rename package, strip JLPT/kanji, insert DE tools  
+3. Register ports **11195/11196**  
+4. MCD: `projects/austrophile-mcp/` (README, STATUS, PHILE copy of INSTALL)  
+5. Skill: `skills/austria-expert/SKILL.md`  
+6. Pilot: `uv run pytest`, `just check`, one NSIS smoke (Stage 3 parity when stable)
+
+### 4.8 vienna-living (contributor repo)
+
+**vienna-living** is a **weak contributor** — not the canonical home for Austrian culture curriculum (that is **austrophile-mcp**), but a source of lived Vienna content:
+
+| Role | Owner |
+|------|--------|
+| Practical daily life (Bezirke, Amt, Müll, Kinder, doctors) | vienna-living |
+| Language curriculum + ÖSD tooling + Knowledge HTML box | austrophile-mcp |
+| Transit deep links | mywienerlinien / gtfs-mcp |
+
+**Integration pattern:** vendoring or git submodule snippets into `assets/knowledge/austria/` with attribution; austrophile **Travel / Daily life** clusters link out to vienna-living pages where they exist. Do not duplicate — **crosslink + short excerpt**. Register vienna-living in fleet-registry when repo path is stable under `D:/Dev/repos/vienna-living`.
+
+---
+
+## 5. sinophile-mcp — plan
+
+### 5.1 Product one-liner
+
+Local-first **Chinese language + civilization** workstation: hanzi tools (simp/trad), HSK-oriented exams, tone-aware curriculum, Knowledge box, travel planner, diary.
+
+### 5.2 MCP tools (five portmanteaus)
+
+| Tool | Purpose |
+|------|---------|
+| `{sino}_help` | Status, paths, fetch hints |
+| `hanzi_*` | Lookup by character, radical, stroke count, level tag (HSK 1–6) |
+| `exam_*` | HSK-style reading/grammar MCQ from seed bank |
+| `vocab_*` | Pinyin search, English gloss, measure word where applicable |
+| `knowledge_*` | Culture/history HTML |
+
+### 5.3 Language curriculum tabs
+
+| Tab | Content focus |
+|-----|----------------|
+| Overview | Mandarin vs Cantonese note; simp/trad; pinyin as default romanization (not Wade-Giles except historical) |
+| Writing | Simplified/traditional toggle mindset; radicals; stroke order; **Script reform FAQ** (why Mao pushed 简化字 + 拼音 but not full latinization — homophony, dialects, literacy politics, Taiwan split; founder note: interesting even if you never study Chinese) |
+| Grammar | 了 le aspect, 把 ba, classifiers 个/本/…, topic-comment |
+| Phonetics | **Four tones + neutral**; sandhi (不, 一); why English speakers fail tones |
+| Vocabulary | Educated lexicon (~5k HSK6 floor vs 30k+ literary); measure words |
+| Materials | HSK Standard Course, New Practical Chinese Reader, **Calibre** (add **Calibre-Bibliothek Chinesisch** or tag `language-learning` + `chinese`); Pleco; jisui |
+| Mobile | Pleco, Skritter, HelloChinese, Du Chinese, HSK apps |
+| Exams | HSK 3.0 bands, TOCFL (Taiwan), what is not tested (speaking in standard HSK computer test) |
+| Bloopers | Tone pairs (mā/má/mǎ/mà); 是 shì vs 十 shí; polite vs direct; 面子 |
+
+Culture-specific: **Honorfics / address** tab (先生, 您) lighter than Japanese keigo.
+
+### 5.4 Knowledge clusters
+
+Dynasties timeline, cuisine regional map, philosophy intro, travel, literature (public domain), contemporary society.
+
+**Politics / modern history cluster — gated:** ships only after [EDITORIAL_CHARTER.md](./sinophile-mcp/EDITORIAL_CHARTER.md) sign-off. Includes PRC/post-1949 (sourced, dated), diaspora, Hong Kong/Macau notes, and **Taiwan** as flagship ([TAIWAN_KNOWLEDGE_OUTLINE.md](./sinophile-mcp/TAIWAN_KNOWLEDGE_OUTLINE.md)).
+
+Reject **sinophobe US cottage industry** and **CCP united-front** voice equally in our HTML — see charter.
+
+### 5.5 Data seeds
+
+- Hanzi seed (HSK 1–6 character list + definitions)  
+- HSK vocabulary SQLite (compact)  
+- MCQ seed bank (reading/grammar)  
+- CC-CEDICT or equivalent **fetched** (large)  
+- Knowledge HTML pack (translate/adapt japanophile pipeline)
+
+### 5.6 Practice games
+
+Port or author: tone trainer, radical drill, HSK vocab quiz, optional character writing grid. Keep heavy arcade out.
+
+### 5.7 Scaffold checklist
+
+Same as §4.7 with ports **11197/11198**, package `sinophile_mcp`, skill `sinophile-expert`, Calibre library split TBD.
+
+### 5.8 Editorial finesse (non-optional)
+
+Owner is **very sinophile** (language, culture, food, history) — enthusiasm in Language and benign Knowledge. **Politics/history** = slow, cited, multi-perspective; skill refuses agitprop.
+
+Taiwan article mandatory before other hot takes: indigenous peoples, Han colonization, pirate/backwater centuries, Japanese era, KMT violent early rule then democratization, cross-strait economic entanglement, **TSMC**, domestic parties — and explicit rejection of **"war with China over Taiwan"** war-fever (foreign policy theatre that skips island history). Neither DPP-as-cartoon-villain nor "renegade province" boilerplate as article voice.
+
+Human review on Tier-A pages (Taiwan first; Tibet/Xinjiang-class only if ever added with same bar).
+
+### 5.9 Taiwan flagship (summary)
+
+Full section brief: [TAIWAN_KNOWLEDGE_OUTLINE.md](./sinophile-mcp/TAIWAN_KNOWLEDGE_OUTLINE.md). Phase **P4b** before politics cluster goes public.
+
+---
+
+## 6. Phased fleet timeline (suggested)
+
+| Phase | Deliverable | Owner |
+|-------|-------------|--------|
+| **P0** | This MCD plan + port reservation in WEBAPP_PORTS (PROPOSED rows) | Done in doc; register on scaffold |
+| **P1** | japanophile Stage 4 travel/diary OR freeze IA — sisters fork **post-0.3.1** tag | japanophile |
+| **P2** | austrophile Stage 1–2 (MCP + HTTP + webapp shell + DE seeds + 10 knowledge pages) | new repo |
+| **P3** | austrophile Stage 3 (NSIS + mcpb) | new repo |
+| **P4** | sinophile Stage 1–2 (hanzi/HSK seeds + curriculum skeleton; **Knowledge = stubs only**) | new repo |
+| **P4b** | Taiwan flagship article + EDITORIAL_CHARTER review; then politics/history cluster | new repo + human |
+| **P5** | sinophile Stage 3 + shared `-phile` CI template in MCD | fleet |
+
+Do **not** batch-scaffold both repos in one script pass — [fleet-batch-scripts](../../standards/TRAPS_AND_PITFALLS.md): pilot one repo first.
+
+---
+
+## 7. MCD artifacts to add when each repo exists
+
+Per [PROJECT_PAGE_STANDARD.md](../standards/PROJECT_PAGE_STANDARD.md):
+
+```
+projects/austrophile-mcp/
+  README.md  STATUS.md  PRD.md  INSTALL.md  CHANGELOG.md  metadata_sync.json
+projects/sinophile-mcp/
+  (same)
+```
+
+Update:
+
+- [FLEET_INDEX.md](./FLEET_INDEX.md)  
+- [projects/README.md](./README.md)  
+- [operations/fleet-registry.json](../operations/fleet-registry.json)  
+- [PHILE_PATTERN.md](./japanophile-mcp/PHILE_PATTERN.md) — link here; refresh sidebar naming to Language/Knowledge/Practice  
+
+---
+
+## 8. Open questions
+
+1. **HSK 3.0 vs 2.0** tagging in seeds — pick one for v0.1.  
+2. **Traditional track** — separate exam tab section or parallel sidebar filter?  
+3. **Austria-only vs DACH** — austrophile scope: AT-first with DE/CH callouts?  
+4. **Licensing** — CC-CEDICT, ÖSD past papers (likely not redistributable — synthetic MCQ only).  
+5. **Repo names** — confirm `sinophile-mcp` / `austrophile-mcp` vs `chinophile-mcp` (PRD used sinophile).  
+6. **Glama / public** — private until Stage 3 smoke green (fleet GitHub Actions rule).  
+7. **Taiwan page** — single long article vs 3-part series?  
+8. **vienna-living** — confirm repo path and license for vendored excerpts.
+
+---
+
+## 9. Related links
+
+- [sinophile-mcp FOUNDER_PERSPECTIVES.md](./sinophile-mcp/FOUNDER_PERSPECTIVES.md) — owner theses (script, English, Ming turn); not HTML voice  
+- [sinophile-mcp SCRIPT_REFORM_BRIEF.md](./sinophile-mcp/SCRIPT_REFORM_BRIEF.md) — 简化字, pinyin, why not full latinization  
+- [sinophile-mcp EDITORIAL_CHARTER.md](./sinophile-mcp/EDITORIAL_CHARTER.md)  
+- [sinophile-mcp TAIWAN_KNOWLEDGE_OUTLINE.md](./sinophile-mcp/TAIWAN_KNOWLEDGE_OUTLINE.md)  
+- [japanophile-mcp PRD](./japanophile-mcp/PRD.md)  
+- [japanophile-mcp STATUS](./japanophile-mcp/STATUS.md)  
+- [WEBAPP_PORTS.md](../operations/WEBAPP_PORTS.md)  
+- [calibre-mcp CALIBRE_LIBRARY_STRUCTURE.md](file:///D:/Dev/repos/calibre-mcp/docs/CALIBRE_LIBRARY_STRUCTURE.md) (Japanisch / Deutsch shelves)  
+- Ming maritime collapse (Zheng He → fleet destroyed) — [MING_MARITIME_FOOTGUN.md](./sinophile-mcp/MING_MARITIME_FOOTGUN.md); not "historians argue" lead  
+- [FOUNDER_PERSPECTIVES.md](./sinophile-mcp/FOUNDER_PERSPECTIVES.md) (isolationist-turn / footgun thesis, labeled opinion)
+
+---
+
+*Document lives in MCD until repos exist; then copy summary into each repo `docs/FLEET_PLAN.md` and keep MCD as canonical plan.*

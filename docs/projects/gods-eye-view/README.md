@@ -1,0 +1,45 @@
+# God's Eye View — MCD Section
+
+**Upstream:** [bilawalsidhu/gods-eye-view](https://github.com/bilawalsidhu/gods-eye-view)
+**Local clone:** `D:\Dev\repos\_upstream\gods-eye-view` (depth-1, HEAD `8b8ccc9`, 2026-10-12)
+**Analyzed:** 2026-10-13
+**License:** MIT (code only — data carve-outs, see DATA_LAYERS + SECURITY_COSTS)
+**Maintainers (upstream):** Bilawal Sidhu + Sameh Khamis at Halfpixel
+**Status upstream:** v0.2.1, 54.6k stars / 10.7k forks, #1 GitHub Trending daily+weekly Aug 2026, #8 Product of the Day
+
+> A spy-satellite simulator in your browser — then you realize the sources are public and the data is real.
+
+Photorealistic 3D globe. Live aircraft, ships, satellites, quakes, traffic, public cameras. Hands-free voice via realtime AI agent. Runs locally, localhost by default.
+
+## Why this is in MCD
+
+1. Best-in-class example of **public-signal fusion** done honestly (stale/fallback provenance surfaced in answers).
+2. Reference for **server-side key brokering + localhost-first threat model** we should copy.
+3. Reference for **voice-to-globe tool design** (30 tools, one catalog, MCP + function-calling adapters).
+4. Candidate for fleet cross-connects (publictransport-mcp/transit, gtfs-mcp, sdr-mcp/local ADS-B, worldlabs-mcp/3D tiles, speech-mcp/voice bus).
+
+## Files in this section
+
+| File | What |
+|------|------|
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | Runtime stack, src/server map, map stacks, motion/symbology correctness, boundaries |
+| [DATA_LAYERS.md](./DATA_LAYERS.md) | All 20 layers: source, proxy route, interval, key tier, license gotchas |
+| [VOICE_AND_MCP.md](./VOICE_AND_MCP.md) | Realtime voice controller, tool catalog, cost caps, MCP stdio setup |
+| [SECURITY_COSTS.md](./SECURITY_COSTS.md) | Threat model, env keys, LAN-sharing rules, real cost numbers |
+| [FLEET_TAKEAWAYS.md](./FLEET_TAKEAWAYS.md) | Patterns to steal, integration ideas, local run recipe |
+
+## 30-second facts
+
+- **Stack:** Vite 6 + CesiumJS 1.124 + vanilla JS (no framework) + Google Photorealistic 3D Tiles + OpenAI Realtime over WebRTC. Node `>=24.14 <25 || >=26 <27`.
+- **Size (HEAD):** 1,803 files, ~17.5 MB source. `src/voice/gevActions.js` 166 KB + test 153 KB is the single biggest domain file.
+- **Run:** `git clone ... / npm ci / npm run doctor / npm run dev` → `http://localhost:4173`. Pinokio 8.2+ one-click path exists.
+- **Keys:** starts with zero keys (Esri + OSM + OpenSky anon + USGS + CelesTrak + city CCTV + radio + transit). POWER UP panel writes `.env` (terminal) or `pinokio/ENVIRONMENT` (Pinokio), owner-only before secret write.
+- **MCP:** `server/mcp/stdio.js --api-base http://localhost:4173`, plus `npm run build:panel` for the in-conversation globe. See VOICE_AND_MCP.
+- **Perf baseline (upstream, M5/Chrome 150, 1440x900):** median 1.86 s initial settle, 60/60 FPS motion/rest; CCTV city cold activation 19.6 s is the outlier; submarine cables 412 MiB heap is the hog. See `docs/PERFORMANCE.md` upstream.
+- **Line in the sand:** models events/assets/infrastructure/systems. No named-person search, no face rec. PRs crossing it won't merge.
+- **Disclaimer (upstream):** delayed/incomplete/modeled/inferred/wrong. NOT for nav, emergency, medical, investment, safety-critical.
+
+## Quick links (upstream docs at HEAD)
+
+- `README.md`, `DATA_SOURCES.md`, `SECURITY.md`, `CONTRIBUTING.md`, `TESTING.md`
+- `docs/CURRENT-STATE.md` (5,129 lines — authoritative runtime reference), `docs/TOOLS.md`, `docs/MCP_SETUP.md`, `docs/PERFORMANCE.md`, `docs/LOCAL-RECEIVERS.md`, `docs/VOICE-OWNERSHIP.md`, `docs/UI-OWNERSHIP.md`, `docs/CODE-BOUNDARIES.md`

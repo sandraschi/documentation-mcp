@@ -1,5 +1,22 @@
 # Troubleshooting
 
+## Inbox page hangs on "Loading inbox"
+
+**Cause:** dead fleet peers used to cost ~8.5s each (4 health paths x ~2s
+Windows refused-loopback stalls), the fast last-run row waited behind the slow
+liveness call, and `fetch` had no timeout. Fixed in round 7: per-peer 6s +
+total 10s deadlines with partial results, aiwatcher check concurrent with peer
+probes, 20s overall budget, 30s frontend fetch timeout, progressive Inbox
+rendering (last run first, peer rows stream in).
+**Fix:** pull latest; restart the backend. If it still spins past ~30s, check
+for a black-holed peer IP (no RST) in `VLA_*_MCP_URL` and Retry.
+
+## Stale backend squatting on :11024
+
+**Cause:** a previous dev/e2e backend is still running old code (new endpoints 404).
+**Fix:** find it (`Get-NetTCPConnection -LocalPort 11024`) and stop the process,
+then start fresh. e2e boots its own backend; kill leftovers afterwards.
+
 ## Server does not appear in Claude Desktop
 
 **Cause:** Invalid JSON in config.  

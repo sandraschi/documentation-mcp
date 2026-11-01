@@ -1,3 +1,13 @@
+---
+title: "Code Quality & Formatting"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-07-29
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Code Quality & Formatting
 
 ## 1. Python Standards (Ruff)
@@ -5,29 +15,74 @@
 Ruff is MANDATORY for all Python-based MCP servers.
 
 ### 1.1. Configuration (`pyproject.toml`)
-- `line-length = 100`
-- `target-version = "py311"`
-- `select = ["E", "W", "F", "I", "B", "UP"]`
+- `line-length = 100` (repo may use 120; keep consistent within repo)
+- `target-version = "py311"` or `"py312"`
+- **`select` is mandatory** — never rely on Ruff defaults. Ruff **0.16** expanded implicit defaults from ~59 to **413** rules when `select` is omitted.
+- Fleet baseline: `select = ["E", "W", "F", "I", "B", "UP"]` (extend per repo as needed, e.g. `"S"`, `"RUF"`)
+- To match pre-0.16 global defaults only: `select = ["E4", "E7", "E9", "F"]`
+- **`E501`:** prefer wrapping long strings; for legacy repos with `"S"`/`"RUF"` in `select`, add `"E501"` to `ignore` manually in `pyproject.toml` if needed (do **not** use batch scripts that rewrite TOML without validation).
+- **Legacy `S` / `RUF` repos:** use explicit `ignore` for noisy rules (`S106`, `S110`, `S112`, `S603`, `S607`, `S324`, `RUF012`, `E402`) rather than dropping `select`. Script: `mcp-central-docs/scripts/fix-fleet-ruff-sruf-ignores.ps1`.
+- **Fleet lint repair:** `mcp-central-docs/scripts/fix-fleet-ruff-green.ps1` (explicit `select`, dev `ruff>=0.16`, `--unsafe-fixes`, format).
+- **Ruff version:** dev/dependency-groups only — `"ruff>=0.16.0,<0.17"`. Never in `[project] dependencies`. CI **fails** if not 0.16.x or if `[tool.ruff.lint] select` is missing (Trap 7b).
+- **Pre-commit pin:** `rev: v0.16.0` on [astral-sh/ruff-pre-commit](https://github.com/astral-sh/ruff-pre-commit) (must match pyproject major/minor).
 
 ### 1.2. Pre-commit hook (recommended)
 
-Use **[pre-commit](https://pre-commit.com/)** so Ruff runs on **commit**, not only in CI.
+Use **[pre-commit](https://pre-commit.com/)** so **Ruff** (Python) and **Biome** (webapp / `web_sota`) run on **commit**, not only in CI.
+
+**Canonical template:** `mcp-central-docs/templates/pre-commit-config.yaml.template`  
+**Biome helper script:** `mcp-central-docs/templates/pre-commit-biome.ps1` → copy to `{repo}/scripts/pre-commit-biome.ps1`
 
 **`.pre-commit-config.yaml`** (pin `rev` to a current [ruff-pre-commit](https://github.com/astral-sh/ruff-pre-commit) tag):
 
 ```yaml
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.0
+    rev: v0.16.0
     hooks:
       - id: ruff
         args: [--fix]
       - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: biome-web
+        name: biome check (webapp)
+        entry: powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/pre-commit-biome.ps1
+        language: system
+        files: ^(webapp|web_sota)/(src/.*\.(ts|tsx|js|jsx|json)|biome\.json)$
+        pass_filenames: false
+        require_serial: true
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: [--maxkb=5120]
 ```
 
-**Setup:** `pip install pre-commit` or `uv tool install pre-commit`, then `pre-commit install` in the repo root.
+**Setup:** `just bootstrap` (preferred) or `uv sync --extra dev` + `uv run pre-commit install` + `npm ci` in `webapp/` (or `web_sota/`).
 
-**CI:** Either run `pre-commit run --all-files` or keep explicit `ruff check` / `ruff format --check` — both align with the same rules.
+**Agent / scaffold pitfall:** Adding `.pre-commit-config.yaml` (or documenting hooks) is **incomplete** without running `pre-commit install` in that repo. Prefer wiring `pre-commit install` and webapp `npm ci` into `just bootstrap` / `just install` so setup activates hooks automatically.
+
+**CI parity:** Local pre-commit and `.github/workflows/ci.yml` MUST run the same gates on the **same paths** (Trap 7c — never narrow ruff `files:` in pre-commit alone):
+
+| Step | Command | Blocking |
+|------|---------|----------|
+| Ruff version + explicit `select` | CI verify step | Yes |
+| Ruff lint | `uv run ruff check src [tests]` (+ `scripts`, `mcpb`, … only if CI lists them) | Yes |
+| Ruff format | `uv run ruff format --check src [tests]` (same path set as lint) | Yes |
+| Pytest | `uv run python -m pytest tests/` | Yes (if `tests/` exists) |
+| ty | `uv run ty check src` | No (`continue-on-error`) until fleet clean |
+| pip-audit | `uv run pip-audit` | No (`continue-on-error`) until fleet clean |
+| TS typecheck | `npm run check` | Yes (if frontend exists) |
+| Biome | `npm run biome:ci` | Yes (if frontend exists) |
+| Playwright | `npx playwright test` | Yes (if `playwright.config.*` exists) |
+
+Template → `mcp-central-docs/templates/ci.yml.template`. Frontend detection: `webapp/` → `web_sota/` → `web-sota/`.
 
 ### 1.3. Manual / local (no hook)
 
@@ -75,8 +130,8 @@ Recommended: local pre-commit hook (example in unicode_safety.md).
 
 On Windows systems where `ruff` is not on the global `PATH`, use the absolute path to the Python-managed executable:
 
-- **Path**: `%USERPROFILE%\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe`
-- **Usage**: `& "%USERPROFILE%\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe" check <path>`
+- **Path**: `C:\Users\<user>\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe`
+- **Usage**: `& "C:\Users\<user>\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe" check <path>`
 
 ## 2. TypeScript/JavaScript Standards (Biome)
 
@@ -103,7 +158,7 @@ Zero-tolerance for dead code. If it's not used, it must be removed. If it's comp
 | Python types | **`ty`** | **No** in CI until clean, then yes |
 | Dependency CVEs | **`pip-audit`** (or lockfile-aware audit) | Recommended in CI |
 | HTTP tests (httpx) | **`respx`** / **pytest-httpx** | When tools call external HTTP |
-| TS/JS lint + format | **Biome** | Yes — ESLint+Prettier retired (SOTA 14.1+) |
+| TS/JS lint + format | **Biome** | Yes (local **pre-commit** + CI) |
 | LLM docs | **`llms.txt`** + **`llms-full.txt`** (both required) | N/A |
 
-**Last updated:** 2026-04-15
+**Last updated:** 2026-07-28

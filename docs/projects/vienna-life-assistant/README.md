@@ -4,18 +4,17 @@
   <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
-  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.4.4-7c5cfc?style=flat-square" alt="FastMCP"></a>
-  <a href="https://playwright.dev"><img src="https://img.shields.io/badge/Playwright-Chromium-45ba4b?style=flat-square&logo=playwright&logoColor=white" alt="Playwright"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
 </p>
 
 
 > 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-**Timestamp**: 2026-07-22  
-**Status**: Active development (web_sota v0.1.0)  
-**Version**: 3.0-beta
+**Timestamp**: 2026-08-03  
+**Status**: Active (web_sota v0.2.0)   
+**Version**: 3.0-beta - AI-Powered Life Management
 
-Vienna life assistant webapp + MCP server with **live-scraped cultural data** (Burgtheater, Staatsoper, Belvedere), AI chat, calendar, todos, expenses, shopping, and restaurant lunch menus. Supports Ollama/LM Studio/OpenAI LLMs. Ships as Tauri NSIS desktop app.
+A personal **AI life assistant** for Vienna (Vienna): owned life data (calendar, health, travel, contacts, household, journal), an agent that executes tools, journal memory (RAG), a proactive daily brief, voice, and fleet orchestration (Plex, Calibre, Wiener Linien, aiwatcher, Fritz!Box).
 
 ## Quick Start
 
@@ -27,7 +26,7 @@ just
 
 This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
 
-## ViLife `web_sota` (FastMCP 3.4.4) — recommended
+## ViLife `web_sota` (FastMCP 3.2) — recommended
 
 Fleet SOTA surface for agents and daily use:
 
@@ -41,19 +40,33 @@ Set-Location web_sota
 | Frontend | http://127.0.0.1:10988 |
 | Backend + MCP | http://127.0.0.1:10922 (`/mcp`, `/api/*`) |
 
-**Pages:** Dashboard · Chat · Skills · Tools · Settings · Help · Apps · Logs · Fleet · Calendar · Expenses · KaffeehausHub · ConcertHall · MuseumGuide · ShoppingOffers · Travel
+**Pages:** Dashboard · Health · Calendar · Travel · Journal · News · Notes · Email · Contacts · Household · Expenses · Shopping · Chat · Skills · Tools · Settings · Help · Apps · Logs
 
-**LLM (Settings):** Switch **Ollama** (11434), **LM Studio** (1234/v1), or **OpenAI** (API key). Each provider has model dropdown from `/api/llm/models`.
+**Life domains (SQLite, since v0.2.0):** calendar with CRUD, doctor visit log,
+medications (dose/schedule/refill), vitals, trips with countdown + packing lists,
+travel documents with expiry alerts, contacts with birthday reminders,
+subscriptions with monthly total + renewal dates, home maintenance tasks, pet care,
+a **personal journal** (mood, streak, on-this-day recall), a **personal news
+site** fed by the fleet aiwatcher engine (urgency-scored stories, trends, search),
+and **OneNote integration** via the onenote-mcp gateway (search notebooks, create
+pages, export journal entries — the Microsoft Graph token stays in onenote-mcp),
+plus **email** (inbox, search, send) via the email-mcp gateway.
 
-**Live scraped data (no fake numbers):**
-- **Burgtheater** (37) + **Wiener Staatsoper** (14) — real performances, Playwright/httpx scrapers
-- **Belvedere** — 8 real exhibitions, httpx scraper
-- **Gasthaus Orlik** — daily lunch menu, httpx scraper
-- References: Steirereck, Enopizzeria Toledo, Mast Weinbar, coffee houses
+**AI PA:** a **tool-calling chat** (the LLM executes your life data — log
+expenses, schedule events, send email — with visible tool traces), a
+**PA Brief** on the Dashboard (LLM-generated morning brief over real context +
+rule-based alerts: refills, follow-ups, renewals, birthdays, document expiry),
+NL questions ("when is my next doctor visit?"), read-aloud, and a daily
+scheduler. Works with Ollama / LM Studio / OpenAI.
 
-**MCP:** `vienna_life` portmanteau (8 ops), 6 Vienna skills, 6 prompts, agentic sampling. Scrapers use Playwright headless Chromium + httpx + BeautifulSoup, cached with TTL.
+**LLM (Settings):** Switch **Ollama** (11434), **LM Studio** (1234/v1), or **OpenAI** (API key). Each provider has a **model dropdown** populated from `/api/llm/models`. Chat uses the saved provider + model with Vienna system preprompt.
 
-See [`docs/PRD.md`](docs/PRD.md) and [`CHANGELOG.md`](CHANGELOG.md) for details.
+**MCP:** 11 portmanteau tools — `vienna_life`, `vienna_health`, `vienna_travel`,
+`vienna_contacts`, `vienna_household`, `vienna_log`, `vienna_news`, `vienna_notes`,
+`vienna_email`, `vienna_life_agentic`, `vienna_tips` — plus 6 Vienna skills, 6 prompts, SQLite
+persistence, sampling via `vienna_life_agentic`.
+
+See [`docs/PRD.md`](docs/PRD.md) and [`CHANGELOG.md`](CHANGELOG.md) for 0.2.0 details.
 
 > **Note:** `vienna-live-mcp` is deprecated — use this repo's `web_sota` only.
 
@@ -61,7 +74,7 @@ See [`docs/PRD.md`](docs/PRD.md) and [`CHANGELOG.md`](CHANGELOG.md) for details.
 
 If you don't have `just` installed:
 
-##  What It Does
+##  What It Does (legacy overview - the modern surface is web_sota, see below)
 
 Your **personal command center** for Vienna life:
 -  **Calendar**: Day/Week/Month views, Benny appointments, events
@@ -336,7 +349,7 @@ docker compose logs -f frontend
 - **Plex MCP** - Media server (50k anime/movies)
 - **Calibre MCP** - Ebook library (15k books)
 - **Immich MCP** - Photo memories
-- **MyWienerLinien** - Vienna public transport
+- **PublicTransport** - Vienna public transport
 
 ##  Database
 
@@ -757,7 +770,7 @@ nssm set ViennaLifeDocker AppDirectory "D:\Dev\repos\vienna-life-assistant"
 - **Backend API**: 7334 (Docker)
 - **PostgreSQL**: 7335 (Docker, mapped from 5432)
 - **Redis**: 7336 (Docker, mapped from 6379)
-- **MyWienerLinien**: 3079 (if running)
+- **PublicTransport**: 3079 (if running)
 - **Ollama**: 11434 (if running)
 - **Plex**: 32400 (if running)
 - **Calibre**: 8080 (if running)
@@ -792,7 +805,7 @@ This project adheres to **SOTA 14.1** industrial standards for high-fidelity age
 
 ##  License
 
-Private project - All rights reserved to Sandra Schipal
+Private project - All rights reserved to Sandra S.
 
 ---
 

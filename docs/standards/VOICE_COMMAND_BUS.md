@@ -1,3 +1,13 @@
+---
+title: "Voice Command Bus (Fleet v1)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-15
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Voice Command Bus (Fleet v1)
 
 **Status:** Official fleet pattern (June 2026)  
@@ -52,7 +62,7 @@ sequenceDiagram
 | Layer | Owns | Must not own |
 |-------|------|----------------|
 | **speech-mcp** | Mic, wake word, command capture, STT, TTS playback | Robot motors, Alexa API, mission planning |
-| **fleet-agent-mcp** | Entity registry, routing, `fleet_call_tool` | Exclusive mic access |
+| **fleet-agent-mcp** | Entity registry, routing, `fleet_call_tool`, dev-workflow commands (`dev_ops`) | Exclusive mic access |
 | **Member MCP** | Domain tools (`interact`, `yahboom_agent_mission`, …) | Wake word models |
 
 ---
@@ -96,6 +106,105 @@ Edit [`config/voice_command_bus.yaml`](../config/voice_command_bus.yaml):
 Unknown entity with no keyword match: fleet-agent returns `success: false` with routing hints.
 
 ---
+
+## 4b. Dev-workflow voice commands (fritz)
+
+`fritz` doubles as the **dev-command entity**: spoken commands route in-process
+to fleet-agent's `dev_ops` portmanteau (`src/fleet_agent/mcp/tools/dev.py`) —
+no HTTP hop to the bridge.
+
+`router.default_entity: fritz` in the registry means **bare commands work**
+without an entity word: *"gpu status"*, *"start webapp arxiv"*, *"set timer…"*
+all resolve to fritz. Entity words still win when spoken (boomy/alexa).
+
+| Spoken phrase (after wake) | Target | Action |
+|---|---|---|
+| *"fritz start webapp arxiv"* (or bare *"start webapp arxiv"*) | `dev_ops.start_webapp` | Resolves `mcp-central-docs/starts/{repo}-start.bat` via the Fleet Starts Launcher (`POST http://127.0.0.1:10791/api/launch`); falls back to a direct detached spawn when the launcher is down |
+| *"fritz gpu status"* | `dev_ops.gpu_status` | `nvidia-smi` snapshot — per-GPU load, VRAM used/total, temperature (spoken back) |
+| *"fritz kick invokeai"* | `dev_ops.invokeai_kick` | `POST http://127.0.0.1:11154/api/invokeai/engine/start` on invokeai-mcp |
+| *"fritz invokeai status"* | `dev_ops.invokeai_status` | Engine running/stopped state from invokeai-mcp |
+| *"fritz list webapps"* | `dev_ops.list_webapps` | Catalog of startable webapps (spoken count + routing hint) |
+| *"opencode assfix devices, run"* | `dev_ops.opencode_send` | Sends the task to the **most recently active opencode session** (the one open in the TUI) via opencode-cli-mcp `opencode_send_message` |
+| *"set timer twenty minutes, then play desguello"* | `voice_assist` | Clause split on "then"/"and": timer → speech-mcp `manage_domestic_utility` (announces expiry aloud), *"play X"* → Plex REST search → **direct part stream** (`/library/parts/…/file.mp4`) → **VLC** (`FLEET_VLC_PATH` override; Plex client fallback). The HLS transcode endpoint (`start.m3u8`) returns 400 for ad-hoc URLs — do not use it |
+
+The spoken repo phrase is tolerant (`"start webapp arxiv"`, `"launch webapp plex"`,
+filler words stripped); `dev_ops` matches it against start-script shortnames.
+Duration words and digits are parsed (`twenty minutes` → 1200s).
+
+**Environment (fleet-agent):**
+
+| Variable | Default | Meaning |
+|----------|---------|---------|
+| `FLEET_STARTS_UI_URL` | `http://127.0.0.1:10791` | Fleet Starts Launcher base URL |
+| `FLEET_STARTS_DIR` | `D:\Dev\repos\mcp-central-docs\starts` | Local fallback scan dir |
+| `FLEET_DEV_INVOKEAI_URL` | `http://127.0.0.1:11154` | invokeai-mcp REST base URL |
+| `FLEET_VLC_PATH` | auto-detect | VLC executable for Plex playback (common install paths checked) |
+| `PLEX_BASE_URL` / `PLEX_TOKEN` | — | Plex server + token for direct REST search/stream (user env or `.env`) |
+
+**Environment (speech-mcp):**
+
+| Variable | Default | Meaning |
+|----------|---------|---------|
+| `FLEET_VOICE_DELEGATE` | `1` when URL set | Enable post-wake capture + route |
+| `FLEET_VOICE_AUTOSTART` | `1` | Start the wake listener at backend boot (HTTP mode) |
+| `FLEET_VOICE_WAKE_KEYWORD` | `hey_jarvis` | openWakeWord model name (production target `wakeywakey` custom ONNX) |
+| `FLEET_VOICE_WAKE_GREETING` | `Hello, mistress.` | Spoken ack after wake, before capture (empty = silent) |
+| `FLEET_VOICE_SLEEP_KEYWORD` | `hey_mycroft` | Second model that **stops the listener** — stock placeholder until a custom `sleepsleep` ONNX is trained; saying *"{wake word}, sleepsleep"* also stops it |
+| `FLEET_VOICE_SPEAK_REPLY` | `1` | Speak routed results back; `0` mutes |
+
+**Daily loop:**
+
+```
+(backend boots with FLEET_VOICE_DELEGATE=1 -> listener auto-starts)
+"wakeywakey"           -> "Hello, mistress." (greeting)
+"fritz gpu status"     -> captures 6s, STT, routes -> "OK. RTX 4090: 12% load, ..."
+"opencode assfix devices, run" -> opencode TUI session gets the task
+"set timer twenty minutes, then play desguello" -> timer + Plex (in VLC)
+"sleepsleep"           -> "Going to sleep." (listener stops; restart via MCP tool)
+```
+
+Manual control: `configure_local_wake_word(action="start" | "stop" | "status")`.
+
+---
+
+## 4c. Receivers (entity roster)
+
+Every voice **receiver** is an entity in `voice_command_bus.yaml`: alias match
+wins over the default entity, so *"dreame go home"* never reaches fritz.
+
+| Receiver | Entity | Aliases | Server | Example commands |
+|---|---|---|---|---|
+| **Fritz** — universal agent | `fritz` | fritz, lumen | fleet-agent (local) | *"fritz gpu status"*, *"set timer…"*, anything unmatched |
+| **opencode** — dev IDE | `opencode` | opencode, open code | fleet-agent (local) | *"opencode assfix devices, run"* → open opencode session |
+| **Boomy** — Yahboom car | `boomy` | boomy, raspbot, yahboom, robocar | yahboom | *"boomy go on patrol"* |
+| **Teleop** — WebXR gateway | `teleop` | teleop, teleoperator, vr teleop, headset | teleoperator | *"teleop emergency stop"*, *"teleop take over"*, *"teleop look left"*, *"teleop start video"* |
+| **Dreame** — D20 Pro robovac | `dreame` | dreame, vacuum, robohoove, hoover, robovac | dreame | *"dreame clean the kitchen"*, *"dreame go home"*, *"dreame find yourself"*, *"dreame status"* |
+| **Calibre** — ebook library | `calibre` | calibre, caliber | fleet-agent (local → calibre-mcp) | *"calibre find neuromancer"*, *"calibre open dune"*, *"calibre recent"* — spoken verbs stripped before search |
+| **Plexy** — movie + audiobook player | `plexy` | plexy, plexie, plex | fleet-agent (local → Plex REST → VLC) | *"plexy play inception"* (VLC), *"plexy pause"*, *"plexy next"*, *"plexy find hitchcock"* |
+| **Alexa** — Echo acoustic loop | `alexa` | alexa, echo | alexa | *"alexa set a timer"*, anything Echo-native |
+| **Japanophile** — Japanese learning workstation | `japanophile` | japanophile, nihongo | japanophile (direct, no NLP) | *"japanophile kanji water"*, *"japanophile vocab arigatou"*, *"japanophile quiz"*, *"japanophile knowledge"* — bare wake with no keyword match → `japanophile_help` |
+
+- `dreame`/`boomy`/`alexa`/`japanophile` route straight to their MCP server
+  (`dreame_tool`, `kanji`/`vocab`/`jlpt`/`knowledge`, …) — no NLP hop needed
+  when the target tools are simple `portmanteau(operation, query)` calls.
+  `plexy`, `calibre`, and `opencode` use fleet-agent local tools
+  (`voice_assist`, `dev_ops`) because they need multi-step logic
+  (search → pick → play; verb stripping; session discovery → send).
+- **`japanophile` (added 2026-09-15) is registered but not yet functional**:
+  japanophile-mcp's `/mcp` streamable-HTTP mount currently fails session
+  init (`McpError: Session terminated`, verified with the real FastMCP
+  Client, not just curl) — `fleet_call_tool` can't reach it until that's
+  fixed. The registry/FLEET_SERVERS entries are correct and ready; only the
+  target server's own `/mcp` mount needs fixing.
+- `teleop` routes to `teleoperator`'s `teleop_voice_command`, which maps STT
+  transcripts to domain actions deterministically (estop, takeover, mode,
+  gaze, LiveKit, status) — no LLM on the hot path.
+- Bridged tool payloads (markdown telemetry, JSON dicts) are summarized by the
+  router for spoken replies — no "Called X on Y" chatter.
+- **Adding a receiver** = one `entities` block + one `handlers` block in
+  `voice_command_bus.yaml`, plus a `FLEET_SERVERS` row in
+  `fleet-agent-mcp/src/fleet_agent/mcp/tools/fleet_bridge.py` when the target
+  server is not registered yet.
 
 ## 5. Operations (Windows fleet)
 

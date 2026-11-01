@@ -91,7 +91,7 @@ Add to your `claude_desktop_config.json`:
 
 ```powershell
 # Find system Python path (check Cursor error logs if needed)
-# Example: C:\Users\sandr\AppData\Local\Programs\Python\Python310\python.exe
+# Example: C:\Users\<user>\AppData\Local\Programs\Python\Python310\python.exe
 python -m uv pip install -r requirements.txt
 python -m uv pip install -e .
 ```
@@ -415,6 +415,7 @@ Functional web interface for archive management. Ports: **10762** = backend (Sta
 | Compression Lab | Runs RAR5 m1/m3/m5 analysis, shows bar chart + best recommendation |
 | Jobs | Auto-refreshing job list with result detail |
 | Status | Backend health, env var docs |
+| Fleet apps | Registry-driven launcher for all fleet webapps (`/api/apps*`) |
 | **Testing** | Modular orchestration via `just test` / `just test-cov` |
 
 ### Start

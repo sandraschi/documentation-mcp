@@ -1,7 +1,8 @@
 # Fleet Pulse
 
-**Model:** Subscription ($2.99–4.99/mo) or annual  
+**Model:** Subscription ($2.99–4.99/mo) or annual
 **Audience:** You + homelab nerds running sandraschi MCP fleet
+**Target:** Xcode 27.2, iOS 27 SDK (widgets + Live Activities for down-alerts)
 
 ## Product
 
@@ -11,7 +12,7 @@ iPhone dashboard: which MCP servers are up, last error, port, optional Tailscale
 
 | Piece | Source |
 |-------|--------|
-| Port registry | [WEBAPP_PORTS.md](../../operations/WEBAPP_PORTS.md), fleet-registry.json |
+| Port registry | [WEBAPP_PORTS.md](../../../operations/WEBAPP_PORTS.md), fleet-registry.json |
 | Health patterns | devices-mcp, meta_mcp monitoring ideas |
 | Backend | Optional: thin aggregator on Windows; app can poll directly on Tailscale |
 
@@ -37,3 +38,6 @@ Narrow market — price for **your** convenience first; similar users on Reddit/
 ## Honest note
 
 Unlikely to hit top charts. Goal: **pay for Apple Developer Program** from sub + dogfood fleet ops from couch.
+
+---
+*Status: spec only, no repo. Last updated: 2026-10-28.*

@@ -31,8 +31,20 @@ Command: uv run --directory D:/Dev/repos/docker-mcp python -m dockermcp
 
 ```
 URL: http://127.0.0.1:10807/mcp
-Transport: streamable HTTP (SSE)
+Transport: streamable HTTP (POST initialize → tools/list → tools/call)
 ```
+
+Live since 2026-10-03 (previously 405 — no route was mounted; verified handshake, 43 tools). Before that date only stdio worked.
+
+## Web UI (dashboard)
+
+Open `http://127.0.0.1:10806`.
+
+1. Overview → **Run MCP tools** (hero) or **MCP Tools** in the sidebar.
+2. Click **Run tool** on a card. Destructive tools (`prune_*`, `remove_*`, recover) ask for confirm.
+3. Shortcuts on Overview: Diagnose (`agentic_workflow`), Backup (`docker_backup`), Prune unused (`prune_system`), Daemon status (`get_docker_status_tool`).
+
+REST: `GET /api/tools`, `GET /api/tools/{name}`, `POST /api/tools/{name}` with `{ "arguments": {}, "confirm": true }`.
 
 ## Tool Catalog
 

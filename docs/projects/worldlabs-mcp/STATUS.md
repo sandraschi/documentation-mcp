@@ -128,6 +128,10 @@ Local dev:
 }
 ```
 
+## Billing — Browser vs API (2026-09-01)
+
+marble.worldlabs.ai (Standard ~30/mo) and platform.worldlabs.ai (API WORLDLABS_API_KEY) are separate credit pools (same email = two balances). API-only generation does not need the browser sub; gallery browsing via api.worldlabs.ai/api/v1/worlds:by-tag is public. Browser Standard only matters for pano-edit, expand, compose, record and the gated Download button — see BILLING.md (sourced from docs.worldlabs.ai + memops projects/world-labs-browser-vs-api-billing-and-gallery-access-2026-09-01).
+
 ## Requirements
 
 - Python 3.10+

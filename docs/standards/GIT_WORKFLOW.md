@@ -1,3 +1,13 @@
+---
+title: "Git Workflow & Branching — Fleet Standard"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-09
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Git Workflow & Branching — Fleet Standard
 
 **Status:** Reference (not required for single-dev operation)  
@@ -126,6 +136,30 @@ Settings > Branches > Add rule
 
 To manage dependency updates at scale across fleet repositories:
 - Refer to the **[Renovate Bot Standards](./RENOVATE_STANDARDS.md)** to configure automated weekly group PR updates and lockfile maintenance.
+
+### Pre-Commit & Commit Hooks
+
+For linting-before-commit, conventional-commit enforcement, pre-push checks,
+and how these relate to branch-protection/required-checks on the GitHub side:
+- Refer to **[Pre-Commit Hooks](./PRE_COMMIT_HOOKS.md)**.
+
+### gh CLI auth: check it as the user, never as the agent host
+
+One `gh auth login` covers all repos - there is no per-repo login. But
+"logged in" depends on WHO asks:
+
+- MCP servers (gitops et al.) run as SYSTEM and cannot see the Windows
+  credential store. `gh auth status` from an MCP tool says "not logged in"
+  while the interactive shell is fully authed. That reading is true for
+  SYSTEM and false for you - do not act on it (incident 2026-09-09: agent
+  told the user a login was needed; `gh auth status` in her own PowerShell
+  showed `Logged in to github.com account sandraschi (keyring)`).
+- Rule: for anything touching GitHub auth (repo create, push over HTTPS,
+  release upload), verify with the shell tool (`gh auth status` in
+  PowerShell as the user), never via an MCP git surface. Prefer the shell
+  for `gh repo create` too - e.g. `gh repo create sandraschi/<repo>
+  --private --source=. --push` from the repo dir, one command, no login
+  ceremony ever again.
 
 ---
 

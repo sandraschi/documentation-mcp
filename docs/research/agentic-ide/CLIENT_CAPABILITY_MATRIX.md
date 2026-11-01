@@ -38,10 +38,10 @@ the fleet.
 
 | Client | MCP Config Path | Notes |
 |--------|----------------|-------|
-| Claude Desktop | `C:\Users\sandr\AppData\Roaming\Claude\claude_desktop_config.json` | Standard |
-| Cursor | `C:\Users\sandr\.cursor\mcp.json` | Standard |
+| Claude Desktop | `C:\Users\<user>\AppData\Roaming\Claude\claude_desktop_config.json` | Standard |
+| Cursor | `C:\Users\<user>\.cursor\mcp.json` | Standard |
 | Windsurf | Windsurf settings → MCP | GUI-configured |
-| Antigravity | `C:\Users\sandr\.gemini\antigravity` | ⚠️ Non-standard — NOT AppData |
+| Antigravity | `C:\Users\<user>\.gemini\antigravity` | ⚠️ Non-standard — NOT AppData |
 | Claude Code | `~/.claude/mcp.json` or per-project `.mcp.json` | CLI-managed |
 
 ---

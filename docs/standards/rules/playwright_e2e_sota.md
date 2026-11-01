@@ -1,3 +1,13 @@
+---
+title: "Playwright E2E Testing Standard (SOTA 2026)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-08-15
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Playwright E2E Testing Standard (SOTA 2026)
 
 Every fleet repo with a webapp MUST include Playwright end-to-end tests.
@@ -130,6 +140,28 @@ const AUTH = { Authorization: 'Basic ' + Buffer.from('user:pass').toString('base
 
 - [email-mcp webapp e2e tests](https://github.com/sandraschi/email-mcp/tree/master/webapp/e2e) — 17 tests
 - [email-mcp playwright.config.ts](https://github.com/sandraschi/email-mcp/blob/master/webapp/playwright.config.ts)
+
+### 9. Visual Regression (W3, 2026-08-13)
+
+Pixel-diff regression lives inside `playwright-audit.ps1` (MCD `scripts/`):
+
+- `-Baseline` — captures per-page baseline PNGs into `webapp/e2e/visual-baseline/`
+  (commit these; they are the reference set).
+- Default audit run — re-captures the same routes and diffs against the
+  baseline via `scripts/visual-regression-diff.py` (Pillow, per-channel
+  tolerance 25). Threshold **2.0%** changed pixels; failures write red-tinted
+  `*-diff.png` into `webapp/e2e/visual-diff/`.
+- `-VisualRoutes "/ /settings"` — routes to walk (default `/` only).
+
+Determinism: capture disables all CSS animations/transitions (including
+Tailwind `animate-pulse` health dots) before screenshotting, so the dashboard's
+pulsing status indicators do not cause false positives. Verified 0.00% drift on
+repeat captures of the same live dashboard. A baseline only protects against
+CSS/Tailwind layout regressions that break layout without breaking DOM
+selectors — exactly the blind spot of assertion-based e2e tests.
+
+Capture helper: `scripts/visual-regression.mjs` (copied into the webapp dir at
+run time so `@playwright/test` resolves from the repo's own `node_modules`).
 
 ## Enforcement
 

@@ -1,4 +1,25 @@
-# SOTA Webapp Standards (The Blueprint)
+---
+title: "Webapp Standards (The Blueprint)"
+category: standard
+status: superseded
+superseded_by: WEBAPP_SOTA_STANDARDS.md
+audience: mcp-dev
+last_updated: 2026-09-18
+---
+
+# Webapp Standards (The Blueprint)
+
+> **Superseded by [WEBAPP_SOTA_STANDARDS.md](./WEBAPP_SOTA_STANDARDS.md).**
+>
+> Both files described themselves as the SOTA webapp standard and neither said which
+> was current, so a reader had no way to choose. `WEBAPP_SOTA_STANDARDS.md` is the one
+> the agent reading order and the Primary Read List point at, it is larger and more
+> recent, and it carries active frontmatter — so it wins.
+>
+> This page is kept in place rather than moved because 28 files link to it; the
+> pointer above is the fix, not relocation. Treat anything here that contradicts
+> `WEBAPP_SOTA_STANDARDS.md` as out of date. The Blueprint architecture below is still
+> useful background on the shell layout it originally defined.
 
 ## 1. Blueprint Architecture
 
@@ -18,6 +39,7 @@ Every webapp MUST include:
     - Launches both Frontend and Backend substrates.
     - **Backend readiness (MANDATORY)**: After spawning the ASGI process, **wait until the backend is actually listening** before starting Vite — e.g. **TCP connect** to the API port, or **`GET /api/v1/health`** (or repo-specific health) when no auth is required. Cold **`uv run`** and heavy imports routinely exceed a fixed sleep; without this step, Vite’s dev proxy logs **`ECONNREFUSED`** to **`127.0.0.1:<backend>`**. Use a bounded wait (e.g. 60–90s) and **exit with a clear error** if the backend never binds (operator checks the uvicorn window). Set **`-WorkingDirectory`** on the backend child to the **repository root** so **`uv run`** resolves the project reliably.
     - **Auto-Open Browser**: Launches a non-blocking background polling task to open the default browser only when the Vite frontend is responsive (200 OK), eliminating cold-start "Connection Refused" errors **for the HTML shell** (distinct from API readiness above).
+    - **Service Banner (MANDATORY)**: Every start script (frontend AND backend) MUST print an explicit banner naming the product + service before launching - e.g. `invokeai-mcp BACKEND  http://127.0.0.1:11154  (REST /api, MCP /mcp)` - and set the console window title (`$Host.UI.RawUI.WindowTitle = "invokeai-mcp BACKEND :11154"`). **Never show bare port numbers alone** - the operator must know which terminal is which without remembering ports. This applies to `start.ps1`, per-service scripts (`scripts/start-backend.ps1`), and the fleet unified launcher (`Invoke-FleetWebappStart.ps1`).
 2.  **`start.bat`**: Double-click wrapper for `start.ps1`.
 3.  **`.gitignore`**: Root rules MUST exclude **`node_modules/`** (and nested `**/node_modules/`), local envs, and build caches — see **[GITIGNORE_STANDARDS.md](./GITIGNORE_STANDARDS.md)**. Never commit npm/pnpm dependencies or Vite pre-bundles.
 
@@ -90,6 +112,15 @@ Implementation note:
 Verification:
 
 - **Assess & Fix** (`repo-assess-and-fix.md` §1B) checks for `GET /api/capabilities` with the standard shape. Run `assfix <repo>` to audit a repo against this requirement.
+
+### 1.5. REST Endpoint Parity & Consistency (MANDATORY)
+
+Every frontend route or action that fetches `/api/*` MUST have a matching, fully functional route in the FastAPI backend substrate:
+
+1. **No Phantom Endpoints**: Do not wire frontend components (e.g. modals, buttons, export actions) to speculative or unmounted endpoints (e.g. `/api/paper/full-text`). Every endpoint referenced in `web/` or `web_sota/` must exist in the backend OpenAPI schema.
+2. **Trailing Slash Discipline**: FastAPI distinguishes strict routes (`/api/resource` vs `/api/resource/`). Frontends and backends must use matching paths without accidental trailing slashes unless explicitly declared.
+3. **No Duplicate Operation IDs**: Ensure route functions have unique names and operation IDs across all routers to avoid FastAPI collisions and schema generation warnings.
+4. **Audit Procedure**: Audit frontend vs backend endpoint parity using automated route inspection against `/openapi.json` before certifying changes.
 
 ### 1.2. Design Constants
 - **Dark Mode**: Default (required). Use HSL-based palettes with subtle glassmorphism (`backdrop-filter`).

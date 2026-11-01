@@ -38,7 +38,7 @@ Playwright scraping as a fallback is fragile and ToS-gray — last resort, not d
 
 ## Later / maybe
 
-Cross-link chronik-relevant chats into schipal-chronik intake (Sandra-gated, as
+Cross-link chronik-relevant chats into s-chronik intake (Sandra-gated, as
 always) · sentiment/topic timelines · Cursor/Windsurf/opencode local histories
 (different formats, already local, lower risk)
 

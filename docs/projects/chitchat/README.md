@@ -5,12 +5,33 @@
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
   <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+  <a href="https://glama.ai/mcp/servers"><img src="https://img.shields.io/badge/Glama-MCP_server-7c5cfc?style=flat-square" alt="Glama"></a>
 </p>
 
 
 > 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
 Conversation starters, archive, and fleet docs crosslink — a FastAPI + FastMCP webapp.
+
+> **Tone:** Honest opinions welcome. Rants, no. We're AI out and proud — keep it constructive.
+
+### Quick Install
+
+```bash
+# Claude Desktop / Cursor — install as MCP server
+uvx mcpb install sandraschi/chitchat
+```
+
+### Sample Starters
+
+| Category | Prompt |
+|----------|--------|
+| Ice Breakers | "If you could have dinner with any fictional character, who and why?" |
+| Tech & Tools | "What dev tool changed your life that nobody talks about?" |
+| Vienna & Local | "Best Kaffeehaus in Vienna that tourists haven't ruined yet?" |
+| Hypotheticals | "You wake up as the opposite sex — first three things you do?" |
+| Deep Thoughts | "What did you believe at 20 that you've completely reversed on?" |
+| Food & Drink | "Desert island: one meal forever, what is it?" |
 
 **Ports:** 10974 (backend) / 10975 (frontend) | Hermes dashboard: **10972** (WSL2)
 

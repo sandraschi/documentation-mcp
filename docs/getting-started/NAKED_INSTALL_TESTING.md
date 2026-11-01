@@ -234,44 +234,27 @@ side procedure. It answers the question "why does this MCP server manage Windows
 Sandbox?" with a concrete, useful demo that every repo maintainer in the fleet
 can use immediately.
 
-### What's available now
+### What's available now (Shipped in virtualization-mcp 1.5.0)
 
-- Host: `scripts/Launch-ConsumerSandbox.ps1` (consumer naked) and `Launch-DevInfraSandbox.ps1` (dev)
-- MCP: `snapshot_management`, `vm_management` (VirtualBox when `NakedWin11` exists)
-- Webapp: consumer + dev infra launch on Sandbox page
-
-### Planned: Install Test webapp page
-
-A dedicated **Install Test** page in the virtualization-mcp webapp:
-
-```
-Pick repo ──► Pick options (A / B / C / all) ──► Run ──► Live log ──► Pass/Fail report
-```
-
-Under the hood, per test run:
-
-1. **Bootstrap** — Consumer Sandbox starts; guest script runs:
-   - `winget --version` → if absent, fetch `Microsoft.DesktopAppInstaller_*.msixbundle`
-     from `microsoft/winget-cli` GitHub releases API → `Add-AppxPackage`
-   - `winget upgrade winget --accept-source-agreements --accept-package-agreements`
-2. **Option A** — download latest `.mcpb` from repo releases API, simulate drag-and-drop
-   install (Claude Desktop CLI or registry write), verify MCP server entry exists
-3. **Option B** — `winget install OpenJS.NodeJS` → `npx @anthropic-ai/mcpb install …`
-   → verify server entry
-4. **Option C** — `winget install astral-sh.uv` + `Git.Git` → clone → `uv sync --all-extras`
-   → write `claude_desktop_config.json` → verify server entry
-5. **Record** — structured pass/fail table per step; surface in webapp; persist to SQLite
-6. **Report** — green/red badge per option; link from repo's GitHub Actions summary (future)
-
-For dev-path regression (Options C/D, `just test`), launch Dev Infra Sandbox
-instead of the consumer baseline.
-
-### MCP tool surface (planned)
-
-```text
-sandbox_install_test(repo="blender-mcp", options=["A","B","C"])
-  → { option_a: pass, option_b: pass, option_c: fail, logs: [...] }
-```
+- **CLI Runner**: `just naked-test repo=<name>` (e.g. `just naked-test repo=sandraschi/calibre-mcp observe=120`) via `scripts/just/naked-test.ps1`.
+- **FastMCP Agent Actions (`sandbox_management`)**:
+  - `win_sandbox_naked_test(repo=..., branch=..., observe_sec=..., health_url=...)`
+  - `win_sandbox_naked_test_status(job_id=...)`
+  - `win_sandbox_naked_test_list()`
+- **FastAPI Endpoints**:
+  - `POST /api/v1/fleet/naked-test`
+  - `GET /api/v1/fleet/naked-test/{job_id}`
+  - `GET /api/v1/fleet/naked-test` (run history)
+  - `GET /api/v1/fleet/naked-test-repos` (auto-discovery)
+- **Webapp UI**:
+  - Dedicated **Naked install test (automatic)** card on the Sandbox page.
+  - Quick-pick repo chips for 1-click test triggers.
+  - Recent runs history panel with color-coded status (`PASS`, `FAIL`, `RUNNING`) and 1-click historical log recall.
+  - Live 4-step progress visualization: `rig` (winget -> git + just) $\rightarrow$ `clone` $\rightarrow$ `just-list` (smoke gate) $\rightarrow$ `start` (observe `start.bat` + `/health`).
+- **Interactive Bringup Scripts**:
+  - `scripts/Launch-ConsumerSandbox.ps1` (consumer naked)
+  - `scripts/Launch-DevInfraSandbox.ps1` (dev stack)
+- **VMs**: `snapshot_management`, `vm_management` (VirtualBox when `NakedWin11` exists)
 
 ---
 

@@ -1,7 +1,7 @@
 # KiCad MCP — Cursor MCP Configuration
 
 **Updated:** 2026-05-29 (v0.3.0 hybrid)  
-**Live file:** `C:\Users\sandr\.cursor\mcp.json`  
+**Live file:** `C:\Users\<user>\.cursor\mcp.json`  
 **Fleet canonical:** `D:\Dev\repos\mcp-central-docs\operations\MASTER_MCP_CONFIG.json`
 
 ---
@@ -12,7 +12,7 @@ This is the production Cursor configuration for Sandra's machine as of 2026-05-2
 
 ```json
 "kicad-mcp": {
-  "command": "C:/Users/sandr/.local/bin/uv.exe",
+  "command": "C:/Users/<user>/.local/bin/uv.exe",
   "args": [
     "--directory",
     "D:/Dev/repos/kicad-mcp",

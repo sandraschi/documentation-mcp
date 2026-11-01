@@ -22,12 +22,12 @@ Install these if you don't have them already. Windows commands use
 
 <!-- Add repo-specific prerequisites here (gh CLI, Docker Desktop, Ollama, host app, etc.) -->
 <!-- Docker: "Docker Desktop is only needed for X tools. Everything else works without it." -->
-<!-- Host app: "Blender/Unity/etc. is never bundled — install separately: [url]" -->
-<!-- LLM (if applicable): see section below — Ollama AND cloud API, equal prominence -->
+<!-- Host app: "Blender/Unity/etc. is never bundled - install separately: [url]" -->
+<!-- LLM (if applicable): see section below - Ollama AND cloud API, equal prominence -->
 
 ---
 
-## Option A — Drag and Drop (Recommended)
+## Option A - Drag and Drop (Recommended)
 
 No Python, uv, or git required. Claude Desktop manages the runtime.
 
@@ -40,9 +40,9 @@ No Python, uv, or git required. Claude Desktop manages the runtime.
 
 ---
 
-## Option B — mcpb CLI
+## Option B - mcpb CLI
 
-`mcpb` is **not** on PyPI — `uvx mcpb` will fail. Requires Node.js:
+`mcpb` is **not** on PyPI - `uvx mcpb` will fail. Requires Node.js:
 
 ```powershell
 winget install OpenJS.NodeJS --accept-source-agreements --accept-package-agreements
@@ -54,7 +54,7 @@ Restart Claude Desktop after install completes.
 
 ---
 
-## Option C — Manual Configuration
+## Option C - Manual Configuration
 
 ```powershell
 winget install astral-sh.uv --accept-source-agreements --accept-package-agreements
@@ -93,11 +93,11 @@ Edit Claude Desktop config:
 
 Replace `C:\\path\\to\\{REPO_NAME}` with your actual clone path. Restart Claude Desktop.
 
-<!-- Entry point from [project.scripts] in pyproject.toml — NOT uv run -m module -->
+<!-- Entry point from [project.scripts] in pyproject.toml - NOT uv run -m module -->
 
 ---
 
-## Option D — Developer Mode
+## Option D - Developer Mode
 
 For contributing or running from source. Requires all tools in Prerequisites.
 
@@ -134,7 +134,7 @@ in Settings → MCP Servers.
 | `MCP_HOST` | `127.0.0.1` | Bind address for HTTP/SSE |
 | `MCP_PORT` | `{DEFAULT_PORT}` | MCP HTTP port |
 | `FASTMCP_LOG_LEVEL` | `WARNING` | Log verbosity: `DEBUG` \| `INFO` \| `WARNING` |
-| `PYTHONUNBUFFERED` | — | Set to `1` in Claude Desktop config |
+| `PYTHONUNBUFFERED` | - | Set to `1` in Claude Desktop config |
 
 <!-- Add repo-specific env vars. See docs/CONFIGURATION.md for full reference. -->
 
@@ -148,7 +148,7 @@ in Settings → MCP Servers.
 | `uv` not found | `winget install astral-sh.uv`; reopen terminal |
 | `git` not found | `winget install Git.Git`; reopen terminal |
 | `uv sync` fails | Ensure Python 3.12+: `uv python install 3.12` |
-| `uvx mcpb` fails | Expected — use Option A or `npx @anthropic-ai/mcpb` |
+| `uvx mcpb` fails | Expected - use Option A or `npx @anthropic-ai/mcpb` |
 
 <!-- Add repo-specific troubleshooting rows here -->
 
@@ -161,7 +161,7 @@ Full diagnostics: [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) · [open an
 ---
 
 <!--
-TEMPLATE VARIABLES — replace all before committing:
+TEMPLATE VARIABLES - replace all before committing:
   {REPO_NAME}                  e.g. filesystem-mcp
   {ONE_SENTENCE_DESCRIPTION}   e.g. "File system, Git, and Docker operations for Claude Desktop."
   {ENTRY_POINT}                from [project.scripts] in pyproject.toml (e.g. filesystem-mcp)
@@ -169,10 +169,10 @@ TEMPLATE VARIABLES — replace all before committing:
   {VERIFY_PROMPT}              e.g. "List the files in my home directory"
   {VERIFY_EXPECTED_OUTPUT}     e.g. "a directory listing from file_ops"
 
-REPO CLASS — identify before filling:
+REPO CLASS - identify before filling:
   MCP hand (blender-mcp, filesystem-mcp, git-github-mcp, ...): Options A-D; this template
-  Control plane (robofang): start.ps1 + hub UI — use CONTROL_PLANE_INSTALL.md instead
-  Isolation stack (deepfang): Docker required — see CONTROL_PLANE_INSTALL.md
+  Control plane (robofang): start.ps1 + hub UI - use CONTROL_PLANE_INSTALL.md instead
+  Isolation stack (deepfang): Docker required - see CONTROL_PLANE_INSTALL.md
 
 CHECKLIST (from AGENT_INSTALL_REFERENCE.md §18):
   [ ] Options A-D preserved with correct semantics
@@ -182,7 +182,7 @@ CHECKLIST (from AGENT_INSTALL_REFERENCE.md §18):
   [ ] No uvx mcpb anywhere
   [ ] No dev tools (just/ruff/biome) in end-user Prerequisites
   [ ] Host app (if any): documented as separate install, not bundled
-  [ ] LLM (if any): Ollama/LM Studio AND cloud API, equal prominence — see blender-mcp reference
+  [ ] LLM (if any): Ollama/LM Studio AND cloud API, equal prominence - see blender-mcp reference
   [ ] Docker: optional footnote only (unless deepfang-class)
   [ ] Entry point from pyproject.toml [project.scripts]
   [ ] Ran check-readme-structure.ps1 -Strict

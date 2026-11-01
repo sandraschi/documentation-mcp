@@ -34,9 +34,16 @@ Unified **comms-mcp** with channel adapters behind one portmanteau tool:
 
 ## Non-goals (v0.1)
 
-- Full WhatsApp Business API (Meta verification heavy) — Phase 3
-- Signal without clear legal/ToS review — Phase 2
+- Full WhatsApp Business API (Meta verification heavy) - **v0.2 via baileys instead** (companion-device link, no Meta verify)
+- **Signal - DROPPED (decision 2026-08-15)** - unofficial client (signal-cli) is ToS-gray in EU/AT, fragile, needs a dedicated SIM; contacts in Austria are on WhatsApp/Telegram. Empty completism is not a goal.
 - Replacing email-mcp or discord-mcp
+
+## Channel priority (revised 2026-08-15)
+
+1. Telegram (Bot API, official) - **v0.1 shipped**
+2. WhatsApp via baileys (companion link, no new number) - **v0.2 next**
+3. Slack (Socket Mode, official) - only if needed (Viktor analog)
+4. ~~Signal~~ - dropped
 
 ## Architecture
 

@@ -15,6 +15,8 @@ How we get MCP apps discovered **without AI-obnoxious spam**: registries first, 
 | kicad-mcp | *(draft)* | KiCad forum (technical), EDA communities |
 | gimp-mcp / inkscape-mcp | *(draft)* | Wrappee discussions if welcoming |
 
+**Fleet-wide visibility / About+topics waves:** [VISIBILITY_OPTIMIZATION_PLAN.md](./VISIBILITY_OPTIMIZATION_PLAN.md)
+
 ---
 
 ## Quick rules

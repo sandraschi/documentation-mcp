@@ -25,7 +25,7 @@ Copy-Item .env.example .env   # if first time
 tailscale serve status
 ```
 
-Note your URL, e.g. `https://goliath.tailfab45.ts.net/`.
+Note your URL, e.g. `https://goliath.<tailnet>.ts.net/`.
 
 `start.ps1` auto-sets `TELEOP_CORS_ORIGINS` and `TELEOP_LIVEKIT_PUBLIC_URL` from Serve when unset.
 

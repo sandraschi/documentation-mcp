@@ -1,5 +1,108 @@
 
+## [Unreleased]
+
+### Fixed
+- **`fleet-start.config.ps1` `Backend.Kind` was `'uvicorn'`, backend is NSSM**: this backend runs as a persistent NSSM Windows service (service name `email-mcp`, matches `Name`), but the config routed launches through the generic port-conflict path instead of `Start-FleetNssmWebapp`. Without `Kind='nssm'`, a perfectly healthy NSSM-held port got reported as blocked and the launcher exited 1 -- an instacrash on plain double-click even though the service was fine. Same bug found and fixed across `discord-mcp`, `tvtropes-mcp`, `pywinauto-mcp` the same day.
+
+## [0.5.0-beta.2] - 2026-08-03 "Auto-Respond + Certified Installer"
+
+### Added
+- **Auto-respond firing pipeline**: mail watcher runs the rule engine on fresh
+  mail (replies / filter actions / notifications) - `start_watcher(auto_respond=True)`,
+  Lab page toggle, REST + MCP wired
+- **Rule engine upgrades**: priority ordering (lower = first), `all` match field
+  (subject+from+body), real `notify` action (aiwatcher/robofang connectors),
+  `update_auto_rule` + `test_auto_rule` MCP tools
+- **Installed-app persistence**: Tauri mode now stores OAuth tokens + rules in
+  `%LOCALAPPDATA%\ai.fleet.email-mcp\` (first run seeds `.env` from the bundled
+  example) - tokens no longer lost to the temp dir
+- **NSIS installer certified**: CUA smoke test 8/8 (install -> launch -> window ->
+  screenshot -> 15-page nav walk -> diagnostics -> uninstall). Build pipeline
+  fixes documented in BUILD_LOG.md (venv PyInstaller, dual-transport
+  run_server.py, .env.example bundling, public /api/v1/health)
+- **Fixes**: filter_action/filter_target/priority were dropped by REST + tool
+  (UI action picker never persisted) - now round-trip; notify stub replaced
+  with real connector pushes
+- 206 tests passing, 44 MCP tools
+
+## [0.5.0-beta.1] - 2026-08-03 "Graph API + Fleet Connectors" (beta)
+
+### Highlights
+- **Microsoft Graph service** — send/receive for personal Outlook/Hotmail
+  (basic SMTP auth disabled on those accounts): OAuth device flow with
+  Microsoft's public client ID (no Azure registration), auto-refreshing tokens,
+  `service="default"` auto-backs onto Graph when a token exists.
+- **Fleet connectors** — `email_connector` tool + REST: aiwatcher fleet ingest,
+  robofang email hook, connector health (opt-in, fail-soft).
+- **Folder treeview** in the webapp Inbox (unread badges, expandable, inline CRUD)
+  + custom folder name -> Graph id resolution.
+- **New email ops**: `copy_email`, `forward_email` (tools + REST + webapp).
+- **Fixes**: 202-empty-body Graph send crash; OAuth token refresh kept the wrong
+  scope family (expired tokens now refresh correctly); `.env` now loaded at startup.
+- 189 tests passing, 42 MCP tools.
+
 ## [Unreleased] -- 2026-06-14
+
+### Added (2026-08-03 - Graph send/receive + connectors)
+- **Microsoft Graph service**: personal Outlook/Hotmail accounts have SMTP/IMAP basic
+  auth disabled (535 5.7.139) — the `graph` service (and `service="default"` when an
+  OAuth token exists for an Outlook-family account) now sends/receives via the Graph
+  REST API (`POST /me/sendMail`). OAuth uses Microsoft's public Graph CLI client ID —
+  no Azure app registration needed (`EMAIL_MCP_OAUTH_CLIENT_ID`).
+- **OAuth device flow fixes** (oauth.py): scopes now include `openid profile email`
+  (Microsoft returns no `id_token` otherwise and valid tokens were discarded); account
+  extraction falls back to the access_token JWT.
+- **Graph send fix** (graph_service.py): `/me/sendMail` returns 202 with an empty body —
+  `_request()` crashed on `resp.json()` (`Expecting value: line 1 column 1`); empty 2xx
+  bodies now handled.
+- **`.env` loading**: server.py now loads the repo `.env` (nothing did before — config
+  never reached the server when launched via start.ps1/uvicorn).
+- **Folder name resolution** (graph_service.py): custom folders (e.g. `Github`,
+  `Family/Dog`) resolve displayName -> Graph folder id (folder names 400 in Graph URLs);
+  `list_folders` returns a full tree with unread/total counts (recursive childFolders).
+- **Webapp folder treeview**: Inbox page now has a sidebar folder tree (expandable,
+  unread badges, per-folder icons) replacing the flat dropdown, plus folder CRUD
+  (new/rename/delete) directly in the tree.
+- **Email ops**: `copy_email` and `forward_email` tools + REST (`POST /api/inbox/{id}/copy`,
+  `/api/inbox/{id}/forward`); Graph + IMAP implementations; email-detail page gained
+  working Move/Copy (folder picker) and Forward (to + comment) actions.
+- **Fleet connectors**: `email_connector` MCP tool + REST (`GET /api/connectors/status`,
+  `POST /api/connectors/aiwatcher`, `POST /api/connectors/robofang`) push events to
+  aiwatcher's `/api/fleet/ingest` and robofang's `/api/hooks/email` (opt-in via
+  `EMAIL_MCP_AIWATCHER_URL` / `EMAIL_MCP_ROBOFANG_URL`, fail-soft).
+- **Tests**: 188 passing (9 connector tests, 4 Graph copy/forward tests).
+
+### Fixed (2026-07-31 - assfix)
+- Packaging: rebuilt `mcpb/src` staging as `mcpb/src/email_mcp/` (was flattened bare modules — bundle could not import itself); purged `.pyc` dross
+- Packaging: MCPB prompts brought to 3-4-100 bar (system.md 3000 words, user.md 4000 words, examples.json 104 entries)
+- Packaging: `.mcpbignore` now excludes webapp/, mcpb/, logs/, monitoring/, reports/, data/, examples/, *.bak (previous pack was 46 MB of bloat)
+- Manifest: root + mcpb manifest.json tool lists regenerated to the actual 39 registered tools
+- Docs: added docs/DEVELOPMENT.md, docs/TOOLS.md, docs/TROUBLESHOOTING.md
+- Webapp: data-testid sweep across 13 pages (page container + key controls)
+- Webapp: fixed production build (tsc -b) type errors in chat.tsx, compose.tsx, inbox.tsx, settings.tsx, tools.tsx, contacts.tsx
+- Webapp: dashboard font/contrast fixes (status labels to text-sm text-slate-300)
+- Tests: pytest.ini enforces coverage floor (--cov=email_mcp --cov-fail-under=30, current 39.8%)
+- Hygiene: removed stale .bak files; glama.json tool count corrected 32 -> 39
+
+### Fixed (2026-07-24 - assfix)
+- CORS: replaced `allow_origins=["*"]` with fleet-standard explicit origins + `allow_origin_regex` for Tailscale/LAN
+- CORS: replaced `run_http_async()` in transport.py with `uvicorn.Server` on `mcp.http_app()` with CORS middleware
+- Imports: added missing `imaplib`, `email`, `asyncio` imports in tool_registry.py (search_emails was broken)
+- Imports: added `from email.header import decode_header` in email_services.py
+- Imports: added `decode_email_header`, `sanitize_text`, `wrap_untrusted_list`, `load_mailing_list_entries` imports in tool_registry.py
+- Imports: fixed E402 (module-level import not at top) in server.py
+- Tool: added `email_shutdown` self-termination tool
+- Service: added `attachments` parameter to LocalEmailService, APIEmailService, WebhookEmailService for interface parity
+- Test: fixed test_e2e_real.py (LocalEmailService.send_email arg count mismatch)
+
+### Added
+- `.env.example` — service config template
+- `.claude-plugin/hooks/hooks.json` — Claude Code SessionStart hook
+- `.windsurfrules` — Windsurf session context
+- `.github/copilot-instructions.md` — GitHub Copilot tool awareness
+- `.opencode/skills/email-mcp/SKILL.md` — OpenCode session context
+- `.pre-commit-config.yaml` — Ruff pre-commit hooks
+- `webapp/bun.lock` — Bun lockfile per fleet standard
 
 ### Added
 - Tauri CORS: 	auri://localhost, http://tauri.localhost, https://tauri.localhost in CORS origins
@@ -100,11 +203,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`native/package.json`**: pins `@tauri-apps/cli` ^2 so `npx` resolves locally
 - **justfile**: new targets for Tauri build, debug, dev mode
 - **`mailing_list_latest` tool**: now correctly handles invalid IDs and missing service configs
-  - uild-sidecar: run PyInstaller, copy binary to 
+  - uild-sidecar: run PyInstaller, copy binary to
 ative/binaries/
   - uild-all: uild-sidecar then uild-native in one step
   - 	auri-dev: hot-reload dev mode (backend must be running separately)
-  - uild-native / uild-native-debug: run 
+  - uild-native / uild-native-debug: run
 pm install before Tauri CLI
 
 ### Fixed
@@ -220,5 +323,3 @@ ative/main.rs**: uvicorn readiness detection now checks both CommandEvent::Stdou
 - Basic service configuration
 - Core email sending and receiving functionality
 - Async operations support
-
-

@@ -1,7 +1,7 @@
 # Pattern: Native Multimodal Fleet Alignment
 
 **Status**: PROPOSED (April 2026)  
-**Reference**: [Gemma 4 Technical Report](file:///C:/Users/sandr/.gemini/antigravity/brain/2d97e8d1-4089-4844-afbf-2fb404ac8568/gemma_4_analysis_report.md)
+**Reference**: [Gemma 4 Technical Report](file:///C:/Users/<user>/.gemini/antigravity/brain/2d97e8d1-4089-4844-afbf-2fb404ac8568/gemma_4_analysis_report.md)
 
 ## 🎯 Context
 Prior to 2026, agentic multimodal workflows relied on **Orchestral Patching**:

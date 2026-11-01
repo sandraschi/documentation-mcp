@@ -162,4 +162,4 @@ slot in opportunistically between them.
 
 ---
 
-*Maintained by Sandra Schipal. Roadmap by Claude Opus 4.7, April 2026.*
+*Maintained by Sandra S.. Roadmap by Claude Opus 4.7, April 2026.*

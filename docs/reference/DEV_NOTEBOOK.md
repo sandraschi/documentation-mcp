@@ -19,7 +19,7 @@ Daily log of what was worked on, fixed, or noteworthy across the fleet.
   - Git repo check, README completeness, port compliance, container stack audit
   - Error/empty/loading states check, keyboard shortcuts, Pydantic v2 patterns
   - Report persistence to `docs/assess-reports/` + `.assess-fix-timestamp`
-  - Conditional `[if:]` markers so non-standard repos (games-app, myai) aren't falsely penalized
+  - Conditional `[if:]` markers so non-standard repos (ai-games-collection, myai) aren't falsely penalized
 
 ### Reference Docs
 - **TOOLS_GLOSSARY.md** — 90+ entries across 12 categories (package mgrs, linters, MCP stack, web stack, backend, ML/GPU, etc.)

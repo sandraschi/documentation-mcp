@@ -114,7 +114,7 @@ D:\Dev\repos\goose-mcp\start.bat
 If the backend starts but reports `goose binary not found`:
 
 1. Install goose: download from https://goose-docs.ai/docs/getting-started/installation
-2. Or set `GOOSE_BIN` in `.env`: `GOOSE_BIN=C:\Users\sandr\.local\bin\goose.exe`
+2. Or set `GOOSE_BIN` in `.env`: `GOOSE_BIN=C:\Users\<user>\.local\bin\goose.exe`
 
 ## Ports in use?
 

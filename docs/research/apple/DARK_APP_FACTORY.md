@@ -20,14 +20,14 @@ Building on the **Xcode 26.3 Revolution**, the Dark App Factory (DAF) for iOS ut
 
 ## 2. "The First Twenty" (Industrial/Vienna/Robotics)
 
-The following 20 apps are planned for the initial factory run, optimized for the Sandra Schipal workstation and environment:
+The following 20 apps are planned for the initial factory run, optimized for the Sandra S. workstation and environment:
 
 | # | App Name | Industrial Function | Integration |
 | :--- | :--- | :--- | :--- |
 | 01 | **Vienna Trash Sentinel** | MA48 Waste scheduling automation. | Vienna Open Data API |
 | 02 | **Benny's Guardian** | German Shepherd activity & Safety monitor. | IoT / Simulated Telemetry |
 | 03 | **Unitree Go2 Mobile** | Direct OSC/ROS bridge for robot control. | `robotics-mcp` |
-| 04 | **District 9 Intelligence** | Alsergrund infrastructure & resource guide. | Local Knowledge Base |
+| 04 | **District 9 Intelligence** | Vienna infrastructure & resource guide. | Local Knowledge Base |
 | 05 | **Workstation Pulse** | RTX 4090/Ryzen health & thermal dashboard. | Windows Server API |
 | 06 | **Plex Zero-Remote** | Minimalist reductionist playback control. | Plex Media Server |
 | 07 | **SOTA Smart Home** | Unified Tapo/Nest/Hue MQTT Dashboard. | Home Automation Grid |
@@ -36,7 +36,7 @@ The following 20 apps are planned for the initial factory run, optimized for the
 | 10 | **Materialist Library** | Tracker for reductionist literature/data. | Book Registry |
 | 11 | **Tapo Real-Time Grid** | Multi-camera RTSP surveillance monitor. | Tapo C-series RTSP |
 | 12 | **Robotics-MCP Debug** | Mobile debugger for agentic fleet logs. | `robotics-mcp` |
-| 13 | **9th District Infra** | Fiber/Weather/Grid health monitor. | Alsergrund Sensors |
+| 13 | **9th District Infra** | Fiber/Weather/Grid health monitor. | Vienna Sensors |
 | 14 | **Dark Factory Dash** | Real-time build status for the App Factory. | `dark-app-factory` API |
 | 15 | **EU Policy Tracker** | Tracking AI/Tech market failures & regs. | EU Data Feed |
 | 16 | **Drive-Nuking Safety** | Mobile interface for cold-storage audit. | Safety Registry |

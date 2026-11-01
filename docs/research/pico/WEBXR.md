@@ -57,7 +57,7 @@ Set-Location D:\Dev\repos\teleoperator-mcp
 
 Legacy two-terminal path: `just serve` (:10901) + `just web` (:10900).
 
-Example URL: `https://goliath.tailfab45.ts.net/`
+Example URL: `https://goliath.<tailnet>.ts.net/`
 
 CORS must include the Serve hostname:
 

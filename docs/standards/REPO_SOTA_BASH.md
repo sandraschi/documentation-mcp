@@ -1,3 +1,13 @@
+---
+title: "REPO_SOTA_BASH: Industrial Modernization Recipe (June 2026)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-07-20
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # REPO_SOTA_BASH: Industrial Modernization Recipe (June 2026)
 
 > [!IMPORTANT]
@@ -119,7 +129,7 @@ def _to_markdown(data: dict, operation: str) -> str:
 ## 7. Phase 6: Deployment Scaffolding (Force Alignment)
 
 Every SOTA webapp or server MUST include:
-1.  **`start.ps1`**: PowerShell launcher with port cleanup (10700-11500 range).
+1.  **`start.ps1`**: PowerShell launcher with port cleanup (reservoir in `operations/WEBAPP_PORTS.md`, currently 10700-12000).
 2.  **`start.bat`**: Generic Windows double-click launcher.
 3.  **Adjacent Ports**: If frontend is `10750`, backend MUST be `10751`.
 

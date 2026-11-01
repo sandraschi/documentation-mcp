@@ -89,7 +89,7 @@ New tool op `notify`: `{title, body, category?, thread_id?, payload?, live_activ
 
 ## 3. Benny FM — the generated morning briefing (STATUS: planned, unblocked)
 
-**The pitch:** a narrated personal radio show for the Benny walk. Fleet PR/issue status, overnight code drops from arXiv scans, AI-news digest, Alsergrund weather — composed into a 4–7 minute script, spoken by speech-mcp TTS, delivered as a push at a scheduled time. Optional 10-second songgeneration jingle. Zero new sensors; pure orchestration over servers that already work.
+**The pitch:** a narrated personal radio show for the Benny walk. Fleet PR/issue status, overnight code drops from arXiv scans, AI-news digest, Vienna weather — composed into a 4–7 minute script, spoken by speech-mcp TTS, delivered as a push at a scheduled time. Optional 10-second songgeneration jingle. Zero new sensors; pure orchestration over servers that already work.
 
 **Architecture:**
 - Goliath composer: a scheduled job in **fleet-agent-mcp (Fritz)** — this is persona-layer work per ORCHESTRATION_HIERARCHY.md, so it belongs to Fritz, not a new repo. New tool `fritz_briefing`: ops `compose_now`, `schedule` (Windows Scheduled Task via winops), `history`.

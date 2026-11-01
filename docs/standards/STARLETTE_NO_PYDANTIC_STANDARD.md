@@ -1,17 +1,42 @@
+---
+title: "Backend Framework Decision Standard"
+category: standard
+status: active
+audience: mcp-dev
+last_updated: 2026-09-30
+---
 # Backend Framework Decision Standard
 
-**Status:** Active  
-**Date:** 2026-03-23 — revised 2026-04-25  
-**Applies to:** All new MCP server webapps
+**Status:** Active
+**Date:** 2026-03-23 - revised 2026-04-25 - **reversed 2026-09-30 (FastAPI default, Sandra's decision)**
+**Applies to:** All new MCP server webapps / REST backends
+
+> Filename kept as `STARLETTE_NO_PYDANTIC_STANDARD.md` so existing links and read lists
+> keep working. The content is now the opposite of the filename: **FastAPI is the default.**
 
 ---
 
-## Decision Rule (revised)
+## Decision Rule (2026-09-30)
 
-**Default: Starlette 1.0, no Pydantic.**  
-**Exception: FastAPI when the REST surface earns it** — see the decision matrix below.
+**Default: FastAPI + Pydantic v2 for every new REST backend.**
+**Starlette only by exception** - see the matrix below.
 
-The original standard was "never FastAPI." That was too absolute. Swagger/OpenAPI is genuinely useful for complex or externally-facing surfaces, and the rule was quietly being second-guessed on every new server. This revision replaces the binary with a decision matrix.
+### Why the reversal
+
+1. **The cost argument was void for our fleet.** The Starlette default rested on "Pydantic
+   import weight at fleet scale". But FastMCP itself depends on Pydantic, so every fleet
+   server built on FastMCP already loads it. Measured 2026-09-30 in `searchstudio-mcp`
+   (FastMCP 4.x): `import fastmcp` loads `pydantic` 2.13.5, 0.83 s. FastAPI adds little
+   on top of that.
+2. **AI writes the models.** The Pydantic boilerplate was a cost for a human author; for
+   agent-written code it is effectively free, and it buys validation and schemas.
+3. **One contract, two surfaces.** One Pydantic model can define both the MCP tool output
+   schema and the OpenAPI schema.
+4. **`/docs` is useful** for debugging, handing a server to Steve or future-you, adapter
+   writers and external consumers - and fleet servers increasingly have those
+   (crossconnects, public repos).
+5. **Agents default to FastAPI anyway** (~95% of training data). The old standard fought
+   that grain on every new repo.
 
 ---
 
@@ -19,37 +44,28 @@ The original standard was "never FastAPI." That was too absolute. Swagger/OpenAP
 
 | Condition | Use |
 |-----------|-----|
-| Pure internal glue — webapp + Claude Desktop only, simple flat payloads | **Starlette 1.0** |
-| REST surface ≤ ~10 endpoints, all consumed by known clients | **Starlette 1.0** |
-| Rich REST surface (15+ endpoints, nested models, multiple consumers) | **FastAPI** |
-| External-facing API — consumers you don't control, or public docs needed | **FastAPI** |
-| Server you or Steve will explore via `/docs` to understand/debug it | **FastAPI** |
-| Existing FastAPI project — working, don't touch it | **Keep FastAPI** |
-| Pydantic models shared with another system in the fleet | **FastAPI** |
+| New server with any REST surface | **FastAPI** |
+| Existing FastAPI project | **Keep FastAPI** |
+| Existing Starlette project, not touching its REST layer | **Keep Starlette** - no churn migrations |
+| Existing Starlette project, adding endpoints / request bodies / external consumers | **Migrate to FastAPI in that work** |
+| No REST at all: `mcp.http_app()` run directly as uvicorn's top-level ASGI app | **No wrapper needed** |
 
-When in doubt, start with Starlette. Migrating up to FastAPI is trivial (Starlette is FastAPI's base). Migrating down is pointless.
-
----
-
-## Why Starlette is still the default
-
-FastAPI's value-adds over Starlette are:
-
-1. **OpenAPI/Swagger UI** — auto-generated `/docs` and `/redoc`
-2. **Pydantic validation** — request body parsing and serialization
-3. **Dependency injection** — `Depends()` pattern
-
-For a typical fleet server (internal dashboard, MCP tool frontend, simple REST backend consumed by Claude and one Vite SPA):
-
-- **Swagger** has no active users unless the REST surface is rich enough to explore
-- **Pydantic validation** adds import weight for payloads we fully control
-- **FastAPI DI** is replaceable with Starlette middleware and `request.state`
-
-On Goliath with 135+ servers running simultaneously, lighter dependency trees have real impact. Pydantic's import time and memory footprint are measurable at fleet scale. Starlette 1.0 (stable since 2026-03-22, first stable release after 8 years on ZeroVer) is a clean, stable foundation.
+**No fleet-wide migration sweep.** Batch limits apply (max 10 files per commit / script invocation);
+migrate repo by repo when a repo's REST layer is being worked on anyway. Migration is
+mostly mechanical: `FastAPI` subclasses `Starlette`, `Route(...)` lists become
+`@app.get/@app.post` handlers, the `/mcp` mount pattern below is unchanged.
 
 ---
 
-## Why FastAPI is worth it for complex surfaces
+## What FastAPI adds over Starlette
+
+1. **OpenAPI/Swagger UI** - auto-generated `/docs` and `/redoc`
+2. **Pydantic validation** - request body parsing and serialization
+3. **Dependency injection** - `Depends()` pattern
+
+---
+
+## Why FastAPI is worth it
 
 Swagger is genuinely powerful and pretty. A live `/docs` endpoint where you can fire requests, inspect schemas, and see all endpoints in one view has real utility for:
 
@@ -58,7 +74,8 @@ Swagger is genuinely powerful and pretty. A live `/docs` endpoint where you can 
 - Any server where the REST surface is rich enough that the shape isn't obvious from the code
 - External exposure — if it ever leaves Goliath, `/docs` is the first thing a new consumer reaches for
 
-The cost (Pydantic import, heavier install) is worth paying when the REST surface complexity crosses the threshold in the matrix above.
+For FastMCP servers the Pydantic cost is already paid (see "Why the reversal"), so there
+is no threshold to cross any more.
 
 ---
 
@@ -68,7 +85,7 @@ Neither cares about your REST framework. Glama indexes from `glama.json` and REA
 
 ---
 
-## Starlette 1.0 Key Patterns
+## Starlette 1.0 Key Patterns (existing Starlette repos only)
 
 ### App skeleton
 
@@ -140,7 +157,7 @@ client = request.app.state.http_client
 
 ---
 
-## FastAPI Key Patterns (when you've chosen it)
+## FastAPI Key Patterns (default)
 
 ### App skeleton with Swagger enabled
 
@@ -186,6 +203,58 @@ Only do this if you're genuinely concerned about exposing schema info externally
 
 ---
 
+## Mounting FastMCP's `http_app()` on a FastAPI/Starlette dual-surface backend
+
+Fleet repos commonly serve both a REST API and an MCP streamable-HTTP
+endpoint from the same process — REST via normal FastAPI/Starlette
+routes, MCP via `mcp.http_app()` mounted at `/mcp`. This mount has TWO
+independent, silent failure modes; both must be handled or `/mcp` is
+broken even though the mount call itself never raises. See
+[BUG-008](../troubleshooting/details/BUG-008_http_app_double_prefix.md)
+and [BUG-038](../troubleshooting/details/BUG-038_http_app_lifespan_not_wired.md).
+
+```python
+# CORRECT — path="/" avoids the double-prefix (BUG-008), and folding the
+# sub-app's lifespan into the parent's starts FastMCP's session manager
+# (BUG-038). Build the sub-app BEFORE the parent app.
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+
+mcp_app = mcp.http_app(path="/")  # NOT mcp.http_app() — default path is "/mcp"
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with mcp_app.router.lifespan_context(app):
+        yield  # nest your own startup/shutdown around this if you have any
+
+
+app = FastAPI(lifespan=lifespan)
+app.mount("/mcp", mcp_app)
+```
+
+```python
+# WRONG — looks fine, mounts without error, but every real MCP client
+# call fails: McpError: Session terminated. Two bugs stacked here:
+# (1) http_app() defaults path="/mcp" -> double prefix under the mount,
+# (2) app.mount() never runs mcp_http.router's own lifespan, so the
+#     streamable-HTTP session manager never starts.
+app = FastAPI()
+app.mount("/mcp", mcp.http_app())
+```
+
+A `try/except (AttributeError, RuntimeError)` around the mount call is a
+reasonable guard for "this FastMCP version has no `http_app()`" — but it
+will NOT catch either bug above, since the mount call itself succeeds in
+both cases. Verify with a real client, not just absence of a startup
+exception (see Detection in BUG-038).
+
+If `mcp.http_app()` is run directly as uvicorn's top-level ASGI target
+(no FastAPI wrapper, no `.mount()`), neither bug applies — uvicorn drives
+that app's lifespan and routes directly.
+
+---
+
 ## What NOT to do (pre-Starlette-1.0 deprecated patterns)
 
 ```python
@@ -207,7 +276,18 @@ async def lifespan(app):
 
 ## AI Agent Prompt Templates
 
-### Starlette path
+### FastAPI path (default for new servers)
+
+```
+Use FastAPI with Pydantic v2 models for request/response bodies.
+Enable Swagger UI at /docs (default - do not suppress it).
+Mount FastMCP with mcp.http_app(path="/") and fold its lifespan into the app lifespan
+(BUG-008, BUG-038).
+Use lifespan context manager (not deprecated on_startup/on_shutdown).
+Use uvicorn as the server.
+```
+
+### Starlette path (maintaining an existing Starlette repo only)
 
 ```
 Use Starlette 1.0 directly (not FastAPI).
@@ -218,16 +298,7 @@ Use TypedDict pattern for State.
 Use uvicorn as the server.
 ```
 
-### FastAPI path
-
-```
-Use FastAPI with Pydantic models for request/response bodies.
-Enable Swagger UI at /docs (default — do not suppress it).
-Use lifespan context manager (not deprecated on_startup/on_shutdown).
-Use uvicorn as the server.
-```
-
-Without explicit instructions, AI agents default to FastAPI + Pydantic (~95% of training data). Be explicit either way.
+Without explicit instructions, AI agents default to FastAPI + Pydantic (~95% of training data), which is now the fleet default. Be explicit only when maintaining a Starlette repo.
 
 ---
 

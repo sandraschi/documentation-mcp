@@ -8,16 +8,16 @@
 
 **EM DASH (U+2014) is never allowed** in fleet repositories.
 
-Also forbidden in the same scope: **EN DASH** (U+2013), **smart single/double quotes** (U+2018–U+201D).
+Also forbidden in the same scope: **EN DASH** (U+2013), **smart single/double quotes** (U+2018-U+201D).
 
 Use ASCII only:
 
 | Forbidden | Use instead |
 |-----------|-------------|
-| `—` EM DASH | ` - ` or ` -- ` (ASCII hyphens) |
-| `–` EN DASH | `-` |
-| `'` `'` | `'` |
-| `"` `"` | `"` |
+| `U+2014` EM DASH | ` - ` or ` -- ` (ASCII hyphens) |
+| `U+2013` EN DASH | `-` |
+| `U+2018`/`U+2019` smart single quotes | `'` |
+| `U+201C`/`U+201D` smart double quotes | `"` |
 
 ## Agent rule (batch replace)
 
@@ -84,7 +84,7 @@ check-unicode:
 ## Agent instructions
 
 - When editing **`start.ps1`**, **`start.bat`**, or **`justfile`**: use **ASCII hyphen `-` only**.
-- Do not let editors "smart punctuation" replace `-` with `—`.
+- Do not let editors "smart punctuation" replace `-` with `U+2014` (em dash).
 - If a user pastes text containing em dashes into a script, replace before save.
 
 ## Related standards

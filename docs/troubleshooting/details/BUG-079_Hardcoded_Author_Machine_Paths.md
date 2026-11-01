@@ -1,0 +1,94 @@
+# BUG-079: Hardcoded author-machine paths in runtime code
+
+- **Severity:** P1 (startup crash / data written to stray trees on every machine but Goliath)
+- **Date:** 2026-10-13
+- **Found by:** outside contributor krolco, [sandraschi/inkscape-mcp#7](https://github.com/sandraschi/inkscape-mcp/pull/7) (BUG_REPORT.md in that PR), installing on a clean Windows machine (user `monte`)
+- **Status:** Fixed in 26 repos (list below); fleet-integration defaults and docs/examples deliberately left (see "Not fixed")
+
+## Symptom
+
+A server works on Goliath and dies or misbehaves everywhere else:
+
+- `run_server.py` opens a debug log under `C:\Users\<user>\AppData\Local\...` before `main()`; the fallback handler writes to the same missing dir and raises unhandled. Server never starts (inkscape-mcp, PR #7).
+- `sys.path.insert(0, r"D:\Dev\repos\mcp-central-docs\scripts")` + unguarded `import fleet_otel_bootstrap` -> `ImportError` at startup (winrar-mcp).
+- Data/log/output defaults under `D:\Dev\repos\<repo>\...` are `mkdir`'ed at tool time -> stray `D:\Dev\repos` trees, or `FileNotFoundError` without a D: drive (leanforge, limx-robotics, unitree, magentart, winrar webapp).
+- Tool lookups pinned to `C:\Users\<user>\...` (lms.exe, uv, Ollama, ffmpeg scoop shim, Unsloth Studio, Zed Preview, HandBrakeCLI winget link, godot) miss the real per-user install of everyone else.
+- `config.example.toml` carried the author's absolute paths; INSTALL tells users to copy it verbatim (leanforge).
+
+## Root cause
+
+Paths written as literals during development on Goliath instead of derived. Contagion through copied files (apps-page template, `fleet_common.py`, `transport.py` docstrings) and through example configs.
+
+Second, distinct root cause found on the way: `bridge/app/config.py` of mcp-federation-hub had **never been committed** (ruff S104 on an intentional opt-in `0.0.0.0` blocked every commit including the nightly WIP sweep), so a clean clone could not import the bridge at all.
+
+## Fix rule
+
+Derive, keep env overrides, keep Goliath values identical:
+
+| Kind | Derive from |
+|---|---|
+| Repo data/logs/outputs/workspace | `Path(__file__).resolve().parents[N]` (repo root) |
+| Sibling repos (`mcp-central-docs`, `external/`, `_exchange/`) | repo root `.parent` |
+| User tools/config | `shutil.which(...)` first, then `Path.home()`, `%LOCALAPPDATA%`, `%APPDATA%`, `tempfile.gettempdir()` |
+| Example configs | leave path keys commented out; defaults apply |
+
+NSSM services run as LocalSystem, but every fleet service sets `USERPROFILE`, `HOME`, `APPDATA`, `LOCALAPPDATA` to `C:\Users\<user>` in `AppEnvironmentExtra` (checked 2026-10-13: aiwatcher, fleet-agent, mcp-federation-hub, devices; advanced-memory sets USERPROFILE/HOME only), so `Path.home()` resolves the same there. `uv` is on the Machine PATH (`C:\Users\<user>\.local\bin`), Ollama is not.
+
+`__file__`-relative derivation assumes an editable install (BUG-026); verified for aiwatcher and fleet-agent.
+
+Verification used: stdio `initialize` + `tools/list` launched with cwd `C:\Windows\System32` (Claude Desktop's cwd), plus importing the module and printing the resolved values to prove they are unchanged on Goliath.
+
+## Audit
+
+```bash
+rg -n -t py "[Dd]:.{1,4}[Dd]ev.{1,4}([Rr]epos|tools)|[Cc]:.{1,4}[Uu]sers.{1,4}sandr" D:/Dev/repos \
+  -g '!**/.venv/**' -g '!**/node_modules/**' -g '!**/tests/**' -g '!**/mcpb/**' -g '!**/external/**' -g '!*.bak*'
+```
+
+2026-10-13 run: 1010 hit lines in 136 top-level dirs (the 38-repo first count used a narrower pattern that missed `D:/Dev/repos` with forward slashes). After dropping comments, docstrings, scripts/demos/examples and junk dirs: ~340 code lines in ~90 dirs, classified below. Now also a gate in `patterns/repo-assess-and-fix.md` 1J.
+
+## Fixed (2026-10-13, one commit per repo, pushed unless noted)
+
+| Repo | Commit | What |
+|---|---|---|
+| winrar-mcp | b840c3b | run_server import crash (also crashed on Goliath: fleet_otel_bootstrap no-op stubs break current fastmcp); webapp REPOS_ROOT/output/registry derived |
+| leanforge-mcp | 97f31b4 | lake/workspace/db/log defaults + config.example.toml |
+| limx-robotics-mcp | 0d62349 | logs/models/jobs/external/_exchange/sim python + settings route |
+| unitree-mcp | 006dc08 | logs/models/external/_exchange + settings route |
+| magentart-mcp | 004d75c | output dir |
+| calibre-mcp | ce9be2a | webapp CALIBRE_CONFIG_PATH |
+| robofang | f05cded | skills dir |
+| zed-mcp | 63e4131 | Zed Preview CLI |
+| handbrake-mcp | 5e9e023 | WinGet HandBrakeCLI link |
+| local-llm-mcp | 0b49b0b | lms.exe x2, uv, muse proxy |
+| tailscale-mcp | c4c8cfd | lms.exe |
+| unsloth-mcp | fa8b472 | Studio python + unsloth.exe |
+| demo-vid-mcp | 4714d76 | ffmpeg scoop shim |
+| pywinauto-mcp | 1ace9e5 | ffmpeg scoop shim (literal fallback also made the "not found" branch dead) |
+| worldlabs-mcp | b1d3719 | GODOT_EXE default |
+| virtualization-mcp | 190a862 | PyInstaller runtime-hook marker -> %TEMP% |
+| git-github-mcp | 82c2ee9 | GIT_CONFIG_GLOBAL minimal.gitconfig |
+| ednaficator | b5a2795 | Claude Desktop config path |
+| veogen | a29d14f | Claude Desktop config path (local commit only: repo has no remote) |
+| aiwatcher-mcp | c3b5e04 | Ollama exe, uv, session-log appender |
+| fleet-agent-mcp | 60dd246 | uv, session-log appender, GH token file |
+| mcp-federation-hub | f90ccc1 + 94eef7e | committed never-tracked bridge/app/config.py; CLAUDE_LOG_DIR (f90ccc1 carries a wrong message from a script error; 94eef7e is the corrected description) |
+| mcp-central-docs | (this commit) | docs_mcp backend config ADVANCED_MEMORY_PATH / CLAUDE_DEPOT_PATH |
+
+## Not fixed (deliberate)
+
+- **Fleet-integration defaults, guarded:** apps-page `apps_routes.py` / `fleet_common.py` (template in `templates/apps-page/backend/` + copies in arxiv, git-github, grandorgue, inkscape, japanophile, ocr, qcad, resonite, winrar, robotics), `FLEET_REPOS_ROOT`-style defaults (codecad, dark-app-factory, meta_mcp, fleetwatcher, secrets, scraper, depot, docker web_queries, documentation/mcp-central-docs starts_ui, agy-fleet, notebooklm-fleet, open-drone, notepadpp, mcp-test-suite, vienna-life, system-admin, disk-usage, fleet-agent sibling defaults, aiwatcher CENTRAL_DOCS_PATH, libreoffice, chitchat, rss, plex/calibre webapp_launch, reaper crosslinks, robofang heartbeat/orchestrator, mcp-links-service). These only make sense on the fleet workstation, are `.exists()`-guarded or env-overridable, and degrade to "not found" elsewhere. Candidate for one shared `FLEET_REPOS_ROOT` helper in the template, not a sweep.
+- **Path allowlists `startswith("D:/Dev/repos")`** (unity3d, resonite, rustdesk-mcp, osc, publictransport-mcp, handbrake main, avatar, alexa, plex fleet, vrchat, docs_mcp server): fleet launcher endpoints; on other machines they refuse every path (safe failure). Same helper would fix them.
+- **Upstream checkouts in `D:\Dev\repos\external\...` / `D:\Dev\tools`** with env overrides or candidate lists: obscura (browser, obscura, rtorrent, scraper, tvtropes), dreame, lewm, openclaude, songgeneration, freecad (FreeCAD/PrusaSlicer/FluidX3D candidates), qcad FluidX3D, mixx-dj, robotics marketplace, reversing FLEET_TOOLS_DIR, local-llm llama.cpp/Muse defaults.
+- **Docstrings, examples, comments, help text** (immich, multi-backup help, zed, beyondcompare, autohotkey, fastsearch prompts, transport.py headers, ...): harmless.
+- **Dev-only scripts/demos/root-level debug scripts** (avatar-mcp's 33 viewers, resonite/robotics/gimp/yahboom scripts, mcp-central-docs fleet-gate and scripts, temp/, junk/): run only on Goliath.
+- **inkscape-mcp run_server.py / main.py** (pending PR #7) and **windows-operations-mcp** (pending PR #3): untouched by instruction.
+- **status-mcp/status_mcp.py** (NOTES_DIR, LOGS_DIR, REPOS_DIR): the directory has no git repo; fixing first needs a baseline repo (GIT_REPOSITORY_SAFETY section 2), which creates a GitHub remote - left for the owner.
+- **devices-mcp ring-mcp server_path**, **gtfs feed_manager cities_root**, **learnbot default VRM**, **plex config .env fallback**, **godot/steam DEFAULT_EXCHANGE**, **limx/unitree done; others with `_exchange`**: sibling-repo integrations, left with the fleet-integration group.
+
+## Side findings
+
+- `mcp-central-docs/scripts/fleet_otel_bootstrap.py`: with no `OTEL_EXPORTER_OTLP_ENDPOINT` it injects empty `opentelemetry*` modules, which current fastmcp cannot import (`cannot import name 'SpanKind'`). Only winrar-mcp imported it (now removed there); the script itself is still broken.
+- Pre-existing test failures seen while verifying (identical at HEAD, not fixed): calibre `tests/integration/test_portmanteau_integration.py` (`.fn` attribute), handbrake `TestHandBrakeServiceIntegration` (unittest `asyncSetUp` on a pytest class, 5 tests), tailscale `tests/unit/test_acl_health.py` (imports removed `analyze_acl_policy`), ednaficator (4 collection errors, `aiofiles` missing), mcp-federation-hub bridge (plain `pytest` cannot import `app`; `python -m pytest` passes).
+- Broken venvs (no `pyvenv.cfg`) still in local-llm-mcp and tailscale-mcp; verified in temp envs instead.
+- Uncommitted WIP left because hooks fail on it: local-llm-mcp web_sota (biome config error, BUG-065 class), ednaficator `mcpb/` (ruff), mcp-federation-hub `bridge/*.ps1` + `nssm-services.json` (not committed: public repo, NSSM service definitions not reviewed for secrets).

@@ -112,10 +112,7 @@ uv run ruff check src/ --fix
 uv run ruff format src/
 ```
 
-If a webapp exists: `npx tsc --noEmit` and, if Biome is configured,
-`npx biome check --write webapp/src/` (fall back to `npx eslint` if Biome isn't set
-up). Iterate — re-run, read the remaining errors, fix, repeat — until clean. Don't
-report this phase done on the first pass if errors remain.
+If a webapp exists: `npx tsc --noEmit` (when `check` script exists) and **`npm run biome:ci`** in the web root. Iterate until clean.
 
 ## Phase 4 — Docs sync (`update docs` macro)
 
@@ -126,6 +123,15 @@ exists. Skip files that don't already exist — this phase syncs, it doesn't sca
 new doc files unless the user separately asked for that.
 
 ## Phase 5 — Package build (skip if `.nopublish`)
+
+**Gate first (CRITICAL, added 2026-10-07):** run
+`pwsh D:\Dev\repos\mcp-central-docs\scripts\audit-mcpb-bundles.ps1 -Repo {name}`. It must
+report the repo `clean`. `NONSPEC` means the manifest uses `${PWD}` (or any non-spec
+`${...}`), which Claude Desktop does not expand, so the bundle will not start on a real
+install; `SIDECAR` means it launches the HTTP `run_server.py` instead of stdio. Fix both
+(`${__dirname}`, `python -m <pkg>`), then pack with the repo's `scripts/mcpb-pack.ps1`
+shim (-> `mcp-central-docs/scripts/fleet-mcpb-pack.ps1`), not bare `mcpb pack`. Details:
+`repo-assess-and-fix.md` MCPB rows and Phase 5, `MCPB_PACKAGING_STANDARDS.md` 2.2/2.2b.
 
 Per `PACKAGING_STANDARDS.md`. Verify `manifest.json` (identifier, version, asset
 paths), confirm `assets/icon.png` exists at 256x256, confirm `glama.json` is excluded

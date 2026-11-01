@@ -6,10 +6,10 @@ All configuration is via environment variables. Copy `.env.example` to `.env` �
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `FOREMAN_MODEL` | `llama3.1:latest` | Model used for planning (Foreman). Needs strong instruction-following and long context. Used once per run. |
+| `FOREMAN_MODEL` | `qwen3.6:27b` | Model used for planning (Foreman). Needs strong instruction-following and long context. Used once per run. |
 | `FOREMAN_BASE_URL` | `http://localhost:11434/v1` | OpenAI-compatible base URL for the Foreman model. |
 | `FOREMAN_API_KEY` | `ollama` | API key. Set to your real key when using a remote provider. |
-| `WORKER_MODEL` | `qwen2.5-coder:latest` | Model used for all file generation. Used heavily — pick for speed and code quality. |
+| `WORKER_MODEL` | `qwen2.5-coder:32b-instruct-q4_K_M` | Model used for all file generation. Used heavily — pick for speed and code quality. |
 | `WORKER_BASE_URL` | `http://localhost:11434/v1` | Base URL for the Worker model. Can differ from Foreman. |
 | `WORKER_API_KEY` | `ollama` | API key for the Worker model. |
 | `OLLAMA_CONTEXT_LENGTH` | `32768` | Context window size. **Set to `65536` minimum.** The factory generates large prompts. |
@@ -42,6 +42,30 @@ FOREMAN_API_KEY=sk-...
 | `FACTORY_PORT` | `8001` | DTU mock server port. |
 | `DASHBOARD_PORT` | `8002` | Web dashboard port. |
 | `MCP_PORT` | `10739` | MCP server port (streamable HTTP). |
+| `APP_PORT_START` | `19300` | Lower bound of the window the Judge allocates generated-app ports from. |
+| `APP_PORT_END` | `19400` | Upper bound of that window. |
+
+The generated app's ports are allocated from the `APP_PORT_START` to
+`APP_PORT_END` window and exported to the app as `PORT` and `VITE_PORT`. Keep
+this window clear of the common dev-server ports (3000, 5173, 8000, 8080). The
+Judge only treats a listener on an assigned port as the generated app, so
+overlapping the window with your own dev servers reintroduces the risk of
+auditing the wrong process.
+
+## Boot and install
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `SKIP_APP_INSTALL` | `false` | Set to `true` to skip installing the generated app's dependencies before the Judge boots it. Only useful when `node_modules` and the Python environment are already prepared. |
+| `APP_INSTALL_TIMEOUT` | `600` | Seconds allowed for each install command (node and python are timed separately). |
+
+The installer is chosen automatically: `bun install` if bun is on PATH, else
+`pnpm install`, else `npm install --legacy-peer-deps --no-audit --no-fund`.
+Python uses `pip install -r requirements.txt`. The node step is skipped when
+`node_modules` already exists in the output directory.
+
+Install output and per-process boot logs are written to
+`output_XXX/.factory-logs/`.
 
 ## Generation settings
 
@@ -100,6 +124,12 @@ OLLAMA_CONTEXT_LENGTH=65536
 FACTORY_PORT=8001
 DASHBOARD_PORT=8002
 MCP_PORT=10739
+APP_PORT_START=19300
+APP_PORT_END=19400
+
+# ── Boot / install ────────────────────────────────────────────────────────────
+SKIP_APP_INSTALL=false
+APP_INSTALL_TIMEOUT=600
 
 # ── Generation ────────────────────────────────────────────────────────────────
 MAX_RETRIES=3

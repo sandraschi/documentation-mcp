@@ -1,6 +1,6 @@
 # Sandrafleetbot — Zero-Pay GrokBot
 
-> **Status: SPEC v2 - buildout in progress.** **P0 (brain tier) DONE 2026-08-14**: Muse Glimmer 30B live on the 4090 (chat/tools/vision verified), cline-mcp + local-llm-mcp default to it, ComfyUI sidecar GPU-verified. **P1 (Fritz reasoning loop) DONE 2026-08-15**: flowforge agent step via cline-mcp agent_run, hub discovery refresh, heartbeat_wake trigger, agent-demo E2E passed. **P2 (comm bus + board) DONE 2026-08-15**: hub board + inbox + agent tools + Discord #sfb-* crosspost hook, gate passed. **P3 (senses) DONE 2026-08-15**: aiwatcher surge (urgency>=8.5 -> inbox in 3.4s) + fritz_surveil fleet triage. Next: P5 (surfaces + hardening). This document is the architecture spec + buildout plan + gap register.
+> **Status: SPEC v2 — buildout in progress.** **P0 (brain tier) DONE 2026-08-14**: Muse Glimmer 30B live on the 4090 (chat/tools/vision verified), cline-mcp + local-llm-mcp default to it, ComfyUI sidecar GPU-verified. **P1 (Fritz reasoning loop) DONE 2026-08-15**: flowforge `agent` step via cline-mcp `agent_run`, hub discovery refresh, `heartbeat_wake` trigger, `agent-demo` E2E passed. Next: P2 (agent comm bus + private bulletin board). This document is the architecture spec + buildout plan + gap register.
 > **Goal:** Beat xAI GrokBot (powerful, metered, cloud-locked) with the sandraschi fleet: Muse Glimmer 30B on the RTX 4090, Fritz as the agent, cline-mcp as the spawner, the federation hub as comm bus + board, aiwatcher/arxiv as the senses, and ~190 MCP wrappers as the hands. Zero per-token cost, everything private.
 > **Positioning (ratified):** GrokBot = horizontal SaaS (millions of tenants, ~$0 marginal cost/user, metered forever). Sandrafleetbot = vertical sovereign agent (1 user on a 4090 → ~dozen users on one H200-class). Sweet spot 1–20 users.
 
@@ -254,11 +254,14 @@ Two distinct surfaces — do not conflate (moltbot's channel insight: history is
 **Gate:** full "morning briefing" demo — wake word → briefing spoken → report in Hub + board — zero cloud calls. — ✅ pipeline verified 2026-08-15 (transcript → agent_run → spoken + hub report path; wake-word listener is the remaining physical mic leg — say "wakeywakey fritz, morning briefing")
 
 ### P6 — Channel & office gaps (user-flagged) · ~1 week
-| Gap | Plan | Notes |
+| Gap | Plan | Status |
 |---|---|---|
-| **WhatsApp** (no wrapper) | Build **comms-mcp** per existing P4 spec (`operations/planning/specs/P4-comms-mcp.md`, ports 11028/11029 reserved). v0.1 Telegram (Bot API, easiest headless E2E) → v0.2 Signal → **v0.3 WhatsApp via baileys** (self-hosted, private — NOT the Meta Business API, which is verify-heavy and cloud-bound). Adapters behind one `comms_ops` portmanteau; secrets via P1 `secrets_resolve`; 7-day message-body TTL; inbound sanitization (email-mcp pattern) | This is the ONE new repo the plan needs; spec already drafted |
-| **MS Office** (libreoffice only) | Add local Office COM bridge: `win32com` automation of Word/Excel/PowerPoint/Outlook — either ops in winops-mcp or a thin `ms-office-mcp`. ms-graph-mcp (11148/11149) already covers Outlook/calendar/ToDo/OneDrive via Graph for the cloud side | COM = classic pywin32, ~1 day; decide repo placement during P6 kickoff |
-| **Slack** | comms-mcp v0.2 Socket Mode (spec exists) | only if needed; Viktor analog |
+| **comms-mcp web_sota** (P6) | Console on 11029 (36087b2): Dashboard (KPIs + Test send via new POST /api/v1/send), Outbox (status filter), Allowlist, Help; /api proxied to 11028; naked-PC start.ps1; verified live (Playwright, zero app errors) |\n| **WhatsApp** (no wrapper) | Build **comms-mcp** per existing P4 spec (`operations/planning/specs/P4-comms-mcp.md`, ports 11028/11029 reserved). v0.1 Telegram (Bot API, easiest headless E2E) → v0.2 Signal → **v0.3 WhatsApp via baileys** (self-hosted, private — NOT the Meta Business API, which is verify-heavy and cloud-bound). Adapters behind one `comms_ops` portmanteau; secrets via P1 `secrets_resolve`; 7-day message-body TTL; inbound sanitization (email-mcp pattern) | ✅ **v0.1 shipped 2026-08-15** (`sandraschi/comms-mcp` d740721): `comms_ops` (send/read_recent/list_threads/status/help), Telegram adapter (allowlist-gated send, getUpdates polling), outbox + inbound store w/ 7-day TTL, sanitization, dual transport + REST /health `/api/v1/outbox` `/api/v1/inbound`, 6 tests, ruff/pyright clean. **Signal dropped 2026-08-15** (unofficial-client ToS risk + needs a dedicated SIM; empty completism is daft). **WhatsApp v0.2 SHIPPED 2026-08-15** (c33d0ba): baileys sidecar :11032 (QR pairing, /send, inbound webhook) + comms_ops channel=whatsapp (E.164 allowlist, outbox-logged, sanitized inbound, 7-day TTL); 13 tests; live pairing = scan QR once on the phone. **Slack v0.3 SHIPPED 2026-08-15** (d682623): official SDK Socket Mode, no sidecar - listener runs in the server lifespan, inbound sanitized + stored, channel allowlist; 19 tests. Setup needs xapp-* + xoxb-* tokens from a Slack app. **Durability (P7 lead-in)**: console served from the backend root (:11028, SPA mount, 005c730) - no separate dev server needed; scripts/install-services.ps1 ready (NSSM comms-mcp + comms-mcp-wa, auto-restart) - awaits one UAC approval; docs/ACTIVATION.md = exact per-channel setup |
+| **MS Office** (libreoffice only) | Add local Office COM bridge: `win32com` automation of Word/Excel/PowerPoint/Outlook — either ops in winops-mcp or a thin `ms-office-mcp`. ms-graph-mcp (11148/11149) already covers Outlook/calendar/ToDo/OneDrive via Graph for the cloud side | ⏳ backlog — decide repo placement at next P6 kickoff |
+| **Slack** | comms-mcp v0.2 Socket Mode (spec exists) | ⏳ with v0.2 |
+| **Bluesky** (channel, added 2026-08-15) | Existing `bluesky-mcp` (10760/10761, outbox_enqueue→approve→publish) | ✅ crosspost leg shipped (fleet-agent 046692b, config-gated `BLUESKY_MCP_URL`); live once `bluesky-mcp` .env has handle + app password |
+| **Reddit** | read-only sense (r/LocalLLaMA etc.) via free API tier | ⏳ backlog (P7) — sense, not channel; posting risks bans |
+| **Twitter/X** | — | ❌ skipped — API paid wall, no free write tier |
 
 **Gate:** WhatsApp message in/out round-trip via baileys self-hosted; Word doc create/edit via COM; zero data leaves the box except the message itself.
 
@@ -269,7 +272,7 @@ Known crunchy inventory (honest, dated — verify before trusting):
 |---|---|---|
 | **myconf / teleconference-mcp untested** | tauri-pitfalls-scan: myconf CRITICAL Bug#2 (no TCP health check), Bug#6 (backend spec missing), Bug#8 (no size gate); HIGH #1/#3/#4/#9 | Fix spec + health check + size gate; then `just cua-nsis-test`; then real conference test |
 | **Monitoring runs "in theory"** | `status/FLEET_MONITORING_STATUS.md` (2026-07-06): aiwatcher HTTP ❌, arxiv codehunt not running, fritz not persistent. Doc is 5+ weeks old — re-verify first | Re-audit liveness; Fritz as NSSM service (hybrid NSSM already supported); wire scheduler |
-| **Gate-sweep FAILs** | `audits/gate-sweep-2026-08-06.csv` (e.g. fritz-pipeline-test pyright FAIL) | `assfix` per repo in severity order |
+| **Gate-sweep FAILs** | `audits/gate-sweep-2026-08-06.csv` — **204/205 FAIL is a sweep artifact** (see `audits/gate-sweep-2026-08-06-ANALYSIS.md`, 2026-08-16): pyright/biome gates ran on repos without the deps/hooks; ruff=FAIL is 0.16 migration fallout; "no tests ran" counted as FAIL | Update sweep to declared-gate criteria + re-run; ruff 0.16 migration pass (≤5 repos/batch); assfix only the genuine failures |
 | **"Planned" webapps / reserved frontends** | Port registry rows marked "planned", "not yet built" | Only build the ones SFB actually calls; the rest stay dormant — do not gold-plate |
 | **Runt webapps** (catch-them-all gate) | Repos shipping < 7 real pages | fakefind audit + fill only where SFB routes through it |
 
@@ -353,14 +356,22 @@ Honest boundary: a user *could* wire Grok's API to local MCP servers manually �
 
 | Location | Content |
 |---|---|
-| `../fritz-coworker/` | Coworker pilot — 9 flows, current gaps |
-| `../../standards/VOICE_COMMAND_BUS.md` | Agent addressing scheme |
-| `../../operations/planning/specs/P4-comms-mcp.md` | comms-mcp PRD (WhatsApp/Telegram/Signal/Slack) |
-| `../fleet-agent-mcp.md` | Fritz canonical page |
-| *(fleet-internal)* `architecture/ORCHESTRATION_HIERARCHY.md` | Hub/Fritz/domain layering rules — mcp-central-docs, private |
-| *(fleet-internal)* `architecture/FLEET_DEEP_ANALYSIS_2026-07-13.md` | fritz_surveil spec §1 — mcp-central-docs, private |
-| *(fleet-internal)* `status/FLEET_MONITORING_STATUS.md` | Liveness baseline (re-verify in P7) — mcp-central-docs, private |
-| *(fleet-internal)* `audits/gate-sweep-2026-08-06.csv` + `logs/tauri-pitfalls-scan.csv` | Crunchy-repo evidence — mcp-central-docs, private |
+| `projects/fritz-coworker/` | Coworker pilot — 9 flows, current gaps |
+| `architecture/ORCHESTRATION_HIERARCHY.md` | Hub/Fritz/domain layering rules |
+| `architecture/FLEET_DEEP_ANALYSIS_2026-07-13.md` | fritz_surveil spec §1 |
+| `standards/VOICE_COMMAND_BUS.md` + `config/voice_command_bus.yaml` | Agent addressing scheme |
+| `operations/planning/specs/P4-comms-mcp.md` | comms-mcp PRD (WhatsApp/Telegram/Signal/Slack) |
+| `status/FLEET_MONITORING_STATUS.md` | Liveness baseline (re-verify in P7) |
+| `audits/gate-sweep-2026-08-06.csv` + `logs/tauri-pitfalls-scan.csv` | Crunchy-repo evidence |
+| `projects/fleet-agent-mcp.md` | Fritz canonical page |
 
 *Tags: #sandrafleetbot #grokbot #zeropay #agent #orchestration #spec*
+
+
+
+
+
+
+
+
 

@@ -2,7 +2,7 @@
 
 General-purpose LibreOffice automation for agents and humans — headless **Writer, Calc, and Impress** conversion, ODT template merge, PDF combine, folder watch, **live Writer typewriter**, and optional extension MCP.
 
-**Version 0.3.0** · [INSTALL.md](INSTALL.md) · [docs/FEATURES.md](docs/FEATURES.md) · [docs/LIVE_WRITER.md](docs/LIVE_WRITER.md) · [docs/EXTENSION_CALC_BRIDGE.md](docs/EXTENSION_CALC_BRIDGE.md) · [docs/COMPARISON-OTHER-LO-MCP.md](docs/COMPARISON-OTHER-LO-MCP.md)
+**Version 0.3.0** · [INSTALL.md](INSTALL.md) · [docs/LIVE_STUDIO_PLAN.md](docs/LIVE_STUDIO_PLAN.md) · [docs/FEATURES.md](docs/FEATURES.md) · [docs/LIVE_WRITER.md](docs/LIVE_WRITER.md) · [docs/EXTENSION_CALC_BRIDGE.md](docs/EXTENSION_CALC_BRIDGE.md) · [docs/COMPARISON-OTHER-LO-MCP.md](docs/COMPARISON-OTHER-LO-MCP.md)
 
 ## How it runs
 
@@ -76,4 +76,18 @@ Open **http://127.0.0.1:10983**. For **live write**: see [docs/LIVE_WRITER.md](d
 
 ## Repo bar
 
-`justfile` · pytest · Biome · Playwright e2e · MCPB · Tauri native · `.env.example`
+`justfile` · pytest (63 tests, coverage floor 45%) · pyright clean · Biome · Playwright e2e · MCPB · Tauri native · `.env.example`
+
+## Stack
+
+Backend: Python 3.12, FastMCP 3.x, FastAPI, uvicorn. Frontend: React 18, Vite 5,
+TailwindCSS 3, Lucide, Framer Motion, Zustand. Desktop: Tauri 2 + NSIS.
+
+## Assfix 2026-10-04
+
+Score 0/100 (runt, checklist-literal) — fixed: shutdown/diagnostics/llm REST routes,
+CI workflow, session-injection channels, ONBOARDING.md, tool annotations + docstrings,
+16 pyright errors (incl. PrefabApp runtime bug), ruff S110/T20, justfile joins,
+`.gitignore`/`.mcpbignore`, glama tools. Deferred: skill rebuild
+(`skillbuild libreoffice-mcp`), Inbox page decision, font-contrast sweep, dialogic
+`message` keys. Report: `docs/assess-reports/2026-10-04.md` in-repo.

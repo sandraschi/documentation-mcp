@@ -1,6 +1,6 @@
 # Discord Fleet Bot
 
-A long-running Discord bot that auto-answers questions about fleet repos in the fleet Discord server. Runs locally on Goliath — no cloud, no per-seat cost.
+A long-running Discord bot that auto-answers questions about fleet repos in the fleet Discord server. Runs locally on Goliath -- no cloud, no per-seat cost.
 
 ---
 
@@ -52,10 +52,10 @@ Fritz is the natural scheduler and orchestrator:
 | **Post release summary** | On `ghaudit` or tag push | Posts release notes from latest GitHub release to #announcements |
 | **Weekly fleet pulse** | Every Monday 09:00 | Runs `mcp pulse`, posts alive/dead server table to #general |
 | **Stale issue reminder** | Daily | Checks for issues >30d with no activity, posts to #bug-reports |
-| **New repo alert** | On `assfix` run completion | Posts "libreoffice-mcp just got its first assfix pass — score 72/100" to #general |
+| **New repo alert** | On `assfix` run completion | Posts "libreoffice-mcp just got its first assfix pass -- score 72/100" to #general |
 | **Support RAG warm-up** | Every 4 hours | Pre-indexes `llms-full.txt` for all repos into LanceDB for fast Q&A |
 
-The bot process itself is outside Fritz — Fritz triggers events, the bot picks them up and posts. They're decoupled: if the bot is down, Fritz still runs; if Fritz is down, the bot still answers questions.
+The bot process itself is outside Fritz -- Fritz triggers events, the bot picks them up and posts. They're decoupled: if the bot is down, Fritz still runs; if Fritz is down, the bot still answers questions.
 
 ## Implementation sketch
 
@@ -110,7 +110,7 @@ action: |
 
 ## Intel Reports Hub integration
 
-Every event — even silence — should publish a lightweight report to the **Intel Reports Hub** at `http://127.0.0.1:11027/`. This is the pinned tab; it should show everything at a glance.
+Every event -- even silence -- should publish a lightweight report to the **Intel Reports Hub** at `http://127.0.0.1:11027/`. This is the pinned tab; it should show everything at a glance.
 
 | Trigger | Report content | Frequency |
 |---------|---------------|-----------|
@@ -142,9 +142,31 @@ async def publish_to_hub(self, title: str, body_html: str):
 | **Where does the bot run?** | Goliath PM2 service or Windows Scheduled Task |
 | **Single channel or all?** | Start with #support only, expand based on usage |
 | **How does the bot find the right repo's docs?** | Option A: User mentions repo name in question. Option B: Bot asks "which repo?" Option C: Scans all `llms-full.txt` and picks best match |
-| **Do we need a new MCP server (fleet-docs-mcp) or extend discord-mcp?** | Extending discord-mcp with an `ask_docs` tool is cleaner — one server to manage |
-| **Rate limiting?** | Discord allows 30 msg/min per bot — fine for a small server |
-| **Auth — who can trigger tool calls?** | Only in #support and #general; ignore DMs |
+| **Do we need a new MCP server (fleet-docs-mcp) or extend discord-mcp?** | Extending discord-mcp with an `ask_docs` tool is cleaner -- one server to manage |
+| **Rate limiting?** | Discord allows 30 msg/min per bot -- fine for a small server |
+| **Auth -- who can trigger tool calls?** | Only in #support and #general; ignore DMs |
+
+## Integration with fleet-public-relations-mcp (Low-Profile Community Outreach)
+
+Connecting `discord-mcp` with `fleet-public-relations-mcp` establishes a disciplined, humble community outreach pipeline:
+
+1. **Inbound Signal Ingestion**:
+   - `discord-mcp` message watcher detects inbound developer questions in targeted community channels (Mixxx, Blender, KiCad, ROS/Robotics, Cursor, Antigravity).
+   - Posts webhook to `fleet-public-relations-mcp` for technical evaluation.
+
+2. **Competency Scoring & Incident Escalation**:
+   - `fleet-public-relations-mcp` scores inbound queries via local Ollama (`qwen3:14b`).
+   - High-competency bug reports or deep technical questions automatically alert maintainers via `admiral-mcp`.
+
+3. **Value-First Pointers (Hype-Free)**:
+   - PR drafting tools formulate factual, short pointers strictly adhering to `FLEET_PROMOTION.md`.
+   - `pr_tone_lint` ensures zero marketing buzzwords ("game-changer", "revolutionary", "10x") and zero AI self-promotion.
+
+4. **Human-Gated Handoff**:
+   - Drafts must be human-approved (`pr_approve_draft`).
+   - Once approved, `pr_discord_handoff` routes the reply back through `discord-mcp` to the exact thread or channel.
+
+See also: [FLEET_PROMOTION.md](../standards/FLEET_PROMOTION.md) and [FLEET_CROSSCONNECT_STANDARD.md](../standards/FLEET_CROSSCONNECT_STANDARD.md).
 
 ## Next steps
 
@@ -153,3 +175,4 @@ async def publish_to_hub(self, title: str, body_html: str):
 3. Register it as a Windows service or PM2 process
 4. Create Fritz coworker flow for weekly pulse
 5. Start with one channel (#support), observe, expand
+

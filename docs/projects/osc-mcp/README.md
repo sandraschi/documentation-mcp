@@ -9,6 +9,7 @@ Natural language control of audio/visual applications (Ableton Live, TouchDesign
   <img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT">
   <img src="https://img.shields.io/badge/status-production-brightgreen?style=flat-square" alt="Status">
+  <img src="https://img.shields.io/badge/zustand-5.0-orange?style=flat-square" alt="Zustand">
 </p>
 
 ## Features
@@ -43,6 +44,12 @@ See [INSTALL.md](INSTALL.md) for manual setup and Claude Desktop configuration.
 "Synthesize a 440 Hz sine wave in SuperCollider"
 ```
 
+## VCV Rack & Community Patches
+
+- **Preset Depot** (`patches/`) — ready-to-load `.vcv` files, generated from real module port schemas (no guessed indices) - from a minimal 3-module FM bell up to a 19-module fully self-playing generative patch. Open any of them in VCV Rack via **File > Open**. See `patches/README.md`.
+- **VCV Module Library** (dashboard page `/vcv-library`) — browse the official VCV Rack module marketplace (`library.vcvrack.com`), 4,468 modules across 345 brands, with search/brand/license filters.
+- **Community Patches** (dashboard page `/community-patches`) — browse user-submitted patches across all 92 platforms Patchstorage.com hosts (VCV Rack, SuperCollider, Max for Live, TouchOSC, Bitwig, and more), sortable by likes/downloads/views, default-scoped to VCV Rack.
+
 ## How It Runs
 
 | Mode | Host App | When |
@@ -52,22 +59,45 @@ See [INSTALL.md](INSTALL.md) for manual setup and Claude Desktop configuration.
 
 ## Tools
 
+47 tools, verified against `server.list_tools()` (see `tests/test_tool_registration.py`):
+
 | Category | Tools |
 |----------|-------|
-| **Core OSC** | `send_osc`, `start_osc_server`, `stop_osc_server`, `get_received_messages`, `get_latest_message`, `get_osc_server_stats`, `clear_osc_message_buffer`, `test_osc_echo` |
+| **Core OSC** | `send_osc`, `send_osc_message`, `start_osc_server`, `start_osc_listener`, `stop_osc_server`, `get_received_messages`, `get_latest_message`, `get_osc_server_stats`, `clear_osc_message_buffer`, `test_osc_echo`, `scan_subnet_osc` |
 | **Discovery** | `oscquery_list_services`, `oscquery_get_parameters` |
-| **MIDI Bridge** | `get_midi_ports`, `start_midi_bridge`, `add_midi_mapping` |
-| **Reactive** | `register_reactive_trigger` |
-| **Managers** | `ableton_manager`, `vcv_manager`, `touchdesigner_manager`, `vrchat_manager`, `supercollider_manager`, `maxmsp_manager`, `resolume_manager`, `puredata_manager`, `audio_workflow_manager`, `osc_recorder_manager`, `music_orchestrator` |
-| **Workflows** | `list_arazzo_workflows`, `execute_osc_workflow`, `generate_osc_workflow` |
+| **MIDI Bridge** | `get_midi_ports`, `start_midi_bridge`, `stop_midi_bridge`, `add_midi_mapping`, `get_midi_mappings` |
+| **Reactive** | `register_reactive_trigger`, `get_reactive_triggers`, `remove_reactive_trigger` |
+| **Managers** | `ableton_manager`, `vcv_manager`, `touchdesigner_manager`, `vrchat_manager`, `supercollider_manager`, `maxmsp_manager`, `resolume_manager`, `puredata_manager`, `audio_workflow_manager`, `osc_recorder_manager`, `music_orchestrator`, `music_loader_manager`, `obs_manager`, `qlab_manager`, `set_vrchat_expression`, `trigger_vrchat_haptic_lfo` |
+| **Workflows** | `list_arazzo_workflows`, `execute_osc_workflow`, `generate_osc_workflow`, `save_workflow_descriptor` |
+| **Dashboard cards** | `show_active_mappings`, `show_discovered_devices`, `show_recent_messages`, `show_available_workflows`, `show_control_faders`, `show_osc_oscilloscope` |
+
+`send_osc`/`send_osc_message` and `start_osc_server`/`start_osc_listener` are two independent
+implementations (older + newer code paths, both wired) rather than aliases — pick one per
+workflow rather than mixing them for the same port/session.
+
+## Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Framework** | FastMCP 3.4 / FastAPI |
+| **Runtime** | Python 3.12+ (uv) |
+| **Frontend** | React 19, Vite 7, TypeScript 5.9 |
+| **Styling** | Tailwind CSS 3.4, Radix UI, Lucide Icons |
+| **State** | Zustand 5, TanStack React Query |
+| **Desktop** | Tauri 2.0 (NSIS installer) |
+| **Build** | PyInstaller, setuptools, MCPB |
 
 ## Dashboard
 
 SOTA web interface at `http://localhost:10766` — real-time OSC monitoring, application-specific controllers, integrated chat for natural language command orchestration.
 
+**Keyboard shortcuts:** Ctrl+L → Logs, Ctrl+H → Help, Ctrl+K → Tools, Ctrl+Scroll → Zoom
+
 ## Links
 
 - [Installation Guide](INSTALL.md) — all install methods
+- [Onboarding Guide](docs/ONBOARDING.md) — per-app install/OSC-setup steps, costs, and pitfalls for all 9+ wrapped apps
+- [OSCelot Mapping Guide](docs/OSCELOT_MAPPING_GUIDE.md) — VCV Rack has no native OSC; OSCelot is the bridge module `vcv_manager`'s addressing assumes
 - [Arazzo Workflows](docs/ARAZZO_WORKFLOWS_GUIDE.md) — multi-step mission descriptors
 - [OBS Studio Guide](docs/OBS_PLUGINS_GUIDE.md) — C++ plugins, SLOBS history, VTubers, and built-in bridge setup
 - [Tool Analysis](docs/APPLICATION_TOOLS_ANALYSIS.md) — comprehensive tool reference
@@ -82,4 +112,3 @@ To control OBS Studio over OSC without installing native C++ plugins, you can ru
 # Starts the OSC UDP receiver on port 7000 and connects to OBS WebSocket on port 4455
 .\scripts\start-obs-bridge.ps1 -ObsPassword "your_obs_websocket_password"
 ```
-

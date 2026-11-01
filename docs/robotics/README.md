@@ -14,8 +14,18 @@ The folders in this repository are now categorized as follows:
 | Directory | Status | Purpose |
 | :--- | :--- | :--- |
 | **`docs/agentic chats/`** | **ACTIVE** | Archive of architectural and philosophical AI/LLM sessions. |
-| **`research/`** | **ACTIVE** | Ongoing philosophical and market research (Embodied AI, Ethics). |
+| **`research/`** | **ACTIVE** | Research and third-party adoption assessments (Embodied AI, Ethics, VLA, skill discovery). |
+| **`hardware/`** | **ACTIVE** | Fleet notes on sourcing (e.g. [Shenzhen humanoid actuators](./hardware/SHENZHEN_HUMANOID_ACTUATORS.md)). |
 | **`_archive/`** | **ARCHIVED** | Legacy Dec 2025/Early 2026 content (Moorebot Scout, ROS 1.4, old VROBs). |
+
+### Adoption assessments (research/)
+
+Adopt-or-borrow calls on third-party robotics work. Each ends with a recommendation and a reopen trigger, so a later session does not re-litigate it from memory.
+
+| Date | Doc | Verdict |
+| :--- | :--- | :--- |
+| 2026-09-09 | [RoboSPA VLA benchmark](./research/2026-09-09_robospa-vla-assessment.md) | Borrow the taxonomy and eval interface; do not run the pi0.5 pipeline on one 4090 |
+| 2026-10-21 | [ASPIRE skill discovery](./research/2026-10-21_aspire-skill-discovery-probe.md) | Borrow the contract layer and task-recipe format; add 3 primitives to `mujoco-mcp`; no new repo yet |
 
 ## 🕹️ Fleet Control Centers
 For real-time control and dashboarding, refer to the individual MCP project hubs:
@@ -23,5 +33,5 @@ For real-time control and dashboarding, refer to the individual MCP project hubs
 - **[bumi-mcp](file:///D:/Dev/repos/bumi-mcp)**: Home of the Noetix Android (T80).
 
 ---
-*Last Updated: 2026-04-13*
+*Last Updated: 2026-10-21*
 *Status: Synchronized with SOTA v16.16*

@@ -317,5 +317,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Status:** Beta - Ready for live VJ performances  
 **MCP Version:** FastMCP 3.1.0+  
-**Maintained by:** Sandra Schipal  
+**Maintained by:** Sandra S.  
 **Last Updated:** 2025-12-24

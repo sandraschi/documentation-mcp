@@ -39,7 +39,7 @@ MsgBox(result)
 | autohotkey-mcp | 10746 | `/mcp` | list_scriptlets, run_scriptlet, stop_scriptlet, generate_scriptlet, help |
 | arxiv-mcp | 10770 | `/mcp` | search_papers, get_paper_details, fetch_full_text, run_codehunt_scan |
 | leanforge-mcp | 10855 | `/mcp` | submit_theorem, get_proof_status, validate_lean, list_jobs |
-| games-mcp | 10987 | `/mcp` | chess analysis, tool listing, system status |
+| ai-games-collection-mcp | 10987 | `/mcp` | chess analysis, tool listing, system status |
 | aiwatcher-mcp | 64800 | stdio only | No HTTP — use claude desktop only |
 | filesystem-mcp | — | stdio only | No HTTP |
 | pywinauto-mcp | — | stdio only | No HTTP |

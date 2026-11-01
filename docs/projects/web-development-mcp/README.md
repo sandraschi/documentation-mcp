@@ -69,7 +69,7 @@ Add to your `claude_desktop_config.json`:
 
 ```powershell
 # Find system Python path (check Cursor error logs if needed)
-# Example: C:\Users\sandr\AppData\Local\Programs\Python\Python310\python.exe
+# Example: C:\Users\<user>\AppData\Local\Programs\Python\Python310\python.exe
 python -m uv pip install -r requirements.txt
 python -m uv pip install -e .
 ```

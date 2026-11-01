@@ -1,7 +1,9 @@
 # Boomy Commander (Raspbot)
 
-**Model:** **Free** core + one-time IAP (~$4.99 each) for **Mission Builder** and **Swarm Organizer**  
-**Hardware:** [Yahboom Raspbot v2](https://github.com/sandraschi/yahboom-mcp) (~$300 kit + Pi 5)  
+**Model:** **Free** core + one-time IAP (~$4.99 each) for **Mission Builder** and **Swarm Organizer**
+**Hardware:** [Yahboom Raspbot v2](https://github.com/sandraschi/yahboom-mcp) (~$300 kit + Pi 5)
+**Repo:** [boomy-commander](https://github.com/sandraschi/boomy-commander) (**private**, scaffold exists — mirror apple-test layout)
+**Target:** Xcode 27.2, iOS 27 SDK
 **Gap vs Yahboom app:** Official app is **manual drive** — joystick, basic telemetry. No natural-language missions, no agent loop, no multi-bot choreography.
 
 ## Product
@@ -19,9 +21,9 @@ iPhone/iPad **command deck** for your Raspbot ("Boomy"):
 
 Spectacle hook: **two bots dancing a minuet** while user plays Couperin on speakers — motion timed in `minuet_couperin.json`, no bundled recording.
 
-## Repo (scaffold)
+## Repo (scaffold exists)
 
-Local: [sandraschi/boomy-commander](https://github.com/sandraschi/boomy-commander) (**private**) — mirror [apple-test](https://github.com/sandraschi/apple-test) layout.
+[boomy-commander](https://github.com/sandraschi/boomy-commander) (**private**) — mirror [apple-test](https://github.com/sandraschi/apple-test) layout.
 
 | Doc | Purpose |
 |-----|---------|
@@ -33,9 +35,9 @@ Local: [sandraschi/boomy-commander](https://github.com/sandraschi/boomy-commande
 
 | Piece | Source |
 |-------|--------|
-| Agent missions API | [AGENT_MISSION_AND_MCP.md](../../docs/robotics/yahboom/AGENT_MISSION_AND_MCP.md) |
+| Agent missions API | [AGENT_MISSION_AND_MCP.md](../../../docs/robotics/yahboom/AGENT_MISSION_AND_MCP.md) |
 | Kaffeehaus preset | `yahboom-mcp` `missions.py` — waltz-adjacent demo on one bot |
-| MCP server | [yahboom-mcp README](../../projects/yahboom-mcp/README.md) — **10892/10893** |
+| MCP server | [yahboom-mcp README](../../../projects/yahboom-mcp/README.md) — **10892/10893** |
 
 **Network:** Tailscale or LAN to Goliath. Missions **fail clearly** if gateway unreachable.
 
@@ -71,4 +73,4 @@ No subscription in v1. Agent missions stay free — that is the wedge vs Yahboom
 - [Fleet Pulse](fleet-pulse.md) — health widgets later
 
 ---
-*Last updated: 2026-05-28*
+*Status: spec + private scaffold. Last updated: 2026-10-28 (ports re-verified: 10892/10893).*

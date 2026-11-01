@@ -1,197 +1,138 @@
 # Mixxxxx — Video-Enabled Mixxx Fork
 
-**Status**: Spec v0.1
-**Repository**: `https://github.com/sandraschi/mixxxxx`
-**Parent**: Mixxx 2.5.6 (tag `2.5.6`)
-**MCP companion**: `mixx-dj-mcp` (ports 11116/11117, OSC 11118/11119)
+> **Accuracy warning, 2026-07-26.** Several claims below are contradicted by the
+> code: hardware decode does not engage, `video_saturation` is never applied, the
+> Rekordbox exporter writes Engine Library not Pioneer pdb, the v0.4 export fix
+> passes wrong arguments and always fails, and crossfader video mixing cannot work
+> because the mixer is keyed on the FFmpeg stream index rather than the deck number.
+> See `docs/ASSESSMENT-20260726.md` and `docs/STATUS.md`. Rewriting this file is
+> TODO item 21.
 
-## Why a Fork
+**Status**: Active development (v0.4 — exporters wired, setAudioClock cleanup)
+**Base**: Mixxx 2.5.6
+**Version**: v0.4
 
-Mixxx upstream has explicitly declined video (complexity, maintenance surface, audio-only philosophy). Meanwhile FFmpeg is already in their dependency tree (`avcodec-60.dll`, `avutil-58.dll`, `swresample-4.dll` — shipped in every Windows installer). The GPU pipeline is Qt6 + OpenGL, already proven by the GL waveform/spinny widgets. The delta to add video playback is ~350 lines of C++ and a skin widget.
+## What It Is
 
-Video DJs are not a niche — Serato Video, VDJ, Traktor all ship it. "Audio-only" is a self-imposed limitation, not a technical boundary.
+Mixxxxx is a fork of Mixxx 2.5.6 that adds video playback alongside audio decks. Companion video files (same basename, .mp4/.mkv/.mov/.webm) are autoloaded when a track loads, decoded via bundled FFmpeg.
 
-## What This Is Not
+**Honest status**: The decode, render, compositing, and hardware decode pieces compile and run. What's NOT wired yet: A/V sync (video free-runs on its own timer, doesn't follow deck transport). Suitable for projection/video backdrop. Not suitable for scratch/loop/pitch-locked video.
 
-This is NOT a video mixer. No video effects, no transitions, no chroma key, no karaoke. **v1 is a video frame slapped on top of a playing deck**, synced to the audio engine. You get a second window (or in-deck widget) showing the video file that matches the loaded track. That's it. v2 adds crossfader-aware video blending.
+## What Actually Exists
 
-## File Manifest
+### Decode (src/video/videodecoder.h/.cpp)
 
-All new files, no existing file modified outside CMakeLists.txt:
+- FFmpeg decode thread per deck via avcodec_send_packet / avcodec_receive_frame
+- PTS tracking in `m_lastPts`
+- `setAudioClock()` method exists but is NEVER CALLED by the engine (the hard 20% is unwired)
+- Video runs on its own msleep timer paced to the file's frame rate
+- Loops back to position 0 on EOF — no awareness of deck transport
+- Hardware decode via D3D11VA or CUDA fallback in `initHardwareDecoder()` — inline, not a separate module
 
-```
-src/
-├── video/
-│   ├── videodecoder.h          # FFmpeg decoder wrapper
-│   ├── videodecoder.cpp        # avcodec_send_packet → avframe → QImage
-│   ├── videowidget.h           # QOpenGLWidget for rendering
-│   ├── videowidget.cpp         # paintGL with texture upload, play/pause/resize
-│   ├── videocontrolobject.h    # ControlObject definitions
-│   └── videocontrolobject.cpp  # /deck[N]/video_enabled, /deck[N]/video_fullscreen
-├── library/
-│   ├── video_dao.h             # (add 5 lines to track DAO for video mime types)
-│   └── video_dao.cpp           # (add 5 lines)
-└── skins/
-    └── video_skin.xml          # <VideoWidget> LateNight/Deere insertion
-```
+### Rendering (src/video/videowidget.h/.cpp)
 
-**Total**: 10 new files, ~350 lines of C++/Qt6.
+- QPainter-based rendering with aspect-ratio letterbox
+- Integrates as `<VideoWidget>` skin element in LateNight
+- Fullscreen window support for secondary monitor output
+- Per-deck brightness/contrast/saturation via ControlPotmeter COs
 
-## New Control Objects (COs)
+### Mixer (src/video/videomixer.h/.cpp)
 
-| Address | Range | Default | Description |
-|---------|-------|---------|-------------|
-| `/deck[N]/video_enabled` | 0/1 | 0 | Toggle video playback for deck |
-| `/deck[N]/video_fullscreen` | 0/1 | 0 | Pop video to separate fullscreen window |
-| `/deck[N]/video_position` | float | — | Current video position (read-only, normalized) |
-| `/mixer/video_crossfader` | 0/1 | 0 | Enable video crossfader blending (v2) |
+- Singleton composites frames from all active decks
+- Crossfader blending: blends Deck A→Deck B opacity following [Mixer],crossfader
+- VFX helpers static — callable from per-deck widgets
 
-These COs are immediately usable by `mixx-dj-mcp` via the same OSC protocol — no MCP server changes for basic control, just add `video_enable`, `video_fullscreen` ops to the existing `mixx_deck` portmanteau.
+### Thumbnails (src/video/videothumbnail.h/.cpp)
 
-## Decoder Architecture
+- FFmpeg keyframe extraction at 10% seek position
+- 500-entry LRU cache
+- `getThumbnail(path, w, h)` API
 
-```
-Mixxx engine loop → Track loaded → Check for companion video file
-    │ (same directory, same basename, .mp4/.mkv/.mov)
-    ▼
-videodecoder.cpp opens FFmpeg (avformat_open_input)
-    │
-    ├── Audio: NOT decoded here — engine handles it
-    └── Video: avcodec_send_packet → avframe → sws_scale → QImage → OpenGL texture
-         │
-         ▼
-videowidget.cpp paintGL → bind texture → draw quad → swap
-```
+### ControlObjects
 
-Video is decoded on a background thread and frame-synced to the engine's audio clock (`track_samples` / `track_samplerate` → `av_seek_frame` on mismatch). No attempt at A/V sync beyond this — FFmpeg's native timing is reliable enough for DJ use where millisecond precision isn't expected.
+| CO | Group | Range | Status |
+|----|-------|-------|--------|
+| `video_enabled` | `[Channel{N}]` | 0/1 | Working |
+| `video_fullscreen` | `[Channel{N}]` | 0/1 | Working |
+| `video_brightness` | `[Channel{N}]` | -1 to 1 | Working |
+| `video_contrast` | `[Channel{N}]` | 0 to 3 | Working |
+| `video_saturation` | `[Channel{N}]` | 0 to 3 | Working |
+| `video_crossfader` | `[Mixer]` | -1 to 1 | Working |
+| `phase` | `[Channel{N}]` | 0-360 | Sprint 1 |
+| `rekordbox_usb_path` | `[Export]` | string | Sprint 1 |
+| `export_crate` | `[Export]` | push button | Sprint 1 |
+| `export_rekordbox` | `[Channel{N}]` | push button | Sprint 1 |
 
-**Companion video file discovery**: When a track is loaded, look for `{track_basename}.mp4`, `.mkv`, `.mov` in the same directory. If found, autoload. This mirrors the Serato Video `.svd` convention without requiring a database change.
+### Known Gaps
 
-## CMake Changes
+| Gap | Impact | Effort to Fix |
+|-----|--------|---------------|
+| ~~**A/V sync unwired** — `setAudioClock()` never called~~ | ~~Scratch/loop/pitch-bend breaks video sync~~ | ✅ **Wired Sprint 3** — VideoSyncControl + 3-tier drift management |
+| ~~**Exporters unwired** — trigger COs had no effect~~ | ~~Pressing export did nothing~~ | ✅ **Fixed v0.4** — ExportController connects all 7 COs to exporters |
+| **No stem separation** | Can't isolate vocals/drums/bass from video tracks | Medium — ONNX Runtime integration, ~400 lines C++ |
+| **No clip extraction** | Can't extract segments from longer videos | Easy — shell out to FFmpeg |
+| **No library thumbnails** | Video files show blank cover art in Mixxx library | Easy — wire VideoThumbnail into existing CoverArt DAO |
 
-In the existing `CMakeLists.txt`:
+## Sprint 1 (Shipped)
 
-```cmake
-# Add to existing find_package for FFmpeg (already present for audio codecs)
-find_package(PkgConfig)
-pkg_check_modules(AVCODEC libavcodec>=60)
-pkg_check_modules(AVFORMAT libavformat)
-pkg_check_modules(SWSCALE libswscale)
+### Phase Indicator
 
-# Add to mixxx-lib target
-target_sources(mixxx-lib PRIVATE
-    src/video/videodecoder.cpp
-    src/video/videowidget.cpp
-    src/video/videocontrolobject.cpp
-)
-target_link_libraries(mixxx-lib PRIVATE
-    ${AVCODEC_LIBRARIES}
-    ${AVFORMAT_LIBRARIES}
-    ${SWSCALE_LIBRARIES}
-)
-```
+Reads `[Channel{N}],beat_distance` (0-1) via `PhaseControl::process()` on each engine callback,
+converts to degrees, writes `[Channel{N}],phase` (0-360). `WPhaseIndicator` widget reads the CO
+at ~30fps via QTimer, renders a QPainter arc ring with color gradient:
 
-No new external dependencies. The FFmpeg DLLs are already shipped.
+- **0°** (aligned): green arc closed, full circle solid green
+- **<90°**: green→yellow arc
+- **90-180°**: orange arc, gap opening at 12 o'clock
+- **>180°**: red arc, pulsing alpha, gap > 50% of circle
 
-## Skin Integration
+Skin element: `<PhaseIndicator>` added to LateNight. Replaces the numeric beat-distance display
+with a visual ring.
 
-Add to LateNight or Deere skin XML:
+**Runtime cost**: single `beat_distance` read + multiply per engine callback; paint every 33ms
+(when visible). Negligible CPU.
 
-```xml
-<WidgetGroup>
-    <Size>200,150</Size>
-    <Children>
-        <VideoWidget>
-            <Name>Deck1Video</Name>
-            <Size>200,150</Size>
-            <VideoEnabledControl>/deck/1/video_enabled</VideoEnabledControl>
-        </VideoWidget>
-    </Children>
-</WidgetGroup>
-```
+### Rekordbox Export
 
-On first launch, a `<VideoWidget>` appears in the default skin showing "No video" text. When `/deck/1/video_enabled` toggles on, it opens the companion file and renders.
+`RekordboxExporter` class reads Mixxx SQLite library database, writes Pioneer .pdb files via
+libdjinterop for USB export. Supports two operations:
 
-## Fullscreen Window
+- `exportTrack(trackPath, usbPath)` — single track to Pioneer format
+- `exportCrate(crateName, usbPath)` — entire crate (all tracks in a Mixxx crate)
 
-When `/deck[N]/video_fullscreen` is set to 1, the videowidget detaches from the skin and opens a standalone `QWindow` with no chrome on the secondary monitor (detected via `QGuiApplication::screens()`). Closing the window resets the CO to 0. This is the primary use case for actual DJing — video on a projector, skin on the laptop.
+ControlObjects:
 
-## Build Pipeline
+| CO | Group | Range | Purpose |
+|----|-------|-------|---------|
+| `rekordbox_usb_path` | `[Export]` | string | Target USB path for Pioneer export |
+| `export_crate` | `[Export]` | push | Trigger export of the configured crate |
+| `export_rekordbox` | `[Channel{N}]` | push button (per-deck) | Trigger export of current deck's track |
+
+**Dependency**: libdjinterop must be linked at build time. Without it, export calls are
+no-ops logged at warning level.
+
+## Quick Build
 
 ```powershell
-# Same as upstream Mixxx Windows build:
-cd mixxxxx
-mkdir build && cd build
-cmake -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release ..
-cmake --build . --config Release
-cpack -G NSIS
-```
-
-Output: `Mixxxxx-2.5.6-video-win64.exe`
-
-The existing build.ps1 in `mixx-dj-mcp/native/` needs no changes — it builds the MCP server's backend, not Mixxx.
-
-## Installation
-
-1. Uninstall Mixxx (keep library database at `%LOCALAPPDATA%\Mixxx\mixxxdb.sqlite`)
-2. Install Mixxxxx — reads the same database path
-3. Enable OSC: Preferences → MIDI/OSC → port 11118/11119
-4. Start mixx-dj-mcp server
-5. Open webapp or connect AI assistant
-
-No migration needed. The fork uses the same database schema, same controller mappings, same skins (plus the new VideoWidget).
-
-## MCP Server Integration
-
-In `mixx-dj-mcp`, add to `mixx_deck` operations:
-
-| Operation | Params | OSC address |
-|-----------|--------|-------------|
-| `video_enable` | `deck`, `enable` | `/deck/{deck}/video_enabled` |
-| `video_fullscreen` | `deck`, `enable` | `/deck/{deck}/video_fullscreen` |
-
-That's two additions to `deck_control.py`'s `Literal` enum and two `if/elif` branches. OSC protocol is unchanged — the new COs are just new addresses the server sends to port 11119.
-
-## Build & Release
-
-```powershell
-# Create fork from tag
-cd D:\Dev\repos
-gh repo fork mixxxdj/mixxx --clone --fork-name mixxxxx
-cd mixxxxx
-git checkout 2.5.6
-git checkout -b video
-
-# Apply patch files
-copy D:\Dev\repos\mixx-dj-mcp\patches\mixxxxx\* src\video\
-# Apply CMake changes manually (~5 lines)
-
-# Build
+tools\windows_release_buildenv.bat
 cd build
-cmake -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release ..
-cmake --build . --config Release
-
-# Ship
-cpack -G NSIS
-# Upload to GitHub Releases
+cmake -DCMAKE_TOOLCHAIN_FILE="..\buildenv\mixxx-deps-2.5-x64-windows-release-40c29ff\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows-release -G Ninja ..
+ninja
 ```
 
-First release tag: `v2.5.6-video.1`
+## OSC Control (via mixx-dj-mcp)
 
-## Non-Goals (v1)
+| CO | OSC Address | mixx-dj-mcp tool |
+|----|-------------|------------------|
+| video_enabled | `/deck/{N}/video_enabled` | `mixx_deck(operation="video_enable")` |
+| video_fullscreen | `/deck/{N}/video_fullscreen` | `mixx_deck(operation="video_fullscreen")` |
+| phase | `/deck/{N}/phase` | `mixx_deck(operation="get_phase")` |
+| export_rekordbox | `/deck/{N}/export_rekordbox` | `mixx_deck(operation="export_rekordbox")` |
 
-- Video transitions / effects / chroma key
-- Video library browsing (use filesystem, mirror existing track)
-- Video recording
-- Streaming video input
-- MIDI mapping for video controls (COs suffice)
-- Video mixing (crossfader-aware blending is v2)
-- DRM / stream-ripped video content
+## Non-Goals
 
-## v2 Considerations
-
-- Crossfader-aware blending: route crossfader to video opacity on the widget
-- AlphaMask video transition (template from VDJ's video crossfader)
-- Deck 3-4 video support
-- Skins with embedded video thumbnails in library browser
-- Performance: hardware decode via `cuvid`/`dxva2` if available, fallback to swscale
+- Real-time AI stem separation during playback (pre-process before gig)
+- Video transitions/effects beyond crossfader blend
+- Video recording or streaming output
+- DRM'd video content
+- Replacing a dedicated video mixer hardware

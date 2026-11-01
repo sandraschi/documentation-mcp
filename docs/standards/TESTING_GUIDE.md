@@ -1,3 +1,13 @@
+---
+title: "Testing Guide for AI-Assisted Development (SOTA 2026)"
+category: guide
+status: review
+audience: mcp-dev
+last_updated: 2026-07-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Testing Guide for AI-Assisted Development (SOTA 2026)
 
 **Status:** Active

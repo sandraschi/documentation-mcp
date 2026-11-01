@@ -332,7 +332,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up
 
 ---
 
-## MyWienerLinien Specific Commands
+## PublicTransport Specific Commands
 
 ### Development Workflow
 ```powershell

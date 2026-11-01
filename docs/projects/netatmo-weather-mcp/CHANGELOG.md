@@ -1,13 +1,3 @@
-
-## [Unreleased] — 2026-06-14
-
-### Added
-- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
-- PyInstaller frozen backend embedded in NSIS installer
-- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
-- `just cua-nsis-test` recipe
-- Tauri CORS: `tauri://localhost` origins for WebView API access
-- `GET /api/v1/diagnostics` endpoint for CUA verification
 # Changelog
 
 All notable changes to the Netatmo Weather MCP Server will be documented in this file.
@@ -16,6 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+- `llms.txt`, `llms-full.txt`, `glama.json` — fleet documentation and discovery files
+- `PRD.md` — product requirements document
+- `@server.prompt()`: `weather_help`, `weather_forecast_guide` — contextual tool guidance
+- `@server.resource(netatmo://info)`: server info resource
+- `@server.tool(app=True) show_help_overview`: Prefab UI card with tool overview
+- `/api/v1/diagnostics` endpoint for CUA-NSIS verification
+- `.claude-plugin/` + `hooks/hooks.json`: session context injection
+
+### Changed
+- **Spec file**: Fleet-standard PyInstaller config (`noarchive=True`, `upx=False`, SKIP list, .dist-info preserve)
+- **Transport layer**: CORS per fleet standard (Tauri origins + Tailscale regex), `run_http_async` replaced with `uvicorn.Server`
+- **pyproject.toml**: Removed legacy black/isort/mypy config (ruff handles all)
+- **AGENTS.md**: Expanded with ports, key files, tool patterns
+- **MCD project page**: Concise rewrite with ports, architecture, tool table
+
+### Fixed
+- Undefined `NetatmoOAuth2` in netatmo_client.py (replaced with `AsyncAccount`)
+- Missing `import os` in test file, blind `pytest.raises(Exception)` (B017)
+- 207 ruff lint issues auto-fixed, 15 manual fixes (B904, F821, E402, E501)
 
 ### Added
 - **Industrial Startup Script**: Root `start.ps1` with `-Headless`, `-BackendOnly`, and `-NoBrowser` support.

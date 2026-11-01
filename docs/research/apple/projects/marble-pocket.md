@@ -1,7 +1,8 @@
 # Marble Pocket
 
-**Model:** Free + IAP environment packs  
-**Comps:** 3D wallpaper / “world viewer” apps
+**Model:** Free + IAP environment packs
+**Comps:** 3D wallpaper / "world viewer" apps
+**Target:** Xcode 27.2, iOS 27 SDK
 
 ## Product
 
@@ -12,7 +13,7 @@ Import and view **GLB environments** (World Labs Marble exports, blender-mcp han
 | Piece | Source |
 |-------|--------|
 | GLB assets | worldlabs-mcp, blender-mcp → `_exchange/` |
-| Pipeline doc | [godot-mcp FLEET_GAME_PIPELINE](../../projects/godot-mcp/FLEET_GAME_PIPELINE.md) (mesh path, not Godot runtime) |
+| Pipeline doc | [godot-mcp FLEET_GAME_PIPELINE](../../../projects/godot-mcp/FLEET_GAME_PIPELINE.md) (mesh path, not Godot runtime) |
 | Dark App Factory #19 | Marble env viewer |
 
 ## Monetization
@@ -37,3 +38,6 @@ Creative IAP mirrors VRMDance but **static 3D** — simpler than humanoid dance.
 ## Next step
 
 Prove GLB load + 60fps orbit on iPhone with one `_exchange` mesh before building store.
+
+---
+*Status: spec only, no repo. Last updated: 2026-10-28.*

@@ -68,7 +68,7 @@ Create a **single, centralized monitoring stack** that serves:
 - ✅ **Grafana**: Port 3140
 - ✅ **Loki**: Port 3100  
 - ✅ **Promtail**: Running
-- ✅ **Docker Network**: `mywienerlinien_loki-network`
+- ✅ **Docker Network**: `publictransport-mcp_loki-network`
 - ✅ **Applications**: 5+ applications with logging integration
 
 #### **VeoGen Platform**

@@ -46,12 +46,25 @@ Then ask Claude: *"Find unread sci-fi books"*, *"Open a random Banks novel"*, or
 
 calibre-mcp bridges your Calibre e-book library and AI assistants (Claude Desktop, Cursor, etc.) via the Model Context Protocol. It reads Calibre's `metadata.db` directly, indexes metadata for semantic search (LanceDB RAG), and exposes 21 portmanteau tools for natural-language library management.
 
+### Architecture & Dual WebApp Ecosystem
+
+In a modern production Calibre setup, two distinct webapps operate side by side:
+
+1. **Calibre Content Server (`http://goliath:8099/` or `http://localhost:8080/`)**:
+   - Built directly into Calibre core (`calibre.exe --start-in-tray`).
+   - Serves an asynchronous Python HTTP/1.1 daemon delivering a compiled RapydScript SPA (`index-generated.html`).
+   - Premier in-browser e-book reader (`viewer.js` with offline ServiceWorker caching, bookmarks, highlights) and OPDS catalog feeds for mobile readers.
+
+2. **CalibreMCP WebApp (`http://localhost:10721/`, backend `:10720`)**:
+   - Next.js 15 (React 19, TypeScript, Tailwind) + FastAPI backend running FastMCP 3.2.
+   - Conversational AI librarian, hybrid search (Reciprocal Rank Fusion combining FTS5 lexical ranking with LanceDB vector embeddings), automated health audits, duplicate candidate clustering, and smart dynamic shelves.
+
 ## Read more
 
 | Topic | Description |
 |-------|-------------|
 | [About Calibre](docs/ABOUT_CALIBRE.md) | What Calibre is, how it stores data, access methods |
-| [About Calibre Web](docs/ABOUT_CALIBRE_WEB.md) | calibre-web vs Calibre Content Server, running both together |
+| [About Calibre Web](docs/ABOUT_CALIBRE_WEB.md) | Calibre Content Server (modern SPA) vs calibre-web vs CalibreMCP |
 | [About Plugins](docs/ABOUT_PLUGINS.md) | CalibreMCP Integration plugin, calibreops-bridge, roadmap |
 | [About MCP Tools](docs/ABOUT_MCP_TOOLS.md) | 21 portmanteau tools, architecture, agentic flows |
 | [About AI Workflows](docs/ABOUT_AI_WORKFLOWS.md) | RAG, FTS, skills, prompts, sampling, agentic chaining |

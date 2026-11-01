@@ -39,7 +39,7 @@ $env:PDK_ROOT = (uv run volare path).Trim()
 4. Or skip EDA install if PDK is already there:
 
 ```powershell
-$env:PDK_ROOT = 'C:\Users\sandr\.volare'
+$env:PDK_ROOT = 'C:\Users\<user>\.volare'
 $env:SKIP_EDA_INSTALL = '1'
 .\start.bat
 ```

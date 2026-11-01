@@ -4,6 +4,14 @@ Unified stack: `mcp-central-docs/monitoring` — Grafana **12000**, Prometheus *
 
 ## 1. Metrics (Prometheus)
 
+> **Never hand-edit `prometheus/prometheus.yml` — it is generated.** It is rebuilt
+> from `prometheus.core.yml` + `prometheus.fleet.yml` (+ optional `fleet.local`)
+> by `scripts/merge-prometheus-config.ps1`, and any hand-added job is silently
+> dropped on the next merge (observed 2026-09-23: a hand-added `aiwatcher-mcp`
+> job vanished when the file was regenerated). Put fleet jobs in
+> `prometheus.fleet.yml`, machine-local experiments in the gitignored
+> `prometheus.fleet.local.yml` (see `prometheus.fleet.local.example.yml`).
+
 ### A. Expose `/metrics` (preferred)
 
 Add a Prometheus text endpoint on your backend port, then register in `prometheus/prometheus.fleet.yml`:

@@ -1,31 +1,31 @@
-
-## [Unreleased] — 2026-06-14
-
-### Fixed
-- Tauri build: resolved Rust crate conflict (brotli/alloc-no-stdlib)
-- Tauri build: fixed PyInstaller path mismatch (hyphen to underscore in src dirs)
-- Tauri build: fixed TypeScript errors (unused imports, useRef arg, import.meta.env)
-- Tauri CORS: allow_origins includes tauri://localhost for WebView access
-
-### Added
-- CUA-NSIS: just cua-nsis-test recipe, smoke script, config
-- CUA-NSIS: build.ps1 now copies NSIS installer to dist/
-- CUA-NSIS: 11-phase smoke test (install, launch, WebView OCR, diagnostics, uninstall)
-- CUA-NSIS: local certification — all 11 phases pass locally (2026-06-14)
-
 # Changelog
 
 All notable changes to **ittybitty** (`videogen-mcp`) are documented here.
 
-Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).  
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning tracks the Python package in `pyproject.toml`.
 
 ---
 
 ## [Unreleased]
 
+### Fixed
+
+- **Tauri build:** Rust brotli/alloc-no-stdlib conflict; PyInstaller path mismatch (hyphen → underscore in `src` dirs); TS unused imports / `useRef` / `import.meta.env`.
+- **Tauri CORS:** `allow_origins` includes `tauri://localhost` and `tauri.localhost` for desktop WebView.
+- **Native build:** `build.ps1` stages NSIS installer to `dist/` reliably.
+- **`/health` / status `tool_count`:** was stuck at 7; now reflects the full MCP catalog (16 when FastMCP is loaded).
+- **Whisper align:** CUDA → CPU fallback when `cublas64_12` (or GPU libs) are missing.
+- **Beat snap (`librosa` 0.11 / NumPy 2.4):** tempo ndarray handling in `snap_cut_durations`.
+- **Planner JSON:** tolerant parse for DeepSeek trailing commas in storyboard responses.
+- **Compose diagnostics:** ffmpeg failures under load dump stderr to `*.ffmpeg-error.log`.
+
 ### Added
 
+- **Pre-commit:** `.pre-commit-config.yaml` (Ruff + hygiene); `just bootstrap` installs git hooks.
+- **CI:** single Windows job on `main`/PRs/`v*` tags — pre-commit, pyright (non-blocking), pytest, webapp `tsc` + build.
+- **MCPB packaging:** `mcpb/` bundle layout, `.mcpbignore`, `scripts/mcpb-pack.ps1`, `just mcpb-pack` (`scripts/just/fleet.just`).
+- **CUA-NSIS smoke:** `scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`, `just cua-nsis-test` (11 phases; local cert 2026-06-14).
 - **Free stock beyond MPT:** `mixkit` and `nasa` providers — no API key; MPT parity on Pexels/Pixabay/Coverr plus two extra free sources.
 - Alpha release path: README badge + warning, marketing site banner, [docs/ALPHA-RELEASE-CHECKLIST.md](docs/ALPHA-RELEASE-CHECKLIST.md), GitHub Pages static site in `docs/` (`index.html`, `.nojekyll`).
 - R10 planning: [docs/PROMPT-DIRECTOR.md](docs/PROMPT-DIRECTOR.md) (mermaid), webapp **Prompt library** (`/prompts`) with sample topics + localStorage CRUD.
@@ -43,14 +43,6 @@ Versioning tracks the Python package in `pyproject.toml`.
 - **Rebrand:** product name **ittybitty** (was roughcutvideos); native binaries `ittybitty-native.exe` / `ittybitty-backend.exe`; Tauri identifier `ai.fleet.ittybitty`; GitHub repo `sandraschi/ittybitty`.
 - **MCP docs:** [docs/TOOLS.md](docs/TOOLS.md) lists all 16 tools; README points agents to `videogen_help` first.
 - Intro/credits MCP samples accept `intro:` / `credits:` prefixes and optional `seed`.
-
-### Fixed
-
-- **`/health` / status `tool_count`:** was stuck at 7; now reflects the full MCP catalog (16 when FastMCP is loaded).
-- **Whisper align:** CUDA → CPU fallback when `cublas64_12` (or GPU libs) are missing.
-- **Beat snap (`librosa` 0.11 / NumPy 2.4):** tempo ndarray handling in `snap_cut_durations`.
-- **Planner JSON:** tolerant parse for DeepSeek trailing commas in storyboard responses.
-- **Compose diagnostics:** ffmpeg failures under load dump stderr to `*.ffmpeg-error.log`.
 
 ### Known issues (live validation)
 
@@ -99,5 +91,3 @@ Versioning tracks the Python package in `pyproject.toml`.
 - FastMCP 3.2 + FastAPI backend on port **11054**; React/Vite webapp on **11055** (dev).
 - MCP tools: `videogen_generate`, `videogen_plan`, `videogen_plan_render`, `videogen_status`, `videogen_list_jobs`, `videogen_providers`.
 - Publish handoff API and SOTA dashboard (Generate, Jobs, Plan, Publish, Tools, Chat, Status).
-
-

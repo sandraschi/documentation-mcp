@@ -1,4 +1,4 @@
-# ⚡ Sandra Schipal
+# ⚡ Sandra S.
 
 > [!NOTE]
 > **These repositories are human-architected, AI-implemented.**
@@ -6,9 +6,9 @@
 
 ![Workshop](assets/sandraschi_header.png)
 
-<sub>*Sandra's workshop, Alsergrund, Vienna. Benny is real. The [Noetix Bumi](https://www.noetix.ai/) humanoid is aspirational (arriving soon).*</sub>
+<sub>*Sandra's workshop, Vienna, Vienna. Benny is real. The [Noetix Bumi](https://www.noetix.ai/) humanoid is aspirational (arriving soon).*</sub>
 
-I'm a retired and vibe-reactivated software engineer living in the 9th District (Alsergrund), Vienna. I build DIY robotics, maintain a fleet of 190+ MCP servers, and hang out with my German Shepherd Benny — and soon, a Noetix Bumi humanoid robot.
+I'm a retired and vibe-reactivated software engineer living in the 9th District (Vienna), Vienna. I build DIY robotics, maintain a fleet of 190+ MCP servers, and hang out with my German Shepherd Benny — and soon, a Noetix Bumi humanoid robot.
 
 ---
 
@@ -86,13 +86,13 @@ The AI handles the part that used to take a degree.
 
 GrokBot serves millions of users shallowly; sandrafleetbot serves one user deeply (or a dozen, on a single H200-class GPU). Same agent loop — sense → reason → act → remember — different economics: horizontal SaaS vs vertical sovereignty. The fleet's own glue does the rest: a private agent board + inbox (moltbot-style, self-hosted), news surge from the AIWatcher pipeline, arXiv codehunt as a second sense, and an RTX 4090 doing the thinking, the voice, and the image generation.
 
-**Status: spec ratified, buildout planned (P0→P7: brain tier → agent loop → board/inbox → senses → memory → surfaces → channels → hardening). No code shipped yet — this is the plan, in the open.** [Spec →](https://github.com/sandraschi/documentation-mcp/blob/main/docs/projects/sandrafleetbot/README.md)
+**Status: spec ratified, buildout in progress — P0 (brain tier) shipped 2026-08-14, P1 (Fritz reasoning loop) shipped 2026-08-15, P2 (comm bus + bulletin board), P3 (surge + fritz_surveil triage), P4 (memory hooks + skills + cron suggestions) and P5 (Board page + Fritz console + FLEET_TOKEN + voice loop) shipped 2026-08-15.** Muse Glimmer 30B runs on the RTX 4090 (chat, tool-calling, vision verified — zero cloud cost), and the fleet's agent runners default to it. Fritz now runs reasoning workflows end-to-end: flowforge `agent` steps spawn cline-mcp `agent_run` on muse-glimmer, results persist, hub discovery refreshes 69 servers. Plan: P0→P8 (agent loop → board/inbox → senses → memory → surfaces → channels → hardening → packs + naked-PC gate). [Spec →](https://github.com/sandraschi/documentation-mcp/blob/main/docs/projects/sandrafleetbot/README.md)
 
 ---
 
 ## 🐾 Benny
 
-**Benny** is a 2-year-old German Shepherd. Primary security consultant and tennis ball lifecycle manager at the Alsergrund node.
+**Benny** is a 2-year-old German Shepherd. Primary security consultant and tennis ball lifecycle manager at the Vienna node.
 
 ---
 

@@ -1,6 +1,6 @@
 # Fritz Coworker — Poor Man's Viktor
 
-> **Status: PILOT (v0.2.1-pre)** — 9 scheduled flows + 11 MCP tools; Intel Hub + home-safety watch shipped 2026-06-07.
+> **Status: PILOT (v0.2.2)** — 9 scheduled flows + 71 FastMCP tools; Hermes borrowings (anti-spin guard, SKILL.md importer, fallback cascade) shipped 2026-08-25.
 
 **Canonical agent:** [fleet-agent-mcp](../../fleet-agent-mcp.md) (**Fritz**, port **10996**)
 **Source repo:** `D:\Dev\repos\fleet-agent-mcp`

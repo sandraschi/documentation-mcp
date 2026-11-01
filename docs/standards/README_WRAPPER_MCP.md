@@ -1,6 +1,16 @@
+---
+title: "Wrapper MCP README Standard"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-09
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Wrapper MCP README Standard
 
-**Status**: ACTIVE — all MCP repos that wrap a host application  
+**Status**: ACTIVE - all MCP repos that wrap a host application  
 **Adopted**: 2026-05-29  
 **Audience**: Repo maintainers, agents editing READMEs, fleet grading  
 **Related**: [README_STRUCTURE.md](./README_STRUCTURE.md), [README_WEBAPP_SCREENSHOTS.md](./README_WEBAPP_SCREENSHOTS.md), [LLM_AND_INSTALL_TIERS.md](./LLM_AND_INSTALL_TIERS.md)
@@ -18,14 +28,14 @@ Applies to any MCP server whose **primary job is driving another program**:
 | DCC / animation | tahoma2d-mcp, vroidstudio-mcp, obs-mcp |
 | Media | handbrake-mcp, reaper-mcp |
 
-**Not wrapper repos:** pure API MCPs (github, filesystem, email) — they skip this doc except optional pipeline notes.
+**Not wrapper repos:** pure API MCPs (github, filesystem, email) - they skip this doc except optional pipeline notes.
 
 ---
 
 ## The two README jobs (wrapper repos)
 
-1. **Execution honesty** — Does the host app run headless, with GUI, or both? Never bury this.
-2. **Pipeline clarity** — What goes **in** (hands-in) and what comes **out** (hands-out) for agents and fleet chaining.
+1. **Execution honesty** - Does the host app run headless, with GUI, or both? Never bury this.
+2. **Pipeline clarity** - What goes **in** (hands-in) and what comes **out** (hands-out) for agents and fleet chaining.
 
 Screenshots show the **webapp**; this standard shows the **host-app contract**.
 
@@ -44,9 +54,9 @@ Place **immediately after** the one-line description (before Features or Preview
 |------|----------|------|
 | **Headless (default)** | Blender subprocess, no window | Batch export, CI, agents without display |
 | **Live GUI (optional)** | Blender + bridge addon | Watch the agent build; viewport screenshots |
-| **Not supported** | — | Sculpting that needs interactive tablet input |
+| **Not supported** | - | Sculpting that needs interactive tablet input |
 
-**You do not need to open Blender’s UI** for most MCP tools — the server spawns headless `blender --background` automatically.
+**You do not need to open Blender's UI** for most MCP tools - the server spawns headless `blender --background` automatically.
 
 Install [Blender](https://www.blender.org/download/) separately; it is never bundled.
 ```
@@ -56,7 +66,7 @@ Install [Blender](https://www.blender.org/download/) separately; it is never bun
 | Rule | Detail |
 |------|--------|
 | **Headless default must be explicit** | If the wrappee runs without GUI for the common path, say so in **bold plain language** in the first paragraph |
-| **GUI optional vs required** | Separate rows — never imply “no install” when host app is required |
+| **GUI optional vs required** | Separate rows - never imply “no install” when host app is required |
 | **Per-operation exceptions** | If *some* tools need GUI (e.g. tahoma2d scene authoring), list them |
 | **Hybrid lanes** | Split table by lane (kicad-mcp: stable CLI vs IPC vs TCP bridge) |
 | **No false “fully headless”** | If Docker/Linux headless differs from Windows GUI bridge, document both |
@@ -69,7 +79,7 @@ Install [Blender](https://www.blender.org/download/) separately; it is never bun
 | **kicad-mcp** | Exports/DRC: stable `kicad-cli` (no pcbnew window). CRUD: 11 nightly IPC headless **or** KiCad GUI + TCP bridge. |
 | **tahoma2d-mcp** | **Render**: headless `tcomposer.exe`. **Scene edit**: Tahoma2D GUI only (ToonzScript unavailable in this build). |
 | **gimp-mcp** | Inkscape/GIMP path: clarify which ops spawn GUI vs batch CLI |
-| **davinci-resolve-mcp** | Resolve often needs GUI/project open — if any headless path exists, label it experimental |
+| **davinci-resolve-mcp** | Resolve often needs GUI/project open - if any headless path exists, label it experimental |
 | **vroidstudio-mcp** | VRoid Studio GUI for authoring; MCP for launch/export/status |
 | **obs-mcp** | OBS must be running; webapp is control plane, not a replacement for OBS UI |
 
@@ -80,7 +90,7 @@ Install [Blender](https://www.blender.org/download/) separately; it is never bun
 **Hands-in** = what the agent (or upstream MCP) **feeds into** this wrappee.  
 **Hands-out** = what this wrappee **produces** for the user or downstream MCP.
 
-This is the fleet **pipeline vocabulary** — especially for blender-mcp and creative chains.
+This is the fleet **pipeline vocabulary** - especially for blender-mcp and creative chains.
 
 ### Template
 
@@ -143,7 +153,56 @@ Agent / uploads
 
 ---
 
+## Required doc: `docs/WRAPPEE.md`
+
+**Added 2026-07-30.** A dedicated page for the wrapped host application -
+separate from the README, since the README's "What this wraps" section
+should stay to a sentence or two.
+
+### Contents
+
+```markdown
+# {Host App Name}
+
+One paragraph: what it is, who makes/maintains it, license.
+
+## Disambiguation (when needed)
+
+If the name is easily confused with something else, say so plainly. Example:
+Overte split from the original Vircadia/High Fidelity codebase; current
+"Vircadia" has since pivoted to an unrelated product (Vircadia World -
+Postgres/Bun/TypeScript) that shares no protocol or client with Overte.
+This repo targets Overte, not current Vircadia.
+
+## Links
+
+- Official site: …
+- Source / GitHub: …
+- Documentation: …
+- Community: Discord / Matrix / Reddit / Mastodon - whatever actually exists,
+  don't pad with a channel that doesn't
+```
+
+### Why this matters most for obscure wrappees
+
+A well-known host app (Blender, KiCad) barely needs this - everyone already
+knows what it is. An obscure, older, or ambiguously-renamed one (Overte,
+Resonite, various niche DCC tools) is exactly where a reader lands confused
+("wait, isn't this Vircadia?") without ever finding the disambiguation. This
+doc is the fix: one clear, honest, linkable place for "what is the thing
+we're wrapping," independent of how well-known it happens to be.
+
+Don't fabricate links or community channels - if there's no Reddit or
+Discord, say so or omit the row rather than inventing one.
+
+---
+
 ## Combined README order (wrapper + webapp)
+
+**Update (2026-07-30)**: "How it runs" and "Hands-in / Hands-out" now nest
+under one `## What You Can Do` heading instead of being separate top-level
+sections - see [README_STRUCTURE.md](./README_STRUCTURE.md) for the current
+template. The content and rules below are unchanged, just the heading level.
 
 For wrapper repos with a dashboard, use this section order:
 
@@ -151,16 +210,13 @@ For wrapper repos with a dashboard, use this section order:
 # repo-name
 One sentence.
 
-## How it runs          ← REQUIRED (this doc)
+## What this wraps  ← REQUIRED - name the wrappee immediately, link docs/WRAPPEE.md
 …
 
 ## Preview              ← REQUIRED if webapp ([screenshots standard](./README_WEBAPP_SCREENSHOTS.md))
 …
 
-## Hands-in / Hands-out ← REQUIRED (this doc)
-…
-
-## Features
+## What You Can Do      ← REQUIRED (this doc) - How it runs + Hands-in/Hands-out + feature bullets
 …
 
 ## Quick Install
@@ -174,17 +230,17 @@ One sentence.
 Use a visible callout when headless is the main selling point:
 
 ```markdown
-> **Headless by default** — KiCad’s pcbnew window does not need to be open for exports,
+> **Headless by default** - KiCad's pcbnew window does not need to be open for exports,
 > DRC, or Gerber generation. PCB editing uses either headless IPC (KiCad 11 nightly)
-> or the legacy GUI bridge — see [NIGHTLY_HEADLESS.md](docs/NIGHTLY_HEADLESS.md).
+> or the legacy GUI bridge - see [NIGHTLY_HEADLESS.md](docs/NIGHTLY_HEADLESS.md).
 ```
 
 ```markdown
-> **Watch or batch** — Most tools run headless Blender. Enable the bridge addon only
+> **Watch or batch** - Most tools run headless Blender. Enable the bridge addon only
 > if you want to see the viewport update live while the agent works.
 ```
 
-Avoid burying headless facts only in INSTALL.md or ARCHITECTURE.md — **README is the evaluation surface**.
+Avoid burying headless facts only in INSTALL.md or ARCHITECTURE.md - **README is the evaluation surface**.
 
 ---
 
@@ -227,12 +283,13 @@ Each `projects/{repo}/README.md` for wrapper MCPs must include:
 
 ## Checklist (wrapper repos)
 
-- [ ] README **How it runs** table — headless default stated in prose
-- [ ] README **Hands-in / Hands-out** table — extensions + downstream links
+- [ ] README **What this wraps** - names the wrappee immediately, links `docs/WRAPPEE.md`
+- [ ] `docs/WRAPPEE.md` - host app overview, disambiguation if the name is confusable, community/official links (no fabricated links)
+- [ ] README **What You Can Do** - headless/GUI honesty + hands-in/hands-out table + capability bullets, in one section
 - [ ] Headless callout if default path needs no host GUI
 - [ ] INSTALL.md consistent with execution table
 - [ ] `llms.txt` execution + artifacts block
-- [ ] Preview screenshots (webapp repos) — [README_WEBAPP_SCREENSHOTS.md](./README_WEBAPP_SCREENSHOTS.md)
+- [ ] Preview screenshots (webapp repos) - [README_WEBAPP_SCREENSHOTS.md](./README_WEBAPP_SCREENSHOTS.md)
 - [ ] Fleet project page updated
 
 ---
@@ -251,10 +308,10 @@ Each `projects/{repo}/README.md` for wrapper MCPs must include:
 
 ## Rollout priority
 
-1. **blender-mcp** — reference implementation (dual mode + fleet pipelines)
-2. **kicad-mcp** — hybrid headless lanes
+1. **blender-mcp** - reference implementation (dual mode + fleet pipelines)
+2. **kicad-mcp** - hybrid headless lanes
 3. **tahoma2d-mcp**, **gimp-mcp**, **davinci-resolve-mcp**
-4. Remaining wrapper fleet from [SOTA_MASTER_INVENTORY.md](../operations/SOTA_MASTER_INVENTORY.md)
+4. Remaining wrapper fleet from [WEBAPP_PORTS.md](../operations/WEBAPP_PORTS.md)
 
 Track in per-repo STATUS.md and fleet grading notes.
 
@@ -262,10 +319,11 @@ Track in per-repo STATUS.md and fleet grading notes.
 
 ## See also
 
-- [README_WEBAPP_SCREENSHOTS.md](./README_WEBAPP_SCREENSHOTS.md) — Preview images
-- [README_STRUCTURE.md](./README_STRUCTURE.md) — Primary README skeleton
-- [CONTROL_PLANE_INSTALL.md](./CONTROL_PLANE_INSTALL.md) — RoboFang **hands** vs control plane
-- [operations/FLEET_CONTROL_PLANE.md](../operations/FLEET_CONTROL_PLANE.md) — `hands/` clones
-- [FLEET_PROMOTION.md](./FLEET_PROMOTION.md) — discovery without spam (pairs with screenshots + wrapper honesty)
-- blender-mcp: [docs/COMPETITIVE_ANALYSIS.md](https://github.com/sandraschi/blender-mcp/blob/main/docs/COMPETITIVE_ANALYSIS.md) — Live GUI vs headless
+- [README_WEBAPP_SCREENSHOTS.md](./README_WEBAPP_SCREENSHOTS.md) - Preview images
+- [README_STRUCTURE.md](./README_STRUCTURE.md) - Primary README skeleton
+- [CONTROL_PLANE_INSTALL.md](./CONTROL_PLANE_INSTALL.md) - RoboFang **hands** vs control plane
+- [operations/FLEET_CONTROL_PLANE.md](../operations/FLEET_CONTROL_PLANE.md) - `hands/` clones
+- [FLEET_PROMOTION.md](./FLEET_PROMOTION.md) - discovery without spam (pairs with screenshots + wrapper honesty)
+- blender-mcp: [docs/COMPETITIVE_ANALYSIS.md](https://github.com/sandraschi/blender-mcp/blob/main/docs/COMPETITIVE_ANALYSIS.md) - Live GUI vs headless
 - kicad-mcp: [docs/NIGHTLY_HEADLESS.md](https://github.com/sandraschi/kicad-mcp/blob/main/docs/NIGHTLY_HEADLESS.md)
+

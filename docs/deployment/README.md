@@ -14,6 +14,7 @@ Complete guide to deploying MCP servers to production environments.
 | **[security.md](security.md)** | Security hardening guide |
 | **[monitoring.md](monitoring.md)** | Monitoring and observability |
 | **[pypi-zero-install.md](pypi-zero-install.md)** | PyPI & OIDC "Zero-Install" standard |
+| **[paas/README.md](paas/README.md)** | PaaS targets: Railway, alternatives, Oct-2026 breach runbook, fleet fit |
 
 ---
 

@@ -4,7 +4,7 @@
 
 **Version:** 1.3.0
 **Date:** January 19, 2026
-**Author:** Sandra Schipal (FlowEngineer)
+**Author:** Sandra S. (FlowEngineer)
 **Status:** Production Release  
 
 ---

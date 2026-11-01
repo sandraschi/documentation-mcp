@@ -1,16 +1,37 @@
 # Changelog
 
+## [0.6.0] — 2026-08-02 (fleet hardening pass)
+
+### Fixed
+- **Installed Tauri app now reaches the backend** — `VITE_API_ORIGIN` absolute-origin
+  pattern (`native/build.ps1` sets it before `bun run build`); the webview at
+  `tauri://localhost` previously fetched relative `/api` and the UI was empty/broken
+  in the installed app (v0.5.0 shipped with this bug).
+- **Vite dev server binds IPv4** — `host: 127.0.0.1` in `vite.config.ts` (`::1`-only
+  bind caused `ERR_CONNECTION_REFUSED` on `http://127.0.0.1:11102`; this was the
+  original "no webapp started" report).
+- **CUA-NSIS smoke test now walks the app** — `scripts/cua-smoke.py` nav phase uses
+  `descendants(title=label)` (pywinauto UIA Name); the old `text=` criteria threw
+  and silently produced 12 identical dashboard screenshots. 6/6 PASS.
+- **tsc gates** — `@types/three`, `vite-env.d.ts`, Tauri 2.11 `getCurrentWebview().setZoom`.
+
+### Added
+- **`just cua-webapp-test`** — pre-Tauri browser walk (stack via `start.ps1 -Headless`,
+  Connected-badge wait, sidebar nav click-through). Reference impl for the fleet.
+- **GitHub Actions CI** — ruff, pytest, tsc, biome.
+- **12 real webapp screenshots** — captured against a running install; README Preview restored.
+
 ## [0.6.0] — 2026-07-17
 
 ### Changed
 - **Japanese reference data (kanji, JMdict, JLPT vocab, Tatoeba examples,
-  JLPT questions) moved from games-app HTTP integration to bundled local
+  JLPT questions) moved from ai-games-collection HTTP integration to bundled local
   SQLite files.** `kanji_search`, `vocab_lookup`, `jlpt_vocab_by_level`,
   `example_sentences`, `jlpt_quiz` now query `data/kanji.db` and
-  `data/jlpt_questions.db` directly via aiosqlite — no running games-app
+  `data/jlpt_questions.db` directly via aiosqlite — no running ai-games-collection
   required. Eliminates a real port collision: the old defaults
   (`LEARNBOT_GAMES_APP_API_URL`=:11003, `LEARNBOT_GAMES_APP_JLPT_URL`=:11001)
-  matched games-app's actual kanji-api/jlpt-api ports, but those exact
+  matched ai-games-collection's actual kanji-api/jlpt-api ports, but those exact
   ports are also allocated to unrelated fleet hardware-control servers
   (power-supply-mcp, function-generator-mcp) per WEBAPP_PORTS.md.
 - `games_integration.py` rewritten: httpx calls → direct aiosqlite queries
@@ -25,9 +46,9 @@
   reach this data — previously zero REST exposure existed for any of it.
 - `webapp/src/pages/Japanese.tsx` rewritten: added a real inline
   dictionary/kanji search UI backed by the new local API. The 11
-  external games-app game links (kanji-master, flashcards, karuta, etc.)
+  external ai-games-collection game links (kanji-master, flashcards, karuta, etc.)
   stay as optional external links, now honestly labeled as such and with
-  a health check pointed at games-app's actual port (:10987, was
+  a health check pointed at ai-games-collection's actual port (:10987, was
   incorrectly checking :11003/:11001 — the visible links and the status
   indicator were checking different things).
 - Added `data/ATTRIBUTION.md` — JMdict (EDRDG licence) and Tatoeba
@@ -41,13 +62,13 @@
 
 ### Added
 - `kanji_search`, `vocab_lookup`, `example_sentences`, `jlpt_quiz` — MCP tools
-  integrating games-app's kanji DB, JMdict (214K), JLPT vocab (8K), Tatoeba (278K),
+  integrating ai-games-collection's kanji DB, JMdict (214K), JLPT vocab (8K), Tatoeba (278K),
   and JLPT practice questions (600). Configurable via LEARNBOT_GAMES_APP_API_URL.
 - `graded_reader` — structured graded reader for any language: leveled text,
   pre-reading vocabulary, comprehension questions, discussion prompts.
 - `framework` parameter on `lesson_generate` and `reading_passage` — target CEFR,
   HSK, DELF, DELE, Goethe, etc. alongside existing JLPT support.
-- Japanese learning page in webapp (`/japanese`) with 11 linked games-app tools.
+- Japanese learning page in webapp (`/japanese`) with 11 linked ai-games-collection tools.
 - `docs/JAPANESE_LEARNING.md` — full-spectrum Japanese learning guide.
 - README.md — Table of Contents, Arabic→German persona preset for Austrian
   integration context (Layla, AR/DE bilingual).

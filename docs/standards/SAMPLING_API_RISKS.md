@@ -1,3 +1,13 @@
+---
+title: "Sampling Api Risks"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-09
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 ﻿# Sampling & API Call Risks in MCP Servers
 
 **Created:** 2026-02-28  
@@ -8,7 +18,7 @@
 
 ## The Problem
 
-Claude Desktop does **not** fully implement the MCP sampling spec. It does not advertise `sampling.tools` capability. MCP servers that use `ctx.sample()` for tool-calling during sampling cannot use the client's model â€” they fall back to **direct Anthropic API calls**, bypassing your Claude subscription and charging against an API key.
+Claude Desktop does **not** fully implement the MCP sampling spec. It does not advertise `sampling.tools` capability. MCP servers that use `ctx.sample()` for tool-calling during sampling cannot use the client's model - they fall back to **direct Anthropic API calls**, bypassing your Claude subscription and charging against an API key.
 
 Combined with agentic loop tools (e.g. `dbops:agentic_workflow_tool` with `max_steps=5`), a single runaway invocation can fire multiple API calls before you notice. At scale across 20+ MCP servers, this is a real cost and quota risk.
 
@@ -84,7 +94,7 @@ if not ctx.client_capabilities.sampling:
         return "Error: client does not support sampling and ANTHROPIC_API_KEY is not set. Cannot proceed."
 ```
 
-This is the correct "refuse" pattern â€” not a blanket refusal, but a clean failure when no fallback is available.
+This is the correct "refuse" pattern - not a blanket refusal, but a clean failure when no fallback is available.
 
 ### 5. Local Logging
 

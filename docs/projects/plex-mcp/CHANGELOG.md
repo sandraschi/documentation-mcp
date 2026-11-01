@@ -1,4 +1,67 @@
 
+## [Unreleased] - 2026-10-08 (dashboard overhaul + webapp API parity)
+
+### Added
+- Overview rewritten to the fleet gate (hero + 6 KPI cards + quick actions + red onboarding button when Plex is down) with a new best-effort `GET /api/dashboard/` aggregation endpoint; sidebar to standard (top toggle, logo + version, live backend/Plex indicator).
+- Parity UI for every backend route: advanced multi-filter search, taste rank/score/temporal, media AI-context button + files/art panel + play-on-client picker, enrichment person search, chat search-and-summarize runner, settings LLM onboarding card + GPU target select + key delete, RAG context tester, server diagnostics panel, live api-docs backend label.
+- 19 new `utils/api.ts` wrappers; repair, RAG, and chat components migrated off raw `fetch` onto them. Dead `getSystemStatus` wrapper removed; legacy `/api/v1/*` marked deprecated.
+
+### Verified
+- `tsc --noEmit` clean, `biome check --write` applied, `ruff check` clean, pytest 52 passed (main, config, plex-auth, taste, llm-providers, enrichment).
+
+## [Unreleased] - 2026-10-04 (taste modelling)
+
+### Added (Taste modelling - roadmap project 3 of 6)
+- `plex_taste` MCP tool, `/api/taste/*` REST, and a `/taste` webapp page: what you gravitate toward and pass over, per movies/TV and time of week, plus a "Lately" panel. Module `src/plex_mcp/services/taste/`, data in `data/taste.db`. Reads from Plex only.
+- Scoring is lift against the library, not the spec's EMA: on real data (16,928 history entries) the capped EMA scored every dimension +1.00 because history is almost all positive events. Replaced with exponentially decayed attention (1-year half-life) compared to a library survey, score in [-1, 1]. Stratified by movie/show; concave per-show episode weighting. Reasoning in `docs/plans/TASTE_MODELLING.md`.
+- Verified against live Plex: history has no progress (entry = completed, repeat = rewatched); episodes roll up via `grandparentKey`; 992 rated items; On Deck dismissals are not exposed so not captured.
+- Background incremental sync every 10 min (`TASTE_SYNC_INTERVAL_SEC`), inert until a profile is built once. Incremental sync tested equal to a full rebuild.
+- Live build: 15,615 events, 12,201 library items surveyed, ~2 minutes; profile is recognizable.
+- 50 new tests.
+- Not built: watch_transitions, per-account profiles, scoring of theme dimensions.
+
+### Fixed (test suite: 13 long-standing failures cleared)
+- All 13 failing tests were stale test expectations, not tool bugs: tests subscripted `ToolResult` directly instead of unwrapping it, and several asserted shapes the tools never had. Added `tests/helpers.py::tool_data_payload`.
+- Verified live against a real Plex server (7 live + 2 RAG live tests pass). Surfaced real contract facts: `plex_media search` requires a non-empty query; ffprobe output is under `result`; subtitle search results under `results`; library `id` is an int.
+- `test_ffmpeg_probe_real` had been silently skipping; it now probes a real file.
+- Known limitation, not fixed: `plex_media search` without `library_id` on a large server (83 libraries) exceeds the 30s Plex read timeout.
+
+## [Unreleased] - 2026-09-13
+
+### Added (Deep metadata enrichment - roadmap project 1 of 6)
+- **Deep, LLM-synthesised per-item dossiers.** `plex_media_enrichment` gained `enrich`, `bulk_enrich`, `get_enrichment`, `get_related`, `search_by_theme`, `search_by_person`, `stale_report` operations. Sources: Wikipedia (REST API) + TMDB deep mode (official v3 API) + JustWatch (best-effort, never blocking). Letterboxd/IMDB/Rotten Tomatoes/Metacritic scraping deliberately excluded - all four prohibit scraping in their ToS and run active bot detection, not worth the exposure at 50k library items. New module `src/plex_mcp/services/enrichment/` (db, sources, synthesis, crossref, orchestrator), sqlite-backed at `data/enrichment.db`.
+- **Library-wide cross-references**: each enriched item matched against every other already-enriched item by director, shared top-5 cast, TMDB collection, and thematic-tag overlap (2+ shared tags).
+- **New webapp pages**: `/media?ratingKey=...` (per-item dossier with related-items section) and `/enrichment` (bulk-run launcher + progress + theme search). "Full dossier" link added to the Movies detail modal.
+- LLM synthesis is transport-agnostic: MCP tool path uses `ctx.sample`, webapp REST path uses the local+cloud LLM provider registry vendored earlier the same week - same seam, two adapters. Works with zero LLM configured too (raw sources, no synthesis).
+- 23 new tests (`test_enrichment_service.py` x15, `test_api_enrichment.py` x8), all passing.
+
+### Fixed
+- **Wikipedia REST calls were silently returning nothing.** Wikimedia's edge (HAProxy) 403s httpx's default User-Agent string; a descriptive UA passes. Affected `enrichment_service.fetch_wikipedia_summary` everywhere it's used (the existing AI-context panel too, not just the new code) since whenever it was first written. Fixed with a UA header on every httpx client hitting Wikipedia/TMDB/JustWatch.
+- **Route-ordering bug caught before it shipped**: FastAPI matches path templates in registration order; an early draft had the generic `/{rating_key}` handlers before literal routes like `/by-theme`, which would have shadowed them. Reordered, with a regression test guarding it.
+
+## [Unreleased] — 2026-09-11
+
+### Added (LLM: local + cloud provider registry, VRAM management)
+- **Settings → Diagnostics**: one traffic-light panel (Plex/LLM/RAG/*arr) instead of five separate error hunts. `GET /api/system/diagnostics`.
+- **Cloud LLM providers** (Anthropic, DeepSeek, OpenRouter) vendored from the fleet's `templates/llm/` registry (pilot: arxiv-mcp) as `webapp/backend/app/llm_providers.py` - 0600 per-provider keystore, correct auth/format per provider, chat + agentic tool-calling both route through it.
+- **GPU VRAM panel**: live telemetry + resident-model list + "Evict all", so an AI task doesn't just fail when VRAM is full - free it in Settings, or use a cloud provider on a GPU-less machine.
+- 15 new tests (`tests/test_api_llm_providers.py`), all passing; full regression suite (54 tests across the day's changes) green.
+- **First-run wizard**: 3-step overlay (Plex sign-in -> optional LLM provider -> done), shows once on a fresh install, auto-skips for an already-working setup. `components/onboarding/FirstRunWizard.tsx`.
+
+### Added
+- **Settings: Plex token test + refresh.** "Test connection" button validates the stored/entered Plex URL+token against the real server (`POST /api/system/plex/test`). "Get a new token" starts the real Plex PIN auth flow (`POST /api/system/plex/pin`, `GET /api/system/plex/pin/{id}`) — opens app.plex.tv, polls for approval, saves the token automatically. Fixes the fresh-install "no Plex token" dead end.
+- `tests/test_api_plex_auth.py` — 7 tests covering the new endpoints, all mocked at the network boundary.
+
+### Fixed
+- **`/health` no longer lies about Plex status:** hardcoded `"plex": "connected"` replaced with a real check of whether `PLEX_TOKEN` is actually configured.
+- **CRITICAL: two hardcoded real Plex tokens removed** from dead/dev-only code (`server_minimal.py`, `webapp/backend/test_plex_pagination.py`) — both committed to git, treat as compromised, rotate.
+- **CORS silently dropped on the raw `--http` transport path:** `transport.py` built a CORS-wrapped Starlette app but served the original unwrapped app via `mcp_app.run_http_async()`. Now serves the CORS+health-wrapped app directly via `uvicorn.Server`.
+- **Ruff `ignore` list was duplicated ~4x** in `pyproject.toml`, re-adding `S110`/`S112`/`T201` (silent except-swallowing, print-ban defeated). Deduplicated, removed permanently, added real logging at the 10 affected call sites.
+- Restored `scripts/mcpb-pack.ps1` (accidentally deleted) and fixed `scripts/just/fleet.just`'s `mcpb-pack` recipe (pointed at a `mcpb/pack.ps1` path that never existed). Root cause was the vendored fleet template — fixed upstream in `mcp-central-docs`; ~160 other fleet repos share the bug (tracked separately).
+- **`fleet-start.config.ps1` pointed the dev webapp launcher at the wrong backend** (`Backend.Kind='module-serve'` ran `python -m plex_mcp --serve`, a flag that doesn't exist). Fixed to `Kind='uvicorn-web-app'` targeting the real `webapp/backend/app/main.py`. Verified via the actual `mcp-central-docs/starts/plex-start.bat` launcher end to end. Likely fleet-wide — see `TRAPS_AND_PITFALLS.md` #31.
+- **Movies/Libraries pages showed empty/"not found" despite a working connection.** `plex_library`/`plex_media`/`plex_search` (7 call sites) never populated a `data` field consumable by the webapp's REST layer, only a human-text summary + Prefab UI card shape. Fixed by carrying the raw list in `meta["data"]` and promoting it in the webapp's MCP bridge. Verified live against the real Plex server (83 libraries, real movie titles).
+- Broken GitHub links fixed fleet-wide in this repo's docs: pointed at `sandraschi/plex-mcp` (doesn't exist), actual repo is `sandraschi/plexmcp`.
+
 ## [Unreleased] — 2026-07-09
 
 ### Fixed

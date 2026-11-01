@@ -1,3 +1,13 @@
+---
+title: "Tauri API Patterns for MCP Webapps"
+category: pattern
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Tauri API Patterns for MCP Webapps
 
 > **Purpose:** Practical usage of `@tauri-apps/api` v2 modules inside React/Vite webapps

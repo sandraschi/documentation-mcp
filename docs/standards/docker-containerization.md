@@ -1,3 +1,13 @@
+---
+title: "Docker Containerization Standards"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-30
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Docker Containerization Standards
 
 ## Overview
@@ -442,6 +452,45 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 10
 ```
+
+## Image Freshness and Rebuild Hygiene
+
+Restarting a container does not update its image, and rebuilding without
+pulling does not update its base. Stale images are the quietest failure in
+the fleet: everything starts, nothing errors, the behavior is just months
+old. Observed repeatedly, including a new game added to the AI games
+collection while the containers kept serving the pre-game build.
+
+### Externally sourced images (OpenSERP, Weaviate, traefik, ...)
+
+```powershell
+# How old is what is actually running?
+docker images karust/openserp --format "{{.Repository}}:{{.Tag}} created {{.CreatedSince}}"
+
+# Refresh (then RECREATE the container - the running one keeps old layers until you do)
+docker pull karust/openserp:latest
+```
+
+- `--restart unless-stopped` restarts the container, never the image. A container restarted daily can still run February's binary in September.
+- Pull cadence: monthly minimum for personal infra; anything fighting an arms race (scrapers vs anti-bot) goes stale in weeks, not quarters. Scraper freshness IS the product for tools like OpenSERP - an 8-month-old image is fighting last year's bot defenses.
+- Diagnose in order: engine responsive? (`docker info`) -> container running? (`docker ps`) -> image current? (`docker images ... CreatedSince`). Skipping straight to "the tool is broken" wastes the hour this section exists to save.
+
+### Internally built images (sandraschi repos)
+
+- Rebuild after every code change that the container serves: `docker compose build` (plain, uses cache) or `docker compose build --no-cache` when dependencies changed. Then `up -d` to recreate.
+- The classic blooper: adding content or code (a game, a page, a tool) and restarting the stack instead of rebuilding it. The container faithfully serves the old build; nothing tells you.
+- Cheap guard for assfix and startup scripts: compare image build time against the repo's newest source mtime. If source is newer than the image, rebuild before diagnosing anything else.
+
+### Scheduled rebuild rule (HARD for active repos)
+
+Blind rebuild on a cadence, tiered by cost. Assumes the repo is fresh, green,
+and tested — never blind-rebuild a red repo (you just mass-produce a broken
+image faster).
+
+- **Weekly (cached):** `docker compose build` for every repo with running containers. Layer cache makes this cheap; it catches source drift, dependency bumps via lockfiles, and anything merged since last week. This is the backstop for the forgotten-rebuild blooper — even if nobody remembered, Monday's build serves current code.
+- **Monthly (`--no-cache`):** full clean rebuild to refresh base layers (`python:slim`, `node:alpine`, ...) and catch upstream breakage in small monthly doses instead of one yearly catastrophe. Base-image drift surfacing a little at a time beats discovering it during an urgent deploy.
+- **On every dependency change:** lockfile or Dockerfile edit means immediate `--no-cache` rebuild, not "next Monday."
+- Better safe than sorry holds only with the green precondition: gates green first (`just gates green` or equivalent), then rebuild, then verify the container answers (`/health`) before calling it done. A scheduled rebuild that nobody verifies is just scheduled hope.
 
 ## Docker Desktop Daemon Reliability
 

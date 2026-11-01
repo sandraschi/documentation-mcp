@@ -3,7 +3,7 @@
 
 **Version:** 1.0  
 **Last Updated:** 2025-11-19  
-**Author:** Sandra Schipal  
+**Author:** Sandra S.  
 **Status:** Active Development
 
 ---
@@ -388,7 +388,7 @@ MCP Client
 **Document Control**
 - **Version History:**
   - v1.0 (2025-11-19): Initial PRD creation
-- **Approvals:** Sandra Schipal (Author/Owner)
+- **Approvals:** Sandra S. (Author/Owner)
 - **Next Review:** 2025-12-19
 
 

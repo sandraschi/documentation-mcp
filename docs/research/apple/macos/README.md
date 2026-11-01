@@ -1,10 +1,10 @@
-# macOS: Desktop development (May 2026)
+# macOS: Desktop development (October 2026)
 
 ## Context
 
-- **macOS 26** SDK with Xcode 26 generation  
-- **Xcode 26.3** agentic IDE — primary development surface for Apple targets  
-- **Apple Intelligence / Foundation Models** available for Mac apps  
+- **macOS Golden Gate 27.2** (Oct 2026) — **current, Apple-silicon-only**; last version with full Rosetta 2 (Tahoe 26 was the last Intel release)
+- **Xcode 27.2** agentic IDE — primary development surface for Apple targets
+- **Apple Intelligence / Foundation Models + Core AI** available for Mac apps  
 
 ## Agentic Xcode on Mac
 
@@ -43,4 +43,4 @@ Run fleet MCP servers on Mac too if desired (`uv run` works) — not required.
 - [MCP_AND_APPLE.md](../MCP_AND_APPLE.md)  
 
 ---
-*Last updated: 2026-05-28*
+*Last updated: 2026-10-28 (27.2 generation)*

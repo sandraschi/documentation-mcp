@@ -41,6 +41,10 @@ Target architecture (arbiter, per-group authority, LeRobot logging, VLA producer
 |-----|----------|
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | **Two-pipe map** (control vs video), ports, module index |
 | [docs/GLOSSARY.md](docs/GLOSSARY.md) | **LeRobot, VLA, arbiter, WebXR**, fleet terms |
+| [docs/CONFIGURATION.md](docs/CONFIGURATION.md) | Environment variables, ports, CORS, LiveKit |
+| [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Layout, gates, conventions, contributing |
+| [docs/TOOLS.md](docs/TOOLS.md) | MCP tools + REST endpoint reference |
+| [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Symptom-first fix guide |
 | [docs/LIVEKIT.md](docs/LIVEKIT.md) | **Video return** — setup, env vars, troubleshooting |
 | [docs/LEROBOT.md](docs/LEROBOT.md) | Session recording (JSONL episodes) |
 | [docs/PRD.md](docs/PRD.md) | v1 product spec |
@@ -50,6 +54,8 @@ Target architecture (arbiter, per-group authority, LeRobot logging, VLA producer
 | [docs/BRINGUP.md](docs/BRINGUP.md) | Milestone 1 hardware checklist |
 | [docs/STACK.md](docs/STACK.md) | Full technology stack |
 | [docs/TODO.md](docs/TODO.md) | Milestone plan |
+| [docs/ONBOARDING.md](docs/ONBOARDING.md) | First-timer setup, pitfalls, sanity check |
+| [INSTALL.md](INSTALL.md) | Install and run the stack |
 | [CHANGELOG.md](CHANGELOG.md) | Release notes |
 
 ---
@@ -78,8 +84,6 @@ Headset URL: `https://goliath.<your-tailnet>.ts.net/` → **Enter VR**.
 | Adapter | `BoomyAdapter` → [yahboom-mcp](https://github.com/sandraschi/yahboom-mcp) | 10892 |
 | Video | [teleconference-mcp](https://github.com/sandraschi/teleconference-mcp) LiveKit + Goliath publisher | 15580 |
 
-> **LiveKit SFU runs as a Windows service** (`LiveKitSFU`, NSSM, native livekit-server 1.7.0 + `teleconference-mcp/livekit.yaml`, auto-start).
-
 ```
   Pico / Meta Quest (Tailscale + Browser)
      |  HTTPS/WSS pose (:10900 → :10901)
@@ -107,10 +111,22 @@ Headset URL: `https://goliath.<your-tailnet>.ts.net/` → **Enter VR**.
 | `teleop_livekit_status` | shipped (M5) |
 | `teleop_livekit_publisher_start` / `_stop` | shipped (M5) |
 | `show_teleop_status_card` | shipped (Prefab) |
+| `teleop_voice_command` | shipped (speech-mcp STT control) |
 | `teleop_shutdown` | shipped |
-| `teleop_task_dispatch` | planned |
 
 ---
+
+## Fleet integration
+
+Teleoperator is the **VLA Fleet Control Tower** hub — the supervision surface that ties the
+robotics fleet together (teleop, claims, episodes/curation, VLA producers). See
+[`mcp-central-docs/patterns/VLA_FLEET_CONTROL_TOWER.md`](https://github.com/sandraschi/mcp-central-docs/blob/main/patterns/VLA_FLEET_CONTROL_TOWER.md).
+
+- **Supervision**: `GET /api/v1/supervision` — every robot's claim + reachability (webapp `/ops`).
+- **Episodes**: `GET /api/v1/episodes` + replay + curation (webapp `/episodes`).
+- **Task dispatch**: `teleop_task_dispatch(goal)` — AUTO waypoint plans (VLA branch hardware-gated).
+- **Voice**: `teleop_voice_command` over the fleet voice bus.
+- **Data flywheel**: `scripts/publish-lerobot-hub.py` packs curated episodes for VLA fine-tuning.
 
 ## Tailscale on viewers
 
@@ -136,11 +152,17 @@ Details and troubleshooting: **[docs/TAILSCALE_VIEWERS.md](docs/TAILSCALE_VIEWER
 ## Development
 
 ```powershell
-just lint
-just test
-just ci      # same gates as GitHub Actions (Windows)
+just lint            # ruff + tsc + biome
+just types           # pyright
+just test            # pytest (coverage gate >=50%)
+just gates-green     # lint + types + test
+just ci              # same gates as GitHub Actions (Windows)
 just serve
 just web
+just mcpb-pack       # build .mcpb bundle (fresh-stages src/ -> mcpb/src)
+just integration-test   # headless WS harness vs live stack (needs backend up)
+# Webapp e2e (Playwright, reuses running stack when healthy):
+Set-Location webapp; npx playwright test
 ```
 
 ---
@@ -148,4 +170,3 @@ just web
 ## License
 
 MIT
-

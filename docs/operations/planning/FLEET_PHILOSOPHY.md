@@ -14,7 +14,7 @@ Naval metaphor maps cleanly onto the Sandra-class MCP stack:
 
 | Naval concept | Fleet equivalent |
 |---------------|------------------|
-| **Home port** | Vienna (Alsergrund) — data residency, daily life, transit |
+| **Home port** | Vienna (Vienna) — data residency, daily life, transit |
 | **Task force** | Cursor + RoboFang + enabled MCP servers |
 | **Flag bridge** | Meta dashboard (VLA) + RoboFang hub (ops) |
 | **Charts & logs** | mcp-central-docs, MemOps, fleet-registry |
@@ -193,7 +193,7 @@ Named after the US Navy [Littoral Combat Ship](https://en.wikipedia.org/wiki/Lit
 
 Vienna is not just a locale — it is the **why** of the fleet:
 
-- Transit (`mywienerlinien`, `gtfs-mcp`) — move through the city
+- Transit (`publictransport-mcp`, `gtfs-mcp`) — move through the city
 - Life admin (`vienna-life-assistant`) — time, money, shopping
 - Residency (`ednaficator` vision) — data stays local/Austria where possible
 - Culture pages in VLA — coffee, museums, Musikverein

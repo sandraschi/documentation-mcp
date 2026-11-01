@@ -1,11 +1,21 @@
-# Tauri production pitfalls — fleet protocol
+---
+title: "Tauri production pitfalls - fleet protocol"
+category: reference
+status: review
+audience: mcp-dev
+last_updated: 2026-09-17
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
+# Tauri production pitfalls - fleet protocol
 
-> **Sources:** calibre-mcp (1.8.x, Jun 2026), **plex-mcp (2.4.1, Jun 2026)** — full night postmortem.  
+> **Sources:** calibre-mcp (1.8.x, Jun 2026), **plex-mcp (2.4.1, Jun 2026)** - full night postmortem.  
 > Use when a Tauri app **works in dev** but **fails in the NSIS installer**: `Failed to fetch`, silent backend, install hang, MCP mount errors, Movies/RAG routes broken, or broken upgrade.
 
 See also:
-- [TAURI_API_PATTERNS.md](TAURI_API_PATTERNS.md) — `@tauri-apps/api` modules for dialog, notification, window, fs, clipboard, updater, http
-- [TAURI_DO_DONT_MATRIX.md](TAURI_DO_DONT_MATRIX.md) — quick ✅/❌ lookup
+- [TAURI_API_PATTERNS.md](TAURI_API_PATTERNS.md) - `@tauri-apps/api` modules for dialog, notification, window, fs, clipboard, updater, http
+- [TAURI_DO_DONT_MATRIX.md](TAURI_DO_DONT_MATRIX.md) - quick ✅/❌ lookup
 - [tauri_nsis_building.md](rules/tauri_nsis_building.md) (scaffold + NSIS UX section)
 - [LLM_AND_INSTALL_TIERS.md](LLM_AND_INSTALL_TIERS.md) (what not to bundle)
 - Cursor skill: `tauri-fleet-expert` (`~/.cursor/skills/tauri-fleet-expert/`)
@@ -19,8 +29,8 @@ See also:
 
 ### The problem
 
-Microsoft Store installs desktop apps as **AppX/MSIX packages** under `C:\Program Files\WindowsApps\`. This directory is **permission-restricted** — executables there cannot be launched directly for CLI operations:
-- The sandboxed `inkscape.exe` at `WindowsApps\...\inkscape.exe` **will not run** when called directly by `subprocess.run()` — it fails with "Access Denied" or "StandardErrorEncoding is only supported when standard error is redirected"
+Microsoft Store installs desktop apps as **AppX/MSIX packages** under `C:\Program Files\WindowsApps\`. This directory is **permission-restricted** - executables there cannot be launched directly for CLI operations:
+- The sandboxed `inkscape.exe` at `WindowsApps\...\inkscape.exe` **will not run** when called directly by `subprocess.run()` - it fails with "Access Denied" or "StandardErrorEncoding is only supported when standard error is redirected"
 - The classic desktop installer puts executables in `C:\Program Files\{App}\...\app.exe` (no sandbox, works with subprocess)
 - App execution aliases (OS-resolved `inkscape.exe` from `%LOCALAPPDATA%\Microsoft\WindowsApps\`) only work for GUI launch, not CLI
 
@@ -28,12 +38,12 @@ Microsoft Store installs desktop apps as **AppX/MSIX packages** under `C:\Progra
 
 | Repo | Host App | Classic path | MS Store path | Risk |
 |------|----------|-------------|---------------|------|
-| `inkscape-mcp` | Inkscape | `C:\Program Files\Inkscape\bin\inkscape.exe` | `WindowsApps\Inkscape*\VFS\ProgramFilesX64\Inkscape\bin\inkscape.exe` | **HIGH** — default won't resolve |
+| `inkscape-mcp` | Inkscape | `C:\Program Files\Inkscape\bin\inkscape.exe` | `WindowsApps\Inkscape*\VFS\ProgramFilesX64\Inkscape\bin\inkscape.exe` | **HIGH** - default won't resolve |
 | `gimp-mcp` | GIMP | `C:\Program Files\GIMP 2\bin\gimp-console-2.10.exe` | Varies by version | **HIGH** |
-| `blender-mcp` | Blender | `C:\Program Files\Blender Foundation\*\blender.exe` | `WindowsApps\Blender*\blender.exe` | **HIGH** — versioned path |
-| `freecad-mcp` | FreeCAD | `C:\Program Files\FreeCAD*\bin\FreeCADCmd.exe` | Varies | **CRITICAL** — hardcoded dev path |
-| `kicad-mcp` | KiCad | `C:\Program Files\KiCad\*\bin\kicad-cli.exe` | Via app alias | **MEDIUM** — has PATH fallback |
-| `godot-mcp` | Godot | PATH/`GODOT_PATH` | Via app alias | **LOW** — PATH lookup works |
+| `blender-mcp` | Blender | `C:\Program Files\Blender Foundation\*\blender.exe` | `WindowsApps\Blender*\blender.exe` | **HIGH** - versioned path |
+| `freecad-mcp` | FreeCAD | `C:\Program Files\FreeCAD*\bin\FreeCADCmd.exe` | Varies | **CRITICAL** - hardcoded dev path |
+| `kicad-mcp` | KiCad | `C:\Program Files\KiCad\*\bin\kicad-cli.exe` | Via app alias | **MEDIUM** - has PATH fallback |
+| `godot-mcp` | Godot | PATH/`GODOT_PATH` | Via app alias | **LOW** - PATH lookup works |
 
 ### Fix
 
@@ -41,7 +51,7 @@ Microsoft Store installs desktop apps as **AppX/MSIX packages** under `C:\Progra
 2. **Add PATH-based fallback** (`shutil.which()`) before trying hardcoded paths
 3. **Document in INSTALL.md** that the classic desktop installer (not the Microsoft Store version) is required for CLI/headless operation
 4. **Probe the executable** at startup and fail with a clear message if it's inaccessible
-5. **Never hardcode developer-specific paths** (e.g. `D:\Dev\repos\...`) in production code — use env vars with installer-default fallbacks
+5. **Never hardcode developer-specific paths** (e.g. `D:\Dev\repos\...`) in production code - use env vars with installer-default fallbacks
 
 ### INSTALL.md template for host app dependencies
 
@@ -50,7 +60,7 @@ Microsoft Store installs desktop apps as **AppX/MSIX packages** under `C:\Progra
 
 **Install the classic desktop installer** (not the Microsoft Store version).
 
-- ✅ **Classic installer** (recommended): Download from {official_url} — puts `{exe_path}`
+- ✅ **Classic installer** (recommended): Download from {official_url} - puts `{exe_path}`
 - ❌ Microsoft Store version: Sandboxed and **not supported** for headless/CLI operation
 
 Verify the installation:
@@ -76,8 +86,8 @@ These are issues that **work in the Vite dev browser** but **fail in the Tauri W
 | **Health check on page load** | Backend starts first, dev is manual | Tauri spawns backend concurrently; WebView loads before backend is listening | Exponential backoff retry (1s, 2s, 4s, 8s, 16s) + Tauri `backend-status` event listener |
 | **Relative asset paths (`./assets/`)** | Vite resolves to `http://localhost:PORT/assets/` | Tauri serves from `tauri://localhost/` or file://, relative paths may not resolve | Use absolute paths or Vite's `base: "./"` config |
 | **`@tauri-apps/api` imports** | Dev browser: dynamic `import()` fails gracefully | Tauri WebView: APIs are available, but code may not handle the transition | Always guard: `try { const { invoke } = await import("@tauri-apps/api/core") } catch { /* browser fallback */ }` |
-| **Ctrl+scroll zoom in dev browser** | `@tauri-apps/api/window.setZoom()` works in Tauri | In dev browser, Tauri API fails, `e.preventDefault()` kills native zoom, empty catch → nothing happens | CSS `transform: scale()` fallback in the catch block — see BUG-007 |
-| **CORS** | Browser origin matches dev server | Tauri origin is `tauri://localhost` or `https://tauri.localhost` — not in CORS allow list. Tailscale/LAN access from phone/tablet also silently blocked. | Apply fleet CORS standard (`CORS_STANDARD.md`): `allow_origins` includes Tauri + local dev origins; `allow_origin_regex` covers Tailscale `*.ts.net`, LAN IPs, CGNAT — **unconditionally**. |
+| **Ctrl+scroll zoom in dev browser** | `@tauri-apps/api/window.setZoom()` works in Tauri | In dev browser, Tauri API fails, `e.preventDefault()` kills native zoom, empty catch → nothing happens | CSS `transform: scale()` fallback in the catch block - see BUG-007 |
+| **CORS** | Browser origin matches dev server | Tauri origin is `tauri://localhost` or `https://tauri.localhost` - not in CORS allow list. Tailscale/LAN access from phone/tablet also silently blocked. | Apply fleet CORS standard (`CORS_STANDARD.md`): `allow_origins` includes Tauri + local dev origins; `allow_origin_regex` covers Tailscale `*.ts.net`, LAN IPs, CGNAT - **unconditionally**. |
 | **SPA routing (pushState)** | Vite dev server returns index.html for all paths | Tauri or static server may return 404 for non-root paths | Server must serve index.html for all routes (SPAStaticFiles in FastAPI, or `fallback: "index.html"` in static serve) |
 | **Backend process crash on startup** | In dev you see the crash in the terminal | In Tauri, the crash goes to `backend-spawn.log`; frontend shows "Failed to fetch" and never recovers | Smoke-test the frozen binary after PyInstaller (build.ps1 step) + TCP health check polling in `backend.rs` |
 | **Button `type` defaults to `submit`** | No form wrapping the button → harmless | In a form context → unexpected form submission | Always add `type="button"` to non-submit buttons (`lint/a11y/useButtonType`) |
@@ -85,23 +95,23 @@ These are issues that **work in the Vite dev browser** but **fail in the Tauri W
 | Symptom | Likely cause |
 |---------|----------------|
 | `Failed to fetch` on libraries/books | Frontend still uses relative `/api/...` (hits static export, not backend) |
-| `Unexpected token '<', "<!DOCTYPE "...` | Same — HTML error/404 page parsed as JSON |
+| `Unexpected token '<', "<!DOCTYPE "...` | Same - HTML error/404 page parsed as JSON |
 | Backend log healthy, UI still broken | **CORS**: webview origin is `http://tauri.localhost`, backend only allows dev origin |
 | No cover thumbnails | Cover `src` still relative `/api/...` |
 | **UI shows no backend / empty app** | Stale flat `*-backend.exe` beside Tauri exe; spawn resolves wrong path |
 | **Backend exe crashes on start (frozen)** | `run_server.py` does `chdir(webapp/backend)` under PyInstaller |
 | **FastMCP mount fails in frozen exe** | Missing `cachetools` / `key_value` hiddenimports |
-| **Auth flows silent-fail in frozen exe (3.4+)** | Missing `joserfc` hiddenimports — 3.4.0 dropped `authlib` for JWT |
+| **Auth flows silent-fail in frozen exe (3.4+)** | Missing `joserfc` hiddenimports - 3.4.0 dropped `authlib` for JWT |
 | **Libraries OK, Movies/RAG fails** | PyInstaller omitted `_strptime` (lazy stdlib C ext) |
 | **`isatty` crash when spawned from Tauri** | Stdio mode treats piped stdout as MCP stdio; set `{REPO}_TAURI=1` |
 | **`AttributeError: 'NoneType' object has no attribute 'isatty'` in uvicorn** | `console=False` in PyInstaller spec → `sys.stderr` is `None` → uvicorn logging crashes. Fix: use `console=True`, or set env `UVICORN_LOG_LEVEL=warning` + patch stderr in run_server.py |
-| **UI shows "Failed to fetch" in Tauri/static, works in dev** | Frontend's `API_BASE` points to the Vite frontend port (e.g. `:11029`) instead of the backend port (`:11028`). In dev mode, Vite's proxy rewrites `/api/*` → backend, so it works. In production, the proxy is absent — the frontend fetches from itself and gets nothing. **Fix:** Set `API_BASE` to `http://127.0.0.1:{BACKEND_PORT}` in `lib/api.ts`. Never use the frontend port. Cross-check against `backend.rs` constant `BACKEND_PORT`. |
-| **Install / upgrade appears hung** | Orphan `*-backend.exe` locks ~100–200 MB file; NSIS only checks main binary |
-| **NSIS installer is ~3 MB (no backend)** | PyInstaller silently produced a 0-byte or runt exe. Check: (a) `run_server.py` exists at repo root, (b) spec `pathex` resolves imports, (c) SKIP list didn't strip uvicorn/httpx. Build pipeline MUST have a >=5 MB size gate on the backend exe — see `tauri_nsis_building.md` Gate 0. |
+| **UI shows "Failed to fetch" in Tauri/static, works in dev** | Frontend's `API_BASE` points to the Vite frontend port (e.g. `:11029`) instead of the backend port (`:11028`). In dev mode, Vite's proxy rewrites `/api/*` → backend, so it works. In production, the proxy is absent - the frontend fetches from itself and gets nothing. **Fix:** Set `API_BASE` to `http://127.0.0.1:{BACKEND_PORT}` in `lib/api.ts`. Never use the frontend port. Cross-check against `backend.rs` constant `BACKEND_PORT`. |
+| **Install / upgrade appears hung** | Orphan `*-backend.exe` locks ~100-200 MB file; NSIS only checks main binary |
+| **NSIS installer is ~3 MB (no backend)** | PyInstaller silently produced a 0-byte or runt exe. Check: (a) `run_server.py` exists at repo root, (b) spec `pathex` resolves imports, (c) SKIP list didn't strip uvicorn/httpx. Build pipeline MUST have a >=5 MB size gate on the backend exe - see `tauri_nsis_building.md` Gate 0. |
 | **Frozen backend: `ModuleNotFoundError` for every project dep** | `uv run pyinstaller` resolved to the **global uv tool** environment (`~/.local/share/uv/tools/pyinstaller/`), not the project's `.venv`. That environment has `pyinstaller` but **none** of the project's dependencies (fastmcp, pydantic, httpx, …). PyInstaller silently skips every missing top-level import and produces a broken binary that crashes on launch. **Fix:** Never `uv run pyinstaller`. Always use the project venv's pyinstaller directly, then smoke-test the frozen binary:</br>````powershell</br>$pyiExe = "$Root\.venv\Scripts\pyinstaller.exe"</br>if (-not (Test-Path $pyiExe)) { uv add --dev pyinstaller }</br>Remove-Item "$Root\dist\${RepoName}-backend.exe" -Force -ErrorAction SilentlyContinue</br>& $pyiExe "$specFile" --clean --noconfirm</br># Gate: smoke-test the frozen binary (catches ALL import crashes generically)</br>$testPort = 11999</br>$testProc = Start-Process -FilePath "$Root\dist\${RepoName}-backend.exe" -NoNewWindow -PassThru `</br>    -RedirectStandardError "$Root\dist\pyi-crash.log" `</br>    -EnvironmentVariables @{ MCP_PORT = "$testPort"; MCP_HOST = "127.0.0.1" }</br>Start-Sleep -Seconds 5</br>if ($testProc.HasExited) { throw "Frozen binary crashed: $(Get-Content "$Root\dist\pyi-crash.log" -Raw)" }</br>$testProc.Kill()</br>```` |
-| **PyInstaller rebuild: `PermissionError: Access is denied` on `dist/{repo}-backend.exe`** | A stale `dist/{repo}-backend.exe` from a previous (broken) build has a file lock — PyInstaller tries to `os.remove()` it before writing the new one. **Fix:** Add a pre-clean in `build.ps1` before calling pyinstaller: `Remove-Item "$Root\dist\${RepoName}-backend.exe" -Force -ErrorAction SilentlyContinue`. Also ensure no stale `inkscape-mcp-backend.exe` processes are running: `Get-Process inkscape-mcp-backend -ErrorAction SilentlyContinue | Stop-Process -Force`. |
+| **PyInstaller rebuild: `PermissionError: Access is denied` on `dist/{repo}-backend.exe`** | A stale `dist/{repo}-backend.exe` from a previous (broken) build has a file lock - PyInstaller tries to `os.remove()` it before writing the new one. **Fix:** Add a pre-clean in `build.ps1` before calling pyinstaller: `Remove-Item "$Root\dist\${RepoName}-backend.exe" -Force -ErrorAction SilentlyContinue`. Also ensure no stale `inkscape-mcp-backend.exe` processes are running: `Get-Process inkscape-mcp-backend -ErrorAction SilentlyContinue | Stop-Process -Force`. |
 | **Install stuck on WebView2** | `downloadBootstrapper` blocked; use `skip` if runtime already present |
-| Installer “done” but window won’t close | `MUI_FINISHPAGE_NOAUTOCLOSE` — click **Finish** |
+| Installer “done” but window won't close | `MUI_FINISHPAGE_NOAUTOCLOSE` - click **Finish** |
 | MCP client config wiped | Installer script merged JSON unsafely (always `.bak` first) |
 | MCPB pack fails / 2 GB archive | Packing from repo root instead of `mcpb/` |
 | **`No module named 'difflib'` / `'statistics'` / `'pydoc'`** | PYZ archive importer unreachable for disk-extracted datas; set `noarchive=True` |
@@ -109,19 +119,19 @@ These are issues that **work in the Vite dev browser** but **fail in the Tauri W
 | **Dynamic routes 404 (e.g. `/app/books/123`)** | `StaticFiles(html=True)` has no SPA fallback; subclass with `SPAStaticFiles` |
 | **Vite dev proxy 404 error** | Target `localhost:PORT` fails due to IPv6 `::1` resolution when Python binds only to `127.0.0.1` |
 | **Frontend start fails silently** | `Start-Process npm` in PowerShell fails on Windows (npm is `npm.cmd` batch file) |
-| **Next.js static export renders 404 page** | Stale `.next/` build cache produces corrupted `out/`. Fix: delete BOTH `.next/` AND `out/` before rebuild — not just `out/` |
-| **LLM chat fails — "Unexpected endpoint"** | Backend sends `/chat/completions` but LMStudio needs `/v1/chat/completions`. Ollama accepts both, LMStudio doesn't. Fix: always use `/v1/` prefix in LLM API URL construction |
+| **Next.js static export renders 404 page** | Stale `.next/` build cache produces corrupted `out/`. Fix: delete BOTH `.next/` AND `out/` before rebuild - not just `out/` |
+| **LLM chat fails - "Unexpected endpoint"** | Backend sends `/chat/completions` but LMStudio needs `/v1/chat/completions`. Ollama accepts both, LMStudio doesn't. Fix: always use `/v1/` prefix in LLM API URL construction |
 | **Frozen exe always runs stdio** | `run_server.py` calls `main()` which uses `argparse` → `sys.argv` still has the original PyInstaller args. Fix: set `sys.argv = ["prog", "--mode", "http", ...]` before calling `main()` |
 | **`PackageNotFoundError: email-validator`** | `.dist-info` stripping removes `email_validator-*.dist-info` that pydantic needs at import time. Keep it or skip the strip entirely |
 | **`Start-Job` backend test gets "Connection refused"** | PowerShell `Start-Job` spawns a child process that does NOT inherit the caller's `$env:` variables. Always set env vars inside the job script block: `Start-Job -ScriptBlock { $env:MCP_PORT="10944"; & $exe }` |
-| **Backend running but no HTTP port open** | The `main()` function auto-detects stdio vs HTTP based on `sys.argv` or env vars. If neither is set correctly in the frozen exe, it defaults to stdio. Check that `run_server.py` overwrites `sys.argv` BEFORE calling `main()` — PyInstarter's `sys.argv` contains frozen paths, not your intended flags |
+| **Backend running but no HTTP port open** | The `main()` function auto-detects stdio vs HTTP based on `sys.argv` or env vars. If neither is set correctly in the frozen exe, it defaults to stdio. Check that `run_server.py` overwrites `sys.argv` BEFORE calling `main()` - PyInstarter's `sys.argv` contains frozen paths, not your intended flags |
 | **`Failed to fetch` / CORS OPTIONS `405 Method Not Allowed`** | `mcp_app.run_http_async()` ignores middlewares/routes added to `http_app()`. Run Uvicorn directly on the fully configured ASGI app. |
 | **Backend spawns but frontend cannot reach it (Tauri only)** | **Port mismatch**: `backend.rs` `BACKEND_PORT` is 10700 but frontend `API_BASE` targets 10701. They must match. In Tauri, the backend is spawned with `PORT` env var from `backend.rs`, while the frontend's compiled JS hardcodes `API_BASE`. Dev mode hides this because the user starts backend + frontend separately with matching ports. |
 | **FastAPI `Router.__init__() got an unexpected keyword argument 'on_startup'`** | **FastAPI/Starlette version mismatch.** The lockfile pins a specific FastAPI version (e.g. 0.138.0) requiring `starlette>=0.46.0`, but the system has a stale FastAPI (e.g. 0.121.1) incompatible with the installed Starlette 1.3.1. Fix: `uv sync` or `pip install fastapi==0.138.0` to match the lockfile. |
 | **`NameError: name 'ChatMemory' is not defined` / missing `_json`, `_req`, `os` in frozen exe** | **Ruff pre-commit hook strips imports.** When a module uses `import json as _json`, `import urllib.request as _req`, or other unconventional import aliases inside nested try/except blocks, `ruff check --fix` may remove them as "unused" (F821 only triggers at file-level name resolution). The fix: add `# noqa: F821` to the import line, or add a dummy usage at module level: `_ = _json`. Pre-commit `ruff` hooks run automatically on commit and silently strip these. |
-| **`ModuleNotFoundError: No module named 'uvicorn'` in frozen exe** | **PyInstaller as `uv tool` can't see venv packages.** When PyInstaller is installed globally via `uv tool install pyinstaller`, it runs from `C:\Users\...\uv\tools\pyinstaller` — a separate environment that cannot import the repo's venv packages (uvicorn, fastapi, etc.). The frozen exe builds without errors but runtime imports fail because the packages were never included. Fix: PyInstaller MUST be in the repo's dev dependencies: `pyinstaller>=6.0.0` in both `[project.optional-dependencies] dev` and `[dependency-groups] dev`, installed via `uv sync` or `uv pip install pyinstaller`. Run `uv run pyinstaller spec.spec` — NOT the global tool. Verify with `uv run pyinstaller --version` — it must show the venv path, not `C:\Users\...\uv\tools\pyinstaller`. |
+| **`ModuleNotFoundError: No module named 'uvicorn'` in frozen exe** | **PyInstaller as `uv tool` can't see venv packages.** When PyInstaller is installed globally via `uv tool install pyinstaller`, it runs from `C:\Users\...\uv\tools\pyinstaller` - a separate environment that cannot import the repo's venv packages (uvicorn, fastapi, etc.). The frozen exe builds without errors but runtime imports fail because the packages were never included. Fix: PyInstaller MUST be in the repo's dev dependencies: `pyinstaller>=6.0.0` in both `[project.optional-dependencies] dev` and `[dependency-groups] dev`, installed via `uv sync` or `uv pip install pyinstaller`. Run `uv run pyinstaller spec.spec` - NOT the global tool. Verify with `uv run pyinstaller --version` - it must show the venv path, not `C:\Users\...\uv\tools\pyinstaller`. |
 | **`ModuleNotFoundError: No module named 'pydantic.networks'` in frozen exe** | **Pydantic lazy imports missed by static analysis.** Pydantic lazy-imports many submodules (`pydantic.networks`, `pydantic.color`, etc.) via `__getattr__` in `pydantic/__init__.py`. PyInstaller's static analysis does not follow these lazy imports. Fix: collect all pydantic submodules in the spec before Analysis: `_pydantic_all = h.collect_submodules('pydantic')`, then pass `hiddenimports=[...] + _pydantic_all`. Include a fallback list for when `collect_submodules` fails. |
-| **`PackageNotFoundError: No package metadata was found for fastmcp`** | **FastMCP's dist-info stripped by spec loop; can't simply re-add it.** The `.dist-info` strip loop removes all dist-info dirs from all TOC lists. Adding `'fastmcp'` to `_keep_dist` preserves its entries, but some entries point to the **dist-info directory itself** (not files inside it). During PKG assembly, PyInstaller calls `open(fastmcp-3.x.x.dist-info, 'rb')` on the directory, which fails with `PermissionError: [Errno 13] Permission denied`. Fix — **two-part**:
+| **`PackageNotFoundError: No package metadata was found for fastmcp`** | **FastMCP's dist-info stripped by spec loop; can't simply re-add it.** The `.dist-info` strip loop removes all dist-info dirs from all TOC lists. Adding `'fastmcp'` to `_keep_dist` preserves its entries, but some entries point to the **dist-info directory itself** (not files inside it). During PKG assembly, PyInstaller calls `open(fastmcp-3.x.x.dist-info, 'rb')` on the directory, which fails with `PermissionError: [Errno 13] Permission denied`. Fix - **two-part**:
 1. **Patch fastmcp's source** in the build script: wrap `__version__ = _version("fastmcp")` in `try/except PackageNotFoundError: __version__ = "0.0.0"`. This is done in `build.ps1` before PyInstaller runs.
 2. **Prevent `_keep_dist` from matching `fastmcp-`**: The pattern `'mcp-'` matches `fastmcp-` as a substring. Change to path-separator-prefixed: `['\\mcp-', '/mcp-']` to only match the `mcp` SDK package (`\mcp-1.x.x`) and not `fastmcp` (`\fastmcp-`). Also include `str(e[0]).startswith('mcp-')` for dest-name-only TOC entries. |
 
@@ -132,11 +142,11 @@ These are issues that **work in the Vite dev browser** but **fail in the Tauri W
 **Time budget:** ~30 min build + 5 min verify. **Never skip sidecar smoke.**
 
 ```
-Phase 0 — Preconditions
+Phase 0 - Preconditions
   [ ] Fleet port assigned; bundle id frozen
   [ ] No {repo}-native.exe or {repo}-backend.exe in Task Manager
 
-Phase 1 — Code gates (B→J checklist below)
+Phase 1 - Code gates (B→J checklist below)
   [ ] API_BASE absolute in prod
   [ ] run_server.py frozen-safe
   [ ] backend.rs → resources/ first
@@ -145,29 +155,29 @@ Phase 1 — Code gates (B→J checklist below)
   [ ] NSIS hooks.nsh kills BOTH exes
   [ ] {REPO}_TAURI=1 + CORS regex
   [ ] @tauri-apps/api in frontend package.json
-  [ ] Frontend: global connection store (§N) — zustand store + topbar indicator + exponential backoff poll + Tauri event bridge
+  [ ] Frontend: global connection store (§N) - zustand store + topbar indicator + exponential backoff poll + Tauri event bridge
   [ ] PyInstaller: upx=False, cachetools, _strptime eager import
 
-Phase 2 — Sidecar only
+Phase 2 - Sidecar only
   pwsh native/build-sidecar.ps1
   $env:PORT='{port}'; $env:{REPO}_TAURI='1'
   Start dist/{repo}-backend.exe → sleep 20
   GET /health → 200
   GET /api/{one_feature}/ → real JSON (not No module named …)
 
-Phase 3 — Full Tauri
+Phase 3 - Full Tauri
   pwsh native/build.ps1
   Remove-Item target/release/{repo}-backend.exe  # stale shadow
 
-Phase 4 — MCPB (optional)
+Phase 4 - MCPB (optional)
   pwsh scripts/build-mcpb-package.ps1
   Confirm dist/{repo}.mcpb < 5 MB
 
-Phase 5 — Release
+Phase 5 - Release
   Copy-Item bundle/nsis/*-setup.exe dist/{repo}-{tag}-setup.exe
   gh release upload {tag} dist/* --clobber
 
-Phase 6 — Verify installed app (§M)
+Phase 6 - Verify installed app (§M)
 ```
 
 **If anything fails:** fix at the **earliest phase** that failed. Do not upload NSIS to "see if it helps."
@@ -183,15 +193,27 @@ Copy this checklist when adding or fixing desktop installers. **Do not ship NSIS
 | Item | Convention |
 |------|------------|
 | Backend port | Fleet block (e.g. calibre 10720, plex 10740, pywinauto 10789) |
+| Operator backend port (side-by-side rule) | A DEDICATED claimed port, never the dev backend port (see below) |
 | Tauri spawn env | `{REPO}_TAURI=1` + `PORT={port}` on child process |
-| Bundle id | `ai.fleet.{repo}` or `com.sandraschi.{repo}` — stable across releases |
+| Bundle id | `ai.fleet.{repo}` or `com.sandraschi.{repo}` - stable across releases |
 | Main binary | `{repo}-native.exe` (Tauri `mainBinaryName`) |
 | Sidecar | `{repo}-backend.exe` in `native/resources/` only |
 | Install dir | `%LOCALAPPDATA%\{Product Name}` (currentUser NSIS) |
 
+**Side-by-side rule (MANDATORY).** The installed app and the dev stack must
+run at the same time without fighting. The Tauri operator backend therefore
+gets its OWN port, claimed via `fleet-gate/claim_ports.py` as a `{repo}-native`
+row (e.g. meta-mcp-native backend 11220 alongside meta_mcp dev 10718/10719).
+Reusing the dev backend port is forbidden: the operator's `free_port` would
+kill the developer's backend on launch, and the dev backend would steal the
+installed app's spawn. The build bakes the operator port into the frontend
+(`VITE_API_BASE_URL`), CSP `connect-src`, and the Rust `BACKEND_PORT`
+constant; the dev default stays untouched. Paid for 2026-09-29 (meta_mcp):
+first NSIS shipped spawning on the dev port, unusable next to `start.ps1`.
+
 ### B. Frontend (production API)
 
-- [ ] `API_BASE` / `getBaseUrl()` → `http://127.0.0.1:{port}` when `NODE_ENV !== 'development'`
+- [ ] `API_BASE` / `getBaseUrl()` → `http://127.0.0.1:{port}` when `NODE_ENV !== 'development'` (`{port}` is the claimed operator port from §A, never the dev backend port)
 - [ ] No relative `fetch('/api/...')` in client pages (audit with `rg` below)
 - [ ] Covers, iframes (`/docs`), export URLs use absolute base in prod
 - [ ] `tauri.conf.json` CSP `connect-src` includes `http://127.0.0.1:{port}`
@@ -211,7 +233,7 @@ rg "VITE_API_BASE|API_BASE" --glob "*.{ts,tsx,env*}"
 - [ ] When `{REPO}_TAURI=1`: `allow_origin_regex=r"https?://tauri\.localhost(:\d+)?"`
 - [ ] Logs + settings under `%LOCALAPPDATA%/{identifier}/` when frozen (not repo-relative `logs/`)
 
-### D. `run_server.py` (PyInstaller entry — **mandatory pattern**)
+### D. `run_server.py` (PyInstaller entry - **mandatory pattern**)
 
 **Do not** `os.chdir("webapp/backend")` when frozen. Match calibre/plex:
 
@@ -236,11 +258,11 @@ def _run_http() -> None:
 - [ ] `datas`: copy `src/{package}` + `webapp/backend/app` into bundle
 - [ ] `hiddenimports`: `collect_submodules("{package}")`, `collect_submodules("app")`
 - [ ] FastMCP chain: `cachetools`, `collect_submodules("key_value")`, `collect_all("cachetools")`
-- [ ] **FastMCP 3.4+ JWT:** add `joserfc`, `joserfc.jwk`, `joserfc.jwt` to hiddenimports — 3.4.0 migrated auth JWT from `authlib` to `joserfc`; frozen builds without this import silently fail auth flows
+- [ ] **FastMCP 3.4+ JWT:** add `joserfc`, `joserfc.jwk`, `joserfc.jwt` to hiddenimports - 3.4.0 migrated auth JWT from `authlib` to `joserfc`; frozen builds without this import silently fail auth flows
 - [ ] Common extras: `fastmcp`, `uvicorn.*`, `h11`, `beartype`, `websockets`, `sqlite3`, `jwt`, `pytz`, `jsonschema`
 - [ ] **Stdlib C extensions:** `_strptime`, `_datetime` in hiddenimports **and** eager import in `run_server.py`
 - [ ] `collect_all()` for `cachetools`, `beartype`, `pytz`, `jsonschema` (calibre parity)
-- [ ] **`noarchive=True`** in `Analysis()` — MANDATORY. Without it, stdlib modules in PYZ become unreachable when packages are loaded from disk-extracted datas (onefile mode)
+- [ ] **`noarchive=True`** in `Analysis()` - MANDATORY. Without it, stdlib modules in PYZ become unreachable when packages are loaded from disk-extracted datas (onefile mode)
 - [ ] Exclude torch if not needed (`excludes=["torch", ...]`)
 - [ ] **`.dist-info` strip preserve list:** `mcp` and `opentelemetry` need metadata at runtime (`importlib.metadata.version()` / `entry_points()`). Keep their dist-info:
       ```python
@@ -256,7 +278,7 @@ def _run_http() -> None:
 **Critical `_strptime` pattern** (hiddenimports alone failed in plex-mcp):
 
 ```python
-# run_server.py — after path setup, before uvicorn
+# run_server.py - after path setup, before uvicorn
 import _datetime  # noqa: F401
 import _strptime  # noqa: F401
 ```
@@ -312,6 +334,16 @@ if _frontend_dist and os.path.isdir(_frontend_dist):
 - [ ] `follow_symlink=True` with `TypeError` fallback for older Starlette
 - [ ] Smoke: `GET /app/nonexistent/route` returns 200 (index.html), not 404
 
+**Next.js `basePath` must match the mount path.** When the backend mounts the static
+export at a subpath (`app.mount("/app", SPAStaticFiles(...))`) and the webview navigates
+to `http://127.0.0.1:{port}/app/`, the Next.js config MUST set the same `basePath`
+(`basePath: "/app"` for `output: 'export'`). Without it the export emits **absolute**
+`/_next/...` asset URLs and `/books` links that 404 under the `/app` mount - the
+installer renders blank (calibre-mcp 2026-08). Files stay at `out/` root, but all
+URLs are prefixed `/app/`, so the existing mount is correct. Do NOT "fix" a blank UI by
+removing `basePath`; restore it and verify the built `out/index.html` refs start with
+`/app/_next/`, not `/_next/`.
+
 ### F. Rust spawn (`native/src/backend.rs`)
 
 - [ ] Resolve backend **only** from `{exe_dir}/resources/{repo}-backend.exe` first
@@ -322,7 +354,7 @@ if _frontend_dist and os.path.isdir(_frontend_dist):
 
 ### G. Rust lifecycle (`main.rs`)
 
-- [ ] Spawn backend in `setup()` (sync — broken async `State` fails silently)
+- [ ] Spawn backend in `setup()` (sync - broken async `State` fails silently)
 - [ ] On `RunEvent::Exit` **and** `RunEvent::ExitRequested`: `child.kill()` + `child.wait()`
 
 ### H. Build scripts (sidecar + NSIS)
@@ -353,7 +385,7 @@ Tauri only runs `CheckIfAppIsRunning` on the **main** binary. The **backend chil
 }
 ```
 
-Use `skip` when WebView2 runtime is already on the machine (Edge installed). Use `embedBootstrapper` on air-gapped builds — **not** `downloadBootstrapper` (network hang).
+Use `skip` when WebView2 runtime is already on the machine (Edge installed). Use `embedBootstrapper` on air-gapped builds - **not** `downloadBootstrapper` (network hang).
 
 **Template `native/windows/hooks.nsh`** (replace names):
 
@@ -466,20 +498,20 @@ app.add_middleware(
 
 ## 4. Tauri operator: spawn backend reliably
 
-See **Fleet rollout §F–G**. Plex-specific failure: `resolve(BACKEND_NAME, Resource)` returned `target/release/{repo}-backend.exe` (stale) instead of `target/release/resources/{repo}-backend.exe`.
+See **Fleet rollout §F-G**. Plex-specific failure: `resolve(BACKEND_NAME, Resource)` returned `target/release/{repo}-backend.exe` (stale) instead of `target/release/resources/{repo}-backend.exe`.
 
 ---
 
 ## 5. PyInstaller sidecar
 
-See **Fleet rollout §D–E**. Plex postmortem added `cachetools` + `key_value` for FastMCP 2.x.
+See **Fleet rollout §D-E**. Plex postmortem added `cachetools` + `key_value` for FastMCP 2.x.
 
 ---
 
 ## 6. MCP installer / JSON configs
 
 - Timestamped `.bak` before editing client MCP JSON
-- Merge `mcpServers` — never replace entire file
+- Merge `mcpServers` - never replace entire file
 - Marker file only after successful registration
 
 ---
@@ -492,11 +524,11 @@ See **Fleet rollout §D–E**. Plex postmortem added `cachetools` + `key_value` 
 
 ## 8. Not backend CORS
 
-Fleet health pings, Ollama proxy, `plugin-http` — see original notes; don’t chase these for “Failed to fetch” on own API routes.
+Fleet health pings, Ollama proxy, `plugin-http` - see original notes; don't chase these for “Failed to fetch” on own API routes.
 
 ---
 
-## 9. Plex-mcp postmortem (Jun 2026) — what broke
+## 9. Plex-mcp postmortem (Jun 2026) - what broke
 
 | # | Bug | Fix |
 |---|-----|-----|
@@ -518,25 +550,25 @@ Fleet health pings, Ollama proxy, `plugin-http` — see original notes; don’t 
 
 ---
 
-## 11. Blender-mcp postmortem (Jun 2026) — what broke
+## 11. Blender-mcp postmortem (Jun 2026) - what broke
 
 | # | Bug | Fix |
 |---|-----|-----|
-| 1 | `hooks.nsh` exists but was **never wired** — `tauri.conf.json` had empty `"nsis": {}` with no `installerHooks` | Set `"installerHooks": "./windows/hooks.nsh"` + `"installMode": "currentUser"`, `createDesktopShortcut`, `createStartMenuShortcut` |
-| 2 | `.dist-info` stripping loop missing from spec — AV file-lock `PermissionError` during PKG assembly | Add post-Analysis loop stripping `.dist-info` from all TOC lists |
-| 3 | Binary SKIP list missing — heavyweight deps (torch, grpc, pyarrow) could bloat installer | Add `SKIP = [...]` filter on `a.binaries` |
-| 4 | Spec missing `pathex=['src']` — PyInstaller may fail to resolve `blender_mcp` package | Add `pathex=['src']` in `Analysis()` |
+| 1 | `hooks.nsh` exists but was **never wired** - `tauri.conf.json` had empty `"nsis": {}` with no `installerHooks` | Set `"installerHooks": "./windows/hooks.nsh"` + `"installMode": "currentUser"`, `createDesktopShortcut`, `createStartMenuShortcut` |
+| 2 | `.dist-info` stripping loop missing from spec - AV file-lock `PermissionError` during PKG assembly | Add post-Analysis loop stripping `.dist-info` from all TOC lists |
+| 3 | Binary SKIP list missing - heavyweight deps (torch, grpc, pyarrow) could bloat installer | Add `SKIP = [...]` filter on `a.binaries` |
+| 4 | Spec missing `pathex=['src']` - PyInstaller may fail to resolve `blender_mcp` package | Add `pathex=['src']` in `Analysis()` |
 | 5 | Missing `_datetime` eager import alongside `_strptime` in `run_server.py` | Add `import _datetime` |
 | 6 | `vite.config.ts` proxy target uses `localhost:10849` which resolves to IPv6 `::1`, while Python backend binds to IPv4 `127.0.0.1` (causes `404` errors in dev mode) | Change proxy target in `vite.config.ts` to `http://127.0.0.1:10849` |
 | 7 | `Start-Process npm` in `start.ps1` fails silently on Windows because `npm` is a `.cmd` batch file | Change to `Start-Process cmd.exe -ArgumentList "/c npm run dev -- --port $WebPort --host"` |
 | 8 | CUA smoke test config (`cua-nsis-config.json`) binary name mismatch (`blender-mcp-native` vs `blender_mcp_native`) | Update `operator_exe` to match the exact compiled Cargo binary name (`blender_mcp_native.exe`) |
 | 9 | `list_local_models` returns blank error descriptions (`Ollama: `) when connection fails with empty exception messages (e.g. `httpx.ConnectTimeout("")`) | Fall back to exception class name when string message is empty: `f"{type(e).__name__}: {e}" if str(e) else type(e).__name__` |
-| 10 | Unicode em-dashes `—` in build scripts throw compilation/parser errors on systems using other encodings; Copy-Item fails with null parameter-binding bugs | Replace all em-dashes `—` with standard hyphens `-`; use distinct variable names and explicit `-Path` / `-Destination` parameters in Copy-Item calls |
+| 10 | Unicode em-dashes `-` in build scripts throw compilation/parser errors on systems using other encodings; Copy-Item fails with null parameter-binding bugs | Replace all em-dashes `-` with standard hyphens `-`; use distinct variable names and explicit `-Path` / `-Destination` parameters in Copy-Item calls |
 | 11 | FastMCP HTTP routing preflight bug (`405 Method Not Allowed` / `Failed to fetch` in webview) | `mcp_app.run_http_async()` runs an internal FastAPI instance that ignores all middlewares (like `CORSMiddleware`) and routes appended to `asgi_app = app.http_app()` in `server.py`. Fix this by running Uvicorn directly on the fully configured `asgi_app` (via `uvicorn.Server`). |
 
 ---
 
-## 12. Stale cached backend binary — version-based materialize never replaces
+## 12. Stale cached backend binary - version-based materialize never replaces
 
 | # | Bug | Fix |
 |---|-----|-----|
@@ -544,26 +576,26 @@ Fleet health pings, Ollama proxy, `plugin-http` — see original notes; don’t 
 
 ---
 
-1. **"Backend is up"** — `/health` does not prove PyInstaller bundled all lazy imports.
-2. **"Tell user to quit"** — correct fix is NSIS hooks; quitting is a workaround for broken installers.
-3. **"Fix CORS again"** — after API_BASE is absolute, remaining fetch failures are often CSP or wrong port.
-4. **"Rebuild Tauri only"** — `npx @tauri-apps/cli build` runs `beforeBuildCommand` (frontend build) and Rust compilation but **does not run PyInstaller**. The NSIS installer bundles whatever `resources/*-backend.exe` already exists. If the backend code changed, PyInstaller must run first. **Always use `build.ps1`** (frontend → PyInstaller → copy to resources → Tauri), not bare `npx tauri build`.
-5. **"Edit .env in install dir"** — frozen tree has no `webapp/backend`; use `%LOCALAPPDATA%/{identifier}/`.
-6. **Chasing WebView2 download** — use `skip` when Edge is installed; bootstrapper download hangs on bad networks.
-7. **Uploading before frozen smoke** — users download broken assets; `--clobber` replaces but reputation damage remains.
-8. **MCPB from repo root** — wastes CI minutes and GitHub storage; not a Tauri fix.
-9. **Assuming Libraries ≡ full app** — browse/search paths pull validation, dates, ML stacks Libraries never touch.
-10. **One-shot hiddenimport** — stdlib C modules need eager import at entry; warn-file audit for the rest.
+1. **"Backend is up"** - `/health` does not prove PyInstaller bundled all lazy imports.
+2. **"Tell user to quit"** - correct fix is NSIS hooks; quitting is a workaround for broken installers.
+3. **"Fix CORS again"** - after API_BASE is absolute, remaining fetch failures are often CSP or wrong port.
+4. **"Rebuild Tauri only"** - `npx @tauri-apps/cli build` runs `beforeBuildCommand` (frontend build) and Rust compilation but **does not run PyInstaller**. The NSIS installer bundles whatever `resources/*-backend.exe` already exists. If the backend code changed, PyInstaller must run first. **Always use `build.ps1`** (frontend → PyInstaller → copy to resources → Tauri), not bare `npx tauri build`.
+5. **"Edit .env in install dir"** - frozen tree has no `webapp/backend`; use `%LOCALAPPDATA%/{identifier}/`.
+6. **Chasing WebView2 download** - use `skip` when Edge is installed; bootstrapper download hangs on bad networks.
+7. **Uploading before frozen smoke** - users download broken assets; `--clobber` replaces but reputation damage remains.
+8. **MCPB from repo root** - wastes CI minutes and GitHub storage; not a Tauri fix.
+9. **Assuming Libraries ≡ full app** - browse/search paths pull validation, dates, ML stacks Libraries never touch.
+10. **One-shot hiddenimport** - stdlib C modules need eager import at entry; warn-file audit for the rest.
 
-11. **"frontendDist points to repo root"** — `outDir: '../dist'` in `vite.config.ts` + `frontendDist: "../dist"` in `tauri.conf.json` means the NSIS installer bundles EVERYTHING in repo root `dist/` (backend.exe, MCPB, and even the NSIS installer itself). Rust binary goes from 12 MB to 587 MB.
-12. **"Strip all .dist-info"** — `mcp` and `fastmcp` call `importlib.metadata.version()` at import time. Removing their `.dist-info` crashes the frozen backend. Always keep `mcp-`, `fastmcp-`, `fastapi-`, `pydantic-` dist-info.
-13. **`"csp": null` blocks all backend connections** — Tauri 2.0's default CSP when `null` only allows `'self'` and `ipc:`. Every `fetch()` from the WebView to `http://127.0.0.1:{PORT}` is silently blocked. `curl` works from terminal; the WebView shows "Failed to fetch". Affects **45 fleet repos**. Fix: set explicit CSP with `connect-src http://127.0.0.1:{PORT}`.
+11. **"frontendDist points to repo root"** - `outDir: '../dist'` in `vite.config.ts` + `frontendDist: "../dist"` in `tauri.conf.json` means the NSIS installer bundles EVERYTHING in repo root `dist/` (backend.exe, MCPB, and even the NSIS installer itself). Rust binary goes from 12 MB to 587 MB.
+12. **"Strip all .dist-info"** - `mcp` and `fastmcp` call `importlib.metadata.version()` at import time. Removing their `.dist-info` crashes the frozen backend. Always keep `mcp-`, `fastmcp-`, `fastapi-`, `pydantic-` dist-info.
+13. **`"csp": null` blocks all backend connections** - Tauri 2.0's default CSP when `null` only allows `'self'` and `ipc:`. Every `fetch()` from the WebView to `http://127.0.0.1:{PORT}` is silently blocked. `curl` works from terminal; the WebView shows "Failed to fetch". Affects **45 fleet repos**. Fix: set explicit CSP with `connect-src http://127.0.0.1:{PORT}`.
 
 Full ✅/❌ table: [TAURI_DO_DONT_MATRIX.md](TAURI_DO_DONT_MATRIX.md).
 
 ---
 
-## 13. Virtualization-mcp postmortem (Jun 2026) — what broke
+## 13. Virtualization-mcp postmortem (Jun 2026) - what broke
 
 | # | Bug | Fix |
 |---|-----|-----|
@@ -574,14 +606,58 @@ Full ✅/❌ table: [TAURI_DO_DONT_MATRIX.md](TAURI_DO_DONT_MATRIX.md).
 | 5 | `start.ps1` (root) lacked port clearing for MCP HTTP port 10702. | Added `Get-NetTCPConnection` zombie kill loop before `uv run virtualization-mcp`. |
 | 6 | CORS `tauri://localhost` missing from dev-mode fallback in `webapp/backend/app/main.py` (only present in `run_server.py`'s `CORS_ORIGINS` env override). | Added `tauri://localhost`, `http://tauri.localhost`, `https://tauri.localhost` to the default CORS `allow_origins` list. |
 | 7 | **Rebuild pipeline shortcut**: Running `npx tauri build` directly instead of `build.ps1` skips PyInstaller. The NSIS installer bundles the stale `resources/*-backend.exe` from the last PyInstaller run. Backend changes (new modules, fixed imports) don't make it into the installer. The Rust `npx tauri build` step succeeds with no errors, giving false confidence. | Always run `build.ps1` which chains: frontend build → PyInstaller → copy to resources → `npx tauri build`. After any backend Python change, verify the backend.exe is fresh (`Get-Item resources/*-backend.exe | Select LastWriteTime`). |
-| 8 | **Frontend fetch to `localhost:{port}` fails in production** — Windows resolves `localhost` to IPv6 `::1` before IPv4 `127.0.0.1`. The backend binds to `127.0.0.1` (IPv4) by default. The frontend sends fetch requests to `http://localhost:{port}`, the OS resolves it to `::1`, and the connection is refused. Dev mode works because Vite's proxy target uses `127.0.0.1` explicitly. | Use `http://127.0.0.1:{port}` in `API_BASE` / `VITE_API_URL`, not `http://localhost:{port}`. Verify with `ping -n 1 localhost` — if it shows `[::1]`, this bug is live. |
-| 9 | **Backend "crashes" after 20–60 seconds — works briefly then goes offline.** Root cause: `backend.rs` spawns the child process with `stdout(Stdio::piped())` and `stderr(Stdio::piped())`. The uvicorn Python backend writes access logs to stdout (~100 bytes per request). The Windows pipe buffer is only 4 KB. After ~40 requests the buffer fills, the Python process blocks on `write()`, and the backend stops serving — but the process stays alive and the TCP port remains open. The frontend health check's TCP probe succeeds (port open) but HTTP requests time out (threads stuck on pipe write). Restart doesn't help because the new process also fills the pipe. Dev mode works because the console (`Start-Process -NoNewWindow`) provides an unbuffered output channel. | Use `Stdio::null()` for BOTH stdout and stderr. The backend already logs to files via its `config.py` / `logging` setup — piped output is redundant. Remove the `watch_backend_stream` reader threads entirely since no pipe is needed. |
-| 10 | **Backend hangs when opening VirtualBox page — VMs show briefly then "Offline".** Root cause: frontend calls `GET /api/v1/vms` with `details=True` which runs `VBoxManage list vms --long`. This produces a LOT of output and contacts VBoxSVC for every VM. The frontend also polls every 10 seconds via `setInterval(fetchVMs, 10000)`. When overlapping calls hit VBoxSVC simultaneously, it locks up and `subprocess.run` hangs forever (no timeout). The backend's health check TCP probe succeeds (port open) but the uvicorn worker is stuck waiting for the subprocess. | Add `timeout=30` to `subprocess.run` in `_run_command` so VBoxManage is killed after 30s instead of hanging forever. Add `except TimeoutExpired` handler that logs and raises a clean error. Remove the 10s polling interval — VMs should only fetch on page load and manual refresh. |
-| 11 | **NSIS installer bloated to 600+ MB.** Root cause: `vite.config.ts` `outDir: '../dist'` builds the frontend to the repo root `dist/`. This directory also receives the PyInstaller backend.exe, MCPB bundle, and the NSIS installer itself (staged by `build.ps1`). `tauri.conf.json` `frontendDist: "../dist"` causes Tauri to embed ALL files in that directory into the Rust binary — including the 600+ MB NSIS installer recursively. The Rust binary balloons to 587 MB and the NSIS installer to 619 MB. | Set `vite.config.ts` `outDir: 'dist'` (relative, outputs to `webapp/dist/`). Set `tauri.conf.json` `frontendDist: "../webapp/dist"` to point specifically at the frontend build output. Verify `frontendDist` contains only `index.html` + `assets/`, not backend.exe or NSIS files. |
-| 12 | **PyInstaller frozen exe crashes with `ImportError: cannot import name 'FastMCP'` / `module 'mcp' has no attribute 'types'` / `PackageNotFoundError: No package metadata was found for mcp`.** Root cause: over-aggressive `.dist-info` stripping in the PyInstaller spec removes metadata directories that packages need at import time. The `mcp` package calls `importlib.metadata.version("mcp")` at startup — without its `.dist-info`, it crashes. `fastmcp` uses `TYPE_CHECKING` guards for `FastMCP` and `Context`, so `from fastmcp import FastMCP` silently fails at runtime because the actual class lives in `fastmcp.server.server`. | Three fixes needed: (1) Keep essential `.dist-info` for packages that need metadata: `_keep_dist = ["fastmcp-", "mcp-", "fastapi-", "pydantic-"]`. Save them before the stripping loop and re-add to `a.datas`. (2) Use direct import paths: `from fastmcp.server.server import FastMCP` instead of `from fastmcp import FastMCP`. (3) Eager-import `mcp.types` in `run_server.py` before any tool code: `import mcp.types # noqa: F401`. See PyInstaller spec pattern in `tauri_nsis_building.md` §E. |
+| 8 | **Frontend fetch to `localhost:{port}` fails in production** - Windows resolves `localhost` to IPv6 `::1` before IPv4 `127.0.0.1`. The backend binds to `127.0.0.1` (IPv4) by default. The frontend sends fetch requests to `http://localhost:{port}`, the OS resolves it to `::1`, and the connection is refused. Dev mode works because Vite's proxy target uses `127.0.0.1` explicitly. | Use `http://127.0.0.1:{port}` in `API_BASE` / `VITE_API_URL`, not `http://localhost:{port}`. Verify with `ping -n 1 localhost` - if it shows `[::1]`, this bug is live. |
+| 9 | **Backend "crashes" after 20-60 seconds - works briefly then goes offline.** Root cause: `backend.rs` spawns the child process with `stdout(Stdio::piped())` and `stderr(Stdio::piped())`. The uvicorn Python backend writes access logs to stdout (~100 bytes per request). The Windows pipe buffer is only 4 KB. After ~40 requests the buffer fills, the Python process blocks on `write()`, and the backend stops serving - but the process stays alive and the TCP port remains open. The frontend health check's TCP probe succeeds (port open) but HTTP requests time out (threads stuck on pipe write). Restart doesn't help because the new process also fills the pipe. Dev mode works because the console (`Start-Process -NoNewWindow`) provides an unbuffered output channel. | Use `Stdio::null()` for BOTH stdout and stderr. The backend already logs to files via its `config.py` / `logging` setup - piped output is redundant. Remove the `watch_backend_stream` reader threads entirely since no pipe is needed. |
+| 10 | **Backend hangs when opening VirtualBox page - VMs show briefly then "Offline".** Root cause: frontend calls `GET /api/v1/vms` with `details=True` which runs `VBoxManage list vms --long`. This produces a LOT of output and contacts VBoxSVC for every VM. The frontend also polls every 10 seconds via `setInterval(fetchVMs, 10000)`. When overlapping calls hit VBoxSVC simultaneously, it locks up and `subprocess.run` hangs forever (no timeout). The backend's health check TCP probe succeeds (port open) but the uvicorn worker is stuck waiting for the subprocess. | Add `timeout=30` to `subprocess.run` in `_run_command` so VBoxManage is killed after 30s instead of hanging forever. Add `except TimeoutExpired` handler that logs and raises a clean error. Remove the 10s polling interval - VMs should only fetch on page load and manual refresh. |
+| 11 | **NSIS installer bloated to 600+ MB.** Root cause: `vite.config.ts` `outDir: '../dist'` builds the frontend to the repo root `dist/`. This directory also receives the PyInstaller backend.exe, MCPB bundle, and the NSIS installer itself (staged by `build.ps1`). `tauri.conf.json` `frontendDist: "../dist"` causes Tauri to embed ALL files in that directory into the Rust binary - including the 600+ MB NSIS installer recursively. The Rust binary balloons to 587 MB and the NSIS installer to 619 MB. | Set `vite.config.ts` `outDir: 'dist'` (relative, outputs to `webapp/dist/`). Set `tauri.conf.json` `frontendDist: "../webapp/dist"` to point specifically at the frontend build output. Verify `frontendDist` contains only `index.html` + `assets/`, not backend.exe or NSIS files. |
+| 12 | **PyInstaller frozen exe crashes with `ImportError: cannot import name 'FastMCP'` / `module 'mcp' has no attribute 'types'` / `PackageNotFoundError: No package metadata was found for mcp`.** Root cause: over-aggressive `.dist-info` stripping in the PyInstaller spec removes metadata directories that packages need at import time. The `mcp` package calls `importlib.metadata.version("mcp")` at startup - without its `.dist-info`, it crashes. `fastmcp` uses `TYPE_CHECKING` guards for `FastMCP` and `Context`, so `from fastmcp import FastMCP` silently fails at runtime because the actual class lives in `fastmcp.server.server`. | Three fixes needed: (1) Keep essential `.dist-info` for packages that need metadata: `_keep_dist = ["fastmcp-", "mcp-", "fastapi-", "pydantic-"]`. Save them before the stripping loop and re-add to `a.datas`. (2) Use direct import paths: `from fastmcp.server.server import FastMCP` instead of `from fastmcp import FastMCP`. (3) Eager-import `mcp.types` in `run_server.py` before any tool code: `import mcp.types # noqa: F401`. See PyInstaller spec pattern in `tauri_nsis_building.md` §E. |
+| 13 | **`PackageNotFoundError: No package metadata was found for fastmcp` at spec line `copy_metadata("fastmcp")`.** Root cause: running PyInstaller via `uv run pyinstaller` executes the **isolated uv tool environment** (its own Python, no project packages) - project metadata like `fastmcp` is invisible to it. | Install PyInstaller into the **project venv** (`uv add --dev pyinstaller`) and invoke `.venv\Scripts\pyinstaller.exe`. Never `uv run pyinstaller`. **Fixed at the template level 2026-09-17** (recurred in gitee-mcp, an otherwise SOTA repo, proving the pitfall write-up alone didn't stop it): `templates/tauri-native/native/build.ps1` now auto-detects a missing `.venv\Scripts\pyinstaller.exe`, runs `uv add --dev pyinstaller pefile altgraph` + `uv sync`, and invokes the venv exe directly. **A fleet grep on 2026-09-17 found this literal `uv run pyinstaller` anti-pattern in 247 existing `native/build.ps1` / `src-tauri/build.ps1` files** (essentially every Tauri-wrapped repo, since they were scaffolded before this fix) - the template fix only prevents it in *new* scaffolds. **Update 2026-09-17 (same day):** mechanically fixed 89 of the 247 (the 57 repos then in the NSIS build queue, `operations/nsis-build-queue.json`, some with duplicate `native/`+`src-tauri/` copies) via an exact-match-or-skip script with a `.bak` per file - 86 fit the uniform template pattern, 3 needed hand-fixing for non-template layouts (`civitai-mcp`, `mastodon-mcp`, `substack-mcp`). Left uncommitted in all 57 repos pending per-repo build verification through the queue's own `nsis-build` pass - commit only after a repo's own build+CUA-smoke run proves the fix works. **Remaining ~158 repos outside the queue are still unfixed** - propagate when/if they're queued; do not blind-sweep them, follow the same exact-match-with-backup approach. |
+| 14 | **Frozen exe ignores `PORT`/`MCP_PORT` and runs stdio** - the Tauri spawn sets env vars but `run_server.py` never translates them to HTTP mode. PyInstaller leaves the frozen `sys.argv` in place, so `argparse` in `main()` parses the wrong args. | Dual-transport entry: `port = os.environ.get("MCP_PORT") or os.environ.get("PORT"); if port: sys.argv = ["run_server.py", "--http", "--host", os.environ.get("MCP_HOST","127.0.0.1"), "--port", str(port)]` BEFORE calling `main()`. |
+| 15 | **Installed app loses OAuth tokens / rules** - defaults like `data/oauth_tokens.json` resolve under the frozen `_MEI*` temp dir which is wiped. First-run `.env` never seeded (dev-only loader). | Tauri mode (`{REPO}_TAURI=1`): store tokens + runtime JSON in `%LOCALAPPDATA%\{identifier}\`; seed `.env` from the bundled `resources/.env.example` on first run. `oauth.token_file()` / rule files must switch on the Tauri env var. |
+| 16 | **"Graph not authorized" after OAuth consent in the installed app** - the Graph service derived its account from the seeded `.env` placeholder (`you@example.com`), but the token is stored under the real account. | Resolve the account lazily: if the configured user holds no token, fall back to any account that does (`graph_account()` from the token store). |
+| 17 | **CUA "Backend not reachable" (401)** - the CUA probe sends no auth; health endpoints protected by dashboard Basic auth return 401. | `/api/v1/health` + `/api/v1/diagnostics` must be public (no `Depends(authenticate)`). They expose no sensitive data. Also: stop the dev backend before `cua-nsis-test` - it holds the port and the app's backend silently fails to bind (Rust TCP probe passes against the dev process). |
+| 18 | **Real `.env` bundled into NSIS installers** (credentials leak - **fleet-wide**, 12+ repos) - `tauri.conf.json` resources list `resources/.env` and build scripts copy the dev `.env`. | Bundle `.env.example` only: `"resources/.env.example"` in tauri.conf + `Copy-Item $Root\.env.example` in build.ps1. Audit: `rg -l "resources/\.env" D:\Dev\repos --no-ignore -g tauri.conf.json`. |
+| 19 | **CUA smoke test "Backend not reachable" against a genuinely stale backend that IS running and IS listening** - `resolve_bundled_backend()` in `backend.rs` tries the bare flat filename (`app.path().resolve(BACKEND_NAME, BaseDirectory::Resource)`) **before** the `resources/{BACKEND_NAME}` path. Normally inert (the flat path doesn't exist on a truly fresh machine), but the moment ANY orphaned copy of the backend exe ends up at the install root - leftover from an old install predating the current layout, a botched uninstall, a manual copy during debugging - it wins the resolution race forever. The NSIS uninstaller only removes files in its own manifest, so an orphan like this survives uninstall/reinstall cycles indefinitely and silently shadows every future rebuild. Symptom: fresh `resources/*-backend.exe` confirmed on disk with today's timestamp, but the running backend 404s on routes that only exist in the new build - because it's not running the new build at all (kicad-mcp, 2026-09-22: install root had a `kicad-mcp-backend.exe` dated 3+ months earlier, plus an unrelated-looking `kicad-mcp-native-backend.exe` orphan, neither cleaned by uninstall). Also produced a visible empty console window on every backend spawn, a second independent symptom of the same install-root cruft class - see row below. | **Try `resources/{BACKEND_NAME}` FIRST**, bare name only as a last-resort fallback (reverse the order). Never trust a flat `{install_dir}/{BACKEND_NAME}` match as authoritative - see §F "Do NOT trust flat `{exe_dir}/{repo}-backend.exe`" for the same principle applied to `target/release/`. **Fleet grep 2026-09-22 found the bare-first order in ~160 of ~163 `native/src/backend.rs` files** (same propagation pattern as row #13 - copied repo-to-repo from an early reference implementation, no single template source to patch centrally). Fixed in kicad-mcp only so far. **Do not blind-sweep** - propagate through the NSIS build queue same as #13, fixing + build-verifying one repo at a time. |
+| 20 | **Backend spawn shows a real, visible, empty console window every time the app launches** - `run_server.py`'s PyInstaller spec has `console=True` (often set deliberately to avoid the `sys.stderr is None` / uvicorn `isatty` crash from row in the Dev-vs-Prod table above), but `backend.rs`'s `Command::new(&backend_path)...spawn()` has no `.creation_flags(CREATE_NO_WINDOW)`. `console=True` embeds a real Windows console subsystem in the exe; without `CREATE_NO_WINDOW` at spawn time, Windows shows that console (empty, since stdout/stderr are `Stdio::null()`'d) every time the Tauri app spawns or restarts the backend. Same applies to any `taskkill.exe`/helper `Command::new()` calls in `backend.rs` - each pops its own flash console without the flag. | Add `use std::os::windows::process::CommandExt;` + `const CREATE_NO_WINDOW: u32 = 0x0800_0000;`, then `.creation_flags(CREATE_NO_WINDOW)` on every `Command::new()` spawn in `backend.rs` (the backend itself, and any `taskkill`/helper subprocess calls). Do **not** "fix" this by flipping `console=False` in the PyInstaller spec instead - that reintroduces the `sys.stderr is None` crash class this repo's `console=True` was set to avoid, unless `run_server.py` first patches `sys.stdout`/`sys.stderr` to a null-safe shim. Fixed in kicad-mcp; likely fleet-wide since `CREATE_NO_WINDOW` doesn't appear in the same ~160-repo `backend.rs` grep from row #19 above - not yet verified per-repo. |
+
+---
+
+## 14. qcad-mcp postmortem (2026-09-01) - native exits -1, CUA Phase 3 "Backend not reachable"
+
+Discovered during the qcad-mcp Tauri/NSIS build. The Rust native was **not** crashing; it exited `-1` (exit code 4294967295) ~2s after launch with **no Rust panic, no Windows crash event**. The event loop reached `WindowEvent[main]=Focused` then halted, firing `RunEvent::Exit` which killed the spawned backend → smoke saw "Backend not reachable".
+
+| # | Bug | Fix |
+|---|-----|-----|
+| 1 | **Webapp dist not code-split → native exits -1 on launch** (ROOT CAUSE). `webapp/vite.config.ts` had **no `manualChunks` and no `VITE_API_BASE` define**, so Vite emitted a **monolithic 1 MB `index-*.js`**. WebView2 failed to render it; the window never properly loaded, the native exited -1, and the backend was killed. freecad-mcp worked because its dist WAS code-split (react/vendor chunks + modulepreload). | Add `build.rollupOptions.output.manualChunks` (react/vendor) + `define: {"import.meta.env.VITE_API_BASE": ...}` to `vite.config.ts`, matching freecad-mcp. Verify `webapp/dist/index.html` has `<link rel="modulepreload">` vendor/react chunks, NOT a single 1 MB `<script src="/assets/index-*.js">`. **Checklist I gate: `webapp/dist` must be code-split before any `tauri build`.** |
+| 2 | Port 10966 squatted by Docker Desktop's `wslrelay`/`com.docker.backend` on Goliath → `free_port` killing arbitrary PID murdered Docker. | Move repo to a port **outside** Docker's dynamic `10960-11000` range (qcad → `11966/11967`). `free_port` must kill ONLY `{repo}-backend`/`{repo}-native`, never `Get-NetTCPConnection \| taskkill` on any PID. Update `WEBAPP_PORTS.md` + all scripts/configs. |
+| 3 | `resolve_bundled_backend` returned `\\?\C:\...` extended-length path from `current_exe()`; `Command::new().spawn()` rejects it. | Strip the `\\?\` prefix in `materialize_backend` before spawning. |
+| 4 | opentelemetry `StopIteration` on frozen backend import. `_keep_dist` had `'opentelemetry-'` (hyphen) but the dist-info is `opentelemetry_api-*.dist-info` (underscore) → entry_points stripped. | Add `'opentelemetry_api'` to `_keep_dist` in the PyInstaller spec (see §13 #12 for the general `.dist-info` rule). |
+| 5 | QCAD Pro GUI auto-launch in `lifespan` hangs the piped-stdout backend in a non-interactive sidecar session. | Skip `_ensure_qcad_running` GUI launch when `{REPO}_TAURI=1` (headless). |
+| 6 | `mcp.get_tools()` doesn't exist in FastMCP 3.2 (it's `get_tool`); `tool_count` in health/diagnostics 500s. | Use `_tool_manager.tools` len or `mcp.list_tools()` (await); wrap in try/except. |
+| 7 | `state.0.lock().unwrap()` in `spawn_backend` could deadlock if a concurrent spawn/exit held it. | Use `state.0.try_lock()`; drop child if busy. |
+
+**Fleet lesson (Checklist I):** the Tauri native is only as healthy as its embedded frontend. Before `tauri build`, confirm `webapp/dist` is **code-split** (react/vendor + modulepreload), otherwise the window fails silently and the native exits -1 with no panic - the classic "works in dev, dies in NSIS" that doesn't point at the backend at all.
+
+## 15. `free_port` still killed healthy shared backends - the wslrelay lesson only half-applied (2026-09-25)
+
+Found in `advanced-memory-mcp` while investigating unrelated NSSM-service desync symptoms, then confirmed as a **fleet-wide template bug**: `grep -rl "taskkill.*OwningProcess" --glob "*.rs"` across `D:\Dev\repos` matched **~230 `backend.rs` files in ~192 distinct repos**.
+
+Item #2 in the qcad postmortem above (the Docker `wslrelay` incident) already established the rule: `free_port` must never do a blind port-PID kill, only an image-name-scoped one. The canonical template (`templates/tauri-native/src/backend.rs.template`) was updated to add image-scoped killing with a poll/escalate loop - but it **still fell back to the exact forbidden blind port-PID kill** (`Get-NetTCPConnection -LocalPort {port} | taskkill /F /PID $_.OwningProcess`) both mid-poll (5s re-kill) and in the elevated escalation (15s), and `spawn_backend` called `free_port` **unconditionally on every launch**, with no check for whether the current port holder was healthy.
+
+Concretely, for any repo shipping both a Tauri native app and an NSSM-managed service on the same backend port (advanced-memory-mcp, aiwatcher-mcp, and any other repo with this dual deployment shape): opening the Tauri app force-killed the NSSM service's process on every single launch, silently, with zero UX indication - NSSM would then auto-restart it, racing the Tauri-spawned copy for the port.
+
+| # | Bug | Fix |
+|---|-----|-----|
+| 1 | `spawn_backend` called `free_port` unconditionally, with no check whether the current port holder was alive and healthy vs. dead/hung. | Added `port_holder_is_responsive(port)`: a real HTTP liveness probe (raw `GET / HTTP/1.1` over a `TcpStream`, timeout-bounded, checks for any `HTTP/` response prefix - not just a TCP connect, which a zombie can still accept). `spawn_backend` now checks this first and attaches to a responsive holder instead of killing it. A genuinely dead/hung holder still gets force-killed via the unchanged `free_port` path. |
+| 2 | `free_port`'s poll-loop re-kill (5s) and elevated escalation (15s) both still called the forbidden blind port-PID kill as a fallback after image-scoped killing, reintroducing the exact wslrelay risk in a second location the qcad postmortem's fix didn't reach. | Removed both blind port-PID fallback calls. If image-scoped killing doesn't free the port within 240s, `free_port` now fails loudly (unchanged existing behavior) instead of escalating to an unidentified-PID kill. |
+
+**Fleet lesson:** a documented fix (the wslrelay rule) needs to be verified against every call site that does the forbidden thing, not just the one that prompted the postmortem - the rule was written, the template was even updated afterward, and the violation survived anyway because nobody re-grepped for the literal pattern after the fix landed. Per the Bug Discovery Protocol, template/spec-level fixes should include a fleet-wide grep for the fixed pattern as a verification step, not just a fix to the one file that was being edited.
+
+**Remediation status (2026-09-25):** canonical template fixed and verified (substituted + `rustc --crate-type lib` syntax-checked clean). 4 of ~192 affected repos fixed and `cargo check`-verified so far (advanced-memory-mcp, aiwatcher-mcp, arxiv-mcp; tvtropes-mcp fixed but blocked on an unrelated pre-existing missing-resource build gap). Remaining ~188 repos are an open, tracked backlog - deliberately not swept blind, per Batch Mutation Safety and the Batch Size Limit and this fleet's own BUG-029 precedent for what an unverified mass Rust-file sweep costs.
+
+**Second bug found in the same fix, same day - a real health check, not just liveness.** The first version of `port_holder_is_responsive` only checked "does anything at this address speak HTTP at all" - it sent a request to `/` and accepted *any* `HTTP/` response prefix, regardless of status code or path. That's still not a health check: a process bound to the port but stuck mid-init, or one that 500s on every request, would pass it and get wrongly treated as healthy. Fixed to hit the app's **actual documented health/status endpoint** (`HEALTH_PATH` - per repo, e.g. `advanced-memory-mcp`'s is `/api/v1/system/status`, most others use `/health` or `/api/health`) and require a genuine `200` status line, not just any response. **General lesson, not Tauri-specific**: "is a TCP port accepting connections" and "did I get any HTTP response" are both liveness checks, not health checks - a health check calls the thing's own real status contract and checks the actual signal it returns. Applies equally to NSSM watchdog scripts, monitoring, and anywhere else this fleet checks "is service X up" by proxy instead of by asking it directly. `templates/tauri-native/src/backend.rs.template` and `scripts/scaffold-tauri.ps1`'s embedded backend.rs generator (a **separate, independently-drifted third copy** of this logic that `native/`-style scaffolds actually come from - the `.template` file alone does not cover them) were both updated; `scaffold-tauri.ps1` gained a `-HealthPath` parameter (default `/health`) so new scaffolds get asked for the real value instead of inheriting a guess.
 
 ## 10. Repo port map
-
 | Repo | Backend port | Tauri env | Frontend API |
 |------|--------------|-----------|--------------|
 | calibre-mcp | 10720 | `CALIBRE_TAURI=1` | `common/api.ts` |
@@ -627,13 +703,19 @@ Every Tauri installer MUST include these NSIS refinements for a professional Win
 ```json
 "nsis": {
   "installMode": "currentUser",
-  "createDesktopShortcut": true,
-  "createStartMenuShortcut": true,
   "installerHooks": "./windows/hooks.nsh"
 }
 ```
 
-These show checkboxes on the NSIS finish page that the user can opt in/out of.
+**Correction (2026-09-22, kicad-mcp live build failure):** `createDesktopShortcut` and
+`createStartMenuShortcut` are **not valid NSIS config keys in Tauri 2.x** — they don't
+exist in `tauri-utils`' `NsisConfig` struct (verified against 2.9.3) and adding them to
+`tauri.conf.json` fails bundling with a schema validation error (`"...is not valid under
+any of the schemas listed in the 'anyOf' keyword"`). This section previously claimed
+they were required; that was wrong and contradicted the already-correct note in
+`rules/tauri_nsis_building.md` §NSIS config ("not configurable in Tauri 2.0... do NOT
+add them to tauri.conf.json for v2"). The desktop/start-menu shortcuts are shown as
+NSIS finish-page checkboxes automatically by the default template — no config needed.
 
 ### Required hooks: PREINSTALL + PREUNINSTALL
 
@@ -662,8 +744,6 @@ Both MUST kill `{repo}-backend.exe` AND `{repo}-native.exe`. Without PREUNINSTAL
 [ ] tauri.conf.json: "resources" includes "resources/.env"
 [ ] Backend loads .env from install dir (Path.cwd() / ".env") in frozen mode
 [ ] If no .env at build time: create placeholder with "Configure via Settings" comment
-[ ] createDesktopShortcut: true
-[ ] createStartMenuShortcut: true
 [ ] installMode: currentUser
 [ ] PREINSTALL kills *-backend.exe AND *-native.exe
 [ ] PREUNINSTALL kills *-backend.exe AND *-native.exe
@@ -674,9 +754,9 @@ Both MUST kill `{repo}-backend.exe` AND `{repo}-native.exe`. Without PREUNINSTAL
 
 ---
 
-## N. Frontend "Backend unreachable" antipattern — connection health standard
+## N. Frontend "Backend unreachable" antipattern - connection health standard
 
-**Problem:** Every frontend page fetches the backend independently. When the backend is down (starting up, crashed, port conflict), each page shows a raw error like "Backend unreachable — is uvicorn running?" or an unhandled exception. This is the #1 user-facing UX failure in Tauri apps.
+**Problem:** Every frontend page fetches the backend independently. When the backend is down (starting up, crashed, port conflict), each page shows a raw error like "Backend unreachable - is uvicorn running?" or an unhandled exception. This is the #1 user-facing UX failure in Tauri apps.
 
 **Solution: Global connection state + exponential backoff + Tauri event bridge.**
 
@@ -703,7 +783,7 @@ Both MUST kill `{repo}-backend.exe` AND `{repo}-native.exe`. Without PREUNINSTAL
 
 ### Required pattern
 
-**1. Connection store (`src/store/connection.ts`) — zustand:**
+**1. Connection store (`src/store/connection.ts`) - zustand:**
 
 ```typescript
 import { create } from "zustand";
@@ -716,7 +796,7 @@ export const useConnection = create<{ state: "connecting"|"connected"|"offline"|
 
 - State is the ONLY source of truth for backend health.
 - Every component reads from `useConnection()` instead of doing its own fetch.
-- Every component shows the topbar indicator — no page hides it.
+- Every component shows the topbar indicator - no page hides it.
 
 **2. Health poll with exponential backoff (1s, 2s, 4s, 8s, 16s, 30s):**
 
@@ -752,7 +832,7 @@ const unlisten = await listen<string>("backend-status", (event) => {
 ```
 
 - `backend.rs` emits `"backend-status"` events: `"ready"`, `"error: <message>"`.
-- The zustand store reacts instantly — no HTTP poll wait.
+- The zustand store reacts instantly - no HTTP poll wait.
 - Outside Tauri (dev browser), the `import("@tauri-apps/api/event")` catches and falls back to HTTP polling.
 
 **4. Topbar dynamic indicator (every page):**
@@ -767,10 +847,10 @@ const statusLabel = state === "connected" ? "System Online" :
   state === "connecting" ? "Connecting..." : `Offline${lastError ? ` (${lastError.slice(0, 60)})` : ""}`;
 ```
 
-- **Always visible** — never hidden behind a menu or collapse.
-- **Color coded** — green (connected), amber (starting), red (offline/error).
-- **Restart button** when offline — calls `invoke("start_backend")`.
-- **Error text truncated** to 60 chars — shows the actual cause (connection refused, timeout, HTTP 503).
+- **Always visible** - never hidden behind a menu or collapse.
+- **Color coded** - green (connected), amber (starting), red (offline/error).
+- **Restart button** when offline - calls `invoke("start_backend")`.
+- **Error text truncated** to 60 chars - shows the actual cause (connection refused, timeout, HTTP 503).
 
 **5. Diagnostic endpoint (`GET /api/v1/diagnostics`):**
 
@@ -790,12 +870,30 @@ async def diagnostics():
 ### Checklist
 
 ```
-[ ] `src/store/connection.ts` — zustand store with global state
-[ ] `src/components/layout/topbar.tsx` — dynamic status indicator (always visible)
-[ ] `src/components/layout/app-layout.tsx` — starts health poll + Tauri event listener on mount
+[ ] `src/store/connection.ts` - zustand store with global state
+[ ] `src/components/layout/topbar.tsx` - dynamic status indicator (always visible)
+[ ] `src/components/layout/app-layout.tsx` - starts health poll + Tauri event listener on mount
 [ ] `start_backend` Tauri command exposed via invoke for "Restart Backend" button
 [ ] `GET /api/v1/diagnostics` endpoint on the backend
 [ ] `@tauri-apps/api` in package.json (for listen/invoke imports)
 [ ] zustand in package.json
 ```
 ```
+
+---
+
+## 16. docker-mcp postmortem (2026-10-06) - what the audit found
+
+| # | Bug | Fix |
+|---|-----|-----|
+| 1 | **`native/build.ps1` copies the real `.env` into `resources/`** - ships developer API keys inside the installer. Found in 14 fleet repos on 2026-10-06 (bus-pirate, function-generator, multimeter, meta_mcp, universal-actuator, test-fixture, unity3d, uitars, songgeneration, smoke-detector, steam, spectrum-analyzer, power-supply, tahoma2d). | Copy `.env.example` only; throw if missing. |
+| 2 | `main.rs` defines its own `start_backend` that spawns the child directly, so the audited `backend.rs::spawn_backend` (free_port, PORT env, health poll) is dead code. Also in google-ai-mcp, grandorgue-mcp. Check with: `main.rs` contains `Command::new` but not `spawn_backend`. | `start_backend` delegates to `spawn_backend`. |
+| 3 | `mcpb/run_server.py` copied from the Tauri sidecar template (`--http` required, imports `customization.server`) - the MCPB cannot run over stdio. | stdio launcher importing the package's real `main`. |
+| 4 | MCPB stages one package but it imports a sibling package under `src/`. | Stage sibling packages in `pack.ps1`. |
+| 5 | `uv run pyinstaller` in build scripts (245 `.ps1` files fleet-wide, see section 5). | `.venv\Scripts\pyinstaller.exe`. |
+| 6 | **Install docs tell end users to build the installer** (`just mcpb-pack`, `just build-native`, `git clone` + `just`) instead of downloading it. docker-mcp's v3.5.0 release had zero assets. Fleet audit 2026-10-06: of 196 repos with `native/` or `mcpb/`, only 37 have a release with assets, 28 have an empty release, 131 have no release. 104 repos' INSTALL.md carry the "clone, `just`, Why not `pip install`?" boilerplate as the recommended path; 37 README/INSTALL files send users to `just mcpb-pack` / `just build-native`. | Every release MUST attach `{repo}-{version}.mcpb` and `{repo}-{version}-setup.exe`. README/INSTALL lead with "download from Releases"; build recipes live in `docs/DEVELOPMENT.md`. See README_STRUCTURE.md Quick Install. |
+| 7 | API_BASE audit (2026-10-06, 201 Tauri repos): 10 with `API_BASE = ""`, 18 where the hardcoded port differs from `backend.rs` `BACKEND_PORT`, 64 with no API_BASE constant (relative `/api`?). | Env-driven `API_BASE` (dev default, `VITE_API_BASE` baked by build script), operator port from `claim_ports.py`. |
+| 8 | **`free_port` kills the app's OWN process (found in onenote-mcp 2026-10-06).** The shell binary is `{repo}-native.exe`, and `free_port` ran `Stop-Process -Name '{repo}-native'` / `taskkill /F /IM {repo}-native.exe`, so the installed app terminated itself ~7 s after launch: exit code -1, no panic, **no backend-spawn.log lines at all**, CUA Phase 3 "Backend not reachable". Unlike the section 14 #1 symptom (window renders badly) the cause is in Rust, not the frontend. Diagnosis that worked: run the installed exe with stdout/stderr redirected (empty), note the spawn log was never touched, then `git log -S` on the kill line (added 2026-10-02 by a CI commit, long after the last smoke-tested build). | In `free_port`, kill only `{repo}-backend` by image name, and kill other `{repo}-native` instances with `Get-Process ... \| Where-Object { $_.Id -ne <std::process::id()> }`. Never name-kill the process that is running the code. Smoke-test after any `free_port` edit. |
+| 9 | **Fleet audit for #8 (2026-10-06, `*/native/src/backend.rs`, 167 files): 35 match the self-name kill pattern, 34 of them with no own-PID exclusion; 157 still contain the blind `OwningProcess` port-PID kill that section 15 forbids.** Not verified per repo (only onenote-mcp was confirmed to self-terminate), so treat as a suspected fleet-wide launch failure for installed apps, to be checked one repo at a time with the CUA smoke test (Batch Size Limit applies; no blind sweep). Candidates: `grep -lE "Stop-Process -Name '[a-z0-9_-]+-native'\|taskkill /F /IM [a-z0-9_-]+-native\.exe" */native/src/backend.rs`. | Fix per repo with the #8 pattern + a smoke run; fix the canonical `templates/tauri-native/src/backend.rs.template` first so new scaffolds stop inheriting it. |
+| 10 | **Operator port must differ from the dev port (section A).** onenote-mcp shipped with the installed app spawning on the dev backend port 10907. The Rust `BACKEND_PORT`, CSP, frontend base URL, `cua-nsis-config.json` and `run_server.py` (must read `PORT`, which is what the shell passes; it only read `ONENOTE_PORT`/`MCP_PORT`) all have to move together, or the app listens on one port and probes another. | Claim a `{repo}-native` row with `claim_ports.py`, then change all five places. |
+| 11 | **`native/build.ps1` "frozen binary smoke test PASSED" examined nothing (found building email-mcp 0.6.0, 2026-10-07).** The template runs the freshly frozen sidecar on a hardcoded port 11999 and only checks "still alive after 5 s". 11999 was already held by another repo's running backend (filesystem-mcp; the registry also lists it for arxiv-mcp-backend), so the server hit `[Errno 10048]` and shut down within a second, yet the gate printed PASSED. Fleet audit: 34 of 168 `native/build.ps1` hardcode `testPort = 11999`, 39 carry the liveness-only gate. Also `Process.Kill()` on a PyInstaller onefile exe kills only the bootloader parent, not the server child. | Pick a free ephemeral port (`TcpListener` on port 0), poll the real health endpoint for HTTP 200, fail loudly with the captured stderr, and kill with `taskkill /F /T /PID`. Reference fix in `email-mcp/native/build.ps1` (tested with a passing and a failing binary). Roll out per repo, not as a sweep. |

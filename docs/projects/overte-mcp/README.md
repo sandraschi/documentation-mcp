@@ -1,72 +1,110 @@
-# 🛰️ Overte MCP & Dashboard
+# overte-mcp
 
-**Talk to your decentralized, agent-based virtual worlds.**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![Status: beta, core tools verified live](https://img.shields.io/badge/status-beta%2C%20verified%20live-brightgreen.svg)](#what-you-can-do)
 
-Overte MCP is a Model Context Protocol (MCP) server and telemetry dashboard tailored for **Overte** (decentralized social-VR / metaverse fork of classic Vircadia/High Fidelity). It enables AI assistants to query domain servers, spawn objects, and inject JavaScript scripts into virtual entities dynamically.
+## What this wraps
 
----
+An MCP server for **[Overte](https://overte.org)**, the open-source social-VR
+platform — a C++ desktop client ("Interface") + domain-server + entity-server,
+descended from High Fidelity's codebase. **Not the same thing as current
+"Vircadia"** — see [docs/WRAPPEE.md](docs/WRAPPEE.md) for the full
+disambiguation and official links (site, docs, community). Complements the
+fleet's other virtual-world servers: `resonite-mcp`, `vrchat-mcp`,
+`godot-mcp`, `unity3d-mcp`, `gazebo-mcp`.
 
-## ✨ Key Features
+Plus a companion React web dashboard.
 
-* 🤖 **Agent-First Design**: Allows AI agents to interact with virtual spaces and monitor self-hosted domains.
-* 🌐 **Domain Telemetry**: Monitor self-hosted domains, check user concurrency, and gain controls for active avatars.
-* 📦 **Real-Time Spawning**: Spawns real in-world entities when the in-world script `scripts/overte-mcp-bridge.js` is loaded inside Overte (relayed over a local WebSocket bridge).
-* 📜 **JS Script Injection**: Remotely modify and attach standard JavaScript behaviors directly into virtual world entities.
-* 🎨 **Federated Caching**: Syncs with standard caching directories (`~/.avatarmcp/`) to share VRM and GLB files with sister servers (like `resonite-mcp` and `vrchat-mcp`).
+## What You Can Do
 
----
+**How it runs**: Overte (domain-server + Interface) is a separate
+application you install yourself — never bundled. `overte_domain_status`
+works against just the domain-server (no GUI needed). `overte_entity_spawn`
+and `overte_script_inject` need a running Interface client with
+`scripts/overte-mcp-bridge.js` loaded, because Overte's entity-server has no
+plain HTTP "create entity" endpoint — only Interface's JavaScript API can do
+that. See [docs/ONBOARDING.md](docs/ONBOARDING.md) for first-time setup.
 
-## Status
+| Direction | Artifacts | Notes |
+|-----------|-----------|-------|
+| **Hands-in** | Entity properties (position, scale, type), JS behavior scripts, GLB/FBX/OBJ model URLs | Via MCP tool calls or the dashboard's Entities/Scripting pages |
+| **Hands-out** | Live domain-server telemetry, spawned in-world entities, animated/scripted entities | Every response labeled `source: "live"` or `source: "simulated"` — never a silent fake success |
 
-**Beta. Real-time integration active via WebSocket bridge.**
+**Tools** — all three core tools verified live against Overte 2026.04.1 (2026-07-30):
 
-| Tool | Real or simulated | Detail |
-|---|---|---|
-| `overte_domain_status` | **Real & Verified** | Calls the real domain-server `/nodes.json` + `/settings.json` HTTP admin API (port `40100`). Fully verified against a live local Overte Domain Server. |
-| `overte_entity_spawn` | **Real (with active bridge)** | Spawns real in-world entities when the in-world script [overte-mcp-bridge.js](scripts/overte-mcp-bridge.js) is loaded inside Overte. Falls back to simulated when disconnected. |
-| `overte_script_inject` | **Real (with active bridge)** | Attaches real JavaScript behaviors to entities when the bridge is active. Falls back to simulated when disconnected. |
+| Tool | Status |
+|------|--------|
+| `overte_domain_status` | **Verified live** — real domain-server `/nodes.json` + `/settings.json` admin API on port `40100` |
+| `overte_entity_spawn` | **Verified live** — in-world entity spawning via WebSocket bridge; `permanent=True` for cross-restart persistence |
+| `overte_script_inject` | **Verified live** — in-world JS behavior injection via WebSocket bridge |
+| `overte_sampling_assist` | Multi-step planning via `ctx.sample()` when host supports it |
 
-Every response indicates its `"source"` (either `"live"` or `"simulated"`).
+**Dashboard pages**:
 
----
+| Page | Route | Features |
+|------|-------|----------|
+| Dashboard | `/` | Domain status, node list, settings viewer |
+| Avatars | `/avatars` | Connected avatar-mixer/agent nodes |
+| Entities | `/entities` | Spawn form + entity explorer |
+| Scripting | `/scripting` | JS code editor + script injection |
+| Chat | `/chat` | Skill-first LLM chat with 4 personalities |
+| Settings | `/settings` | Backend health + LLM provider detection |
+| Tools | `/tools` | Dynamic tool discovery + search |
+| Skills | `/skills` | Skill content viewer (markdown) |
+| Logs | `/logs` | Ring-buffer log viewer with level filter |
+| Help | `/help` | Domain setup + JS API reference |
 
-## ⛩️ Quick Start
+## Quick Install
 
-### 1. Configure in-world parameters
-Ensure your self-hosted Overte Domain Server is running and accessible (default port `40100` for REST administration).
+### Claude Desktop (`.mcpb`)
+1. Build: `just mcpb-pack` → `dist/overte-mcp.mcpb`
+2. Drag the `.mcpb` into Claude Desktop (needs Python 3.12+ and `uv` on PATH).
 
-### 2. Start the REST API and Stdio Server
-Install dependencies and run the server using `uv`:
-```bash
-git clone https://github.com/sandraschi/overte-mcp
-cd overte-mcp
-uv pip install -e .
-uv run overte-mcp
+Stdio without MCPB: `uv run overte-mcp`. Full install paths: [INSTALL.md](INSTALL.md).
+
+### Full stack (dashboard + bridge)
+```powershell
+./start.ps1
+```
+Syncs deps, starts FastAPI backend (`11110`) and Vite dashboard (`11111`),
+opens the browser. Then start Overte `domain-server.exe`, open Interface,
+load `scripts/overte-mcp-bridge.js` for live spawn/inject — see
+[docs/ONBOARDING.md](docs/ONBOARDING.md).
+
+## Example Prompts
+
+- "What's the status of my Overte domain?"
+- "Spawn a permanent box entity at the origin"
+- "Attach the dance script to that entity"
+
+## Lint / test
+```powershell
+just lint      # Ruff + Biome
+just test      # unit + e2e
+just mcpb-pack # validate + pack Claude Desktop bundle
 ```
 
-### 3. Add to your AI Agent Configuration (e.g. Claude Desktop)
-Add this to your `claude_desktop_config.json`:
-```json
-"mcpServers": {
-  "overte-mcp": {
-    "command": "uv",
-    "args": ["--directory", "D:/Dev/repos/overte-mcp", "run", "overte-mcp"]
-  }
-}
-```
+## Documentation
+- [docs/WRAPPEE.md](docs/WRAPPEE.md) — what Overte is, disambiguation from Vircadia, official links
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — data flow, ports, WebSocket bridge
+- [INSTALL.md](INSTALL.md) — Overte setup, MCPB, Claude Desktop config
+- [STATUS.md](STATUS.md) — current verification status, remaining work
+- [ASSESSMENT.md](ASSESSMENT.md) — fleet audit findings and improvement plan
+- [PROJECT_PAGE.md](PROJECT_PAGE.md) — roadmap and task tracker
+- [CHANGELOG.md](CHANGELOG.md) — release notes
+- [docs/ONBOARDING.md](docs/ONBOARDING.md) — first-time Overte + bridge setup
+- [docs/CONFIGURATION.md](docs/CONFIGURATION.md) — env vars, ports
+- [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) — dev setup, contributing
+- [docs/TOOLS.md](docs/TOOLS.md) — full MCP tool reference
+- [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) — common issues
+- [llms.txt](llms.txt) / [llms-full.txt](llms-full.txt) — LLM index + full corpus
+- [mcpb/README.md](mcpb/README.md) — Claude Desktop bundle layout
 
----
+## Requirements
+- Python 3.12+ with `uv`
+- [Bun](https://bun.sh) (webapp + Biome)
+- [Overte Client + Server](https://overte.org/downloads.html) installed separately for live domain + bridge features
 
-## 📚 Documentation Index
-
-| Guide | Description |
-| :--- | :--- |
-| **[ARCHITECTURE.md](ARCHITECTURE.md)** | High-level data flow, REST endpoints, and domain scripting |
-| **[INSTALL.md](INSTALL.md)** | Environment variables, local setup, and staging caches |
-
----
-
-## 📈 Project Status
-* **Status**: `v0.1.0-beta` (WebSocket Bridge active).
-* **Target Audience**: AI developers, self-hosted metaverse admins, and agent-builders.
-* **License**: MIT Licensed. Made with care for the open metaverse.
+## License
+MIT

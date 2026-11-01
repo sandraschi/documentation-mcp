@@ -12,7 +12,7 @@ Updated: 2026-05-14
 | [myhomeserver](file:///D:/Dev/repos/myhomeserver) | A modern, beautiful home automation dashboard built with React, Tailwind CSS, and MCP (Model Context Protocol) integration. ## ðŸš€ Overview | 2026-02-13 |
 | [myscripts](file:///D:/Dev/repos/myscripts) | This repository contains a collection of personal PowerShell scripts. ## Folders | 2026-01-01 |
 | [myvrworlds](file:///D:/Dev/repos/myvrworlds) | Beautiful React Tailwind VR Worlds Control Center - Integrating Avatar MCP, Blender MCP, VRChat MCP, Resonite MCP, OSC MCP, Unity3D MCP with ikubaysan dual-STT AI chatbot architecture | 2026-02-06 |
-| [mywienerlinien](file:///D:/Dev/repos/mywienerlinien) | **Last Updated:** 2025-12-27 **Status:** âœ… Production Ready | ðŸ† SOTA Compliant | ðŸš€ Fully Operational | 2026-02-10 |
+| [publictransport-mcp](file:///D:/Dev/repos/publictransport-mcp) | **Last Updated:** 2025-12-27 **Status:** âœ… Production Ready | ðŸ† SOTA Compliant | ðŸš€ Fully Operational | 2026-02-10 |
 
 ## MCPServer (100)
 
@@ -20,7 +20,6 @@ Updated: 2026-05-14
 |------------|-------------|---------------|
 | [__legacy_junk](file:///D:/Dev/repos/__legacy_junk) | No description available. | 2026-02-12 |
 | [advanced-memory-mcp](file:///D:/Dev/repos/advanced-memory-mcp) | **Flagship SOTA Research Platform (v1.7.0)** - Industrial-grade knowledge substrate with Prefab Testing, Arcade Compliance, and RAG. | 2026-04-11 |
-| [ag-gazebo-bridge](file:///D:/Dev/repos/ag-gazebo-bridge) | MCP server for bridging Gazebo Harmonic/Jetty `gz-transport` to AI agents. | 2026-02-07 |
 | [ai-producer-hub](file:///D:/Dev/repos/ai-producer-hub) | **AI Music Production Engine (v2.0.0)** - Composite server for autonomous music creation, MIDI orchestration, and live streaming integration. | 2026-02-15 |
 | [alexa-mcp](file:///D:/Dev/repos/alexa-mcp) | **Acoustic bridge (v0.3.x)**: TTS+STT loop, web_sota, playback controls, TTS shopping guard, Alexa+ / security docs. | 2026-04-21 |
 | [anthropic-skills](file:///D:/Dev/repos/anthropic-skills) | Skills are folders of instructions, scripts, and resources that Claude loads dynamically to improve performance on specialized tasks. Skills teach Claude how to complete specific tasks in a repeatable way, whether that's creating documents with your company's brand guidelines, analyzing data using your organization's specific workflows, or automating personal tasks. For more information, check out: | 2026-01-01 |
@@ -45,7 +44,6 @@ Updated: 2026-05-14
 | [external](file:///D:/Dev/repos/external) | Read-only mirrors of upstream projects used for research, pattern matching, or integration testing. Paths in other repos expect these clones to live here. ## Current Mirrors | 2026-02-09 |
 | [fastsearch-mcp](file:///D:/Dev/repos/fastsearch-mcp) | Lightning-fast file search using NTFS Master File Table - MCP Server | 2026-02-12 |
 | [filesystem-mcp](file:///D:/Dev/repos/filesystem-mcp) | **SOTA File System Operations (v1.2.0)** - Comprehensive file manipulation, Git repository management, and Docker container orchestration with Austrian efficiency. | 2026-02-15 |
-| [fullstack-demo](file:///D:/Dev/repos/fullstack-demo) | A **professional fullstack application** with AI, MCP integration, and comprehensive monitoring. ## ðŸŒŸ Features | 2026-01-01 |
 | [ai-games-collection](file:///D:/Dev/repos/ai-games-collection) | Games Collection - 75+ games with optional AI | 2026-02-07 |
 | [gimp-mcp](file:///D:/Dev/repos/gimp-mcp) | **Professional GIMP orchestrator (v3.0.0)** with 8 portmanteau tools and integrated AI image generation (Flux/nano-banana). | 2026-02-15 |
 | [git-github-mcp](file:///D:/Dev/repos/git-github-mcp) | FastMCP 3.1.1+ portmanteau server for Git and GitHub operations. Uses `gh` CLI for GitHub; avoids the 40-tool explosion. ## Features | 2026-02-09 |
@@ -82,7 +80,7 @@ Updated: 2026-05-14
 | [pinokio-mcp](file:///D:/Dev/repos/pinokio-mcp) | MCP server for controlling [Pinokio](https://pinokio.co) - the 1-click localhost cloud for AI apps. ## Status: ðŸŸ¢ PRODUCTION READY - Full Feature Set | 2026-02-12 |
 | [plex-mcp](file:///D:/Dev/repos/plex-mcp) | > **âš ï¸ ALPHA STATUS**: This project is in alpha development. Some features may be incomplete or unstable. **Playback control (`plex play`, `plex pause`) is currently non-functional for ALL clients**, including GDM-discoverable clients (PlexAmp) and non-GDM clients (Plex Web, Plex for Windows). See [STATUS_2026-01-08.md](STATUS_2026-01-08.md) for detailed status. A FastMCP 3.1.1+ server implementation for managing Plex Media Server with a clean, type-safe API. | 2026-02-10 |
 | [windows-computer-use-mcp](file:///D:/Dev/repos/windows-computer-use-mcp) | **v0.4.2** | **8+ portmanteau tools** | **FastMCP 3.2+** | **SOTA 2026** — Windows UI automation (PyWinAuto); **`web_sota` 10788/10789**; repo **`start.ps1`** waits for API before Vite. Safety: pair with **virtualization-mcp** for Sandbox/VM. Hub: [projects/windows-computer-use-mcp/README.md](windows-computer-use-mcp/README.md). | 2026-04-16 |
-| [rtorrent-mcp](file:///D:/Dev/repos/rtorrent-mcp) | FastMCP 3.4 SOTA server for rTorrent anime torrenting automation with Austrian legal compliance using rTorrent. > **ðŸ“ Package name `qbtmcp`?** This project started as "qBittorrent MCP" but we discovered | 2026-02-12 |
+| [qbt-mcp](file:///D:/Dev/repos/qbt-mcp) | FastMCP 3.1.1+ SOTA server for anime torrenting automation with Austrian legal compliance using rTorrent. > **ðŸ“ Package name `qbtmcp`?** This project started as "qBittorrent MCP" but we discovered | 2026-02-12 |
 | [readly-mcp](file:///D:/Dev/repos/readly-mcp) | A specialized MCP server for automating reading and scraping tasks on the Readly web platform (`go.readly.com`). ## Features | 2026-02-12 |
 | [reaper-mcp](file:///D:/Dev/repos/reaper-mcp) | **Austrian precision DAW automation via Reaper with OSC control.** ## âœ¨ What's New (v2.0) | 2026-02-12 |
 | [repomix-mcp](file:///D:/Dev/repos/repomix-mcp) | **Pack repositories into AI-friendly formats for comprehensive codebase analysis** A Model Context Protocol (MCP) server that integrates [Repomix](https://repomix.com/) to provide AI assistants with powerful repository analysis capabilities. | 2026-02-12 |
@@ -146,7 +144,6 @@ Updated: 2026-05-14
 | [basic-memory-docs](file:///D:/Dev/repos/basic-memory-docs) | Basic Memory knowledge export with search and navigation ## Overview | 2026-01-01 |
 | [epub_test](file:///D:/Dev/repos/epub_test) | No description available. | 2026-01-01 |
 | [freevibe-at](file:///D:/Dev/repos/freevibe-at) | Internal testing landing page for freevibe.at and paidvibe.at on server **213.47.34.131**. ## Contents | 2026-02-10 |
-| [fullstack-demo-backend](file:///D:/Dev/repos/fullstack-demo-backend) | Backend microservices for Fullstack Demo - AI-powered dashboard with chat, image generation, and TTS/STT | 2026-01-01 |
 | [management-stack](file:///D:/Dev/repos/management-stack) | No description available. | 2026-01-25 |
 | [media-stack](file:///D:/Dev/repos/media-stack) | No description available. | 2026-01-25 |
 | [moltbot-docker](file:///D:/Dev/repos/moltbot-docker) | Run Moltbot Gateway in Docker for local experimentation. ## Prerequisites | 2026-01-31 |

@@ -1,3 +1,13 @@
+---
+title: "LLM, External Dependencies, and Install Tiers"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # LLM, External Dependencies, and Install Tiers
 
 **Status**: ACTIVE — normative for all sandraschi MCP repos  

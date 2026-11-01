@@ -10,14 +10,14 @@ obsolete_reason: >
 ---
 
 > [!WARNING]
-> **OBSOLETE — do not follow.** This doc contradicts current fleet standards:
+> **OBSOLETE - do not follow.** This doc contradicts current fleet standards:
 > it sets FastMCP 3.1.1+ as the floor (current: 3.2+) and advises abandoning
 > the portmanteau pattern (current: mandatory). See `JUNE_2026_STANDARDS_BAR.md`.
 
 # MCP Server First-Time Success Guarantee
 
 > [!IMPORTANT]
-> **SOTA v13.1 (2026-03-30)** — This is the authoritative standard for achieving a "Zero-Error First Connection" in the March 2026 fleet. All mentions of legacy FastMCP 2.x and Poetry have been purged.
+> **SOTA v13.1 (2026-03-30)** - This is the authoritative standard for achieving a "Zero-Error First Connection" in the March 2026 fleet. All mentions of legacy FastMCP 2.x and Poetry have been purged.
 
 ## 🎯 Mission Statement
 

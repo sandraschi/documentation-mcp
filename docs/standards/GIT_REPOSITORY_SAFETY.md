@@ -1,3 +1,13 @@
+---
+title: "Git and GitHub safety (fleet mandatory)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-10
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Git and GitHub safety (fleet mandatory)
 
 **Status:** Active  
@@ -66,15 +76,51 @@ if (-not (Test-Path $serverPy) -or (Get-Item $serverPy).Length -lt 1024) {
 }
 ```
 
+### 6. The Local-Fix Abandonment Antipattern (Push Gate)
+
+> **"A fix does not exist until it is pushed to GitHub."**
+
+Testing locally with `start.bat` or `just dev` and seeing it work is only step 1.
+**Never leave a repository with uncommitted or unpushed changes.**
+
+- **The Danger:** If an agent fixes an issue locally, verifies that `start.bat` runs, and immediately jumps to another repo, upstream `origin/main` remains broken. Clean clones, CI runners, CUA smoke-test bots, and NSIS installers built from git tags will distribute stale, broken code. Weeks later, forgotten local edits get blown away by `git checkout` or `git restore`.
+- **The Mandate:**
+  1. Commit changes in logical, atomic batches (Conventional Commits: `fix:`, `feat:`, `docs:`, `chore:`).
+  2. Run local linters/tests (`just lint`, `just check`, `npm run check`).
+  3. **Push to `origin/main` immediately.**
+  4. If the repo is a distributable release tier (MCPB / NSIS), tag and release.
+  5. Never switch repositories while `git status` reports uncommitted changes or unpushed commits.
+  6. Nightly enforcement: [WIP_COMMIT_STANDARD.md](./WIP_COMMIT_STANDARD.md) - every repo is swept at 04:00, all WIP committed and pushed, whoever made it.
+
 ## GitHub defaults
 
 | Item | Default |
 |------|---------|
 | Org/user | `sandraschi` unless user specifies |
 | Visibility | `private` for experimental; `public` when user requests |
-| Branch | `master` or repo default; push with `-u origin HEAD` |
+| Branch | The repo's **GitHub default branch**; push with `-u origin HEAD` |
 
 Manifest `repository` URLs MUST match an **existing** remote after step D.
+
+### Default-branch rule (HARD)
+
+The local working branch MUST equal the GitHub default branch. A repo created on GitHub
+with an auto-generated first commit (README/LICENSE) and then pushed from a local branch
+with a different name ends up with two unrelated histories: the work sits on a branch
+GitHub does not treat as default, so the license, README and releases look missing and
+fixes appear unpushed. 2026-10-07 audit: 13 of ~290 repos had this (e.g. `gimp-mcp`:
+41 commits off-default); all were fixed with `gh repo edit --default-branch`.
+
+- **New repo:** create it *empty* on GitHub (no README, no license, no .gitignore), or
+  `git init -b main` locally and `gh repo create --source . --push`. Fleet default name
+  is `main`.
+- **Before first push**, and in any "push" step: compare `git branch --show-current` with
+  `gh repo view --json defaultBranchRef -q .defaultBranchRef.name`. If they differ, stop
+  and fix it; never push to a second branch name.
+- **Fixing an existing mismatch:** `gh repo edit <owner>/<repo> --default-branch <work-branch>`.
+  No force-push, no history rewrite; the orphan initial commit stays on the old branch.
+- **Audit:** compare the local branch to the default for every clone (read-only); expect
+  only deliberate exceptions (feature-branch checkouts).
 
 ## Related standards
 
@@ -120,6 +166,35 @@ git config --global rebase.autoStash true  # auto-stash before rebase
 ```
 
 The critical rule: **always pull before you start, always push when you finish.** If you forget and make commits on stale history, `git pull --rebase` still sorts it out cleanly.
+
+### 7. Pre-commit insurance (BUG-043, 2026-09-20)
+
+Every `git commit` with unstaged files present makes pre-commit stash the
+unstaged work, run hooks, then pop the stash. That pop has silently
+restored an empty state at least once (full session of tracked
+modifications gone from disk, zero errors — recovered from pre-commit's
+leftover `.cache` patches). So:
+
+1. **Snapshot first**: `git stash create` before committing whenever
+   unstaged changes exist. It creates the stash commit WITHOUT touching
+   index or worktree and prints the hash. Keep the hash until the push
+   succeeds — `git stash apply <hash>` is the recovery path.
+2. **Verify after every git op**: `git status` path counts plus one
+   content grep before moving on. Silent loss survives exactly as long
+   as nobody re-checks.
+3. **Keep hook and project toolchains aligned**: the hook env's
+   `ruff-format` has reformatted what the project's pinned ruff calls
+   clean (whitespace-only, but version-dependent "clean" is a lie).
+
+**Recurred 2026-09-25** (`aiwatcher-mcp`, `arxiv-mcp`): the stash/pop fired
+again, twice, as an ordinary side effect of ruff-format's pre-commit hook —
+not an edge case, the default path whenever unstaged changes coexist with a
+commit. Both times `git status` immediately after confirmed every unrelated
+pre-existing modified file was still present with its changes intact. No
+loss this time, but only because step 2 (verify after every op) was
+actually followed, not skipped because "it worked before." See also
+`patterns/AGENT_BRANCH_DISCIPLINE.md` for the related problem of dirty
+files with no attributable owner accumulating in a shared repo's tree.
 
 ## Case study (2026-05-31)
 

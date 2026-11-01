@@ -104,4 +104,4 @@ Pre-release v0.1.0. Core tool surface complete, webapp scaffolded. Active develo
 
 ## License
 
-MIT © Sandra Schipal 2026. Jellyfin is GPL-2.0 — this MCP server communicates via HTTP, no derivative code.
+MIT © Sandra S. 2026. Jellyfin is GPL-2.0 — this MCP server communicates via HTTP, no derivative code.

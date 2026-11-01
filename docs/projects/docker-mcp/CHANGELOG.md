@@ -1,3 +1,29 @@
+# Changelog
+
+## [Unreleased]
+
+### Added (2026-10-03 session)
+- List/card views + CSV/JSON export on containers/images/networks/volumes; richer columns, sort, filters.
+- Image provenance (fleet-local vs registries) + upstream "What is this?" brief (`GET /api/images/brief`).
+- `POST /api/images/pull` with already-current reporting; Pull buttons; inline container start/stop/restart.
+- `GET /api/junk` + `/reports` page (Markdown/JSON export, deep links).
+- Compose files preload (`GET /api/compose/files`, cached) with Analyze/Up/Down; `project_dir` passthrough.
+- Fleet repos setting (`GET/PUT /api/settings/fleet`, Settings UI, `DOCKER_MCP_FLEET_ROOT`).
+- MCP Streamable HTTP at `POST /mcp` (verified: 43 tools); dashboard progressive loading; AI Command → AI Chat.
+
+### Changed
+- `list_images` via raw `/images/json` (31s → ~11s); usage map from list attrs; dashboard aggregate gains counts.
+
+### Fixed
+- `POST /mcp` 405 — now serves MCP. Daemon list stalls from broken container network records (`docker rm` + recreate; stopping is not enough).
+
+### Added
+- Dashboard quick actions: Overview **Run MCP tools** CTA plus Diagnose, Backup, Prune, Recover Docker, and resource pages.
+- Generic MCP tool runner at `/tools` and `/tools/:name` (`GET/POST /api/tools`).
+- Volumes/networks pages and REST inspect/lifecycle coverage.
+
+### Fixed
+- Health/docker-status access-log spam; dashboard no longer blocked on `docker system df`.
 
 ## [3.5.0] - 2026-06-24 (Session 2)
 

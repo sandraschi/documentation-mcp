@@ -203,8 +203,8 @@ I/O 2026: “Antigravity agent via Gemini API” for programmatic querying; MCP 
 
 ## Fleet integration notes
 
-- **Shared MCP config:** `C:\Users\sandr\.gemini\config\mcp_config.json` — agy already sees arxiv, fileops, jellyfin, etc.
-- **Cursor config:** `C:\Users\sandr\.cursor\mcp.json` — add bridge here only
+- **Shared MCP config:** `C:\Users\<user>\.gemini\config\mcp_config.json` — agy already sees arxiv, fileops, jellyfin, etc.
+- **Cursor config:** `C:\Users\<user>\.cursor\mcp.json` — add bridge here only
 - **Tool budget:** Antigravity recommends ≤50 enabled tools for performance; fleet has many servers — use `disabled` / `disabledTools` aggressively ([Antigravity MCP docs](https://antigravity.google/docs/mcp))
 - **Cross-validation pattern:** Cursor (Composer) plans; `agy_goal` executes with Gemini 3.5 Flash — documented in [ANTIGRAVITY_2.0_SDK_CLI.md](../ecosystem/antigravity/ANTIGRAVITY_2.0_SDK_CLI.md) as optional, not fleet-critical
 

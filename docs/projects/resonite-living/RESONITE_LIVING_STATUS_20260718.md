@@ -66,7 +66,7 @@ as-is — worth checking before the real home-brief generation starts.
 | learnbot-mcp | Persona (Miko-chan), chat, emotion tags, lesson tools (Phase 5b keigo lesson) | No — core repo since Phase 0 |
 | mcp-central-docs | This project's home (`projects/resonite-living/`) | No — it's where you're reading this |
 | avatar-pipeline-mcp | **Deprecated stub** — folded into avatar-mcp's `avatar_pipeline` tool | Net new to the list, but dead weight: don't build against it |
-| games-app | Japanese learning content (kanji/JLPT/vocab) — possible lesson-content or prop-asset reuse | **Net new** — not previously in the plan; role is speculative, not yet wired to any phase |
+| ai-games-collection | Japanese learning content (kanji/JLPT/vocab) — possible lesson-content or prop-asset reuse | **Net new** — not previously in the plan; role is speculative, not yet wired to any phase |
 | robotics-mcp | Generic robot bridge (Dreame/Yahboom/Gazebo/Unity/VRChat) | **Net new** — relevant to the Phase 6 "Boomy virtual twin" backlog item, not Phases 1-5 |
 | yahboom-mcp | Boomy (the actual Raspbot) — real-robot control, live daily | **Net new** — same Phase 6 backlog relevance as robotics-mcp |
 
@@ -74,13 +74,13 @@ The master plan (`RESONITE_HOME_NEKOMIMI_PLAN.md`) has been updated with
 these four net-new rows in its building-blocks table, plus the
 avatar-pipeline-mcp deprecation note, in this same session.
 
-**Honest read**: games-app, robotics-mcp, and yahboom-mcp being in the repo
+**Honest read**: ai-games-collection, robotics-mcp, and yahboom-mcp being in the repo
 list doesn't change what Phase 1 needs to do next. Robotics/yahboom map
 cleanly onto the pre-existing Phase 6 "Boomy gets a virtual twin" backlog
 item — nothing to design differently, just confirms it's still a live idea.
-games-app is the one genuinely open question: it duplicates some of what
+ai-games-collection is the one genuinely open question: it duplicates some of what
 learnbot-mcp's lesson tools already do (Phase 5b is fully specced against
-learnbot, not games-app). If the intent is to pull specific kanji-wall
+learnbot, not ai-games-collection). If the intent is to pull specific kanji-wall
 assets or JLPT drill content into the in-world lesson, that's a real but
 undefined integration — flagged in TODO, not designed yet.
 

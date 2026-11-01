@@ -1,39 +1,75 @@
 # mathops-mcp — Computational Mathematics Service
 
-**Status:** Build brief ready — repo NOT yet created
-**Priority:** P1 (highest gap-to-effort ratio)
+**Version:** 0.1.0 (2026-08-15) · **Status:** Active
+**FastMCP 3.4.4+** · **Stack:** SymPy · SciPy · pint · Matplotlib (Agg) · FastAPI
 
-| Item | Details |
+Computational mathematics as an MCP service: computer algebra, units and
+dimensional analysis, numerical methods, curve fitting, interpolation, and
+plotting. The fleet gap between formal proof search (leanforge) and rigid-body
+physics (mujoco) — now closed.
+
+## Features
+
+- **`math_symbolic`** — simplify, expand, factor, solve (symbolic + numeric fallback), diff, integrate (unevaluated marker for no-closed-form), limit, series, matrix (det/inverse/eigen/rank/rref), ODE solving, LaTeX round-trip
+- **`math_units`** — unit conversion, dimensional consistency checks (`1 m + 1 s` → DimensionalityError), physical constants with units
+- **`math_numeric`** — optimization, root finding, curve fitting (R² included), persisted interpolation (SQLite spline ids), quadrature, statistics, FFT with proper frequency axis
+- **`math_plot`** — function/data plots to PNG (Agg) with base64 thumbnails
+- **`math_agentic_assist`** — natural-language maths via SEP-1577 sampling
+- **Prefab cards** — `show_solution_card`, `show_plot_card` for in-chat rich UI
+- **Webapp** — React/Vite dashboard (Symbolic, Units, Numeric, Plots, Tools, Skills, Chat, Settings, Help, Logs) with local-LLM chat (Ollama)
+
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/mathops-mcp
+cd mathops-mcp
+copy .env.example .env
+.\start.ps1        # backend :11080 + frontend :11081, opens browser
+```
+
+See [INSTALL.md](INSTALL.md) for naked-PC setup and [docs/ONBOARDING.md](docs/ONBOARDING.md).
+
+## Ports
+
+| Port | Service |
 |------|---------|
-| **Repo** | `D:\Dev\repos\mathops-mcp` (not yet scaffolded) |
-| **Brief source** | `architecture/FLEET_GAP_ANALYSIS_2026-07.md` §3 |
-| **Stack** | SymPy, SciPy, NumPy, pint, Matplotlib (Agg only) |
-| **Depends on** | Nothing |
-| **Consumed by** | codecad-mcp, simbench-mcp, kicad-mcp, chip-design-mcp, sdr-mcp |
+| **11080** | Backend (FastAPI + FastMCP HTTP `/mcp`, REST `/api/*`) |
+| **11081** | Frontend (Vite React) |
 
-## Why
-
-The fleet has formal proof search (leanforge) and rigid-body physics (mujoco) but NO computer algebra, NO units handling, NO optimization, NO curve fitting as a service. This is the widest gap with the lowest build cost, and every engineering-flavored server is a consumer.
-
-## Tools (5 portmanteau)
+## Tools
 
 | Tool | Ops | Backend |
 |------|-----|---------|
-| `math_symbolic` | simplify, expand, factor, solve, diff, integrate, limit, series, matrix, ode_solve, latex, parse_latex | SymPy |
-| `math_units` | convert, check_dimensions, constants | pint + scipy.constants |
-| `math_numeric` | optimize, root_find, fit_curve, interpolate, integrate_numeric, stats, fft | SciPy |
-| `math_plot` | plot_function, plot_data | Matplotlib Agg |
-| `math_agentic_assist` | Natural-language maths → planned tool sequence | SEP-1577 sampling |
+| `math_symbolic` | 12 | SymPy (safe parser, implicit multiplication, 30s timeout) |
+| `math_units` | 3 | pint + scipy.constants |
+| `math_numeric` | 8 | SciPy |
+| `math_plot` | 2 | Matplotlib Agg |
+| `math_agentic_assist` | 1 | MCP sampling (SEP-1577) |
+| `show_solution_card` / `show_plot_card` | 2 | Prefab UI |
 
-## Key Pitfalls (from Fable's brief)
+Full reference: [docs/TOOLS.md](docs/TOOLS.md) · Skill: `skill://mathops-expert`
 
-- All symbolic ops run with 30s timeout via `asyncio.wait_for` + `asyncio.to_thread` — SymPy can hang on pathological integrals
-- `sympy.parsing.sympy_parser.parse_expr` (not `eval()`) — with implicit multiplication transformation so `2x` works
-- No `plt.show()` — ever. `plt.close(fig)` after every save
-- pint registry is module-level singleton, not per-call
+## Environment
 
-## Acceptance
+See [docs/CONFIGURATION.md](docs/CONFIGURATION.md) and `.env.example`:
+`MATHOPS_TIMEOUT_SECONDS` (30), `LLM_PROVIDER`/`LLM_BASE_URL`/`LLM_MODEL`
+(Ollama local-first), `MATHOPS_PLOTS_DIR`.
 
-- 25+ pytest cases including: unsolvable integral returns unevaluated marker (not crash); timeout fires; `metre + second` dimension check fails
-- Webapp: Symbolic, Units, Numeric, Plots, Chat pages
-- Leanforge bridge noted in README roadmap (not built yet)
+## Development
+
+```powershell
+just test      # pytest (30+ cases)
+just lint      # ruff check + format
+just ci        # lint + test + webapp build
+```
+
+## Roadmap
+
+- **Leanforge bridge** (NOT built — future leanforge Phase C): `math_symbolic.solve`
+  output → Lean statement candidate for formal verification.
+- `math_numeric.fft` consolidation: sdr-mcp's hand-rolled FFT should delegate here.
+
+## Links
+
+- Brief: `mcp-central-docs/architecture/FLEET_GAP_ANALYSIS_2026-07.md` §3 (P1)
+- Ports: `mcp-central-docs/operations/WEBAPP_PORTS.md` (11080/11081)

@@ -1,5 +1,7 @@
 # MCP Development Tools
 
+**Private — Sandra S. + collaborators only. Not for public distribution.**
+
 **Last Updated:** 2026-06-17  
 **Standards:** FastMCP **3.2+** · [JUNE_2026_STANDARDS_BAR.md](../standards/JUNE_2026_STANDARDS_BAR.md)
 
@@ -25,7 +27,7 @@ Tool for analyzing MCP server quality and compliance against fleet standards (3.
 
 ---
 
-## 🧪 Testing Tools
+## 🧪 Testing & Diagnostic Tools
 
 ### MCP Inspector
 
@@ -36,6 +38,14 @@ Debug MCP connections and inspect messages.
 ```powershell
 uv run fastmcp dev server.py
 ```
+
+### Wrapture (Diagnostic Sidecar & Host Testing)
+
+Call-site binding, determinism assertions, and zero-code ad-hoc tracing.
+- **Fleet Policy**: Dev/test utility & diagnostic sidecar only (no production fleet rollout).
+- **Primary Use**: Testing C-extensions/Win32 APIs (`windows-operations-mcp`), fault injection stubs (`email-mcp`), and local hang debugging.
+
+→ See [WRAPTURE.md](WRAPTURE.md)
 
 ---
 

@@ -1,3 +1,13 @@
+---
+title: "Unicode Safety Standard"
+category: pattern
+status: review
+audience: mcp-dev
+last_updated: 2026-07-14
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Unicode Safety Standard
 
 **Established:** originally scoped to script files; **broadened 2026-07-13** per Sandra's direct instruction after a real, costly incident (see \"Why this got broadened\" below).

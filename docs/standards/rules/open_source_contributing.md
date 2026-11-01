@@ -1,3 +1,13 @@
+---
+title: "FOSS Contribution Etiquette for AI-Assisted Development"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # FOSS Contribution Etiquette for AI-Assisted Development
 
 **Scope**: Opening issues and PRs against third-party open-source projects (NOT our own repos).

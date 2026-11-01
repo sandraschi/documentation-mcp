@@ -1,4 +1,46 @@
 
+
+## [Unreleased] — 2026-08-03
+
+### Added
+- README: "What is Streamfog?" primer + "How to use this server" 3-step guide + plain-English architecture explanation
+- Same primer added to docs/ONBOARDING.md and llms-full.txt (LLM-facing)
+- MCD project page mirrored with the primer
+- FLEET_INDEX.md entry for streamfog-mcp
+- PRD.md (purpose, problem statement, solution, shipped features, non-goals, success criteria)
+- AGENTS.md: bun commands, streamable HTTP /mcp, pyright/biome gates, mcpb-pack + cua recipes
+- .env.example: STREAMFOG_MCP_HOST and STREAMFOG_MCP_TRANSPORT vars (match config.py)
+
+### Fixed
+- INSTALL.md: stale commands (npm → bun, module entry, Python 3.13 → 3.12+, nonexistent just recipes), added external-prerequisites section
+
+## [0.2.0] — 2026-08-03
+
+### Added
+- MCP streamable HTTP endpoint at /mcp now actually served (dual mode mounts FastMCP http_app; fixes phantom `FastMCP.from_fastapi` dead code)
+- REST: /api/health, /api/tools (dynamic), /api/capabilities, /api/skills, /api/llm/discover (Ollama/LM Studio/vLLM + GPU), /api/logs (ring buffer), /api/v1/diagnostics
+- Webapp rebuilt: AppLayout (sidebar + topbar), Dashboard with hero + KPI cards + data-testid, Tools page, Chat page (skill-first, 4 personalities, localStorage, export), Settings page, Help page, Logs modal (Ctrl+L)
+- Zustand LLM store, exponential-backoff health polling, Ctrl+Scroll zoom (useZoom, tauri-zoom), Tauri backend-status listener + Restart Backend button
+- Session context injection: .claude-plugin hooks, .cursorrules, .windsurfrules, .opencode skill, .agents skill, copilot-instructions
+- docs/: CONFIGURATION, DEVELOPMENT, TOOLS, TROUBLESHOOTING, ONBOARDING
+- llms.txt + llms-full.txt, glama.json, renovate.json
+- CI: .github/workflows/ci.yml (ruff, pyright, pytest, biome, tsc, build; node 22, bun)
+- Pre-commit: ruff + biome + em-dash guard; .gitattributes LF
+- Playwright e2e: 6 tests (health, tools, REST, SPA load, nav walk, console errors)
+- MCPB: fresh-stage pack script (mcpb/src/streamfog_mcp not flattened), 3-4-100 prompts (3126/4156/104), icon.png, manifest tools list
+- Skills: streamfog SKILL.md + skill:// resource + /api/skills endpoints
+- run_server.py dual transport (MCP_PORT/PORT -> HTTP mode)
+- uv.lock now committed; coverage gate (30%) + pyright in dev deps
+
+### Fixed
+- CRITICAL: tauri.conf.json + native/build.ps1 bundled `.env` — now bundle `.env.example` only
+- CORS allow_origin_regex now unconditional (Tailscale/LAN/tauri.localhost)
+- hooks.nsh killed wrong process names (streamfog-backend.exe vs streamfog-mcp-backend.exe)
+- `except Exception: pass` in bridge disconnect now logs
+- Dashboard hardcoded ports removed; text-xs / text-slate-500 contrast fixes
+- start.ps1: readiness poll instead of fixed sleeps; correct /mcp URL
+- cua-nsis-config.json: correct process names + nav_routes + frontend_port
+
 ## [Unreleased] — 2026-06-14
 
 ### Fixed

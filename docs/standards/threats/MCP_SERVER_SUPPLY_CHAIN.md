@@ -1,3 +1,13 @@
+---
+title: "MCP Server Supply Chain Risk: The Find→Clone→Install Pipeline"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-07-20
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # MCP Server Supply Chain Risk: The Find→Clone→Install Pipeline
 
 **Established**: 2026-07-15

@@ -1,5 +1,91 @@
+# Changelog
 
-## [1.22.1] — 2026-06-16
+## [2.4.1] - 2026-08-16
+
+### Fixed
+- Netatmo 403 regression: a 57-byte NUL-byte token cache file overrode the valid `.env` refresh token (str.strip() does not remove NULs). Cache loader now validates printable-ASCII 32-400 chars and falls back to the config/.env token; cache saves are atomic (temp + rename).
+- Dashboard showed `lights_count: 0` forever after boot: Hue manager initializes with an empty lazy cache. The status endpoint now triggers one bounded rescan per process.
+- TemplateResponse calls updated to the Starlette 1.3.1 signature `(request, name, context)` across 47 call sites (views/auth/pages) - HTML pages 500'd on the new Starlette.
+- `start.ps1 -Headless` infinite re-spawn: the window-title guard failed on hidden consoles (title is empty, not "Hidden"); replaced with an env-var guard.
+
+### Added
+- Dashboard rebuild: hero section, per-plug energy rows (power state, W, kWh), Weather and Lighting cards, backend status dot, "Reconnect services" button.
+- `POST /api/system/reconnect` - one round trip reconnects Hue (rescan) and Netatmo (re-init), returns per-service state.
+- Fleet-standard API aliases: `GET /health`, `GET /api/v1/models` (with `chat` key), `GET /api/v1/settings` (with `configured` key).
+- Weather status exposes `needs_reconnect` + `reconnect_url` (Netatmo OAuth) when the sync fails.
+
+### Changed
+- `start.ps1` rewritten as the fleet SOTA webapp launcher: backend 10717 + Vite 10716, readiness poll (240s boot budget), browser auto-open, netstat port clearing matched on LISTENING only (a bare `:port` pattern can kill the caller's own client connections).
+- CUA webapp test hardened: NSSM service lifecycle via `sc.exe` (never kill the child), `pwsh` host (PS 5.1 + Start-Job in a console-less context crashes the parent), LISTENING-only port kills, Chrome window detection without the slow descendants() scan.
+- Removed `scripts/manage-webapp.ps1` (dead module `devices_mcp.web.server`, port 7777, dangerous Stop-Process pattern against the NSSM service).
+
+### Ops
+- `just e2e` green (backend health, frontend loads, no console errors; /health + /api/v1 probes).
+- NSSM service `devices-mcp` remains the canonical always-on backend on 10717; control via `sc.exe stop/start devices-mcp`; `Fleet-devices-mcp` watchdog task (20 min) restarts it via the service manager.
+
+## [2.4.0] - 2026-08-01
+
+### Added
+- Fritz priority API - `GET /api/fleet/priority` aggregates Shelly temps, Nest CO/smoke (HA), Ring events, unacked alarm messages
+- `integrations/fritz_priority.py` - urgency scoring (kitchen >=45C, threshold breaches, CO/smoke emergency)
+- Docs - [docs/FLEET_INTEGRATION.md](docs/FLEET_INTEGRATION.md) for Fritz `coworker_devices_watch` consumer
+
+### Integration
+- [fleet-agent-mcp](https://github.com/sandraschi/fleet-agent-mcp) polls every 5m; urgent email + Intel Hub on new critical incidents
+
+### Changed
+- Version aligned to pyproject 2.4.0 (tauri.conf.json, README badge, mcpb naming)
+- Webapp theme: light-mode toggle migrated from Tailwind class strategy to fleet invert hack (`devices-mcp-light-mode` key, comfyops pattern)
+- Vite dev proxy: added `/alerts` (Dashboard/Alarms alert calls no longer 404 in dev)
+- `fleet-start.config.ps1`: WebRoot fixed to `web-sota/frontend` (fleet launcher frontend now starts)
+- Dependabot updates disabled (scheduled runs fail while Actions are account-disabled)
+- `netatmo_token.cache` untracked (secrets hygiene)
+
+## [1.23.0] — 2026-07-21
+
+### Security
+- Credentials moved from `config.yaml` to `.env` — env var interpolation (`${VAR}` / `${VAR:-default}`) added to config loader via `python-dotenv`
+- All hardcoded secrets (Ring, Tapo, Netatmo, Hue, Home Assistant) replaced with env var references
+- `.env.example` updated with all credential keys as template
+
+### Added
+- `GET /api/skills`, `GET /api/skills/{name}` — serve SKILL.md for chat preprompt
+- Chat page (SOTA rewrite): localStorage persistence, 5 personas, 8 example prompts, NDJSON streaming, export .txt, clear conversation, all `data-testid` attributes
+- Settings page: model selector dropdown populated from provider API, saves `preferred_model` to config
+- Ring portmanteau: `answer_call`, `two_way_talk` actions for paid Protect accounts
+- `get_snapshot()` method on Ring client for paid Protect live snapshots
+- Lighting page: group selector dropdown, scene activation targets selected group
+- FastMCP 3.4 tool annotations (`READ_ONLY`/`MUTATING`/`DESTRUCTIVE`) on all 27 portmanteau tools
+
+### Changed
+- Pydantic v2 migration: `.dict()` → `.model_dump()` across 11 tool files (20+ call sites)
+- Scene activation uses `HueManager.activate_scene()` instead of raw `phue.run_scene()`
+- Tapo L900 lightstrip IP corrected from 192.168.0.172 → 192.168.0.171
+- Dreame vacuum IP in .env corrected from 192.168.0.179 → 192.168.0.144
+- Removed deprecation warning UP038 from ruff config
+- Removed stale `pyproject.toml.20260717.bak`
+
+### Fixed
+- `POST /api/lighting/scene` now accepts `group_name` parameter for targeted scene activation
+- Scene buttons now show success/error feedback (green checkmark or red X, 3s auto-clear)
+- WebRTC Ring stream: all `ring_doorbell` 0.9.13 methods (`generate_webrtc_stream`, `on_webrtc_candidate`, `keep_alive_webrtc_stream`, `close_webrtc_stream`) are async coroutines — removed incorrect `asyncio.to_thread()` wrapping that caused HTTP 500
+- Ring snapshot endpoint: multi-level fallback (`async_get_snapshot` → `snapshot_url` download → last recording URL)
+- USB camera auto-discovery: now skips device IDs already configured in `config.yaml` to prevent duplicate entries
+- `nest_protect_tools.py`, `plex/*.py`: legacy `.dict()` → `.model_dump()` (FastMCP 3.4 pydantic v2 compliance)
+
+### Added
+- Ring doorbell WebRTC intercom: `useRingWebRTC` React hook with `RTCPeerConnection` → SDP offer/candidate/keepalive → two-way talk via mic capture
+- Ring page: Live View button per doorbell, video stream + Talk/Mute/Close controls
+- Nest Protect via Home Assistant: `GET /api/nest/ha-status` queries HA REST API for Nest Protect entities — no OAuth setup needed
+- Nest page: auto-detects HA path first, shows "via Home Assistant" badge, falls back to direct OAuth
+
+### Changed
+- All 27 portmanteau tools: `@mcp.tool()` → `@mcp.tool(annotations=...)` with `_READ_ONLY`/`_MUTATING`/`_DESTRUCTIVE` (FastMCP 3.4)
+- `.mcpbignore` tightened: excluded `build_venv/`, `target/`, `integrations/*.exe`, reduced MCPB from 117 MB → 2.5 MB
+
+### Packaging
+- MCPB bundle rebuilt: `dist/devices-mcp-1.23.0.mcpb` (2.5 MB, 752 files)
+- `manifest.json` updated to v1.23.0, entry point `server_v2.py`, tool list reflects 27 portmanteau tools
 
 ### Fixed
 - Camera page crash: removed invalid `ConfigDict(use_enum_values=True)` from `CameraStatus(StrEnum)` that raised `ValueError` at import time
@@ -51,16 +137,6 @@
 - MCD project page updated with build/release info
 
 # Changelog
-
-## [Unreleased]
-
-### Added
-- **Fritz priority API** — `GET /api/fleet/priority` aggregates Shelly temps, Nest CO/smoke (HA), Ring events, unacked alarm messages
-- **`integrations/fritz_priority.py`** — urgency scoring (kitchen ≥45°C, threshold breaches, CO/smoke emergency)
-- **Docs** — [docs/FLEET_INTEGRATION.md](docs/FLEET_INTEGRATION.md) for Fritz `coworker_devices_watch` consumer
-
-### Integration
-- [fleet-agent-mcp](https://github.com/sandraschi/fleet-agent-mcp) polls every 5m; urgent email + Intel Hub on new critical incidents
 
 ## [1.21.5] - 2026-06-01 — Beta docs, splash/CORS, three delivery legs
 

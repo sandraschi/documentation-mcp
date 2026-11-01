@@ -1,3 +1,13 @@
+---
+title: "Fleet README Structure Standard"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-18
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Fleet README Structure Standard
 
 **Status**: ACTIVE — applies to all sandraschi MCP server repos  
@@ -28,9 +38,32 @@ repo-root/
     ├── ONBOARDING.md          ← First-timer wrappee/account (DEFAULT — see ONBOARDING_STANDARD.md)
     ├── CONFIGURATION.md       ← All env vars and config options
     ├── DEVELOPMENT.md         ← Dev setup, tools, contributing
+    ├── ARCHITECTURE.md        ← System architecture, data flow, ports, protocols
     ├── TOOLS.md               ← Full MCP tool reference (MCP repos only)
+    ├── WRAPPEE.md             ← Wrapped host-app overview + community links (wrapper repos — see below)
     └── TROUBLESHOOTING.md     ← FAQ, common errors, diagnostics
 ```
+
+**Update (2026-07-30)**: `ARCHITECTURE.md` moves from repo root into `docs/`,
+alongside the other reference docs - it was never actually specified before
+and repos put it wherever felt natural, which was mostly root. New repos and
+retrofits should use `docs/ARCHITECTURE.md`.
+
+**Update (2026-10-22)**: contributor-facing rules (issues, PRs, conduct) live
+in root `CONTRIBUTING.md` (GitHub-native discovery) - see
+`GITHUB_HYGIENE_STANDARDS.md`. `docs/DEVELOPMENT.md` keeps dev setup and
+tooling detail.
+
+**`docs/WRAPPEE.md` (wrapper repos — required)**: a dedicated page for the
+host application this repo wraps — what it is, and where to find its
+homepage, community (Discord/Matrix/Reddit/Mastodon, whatever exists),
+official docs, and GitHub. This matters most for **obscure or easily-confused
+wrappees** — e.g. a person landing on `overte-mcp` reasonably asks "isn't
+this called Vircadia?" (it split from Vircadia's original codebase; current
+"Vircadia" is now an unrelated product). A well-known wrappee like Blender
+needs this less; an obscure or ambiguously-named one needs it a lot. See the
+[Wrapper MCP README Standard](./README_WRAPPER_MCP.md) for the full contract
+(this file plus the README's own "What You Can Do" section).
 
 When the product wraps a host app or needs a vendor account (**default for fleet MCPs** — even Notepad++), **`docs/ONBOARDING.md` is mandatory**, plus webapp big-red CTA and MOCK-until-onboarded. See [ONBOARDING_STANDARD.md](./ONBOARDING_STANDARD.md).
 ---
@@ -48,6 +81,16 @@ When the product wraps a host app or needs a vendor account (**default for fleet
 
 One sentence: what it does and why you'd want it.
 
+## What this wraps (wrapper repos — required, first thing after the title)
+
+Name the wrapped host app immediately — don't make the reader hunt for it.
+One or two sentences: what the app is, and a link to
+[docs/WRAPPEE.md](docs/WRAPPEE.md) for the full picture (official links,
+community, disambiguation from similarly-named projects). This matters most
+for obscure or confusable wrappees — e.g. "wraps **Overte**, the open-source
+continuation of the original Vircadia/High Fidelity codebase (not to be
+confused with current 'Vircadia,' an unrelated product)."
+
 ## Preview (webapp repos — required)
 
 If the repo ships a React/Vite dashboard, include a **Preview** section with 1–2 screenshots
@@ -64,48 +107,90 @@ showing the AI-oriented webapp (not the native host app UI). See
 
 stdio-only repos may skip Preview or use an architecture diagram instead.
 
-## How it runs (wrapper MCPs — required)
+## Demo video (optional, when available)
 
-If the repo wraps a host application (Blender, KiCad, GIMP, Resolve, …), document
-**headless vs GUI** execution honestly — do not bury this in INSTALL.md only.
-See [README_WRAPPER_MCP.md](../standards/README_WRAPPER_MCP.md).
-
-```markdown
-## How it runs
-| Mode | Host app | When |
-| **Headless (default)** | … | … |
-| **Live GUI (optional)** | … | … |
-
-> **Headless by default** — one-sentence plain-language callout when true.
-```
-
-## Hands-in / Hands-out (wrapper MCPs — required)
-
-What artifacts flow **into** and **out of** the wrappee (for agents and fleet pipelines).
-Reference: blender-mcp → tahoma2d-mcp / godot-mcp chains.
-
-```markdown
-## Hands-in / Hands-out
-| Direction | Artifacts | Notes |
-| **Hands-in** | … | … |
-| **Hands-out** | … | … |
-```
-
-## Features
-- Bullet list of 4–8 capabilities (user benefits, not implementation details)
-
-## Quick Install
-The single fastest path (drag-and-drop .mcpb). One code block, done.
-Link to INSTALL.md for other methods.
+If [demo-vid-mcp](https://github.com/sandraschi/demo-vid-mcp) has produced a
+walkthrough for this repo, embed it here (early in the README, near Preview).
+Not yet mandatory fleet-wide — demo-vid-mcp is new (2026-07) and still
+maturing — but worth adding as videos become available; automating this
+across 150+ repos is expected to meaningfully improve first impressions.
 
 ## What You Can Do
+
+For **wrapper repos**, this section replaces the old separate "How it runs"
++ "Hands-in / Hands-out" split — fold both into one section so a reader gets
+execution honesty and the artifact pipeline in one place, right after they
+know what's being wrapped:
+
+```markdown
+## What You Can Do
+
+**How it runs**: headless Blender subprocess by default; optional live
+session + bridge addon to watch in the GUI. Blender itself is never bundled
+— install separately.
+
+| Direction | Artifacts | Notes |
+|-----------|-----------|-------|
+| **Hands-in** | `.blend`, image refs, natural-language scene prompts | Upload via webapp or tool params |
+| **Hands-out** | `.glb`, `.vrm`, `.blend`, viewport PNG | `blender_export`, `blender_render` |
+
+- 4–8 more capability bullets (user benefits, not implementation details)
+```
+
+Non-wrapper repos can use a plain features list here instead — the
+headless/hands-in-out structure is specifically for repos that drive another
+program. Full rules for headless-vs-GUI honesty and artifact tables:
+[README_WRAPPER_MCP.md](../standards/README_WRAPPER_MCP.md).
+
+## Install (single-click, installer first)
+
+Lead with the **NSIS installer** for repos with a webapp: it is the only artifact that installs the
+whole product (webapp + embedded backend), so it is the default for end users. No `git clone`, no
+`just`, no Python or Node. Direct them to GitHub Releases ([RELEASE_TIERS.md](./RELEASE_TIERS.md)).
+
+```markdown
+## Install
+
+1. Download **`{repo}-{version}-setup.exe`** from the [latest release](https://github.com/sandraschi/{repo}/releases/latest).
+2. Run it. Windows may show a SmartScreen warning because the installer is unsigned:
+   choose **More info > Run anyway**.
+3. Open **{Product}** from the Start menu.
+
+**Only want the tools inside Claude?** The `.mcpb` bundle registers the MCP server in Claude Desktop
+but does **not** install the webapp. Paste this to Claude:
+
+> Install the {repo} MCP extension: download `{repo}-{version}.mcpb` from
+> https://github.com/sandraschi/{repo}/releases/latest and open it with Claude Desktop.
+
+**Developers:** build from source, justfile recipes, tests and packaging are in
+[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
+```
+
+Rules:
+- The installer is step one. The `.mcpb` is the second path and always says what it does not install.
+- The "paste this to Claude" wording is a template; validate it against the Claude client you document
+  and adjust the sentence, not the structure.
+- Repos with **no webapp** (Class B) lead with the `.mcpb` and the same paste-to-Claude prompt.
+- **No `just ...` command, no `git clone`, no `uv sync` anywhere in the README install section.** Those
+  live in `docs/DEVELOPMENT.md`, together with the justfile recipes (`build-native`, `mcpb-pack`,
+  `cua-nsis-test`, ...) and their prerequisites. Ordinary users never need them.
+- Link `INSTALL.md` for everything else (manual config, other clients, troubleshooting).
+
+## Example Prompts
 2–3 example prompts showing real usage. Shows value immediately.
+
+## Fleet Crossconnects (Companions) (when applicable)
+If the server connects to or enhances peer fleet repositories (e.g. email-mcp, speech-mcp),
+include the standard crossconnect table. See [FLEET_CROSSCONNECT_STANDARD.md](./FLEET_CROSSCONNECT_STANDARD.md).
+Companions must be optional and self-contained; never require mandatory transitive installs.
 
 ## Documentation
 | Doc | Contents |
 |-----|----------|
 | [Installation](INSTALL.md) | All install methods, prerequisites |
 | [Onboarding](docs/ONBOARDING.md) | First-timer account/host setup, money/CC, pitfalls (when applicable) |
+| [Wrapped app](docs/WRAPPEE.md) | What it is, official links, community, disambiguation (wrapper repos) |
+| [Architecture](docs/ARCHITECTURE.md) | System architecture, data flow, ports |
 | [Configuration](docs/CONFIGURATION.md) | Env vars, config options |
 | [Tool Reference](docs/TOOLS.md) | All available tools |
 | [Development](docs/DEVELOPMENT.md) | Contributing, local setup |
@@ -119,6 +204,7 @@ Minimal: OS, Claude Desktop version, any hard dependencies
 
 ### What Does NOT Belong in README.md
 
+- `git clone`, `uv sync`, `just ...` or any build step in the install section (developer docs only)
 - Detailed install steps beyond the quick path
 - Configuration tables with env vars
 - Full tool reference
@@ -156,11 +242,19 @@ Install these if you don't have them already:
 > macOS: use `brew install` equivalents  
 > Linux: use your distro package manager
 
-## Option A — Drag and Drop (Recommended)
+## Option A — Windows installer (Recommended, repos with a webapp)
 1. Go to [Releases](https://github.com/sandraschi/{repo}/releases/latest)
-2. Download `{repo}-{version}.mcpb`
-3. Open Claude Desktop → drag the file onto the window  
+2. Download `{repo}-{version}-setup.exe` and run it (unsigned: SmartScreen "More info > Run anyway")
+3. Open **{Product}** from the Start menu
+
+Installs the webapp and the backend; no other prerequisites. Per-user install, no admin prompt.
+
+## Option A2 — Claude Desktop bundle (.mcpb; Recommended for repos with no webapp)
+1. Download `{repo}-{version}.mcpb` from the same release
+2. Open Claude Desktop → drag the file onto the window  
    *Or*: Settings → MCP Servers → Install from file
+
+Registers the MCP server in Claude Desktop only. It does **not** install the webapp.
 
 ## Option B — mcpb CLI
 ```bash
@@ -212,6 +306,10 @@ See [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for common issues.
 - Do not omit the config file path — users don't know where it is
 - Do not omit the JSON snippet — users shouldn't have to look it up
 - Do not link to "see the README" for install steps — the README links here
+- **NEVER require private central infrastructure (`mcp-central-docs` or `D:\Dev\repos` paths)** — the repo must install and run standalone on any clean PC
+- Do not reference internal tooling scripts in user install steps (users cannot clone private repositories)
+- Document the ConPTY pipe teardown error (`0x800700e8`) in troubleshooting sections with the fix (use `cmd.exe /k` or run frontend build manually)
+
 
 ---
 
@@ -367,3 +465,7 @@ The broader `scripts/check-repo-standards.ps1` can also be extended to check:
 - [ ] Host-app repos: INSTALL documents external app install, not bundled ([LLM_AND_INSTALL_TIERS.md](./LLM_AND_INSTALL_TIERS.md))
 - [ ] docs/CONFIGURATION.md exists (for MCP repos)
 - [ ] docs/TROUBLESHOOTING.md exists
+- [ ] README install section links GitHub Releases and contains no `just ...`, `git clone` or `uv sync`
+- [ ] Class A repos: README and INSTALL.md lead with the NSIS installer; the `.mcpb` says it does not install the webapp
+- [ ] docs/DEVELOPMENT.md documents every justfile recipe a developer needs (`build-native`, `mcpb-pack`, `cua-nsis-test`, ...)
+- [ ] Release gate passes: `scripts/check-release-gate.ps1` ([RELEASE_TIERS.md](./RELEASE_TIERS.md))

@@ -10,7 +10,7 @@ The system categorizes taboos into three layers. Any attempt to violate a Taboo 
 
 | Layer | Type | Examples |
 |-------|------|----------|
-| **Path Taboo** | Protected Directories | `C:/Users/sandr/Inbox`, `D:/Dev/repos/*/.git`, `C:/Windows`, `System32` |
+| **Path Taboo** | Protected Directories | `C:/Users/<user>/Inbox`, `D:/Dev/repos/*/.git`, `C:/Windows`, `System32` |
 | **Command Taboo** | Forbidden Patterns | `rm -rf`, `format`, `truncate table`, `delete * from`, `shred` |
 | **Action Taboo** | Prohibited Behaviors | Unencrypted upload of `memops`, Modification of `TABOO_PROTOCOL.md`, Disabling the Bastion. |
 
@@ -43,10 +43,10 @@ def validate_command(command_str: str, target_path: str) -> bool:
 
 | Path | Rationale |
 |------|-----------|
-| `C:/Users/sandr/Inbox` | Personal communication and privacy sovereignty. |
+| `C:/Users/<user>/Inbox` | Personal communication and privacy sovereignty. |
 | `D:/Dev/repos/*/.git` | Prevention of history-based supply chain poisoning. |
 | `D:/Dev/repos/mcp-central-docs` | Prevention of agentic self-modification of the project's rules. |
-| `C:/Users/sandr/.gemini/antigravity` | Prevention of IDE-level configuration tampering. |
+| `C:/Users/<user>/.gemini/antigravity` | Prevention of IDE-level configuration tampering. |
 
 ---
 

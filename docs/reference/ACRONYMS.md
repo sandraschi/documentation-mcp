@@ -3,7 +3,7 @@ title: "Fleet Acronym Reference"
 category: reference
 status: active
 audience: everyone
-last_updated: 2026-07-12
+last_updated: 2026-10-18
 ---
 
 # Dev Acronyms, Abbreviated
@@ -12,7 +12,7 @@ last_updated: 2026-07-12
 
 ---
 
-~200 TLAs and initialisms, plus ~60 more from Fable's gap analysis. Short explanation + fleet-relevant example where useful.
+~210 TLAs and initialisms, plus ~60 more from Fable's gap analysis. Short explanation + fleet-relevant example where useful.
 
 ---
 
@@ -21,6 +21,9 @@ last_updated: 2026-07-12
 | TLA | Stands For | What | Fleet Example |
 |-----|------------|------|---------------|
 | MCP | Model Context Protocol | Protocol for AI models to call tools and read resources | Every repo in `D:\Dev\repos\` |
+| SOTA | Service-Oriented Thinking Architecture | Fleet architectural framework -- standards, quality gates, tooling conventions | `standards/SOTA_REQUIREMENTS.md` |
+| MCD | MCP Central Docs | Fleet documentation hub at `mcp-central-docs/` | `mcp-central-docs/standards/` |
+| ACP | Agent Client Protocol | Open-source protocol for AI agent communication | `standards/AGENT_PROTOCOLS.md` |
 | OTel | OpenTelemetry | Observability framework for traces, metrics, logs | `patterns/OPENTELEMETRY_FLEET_ROLLOUT.md` |
 | OT | Operation Transform | Data transformer concept | OpenTelemetry OT pipeline |
 | OTLP | OpenTelemetry Protocol | Wire format for telemetry data | gRPC :4317, HTTP :4318 |
@@ -32,15 +35,18 @@ last_updated: 2026-07-12
 | SEP | Something-Extension-Proposal | FastMCP extension specification | `fastmcp/sep-1577-sampling-with-tools.md` |
 | MCPB | MCP Bundle | .mcpb packaging format for Claude Desktop | `MCPB_PACKAGING_STANDARDS.md` |
 | NSIS | Nullsoft Scriptable Install System | Windows installer generator. Fleet's PRIMARY installer format. Supports PREINSTALL/PREUNINSTALL hooks (process kill), `currentUser` mode (no admin), silent `setup.exe /S`. See `packaging/NSIS_BUILD.md`. | Tauri NSIS `*-setup.exe` |
+| ASGI | Asynchronous Server Gateway Interface | Python async web server spec (Starlette, Uvicorn, FastAPI). In FastMCP 3.4+, `mcp.http_app()` returns a Starlette app whose `lifespan` MUST be passed to the parent ASGI constructor or streamable HTTP crashes with 500. | `fastmcp/3.4-features.md` SS7 |
 | CUA | Computer Use Agent | Agent that uses mouse/keyboard like a human | `cua_nsis_smoke_testing.md` |
 | PREFAB | Prefabricated UI | FastMCP in-chat rich UI components | `prefab-ui>=0.14.0` |
 | FTS | Full-Text Search | Keyword search over ingested text | SQLite FTS5 in arxiv-mcp depot |
+| HuJSON | Human JSON | JSON with `//` comments and trailing commas allowed (used by Tailscale ACL policies and other configs). Strict `json.loads` fails on it — strip full-line `//` comments and trailing commas before parsing. Fleet reference: `tailscalemcp.operations.network._hujson_to_json` (tailscale-mcp). Pitfall: Tailscale's `GET /acl` serves raw HuJSON text, not JSON. | Tailscale ACL `GET/POST /acl` |
 
 ## AI / ML
 
 | TLA | Stands For | What | Fleet Example |
 |-----|------------|------|---------------|
 | LLM | Large Language Model | Generative text model | The thing talking to the MCP tools |
+| GPT | Generative Pre-trained Transformer | Transformer-based LLM architecture from OpenAI | `gpt-4o`, `gpt-4.1` in fleet chat |
 | VLM | Vision Language Model | LLM that also processes images | Gemini, GPT-4o |
 | VLA | Vision-Language-Action | Model that sees, understands, and controls robots | `yahboom-mcp`, `unitree-mcp` |
 | dLLM | Diffusion Language Model | Non-autoregressive LLM (generate all tokens at once) | `diffusiongemma` |
@@ -54,9 +60,31 @@ last_updated: 2026-07-12
 | TPU | Tensor Processing Unit | Google's ML accelerator | Not in fleet |
 | NPU | Neural Processing Unit | On-device ML accelerator | Snapdragon X Elite laptops |
 | LoRA | Low-Rank Adaptation | Efficient fine-tuning method | LoRA adapters for diffusion models |
+| QLoRA | Quantized Low-Rank Adaptation | LoRA with 4-bit model quantization -- halves VRAM again | Unsloth fine-tuning on consumer GPUs |
 | QAT | Quantization-Aware Training | Train with simulated quantization | Local model optimisation |
+| Quant | Quantization (shorthand) | Reduce model weight precision (16-bit -> 8/4-bit) to fit bigger models in less VRAM at slightly lower quality | a 4-bit quant of glm-5.3 for local inference |
+| CUDA | Compute Unified Device Architecture | NVIDIA parallel computing platform | All fleet GPU workloads |
+| NVENC | NVIDIA Encoder | Fixed-function GPU video-encode block, separate from CUDA cores; near-zero compute and VRAM cost | Sunshine streaming on Goliath RTX 4090 |
+| ONNX | Open Neural Network Exchange | Interchangeable model format | `stems-mcp` HTDemucs, ComfyUI export |
+| AGI | Artificial General Intelligence | Human-level AI across all tasks | Research frontier |
 | GGUF | GPT-Generated Unified Format | llama.cpp model format | Local inference via Ollama |
 | MoE | Mixture of Experts | Model architecture with sparse expert routing | DeepSeek-V4 |
+| GLM | General Language Model | Zhipu/Z.AI open-weight LLM family; long-context coding models | glm-5.3 (1M ctx) in opencode providers |
+| Opus | Anthropic flagship model tier (name, not an acronym) | Top-capability Claude tier for hard codegen and architecture work | Opus 5.5 built storytold ArtCraft; fleet sampling-model option |
+| MLA | Multi-head Latent Attention | KV-cache compression via latent vectors; cheap long-context serving | DeepSeek-V2 |
+| DeepSeekMoE | DeepSeek Mixture-of-Experts | Fine-grained expert segmentation plus isolated shared experts | DeepSeek-V2 |
+| MTP | Multi-Token Prediction | Predict several future tokens per step; denser training signal | DeepSeek-V3 |
+| DualPipe | Bidirectional pipeline parallelism | Overlap computation and communication in both directions | DeepSeek-V3 |
+| FP8 | 8-bit Floating Point | Low-precision training format; headline V3 efficiency bet | DeepSeek-V3 |
+| PPO | Proximal Policy Optimization | Baseline policy-gradient RL | Precursor to GRPO |
+| GRPO | Group Relative Policy Optimization | RL without a critic model; group-scored advantages | DeepSeek-R1 |
+| Qwen | Tongyi Qianwen (Alibaba) | Open-weight LLM family; coder and vision-language variants | `qwen3.8-tools` in Ollama provider |
+| Kimi | Moonshot AI | Long-context chat and coding models (Kimi K2) | API clients |
+| Hunyuan | Tencent Hunyuan | LLM plus 3D generation (Hunyuan3D meshes) | ArtCraft 3D catalog |
+| Doubao-Seed | ByteDance Seed team | Doubao chat brand; sibling video/image models Seedance and Seedream | ArtCraft video/image catalog |
+| MiniMax | MiniMax (Hailuo) | Video and audio models | ArtCraft catalog |
+| Kling | Kuaishou Kling | Video generation models (1.6 through 3.0) | ArtCraft video catalog |
+| ERNIE | Baidu ERNIE | Search-grounded LLM family; China enterprise default | Competitor watch |
 | MMLU | Massive Multitask Language Understanding | Benchmark (undergrad knowledge) | Standard eval |
 | HHH | Helpful, Honest, Harmless | Anthropic's alignment principles | System prompts |
 | RLHF | Reinforcement Learning from Human Feedback | Align model via human preferences | Precursor to DPO |
@@ -65,6 +93,9 @@ last_updated: 2026-07-12
 | DL | Deep Learning | Neural network-based ML | Transformers, diffusion models |
 | NLP | Natural Language Processing | Text understanding/generation | All MCP tool descriptions |
 | CV | Computer Vision | Image/video understanding | `comfyops-mcp` vision-refine loop |
+| OCR | Optical Character Recognition | Extract text from images/screenshots | CUA smoke test page verification |
+| TTS | Text-to-Speech | Convert written text to spoken audio | `speech-mcp`, fleet chat SpeakButton |
+| STT | Speech-to-Text | Convert spoken audio to written text | `speech-mcp`, fleet chat MicButton |
 | AR | Augmented Reality | Digital overlay on real world | Future fleet frontpage |
 | VR | Virtual Reality | Fully digital environment | `resonite-mcp`, `vrchat-mcp` |
 | XR | Extended Reality | Umbrella for AR/VR/MR | Teleoperator XR client |
@@ -78,6 +109,7 @@ last_updated: 2026-07-12
 | ICL | In-Context Learning | Learning from examples in prompt | Few-shot prompting patterns |
 | CoT | Chain of Thought | Step-by-step reasoning | `ctx.sample()` pattern |
 | ToT | Tree of Thoughts | Branching reasoning exploration | Advanced agentic patterns |
+| HITL | Human In The Loop | Human oversight in automated systems | `admiral-mcp` agent approval pager |
 | HF | HuggingFace (see above) | ML model hub | `comfy_models` download |
  
 ## Protocols & Standards
@@ -89,6 +121,7 @@ last_updated: 2026-07-12
 | gRPC | gRPC Remote Procedure Call | High-performance RPC over HTTP/2 | OTLP gRPC export |
 | REST | Representational State Transfer | Resource-oriented HTTP API pattern | `GET /api/health` |
 | JSON | JavaScript Object Notation | Ubiquitous data interchange format | Tool return values |
+| NDJSON | Newline-Delimited JSON | One JSON value per line, no enclosing array — stream-friendly. Emitted by `gh api --jq '.[] | …'` and OpenSERP `format=ndjson`. Parse by splitting lines and `json.loads` per line; `json.loads` on the whole blob fails with "Extra data". | `gh api --jq`, openserp `format=ndjson` |
 | JSON-RPC | JSON Remote Procedure Call | RPC protocol using JSON | MCP protocol messages |
 | YAML | YAML Ain't Markup Language | Config file format (recursive acronym) | `docker-compose.yml` |
 | TOML | Tom's Obvious Minimal Language | Config file format | `pyproject.toml` |
@@ -125,6 +158,7 @@ last_updated: 2026-07-12
 | SLA | Service Level Agreement | Uptime commitment | Internal fleet target |
 | SLO | Service Level Objective | Internal reliability target | Grafana alert thresholds |
 | SLI | Service Level Indicator | Measured reliability metric | P99 latency, error rate |
+| KPI | Key Performance Indicator | Dashboard metric showing system state | `kpi-gpu`, `kpi-jobs` data-testids |
 | MTTR | Mean Time To Recover | Average restoration time | After bug discovery |
 | MTBF | Mean Time Between Failures | Average uptime between failures | Rare for MCP servers |
 | IaC | Infrastructure as Code | Manage infra via config files | Docker Compose files |
@@ -163,6 +197,7 @@ last_updated: 2026-07-12
 | SDK | Software Development Kit | Library for building against a platform | MCP SDK |
 | E2E | End-to-End (Test) | Full user-journey test | Playwright tests |
 | LSP | Language Server Protocol | Standard for IDE code intelligence | Rust Analyzer, Pyright |
+| IDE | Integrated Development Environment | Code editor with language intelligence | Cursor, VS Code, Windsurf |
 | DAP | Debug Adapter Protocol | Standard for IDE debugging | Python debugger |
 | WASM | WebAssembly | Binary format for browser execution | Not yet in fleet |
 | TS | TypeScript | Typed JavaScript superset | Fleet webapp standard |
@@ -172,6 +207,8 @@ last_updated: 2026-07-12
 | SCSS | Sassy CSS | CSS preprocessor | Rare in fleet (Tailwind) |
 | AST | Abstract Syntax Tree | Code structure representation | Linters, formatters |
 | RFC | Request for Comments | Design proposal document | Architecture patterns |
+| PRD | Product Requirements Document | Spec defining what to build and why | `projects/*/PRD.md` |
+| NFR | Non-Functional Requirements | Performance, security, reliability constraints | PRD appendix |
 | RAII | Resource Acquisition Is Initialization | C++ resource management pattern | Rust borrow checker |
 | ORM | Object-Relational Mapping | DB abstraction layer | SQLAlchemy |
 | DTO | Data Transfer Object | Structure for API data | Pydantic models |
@@ -216,6 +253,7 @@ last_updated: 2026-07-12
 |-----|------------|------|---------------|
 | DOM | Document Object Model | Browser's page representation | React virtual DOM |
 | SPA | Single-Page Application | Webapp with one HTML page, JS-routed | All fleet webapps |
+| CTA | Call to Action | UI element prompting a user action (button, link) | Dashboard hero "Start onboarding" button |
 | CSR | Client-Side Rendering | Browser renders the page | React default |
 | SSR | Server-Side Rendering | Server renders the HTML | Next.js mode |
 | SSG | Static Site Generation | Pre-built HTML at build time | Next.js export mode |
@@ -231,11 +269,38 @@ last_updated: 2026-07-12
 | FID | First Input Delay | Core Web Vitals metric (interactivity) | Performance monitoring |
 | INP | Interaction to Next Paint | Core Web Vitals metric (responsiveness) | Replaces FID in 2024+ |
 | SEO | Search Engine Optimization | Making pages findable on Google | SPA needs SSR/SSG for this |
-| A11Y | Accessibility | Numeronym for "accessibility" | `aria-label`, `data-testid` |
-| I18N | Internationalization | Numeronym — 18 letters between I and N | Locale support |
-| L10N | Localization | Numeronym — 10 letters between L and N | Translations |
+| SERP | Search Engine Results Page | The page Google/Bing shows for a query | `integrations/openserp/README.md` — FOSS SERP API |
+| A11Y | Accessibility | Numeronym for "accessibility" — lowercase `a11y` in tooling, uppercase `A11Y` in prose. Biome lint category is `lint/a11y/*` (e.g. `useButtonType`, `noStaticElementInteractions`); webapps must pass these as part of `just lint` | `aria-label`, `data-testid`, `lint/a11y/useButtonType` |
+| I18N | Internationalization | Numeronym: **i** + 18 letters + **n** = "internationalization". Architecture that makes software localizable (locale dictionaries, no hardcoded copy, date/number/currency formatting per locale) | `src/lib/i18n.tsx` pattern (EN/DE dictionary + topbar dropdown + localStorage); content translation is a separate Phase 2 |
+| L10N | Localization | Numeronym: **l** + 10 letters + **n** = "localization". The actual translation/adaptation work per locale (copy, formats, RTL, imagery) that i18n architecture enables | DE UI strings; curated content stays source-language until Phase 2 |
 | RWD | Responsive Web Design | Layout adapts to screen size | Tailwind breakpoints |
 | BEM | Block Element Modifier | CSS naming convention | Not fleet standard (Tailwind) |
+
+## Fleet-internal numeronyms (Eigengebrauch)
+
+**What a numeronym is** (very dev-nerdy, as requested): a word compressed to
+*first letter + count of middle letters + last letter*. The original is
+**i18n** = **i** + 18 + **n** for "internationalization" - coined at Digital
+Equipment Corporation (DEC) in the 1970s or 1980s by engineers tired of typing
+30-page memos about it (Wikipedia: *Internationalization and localization*).
+The localization industry added **l10n**, accessibility folks **a11y**,
+Google-era infrastructure **K8s**. The pattern only works when the result is
+shorter than the word AND the tribe already knows the word - otherwise it's
+just showing off.
+
+Same pattern as i18n/a11y (first letter + letter count + last letter), defined
+for fleet use. Propose new ones sparingly - an acronym nobody uses is clutter.
+**r11n** is in active use as of 2026-10-18 (lowercase in chat, `R11N` in this table).
+The public banner bearer is Brandon Thomas (`storytold`) and the 13 Crafting Apps: CADCraft, DeckCraft, DesignCraft, EffectCraft, FigCraft, FilmCraft, GridCraft, LightCraft, PdfCraft, PhotoCraft, SoundCraft, VectorCraft, WordCraft. Fleet r11n borrows his harness. Wrap those apps, do not reimplement them (`standards/rust-artcraft/CRAFT_APPS_MCP_UTILIZATION.md`).
+The public banner bearer is Brandon Thomas (`storytold`) and the 13 Crafting Apps: CADCraft, DeckCraft, DesignCraft, EffectCraft, FigCraft, FilmCraft, GridCraft, LightCraft, PdfCraft, PhotoCraft, SoundCraft, VectorCraft, WordCraft. Fleet r11n borrows his harness. Wrap those apps, do not reimplement them (`standards/rust-artcraft/CRAFT_APPS_MCP_UTILIZATION.md`).
+The public banner bearer is Brandon Thomas (`storytold`) and the 13 Crafting Apps: CADCraft, DeckCraft, DesignCraft, EffectCraft, FigCraft, FilmCraft, GridCraft, LightCraft, PdfCraft, PhotoCraft, SoundCraft, VectorCraft, WordCraft. Fleet r11n borrows his harness. Wrap those apps, do not reimplement them (`standards/rust-artcraft/CRAFT_APPS_MCP_UTILIZATION.md`).
+
+| TLA | Stands For | What | Fleet Example |
+|-----|------------|------|---------------|
+| R11N | Rustification | Numeronym: **r** + 11 letters + **n** = "rustification". Fleet program that ports a Python/FastMCP + React repo into a Pure-Rust ArtCraft workspace. Trigger: `repconv <repo>` or `rustify <repo>`. Lineage: `rust-devices-mcp` is the first converted repo and the kernel blueprint (measured 2026-10-17, v0.4.0+). `rust-calibre-mcp` is the first end-to-end daily-driver `repconv` (2026-10-18, v0.4.0). `rust-plex-mcp` and `rust-arr-mcp` followed the same week. Triage: Buckets A and B convert, C splits, D stays Python. SOP: `patterns/REPCONV_SOP.md`. | `standards/RUST_ARTCRAFT_STANDARD.md` |
+| D11N | Documentation | **d** + 11 + **n**. The docs corpus itself (this hub, READMEs, INSTALLs, ONBOARDINGs) | `mcp-central-docs/` |
+| O11N | Orchestration | **o** + 11 + **n**. MCP servers calling MCP servers (sampling loops, crossconnects, fleet-agent) | `fleet-agent-mcp`, crossconnect pattern |
+| P13N | Personalization | **p** + 13 + **n**. Everything tuned to one human (Sandra): memory, PII block, habits, dialect | `pii.json`, Advanced Memory |
 
 ## Windows / Systems
 
@@ -253,6 +318,8 @@ last_updated: 2026-07-12
 | AD | Active Directory | Microsoft directory service | Enterprise auth |
 | GPO | Group Policy Object | Centralized Windows config | Enterprise mgmt |
 | WMI | Windows Management Instrumentation | System management interface | `Win32_Processor` queries |
+| NSSM | Non-Sucking Service Manager | Run any program as a Windows service | `unsloth-mcp` queue worker daemon |
+| IPC | Inter-Process Communication | Data exchange between processes | WebSocket bridge, stdio pipes |
 | COM | Component Object Model (see above) | Microsoft interop | Also Component Object Model |
 | UAC | User Account Control | Windows privilege elevation prompt | Admin prompts |
 | ACL | Access Control List | NTFS permissions | `winops_acl_*` tools |
@@ -261,6 +328,8 @@ last_updated: 2026-07-12
 | ReFS | Resilient File System | Modern Windows filesystem | Storage spaces |
 | GUID | Globally Unique Identifier | 128-bit identifier | Registry keys |
 | HWND | Handle to a Window | Window identifier in Win32 | AutoHotkey interop |
+| AHK | AutoHotkey | Windows automation scripting language | `autohotkey-mcp`, fleet macro hotkeys |
+| UIA | UI Automation | Windows accessibility framework for programmatic UI controls | pywinauto CUA tests, `descendants(title=...)` |
 | HKEY | Handle to a Key | Registry hive root | Registry paths |
 | MSVC | Microsoft Visual C++ | Microsoft C++ compiler | Tauri builds |
 | CRT | C Runtime | Standard C library for Windows | MSVC runtime |
@@ -279,7 +348,11 @@ last_updated: 2026-07-12
 | ICMP | Internet Control Message Protocol | Network diagnostics | `ping` |
 | ARP | Address Resolution Protocol | IP to MAC address mapping | Local network |
 | MAC | Media Access Control | Hardware address of network interface | Network interface ID |
+| LAN | Local Area Network | Network within a single site | Fleet 192.168.x.x, Tailscale virtual LAN |
 | MTU | Maximum Transmission Unit | Largest packet size | Network tuning |
+| PCAP | Packet Capture | File format for captured network traffic (.pcap/.pcapng); also the act of sniffing | `packetsniffer-mcp` `analyze_pcap` / `sniff` ops |
+| BPF | Berkeley Packet Filter | Filter expression language for captures (e.g. `tcp port 80`, `udp port 53`) | `packetsniffer-mcp` `filter_expr` parameter |
+| Npcap | Npcap | Windows packet capture driver (Wireshark's capture backend); required for live sniffing on Windows | `packetsniffer-mcp` live capture (admin required) |
 | RTT | Round-Trip Time | Network latency | Performance monitoring |
 | QoS | Quality of Service | Traffic prioritization | Media streaming |
 | VLAN | Virtual Local Area Network | Network segmentation | Not in fleet |
@@ -296,6 +369,8 @@ last_updated: 2026-07-12
 | WebRTC | Web Real-Time Communication | Browser-to-browser media | Media MCP servers |
 | WebSocket | Web Socket | Full-duplex communication over TCP | `/ws` endpoints |
 | mDNS | Multicast DNS | Local network service discovery | Tailscale |
+| Funnel | Tailscale Funnel | Expose a local port to the public internet via the tailnet, no port forwarding | funnel-landing playbooks, `/multigpu/` deployment |
+| MIDI | Musical Instrument Digital Interface | Music hardware/software protocol | `osc-mcp`, `mixx-dj-mcp`, `vcv-rack-mcp` |
 
 ## Storage & DB
 
@@ -340,6 +415,7 @@ last_updated: 2026-07-12
 | STL | Stereolithography | Mesh format (triangle soup, no units) | `cad_export.stl` for slicing |
 | DXF | Drawing Exchange Format | Autodesk 2D CAD interchange | `cad_export.dxf` → kicad board outline |
 | GLTF | GL Transmission Format | 3D scene format (glTF 2.0 standard) | `cad_export.gltf` → blender/godot |
+| GLB | GLTF Binary | Single-file glTF variant (binary container) | Overte entity models, 3D asset depot |
 | 3MF | 3D Manufacturing Format | Additive manufacturing format (preserves units, colors) | `cad_export.3mf` |
 | SVG | Scalable Vector Graphics | Vector image format | `cad_export.technical_drawing` via `ExportSVG` |
 | BREP | Boundary Representation | Solid geometry kernel representation | OCCT BREP, the native format |
@@ -353,10 +429,13 @@ last_updated: 2026-07-12
 |-----|------------|------|---------------|
 | CPU | Central Processing Unit | General-purpose processor | AMD Ryzen 9 5900X |
 | GPU | Graphics Processing Unit | Parallel compute processor | RTX 4090 24 GB |
+| USB | Universal Serial Bus | Peripheral connection standard | Dymo HID scale, RPLidar, cameras |
 | NPU | Neural Processing Unit | On-device AI accelerator | Snapdragon X Elite |
 | TPU | Tensor Processing Unit | Google's ML ASIC | Not in fleet |
 | VRAM | Video Random Access Memory | GPU memory | 24 GB GDDR6X on RTX 4090 |
 | RAM | Random Access Memory | System memory | 64 GB DDR4 |
+| SRAM | Static RAM | Fast cache memory (no refresh) | CPU L1/L2/L3 cache |
+| DRAM | Dynamic RAM | Main system memory (requires refresh) | DDR4/DDR5 DIMMs |
 | SSD | Solid State Drive | Flash storage | Fleet boot drives |
 | HDD | Hard Disk Drive | Magnetic storage | NAS bulk storage |
 | NVMe | NVM Express | High-speed SSD interface | `C:\` drive protocol |
@@ -376,6 +455,11 @@ last_updated: 2026-07-12
 | HIL | Hardware-in-the-Loop | Real hardware with simulated inputs | Sim-to-real transfer validation |
 | PNP | Pick and Place | Robot manipulation task | Future arm robotics |
 | AGV | Automated Guided Vehicle | Floor-following robot | Boomy patrol mode |
+| VDI | Virtual Disk Image | VirtualBox native disk container (dynamic or fixed) | `win11-automated.vdi` (80 GB dynamic) |
+| VMDK | Virtual Machine Disk | VMware disk format; also readable by VirtualBox | Cross-hypervisor imports |
+| VHDX | Virtual Hard Disk v2 | Hyper-V disk format (large, resilient) | Hyper-V guests, Windows backup images |
+| VHD | Virtual Hard Disk | Legacy Hyper-V/Virtual PC format, 2 TB limit | Older Windows images |
+| QCOW2 | QEMU Copy-On-Write v2 | QEMU/KVM sparse format with internal snapshots | libvirt guests |
 
 ## Version Control
 
@@ -403,6 +487,9 @@ last_updated: 2026-07-12
 | MIT | Massachusetts Institute of Technology | Permissive license (short) | Fleet standard license |
 | AGPL | Affero GPL | Copyleft for network services | Some self-hosted tools |
 | FOSS | Free and Open Source Software | Free + open source | All fleet dependencies |
+| OSS | Open Source Software | Software with source code accessible | Community contributions |
+| EPUB | Electronic Publication | E-book file format | `calibre-mcp` library management |
+| DAW | Digital Audio Workstation | Music production software | `reaper-mcp` OSC bridge |
 | DRY | Don't Repeat Yourself | Software principle | Portmanteau tools |
 | WET | We Enjoy Typing / Write Everything Twice | Anti-DRY | Legacy code |
 | SOLID | SRP, OCP, LSP, ISP, DIP | OOP design principles | Architecture patterns |

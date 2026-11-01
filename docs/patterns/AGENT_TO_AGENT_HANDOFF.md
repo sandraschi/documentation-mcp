@@ -70,3 +70,45 @@ async def handoff_to_robotics(ctx: RunContext[MyDeps], reason: str):
     """Explicitly hands off to the Robotics Specialist."""
     return HandoffResult(agent="robotics", reason=reason)
 ```
+
+---
+
+## Session handoff (opencode file-based, Oct 2026)
+
+Runtime handoff above assumes live agents. opencode sessions share no memory,
+so session-to-session handoff is file-based: write a markdown handoff, `@` it
+in the next session. `/share` makes a link for human eyes and gives the
+receiving agent zero context - link for people, file for agents.
+
+### Freshness guard (paste at the top of every handoff)
+
+A handoff without a pinned state rots the moment either tree moves. The guard
+names a checkable fact (commit hash + dirty count + real timestamp) so the
+receiver has something to mismatch against. "Use current state" alone is not
+checkable - the agent will reassess yesterday's tree and sound confident.
+
+```
+> FRESHNESS GUARD (receiving agent: run this first, before any assessment).
+> This handoff is pinned to repo state at <YYYY-MM-DD HH:MM +ZZ:ZZ>, NOT to "latest".
+> 1. Run: `git -C <repo> log --oneline -5` and `git status --porcelain | Measure-Object -Line`.
+>    Pinned: HEAD `<hash subject>`, dirty = <N> paths (<describe: M files + untracked>).
+> 2. If HEAD differs OR dirty count differs OR the user says work has landed: STOP.
+>    Re-read the actual diff (`git diff`, new files) and state what moved before
+>    reasoning. Treat every claim below about "current tree" as STALE until re-verified.
+> 3. If verification is impossible (repo missing, git unavailable): say
+>    `STATE UNKNOWN - cannot reassess` and ask. Never reassess from memory.
+> 4. Temporal rule: never invent dates. Handoff claims expire at session end; re-stamp on use.
+```
+
+Notes:
+
+- Unversioned dirs cannot be pinned by hash, only by "binary exists, built
+  <date>". If a scratch dir stops being throwaway, `git init` + first commit
+  (with `.gitignore` before first `git add`) so future handoffs pin it too.
+- One guard per repo named in the handoff. Two dirty repos = two pinned blocks.
+- Provenance: observed 2026-10-14 moving a Rust/WordCraft research handoff
+  (`_exchange/rust-wordcraft-reversing-handoff-2026-10-14.md`) into a
+  dirty-tree `reversing-mcp` reassessment.
+- opencode invocation (share vs @file, snapshot format, HANDOVER.md,
+  session-log): `opencode/SESSION_HANDOFF.md`. The template above is canonical;
+  that page copies nothing, it points here.

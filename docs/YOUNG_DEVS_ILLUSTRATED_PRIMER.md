@@ -304,6 +304,11 @@ flowchart TD
 
 Daddy wanted you to use your Rechenschieber. So we gave it to the agents, gave it infinite precision, and projected it into 4D space.
 
+
+> 💡 **For the mathematically fearless:** If your brain craves the rigorous academic history, Hilbert's 13th Problem, Kolmogorov-Arnold Representation Theorem, and Hyperdimensional Computing (HDC), see the companion research paper: **[The Theory of Higher-Dimensional Slide Rules](THEORY_OF_HIGHER_DIMENSIONAL_SLIDE_RULES.md)**. Junior devs may safely skip this to prevent their lids from flipping!
+
+---
+
 ## Epilogue: The Creed of the Sovereign Architect
 
 1. **Own the floor, rent the ceiling**: Run your daily models locally on your GPU for \$0; rent cloud brains only when an Eötvös proof needs raw horsepower.

@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed (2026-08-05)
+- **Reality Hub (/immersive) crashed to a blank page** - ExternalLink used at
+  web_sota/src/pages/immersive-detail.tsx was never imported from lucide-react,
+  throwing ReferenceError: ExternalLink is not defined at render. Import added; tsc --noEmit clean.
+- **Plex integration token wired up** - PLEX_BASE_URL + PLEX_TOKEN copied from
+  plex-mcp/.env into .env (token read at import time in api_bridge.py).
+  GET /api/plex/status now reports the live server. .env.example documents both vars.
+
+### Added (2026-08-05)
+- **Marble Community Gallery webapp page** (/gallery) - browse public worlds from
+  marble.worldlabs.ai with tag tabs (curated/stylized/realism/interior/hq/fantasy/sci-fi),
+  pagination, prompt expand/copy, "Use prompt" seeding the Architect, and per-entry
+  attribution. Backed by GET /api/gallery on the bridge (60s TTL cache).
+- **gallery_explore MCP tool** - portmanteau (browse | world | prompts) over the public
+  gallery API for agents: prompt mining, world detail, asset URLs.
+- **10 presets mined from community showpieces** in web_sota/src/lib/presets.ts
+  (Lisbon Tram, Wild West Town, Tokyo Oden Alley, Retro Diner, Sorcerer's Hallway,
+  Temple of Sacred Statues, Tokyo Vinyl Bar, Bayou PI Office, Orbital Research Station,
+  Rustic Cabin Winter) - each credited to its original creator.
+- **scripts/gallery_scrape.py** - polite bounded scraper for the same public API.
+- **Step into Marble worlds**: fixed resonite-mcp import endpoint mismatch (now calls the real /api/resonite/integrations/worldlabs); new POST /api/export/overte spawns the world's GLB mesh + viewer panel in an Overte domain via the overte-mcp bridge (auto-fetches mesh from the Marble API when not supplied); spark-viewer gained a 'Spawn world in domain' button.
+- **Marble Adventure hero worlds**: authored competition/marble-adventure/WORLD_PROMPTS.md with 8 stunning Marble-optimized prompts + seeds for regeneration.
+- **Marble Adventure hub life**: potted plants (8), benches (4) + standing lamps (2) around the platform, rotating beacon light, 4 orbiting light orbs, pulsing floor rings / radial guides, lamp flicker - all animated in _process (verified headless: props build + 120 frames clean).
+- **Launch Marble Adventure from the webapp**: Apps page card with live status dot + Play button (POST /api/marble-adventure/launch, GET /api/marble-adventure/status; godot launched windowed with competition/.env env).
+- **Credits on status page**: GET /api/credits - live balance from /marble/v1/credits + local usage tally (per-model estimates from the account worlds list, history fallback); Status page shows balance + tally cards.
+- **Ctrl+Scroll zoom fixed**: use-zoom now uses the fleet standard (Tauri getCurrentWebview().setZoom + CSS zoom fallback, persisted in localStorage); was a broken transform-scale hack.
+- **gallery_explore search operation** + GET /api/gallery/search - keyword search (AND tokens, case-insensitive) over title/prompt/owner/tags with bounded per-tag page scans and TTL cache; tag='all' scans every tab.
+
 ### Added (Tauri desktop — June 2026)
 - Tauri native wrapper (`native/`) with `bundle.resources` + `std::process::Command` sidecar spawn
 - CUA-NSIS: `just cua-nsis-test` recipe, `scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`
@@ -212,4 +240,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.2.1]: https://github.com/sandraschi/worldlabs-mcp/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/sandraschi/worldlabs-mcp/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/sandraschi/worldlabs-mcp/releases/tag/v0.1.0
-

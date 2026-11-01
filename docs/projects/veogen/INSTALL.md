@@ -1,67 +1,66 @@
-# Installation
+# Install & Run
 
-## 🚀 Quick Start (recommended)
+## Quick start (Windows)
 
 ```powershell
-# Install just if you don't have it
-winget install Casey.Just    # Windows
-# scoop install just          # Windows (alternative)
-# brew install just           # macOS
-# sudo apt install just       # Debian/Ubuntu
-# cargo install just          # Linux (Rust)
-
 git clone https://github.com/sandraschi/veogen
 cd veogen
-just
+./start.ps1
 ```
 
-The interactive recipe dashboard opens in your browser. From there:
+`start.ps1` kills stale processes on 11150/11151, creates the backend venv,
+syncs deps with `uv`, waits for `/health`, starts Vite, and opens the
+browser.
+
+### Piecemeal (recommended for development)
 
 ```powershell
-just bootstrap   # install all dependencies
-just serve       # start the server
-just web         # start the frontend (if applicable)
+# 1. Backend (http://127.0.0.1:11150)
+cd backend
+uv sync
+uv run uvicorn app.main:app --host 127.0.0.1 --port 11150 --reload
+
+# 2. Frontend (http://127.0.0.1:11151)
+cd frontend
+bun install
+bun run dev
 ```
 
-> **Why not `pip install`?** MCP servers bundle webapps, configs, project scaffolding, and tooling that a flat Python package can't deliver. PyPI offers no safety advantage — it doesn't audit packages either. `just` gives you the complete, ready-to-run stack.
+Or use the justfile: `just serve`, `just dev`, `just test`, `just e2e`.
 
----
+## Configuration
 
-## 🐌 Traditional Setup
+Copy `backend/.env.example` to `.env` and set:
 
-If you prefer not to use `just`:
+| Variable | Required for | Notes |
+|----------|--------------|-------|
+| `GEMINI_API_KEY` / `GOOGLE_API_KEY` | Chat, movie scripts | Revoke + regenerate if an old key was ever committed |
+| `SECRET_KEY` | JWT signing | Random string >= 32 chars; the default warns at startup |
+| `GEMINI_PRO_MODEL` etc. | Model selection | Defaults are 2025-era placeholders - update to current model IDs |
 
-1. Install [Python 3.13+](https://python.org) and [uv](https://docs.astral.sh/uv/)
-2. Clone and enter the repo:
-   ```powershell
-   git clone https://github.com/sandraschi/veogen
-   cd veogen
-   ```
-3. Install dependencies:
-   ```powershell
-   uv sync --all-extras
-   ```
-4. Start the server:
-   ```powershell
-   # stdio mode (for MCP clients like Claude Desktop)
-   uv run python -m veogen.server
+Config is loaded from `backend/.env`, falling back to the repo-root `.env`.
 
-   # HTTP mode (for web dashboard)
-   uv run uvicorn veogen.server:app --port 
-   ```
-5. Open `http://localhost:` or the frontend URL.
+## Tests
 
----
+```powershell
+cd backend; uv run pytest          # 7 backend tests
+cd frontend; bunx playwright test  # 6 e2e tests (needs chromium installed once)
+```
 
-## ❓ Troubleshooting
+## MCP
 
-| Issue | Fix |
-|---|---|
-| `just` not found | Install via `winget install Casey.Just`, `scoop install just`, or `brew install just` |
-| Port conflict | Run `just kill-all` to clear fleet ports (10700–11000) |
-| Dependencies out of sync | `uv sync --all-extras` |
-| Something else | [Open a GitHub issue](https://github.com/sandraschi/veogen/issues) |
+The FastMCP surface is served on the backend: `http://127.0.0.1:11150/mcp`
+(streamable HTTP). Register it in Cursor / Claude Desktop:
 
----
+```json
+{ "mcpServers": { "veogen": { "url": "http://127.0.0.1:11150/mcp" } } }
+```
 
-*See the main [README](README.md) for feature overview and documentation.*
+## Troubleshooting
+
+- **Backend won't start**: check `backend/.venv` exists (`uv sync`), port
+  11150 free (`Get-NetTCPConnection -LocalPort 11150`).
+- **Chat / movie script fails with provider error**: API key missing or
+  model IDs outdated - see `backend/.env.example`.
+- **Frontend build fails**: `cd frontend; bun install` then `bun run build`.
+- **Ports in use**: kill the holder, then restart `start.ps1`.

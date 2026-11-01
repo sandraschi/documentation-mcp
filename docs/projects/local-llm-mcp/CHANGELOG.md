@@ -5,6 +5,63 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [1.0.0] - 2026-08-12
+
+### Added
+- **MCPB prompts to fleet 3-4-100 bar**: system.md (3228 words), user.md (4145 words), examples.json (119 entries) - fully rewritten for the current 13-tool portmanteau surface.
+- **Real manifest.json**: proper author/repo/entry_point (run_server.py) and the current 13 portmanteau tool schemas; version aligned to 1.0.0.
+- **Prefab status card**: `show_status_app` in-chat dashboard card (PrefabApp) registered via `@mcp.tool(app=True)`.
+- **Webapp Tools page** (`/tools`): live dynamic tool catalog from new `GET /api/v1/tools` endpoint - never a hardcoded list.
+- **Webapp Skills page** (`/skills`): lists server skills and renders SKILL.md via new `GET /api/v1/skills` + `GET /api/v1/skills/{name}` endpoints.
+- **Local engine glom-on** in Settings: client-side Ollama/LM Studio/vLLM auto-detection with status dots, provider/model selects (`llm-provider-select`/`llm-model-select`), localStorage persistence (`llm_provider`/`llm_model`), GPU opportunity hint.
+- **Tool registration fixes**: gpu_manager (broken async body), moe_tools (dropped FastMCP 3.x-incompatible `stateful=` and `**kwargs`), qloraevolved (*args wrappers -> explicit signatures, removed double registration). 28 tools now register cleanly (was 20 with 3 silent failures).
+- **FastMCP 3.4.5 API fixes**: `get_tools()` -> `list_tools()` in main.py and help_tools (compat helper supports both).
+- **CORS on HTTP transport**: transport.py now serves via uvicorn.Server on `mcp.http_app()` with fleet CORS middleware (`run_http_async` dropped middleware).
+- **T20 print ban** enabled in ruff select; error-path prints in main.py converted to logger calls.
+- pyright and ty added to dev dependencies; pyproject description mojibake fixed; `ServerConfig.port` default corrected to 10833; Pydantic v1 `.dict()` calls migrated to `model_dump()`.
+- `.git/hooks/pre-commit` materialized; CI ruff gate fixed (tests I001); root junk and .bak dross removed; glama.json tool list refreshed to the 13 portmanteaus; `just mcpb-pack` version corrected to v1.0.0.
+
+## [1.2.3] - 2026-07-29
+
+### Added
+- **RAG as a Service**: Optional LanceDB vector store with sentence-transformers embeddings.
+  `POST /api/v1/rag/ingest`, `GET /api/v1/rag/search`, `DELETE /api/v1/rag/clear`.
+  Opt-in via `uv sync --extra rag`. Returns 501 gracefully when deps missing.
+  Includes `skills/rag-expert/SKILL.md` with usage recipes and cross-repo examples.
+- **Settings LLM provider detection**: Auto-probes Ollama, LM Studio, vLLM via backend health.
+  Shows Detected/Not found per provider with model count. Active provider and model
+  selectors persist to localStorage per WEBAPP_SOTA_STANDARDS.md §VI.
+- **Dashboard hero section**: Oversized brand header with live status chips
+  (model count, server version, uptime). Real GPU telemetry (RTX 4090 VRAM used/total).
+  `data-testid` attributes on all KPIs.
+
+### Fixed
+- **Models endpoint**: `/api/v1/models` now auto-discovers Ollama/LM Studio models by
+  direct probe when ModelService registry is empty — returns 20+ real model names instead of `[]`.
+- **Chat generation**: `POST /api/v1/generate` with provider="ollama" no longer returns
+  "Provider not found". Falls back to calling Ollama's `/api/chat` directly.
+- **API config URLs**: `getConfig()`/`updateConfig()` now hit `/api/v1/config` (was `/config` — 404).
+- **GPU telemetry**: Fixed type mapping so dashboard shows real GPU name and VRAM usage,
+  not "—".
+- **TypeScript build**: Fixed `vision.tsx` missing imports, `Logging.tsx` useRef arg,
+  `chat.tsx` unused variable. `tsc --noEmit` and `bun run build` both clean.
+
+## [1.2.2] - 2026-07-29
+
+### Added
+- **CORS hardening**: Added `allow_origin_regex` for Tailscale/LAN IPs per fleet standard
+- **Session context injection**: `.claude-plugin/plugin.json` + `hooks/hooks.json` for Claude Code,
+  `.windsurfrules` for Windsurf, `.github/copilot-instructions.md` for GitHub Copilot
+- **Self-termination MCP tool**: `llm_health(operation="shutdown", confirm=True)` for graceful shutdown
+- **Automated error logging**: `_error_response()` helper in `tool_utils.py` with `logger.exception()` auto-logging
+
+### Fixed
+- **Pydantic v2 migration**: Replaced all deprecated `.dict()` calls with `.model_dump()` (6 files)
+- **Bare `except:` in Ollama provider**: Changed to `except Exception` with proper logging
+- **Port zombie clearing**: `start.ps1` now clears port 10833 before binding with readiness poll
+- **Line length violations**: Fixed E501 in `mcp_servers.py`
+
 ## [1.2.1] - 2026-07-06
 
 ### Added
@@ -179,3 +236,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 📚 Documentation
 - 🔒 Security enhancement
 - 🚀 Performance improvement
+
+## [1.0.1] - 2026-08-12
+
+### Fixed
+- **ty typecheck clean (521 -> 0 diagnostics)**: the CI type gate now actually passes. Systematic fixes (status shadowing in mcp_servers endpoint, transport.py bare ignore) plus ty-sanctioned # ty: ignore[...] comments on legacy optional-dep modules (vllm/torch stubs). CI's continue-on-error step is now a real pass.
+- **biome clean (2 a11y warnings)**: Logging.tsx clear-logs modal backdrop is now a real button + dialog role.
+- **vllm_v1 provider**: removed dummy-class union for optional vllm imports.

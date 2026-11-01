@@ -1,6 +1,22 @@
+---
+title: "Biome Code Quality Standard (v14.1 — June 2026 SOTA)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-08-02
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Biome Code Quality Standard (v14.1 — June 2026 SOTA)
 
 **Standardization for Industrial-Grade MCP TypeScript/JavaScript Repositories**
+
+## Version Floor & Known Pitfall (2026-08-01)
+
+- **Version floor: Biome 2.x.** The fleet mandates `"@biomejs/biome": "^2.0.0"` as a webapp devDependency (§ Pre-commit hook), and canonical configs may use the `files.includes` key (Biome 2.x schema, e.g. `webapp/biome.json` in aiwatcher-mcp).
+- **PITFALL — global Biome 1.9.x silently drops the config:** the globally installed `C:\Users\<user>\.local\bin\biome.exe` is **1.9.4** and **cannot parse the `files.includes` key** introduced in 2.x. Running `biome check` with such a config emits a `deserialize` error ("Found an unknown key `includes`"), the config is not applied, and results differ from CI (which uses the repo devDependency 2.x). Symptom: local `biome check` reports different error counts than `npm run biome:ci`.
+- **Fix:** upgrade the global binary — `npm i -g @biomejs/biome` (verify `biome --version` ≥ 2.x). Until then, prefer running biome via the repo's devDependency (`npx biome` from the webapp dir) for results that match CI.
 
 ## Configuration Philosophy
 
@@ -66,6 +82,22 @@ fix:
 1. **Zero-Error State**: The `lint` recipe must return exit code 0 in CI.
 2. **Deterministic Formatting**: All files must pass `biome format --check`.
 3. **Speed**: Linter execution for a standard MCP node should not exceed 500ms.
+
+## Pre-commit hook (mandatory when `webapp/` or `web_sota/` exists)
+
+Repos with a Vite dashboard MUST wire **Biome** into **pre-commit** alongside Ruff — same bar as CI (`npm run biome:ci`).
+
+1. Copy `mcp-central-docs/templates/pre-commit-biome.ps1` → `{repo}/scripts/pre-commit-biome.ps1`
+2. Add the **`biome-web` local hook** from `mcp-central-docs/templates/pre-commit-config.yaml.template`
+3. Ensure `webapp/package.json` (or `web_sota/package.json`) defines:
+   - `"biome:ci": "biome check src"`
+   - `"biome:fix": "biome check --write src"`
+   - devDependency `"@biomejs/biome": "^2.0.0"`
+4. `just bootstrap` runs `npm ci` in the web root so the hook can execute offline
+
+The hook runs only when staged files match `webapp/` or `web_sota/` — Python-only commits stay fast.
+
+See also [CODE_QUALITY_STANDARDS.md](./CODE_QUALITY_STANDARDS.md) §1.2 and [github-workflows.md](../operations/github-workflows.md).
 
 ## The Ruff/Biome Power Couple
 

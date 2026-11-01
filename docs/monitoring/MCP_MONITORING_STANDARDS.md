@@ -1,5 +1,20 @@
 # MCP Server Monitoring Standards
 
+## Fleet direction: 5+1 (standardize on unified)
+
+Fleet repos ship five layers (wrapee, MCP server, webapp, winapp, AI chat). Observation is **not** a sixth shipped layer — it is a **contract** each repo honors plus a **central stack** the fleet provides. Rationale: per-repo Prometheus/Grafana/Loki triples (the pattern in most templates below) scale to N monitoring stacks for N repos. Centralizing keeps one Prometheus, one Loki, one Grafana while every repo stays observable.
+
+**The contract (what each repo does, ~20 lines):**
+1. Expose `GET /metrics` on the backend host port in Prometheus text format. No `prometheus_client` dependency required — see `aiwatcher-mcp/src/aiwatcher_mcp/metrics.py` for a zero-dependency formatter, or `templates/fleet_tool_metrics.py` for the `prometheus_client` variant with per-tool counters (`mcp_tool_calls_total`, `mcp_tool_duration_seconds`).
+2. Write structured logs (JSON, one line per event) to the repo's `logs/` directory for promtail pickup.
+3. Keep a `/health` endpoint (the unified status checks and the per-app hub both use it).
+
+**The central stack (what the fleet provides):**
+- `mcp-central-docs/monitoring/`: `unified-prometheus` (`:12001`), `unified-grafana` (`:12000`), `unified-loki`, promtail, node/cAdvisor exporters. Pinned images, file-provisioned dashboards in `grafana/dashboards/`.
+- Onboarding a repo = (a) add one scrape block to `prometheus/prometheus.yml`, (b) hot-reload via `POST :12001/-/reload`, (c) optionally drop one dashboard JSON into `grafana/dashboards/` (auto-provisioned on rescan; restart Grafana if the file watcher misses a create).
+
+**Per-project stacks are legacy/standalone.** The compose templates and dashboard JSON below remain valid for repos that genuinely need isolation (no network route to the workshop box, air-gapped demos). For everything on Goliath, prefer unified. Do not add new per-project Prometheus/Grafana/Loki triples.
+
 ## Overview
 
 This document outlines the comprehensive monitoring standards and patterns used across heavyweight MCP (Model Context Protocol) servers. It provides reusable templates, configurations, and best practices for implementing observability in MCP servers.
@@ -82,12 +97,12 @@ Logs in Loki only show tool activity when the server **writes a line** per call.
 
 Wrap each FastMCP tool (or portmanteau `operation` branch) with a timer and increment on exit. Register `/metrics` via `prometheus_client.generate_latest()`.
 
-### Unified stack wiring
+### Unified stack wiring (current, verified 2026-09-22)
 
-1. Expose `/metrics` on the host port (e.g. devices-mcp **10717**, calibre-mcp **10720**).  
-2. Add scrape job in `mcp-central-docs/monitoring/prometheus/prometheus.fleet.yml`.  
-3. Run `.\scripts\merge-prometheus-config.ps1` and restart `unified-prometheus`.  
-4. Grafana panels: `rate(mcp_tool_calls_total{job="my-mcp"}[5m])`, `histogram_quantile(0.95, sum(rate(mcp_tool_duration_seconds_bucket{job="my-mcp"}[5m])) by (le, tool_name))`.
+1. Expose `/metrics` on the host port (e.g. devices-mcp **10717**, calibre-mcp **10720**, aiwatcher-mcp **10946**).
+2. Add a scrape job in `mcp-central-docs/monitoring/prometheus/prometheus.yml` following the existing `job_name` blocks (30s interval, `host.docker.internal:<port>`).
+3. Hot-reload without restart: `POST http://127.0.0.1:12001/-/reload` (returns 200), then confirm via `/api/v1/targets?state=active` and query a metric.
+4. Grafana panels: `rate(mcp_tool_calls_total{job="my-mcp"}[5m])`, `histogram_quantile(0.95, sum(rate(mcp_tool_duration_seconds_bucket{job="my-mcp"}[5m])) by (le, tool_name))`. Dashboard JSON goes in `mcp-central-docs/monitoring/grafana/dashboards/` (provisioned from disk; if a new file does not appear within ~15s, restart `unified-grafana` — the file watcher occasionally misses creates).
 
 Copy-paste implementation: [templates/fleet_tool_metrics.py](./templates/fleet_tool_metrics.py) (FastMCP `add_middleware` + `/metrics`), or [QUICK_START.md](./QUICK_START.md) § Step 3. Without this, unified monitoring only sees **process health**, not individual tools.
 

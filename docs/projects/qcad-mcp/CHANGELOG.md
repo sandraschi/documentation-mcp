@@ -2,7 +2,7 @@
 
 All notable changes to the QCAD MCP server and webapp.
 
-## [Unreleased] — 2026-06-20
+## [0.4.0] — 2026-07-24
 
 ### Added
 - **SOTA annotations**: All 26 tools now have `@mcp.tool(annotations=READ_ONLY/MUTATING)`. Using proper imports from `fastmcp.tool.annotations` instead of legacy dict.
@@ -20,6 +20,33 @@ All notable changes to the QCAD MCP server and webapp.
 ### Changed
 - `_READ_ONLY = {"readonly": True}` removed from all 5 tool files — replaced with proper `from fastmcp.tool.annotations import READ_ONLY, MUTATING`.
 - Total MCP tools: 22 → 26 documented in STATUS.md.
+
+### Added
+- **Versailles palace preset** (Demo page): 200m x 150m palace with Hall of Mirrors, King's/Queen's wings, royal chapel, grand staircase, 10 state apartments, Grand Trianon, Orangerie, formal gardens with fountains.
+- **Floorplan sources doc** (`docs/floorplan-sources.md`): free, paid, and historic floorplan sources with raster→DXF pipeline description.
+- **SOTA LLM provider detection** (Settings page): probes Ollama/LM Studio/vLLL on mount, provider status indicators (green/red/spinner), switchable provider dropdown, model list fetched from detected provider, localStorage persistence.
+- **Tool Playground** (`/playground`): API tester page with tool selector, JSON arg editor with templates per tool, depot file-name injector, raw response viewer with copy.
+- **Elaborate floorplan presets**: Baroque church (45m nave, apse, transept, 12 columns, 6 chapels), mob compound (walls, towers, villa, pool), art museum (atrium + 4 gallery wings). Plus parametric fallback that parses dimensions/rooms from any text.
+- **QCAD Pro panel** on Dashboard: live status, version, install path, quick links to Demo/Playground/Help.
+- **Batch STL** on BatchPage: run `plan_extrude` across all depot DXF files, STL gallery with download links.
+- **Live FreeCAD panel** on PipelinePage step 5: calls `plan_wall_data`, renders wall segment table, copy-button generates `bim_create_wall(...)` calls.
+- **Full REST tool bridge**: All 28 MCP tools now exposed via `/api/v1/control/tool` (previously only 9). Added `plan_blocks`, `plan_blocks_download`, `qcad_status`, `plan_scripts_search`, `plan_scripts_download`, `plan_beam_analysis`, `plan_measure`, `plan_wall_data`, `plan_dimension`, `plan_text`, `plan_hatch`, `plan_block_insert`, `plan_array`, `plan_script`, `plan_render`, `plan_exec`.
+- **QCAD Pro auto-start**: Backend launches QCAD Pro GUI on startup via `_ensure_qcad_running()`.
+- **Dashboard hero section**: Welcome banner with QCAD Pro status dot, live ezdxf version.
+- **Topbar redesign**: Page title, Pop Out and Companion Mode buttons, connection status.
+- **Demo page fallback**: AI CAD Demo falls back to `plan_create` geometry when QCAD Pro is unavailable.
+- **`[project.scripts]` entry point**: `qcad-mcp = qcad_mcp.server:main`
+
+### Fixed
+- **color-scheme:dark** in index.css — white scrollbars and light native form controls fixed.
+- **PipelinePage indigo theme** → amber (was a different app colour).
+- **FloatingChat cyan theme** → amber, inline SVGs → Lucide icons, "Go" → Send icon.
+- **White SVG preview backgrounds** in PipelinePage and DemoPage.
+- **Redundant backend status indicators** on Dashboard (removed duplicate dot).
+- **Sidebar collapse animation** — text now fades with the width instead of popping.
+- **useZoom** CSS fallback: `transform:scale()` → `document.documentElement.style.zoom`.
+- **Dashboard QCAD Pro status** now correctly reads nested `qcad_pro.running` from API.
+- **Dead imports** removed across 7 pages (8 unused Lucide icons).
 
 ## [0.3.0] - 2026-05-13
 

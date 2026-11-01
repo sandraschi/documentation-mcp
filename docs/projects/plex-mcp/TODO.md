@@ -7,12 +7,13 @@ Implementation tracking for roadmap projects. Full specs at
 
 | # | Project                | Status        | Branch                      | Notes                  |
 |---|------------------------|---------------|-----------------------------|-----------------------|
-| 1 | Deep metadata enrich   | ⬜ not started | `feat/deep-enrichment`      | Build first           |
+| 1 | Deep metadata enrich   | ✅ shipped    | `feat/deep-enrichment`      | See STATUS 2026-09-13 |
 | 2 | Subtitle RAG           | ⬜ not started | `feat/subtitle-rag`         | Most ambitious        |
-| 3 | Taste modelling        | ⬜ not started | `feat/taste`                | Small, unlocks others |
+| 3 | Taste modelling        | ✅ shipped    | `feat/taste`                | See STATUS 2026-10-04 |
 | 4 | Mood picker            | ⬜ not started | `feat/mood-picker`          | Daily-use payoff      |
 | 5 | Episode intelligence   | ⬜ not started | `feat/episode-intel`        | TV-focused            |
 | 6 | Cross-library links    | ⬜ not started | `feat/crossref`             | Connective tissue     |
+| 7 | Webapp API parity      | 🟨 in progress | `feat/webapp-parity`       | This file, below      |
 
 Legend: ⬜ not started · 🟨 in progress · ✅ shipped · 🟥 blocked
 
@@ -141,6 +142,48 @@ Legend: ⬜ not started · 🟨 in progress · ✅ shipped · 🟥 blocked
 
 ---
 
+## Project 7 — Webapp API parity (2026-10-08)
+
+Audit: every backend `@router` route vs every `api.ts` export + UI caller.
+
+### Phase checklist
+
+- [x] Phase 0 — Contracts: `api.ts` wrappers for `search/advanced`, taste
+  `score/` + `rank` + `temporal/`, media `stream-url`/`file`/`art`, `playback/play`
+  + `/clients`, `workflows/run`, `llm/onboarding`, `DELETE llm/keys`, `rag/context`
+  + `rag/stats`, single-library `GET /{id}` + `/{id}/items`,
+  `system/api-docs-info`, plain `llm/chat` + `agentic` + `refine`; raw-`fetch`
+  components (repair, rag-dashboard, chat) migrated onto wrappers
+- [x] Phase 1 — Search + taste + diagnostics: advanced-search panel on `/search`
+  (`adv-search-*`); rank/score/temporal panel on `/taste` (`taste-rank-*`,
+  `taste-score-*`, `taste-temporal-*`); diagnostics panel on `/server`
+  (`diagnostics-list`)
+- [x] Phase 2 — Media actions: AI-context button + files/art panel
+  (`media-files`) + playback picker (`media-playback`) on `/media`; person search
+  on `/enrichment` (`person-search-*`); workflow runner on `/chat`
+  (`workflow-*`). Note: `MediaAiContextPanel` modal already existed and is used
+  from search/movies; media page now opens it too
+- [x] Phase 3 — LLM/VRAM + RAG: onboarding card (`llm-onboarding`), GPU target
+  select (`llm-gpu-select`, secondary default, `llm_gpu` key), key delete
+  (`llm-key-delete-*`) in Settings; RAG context tester (`rag-context-*`) on RAG
+  page. Resident-model/evict + diagnostics + RAG stats were already wired
+  (VramPanel, DiagnosticsPanel, rag-dashboard) — corrected audit, not rebuilt
+- [x] Phase 4 — Cleanup: dead `getSystemStatus` wrapper removed (no backend
+  route); `/api/v1/*` marked deprecated in docstring; api-docs page uses
+  `getApiDocsInfo` + corrected quick-ref paths; `fleet/launch` left as-is
+  (possible external callers — wont-surface recorded in PRD)
+- [x] Shipped 2026-10-08 — tsc clean, biome applied, ruff clean, pytest
+  (main/config/auth/taste/llm-providers/enrichment, 52 tests) green
+
+### Acceptance criteria
+
+- No backend route without either a UI caller or a recorded wont-surface reason
+- No `fetch("/api/...")` outside `utils/api.ts` (except topbar launch + chat
+  streaming, both documented)
+- `tsc --noEmit`, `biome check`, `ruff check` green
+
+---
+
 ## Cross-cutting considerations
 
 - **Webapp port 10741/10742** is shared across all frontend work
@@ -156,4 +199,4 @@ Legend: ⬜ not started · 🟨 in progress · ✅ shipped · 🟥 blocked
 
 ---
 
-*Maintained by Sandra Schipal. Roadmap by Claude Opus 4.7, April 2026.*
+*Maintained by Sandra S.. Roadmap by Claude Opus 4.7, April 2026.*

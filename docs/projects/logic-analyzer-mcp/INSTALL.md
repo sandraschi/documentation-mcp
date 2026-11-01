@@ -13,7 +13,7 @@ Set-Location D:\Dev\repos\logic-analyzer-mcp
 uv sync --extra dev
 ```
 
-4. Add MCP entry to `C:\Users\sandr\.cursor\mcp.json` (see [README.md](README.md#cursor-mcp-config))
+4. Add MCP entry to `C:\Users\<user>\.cursor\mcp.json` (see [README.md](README.md#cursor-mcp-config))
 5. Restart Cursor
 6. Verify: `la_help(operation="status")`
 
@@ -77,7 +77,7 @@ la_device(operation="connect", device_id="sim-la-001")
 just webapp
 ```
 
-Opens backend on **10985** and Vite on **10987**.
+Opens backend on **10985** and Vite on **10988**.
 
 ## Troubleshooting
 

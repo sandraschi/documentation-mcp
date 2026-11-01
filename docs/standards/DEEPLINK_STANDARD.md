@@ -1,3 +1,13 @@
+---
+title: "MCP Deeplink Installation - Portfolio Standard"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-08-06
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # MCP Deeplink Installation - Portfolio Standard
 
 **Status**: MANDATORY for all MCP repositories  

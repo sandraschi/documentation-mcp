@@ -268,6 +268,39 @@ dystopia or diversity depends on your perspective.
 
 ---
 
+## Auditing as the Practical Layer Underneath the Philosophies
+
+Each of the three regulatory philosophies above eventually needs an answer to a mechanical question none
+of them fully specify: once a rule exists — "high-risk systems require ongoing monitoring" (EU), "the
+largest models require safety testing and reporting" (US executive orders), "content must reflect core
+socialist values" (China) — who actually checks, and how?
+
+**Auditing AI** (Christian Sandvig, Marc Aidinoff, Alondra Nelson, Kristen Vaccaro, Karrie Karahalios, Esha
+Bhandari, Ellery Roberts Biddle, Lena Armstrong, J. Nathan Matias, Motahhare Eslami, and Danaé Metaxa — the
+Marquand House Collective, Berkman Klein Center, Harvard; MIT Press *Essential Knowledge* series, 2026,
+open access) is a short practitioner-facing primer on exactly that question. The author list is a genuine
+concentration of expertise in the specific discipline of algorithmic auditing rather than AI policy in the
+abstract: Sandvig is a founding figure in algorithm-auditing methodology; Alondra Nelson was Deputy
+Director of the White House Office of Science and Technology Policy and co-authored the Blueprint for an AI
+Bill of Rights; Esha Bhandari works speech/tech law at the ACLU; Karahalios, Matias, Metaxa, Eslami, and
+Vaccaro all have research track records specifically in algorithm transparency and audit methods, not
+general AI commentary.
+
+The book is organized around canonical audit case studies rather than theory: AI-powered drones
+misidentifying targets in conflict zones, facial-recognition misidentification leading to false arrests
+(disproportionately of people with dark skin tones), hiring software found to disadvantage women — in each
+case walking through the specific audit methodology that surfaced the problem and the concrete policy or
+product change that followed. It's a toolkit, not a manifesto: how audits get done, not just why they
+should be.
+
+**Where it slots into the trilemma above:** the EU's risk-tiered categories and the US's voluntary NIST
+standards both presuppose that *someone* can run an audit capable of catching the failure modes the
+category is meant to prevent — a capability this book treats as a distinct, underdeveloped discipline in
+its own right, closer to financial or safety auditing as a profession than to policy debate. Worth reading
+as the missing "how" underneath any of the three "what" answers surveyed above.
+
+---
+
 ## The Meta-Question
 
 Underlying all regulatory debates is a question nobody can answer:

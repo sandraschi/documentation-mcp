@@ -5,7 +5,7 @@
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
   <a href="https://biomejs.dev"><img src="https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat-square&logo=biome&logoColor=white" alt="Biome"></a>
-  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.4-7c5cfc?style=flat-square" alt="FastMCP"></a>
 </p>
 
 ## Two ways to use this
@@ -15,7 +15,7 @@ This project exposes FreeCAD as a server that two different kinds of users talk 
 | | Who | How | What for |
 |:---|:---|:---|:---|
 | **MCP server** (port 10944) | **AI agents** — Claude Desktop, Cursor, Continue, any MCP client | Your AI assistant calls tools like `step_to_stl()` or `cfd_run_solver()` directly. You type "convert this STEP file and slice it for my printer" and it does the whole chain. | Hands-free CAD work. Agentic loops: the AI iterates design → simulate → analyze → refine without you touching the GUI. |
-| **Web dashboard** (port 10945) | **Humans** — you, in a browser | A dark-mode React app with pages for converting files, browsing models, configuring fluid simulations, chatting with an LLM about CAD, viewing logs, and changing settings. | Point-and-click workflow. Upload a file, click Convert, download the STL. Fill in a form, click Run, see simulation results. |
+| **Web dashboard** (port 10945) | **Humans** — you, in a browser | A dark-mode React app: **Guided Demo** (cube → car → depot CRUD), Parts Studio, Depot, Convert, Models, Marketplace, BIM/CFD/FluidX3D workspaces, Chat, Logs and Settings. | Point-and-click workflow. Open `/demo` to see the whole chain work, or upload a STEP file and click Convert. |
 
 Both talk to the same FreeCAD backend. An AI agent can prepare a simulation case, and you can inspect the results in the web dashboard — or vice versa.
 
@@ -51,7 +51,7 @@ FreeCAD is a free professional CAD modeler (like SolidWorks but open-source). Th
 |:---|:---|
 | **Mechanical parts** | Convert STEP files to 3D-printable STL meshes. Create boxes, cylinders, spheres, cones by describing them. Inspect part volumes and bounding boxes. All managed through the persistent CAD file depot with full CRUD. |
 | **Architecture & construction** | Create walls, floor slabs, columns (rectangular or steel H-sections), windows, doors, and sloped roofs — all in millimeters. Export to `.ifc` files that architects and structural engineers can open. Import `.ifc` files from other design tools. *This is called BIM (Building Information Modeling) — 3D building design where every element knows what it is (a wall, a door, a load-bearing column), not just a shape. FreeCAD's Arch workbench handles this. QCAD is a 2D drafting tool — different domain.* |
-| **Fluid simulation** | Model pipes, channels, and nozzles. Run airflow or water-flow simulations through OpenFOAM (the same tool Formula 1 teams use). Or run GPU-accelerated simulations with FluidX3D — uses your graphics card instead of the CPU. Describe a flow problem in plain English and let an LLM write the solver config. |
+| **Fluid simulation** | Two CFD solvers, each with a different job: **OpenFOAM** (CPU, Docker) — complex geometry, full turbulence models (kEpsilon, kOmegaSST, LES), multiphase, heat transfer, 30-year industry standard. Use when you need fidelity or have complex geometry. **FluidX3D** (GPU, OpenCL) — Cartesian grids only, fast iteration, millisecond-per-timestep throughput on any GPU (NVIDIA, AMD, Intel, Apple). Use when you have a GPU and the geometry is simple enough to fit a uniform grid. Also: describe a flow problem in plain English and let an LLM write the solver config. |
 | **Structural analysis (FEM)** | Run finite element analysis with CalculiX: stress, strain, displacement, safety factor. 10 material presets (steel, aluminum, titanium, carbon fiber...), automatic meshing via Gmsh, and an end-to-end `run_fem_analysis` convenience tool. Same tool Formula 1 teams use for chassis and wing analysis. |
 | **3D printing** | Slice STL files into G-code for your printer. Configurable profiles for different printers, filaments, and layer heights. |
 | **Model marketplace** | Search Printables, Thingiverse, and GrabCAD for ready-made parts. Import them directly into your workspace. |
@@ -60,7 +60,7 @@ FreeCAD is a free professional CAD modeler (like SolidWorks but open-source). Th
 | | |
 |--:|--|
 | **Example use cases** | "What's inside this STEP file?" — "Convert this assembly to 3D-printable STL" — "Design a room with two windows and a door" — "Simulate water flow through this pipe at 2 m/s" — "Find me a gear on Printables and slice it for my MK4" — "Train a neural network to predict airflow instead of running the full simulation every time" — "Browse my persistent CAD depot, create a test bracket, rename and tag it" |
-| **What it connects to** | FreeCAD 1.1.1+ (the CAD engine), OpenFOAM 10 via Docker (fluid simulation), FluidX3D via OpenCL (GPU-accelerated simulation), PrusaSlicer 2.8+ (3D printing), Ollama (local LLM), Printables / Thingiverse / GrabCAD (model search) |
+| **What it connects to** | FreeCAD 1.1.1+ (the CAD engine), OpenFOAM 10 via Docker (fluid simulation), FluidX3D via OpenCL (GPU-accelerated simulation), PrusaSlicer 2.8+ (3D printing), Ollama (local LLM), Printables / Thingiverse / GrabCAD (model search). **ParaView** (optional, for professional CFD viz): `winget install Kitware.ParaView` |
 | **Ports** | **10944** = MCP server (AI agents), **10945** = web dashboard (humans), **10946** = FreeCAD bridge (internal) |
 | **Start** | `just bootstrap` then `start.ps1` |
 
@@ -70,9 +70,10 @@ FreeCAD is a free professional CAD modeler (like SolidWorks but open-source). Th
 | :--- | :--- |
 | **[Installation](docs/install.md)** | Prerequisites, FreeCAD setup, PrusaSlicer, `just bootstrap` |
 | **[Architecture](docs/architecture.md)** | TCP bridge, subprocess fallback, port layout, file pipeline |
-| **[MCP Tools](docs/mcp-tools.md)** | All 46 tools with examples: geometry conversion, architecture (walls/floors/roofs/IFC), structural FEM (CalculiX stress/strain), fluid simulation (OpenFOAM + FluidX3D), 3D printing, marketplace search, LLM assistance, and **CAD file depot** with persistent storage + full CRUD |
+| **[MCP Tools](docs/mcp-tools.md)** | All 59 tools with examples: geometry conversion, architecture (walls/floors/roofs/IFC), structural FEM (CalculiX stress/strain), fluid simulation (OpenFOAM + FluidX3D), 3D printing, marketplace search, LLM assistance, and **CAD file depot** with persistent storage + full CRUD |
 | **[Fleet CFD pipeline](docs/fleet-pipeline.md)** | qcad DXF → freecad OpenFOAM/FluidX3D → resonite/godot/robotics handoff |
 | **[Fluid simulation guide](docs/cfd-guide.md)** | Full walkthrough: creating domains, configuring physics, setting boundary conditions, running solvers, reading results, parametric sweeps, natural language config, and exporting data for neural network training |
+| **[Flow visualization & render guide](docs/flow-visualization.md)** | What FluidX3D produces (VTK, OBJ, WebM, PNG, CSV). How to turn it into video, game engine assets, or VR visuals. Glossary of terms (VTK, OBJ, streamlines, LBM, MLUPS, heatmaps). Integration with Unity3D, Godot, Blender, Resonite. |
 | **[OpenFOAM & GPU solvers](docs/openfoam.md)** | Solver reference, turbulence model guide, GPU acceleration options (FluidX3D on RTX 4090 and Apple Silicon), Mac vs PC comparison |
 | **[AI Tooling](docs/ai-tooling.md)** | Ollama chat, agentic CAD reasoning, sampling workflows |
 | **[About FreeCAD](docs/about-freecad.md)** | History, community, Python scripting, 300+ workbenches, vs SolidWorks/Fusion |
@@ -104,8 +105,8 @@ start.ps1        # kills zombies, starts backend + frontend, opens browser
 - **Python**: [Ruff](https://astral.sh/ruff) linter + formatter (zero-config, sub-millisecond)
 - **Frontend**: [Biome](https://biomejs.dev/) linter + formatter
 - **Task runner**: [`just`](https://github.com/casey/just) — `just lint`, `just fix`, `just dev`, `just tauri-build`
-- **Native desktop**: Tauri 2.0 + PyInstaller sidecar — `just tauri-build` (ports 10944/10945)
-- **AI protocol**: FastMCP 3.2 with SSE transport
+  - **Native desktop**: Tauri 2.11 + PyInstaller sidecar — `just tauri-build` (ports 10944/10945, Gate F/G/H/J fixed, NSIS 30.2 MB, 11/11 CUA pass)
+  - **AI protocol**: FastMCP 3.4 with SSE transport
 
 ## See also — other construction & design tools in the fleet
 

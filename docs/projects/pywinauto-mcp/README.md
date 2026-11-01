@@ -82,7 +82,7 @@ See **[INSTALL.md](INSTALL.md)** for detailed setup. Run `just demo` for example
 | Port | Service |
 |------|---------|
 | **10788** | Frontend — Vite operator UI |
-| **10789** | Backend — FastAPI + FastMCP HTTP | 
+| **10789** | Backend — FastAPI + FastMCP HTTP |
 | stdio | MCP transport (port-free) |
 
 ---
@@ -104,4 +104,4 @@ Fleet standards: [mcp-central-docs](https://github.com/sandraschi/mcp-central-do
 
 ## License
 
-MIT — Copyright (c) 2026 Sandra Schipal.
+MIT — Copyright (c) 2026 Sandra S..

@@ -56,6 +56,30 @@ Trace data sources for all rendered dynamic content:
 - If a value has a hardcoded `|| "fallback"` that's shown instead of an error state, flag it
 - If a component shows content before any API call completes, flag it
 
+### Phase 5: CUA-NSIS Fake-Pass Audit (2026-08-02)
+
+The smoke test itself can be a gaslight. A 6-phase script (kill → install → launch →
+window → screenshot → uninstall) that never clicks the sidebar "certifies" an app it
+never verified — the screenshot is taken of whatever page loaded, error page included.
+
+Check `scripts/cua-smoke.py` + `scripts/cua-nsis-config.json` (if `native/` exists):
+
+| Check | Fake (flag) | Real |
+|-------|-------------|------|
+| Nav walk exists | No `nav_click_through` / `NAV_ITEMS` — old 6-phase script | Has nav phase |
+| Nav matching | `descendants(text=...)` (invalid pywinauto — throws) or coordinate-only clicks | `descendants(title=label)` (UIA Name, template v3+) |
+| Config | No `nav_routes` key (nav walk silently skips) | `nav_routes` matches the repo's real sidebar labels |
+| Evidence | Script takes screenshots but never verifies content | Per-page screenshots + live `/api/*` calls + OCR keyword scan |
+| Prior art | Any report claiming PASS with 12 same-size screenshots | Distinct byte sizes per page |
+
+Severity: nav walk missing/invalid = **HIGH** (the test lies about the app). Config
+missing `nav_routes` = **MEDIUM** (walk silently disabled). Same-size screenshot
+history = **HIGH** (indicates the walk never worked).
+
+See [CUA_NSIS_SAGA.md](../operations/CUA_NSIS_SAGA.md) for the 2026-08-02 fleet
+incident: 14 repos "certified" by a 6-phase script while their installed apps were
+completely broken.
+
 ## Remediation Rules
 
 | Severity | Action |
@@ -138,5 +162,5 @@ npx tsc --noEmit  # TypeScript check
 # Also check for remaining patterns
 rg -n "className=\"[^\"]*\binput\b[^\"]*\"" src/  # No bare input class
 rg -n "setTimeout|setInterval" src/pages/  # Review timers
-rg -n "mock|fake|placeholder" src/ --include="*.tsx" -i  # Review suspicious naming
+rg -n "mock|fake|placeholder" src/ -g "*.tsx" -i  # Review suspicious naming
 ```

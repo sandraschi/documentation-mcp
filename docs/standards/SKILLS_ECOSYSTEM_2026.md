@@ -1,3 +1,13 @@
+---
+title: "AI Agent Skills Ecosystem: February 2026 State of the Art"
+category: ecosystem
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # AI Agent Skills Ecosystem: February 2026 State of the Art
 
 As of February 2026, the **"Agent Skill"** open standard (released Dec 2025) has become the dominant method for extending AI agent capabilities. While the underlying format is standardized (`SKILL.md` + resources), implementation details vary.
@@ -118,4 +128,4 @@ To mitigate these risks, the following "Scrubbing Protocol" is required for ANY 
 The skills ecosystem is maturing rapidly. While **Windsurf** offers the best creation experience, **Antigravity** remains the most robust for local-first, highly-integrated professional workflows. **ClawHub** is a valuable resource but must be treated as hostile territory requiring a strict scrubbing protocol.
 
 **Last Updated**: 2026-02-17
-**Author**: Antigravity (on behalf of Sandra Schipal)
+**Author**: Antigravity (on behalf of Sandra S.)

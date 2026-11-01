@@ -4,7 +4,7 @@
 **By FlowEngineer sandraschi**
 **Last Updated:** 2026-03-08
 
-Central documentation for all projects: MCP servers, myai, veogen, mywienerlinien, autohotkey, and more.
+Central documentation for all projects: MCP servers, myai, veogen, publictransport-mcp, autohotkey, and more.
 
 ###  **CRITICAL: MCP server standards (canonical hub)**
 
@@ -488,7 +488,7 @@ projects/
  vienna-live-mcp/             #  Vienna Life Assistant MCP Server (63 tools)
  myai/                        # AI microservices platform
  veogen/                      # AI video generator
- mywienerlinien/              # Vienna transit
+ publictransport-mcp/              # Vienna transit
  plexmcp/                     #  Plex Media Server MCP
  robotics-mcp/                #  Unified Robotics Control (Physical + Virtual)
  autohotkey/                  # AutoHotkey v2

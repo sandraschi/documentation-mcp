@@ -1,0 +1,148 @@
+---
+updated: 2026-09-18T14:30:00+02:00
+agent: claude
+status: ready-for-review
+tags: [mcp-central-docs, fleet-gate, ports, docker, standards, high]
+---
+
+# Handover — mcp-central-docs / fleet-gate
+
+Written for whichever agent picks this up next: opencode, antigravity, cursor, cline,
+windsurf, zed or claude. Nothing here assumes a particular tool.
+
+## What's happening right now
+
+Three days of work on **why fleet launchers keep breaking**, which became `fleet-gate/` —
+continuous invariants that run on a schedule instead of when someone remembers to type a
+script name.
+
+Branch: **`main`**, clean, everything pushed. (`feat/fleet-gate` still exists locally and
+on origin; it is fully merged and can be deleted.)
+
+The headline finding shapes everything else: **the fleet was never short of verification
+tools — several were actively lying.** Six cases in two days of a tool reporting success
+while checking nothing, three of them introduced *during* this work. That is why every
+gate now has to prove it examined something (`coverage.py`).
+
+The second finding, from yesterday: **the port allocator built to prevent collisions
+created four of them in one afternoon**, because it consulted `WEBAPP_PORTS.md` and the
+configs and nothing else. Docker compose files, running containers and native listeners
+all claim ports too. Read `operations/PORT_OCCUPANCY.md` before touching any port.
+
+## Last concrete action
+
+Scoped the `update docs` macro to files only and split the outward-facing half into a new
+`report work` macro (`2a4a1f64`). Then, while checking the gates for this handover, found
+and fixed a **crash in `health_probe.py`**: a fleet port answering with an SSH banner
+raised `http.client.BadStatusLine`, which derives from `Exception`, not `OSError`, so it
+escaped the handler and killed the whole probe. That is why the nightly gate exited 1 last
+night. Non-HTTP answers are now classified `WRONG_APP` with the banner in the message.
+
+**Uncommitted at the time of writing: that `health_probe.py` fix, lint-clean but NOT yet
+re-run against the fleet.** Verify it before trusting the next probe result.
+
+## Current gate readings (2026-09-18 14:26)
+
+| Gate | Reading |
+|---|---|
+| `fleet_lock.py` | 190 repos (167 with a webapp), **0 errors**, 35 warnings (mostly W2: config and registry disagree) |
+| `start_integrity.py` | 219 repos — 65 canonical, 39 drifted, 67 bespoke, 28 unmanaged, 17 hardcoded, 1 risky, **2 broken** |
+| `compose_ports.py` | **9 static collisions** (compose host port vs lock entry), 16 container-held ports in range, **3 live collisions** |
+| `heartbeat.py check` | 6 expected jobs, **3 failing** |
+| `health_probe.py` | **unknown** — it crashed; the fix is untested |
+
+## Next step
+
+Roughly in value order:
+
+1. **Re-run `python fleet-gate/health_probe.py`** and confirm the SSH-banner fix holds.
+   Find out which port is running SSH — it is inside 10700-15000 and belongs to nobody in
+   the lock. Then commit the fix.
+2. **`nssm-boot-check` has never recorded a heartbeat.** Not late — never. Either it does
+   not call `heartbeat.py beat`, or it is not registered. Decide which and fix or deregister;
+   a job that can never pass trains people to ignore the gate.
+3. **3 live port collisions** where a running container sits on a lock-owned port:
+   `future-you-app` on 10746 (autohotkey-mcp), `avatarmcp-grafana` on 10796 (reaper-mcp),
+   `cf-test` on 10966 (qcad-mcp). `cf-test` looks disposable; check before assuming.
+4. **9 static compose collisions**, all pre-existing — `sdr-mcp` 10900 vs `teleoperator-mcp`,
+   openbci/bluesky/xkcd and others. Static means nothing is listening, so nothing hurts
+   today; it hurts on whatever machine first runs both stacks.
+5. **Class 2 ports are still undetected** — a repo binding a third port (health, metrics,
+   sidecar) that its config never declares. `teleconference-mcp` binds 10891 as
+   `HEALTH_PORT` and `sdr-mcp` was handed it. Needs an `ExtraPorts` config field *and* a
+   code scanner, because declaration alone relies on memory.
+6. **2 repos still BROKEN_LAUNCH**, needing a design decision rather than a fix:
+   `mcp-federation-hub` and `mywienerlinien` (the latter has a stdio-only backend, so its
+   dashboard can never have an API until an HTTP layer is written — Sandra approved
+   building a minimal one: 5 standard endpoints, roughly half a day).
+7. **84 repos whose launcher ignores its own `fleet-start.config.ps1`** — 67 bespoke,
+   17 hardcoded. Until they read their config, `fleet.lock.json` is fiction for them.
+   Per-repo assfix work, never a sweep.
+8. **6 baselined standards findings** citing a pre-3.4.4 FastMCP as current. Mixed: some
+   are genuine stale floors, some are historical notes that arguably should not fire.
+   Needs judgement, not a regex.
+
+## Blockers
+
+- **`D:\Dev\repos` is not a git repo**, so `AGENTS.md` and `CLAUDE.md` there are
+  machine-local only. The version-controlled copies live in `standards/`.
+- Nothing else is blocked. The elevation problem in the previous handover is resolved:
+  virtualization-mcp was restarted elevated and the naked-PC install matrix dispatched
+  for the first time.
+
+## Context the next agent needs
+
+**Read `standards/AGENT_READING_ORDER.md` first.** It is the single source for what to
+read in what order, and every IDE's rules file now points at it.
+
+What `fleet-gate/` contains and why:
+
+| Tool | Answers |
+|---|---|
+| `fleet_lock.py` | Port contract from the 190 configs. 0 errors (was 16) |
+| `claim_ports.py` | **The only sanctioned way to take a port.** Checks registry + configs + compose + running containers |
+| `compose_ports.py` | Compose/container/native occupancy, collisions, ghost containers |
+| `migrate_port.py` | Moves a port everywhere it is named (10-24 places per repo). Dry run by default |
+| `start_integrity.py` | Launchers that contradict or ignore their config |
+| `health_probe.py` | What is actually listening and answering right now |
+| `heartbeat.py` | Scheduled jobs that stopped running or started failing |
+| `standards_audit.py` | Retired/rival/stale standards; regenerates the index |
+| `agent_context.py` | Whether all seven IDEs actually receive the standards |
+| `coverage.py` | **Whether a gate examined anything at all** |
+| `nightly.ps1` | Runs the lot at 03:30 as `Fleet-Nightly-Gate` |
+
+Four conventions that will otherwise surprise you:
+
+- **Findings ratchet.** `baseline.json` holds accepted debt with dates; gates fail only on
+  *new* breakage. A gate red from day one gets ignored, which defeats it.
+- **Coverage is enforced.** A gate examining 0 units, or >50% fewer than last run, is a
+  failure regardless of its exit code.
+- **Batch limits are real.** `agent_context.py --apply` refuses more than 5 targets. This
+  fleet has twice been broken by one blind pass (100+ `build.ps1`, 63 spec files).
+- **The nightly gate shards cold starts** — 1/7 of repos per night, chosen by day-of-year.
+  A repo you expect it to have tested may simply not have been in last night's shard.
+  Check before blaming it, as I nearly did for six orphaned frontends whose real cause was
+  the watchdog being blind to `node.exe`.
+
+Traps that cost hours here, all now hard rules in `standards/AGENTS.md` §9:
+
+- **BUG-031** — Bash heredocs intermittently write nothing. Use the Write tool.
+- **BUG-039** — inline `python - <<'PY'` silently mangles backslash escapes.
+  `"D:\Dev\repos\x"` becomes `D:` + `\D` + `ev` + CR + `epos` + CR + `x`. One case deleted
+  dict entries while staying valid Python with a clean lint. Use Edit and Write. I hit this
+  **twice in one session after writing the rule.**
+- **Deleting or renaming a repo does not stop its containers.** Five containers from the
+  deleted `games-app` repo ran for an unknown period holding seven fleet ports and blocking
+  its successor `ai-games-collection` from starting. `compose_ports.py --running` now
+  reports these as ghosts. `docker compose down` *before* retiring anything containerised.
+
+## Not done, deliberately
+
+- **Per-repo rollout of the agent-context block** — fleet root is done (every tool walks up
+  to it), 3 repos piloted, ~247 remain. Batched, not swept.
+- **Port reallocation for the 84 config-ignoring repos** — each is 10-24 files.
+- **The 9 static compose collisions** — all pre-existing, none causing a failure today.
+- **`starts/README.md` is broadly stale** (dated 2026-08-01, claims 136 launchers against
+  202). Only the 10 rows my own migration invalidated were corrected.
+- **No Discord or Fritz announcement** of any of this. Per the new `report work` macro
+  those are deliberate, confirmed actions — see `patterns/DOC_SYNC_SOP.md` Phase 6.

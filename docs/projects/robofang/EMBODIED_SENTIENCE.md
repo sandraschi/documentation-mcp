@@ -2,7 +2,7 @@
 
 **Document Status**: Active Research Reference  
 **Date**: 2026-02-25  
-**Author**: Sandra Schipal  
+**Author**: Sandra S.  
 **Philosophical Frame**: Materialist / Reductionist
 
 ---

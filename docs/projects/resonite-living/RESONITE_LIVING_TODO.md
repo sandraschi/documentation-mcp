@@ -343,12 +343,12 @@ recommended production path).
       confirmed still live by today's repo list but not designed. Real robot
       control (yahboom-mcp) vs. generic bridge (robotics-mcp) — pick one
       as the actual integration point when this gets picked up.
-- [ ] **games-app Japanese content integration** — undefined. Phase 5b's
+- [ ] **ai-games-collection Japanese content integration** — undefined. Phase 5b's
       keigo lesson is fully specced against learnbot-mcp's own lesson tools
       (`lesson_generate`, `chat_start`, `lesson_run`, `grammar_check`,
-      `lesson_differentiate` — all verified real). Before touching games-app,
+      `lesson_differentiate` — all verified real). Before touching ai-games-collection,
       decide: is this about reusing specific kanji-wall/JLPT assets as
-      in-world props, or actually routing lesson content through games-app's
+      in-world props, or actually routing lesson content through ai-games-collection's
       engine instead of learnbot's? Those are different amounts of work.
       Don't start this without that decision made explicit.
 - [ ] Kotatsu prop + low table (Marble object-mode or Blender kit-bash) for

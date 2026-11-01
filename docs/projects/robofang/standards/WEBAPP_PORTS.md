@@ -5,7 +5,6 @@ status: active
 audience: mcp-dev
 skill_candidate: false
 related:
-  - operations/SOTA_MASTER_INVENTORY.md
   - operations/webapp-registry.json
 last_updated: 2026-02-10
 ---
@@ -58,7 +57,7 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10719 | meta_mcp | Frontend |
 | 10720 | calibre-mcp | Backend |
 | 10721 | calibre-mcp | Frontend |
-| 10722 | mywienerlinien | Frontend |
+| 10722 | publictransport-mcp | Frontend |
 | 10724 | mcp-studio | Backend |
 | 10725 | mcp-studio | Frontend |
 | 10728 | ring-mcp | Web dashboard |
@@ -87,8 +86,8 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10761 | robofang-mcp | Web dashboard backend |
 | 10762 | winrar-mcp | Backend |
 | 10763 | winrar-mcp | Frontend |
-| 10764 | openclaw-molt-mcp | Frontend |
-| 10765 | openclaw-molt-mcp | Backend |
+| 10744 | openclaw-molt-mcp | Frontend |
+| 10745 | openclaw-molt-mcp | Backend |
 | 10766 | osc-mcp | Web dashboard frontend |
 | 10767 | osc-mcp | Web dashboard backend |
 | 10772 | gimp-mcp | Frontend |

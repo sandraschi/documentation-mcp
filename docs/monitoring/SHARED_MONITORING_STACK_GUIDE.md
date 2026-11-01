@@ -323,7 +323,7 @@ networks:
 myai:         Prometheus + Grafana + Loki + Promtail = 4 containers
 veogen:       Prometheus + Grafana + Loki + Promtail = 4 containers
 tailscale:    Prometheus + Grafana + Loki + Promtail = 4 containers
-mywienerlinien: Grafana + Loki + Promtail = 3 containers
+publictransport-mcp: Grafana + Loki + Promtail = 3 containers
 ---
 Total: 15 containers just for monitoring!
 ```

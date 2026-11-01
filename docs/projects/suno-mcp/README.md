@@ -162,5 +162,5 @@ MIT License
 
 ---
 
-**Author:** Sandra Schipal (@sandraschi)  
+**Author:** Sandra S. (@sandraschi)  
 **Status:** Experimental browser automation; not production ready in any sense that implies Suno will keep working without ongoing maintenance.

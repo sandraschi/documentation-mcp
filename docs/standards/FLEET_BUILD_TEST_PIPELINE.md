@@ -1,3 +1,13 @@
+---
+title: "Fleet Build, Test & CI Pipeline — Plan"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-08-06
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Fleet Build, Test & CI Pipeline — Plan
 
 **Status**: Draft Proposal  
@@ -35,15 +45,19 @@ Three validation tiers:
 Already partially in `just lint` across the fleet. Standardise:
 
 ```justfile
-# Standard justfile snippet — every webapp repo
+# Standard justfile snippet - every webapp repo (PowerShell shell per fleet
+# standard - no bash &&, ||, or /dev/null; use $LASTEXITCODE)
 check: lint build
-    @echo "✓ static checks pass"
+    @echo "V static checks pass"
 
 lint:
-    cd web_sota && npx biome check src/ 2>/dev/null || ruff check src/ web_sota/backend/
+    Set-Location web_sota
+    npx biome check src/ 2>$null
+    if ($LASTEXITCODE -ne 0) { ruff check src/ web_sota/backend/ }
 
 build:
-    cd web_sota && npx vite build
+    Set-Location web_sota
+    npx vite build
 ```
 
 **Gaps to close:**

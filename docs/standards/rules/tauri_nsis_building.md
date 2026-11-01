@@ -1,3 +1,13 @@
+---
+title: "Fleet Native App Standard — Tauri 2.0"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-17
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Fleet Native App Standard — Tauri 2.0
 
 As of May 2026, Tauri 2.0 is the fleet's recommended native wrapper for all MCP webapps. It replaces Electron.
@@ -67,11 +77,27 @@ Operator.exe  (Rust + WebView2 + React dist + embedded backend resource)
 
 **Debug:** `npm run sidecar:build` then run `resources/{repo}-backend.exe` without Tauri.
 
-### MCP client registration (Cursor / Claude Desktop)
+### MCP client registration - CURRENT FLEET STANDARD (2026-10-07, reference: onenote-mcp)
+
+The installer registers the app's bundled backend, **over stdio**, in every detected AI client,
+behind an installer-page checkbox that is **on by default**. Supersedes the older notes below.
+
+| Piece | Where | Notes |
+|---|---|---|
+| Registration script | `mcp-central-docs/scripts/install-mcp-clients.ps1` | Claude Desktop, Cursor, Antigravity, Windsurf, OpenCode (JSON); Claude Code via its own `claude mcp` CLI. Detects installed clients only, timestamped `.bak`, merge-never-replace, idempotent, `-Uninstall`, `-List`, `-DryRun`, `-EnvPairs K=V`. JSONC configs are left untouched with a manual snippet. |
+| Installer page + hooks | `mcp-central-docs/scripts/nsis/mcp-clients.nsh` | Define `MCP_REG_NAME` / `MCP_REG_EXE`, `!include "${__FILEDIR__}\mcp-clients.nsh"` in `hooks.nsh`; call `McpClientsRegister` from `NSIS_HOOK_POSTINSTALL` and `McpClientsUnregister` from `NSIS_HOOK_PREUNINSTALL`. Page is shown only if a client is detected; `/S` and `/P` register by default, `/NOMCP` skips. |
+| Template patch | `scripts/patch-nsis-template.ps1` | Tauri hooks cannot add pages and its finish page uses both checkbox slots, so the build fetches the raw template for the installed CLI version and inserts one `NSIS_HOOK_PAGES` line (fails loudly if the anchor vanishes). Output goes to `native/windows/installer.template.nsi` (gitignored); `tauri.conf.json` sets `bundle.windows.nsis.template` to it. |
+| Stdio gate | `scripts/mcp-stdio-probe.py` | `build.ps1` MUST run it against the frozen exe: initialize + tools/list over stdio. The exe must honour `MCP_TRANSPORT=stdio` (see onenote `run_server.py`) while the Tauri shell keeps getting HTTP. |
+| Resources | `bundle.resources` += `resources/install-mcp-clients.ps1` | Vendored (committed) copies of the script and `.nsh`, refreshed by `build.ps1`; the installed app cannot reach the central repo. |
+
+Registering stdio (not an HTTP URL) means the AI client works whether or not the app is running,
+and needs no `uv`/Python on the user's machine.
+
+**Superseded notes (older design, kept for history):**
 
 Shipping the operator app does **not** auto-configure Cursor or Claude. The backend listens on localhost; the IDE still needs an `mcpServers` entry.
 
-**Fleet standard (pywinauto-mcp reference impl):**
+**Earlier standard (pywinauto-mcp reference impl):**
 
 1. **NSIS post-install hook** — optional WinForms dialog: “Register MCP server in Cursor / Claude Desktop?”
    - Hook file: `src-tauri/windows/hooks.nsh` → `NSIS_HOOK_POSTINSTALL`
@@ -109,17 +135,18 @@ Rust: materialize `resources/pywinauto-mcp-backend.exe` → `app_cache_dir`, spa
 
 ## Infrastructure MCP Tier (No Tauri / NSIS)
 
-Some fleet servers are **infrastructure daemons** — they provide shared services consumed by other MCP servers, not end-user desktop apps. These should have a webapp for manual inspection but do NOT need a Tauri wrapper or NSIS installer.
+**Superseded 2026-10-06 by [RELEASE_TIERS.md](../RELEASE_TIERS.md) (the release standard).** The old
+exception ("infrastructure daemons may keep a webapp and skip Tauri/NSIS") no longer exists. The
+rule is now decided by the webapp alone:
 
-| Repo | Role | Why no NSIS |
-|------|------|-------------|
-| secrets-mcp | Credential vault bridge | Consumed by other servers via stdio/HTTP |
-| depot-mcp | Artifact depot, cross-repo lookups | API-only; no desktop surface |
-| local-llm-mcp | Shared local LLM inference | Backend compute; consumed via API |
-| monitoring-mcp | Fleet observability | Dashboard only; no desktop install needed |
-| fleet-agent-mcp | Fleet orchestration | Headless agent; no GUI |
+- **No webapp** (a headless daemon consumed by other servers: e.g. secrets-mcp, depot-mcp,
+  local-llm-mcp, fleet-agent-mcp): no Tauri wrapper, no NSIS. Releases carry the `.mcpb` only.
+- **Has a webapp** (e.g. monitoring-mcp's dashboard): every release carries the NSIS installer too.
+  An infrastructure repo that does not want to ship an installer must not ship a webapp. If it still
+  wants a diagnostics page, serve a single static page from the backend instead of a `webapp/` project.
 
-**Rule of thumb:** If a server's primary consumers are other MCP servers (not humans at a keyboard), skip the Tauri wrapper. Keep the webapp for diagnostics, but mark it `infrastructure: true` in fleet manifests.
+`infrastructure: true` in fleet manifests remains a descriptive flag only; it no longer exempts a repo
+from the installer requirement.
 
 ## Repos That Should Add Tauri Wrappers
 
@@ -320,14 +347,29 @@ pub fn materialize_backend(app: &AppHandle) -> Result<PathBuf, String> {
 fn free_port(port: u16) -> bool {
     // Multi-layer kill: Stop-Process (same-user), taskkill (any user), port release,
     // escalated kill (UAC), TIME_WAIT poll.  `{repo}` = your repo name.
+    //
+    // free_port() runs from *inside* the currently-running `{repo}-native`
+    // process (spawn_backend is called from setup(), i.e. on the process's
+    // own startup) — a plain `Stop-Process -Name '{repo}-native'` therefore
+    // matches and kills the caller itself (process-name matching has no
+    // "not me" concept). This shipped unnoticed in this exact example and
+    // in the tauri-native template until 2026-09-04 (found on demo-vid-mcp:
+    // every launch self-killed ~1-2s in, "black window pops up for a few
+    // seconds, nothing starts"). Exclude the caller's own PID from every
+    // native-image kill below; the backend-image kill needs no exclusion
+    // since {repo}-backend.exe is always a distinct child process.
     #[cfg(windows)]
     {
+        let self_pid = std::process::id();
         // Kill by image name (catches zombies NOT holding the port)
         let img_kill = format!(
             "Stop-Process -Name '{repo}-backend' -Force -ErrorAction SilentlyContinue; \
-             Stop-Process -Name '{repo}-native' -Force -ErrorAction SilentlyContinue; \
+             Get-Process -Name '{repo}-native' -ErrorAction SilentlyContinue \
+             | Where-Object {{ $_.Id -ne {self_pid} }} | Stop-Process -Force -ErrorAction SilentlyContinue; \
              taskkill /F /IM {repo}-backend.exe /T 2>$null; \
-             taskkill /F /IM {repo}-native.exe /T 2>$null",
+             Get-Process -Name '{repo}-native' -ErrorAction SilentlyContinue \
+             | Where-Object {{ $_.Id -ne {self_pid} }} \
+             | ForEach-Object {{ taskkill /F /PID $_.Id /T 2>$null }}",
             repo = "{repo}"
         );
         let _ = Command::new("powershell.exe")
@@ -794,8 +836,28 @@ build-native-debug:
 
 # Run CUA-NSIS smoke test (install → launch → verify → uninstall)
 cua-nsis-test:
-    uv run python scripts/cua-smoke.py
+    uv run python scripts/cua-smoke.py --config scripts/cua-nsis-config.json
+
+# One command: pre-flight checks -> build -> genuine CUA verification.
+# Added 2026-09-17 after gitee-mcp/teleoperator-mcp/bilibili-mcp all silently
+# false-passed CUA tests for missing pywinauto -- see cua_nsis_smoke_testing.md
+# CRITICAL PITFALL section and HANDOVER.md for the full story.
+tauri: tauri-preflight build-native cua-nsis-test
+
+# Catches the two most common ways a build/test looks fine but proves nothing:
+# pyinstaller resolving to the wrong (global uv-tool) environment, and pywinauto
+# missing so every CUA GUI phase silently no-ops while the script still prints
+# a full pass. Both bit otherwise-SOTA repos on 2026-09-17. Fails loud and fast
+# (seconds) instead of after a multi-minute Rust compile.
+tauri-preflight:
+    @echo "== Tauri pre-flight checks =="
+    uv run python -c "import pywinauto"; if ($LASTEXITCODE -ne 0) { Write-Error "FATAL: pywinauto not importable -- run: uv add --dev pywinauto pillow pytesseract"; exit 1 }
+    if (-not (Test-Path '.venv\Scripts\pyinstaller.exe')) { Write-Error "FATAL: pyinstaller missing from project venv -- run: uv add --dev pyinstaller pefile altgraph"; exit 1 }
+    $gi = Get-Content .gitignore -Raw -ErrorAction SilentlyContinue; if ($gi -notmatch 'resources.*\.exe') { Write-Warning "gitignore may not cover resources/*.exe -- verify before committing (found untracked 28-51MB exes fleet-wide 2026-09-17)" }; if ($gi -notmatch 'cua-reports') { Write-Warning "gitignore may not cover cua-reports/" }
+    @echo "== Pre-flight OK =="
 ```
+
+Run the whole pipeline for any repo with `just tauri`. This does NOT replace `assfix`/`fakefind` — those need an agent's judgment (reading code, deciding what's fake/stale, applying context-aware fixes) and can't be scripted into a `just` recipe. Run `assfix` and, for repos with a webapp, `fakefind` **before** `just tauri`, not as part of it.
 
 ### build.ps1 (full pipeline — see [NSIS_BUILD.md](../packaging/NSIS_BUILD.md) for size gates and troubleshooting)
 
@@ -1206,7 +1268,7 @@ Get-ChildItem D:\Dev\repos -Filter ".env" -Depth 3 -ErrorAction SilentlyContinue
 ```
 
 **Affected repos** (as of 2026-07-09): calibre-mcp (4), plex-mcp (3, fixed), docker-mcp (2),
-tailscale-mcp (2), veogen (2), worldlabs-mcp (2), mywienerlinien (2).
+tailscale-mcp (2), veogen (2), worldlabs-mcp (2), publictransport-mcp (2).
 
 ### Gate 1: Build Verification (automated in build.ps1)
 
@@ -1261,6 +1323,13 @@ just cua-nsis-test   # certify — must pass before shipping
 ```
 
 Upload **that one `.exe`** to GitHub Releases. No committed binaries, no second download for the backend.
+
+**Mother rule — link the installer.** Every successful NSIS build ends with:
+`powershell -NoProfile -ExecutionPolicy Bypass -File D:\Dev\repos\mcp-central-docs\scripts\sync-tauri-starts.ps1`
+so `D:\Dev\Tauri starts\{repo}-setup.lnk` points at the fresh installer.
+A build without a linked shortcut is not shipped. Re-run the sync after any
+rebuild; it repoints stale targets, creates missing links, and regenerates
+the folder README (backs the folder up to %TEMP% first).
 
 ### Future — GitHub Actions (when shipping regularly)
 

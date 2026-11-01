@@ -1,0 +1,235 @@
+# WIP sweep 2026-10-24 (live, wip-sweep v1)
+
+Started 2026-10-24 04:00, took 3473 s. Repos scanned: 275. Repos with activity: 216.
+Commits: 324. Files: 863.
+
+| Repo | Status | Pushed | Snapshot |
+|---|---|---|---|
+| 4g-usb-phone-mcp | committed 1 commit(s) | yes (1) | 8e9d26ee08f851fe24c3562efc77022d7dec75a4 |
+| admiral-mcp | committed 6 commit(s) | yes (6) | a5ead866456238b1b4c84dbcaab6472c5255e4c1 |
+| advanced-memory-mcp | committed 5 commit(s) | yes (5) | 86a3d852a78c967abf1d37f71d69049f49ee519e |
+| ai-games-collection | committed 3 commit(s) | yes (3) | ae30c079fb899e89a88bb9b0f1fc25a60eab6ebb |
+| ai-producer-hub | committed 1 commit(s) | yes (1) | cb1f9cf3ea1520093bb08a37988bb9e21c49bec6 |
+| aiwatcher-mcp | committed 1 commit(s) | yes (1) | 47c73d346504f19ff839e6d907ebebfef79f2b33 |
+| alexa-mcp | committed 1 commit(s) | yes (1) | 983e96873e4d4d603b5d2cc88cc2355060462ed9 |
+| arr-mcp | committed 2 commit(s) | yes (2) | a9ea363526cda54203b12f8631d9a45cf005b070 |
+| arxiv-mcp | committed 2 commit(s) | yes (2) | 85f960dfeb8f2e2effea0a9752de3f20ba17e2fd |
+| audiotool-nexus-mcp | committed 2 commit(s) | yes (2) | 3fc8af848f9ad0c3898760bea3005ce1c93db3b7 |
+| autohotkey-linter | committed 1 commit(s) | yes (1) | 5d1f510ee91c118908e24a162246dec4ecca9e69 |
+| autohotkey-mcp | committed 1 commit(s) | yes (1) | 5bf67963864747c82d88e3f2abaa0bda02c255e7 |
+| autohotkey-tools | committed 1 commit(s) | no: behind 4 and rebase conflicted (local commits kept) | 5ac1c104cd8bb950cac4d8b106e405578ebc757b |
+| avatar-mcp | committed 1 commit(s) | yes (1) | acc4ba5d7f1f062ddc3f84f1d4c920cbb716d402 |
+| avatar-pipeline-mcp | committed 1 commit(s) | yes (1) | 5336252ccdccdf6c31674afb12ec75e116a6cee8 |
+| bakemono-runter | committed 1 commit(s) | yes (1) | 90e1fa80e2bd44adfd23ee5f7b69a14d83e14727 |
+| benny-the-dog-mcp | committed 1 commit(s) | yes (1) | 55954261593242ee04346498499315c2087b0044 |
+| beyondcompare-mcp | committed 1 commit(s) | yes (1) | 79bc56e855cca765a062a4eb7e97a19eef946f3c |
+| bilibili-mcp | committed 1 commit(s) | yes (1) | 2ba5e5616c02b46750a138aee65e2d1b9e494b26 |
+| bl-halo-mcp | committed 1 commit(s) | yes (1) | a817f81f8804b17c59df9ac5639244fdc706e9cf |
+| blender-mcp | committed 1 commit(s) | yes (1) | dd5cbfcf492bbe76c95b0011f3e98c1f2893c987 |
+| bluesky-mcp | committed 1 commit(s) | yes (1) | 39f5b4f2c1a4e4bbfa9f04585161d3851eafd0a8 |
+| bookmarks-mcp | committed 2 commit(s) | yes (2) | eca91ff17bb32aba21521ba2b58423ccc2608afd |
+| browser-mcp | committed 1 commit(s) | yes (1) | 66e18b8a036f729f0af227940fe05368c6791e25 |
+| bumi-mcp | committed 1 commit(s) | yes (1) | 25332cb7f6b79e611f8a7a25c856720c6a31f990 |
+| butterchurn-mcp | committed 1 commit(s) | yes (1) | 721970ca4c6fe475f72715593fe5b5f8ea870f03 |
+| calibre-mcp | committed 2 commit(s) | yes (2) | 65fd4e512af539873befa7072dad38651ca5006b |
+| chip-design-mcp | committed 2 commit(s) | yes (2) | 937ffa921f1ce05ab7f8729994b6ef3ee27fb90f |
+| chitchat | committed 1 commit(s) | yes (1) | 92f038d09b4664af9043248017357f762127e372 |
+| civitai-mcp | committed 1 commit(s) | yes (1) | c65618699375cd16cf870b9f897adbd09e24e529 |
+| classroom-mcp | committed 1 commit(s) | yes (1) | 22b9b398175b9d990c3b703725e98e377a0acfb6 |
+| claude-artifact-vault | clean | no remote |  |
+| cline-mcp | committed 2 commit(s) | yes (2) | d1a1a2b3c417fd5367d2407594dcf98eb1b9ca83 |
+| codecad-mcp | committed 1 commit(s) | yes (1) | 452aad29761ad01375726b91155fc6372840b67d |
+| colony-mcp | committed 1 commit(s) | yes (1) | 08c546dcb597f69790160438fd4088bb407bd656 |
+| comfyops-mcp | committed 1 commit(s) | yes (1) | 9a31805ad66181772621d34186da8ad6733cf539 |
+| comms-mcp | committed 2 commit(s) | yes (14) | 4e2120d4d61d38a2fcd2735a6abb774b616334b8 |
+| copy-fail-mcp | committed 1 commit(s) | yes (1) | b1bb331cc7d294839e6a8a3693680ec737f85117 |
+| dark-app-factory | committed 1 commit(s) | yes (1) | 675d5a4de429c04085b95d0f73bebcd6594119e4 |
+| database-operations-mcp | committed 1 commit(s) | yes (1) | 675577a76825b7e8a015c19961321859c0c983d8 |
+| davinci-resolve-mcp | committed 1 commit(s) | yes (1) | 3c0f97ba734be19f690c3176a5490d25a6191f3c |
+| deepfang | committed 2 commit(s) | yes (2) | f8f346599d62831cc7358de13a9befeed1156dc3 |
+| demo-app | committed 1 commit(s) | yes (1) | ba82cd80555fd4963ee9b784b41fccf8ae11a5b0 |
+| demo-vid-mcp | committed 2 commit(s) | yes (2) | 67f52e1a6642346b3800897b5d56cf2a22ac1ed9 |
+| depot-mcp | committed 1 commit(s) | yes (1) | c003a9294b081d2ac22210915a7ff190ca6bfa09 |
+| devices-mcp | committed 4 commit(s) | yes (4) | f1035f0ea535bdcd213ad11261e093699d560344 |
+| directmedia-mcp | committed 1 commit(s) | yes (1) | 137bf57bc38e1db8aef62001dff4d3f6c1821cbd |
+| discord-mcp | committed 1 commit(s) | yes (1) | fc78c5f81d62a9b215cb2a86a2a1edfa28360089 |
+| disk-usage-mcp | committed 1 commit(s) | yes (1) | 94a2e8dead960fc869c079cf575647f566f74450 |
+| docker-mcp | committed 2 commit(s) | yes (2) | 1b27b423645b96cadd29deb1494d1c110f4dc724 |
+| documentation-mcp | triage: 3768 eligible files (> 400) |  |  |
+| dreame-mcp | committed 1 commit(s) | yes (1) | 45f844ce032b5f9f4672142fe50d64690481209d |
+| ednaficator | committed 1 commit(s) | yes (1) | 0918c11ad99bcae260666ef01095a1839ea57fee |
+| email-mcp | committed 2 commit(s) | yes (2) | 3de8255b6978319ccf8048d800d1119fe4b491a3 |
+| etherpad-mcp | committed 1 commit(s) | yes (1) | 614fe9dd06ddc85aaa82569df21ef44b5526711d |
+| fastsearch-mcp | committed 3 commit(s) | yes (3) | dc6ac91d44a823c5a8b28f8f35a7a03b53e8526e |
+| filesystem-mcp | committed 2 commit(s) | yes (2) | 8cc9f711251a562ebd8e6ceb625a5d647cfd26b0 |
+| fleet-launcher-mcp | committed 1 commit(s) | no remote | 0cc7e3ccfcc0e588d0d8afe7587966b4cb610d26 |
+| fleet-public-relations-mcp | committed 1 commit(s) | yes (1) | d343685ca9e0c8cec3d8dd69a318e04a08b8d4fe |
+| fleetwatcher-mcp | committed 1 commit(s) | yes (1) | 3f5d736d4e8ec86ef449937440d0fbfc9d98a0f6 |
+| forgejo-mcp | committed 1 commit(s) | yes (1) | adcc4a66358dc66346cd5c516889ee591f580ba1 |
+| freecad-mcp | committed 2 commit(s) | yes (2) | 81c443827d09de55a4c056450a237b81d63860c1 |
+| fritz-test | clean | no: behind 1 and rebase conflicted (local commits kept) |  |
+| gazebo-mcp | committed 1 commit(s) | yes (3) | ec53e43cae62d837b989b47f1660d20ff6e81d19 |
+| getsandratools | committed 1 commit(s) | no: branch 'phase2-prep' has no upstream and is not the remote default ('main') | e065f50e8fad5dff2a631e3404b0b30dc1414a1a |
+| gimp-mcp | committed 1 commit(s) | yes (1) | 337aec669ea26f95a4e4b2a0c5a26299145304b6 |
+| giskard-mcp | committed 1 commit(s) | yes (1) | e7348b9f8cd3ee741f22f8edb21d0661941f9088 |
+| git-github-mcp | committed 2 commit(s) | yes (2) | 6484adbf6f5962920789db2d1e87e0b8475aeb69 |
+| gitee-mcp | committed 1 commit(s) | yes (1) | b6b43cefe8df64194c636983717dcbbc89387c32 |
+| glama-status-mcp | committed 1 commit(s) | yes (1) | 48616b53be09ea44641410b23c1b720257fcef6d |
+| glance-mcp | committed 1 commit(s) | yes (1) | b9246d722980d65df40e7dde033e4a7fea7dae3f |
+| godot-mcp | committed 2 commit(s) | yes (2) | 92480a520f67f2d3f1aee88bcd6e5effdcc9b0b2 |
+| google-ai-mcp | committed 1 commit(s) | yes (1) | 740eeb373f02c1d1de0fbb6053f7bcdb21812f79 |
+| google-docs-mcp | committed 1 commit(s) | yes (1) | 4c17d2b0fa93deb0247a44213aef830c00bc387f |
+| goose-mcp | committed 1 commit(s) | yes (1) | d84df115e086bcbe4a636cb9f2410c2f7a975e26 |
+| grandorgue-mcp | committed 1 commit(s) | yes (1) | f6a263c5f3e2e236dacce1e3dff14e2a2eb357f9 |
+| gtfs-mcp | committed 1 commit(s) | yes (1) | daae5ff0d49a568bc8a32913075736e9efe7e582 |
+| handbrake-mcp | committed 5 commit(s) | yes (5) | 9c22ba2edb9c2adeaec4640dcddd0f1dbd593047 |
+| home-assistant-mcp | committed 2 commit(s) | yes (2) | cd9dc8f9a107a0d6843774aa4928f4543f9fd6cd |
+| huggingface-mcp | committed 1 commit(s) | yes (1) | 0523aaed3196da1a890f5d191dd2a3f9207a91ab |
+| iflow-mcp-catalog | committed 1 commit(s) | yes (1) | bfd9890f1ca8c26ba35d49e7db08c70cc4e0b501 |
+| immich-mcp | committed 3 commit(s) | yes (5) | c49fee723a0edc79685850453888ea8e6c418b9c |
+| inkscape-mcp | committed 1 commit(s) | yes (1) | b4f82475fa6bb5f5364cca3e6b2e22b23cd6f41c |
+| invokeai-mcp | committed 1 commit(s) | yes (1) | d8554f7b6c8027d2f198eb92604c09ed14efe715 |
+| iptv-org-mcp | committed 1 commit(s) | yes (1) | 4ecacb29595534fbf5ac58c36056f9602ffe3776 |
+| isaac-mcp | committed 1 commit(s) | yes (1) | 467b1e91feab478785fc650bcffdb0b49d23aa8b |
+| jellyfin-mcp | committed 2 commit(s) | yes (2) | cdcefe8ee494bda5e5e3014aa9854ad09850c330 |
+| kavita-mcp | committed 1 commit(s) | yes (1) | e7fb1fd7b24b3f621e6381d501f2cdc0df656d6e |
+| kicad-mcp | committed 1 commit(s) | yes (1) | 1d831882daead7c005a0e216e5f5d8f2b880da52 |
+| kick-mcp | committed 1 commit(s) | yes (1) | d4d1ca9694263126a501f9a8973d39d57a2a8a9b |
+| kubernetes-mcp | committed 1 commit(s) | yes (1) | 937a7d6790a1dc5c67d6db73be1d3ae1c1fbafb9 |
+| kyutai-mcp | committed 1 commit(s) | yes (1) | eb4541d745a15e88bbf865cead633840bfbe4b11 |
+| leanforge-mcp | committed 1 commit(s) | yes (1) | d87ae2a07c501ae1d761f527421450189be2df1e |
+| learnbot-mcp | committed 1 commit(s) | yes (1) | 3e5775f33dcd29f6c063293c5098581ef6bf1e67 |
+| lewm-mcp | committed 1 commit(s) | yes (1) | dae05adbd74be1fff69cf33ac833e7f455c05c66 |
+| libreoffice-mcp | committed 2 commit(s) | yes (2) | 3d6de30d6bd38844cb09e2cfe2e90d5bc7fb0358 |
+| lidar-mcp | committed 1 commit(s) | yes (1) | 6f83f7f7cc5b05c76bebf47e69b8e09c80fc9631 |
+| limx-robotics-mcp | committed 2 commit(s) | yes (2) | 6f9ff9a0492a08b7361da9a1a481f9d3342f4f94 |
+| llm-txt-mcp | committed 1 commit(s) | yes (1) | f6d25aa44194f5a8802dfbfc57cadd29c4c37aa2 |
+| local-llm-mcp | committed 1 commit(s) | yes (1) | 4efe0664d4252455620de6ea16d1fdff24598c5e |
+| logic-analyzer-mcp | committed 1 commit(s) | yes (1) | 93f4585b26fb1c19f898ca76b0c9918555b2fafa |
+| magentart-mcp | committed 2 commit(s) | yes (2) | 5e7057a9c135edd3917eb7a9751b0051a3ad9069 |
+| mastodon-mcp | committed 1 commit(s) | yes (1) | 7e0cb880e6d8fe75e335576a909b4d6454f4d7db |
+| mathops-mcp | committed 1 commit(s) | no remote | 1dc4c6b080a8659c63df6baebb21d8c103a4c851 |
+| mcp-federation-hub | committed 1 commit(s) | yes (1) | 32b80e3bc009d130d8e75b7200e97d89b6ca9561 |
+| mcp-server-template | clean | no: branch 'master' has no upstream and is not the remote default ('') |  |
+| mcp-studio | committed 3 commit(s) | yes (3) | 8fef249494ae4e0a90dc7bef9b52224bce9836be |
+| mcp-test-suite | clean | no: branch 'main' has no upstream and is not the remote default ('') |  |
+| meta_mcp | committed 3 commit(s) | yes (3) | 9a38df9b27daad49343e19dcaeb579169073e311 |
+| midasheng-gen-mcp | committed 1 commit(s) | yes (1) | fde22e036e2f3dcb88712b7d95b72bcb20fbc561 |
+| mixx-dj-mcp | committed 1 commit(s) | yes (1) | f0e2f71a96ea5bacb90b22d0de66e28f84d0c6f3 |
+| moltbot-mcp | committed 2 commit(s) | yes (2) | f50abda41d1cff3afce5edd5ea086236bb4c7263 |
+| monitoring-mcp | committed 1 commit(s) | yes (1) | aecfe10fb9ff20d419d109f8252d67facdb68bde |
+| ms-graph-mcp | committed 1 commit(s) | yes (1) | 603c60af3847a35a36a4c8cf71944b4709059345 |
+| mujoco-mcp | committed 1 commit(s) | yes (1) | 0288e430d5fd7402837ae7a8a1444b0f18d133b6 |
+| multi-backup-mcp | committed 2 commit(s) | yes (2) | 0ae2b890a3a7fef4e8b015009f59e56d332b504b |
+| multi-gpu-cluster-recipes | committed 1 commit(s) | yes (1) | 91f3839752f53e950e2d0ad8f5e1b3112f1f7cc4 |
+| myai | committed 3 commit(s) | yes (3) | 0db043b1fc2dfab5d0197338d0ccfa7c98924070 |
+| myvrworlds | committed 2 commit(s) | yes (2) | fa70571019bede39d5d9d3dd399aea13a347fb1b |
+| mywienerlinien | committed 5 commit(s) | yes (5) | 598e97c3fd3600ec56d63cdc85bbb926ce1a0fb1 |
+| nekomimi-mcp | committed 1 commit(s) | yes (1) | adb2bcb5a7c1b962d0f2f2bd42d0a779c52cbb71 |
+| nest-protect-mcp | committed 2 commit(s) | yes (2) | f50eb6a3d890eba1a1879434609e2354d8e36d5f |
+| netatmo-weather-mcp | committed 1 commit(s) | yes (1) | 74abb178b1fabe127ff3310da49010502be7fc14 |
+| norirobotics-mcp | committed 3 commit(s) | yes (3) | ab60510d277ecb4143abc93493962428227cd59f |
+| notebooklm-fleet-mcp | committed 1 commit(s) | yes (1) | a723b2afbbc04695f3cf6363fc194dd2da20e969 |
+| notepadpp-mcp | committed 1 commit(s) | yes (1) | 0cd85e0dc280b47702fa818bde7050f1e015a668 |
+| notion-mcp | committed 1 commit(s) | yes (1) | eaac784b2146da2bfffba9bef61042c366030d56 |
+| nuki-mcp | committed 1 commit(s) | yes (1) | ed53b9792705783c447f520ceccdb5c75fe674e1 |
+| obs-mcp | committed 1 commit(s) | yes (1) | a1c961581a098393748b34e6ac0e8d4a07c49c71 |
+| observability-mcp | committed 1 commit(s) | yes (1) | 60dda7b2b9d5087ddfcdf0662dc65b6ad4111e31 |
+| obsidian-mcp | committed 3 commit(s) | FAILED: remote: This repository was archived so it is read-only. fatal: unable to access 'https://github.com/sandraschi/obsidianmcp.git/': The requested URL returned error: 403 | be4e7163c62872df53e16233e6954305362b8beb |
+| ocr-mcp | committed 1 commit(s) | yes (1) | 1d56524f32c661e316c2165228e2a5fff2413a98 |
+| onenote-mcp | committed 2 commit(s) | yes (2) | 252e2b88e158565e7355df2e7818d80e09cc0404 |
+| open-drone-mcp | committed 1 commit(s) | yes (1) | fe7c8b15cd2a89d2fbadd9417d51124ff44c39f2 |
+| open-edit-spike | committed 1 commit(s) | no remote | 84bdc049eab172431c385e9edd501ad10d46f5b1 |
+| openbci-mcp | committed 1 commit(s) | yes (1) | 5244eb8130793ee932c2c892be87f27bcdae9887 |
+| openclaude-mcp | committed 1 commit(s) | yes (1) | e9262e24cf13e425f811740cfab76711e472ac5d |
+| openclaw-molt-mcp | committed 1 commit(s) | yes (1) | 5903b7863fb251c9689d586a4c6495a1983c158e |
+| opencode-cli-mcp | committed 1 commit(s) | yes (1) | af2da342662590f5db22a4950865df690e0d1afd |
+| openmanus-mcp | committed 1 commit(s) | yes (1) | cf52a36b4ef6e38e75fac10e840b52c1145ac484 |
+| osc-mcp | committed 1 commit(s) | yes (1) | 7bc77e038a59b5f6ad73e89c698cc08c3206e5ce |
+| oscilloscope-mcp | committed 1 commit(s) | yes (1) | d8a3189d8857d25ee71be1d36ace74835985abe7 |
+| overte-mcp | committed 1 commit(s) | yes (1) | b1c9158c4cca10ebcaadac28174619b87d3f0c4c |
+| pdf-mcp | committed 1 commit(s) | yes (1) | 8281f66f98ee4c794259dc41bfa8eef2f1ea4085 |
+| pinokio-mcp | committed 1 commit(s) | yes (1) | d601482dcba619b555e0ac0d4e3c1a1e23831b42 |
+| plex-mcp | committed 0 commit(s) | up to date | 14935d62a50d8923b3b0b5bc6f4bef9f7a0a4a72 |
+| podman-mcp | committed 1 commit(s) | yes (1) | c93378dbca09c1553816cf915d708f614399fd8e |
+| prc-shopping-mcp | committed 1 commit(s) | yes (1) | 49b8bd00c2c3bcad97adceda9512f8f720678310 |
+| qcad-mcp | committed 1 commit(s) | yes (1) | 53575891e65a774403fb9fd99454fbf63f418306 |
+| raspberrypi-mcp | committed 1 commit(s) | yes (1) | ba567f0c1dd6a9c09d98b9eeca69e3b674b475f4 |
+| readly-mcp | committed 1 commit(s) | yes (1) | 0932e8a07c76bca5969f9884f802c7a372d696ee |
+| reaper-mcp | committed 1 commit(s) | yes (1) | 778b90659218f94765234509ccef3df5f9f8a047 |
+| repomix-mcp | committed 1 commit(s) | yes (1) | 594d41ea774215e566c47f04b219d11259f1ad16 |
+| resolume-mcp | committed 1 commit(s) | yes (1) | d11fbd30a2bbec1971f28a0c904a1e14b9bb1ceb |
+| resonite-mcp | committed 2 commit(s) | yes (2) | 90f82e17fba4ac62a1aacd93464eb724c7669c0c |
+| reversing-mcp | committed 1 commit(s) | yes (1) | 5180b6dc9d777e7c69cf3d73e556fc7c0ae25624 |
+| ring-mcp | committed 1 commit(s) | yes (1) | f912a6d4e208e3a142786d39394498039eff82aa |
+| robofang | committed 4 commit(s) | yes (4) | 26f93fb8c7c567d21f74c29e9b53c588527d19bc |
+| robotics-mcp | committed 2 commit(s) | yes (2) | dbf39c5440356a8a7189f95c77b4abf450be5cec |
+| ros-mcp | committed 1 commit(s) | yes (1) | acdfe11d841d723b2d1a3e59da6c6b324ad4c0c5 |
+| rss-mcp | committed 1 commit(s) | yes (1) | 8343a359eab77144f11166014bb60fd308b76744 |
+| rtorrent-mcp | committed 1 commit(s) | yes (1) | b319e6fc8b28bc0e75ea3b2e46439197a2ffaf4f |
+| rustdesk-mcp | committed 1 commit(s) | yes (1) | 8ef12ba8dd94fb335ac4384972654c77b881a9e2 |
+| rustdesk-server | committed 1 commit(s) | no: behind 3 and rebase conflicted (local commits kept) | 0d1af3d7e31107a0277fdc862cb2530fa42409de |
+| safety-mcp | committed 1 commit(s) | yes (1) | 28cb4d72a9c2d7131cf7b0730b7acba5998a0c30 |
+| sakana-mcp | committed 1 commit(s) | yes (1) | a76211edde48f7eac3e1343194797bcef531455f |
+| sandras-com | clean | no remote |  |
+| scraper-mcp | committed 1 commit(s) | no: behind 1 and rebase conflicted (local commits kept) | 153fe62092743a8a3a7e1afe2c04a0e31ea2038a |
+| sdr-mcp | committed 1 commit(s) | yes (1) | cd3b8ee35ed27964f4674b91d4db13e7cf72a681 |
+| searchstudio-mcp | committed 1 commit(s) | yes (1) | 12a1b6df8bc60c01bdd29e9b7befe42caaf2eeeb |
+| sfx-mcp | committed 1 commit(s) | yes (1) | dfb77af3b66544aca5b66b8e11fd060b74877169 |
+| songgeneration-mcp | committed 1 commit(s) | yes (1) | e43419dd1b0b0ab5859b2e20ea99e505516f04b7 |
+| speech-mcp | committed 5 commit(s) | yes (5) | 84ef467a6c105dd6009b23b2d41e45ea460bb739 |
+| splatmaker-mcp | committed 2 commit(s) | yes (2) | 8fc497b25ccece95b5264415ba6f13d527a76040 |
+| steam-mcp | committed 2 commit(s) | yes (2) | e8eab366778083d8c8f10b176622f0b006d21128 |
+| streamfog-mcp | committed 1 commit(s) | yes (1) | a1c5a98a5423fd8e7462da14e007df38bd297932 |
+| stripe-mcp | committed 1 commit(s) | yes (1) | 5f55280af90a34c46560f83cdc879cf53cc1e0ce |
+| substack-mcp | committed 1 commit(s) | yes (1) | f32c07cbfdf64ba1b3f2bc3a6d9c4c04cdebef11 |
+| suno-mcp | committed 2 commit(s) | yes (2) | dfffb4e3e0af36014939e732d4e7ebaaeb1203c1 |
+| sysinternals-mcp | committed 2 commit(s) | yes (2) | a29cf94434245950f8b29961864557512ccbf2d2 |
+| system-admin-mcp | committed 1 commit(s) | yes (1) | 518cc4920bc138d816ee8e1a7364a7615579b47e |
+| tahoma2d-mcp | committed 2 commit(s) | yes (2) | 3c9afcde7f72be640420dcb22f61e142ae7361e0 |
+| tailscale-mcp | committed 1 commit(s) | yes (1) | 100f0ca8577aebbf8bccc4f171d07747e57aaabc |
+| tapo-mcp | committed 1 commit(s) | yes (1) | b3e8d6de2719a256ecbb049c265ac4105eeb7c6a |
+| teams-mcp | clean | no remote |  |
+| teleconference-mcp | committed 5 commit(s) | yes (5) | 07f115b2421f450981448efeb46657518ea3e314 |
+| teleoperator-mcp | committed 1 commit(s) | yes (1) | 85034bedd6c88dd3c0dad2c0fa5909b00c1668a0 |
+| telephony-mcp | committed 1 commit(s) | yes (1) | 31f84f7d7434e1d102e38e7aacffb1aecebe4d95 |
+| toolbench-mcp | committed 2 commit(s) | yes (2) | 8ad542340e3ca7a353ed912cea23f607a70e5e51 |
+| travelprep-mcp | committed 2 commit(s) | yes (2) | 907ed4230b60b1ee9f095554ded946451f26de3a |
+| triton-mcp | committed 1 commit(s) | yes (1) | 5f7384390eca371feb29d8a7436f39a6a052b47e |
+| tvtropes-mcp | committed 1 commit(s) | yes (1) | f4a31a83d095628878577013aeca8a7f3b09eb1a |
+| uitars-mcp | committed 1 commit(s) | yes (1) | 22f1a15cd8598456b795b23a2eed9c49203717c0 |
+| unitree-mcp | committed 2 commit(s) | yes (2) | 3dc2ee8116457ef968239296ef7f01f52e47e526 |
+| unity3d-mcp | committed 1 commit(s) | yes (1) | 78f5411de6ae7f81c6e601784400da8555582551 |
+| universal-actuator-mcp | committed 2 commit(s) | yes (2) | 33b57a146a23eb5f1b7cd01e4f57e3953b537acd |
+| unsloth-mcp | committed 1 commit(s) | yes (1) | dda9e2bc3386fb6122fc5c435dd61c35c2fe5ef8 |
+| vbot-mind-mcp | committed 1 commit(s) | yes (1) | d0d38560439c258fcea435bd89c80c04698b4013 |
+| vcv-rack-mcp | committed 1 commit(s) | yes (1) | c9f6b6bc7421aac923f2127a23415aa383913cc9 |
+| veogen | committed 3 commit(s) | yes (3) | 56592d6e4cb24fba8def80373d7e216a47bb0103 |
+| videogen-mcp | committed 1 commit(s) | yes (1) | aba103f82a5873f1b38f94b3d0440a43b7852a3d |
+| vienna-life-assistant | committed 2 commit(s) | yes (2) | a0fbb15f5cc54f7418f6ddf32b64cf7c540e6b93 |
+| virtualdj-mcp | committed 1 commit(s) | yes (1) | 617b23d2eb55f5ae4a2b93e1a8a9522e7306dbe6 |
+| virtualization-mcp | committed 1 commit(s) | yes (1) | 009a31f08c9e8a65af7bddaf835640db1da0aae9 |
+| vla-mcp | committed 1 commit(s) | yes (1) | d7b982e90f60a2b60a4542e9ba7f852e49f5ad46 |
+| vrchat-mcp | committed 2 commit(s) | yes (2) | 5d2a02dd15e9790e22a9e0738172bc9ece9ed5bc |
+| vroidstudio-mcp | committed 1 commit(s) | yes (1) | 59170abfa29157a9c8ed36dcb32b6a9a50983d16 |
+| vroidstudio-mcp-backup-20260607-231839 | committed 1 commit(s) | FAILED: To https://github.com/sandraschi/vroidstudio-mcp.git ! [rejected] HEAD -> master (fetch first) error: failed to push some refs to 'https://github.com/sandraschi/vroidstudio-mcp.git' hint: Updates were rejected because the remote contains work that you do not hint: have locally. This is usually caused by another repository pushing to hint: the same ref. If you want to integrate the remote changes, use hint: 'git pull' before pushing again. hint: See the 'Note about fast-forwards' in 'git push --help' for details. | 4297a2ca2c42c7f4337fc25cba56a85ebede6ec9 |
+| web-development-mcp | committed 2 commit(s) | yes (2) | 2ec2b0bb5a87972db70ce8db95eb0efb9de289a7 |
+| winrar-mcp | committed 2 commit(s) | yes (2) | 35106b82efacc11314a958ff22a7f73c1632bb5d |
+| worldlabs-mcp | committed 1 commit(s) | yes (1) | f47c15022aef41cb95ab6d2d6050663a6b0c1f33 |
+| xkcd-mcp | committed 1 commit(s) | yes (1) | 89125eaefefb4c638674b009fa2e9b869bfa47e5 |
+| yahboom-mcp | committed 11 commit(s) | yes (11) | a538b1b52816c9adcaefd6c22d85f5fd0f8976ad |
+| zed-mcp | committed 1 commit(s) | yes (1) | 684d1a8d668da2ad8b3267fc5f7e720467b56969 |
+| zoji-mcp | committed 7 commit(s) | yes (7) | e37e6ffbb9b12d2cc9bf7e87b98de4ab19cf2375 |
+| mcp-central-docs | committed 11 commit(s) | yes (11) | b83b7c5ff0f8885e3f969355b2d1b55ffd44c886 |
+
+## Excluded files (left uncommitted)
+
+- documentation-mcp: docs/not-mcp-related/claude-skills/temp/code-plugins/plugins/security/secret-scanner/README.md: secret-like content
+
+## Ignore rules added
+
+- resonite-mcp: dist
+
+## Notes
+
+- resonite-mcp: untracked 1 generated files in: dist

@@ -1,3 +1,13 @@
+---
+title: "MCPB & Glama Packaging Standards (SOTA v2.0)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-18
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # MCPB & Glama Packaging Standards (SOTA v2.0)
 
 **Version:** 2.2 (June 2026)  
@@ -53,7 +63,7 @@ mcp-server/
       "command": "python",
       "args": ["-m", "package_name.server"],
       "env": {
-        "PYTHONPATH": "${PWD}",
+        "PYTHONPATH": "${__dirname}",
         "PYTHONUNBUFFERED": "1"
       }
     }
@@ -63,6 +73,50 @@ mcp-server/
   ]
 }
 ```
+
+> [!CAUTION]
+> **Path variables (HARD, added 2026-10-07).** Claude Desktop expands ONLY the MCPB-spec
+> variables in `mcp_config`: `${__dirname}` (the unpacked bundle directory), `${HOME}`,
+> `${DESKTOP}`, `${DOCUMENTS}`, `${DOWNLOADS}`, `${pathSeparator}`, `${/}` and
+> `${user_config.KEY}`. **`${PWD}` is NOT expanded** -- it reaches the server as the literal
+> text `${PWD}`, so the server fails to start on a real install while working in every dev
+> check. This section previously prescribed `${PWD}` and ~190 fleet manifests copied it.
+> `pack.ps1` now fails the pack on any non-spec `${...}` variable.
+>
+> Desktop launches **stdio**: `entry_point`/`mcp_config` must start the stdio server
+> (`python -m <pkg>`), never an HTTP/PyInstaller sidecar `run_server.py`.
+
+### 2.2b. Release assets and zero-friction install (HARD, added 2026-10-07)
+
+Every fleet MCP repo's GitHub release MUST carry three assets, produced by the fleet pack script (`scripts/fleet-mcpb-pack.ps1`, called through each repo's thin `scripts/mcpb-pack.ps1` shim -- never a vendored copy):
+
+| Asset | Why |
+|---|---|
+| `<name>-v<ver>.mcpb` | versioned archive |
+| `<name>.mcpb` | **stable name**, so `releases/latest/download/<name>.mcpb` never changes |
+| `install.ps1` | `scripts/install-mcpb.ps1` with the repo's latest-release URL and bundle SHA256 baked in |
+
+README must open its install section with the Claude Desktop (Windows) one-liner, labelled
+as Claude-only, and give the `uvx --from git+...` config for every other client:
+
+```powershell
+irm https://github.com/<owner>/<repo>/releases/latest/download/install.ps1 | iex
+```
+
+"Install X.mcpb" typed to Claude is served by the `install-mcpb` skill, which runs the same
+`scripts/install-mcpb.ps1`. The installer writes Claude Desktop's undocumented extension
+store and refuses manifests with non-spec `${...}` variables. Reference: onenote-mcp.
+
+**Runtime prerequisites are installed by the installer, never by the user (HARD, 2026-10-07).**
+A normal user must not need to know what `uv` is. `scripts/install-mcpb.ps1` detects
+`mcp_config.command` of `uv`/`uvx`, and if `uv` is missing installs it (winget
+`astral-sh.uv`, else the official astral installer) before registering the bundle. Because
+`install.ps1` is generated from that script at pack time, **every repo that packs through
+`fleet-mcpb-pack.ps1` gets this automatically**; a repo whose latest release has no
+`install.ps1` built from the current script does NOT have it and is a retrofit target.
+README/INSTALL for end users must not tell them to install `uv` by hand (only the
+non-Claude `uvx` config section may mention it). New runtime prerequisites (any other
+command a manifest launches) must be added to the installer the same way, in the same change.
 
 ### 2.3. Package Inclusions & Exclusions
 
@@ -312,6 +366,106 @@ Copy-Item -Recurse -Force (Join-Path $RepoRoot "src\$pkg") $stage
 5. Launch the packaged entry point in a clean environment and assert it serves. Static
    checks cannot prove a bundle runs.
 
+#### Pack-root `.mcpbignore` gotcha (added 2026-08-27)
+
+`mcpb pack <dir> <out>` reads `.mcpbignore` from the **pack root** (`mcpb/`), not the repo
+root. If `.mcpbignore` exists only at the repo root, pack reports `ignored files: 0` and
+ships whatever the fresh copy dragged in (`.pyc`, `__pycache__`, sneak-in `.bak` twins).
+Measured on resonite-mcp: a bundle ballooned from 59 clean files to 196 / 1.1MB entirely
+because `.mcpbignore` was repo-root-only and the freshly copied `src/` carried bytecode and
+`.bak` files.
+
+Mandatory in every pack script: **ensure `.mcpbignore` is present at `mcpb/.mcpbignore`**
+before packing (copy from repo root if missing). Verify the pack summary's
+`ignored files: N` is non-zero as a smoke check, and expand/verify the archive rather than
+trusting the summary alone.
+
+#### Import-verification bytecode gotcha (added 2026-08-27)
+
+A §2.5 required check is "launch/import the entry point to prove self-containment." Running
+that import **generates `__pycache__/*.pyc` inside `mcpb/src`** — and if the pollution check
+ran *before* the import, the bytecode ships in the bundle. Fixes (both, not either):
+1. Set `PYTHONDONTWRITEBYTECODE=1` around the import-verification subprocess.
+2. Run the pollution check (check 4) **after** the import-verification step, so anything the
+   import left behind is still caught.
+
+Also strip `__pycache__` / `*.pyc` / `*.bak` / `*.bak.*` from the fresh stage right after the
+copy, so the pollution check is a safety net, not the only cleaner. Sneak-in `.bak` twins
+inside `src/` are the top recurring source of this; clean them from `src/` itself, not just
+from the stage.
+
+#### Package-name / entry-point / output-filename bugs in the fleet template (found + fixed 2026-09-14)
+
+Found while packing `bookmarks-mcp` from the fleet-canonical `pack.ps1.template`
+(`mcp-central-docs/_scratch_mcpb_fix/`), which `sweep.ps1` had already distributed to
+however many repos were missing a pack script at the time it last ran. All three bugs were
+in the template itself, not repo-specific — every repo that received it via the sweep
+carries the same exposure until it repacks with the fixed template.
+
+1. **Package-name detection trusted the pyproject.toml `name` field without checking the
+   derived directory exists.** `name = "bookmarks-mcp"` → guessed `src/bookmarks_mcp/`,
+   but the real package is `src/browser_bookmarks_tools/` (PyPI/distribution name and the
+   importable package directory are not required to match, and often don't after a rename).
+   First run failed at the copy step with "Copy source missing". Fixed with 3-tier detection,
+   each tier validated against the filesystem: (1) hatch's own
+   `[tool.hatch.build.targets.wheel] packages = ["src/<pkg>"]` — most authoritative, since
+   hatch/`uv build` already depends on it being correct; (2) the name-derived guess, only
+   trusted if `src/<guess>/` actually exists; (3) last resort, exactly one directory under
+   `src/`.
+2. **Entry point resolved against the repo root instead of the bundle root.** `manifest.json`
+   describes the *bundle* (`mcpb/` is what gets packed), so `entry_point` must resolve
+   relative to `mcpb/`, not `$RepoRoot`. The old template did
+   `Join-Path $RepoRoot $entryPointRel`. This silently "worked" during testing only because a
+   byte-identical same-named `run_server.py` happened to also exist at the repo root for an
+   unrelated build — it surfaced only once that coincidence produced a malformed dotted
+   module string and `importlib.import_module` raised `TypeError: the 'package' argument is
+   required to perform a relative import`. Fixed: resolve against `$McpbDir`, and detect
+   which of the two real fleet entry-point styles (see §2.5 above) is in play by checking
+   whether the resolved path lands under `mcpb/src` at all (`GetRelativePath` starting with
+   `..` means it's a standalone wrapper script, not a staged module).
+3. **Output filename used the detected source package name instead of `manifest.json`'s own
+   `name`.** They can differ (`bookmarks-mcp` vs. `browser_bookmarks_tools`) — the packed
+   file should be named after what `mcpb pack` itself calls the bundle (shown in its own
+   "Archive Contents" summary), not an internal implementation detail. Fixed: build the
+   output filename from `$manifest.name`/`$manifest.version`.
+4. **`verify_pack.py`'s import check only supported dotted-module imports** (`importlib.
+   import_module`), so it could not verify a standalone bootstrap-script entry point (the
+   `run_server.py` style, at least as common fleet-wide as the dotted-module style — see the
+   two entry-point styles under §2.5). Fixed: `check_import` now takes a 3rd arg
+   (`package_name`) and branches — a `.py` file path runs via
+   `runpy.run_path(path, run_name="__mcpb_verify__")` (avoids triggering
+   `if __name__ == "__main__":`) then asserts `sys.modules[package_name]` resolved under the
+   staged dir; a dotted string still goes through `importlib.import_module` as before.
+5. **The §2.5 "launch the packaged entry point" check (item 5) was entirely missing from the
+   template** — added as Step 10. First implementation used
+   `Start-Process -FilePath uv -ArgumentList @('run','python',...)`; confirmed empirically
+   (via `netstat`/`Get-Process` polling *after* the script reported success and exited) that
+   `uv run` spawns Python as a **child** of the `uv.exe` wrapper on Windows rather than
+   exec-replacing it, so `Stop-Process -Id $proc.Id` killed the wrapper and orphaned a live
+   server bound to the probe port. Fixed: launch `.venv\Scripts\python.exe` directly,
+   bypassing `uv run` for this one check, with try/finally cleanup and a save/restore of any
+   pre-existing `$env:MCP_PORT`. Hardened further: "still alive after 4s" alone can't
+   distinguish a genuinely serving process from one blocked on `stdin.readline()` (a
+   stdio-transport server with no client attached looks identical) or one whose startup
+   failed in a background thread without killing the main process — the check now also scans
+   stderr for a Python traceback even when the process is still running.
+
+Also hardened while fixing (not bugs per se, but silent-failure modes the template should
+not ship with): `manifest.json` missing/empty `name` or `version` now fails fast with an
+explicit message instead of silently producing a malformed output filename like `-v.mcpb`;
+missing `bunx` on `PATH` now fails with an actionable "install Bun" message instead of
+whatever cryptic error the shell gives for a not-found command.
+
+**Fleet exposure — not yet audited.** `sweep.ps1`'s own docstring states it does not touch
+entry-point/console-script correctness ("those need per-repo understanding... explicitly out
+of scope here"), meaning it distributed the *buggy* pre-fix template as-is to every repo it
+touched. The drift-scan JSON it reads from (`$env:TEMP\mcpb_drift_scan.json`) is ephemeral
+and may no longer reflect current fleet state. A repo count and a decision on whether to
+re-sweep with the fixed template is a separate, larger-blast-radius action than fixing the
+template itself — flag to the user before doing it, per the Batch Size Limit and Batch
+Mutation Safety rules (this is potentially 100+ repos, far past the 10-file-per-operation
+ceiling even done in small batches).
+
 #### Version control
 
 `mcpb/src` **MUST** be gitignored (new-repo gate item 9). It is an exact staging copy of
@@ -393,11 +547,13 @@ mcpb --version
 |---------|---------|
 | `mcpb pack <dir> <output.mcpb>` | Create a bundle from a SOTA layout. |
 | `mcpb validate <file>` | Check a `manifest.json` or `.mcpb` for errors. |
-| `mcpb inspect <file.mcpb>` | List the contents and manifest of a bundle. |
+| `mcpb info <file.mcpb>` | List the contents and manifest of a bundle. |
+| `mcpb unpack <file.mcpb> [output]` | Unpack a bundle -- use for the launch-in-clean-copy required check (§2.5 check 5). |
+
+> Verified against `@anthropic-ai/mcpb` v2.1.2, 2026-09-10 — `inspect` does not exist on this CLI (`error: unknown command 'inspect'`); the real command is `info`. This table was previously wrong and nothing had exercised it against the actual tool.
 
 > [!WARNING]
 > **FORBIDDEN**: Never use `mcpb init` or `mcpb create`. These commands generate legacy/broken manifests that do not comply with v2.0 SOTA standards. Always author your layout manually according to Section 2.
-```
 
 ---
 

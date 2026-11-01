@@ -1,4 +1,64 @@
 
+# Changelog - Speech-MCP
+
+All notable changes to this project will be documented in this file.
+
+## [Unreleased] - 2026-08-19
+
+### Added - Voice intelligence feature set (spec: docs/FEATURE_SPEC_2026.md)
+
+- **Persistent voice memory** - SQLite episodic diary (`voice_memory_store` /
+  `voice_memory_recall` / `voice_memory_search`, REST `/api/v1/memory*`).
+  History page gains a Voice Memory panel (search + quick note).
+- **Translation bridge** - `translate_text` + `translate_speech` (FunASR ->
+  local LLM -> optional TTS), REST `/api/v1/translate`. No cloud translation.
+- **Sound-event detection** - `detect_sound_events`: model-free energy-based
+  segmentation (loud events / silence / speech-like), REST `/api/v1/sound/events`.
+- **Voice bank** - `manage_voice_bank` / `voice_bank_resolve`: named profiles
+  routed to a provider + voice; local cloning (cosyvoice/gpt-sovits) reserved
+  as an optional-extra path, never silently faked.
+- **Voice macros + reading mode** - `voice_macros` (list/create/run/delete),
+  `read_aloud` (text or file), REST `/api/v1/macros`, `/api/v1/read`.
+- **Speech analytics** - auto-recorded per-call latency telemetry
+  (`speech_analytics`, REST `/api/v1/analytics`); the `latency_benchmark_view`
+  Prefab card and dashboard/History now render real measured numbers (closes the
+  "latency not measured" honest-gap).
+- **Fleet readouts** - `spoken_status_readout` speaks live status (providers,
+  RAG, timers, GPU), REST `/api/v1/readout`.
+- **Chat page + tool** - webapp Chat page (5 personalities incl. Custom,
+  skill-first prompts, localStorage history 100-cap, export/clear,
+  data-testids) + `chat_message` MCP tool, REST `/api/v1/chat` + `/api/v1/personas`.
+- 13 new MCP tools (41 total); `storage.py` SQLite stores; 7 new tests
+  (36 passed).
+
+### Changed - assfix quality pass
+
+- Tool surface: `annotations=` (READ_ONLY / MUTATING / DESTRUCTIVE) on all 28 MCP tools, `## Return Format` + `## Examples` added where missing, `Args:` blocks removed (docstrings_sota).
+- Webapp lint gate fixed (biome green): a11y label/input associations, unused vars, generic `request<T>` (no explicit `any`).
+- justfile: added `serve`, `fmt`, `gates-green`, `ci` recipes; justfile formatter-clean.
+- CI: added `check`/`typecheck` npm scripts so the fleet-ci type gate can run; flagged fleet-ci `web/` frontend detection gap upstream.
+- Cleanup: removed tracked `.bak` dross, gitignored `logs.txt`/`logs/`, `llms.txt` links `llms-full.txt`.
+
+## [0.6.5] — 2026-08-17
+
+### Added — Streaming STT & barge-in (sherpa-onnx) + assfix
+- **Streaming STT (ja/en/de, CPU)** via sherpa-onnx: `streaming_stt` MCP tool (partials + endpoint), `barge_in_feed` (barge-in). Models: en zipformer, ja multilingual zipformer, de-kroko. `just sherpa-download` + `SHERPA_ASR_ENABLED`, `SHERPA_ASR_LANG`, `SHERPA_BARGE_IN`.
+- **Voice listener streaming mode** — wake -> streaming capture (no fixed command window) -> route intent -> reply -> follow-up turn loop.
+- **FunASR default model** -> `Fun-ASR-MLT-Nano-2512` (multilingual, EN/JA/DE); `funasr>=1.4.1`. Sidecar port 10914 (was 10910, rtorrent collision).
+- **Honesty pass**: removed webapp gaslights (fake tool registry, fabricated metrics, fake dispatch endpoints), replaced stubs (Gemma TTS/STT, weather fallback, Prefab cards now real data), fixed REST `Context()` crash, `pyright 0 errors`.
+- New REST: `/api/tools`, `/api/v1/diagnostics`, `/api/v1/shutdown`; honest `/api/v1/agentic`, `/api/v1/action`.
+- Native build repaired (backend.rs compile, build.ps1 frontend scan, size gate); CUA config nav_routes; docs sync; GitHub topics + badges.
+
+## [0.6.4] — 2026-08-17
+
+### Added — Voice Command Bus: hands-free dev workflow loop
+- **Auto-start listener** at backend boot when `FLEET_VOICE_DELEGATE=1` (`FLEET_VOICE_AUTOSTART=0` to disable) — NSSM/headless reboot-proof
+- **Wake greeting** — spoken ack after the wake word (`FLEET_VOICE_WAKE_GREETING`, default "Hello, mistress."), played before command capture
+- **Sleep word** — second openWakeWord model stops the listener (`FLEET_VOICE_SLEEP_KEYWORD`, stock `hey_mycroft` placeholder until a custom `sleepsleep` ONNX); saying "{wake word}, sleepsleep" in the transcript also stops it
+- **Spoken replies** — routed results are spoken back (`FLEET_VOICE_SPEAK_REPLY`, default on); `set_speak_hook` for provider-aware TTS
+- **Timer announcements** — `run_timer` speaks "Timer done. <label>" on expiry
+- Receivers/registry: fritz, opencode, boomy, dreame, calibre, plexy, alexa — standard: mcp-central-docs `standards/VOICE_COMMAND_BUS.md`
+
 ## [Unreleased] — 2026-06-14
 
 ### Added
@@ -11,10 +71,7 @@
 - CUA-NSIS: local certification — all 11 phases pass locally (2026-06-14)
 
 ### Changed
-- CORS: llow_origins=["*"] → explicit origins list for Tauri webview compatibility
-# Changelog — Speech-MCP
-
-All notable changes to this project will be documented in this file.
+- CORS: allow_origins=["*"] → explicit origins list for Tauri webview compatibility
 
 ## [0.6.3] - 2026-05-31 (beta)
 
@@ -229,4 +286,3 @@ All notable changes to this project will be documented in this file.
 - FastMCP server with `text_to_speech`, `start_evi_session`, `manage_voice_clones`
 - Webapp baseline
 - Git repository and GitHub remote setup
-

@@ -26,7 +26,7 @@ Canonical **A → B → C** paths. Hulls may appear in multiple lanes.
 | Lane | One-line mission | Primary flow | Key hulls | Example sortie |
 |------|------------------|--------------|-----------|----------------|
 | **Intel** | Know what changed in the world | readly → arxiv → aiwatcher → calibre/email → ViLife brief | readly-mcp, arxiv-mcp, aiwatcher-mcp, glance-mcp, calibre-mcp, email-mcp | WF-001 `intel` node; Office Day Prep intel slice |
-| **Life** | Run Vienna as a human | ViLife ↔ transit ↔ shopping ↔ `/fleet` meta | vienna-life-assistant, mywienerlinien, gtfs-mcp, vienna-transit | `vienna_life(life_brief)`; meta dashboard |
+| **Life** | Run Vienna as a human | ViLife ↔ transit ↔ shopping ↔ `/fleet` meta | vienna-life-assistant, publictransport-mcp, gtfs-mcp, vienna-transit | `vienna_life(life_brief)`; meta dashboard |
 | **Office** | Ship work artifacts | Fritz → opencode/git → docs → email → MemOps ADN | fleet-agent-mcp, opencode-cli-mcp, git-github-mcp, docs_mcp, email-mcp, advanced-memory-mcp | `day_prep`; PR pipeline; board pack |
 | **Comms** | Reach Sandra on a channel | agent decision → comms → human reply loop | email-mcp, discord-mcp; **P4 comms-mcp** (Telegram) | Outbound digest; inbound “reply yes/no” |
 | **Media** | Acquire, library, play | arr → plex/jellyfin → virtualdj / immich | arr-mcp, plex-mcp, jellyfin-mcp, immich-mcp, dj-media-hub | “Add season, watch tonight” |

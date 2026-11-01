@@ -1,3 +1,13 @@
+---
+title: "Ruff Code Quality Standard (v13.1 — June 2026 SOTA)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-10
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Ruff Code Quality Standard (v13.1 — June 2026 SOTA)
 
 **Standardization for Industrial-Grade MCP Python Repositories**
@@ -37,6 +47,8 @@ ignore = [
     "ANN102", # Missing type annotation for cls in classmethod
     "PLR0913", # Too many arguments to function call
     "S101",   # Use of assert (allowed in tests/validation)
+    # NEVER ignore S110 (try-except-pass) or S112 (try-except-continue).
+    # Silent exception swallows are strictly forbidden across the fleet.
 ]
 
 [tool.ruff.lint.per-file-ignores]

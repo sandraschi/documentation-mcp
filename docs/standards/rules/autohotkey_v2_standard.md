@@ -1,3 +1,13 @@
+---
+title: "AutoHotkey v2 Standard (SOTA 2026)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-07-08
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # AutoHotkey v2 Standard (SOTA 2026)
 
 **Established**: 2026-07-05
@@ -73,3 +83,28 @@ Optionally `#Warn` for stricter validation.
 - Full migration guide: `not-mcp-related/autohotkey/AutoHotkey_v2_Syntax_Migration_Guide.md`
 - Cheat sheet: `not-mcp-related/autohotkey/AUTO_HOTKEY_V2_CHEAT_SHEET.md`
 - Common incompatibilities: `not-mcp-related/autohotkey/AutoHotkey_v2_Common_Incompatibilities.md`
+
+## Pre-flight procedure (established 2026-10-16)
+
+AHK scripts run with the user's own keystrokes and focus, so a bad
+script can lock the machine (unqualified hotkeys eating input, focus
+steal loops, modal dialogs blocking automation). Historical motive:
+the runtime's own message boxes on lint/parse failure were the
+annoyance - fleet convention is log-to-file, never modal.
+
+1. Static danger-pattern audit: no unqualified hotkeys, no Send /
+   WinActivate unless the script's job needs it, no loops or repeating
+   timers, every `#HotIf` closed, `#SingleInstance Force`, no `MsgBox`.
+2. Lint clean: depot headless linter (`utils/linter_headless.ahk`,
+   single-file form as in `run_lint_all.ps1`) must exit 0. Dismiss
+   warnings in writing, never silently. Deeper static checks live in
+   the `autohotkey-linter` repo (own grammar + rules, paper draft in
+   its `paper/` directory).
+3. Smoke run: launch the real script, confirm alive + responding,
+   confirm zero log writes, kill cleanly.
+4. First launch with the target app closed: only global hotkeys can
+   possibly fire.
+5. Never live-fire synthesized keystrokes into windows as a test.
+
+Provenance: `opencode_typo_watcher.ahk` hardening session,
+`operations/session-log/2026-10-16.md`.

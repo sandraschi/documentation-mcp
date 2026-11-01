@@ -1,0 +1,43 @@
+# God's Eye View — Fleet Takeaways
+
+## 1. Patterns to steal (concrete, copyable)
+
+1. **POWER UP panel + `doctor`.** In-app key entry listing every key/what it unlocks/where to get it; writes owner-only `.env`/`pinokio/ENVIRONMENT` + self-restart; `npm run doctor` reports readiness + provider routes WITHOUT printing values. Our wrappee MCPs (Plex, Notion, Tailscale...) should copy this instead of README-diving.
+2. **Portable tool catalog.** `defineTool` + `composeCatalog` + `TOOL_SURFACES` + boundary-enforced portable exports (`tools`, `tools/mcp`). One definition → voice + MCP. Our portmanteau servers should aim here.
+3. **Stale/fallback honesty.** Analyst answers say when a feed is stale or on fallback; adsb.lol fallback shows provenance row. Copy into aiwatcher/fleet-agent answers.
+4. **Governors, not just quotas.** OpenSky credit governor, TomTom 6 k/day app ceiling, TLE disk cache, Mapillary tile strip + shared fetch, adsbdb 4-in-flight/5 Hz drip + 24 h cache. App-level ceilings that sit UNDER provider free tiers.
+5. **Fixture-mode QA.** `qa:street-level:fixtures` answers Mapillary from fixtures — CI needs no network. Template for our camera/transit/GBFS tests.
+6. **Ownership docs.** `UI-OWNERSHIP.md` / `VOICE-OWNERSHIP.md` per-surface owners. Cheap, scales.
+7. **Share-link v2.** Camera+style+layers+tracked-target in URL; live target = handoff. Our dashboards (devices, robotics, teleop) want this.
+8. **Short voice context.** 3,000 tokens + live scene fetch instead of long history. Cheaper + more truthful.
+
+## 2. Integration ideas (1-hop, soft-degrade)
+
+- **publictransport-mcp + gtfs-mcp ↔ transit layer.** GEV already speaks GTFS-RT for 7 regions; point its `transit` provider at our Vienna feeds for a GEV Vienna view. No fork needed — a source-pack + proxy config.
+- **sdr-mcp ↔ local receivers.** GEV's browser WebUSB RTL-SDR + `aircraft.json` relay is the UX we want for SDR; sdr-mcp is the headless counterpart. Share the `LOCAL_RECEIVER_FEEDS` contract.
+- **worldlabs-mcp / unity3d-mcp ↔ 3D tiles.** GEV's draped-vs-terrain ground-floor logic (`groundCast`, `meshSampler`) is directly relevant to placing splats/meshes on real terrain.
+- **speech-mcp + fleet voice bus ↔ Realtime agent.** GEV's 30-tool catalog + `TOOL_SURFACES` is the model for our voice command bus members; borrow turn-cost metering ($2/$5 pattern) for local-LLM cost guards.
+- **aiwatcher-mcp ↔ cockpit headlines.** GEV already fuses Google News RSS + GDELT fallback for locality headlines; aiwatcher could supply the same slot fleet-side.
+- **devices-mcp / robotics teleop ↔ CCTV viewsheds.** VIEWSHED coverage volumes are the right primitive for our camera-coverage UI.
+
+## 3. Local run (verified recipe at HEAD)
+
+```powershell
+& "C:\Program Files\Git\cmd\git.exe" clone https://github.com/bilawalsidhu/gods-eye-view.git D:\Dev\repos\_upstream\gods-eye-view
+cd D:\Dev\repos\_upstream\gods-eye-view
+npm ci
+npm run doctor
+npm run dev   # http://localhost:4173 — Live Contacts / Space Missions / Environmental / Explore Manually
+```
+
+- Node 24.14+ or 26.x (25 is EOL, doctor warns). macOS: `./scripts/dev-fresh.sh` (Keychain pull, cache clear).
+- First keys to add (in-app POWER UP): Cesium ion token (3D), then OpenAI (voice), then AISStream/FIRMS/TomTom as needed.
+- **Do NOT chase:** commercial deploy without clearing OpenSky + TeleGeography + Google terms (§4 SECURITY_COSTS); LAN share without quotas/alerts/throttles.
+
+## 4. Open questions / follow-ups
+
+- [ ] Try MCP stdio against local dev + Claude Desktop; measure first-load + tool latency.
+- [ ] Prototype Vienna GTFS-RT in GEV transit provider; screenshot + note heap/FPS.
+- [ ] Compare GEV `groundCast`/`meshSampler` approach with worldlabs-mcp placement; write up delta.
+- [ ] Voice cost test: STD vs MINI tier on a scripted 5-turn session; record spend readout accuracy.
+- [ ] Watch upstream hosted version (Halfpixel) — may change self-host vs link tradeoff.

@@ -1,3 +1,13 @@
+---
+title: "Hierarchical Skill Trees (HST) — Fleet Taxonomy Standard"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Hierarchical Skill Trees (HST) — Fleet Taxonomy Standard
 
 **Status**: Active Fleet Standard
@@ -140,7 +150,7 @@ context and self-routes. No tool calls, no API — just structured context.
 
 ## 7. Fleet Deployment (Current State)
 
-The fleet's active skill depot at `C:\Users\sandr\.claude\skills\` already
+The fleet's active skill depot at `C:\Users\<user>\.claude\skills\` already
 implements HST with the following branches:
 
 | Branch | Leaf Count | Examples |
@@ -215,5 +225,5 @@ standard indefinitely without upstream adoption.
 
 ---
 
-**Author**: Sandra Schipal (HST concept), fleet deployment 2025-2026
+**Author**: Sandra S. (HST concept), fleet deployment 2025-2026
 **References**: `SKILLS_ECOSYSTEM_2026.md`, `anthropic-skills/agent_skills_spec.md`

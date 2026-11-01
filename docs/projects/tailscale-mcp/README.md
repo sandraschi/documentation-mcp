@@ -143,6 +143,7 @@ Set `TAILSCALE_API_KEY` and `TAILSCALE_TAILNET` in your environment or `.env` be
 | Webapp routes and ports | [docs/WEBAPP.md](docs/WEBAPP.md) |
 | Architecture | [docs/ARCHITECTURE_AND_DESIGN.md](docs/ARCHITECTURE_AND_DESIGN.md) |
 | Portmanteau tools (deep dive) | [docs/TAILSCALE_MCP_PORTMANTEAU_TOOLS.md](docs/TAILSCALE_MCP_PORTMANTEAU_TOOLS.md) |
+| **Troubleshooting (ACL ip-grant pitfall, iOS serve issues)** | **[docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)** |
 | Everything else | [docs/DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md) |
 | Contributing (uv, Ruff, tests) | [CONTRIBUTING.md](CONTRIBUTING.md) |
 

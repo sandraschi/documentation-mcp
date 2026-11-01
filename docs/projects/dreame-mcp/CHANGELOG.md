@@ -2,9 +2,131 @@
 
 All notable changes to dreame-mcp are documented here.
 
+## [Unreleased] - 2026-09-06 (honest status)
+
+### Fixed
+- **Status/health no longer blame missing credentials for an unreachable
+  robot**: `mode` is now `hybrid`/`local`/`cloud` when live, `offline` when
+  credentials exist but neither path answers, and `unconfigured` only when
+  `.env` truly has no credentials. The fake Battery-85%/idle stub dict is
+  deleted — `/api/v1/status` returns `success: false` with the real reason
+  (local UDP down at `DREAME_IP:54321` and/or the cloud login error), and
+  `/api/v1/health` keeps the startup snapshot (`did`, `cloud_error`,
+  `startup_error`) instead of blanking it.
+- **`.env` loads even when launched with the wrong working directory**:
+  `client_from_env()` falls back to the repo-root `.env` (fleet starters
+  launch `uvicorn dreame_mcp.server:app` from outside the repo, which used
+  to leave the backend credential-less).
+- **Docs**: Help → Troubleshoot tab, `docs/TROUBLESHOOTING.md`, and the mcd
+  project page now cover robot Wi-Fi loss (diagnose → Wi-Fi reset → re-pair
+  on 2.4 GHz → DHCP reservation → `DREAME_IP` update).
+
+### Gates
+ruff 0 · pytest 17 passed/4 skipped · biome clean · tsc 0
+
+## [0.2.0] - 2026-08-07 (polish pass)
+
+### Added
+- **data-testid on all 9 pages** (13 → 35): page containers, titles, and key controls
+  (controls-page/control-*, help-tab-*, logs-level/search, map-refresh, mission-header,
+  status-refresh, tools-copy, settings-llm-section) — every page ≥3, CUA/Playwright targetable
+- **`bun.lock`** committed (fleet Bun standard; migrated from package-lock.json)
+
+### Verified (were already present — earlier assessment false negatives)
+- 6+ chat example prompts with `data-testid="example-prompts"`
+- Chat LLM provider status dot (`llm-status-dot`, probes `/api/llm/providers`) + model dropdown
+
+### Gates (all pass)
+ruff 0 · pyright 0 · pytest 17 passed/4 skipped · tsc 0 · biome clean
+
+## [0.2.0] - 2026-08-06 (Hoover control + LiDAR map)
+
+### Fixed
+- **Robot control restored + LiDAR map download** via Dreame-native cloud (the saga end: the
+  Hoover/Dreame actually responds to commands and serves its floor map)
+- **All 13 HIGH + most MEDIUM findings from the 08-06 assessment closed in one burst**:
+  native pipeline (spec + run_server.py), port cluster 10894 everywhere (backend.rs, CSP,
+  cua config), API_BASE to backend, Tauri integration (zoom/status/restart), shutdown tool,
+  docstring SOTA, MCPB staging, docs/ + ONBOARDING, session injection (all 5 channels),
+  agentic workflow bug, T20 ruff, pyright dev dep + CI five-gate, free_port + health poll,
+  Zustand LLM store, Prefab status card, `dreame://status` resource, Playwright suite (5 tests),
+  renovate, Antigravity skill
+- Auth key logging downgraded to DEBUG boolean (no key prefix at INFO)
+- Exponential backoff on dashboard health poll (1s × 2^n)
+
+### Gates (all pass, 2026-08-07 re-assessment)
+ruff 0 · pyright 0 · pytest 17 passed/4 skipped · tsc 0 · biome clean (23 files)
+
+### Remaining (deferred, MEDIUM)
+data-testid sparse (13), no example prompts (6+ bar), `bun.lock` absent (npm-based),
+chat provider status indicator.
+
 ---
 
 ## [Unreleased]
+
+### Fixed — The Dreame Robo Hoover Saga (control + LIDAR map restored, 2026-08-06)
+
+- **Root cause**: `DREAME_REF_PATH` pointed at the upstream v1 ref clone
+  (`dreame-vacuum`), which renamed `DreameVacuumDreameHomeCloudProtocol` and
+  only ships the legacy Xiaomi auth — DreameHome accounts get 70016. On top of
+  that, the null-token UDP trick stopped working on current firmware.
+- **Fix**: `client.py` now auto-resolves a ref clone that ships the
+  Dreame-native class, builds a dedicated `_dreame_cloud` client
+  (`account_type="dreame"`, `api.dreame.tech`), routes commands via the
+  device's `bindDomain` host (`_host` → `dreame-iot-com-10000/...`), and falls
+  back to the cloud for status/control/map when local UDP fails.
+- **Result (live verified)**: status (battery 98%), control
+  (`find_robot` → code 0), and the full LIDAR map pipeline
+  (16,768 raw bytes → rendered PNG, 1 room) through `GET /api/v1/map`.
+- **Observability**: `/api/v1/health` now returns `control.available`,
+  `control.reason`, `cloud_error` (70016/2FA/captcha classified);
+  `scripts/discover.py` + `just check-discovery` (working LAN sweep).
+- See `docs/ROBO_HOOVER_SAGA.md` for the full story.
+
+### Added — 2026-08-06 (round 2)
+
+- **`show_dreame_status_app`** Prefab card tool (`app=True`) + **`dreame://status`**
+  resource; tool surface now 5 tools + 1 resource.
+- **Zustand LLM store** (`webapp/src/store/llm.ts`) shared by the chat and the
+  new Settings Local LLM section (provider status + model select with
+  `data-testid="llm-model-select"`).
+- **Playwright e2e** (`webapp/e2e/fleet.spec.ts`, 5 tests: health,
+  diagnostics, skills, SPA no-console-errors, sidebar nav walk) — 5/5 passing.
+- **`.agents/skills`** (Antigravity) + **`renovate.json`**; biome excludes
+  `dist/`/`test-results` build output.
+
+### Added — assfix 2026-08-06 (SOTA pass)
+
+- **Ports corrected fleet-wide**: backend default `10794` → `10894` (server.py,
+  justfile `start-hybrid`, prompts); `backend.rs` `BACKEND_PORT` `10700` → `10894`;
+  Tauri CSP `connect-src` → `127.0.0.1:10894`; `cua-nsis-config.json` backend port +
+  `nav_routes`; `Tools.tsx` SSE URL `10794` → `10894`.
+- **`GET /api/v1/diagnostics`** endpoint (tools, system info) for CUA-NSIS smoke testing.
+- **`GET /api/skills`** + `skill://dreame-operator/SKILL.md` resource (skill-first chat).
+- **`dreame_shutdown`** MCP tool + `POST /api/v1/shutdown` (graceful uvicorn exit).
+- **Docstring SOTA** on all four tools: `## Return Format`, `## Examples`,
+  `Annotated+Field` params, `Literal` operation enum, tool annotations.
+- **Webapp**: `API_BASE` → backend port `10894` (fixes prod/Tauri fetch), Tauri
+  `backend-status` listener + exponential-backoff health poll + Restart Backend
+  button + `data-testid` KPIs, `useZoom()` Ctrl+Scroll zoom, 4th chat personality
+  (Custom), 6 example prompts, LLM status dot.
+- **Native pipeline**: `run_server.py` (dual transport) + `dreame-mcp-backend.spec`
+  (PyInstaller) so `just build-native` can produce the embedded backend;
+  multi-layer `free_port()` + TCP health poll in `backend.rs`.
+- **Tooling**: `T20` in ruff select + per-file-ignores; `pyright` + `pre-commit`
+  dev deps; `.pre-commit-config.yaml` + `scripts/pre-commit-biome.ps1`;
+  `just serve` / `just test`; CI gains pyright + format steps and push/PR triggers.
+- **Repo hygiene**: `.gitattributes` (eol=lf), `.gitignore` (`reports/`, `*.mcpb`,
+  native artifacts; `uv.lock` un-ignored), `.mcpbignore` (webapp/, scratch/, *.bak),
+  `.windsurfrules`, `.github/copilot-instructions.md`, `.claude-plugin/` + hooks,
+  `.opencode/skills/session-context`.
+- **Docs**: `docs/CONFIGURATION.md`, `DEVELOPMENT.md`, `TOOLS.md`,
+  `TROUBLESHOOTING.md`, `ONBOARDING.md`; README/llms-full.txt synced.
+- **Fixes**: agentic workflow now reads real status (dict-vs-str bug); auth key no
+  longer logged at INFO; stdio transport uses `run_stdio_async()` (old
+  `fastmcp.cli.run_stdio` import was broken on 3.4.x); pyright clean (13 errors
+  fixed); biome clean (52 format/lint errors fixed).
 
 ### Fixed — LIDAR map (download + image) + local/hybrid (Tasshack)
 

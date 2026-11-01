@@ -1,4 +1,4 @@
-﻿# Edge Bookmark MCP Server
+# Edge Bookmark MCP Server
 
 A comprehensive Model Context Protocol (MCP) server for Microsoft Edge bookmark management, built with FastMCP 2.12.2.
 
@@ -24,7 +24,7 @@ A comprehensive Model Context Protocol (MCP) server for Microsoft Edge bookmark 
 
 1. **Clone or download** this repository:
    `ash
-   git clone https://github.com/stephanschipal/edge-bookmark-mcp.git
+   git clone https://github.com/stephans/edge-bookmark-mcp.git
    cd edge-bookmark-mcp-server
    `
 
@@ -203,8 +203,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 📞 Support
 
 For issues and questions:
-- **GitHub Issues**: https://github.com/stephanschipal/edge-bookmark-mcp/issues
-- **Email**: stephanschipal@hotmail.com
+- **GitHub Issues**: https://github.com/stephans/edge-bookmark-mcp/issues
+- **Email**: stephans@hotmail.com
 
 ---
 

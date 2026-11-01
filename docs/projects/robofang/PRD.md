@@ -1,7 +1,7 @@
 # PRD: RoboFang Sovereign Orchestration Hub
 
 **Status**: ACTIVE DRAFT (Phase 4)  
-**Owner**: Sandra Schipal  
+**Owner**: Sandra S.  
 **Vision**: A reductionist, industrial-grade orchestration layer for a federated fleet of MCP servers, enabling autonomous synthesis, hardware synchronization, and sovereign observability.
 
 ---
@@ -68,7 +68,7 @@ The simulation pipeline runs: `worldlabs-mcp` → Marble API → SPZ (visual) + 
 
 ### Frontend Stack
 
-React + Vite + TypeScript with Vanilla CSS (glassmorphism, dark mode, micro-animations). Port allocation: **10864** (Sovereign Dashboard frontend), **10865** (RoboFang API / backend bridge).
+React + Vite + TypeScript with Vanilla CSS (glassmorphism, dark mode, micro-animations). Port allocation: **10870** (Hub web dashboard), **10871** (Bridge API / FastMCP), **10872** (Supervisor), **10873** (robofang-mcp thin server).
 
 ### Infrastructure
 

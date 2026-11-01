@@ -4,6 +4,7 @@
 **Date:** 2026-07-12
 **Status:** Fixed fleet-wide (94 files across ~50 repos)
 **Tags:** fastmcp, http_app, mount, 404, MCP transport
+**Related:** [BUG-038](./BUG-038_http_app_lifespan_not_wired.md) — same mount call site, different failure mode. Fixing `path="/"` alone is NOT sufficient: the mounted sub-app's lifespan must also be folded into the parent's, or the session manager never starts and requests still fail (`McpError: Session terminated`) even with the correct path.
 
 ## Symptom
 

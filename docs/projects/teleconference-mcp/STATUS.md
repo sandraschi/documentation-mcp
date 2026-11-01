@@ -162,6 +162,19 @@ Self-hosted video conferencing platform with AI voice agent ("Visio"), built on 
 
 ---
 
+## Authentication (Authentik)
+
+Dashboard login is optional SSO via [Authentik](https://goauthentik.io/) (self-hosted
+identity provider) through next-auth v5 OIDC (`apps/web/auth.ts`, `apps/web/proxy.ts`).
+Dev defaults to **no login** (`AUTH_DISABLED=true` in `start.ps1` / `docker-compose`;
+explicit env wins). Secured deployments set `AUTH_DISABLED=false` + `AUTH_SECRET`
+(≥32 chars, hard-required) + `AUTH_AUTHENTIK_ID/SECRET/ISSUER`. History: a missing-secret
+crash used to fire before the login redirect, hiding the wall; fixing the crash exposed
+it, and the dev default was switched to bypass (2026-09-06). Always-public paths:
+`/auth/*`, `/join/*`, `/api/health`, `/api/discovery`.
+
+---
+
 ## Integration Points
 
 - **MCP Central Docs**: `integrations/livekit/` (integration guide, MCP patterns)

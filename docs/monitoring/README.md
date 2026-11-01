@@ -1,5 +1,7 @@
 # Unified Monitoring Stack
 
+**Private — Sandra S. + collaborators only. Not for public distribution.**
+
 **One Grafana. One Loki. One Prometheus. For the entire fleet.**
 
 This directory contains the **shared observability stack** for all MCP repositories,

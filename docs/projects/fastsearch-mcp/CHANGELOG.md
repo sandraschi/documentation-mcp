@@ -1,13 +1,3 @@
-
-## [Unreleased] — 2026-06-14
-
-### Added
-- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
-- PyInstaller frozen backend embedded in NSIS installer
-- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
-- `just cua-nsis-test` recipe
-- Tauri CORS: `tauri://localhost` origins for WebView API access
-- `GET /api/v1/diagnostics` endpoint for CUA verification
 # Changelog
 
 All notable changes to FastSearch MCP will be documented in this file.
@@ -15,105 +5,57 @@ All notable changes to FastSearch MCP will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.7.0] — 2026-09-08
 
 ### Added
-- **MFT_RECORD_HEADER USA fixup** - Apply Update Sequence Array fixup to each MFT record before parsing attributes. Without this, the last 2 bytes of each 512-byte sector contained fixup values instead of real data, corrupting attribute traversal when attributes crossed sector boundaries.
+- **Python REST bridge is now a proper NSSM Windows service** (`fastsearch-mcp`, distinct from the existing native `FastSearchMCP` NTFS service). Previously just a bare `uv run uvicorn ...` process started by hand — nothing restarted it on crash or reboot, and the fleet launcher's port-conflict check treated it as an ordinary squatter rather than a persistent backend. `fleet-start.config.ps1` now declares `Kind='nssm'` with an explicit `NssmService` override.
+- **`$DATA` attribute parsing for authoritative file size** (`service/src/mft_search.cpp`): the scanner previously read size only from `$FILE_NAME`'s cached `RealSize`/`AllocatedSize` fields, which NTFS doesn't reliably keep current on every write — most files reported size 0 or a stale value. `ParseDataAttribute()` reads size directly from the unnamed `$DATA` attribute (resident `ValueLength`, or the fixed-offset `RealSize`/`AllocatedSize` header fields for non-resident — no data-run decoding needed just for size).
+- **Real parent-chain path resolution** (`ResolveFullPath()`): files previously reported only a bare filename with an unresolved `parent_dir` MFT reference — nothing showed a real folder, so results couldn't be located in Explorer. Walks the `$FILE_NAME` `ParentDirectory` chain up to the volume root, per-thread cached (each scan worker already owns its own volume handle, so no locking needed). Validated with three checks before trusting a resolved ancestor: valid "FILE" signature, sequence number matches what the reference expected (catches a recycled record slot), and the record's own self-reported `RecordNumber` matches what was requested (catches a read landing at the wrong physical offset entirely).
 
 ### Fixed
-- **C++ MFT_RECORD_HEADER struct misalignment** - The `WORD Flags` field was missing between `AttributeOffset` (0x14) and `BaseRecordReference` (0x18), placing it at offset 0x26 instead of 0x16. This caused the record-in-use check (`header->Flags & 0x0001`) to read the high word of the MFT record number instead of the actual flags, silently skipping ~50% of records. (mft_search.cpp)
-- **Session management completely broken** - `mcp_server.py` popped `session_id` from params twice, discarding the first session and creating a brand-new UUID session on every request. Session state, history, and search history were all lost. (mcp_server.py:233-243)
-- **Windows named pipe handle leak** - On pipe I/O errors, `self.connected` was set to `False` but `self.handle` was never closed via `CloseHandle`, leaking the kernel handle. (pipe_client.py:196-203)
-- **Blocking CreateFile in async connect** - `win32file.CreateFile` for named pipes can block for seconds waiting for an available instance, freezing the asyncio event loop. Wrapped in `run_in_executor` with `asyncio.wait_for`. (pipe_client.py:75-88)
-- **Service arguments passed as joined string** - `win32serviceutil.StartService` received `" ".join(args)` which caused pywin32 to iterate over individual characters, turning `["--verbose", "--port=8080"]` into 20 single-character arguments. (service_manager.py:324)
-- **Blocking subprocess.run in async functions** - `subprocess.run` calls in `get_service_status`, `start_service`, and `stop_service` blocked the event loop for up to 30 seconds. Wrapped in `asyncio.to_thread`. (service_client.py)
-- **Date filters silently dropped on parse failure** - Invalid date strings (typos, wrong formats) returned `None` from the parser, which was silently ignored. Users got unfiltered results instead of an error. All six date parameters now validated at tool entry with immediate error return. (advanced_search.py, file_search.py)
-- **Multi-drive search double truncation** - `file_name_search.py` unnecessarily truncated combined results to `max_results` after per-drive limits were already applied, discarding results from later drives. (file_name_search.py:269-270)
-- **New files reported as "updated"** - `integrity_checker.py` called `add_file` (which inserted into `self.records`) before checking `file_path_str in self.records`, making the check always True and the "added" code path dead when `update_existing=True`. (integrity_checker.py:381-388)
-- **CSV/TSV include_metadata silently discarded** - Metadata lines appended to `content_lines` were never joined into the final CSV/TSV output (only used for markdown/Pandoc). Prepend metadata to CSV/TSV string output. (search_result_export.py:418-434)
-- **PYTHONIOENCODING=ascii:replace corrupts stderr** - Set `PYTHONIOENCODING=ascii:replace` in `__main__.py`, silently replacing all non-ASCII characters with `?` in log/error output. Changed to `utf-8:replace`. (__main__.py:26)
-- **_sanitize_for_json corrupts bytes** - Decoded arbitrary bytes as ASCII with replacement, silently corrupting binary data. Now uses `base64.b64encode`. (base.py:90-91)
-- **UTF-8 truncation reclassifies text as binary** - File truncation at `MAX_TEXT_BYTES` could land mid-multi-byte character, causing `UnicodeDecodeError`. The file was reclassified as binary (base64 blob). Now trims to a clean character boundary. (api_bridge.py:143-149)
-- **mcp.disable() failures hidden silently** - Bare `except Exception: pass` swallowed all failures from `mcp.disable()`, leaving unwanted tools registered. Now logs a warning and catches only `LookupError`. (tools/__init__.py:154-158)
+- **Cushion treemap layout was a flat horizontal strip, not a 2D squarified layout** (`web_sota/src/components/CushionTreemap.tsx`): `layoutSquarified` was named and commented as the Bruls/Huizing/van Wijk algorithm but didn't implement it — it placed every child of a node in a single row or column based on one global width-vs-height check, a 1D proportional strip rather than 2D squarification. Replaced with an actual squarified layout: builds one row at a time along the container's current shorter side, greedily adding children only while it doesn't worsen the row's worst aspect ratio, closes the row, recurses into the remainder.
+- **Path resolution was fabricating wrong ancestor folder names**: live verification found paths like `C:\PCPKSP\...` and `C:\AggregatorStorage\...` that don't exist anywhere on the volume (confirmed via direct filesystem enumeration). Root cause: `ReadMftRecordFromVolume`'s offset math assumes the volume's `$MFT` is one contiguous extent, which holds for the main sequential scan but not for an ancestor's record number reached by random access on a fragmented `$MFT` — the read can land at the wrong physical offset. Two confirmed failing cases both diagnosed to landing on MFT record #0 (the `$MFT`'s own metadata record), which coincidentally has a valid signature and sequence number, passing the checks already in place. Added a third check (self-reported `RecordNumber` must match what was requested) that catches this. **Known limitation, not fully solved**: this makes the resolver fail safely rather than fabricate a wrong path, but ancestors outside the first `$MFT` extent still can't be resolved and fall back to a flat filename. Full resolution needs the `$MFT`'s own data-run list decoded — scoped as a follow-up, not attempted here given the risk of shipping another unverified native fix.
 
-### Changed
-- **Version bump** - 0.4.0 → 0.5.0
-- **FastMCP upgrade 3.1 → 3.2** - Dependency updated to `fastmcp>=3.2.0,<4`
-  - **Sampling**: Tools now use `ctx: Context = None` pattern for client-side LLM sampling via `ctx.sampling()`
-  - **CodeMode**: New `--agentic` CLI flag (and `MCP_AGENTIC=true` env) enables agentic discovery via `CodeMode().attach(mcp)`, collapsing tools into search + execute meta-tools
-  - **Prompts**: 3 `@mcp.prompt()` templates registered: file search guide, disk analysis guide, service troubleshooting
-  - **Skills**: 3 `@mcp.skill()` definitions: find recently modified files, cleanup disk space, forensic file audit
-  - **Transport**: Updated to support FastMCP 3.2 async APIs (`run_stdio_async`, `run_http_async`)
-- **mcpb.json** - Updated fastmcp constraint to `>=3.2.0,<4`, version bumped to 1.1.0
-- **ntfs.py** - Changed `bytes(n)` to `bytearray(n)` for mutable DeviceIoControl output buffer (was passing immutable bytes object).
-- **Documentation updated** - Stale FastMCP 2.13 references replaced with 3.2 throughout
-
-## [0.4.0] - 2025-11-15
+## [0.6.0] — 2026-08-25
 
 ### Added
-- **Fast service availability checks** - Optimized from 5 seconds to <1ms per check
-  - Fast pipe connection check (fails immediately if service is down)
-  - 2-second caching to avoid repeated checks on rapid searches
-  - Fallback to process check only if pipe check is ambiguous
-- **Improved error messages** - Clear, user-friendly error messages with step-by-step recovery instructions
-  - Service-required flags in search responses
-  - Tool suggestions for troubleshooting (`service_status`, `start_service`, etc.)
-- **Comprehensive test coverage** - 18/18 tests passing
-  - Tests for different file patterns (*.py, *.cpp, *.txt, etc.)
-  - Tests for different drives (C:\, D:\, etc.)
-  - Tests for different start directories
-  - Tests for search all drives functionality
-
-### Changed
-- **Service checks performance** - Reduced from 5 seconds to <1ms overhead per search
-- **Error handling** - More explicit and actionable error messages
-- **Search response format** - Added `service_required` flag and `suggestion` field
-
-### Removed
-- **Fallback code** - Removed all treewalking fallbacks that violated architecture
-  - Removed `_fallback_search()` dead code from `service_client.py`
-  - Removed `basic_file_search()` treewalker from `mcp_server.py`
-  - Removed `fastsearch.search_basic` tool registration
-- **Python fallback references** - Updated all documentation to reflect direct MFT access only
+- **Automated First-Time Onboarding (`just onboard`)**: Created single-UAC onboarding pipeline (`scripts/onboard-first-time-user.ps1`) that prompts for Administrator elevation **ONCE** via UAC to register & start the `FastSearchMCP` background Windows Service under `LocalSystem`, followed by automated unprivileged Win32 Named Pipe IPC diagnostics (`\\.\pipe\FastSearchMCP`).
+- **4 Windows Explorer Result Display Modes**: Added layout view switcher toolbar to Search page featuring **Details View** (Sortable Table), **Grid / Medium Icons View** (Responsive Cards), **Tiles View** (Multi-column Cards), and **Compact List View** (High-density Rows).
+- **Configurable Results Pagination & Max Limits**: Added switchable page size selector (`25`, `50`, `100`, `250`, `500` per page) and configurable MFT search limit cap (`100`, `250`, `500`, `1,000`, `2,000`, `5,000`, `10,000`).
+- **Advanced Sorting & Multi-Dimensional Filtering**: Added multi-attribute sorting (`Sort: Name`, `Sort: Path`, `Sort: Size`, `Sort: Type/Extension`, `Asc/Desc`), category filter pills, size range filter (`Small < 1MB`, `Medium 1-100MB`, `Large > 100MB`), and live search input.
+- **Live System Logging for Web App Logs Page (`/logs`)**: Attached custom `RingBufferLogHandler` to Python `logging` framework (`fastsearch_mcp` and `uvicorn`), populating real-time system logs (MFT searches, tool calls, service checks, exceptions) on the `/logs` page with exact timestamps, log levels, file origins, and line numbers.
+- **Comprehensive Real-Time Service Diagnostics & Event Logs**: Surfaced SCM/UAC execution traces, exit codes, stderr, and C++ Windows Event Log entries under source `FastSearchMCP` via `GET /api/service/logs` and real-time UI diagnostic drawer.
 
 ### Fixed
-- **Search functionality** - All search tools now fully operational
-  - File searches working across different patterns, drives, and directories
-  - Service integration complete - FastSearch Windows service running and responding
-  - Direct NTFS MFT access verified and working
+- **Web UI "Start Service" UAC Elevation**: Added automatic fallback to UAC elevation prompt (`Start-Process powershell -Verb RunAs`) when starting service from unprivileged Web UI.
+- **Service Disconnection Diagnostics**: Clarified privilege separation architecture notices across UI, `help.tsx`, and CLI scripts.
 
-### Documentation
-- Created `CHANGELOG.md` - Project changelog following Keep a Changelog format
-- Created `docs/RECENT_IMPROVEMENTS.md` - Comprehensive documentation of recent improvements
-- Created `docs/SERVICE_AVAILABILITY_CHECKS.md` - Detailed explanation of service check flow
-- Updated `README.md` - Reflects current operational status
-- Updated `docs/STATUS_REPORT.md` - Updated with recent improvements and current status
-- Updated `docs/TECHNICAL_ARCHITECTURE.md` - Removed fallback references, updated status
-- Updated `docs/PRODUCT_REQUIREMENTS.md` - Updated to version 2.2, reflects production-ready status, removed fallback references
-
-## [0.4.0] - 2025-11-15
+## [0.5.1] — 2026-08-25
 
 ### Added
-- Direct NTFS MFT access implementation
-- FastMCP 2.13 compliant MCP server
-- Comprehensive tool suite (18 tools)
-- Service management tools
-- Advanced search with MFT attribute filtering
+- **Dedicated SOTA Search Page (`/search`)**: Built new dedicated file search page in `web_sota` featuring live service health status badge with one-click service start, instant drive root shortcuts (`C:\`, `D:\`, `d:\Dev\repos`), glob/regex query input, category filter pills (Code, Docs, Images, Media, Archives, Apps), interactive data table with sorting and pagination, file preview drawer (text, hex, image), direct CSV/JSON exports, and `localStorage` search history.
+- **Standalone C++ Server Mode**: Added `--standalone` / `standalone` / `console` interactive mode to `FastSearchServiceNew.exe` with `SetConsoleCtrlHandler` for Ctrl+C interception, allowing execution directly in terminal without administrative Windows SCM setup.
+- **Flexible CLI Argument Parsing**: Updated C++ `wmain` in `fastsearch_service.cpp` to parse both standard commands (`install`, `uninstall`, `start`, `stop`) and flag-style commands (`--install`, `--uninstall`, `--start`, `--stop`).
+- **Direct REST API Endpoints**: Added dedicated REST API routes in `api_bridge.py`: `POST /api/search`, `GET /api/service/status`, `POST /api/service/start`, `POST /api/service/stop`, `POST /api/service/restart`, and `GET /api/file`.
+- **500 Error Crash Prevention**: Wrapped REST API bridge and `call_tool` exception handlers to return structured `{ "success": false, "service_down": true, "error": "..." }` responses instead of unhandled HTTP 500 server crashes.
 
-### Changed
-- Architecture to direct MFT access only (no indexing, no caching)
+### Fixed
+- **Dashboard UI Mock Gaslights**: Refactored `dashboard.tsx` to remove all static hardcoded mock numbers (records, latency, fake USN consistency claims). It now queries live service status from `/api/service/status` in real time.
+- **Unit Test Suite Modernization**: Updated Pytest unit tests in `tests/unit/` (`test_comprehensive.py`, `test_fastsearch.py`, `test_implementation.py`, `test_exceptions.py`, `test_ntfs_tools.py`, `test_service_tools.py`), reaching 100% test pass rate (17/17 passed).
 
-## [0.3.0] - Previous Release
+## [0.5.0] — 2026-06-14
 
 ### Added
-- Initial MCP bridge implementation
-- Basic file search functionality
-- Service infrastructure
+- **FastMCP 3.2 Upgrade**: Sampling (`ctx.sampling()`), CodeMode (`--agentic`), `@mcp.prompt()`, and `@mcp.skill()` support.
+- **MFT_RECORD_HEADER USA fixup**: Apply Update Sequence Array fixup to each MFT record before parsing attributes.
 
----
+### Fixed
+- **C++ MFT_RECORD_HEADER struct misalignment**: Fixed `WORD Flags` offset to prevent skipping records.
+- **Session management**: Fixed session popping bugs in `mcp_server.py`.
+- **Windows named pipe handle leak**: Fixed kernel handle leak in `pipe_client.py`.
 
-[Unreleased]: https://github.com/sandraschi/fastsearch-mcp/compare/v0.5.0...HEAD
-[0.5.0]: https://github.com/sandraschi/fastsearch-mcp/releases/tag/v0.5.0
-[0.4.0]: https://github.com/sandraschi/fastsearch-mcp/compare/v0.3.0...v0.4.0
+## [0.4.0] — 2025-11-15
 
-
+### Added
+- **Fast service availability checks**: Optimized service health check to <1ms per check.
+- **Improved error messages**: Step-by-step recovery instructions when service is offline.

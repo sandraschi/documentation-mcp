@@ -1,7 +1,94 @@
 
-## [Unreleased] — 2026-06-14
+## [0.4.0-beta] — 2026-08-25
 
 ### Added
+- **1-Click Photocopy Button**: Added a dedicated **Photocopy** button on the Dashboard for immediate 1-click WIA scanning and direct physical printer output with a **Preserve Scan in Depot** toggle option to keep or discard the raw scan file.
+- **Preprinted Form Overlay Filler (`/forms`)**: Dedicated 4-step webapp workflow for official preprinted paper forms (e.g. **Austrian Meldezettel**). Features WIA empty form scanning, layout OCR field elicitation, interactive text field input querying, dual print mode (overlay-only vs full document print), and 1-click template saving to Corpus Depot.
+- **Searchable, Sortable, Filterable Corpus Depot (`/depot`)**: Dedicated SQLite document & form layout repository with full-text search, multi-backend filtering, sorting (date, title, backend), document drawer, and 1-click template reload.
+- **Quick Scan Raw Webpage (`/scan-viewer`)**: One-click raw document scan page with Print, Download/Export, Email, Discord Link embed, and Copy URL action bar.
+- **Corpus Depot REST API**: Added `GET /api/corpus`, `GET /api/corpus/{id}`, `POST /api/corpus/register`, and `DELETE /api/corpus/{id}` endpoints.
+
+### Fixed
+- **[CRITICAL] Unlimited-OCR `transformers` Compatibility Patch**: Added automatic monkey patching for `is_torch_fx_available` in `startup_bootstrap.py` and `unlimited_ocr_backend.py` to fix `cannot import name 'is_torch_fx_available'` on newer `transformers` releases.
+- **[CRITICAL] Unlimited-OCR Dynamic Dependencies**: Added `addict`, `easydict`, and `matplotlib` to `pyproject.toml` dependencies and backend spec checks.
+
+## [0.3.0-beta] — 2026-08-25
+
+### Added
+- **Digital PDF Fast Text Extraction**: `extract_pdf_digital_text()` in `DocumentProcessor` checks PDF text density. If $\ge 95\%$ digital text is found, native text is extracted directly via PyMuPDF (`fitz`), bypassing visual OCR and reducing execution time significantly.
+- **Multi-Format Book Export**: Added `assemble_markdown()` to `book_assembler.py` to allow exporting scanned books to consolidated Markdown documents in addition to EPUB.
+- **Hybrid Content Auto-Routing**: Added domain-specific backend routing instructions (tables $\rightarrow$ PaddleOCR-VL/MinerU, math $\rightarrow$ olmOCR, handwriting $\rightarrow$ EasyOCR, body text $\rightarrow$ PP-OCRv5/Tesseract) to `execute_agentic_workflow`.
+- **Corpus Auto-Indexing**: Added `auto_index=True` option to `process_document` to automatically index extracted text into SQLite `manage_corpus`.
+- **Unified Ground Truth Diff Generator**: Added `diff_patch` generation to `validate_ocr_accuracy()` in `_quality.py`.
+
+### Fixed
+- **[CRITICAL] Backend Lazy Loading Probing**: Refactored `BackendManager._is_backend_available()` to probe module specs (`importlib.util.find_spec`) without instantiating backend classes or triggering premature PyTorch imports on startup.
+- **[CRITICAL] `ingest_book(full_pipeline)` Context Bug**: Fixed context resolution by passing `backend_manager` instance directly to `_handle_full_pipeline`.
+- **[HIGH] Async Event Loop Non-Blocking**: Offloaded synchronous model engine loading and tensor inference to worker threads via `asyncio.to_thread`.
+- **[HIGH] FastAPI Lifespan Handler**: Replaced deprecated `@app.on_event` startup/shutdown handlers in `backend/app.py` with FastAPI `asynccontextmanager` `app_lifespan`.
+- **[MEDIUM] `validate_accuracy` Input Safety**: Updated `ocr_result` handling in `ocr_tools.py` to safely process both `dict` and `str` inputs.
+- **[MEDIUM] VRAM Memory Protection**: Fixed logger format string bug in `ModelManager._check_memory_pressure()` to reliably trigger LRU model unloading when VRAM usage exceeds 85%.
+
+## [0.2.0-beta] — 2026-07-21
+
+### Added
+- **FastMCP 3.4+ feature set**: Skills directory, Prefab UI cards, parameterized prompts, ctx.sample() support
+  - `src/ocr_mcp/skills/ocr-expert/SKILL.md` — comprehensive skill with backend table, workflows, config
+  - `resource://ocr/skills` now reads dynamically from skills directory
+  - `skill://{name}` parameterized resource for per-skill access
+  - `show_health_card` and `show_backends_card` — rich Prefab UI cards for in-chat status
+  - All 5 prompts now accept domain-specific parameters (backend, dpi, goal, etc.)
+  - Agentic workflow uses `ctx.sample()` (FastMCP 3.4+) with fallback to `context.sample_step()` (3.1)
+- **CORS fleet-standard** — proper allow_origin_regex covering Tailscale, LAN, CGNAT
+- **transport.py** — uvicorn.Server on mcp.http_app() replacing run_http_async
+- **.cursorrules**, **.env.example** — session context injection and config template
+- **PRD.md**, **STATUS.md**, **llms-full.txt**, **WEBAPP_REDESIGN.md** — documentation
+
+## [Unreleased]
+
+### Added
+- **Form reconstruction spec** (`SPEC.md`, `IMPLEMENTATION_PLAN.md`) — scan paper forms, detect fields (checkboxes, text inputs, radio buttons, signatures), reconstruct as fillable ODT via libreoffice-mcp bridge. Dual print modes: full document or entries-only overlay for physical form overprinting. Cross-repo FormReconstruction Pydantic data contract.
+
+### Fixed (2026-07-25 assfix)
+- **[CRITICAL]** `native/build.ps1` now bundles `.env.example` instead of `.env` (was leaking developer API keys to all users)
+- **[CRITICAL]** `native/tauri.conf.json` resources now reference `.env.example` not `.env`
+- **[CRITICAL]** `scripts/scanner_bridge_server.py` replaced `allow_origins=["*"]` with fleet-standard CORS (Tailscale, LAN, Tauri origins)
+- **[HIGH]** `run_server.py` added CORSMiddleware (was missing entirely; Tauri WebView2 would get CORS errors)
+- **[HIGH]** 13 sites in scanner.tsx, dashboard.tsx, settings.tsx: replaced silent `.catch(() => {})` and `.json().catch(() => ({}))` with `console.error()` -- backend errors now visible in console
+- Session injection: added `.claude-plugin/plugin.json`, `hooks/hooks.json`, `.windsurfrules`, `.opencode/skills/ocr-mcp/SKILL.md`, `.github/copilot-instructions.md`
+- `shutdown_server` MCP tool added (requires confirm=True)
+- `_error_response()` auto-logging helper added to `error_handler.py`
+- `web_sota/start.ps1` replaced fixed 8s sleep with TCP health poll (60s retry loop)
+- Fixed bare `# type: ignore[return-value]` at `transport.py:169`
+- 7 `except Exception: pass` locations replaced with `logger.exception()` / `logger.warning()`
+- Pre-existing `scanner_watcher.py` lint issues fixed (unused ImageChops import, zip strict=False)
+- `reports/` added to `.gitignore`
+  polls for document placement on flatbed scanners via preview-scan image diff detection.
+  Toggle from Dashboard or Settings. When a document is detected, triggers full scan + OCR
+  with the configured backend. Two modes: `preview` (universal, image-hash comparison) and
+  `button` (WIA button event polling, scanner-dependent).
+- **Book scanning guide** (`docs/BOOK_SCANNING.md`) — history of home book scanning,
+  CZUR recommendations, V-cradle DIY, cut-away-spine method, and integration with OCR-MCP's
+  auto-scan and folder watching.
+
+### Added
+- **Unlimited-OCR backend** (`unlimited_ocr_backend.py`) — Baidu one-shot long-horizon document parsing
+  - 3B params, MIT license, arXiv:2606.23050
+  - Two inference modes: gundam (cropped, 640px) and base (full, 1024px)
+  - Unbounded-length document parsing without image resolution limits
+  - ParseBench: 46.17 mean, 86.81 text content score
+  - Uses custom `model.infer()` API with trust_remote_code=True
+  - Requires: torch>=2.10.0, transformers>=4.57.1, einops, addict, easydict
+  - Backend name: `unlimited-ocr`, aliases: `unlimited`, `baidu`
+  - HF: `baidu/Unlimited-OCR`
+- **Webapp streamlined** — removed legacy `frontend/` directory, reduced sidebar to 5 core pages
+  - Dashboard is now the one-stop shop: file drop zone, scanner selector, backend selector, Quick Scan & OCR button, inline result editor with Copy/.txt/.md export
+  - Live KPI cards from `/api/health` and `/api/backends`
+  - Sidebar collapse toggle moved to top (fleet standard)
+  - Topbar live backend health indicator
+  - Routes removed: `/import`, `/scanner`, `/scan-viewer`, `/process` (functionality absorbed into dashboard)
+  - See `docs/WEBAPP_REDESIGN.md` for full details
+
 - Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
 - PyInstaller frozen backend embedded in NSIS installer
 - CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
@@ -347,4 +434,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Mistral OCR 3: Ready (API-based, requires key)
   - Qwen-Image-Layered: Available (model not found)
   - EasyOCR: Available (Unicode issues)
-

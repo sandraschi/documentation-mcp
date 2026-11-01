@@ -1,3 +1,13 @@
+---
+title: "Fleet Project Page Standard"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-08-02
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Fleet Project Page Standard
 
 **Status**: ACTIVE — applies to all sandraschi MCP server repos
@@ -66,7 +76,7 @@ Path: `mcp-central-docs/operations/fleet-registry.json`
   `operations/WEBAPP_PORTS.md` AND every other `fleet-registry.json`
   entry before assigning. This is the single most common failure (see
   learnbot-mcp/sketchboard-excalidraw-mcp collision above, and the
-  earlier games-app port collision documented in learnbot-mcp's own
+  earlier ai-games-collection port collision documented in learnbot-mcp's own
   CHANGELOG.md — this class of bug has now recurred at least three times).
 - `category` picked from the same taxonomy `sync-fleet-registry.ps1`
   already uses (see its `Get-CategoryFromName` function) — don't invent

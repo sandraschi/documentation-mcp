@@ -1,7 +1,8 @@
 # Shelf Remote
 
-**Model:** One-time $2.99–4.99 (or “buy me a coffee” IAP)  
+**Model:** One-time $2.99–4.99 (or "buy me a coffee" IAP)
 **Comps:** Official Plex/Jellyfin apps (heavy); you want **minimal remote**
+**Target:** Xcode 27.2, iOS 27 SDK
 
 ## Product
 
@@ -11,7 +12,7 @@ Connect to **one** Plex or Jellyfin server (URL + token). Browse libraries, play
 
 | Piece | Source |
 |-------|--------|
-| API knowledge | [plex-mcp](../../integrations/plex-mcp.md), jellyfin-mcp project docs |
+| API knowledge | [plex-mcp](../../../integrations/plex-mcp.md), jellyfin-mcp project docs |
 | Dark App Factory #06 | Plex Zero-Remote concept |
 
 ## Monetization
@@ -36,3 +37,7 @@ Hard to win on features vs official apps; win on **speed and minimal UI** for yo
 ## Legal
 
 - Not affiliated with Plex/Jellyfin — use trademarks correctly in listing
+- Declare local-network access for LAN server discovery (`NSLocalNetworkUsageDescription`)
+
+---
+*Status: spec only, no repo. Last updated: 2026-10-28.*

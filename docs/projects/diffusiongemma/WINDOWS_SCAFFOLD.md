@@ -37,7 +37,7 @@ Visual Studio 2022 Build Tools with "Desktop development with C++" workload is r
 ### 2. Clone llama.cpp diffusion branch
 
 ```powershell
-Set-Location C:\Users\sandr\dev
+Set-Location C:\Users\<user>\dev
 git clone https://github.com/ggml-org/llama.cpp.git llama.cpp-diffusion
 Set-Location llama.cpp-diffusion
 git fetch origin pull/24423/head:diffusion-support
@@ -66,8 +66,8 @@ Verify:
 ### 4. Download GGUF weights
 
 ```powershell
-New-Item -ItemType Directory -Path C:\Users\sandr\dev\models\diffusiongemma -Force
-Set-Location C:\Users\sandr\dev\models\diffusiongemma
+New-Item -ItemType Directory -Path C:\Users\<user>\dev\models\diffusiongemma -Force
+Set-Location C:\Users\<user>\dev\models\diffusiongemma
 
 # Requires huggingface-cli (pip install huggingface_hub)
 py -m pip install huggingface_hub
@@ -77,10 +77,10 @@ py -m huggingface_hub.cli download unsloth/diffusiongemma-26B-A4B-it-GGUF diffus
 ### 5. Run interactive chat
 
 ```powershell
-Set-Location C:\Users\sandr\dev\llama.cpp-diffusion
+Set-Location C:\Users\<user>\dev\llama.cpp-diffusion
 
 .\build\bin\Release\llama-diffusion-cli.exe `
-  -m C:\Users\sandr\dev\models\diffusiongemma\diffusiongemma-26B-A4B-it-Q4_K_M.gguf `
+  -m C:\Users\<user>\dev\models\diffusiongemma\diffusiongemma-26B-A4B-it-Q4_K_M.gguf `
   -ngl 99 `
   -cnv `
   -n 512
@@ -92,7 +92,7 @@ Watch the canvas denoise in real time — useful for understanding block diffusi
 
 ```powershell
 .\build\bin\Release\llama-diffusion-cli.exe `
-  -m C:\Users\sandr\dev\models\diffusiongemma\diffusiongemma-26B-A4B-it-Q4_K_M.gguf `
+  -m C:\Users\<user>\dev\models\diffusiongemma\diffusiongemma-26B-A4B-it-Q4_K_M.gguf `
   -ngl 99 `
   -cnv `
   --diffusion-visual
@@ -140,7 +140,7 @@ VRAM at FP16 will not fit on 24 GB. Use 4-bit quantization (bitsandbytes) or sti
 ## Directory Layout (Proposed)
 
 ```
-C:\Users\sandr\dev\
+C:\Users\<user>\dev\
 ├── llama.cpp-diffusion\          # PR branch build
 │   └── build\bin\Release\
 │       └── llama-diffusion-cli.exe

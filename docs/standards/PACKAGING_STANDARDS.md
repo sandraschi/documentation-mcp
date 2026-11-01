@@ -1,3 +1,13 @@
+---
+title: "Packaging & Discovery Standards (SOTA)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-07-28
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Packaging & Discovery Standards (SOTA)
 
 ## 0. Two-Track Distribution (READ FIRST)
@@ -7,14 +17,15 @@ Every fleet server has **two distinct install surfaces** that solve different pr
 | Track | Artifact | Solves | Does NOT solve |
 |---|---|---|---|
 | **Claude Desktop MCP install** | `.mcpb` bundle | Single-click server registration in Claude Desktop; env var prompting; curated directory listing | Python runtime; webapp; scheduler; naked-PC prereqs |
-| **Full app install (webapp + backend)** | Tauri NSIS `*-setup.exe` (preferred) or `start.bat` + `start.ps1` | Everything — one installer or dev stack; webapp + MCP server | Nothing extra needed on naked PC (Tauri path) |
+| **Full app install (webapp + backend)** | Tauri NSIS `{repo}-{version}-setup.exe` | Everything: webapp + embedded MCP server, one download, one shortcut, naked PC | Claude Desktop registration (use the `.mcpb`, or the installer's registrar hook) |
 
-**Both tracks are mandatory.** They are complementary, not alternatives.
+**Both artifacts ship with every release of a repo that has a webapp** (see [RELEASE_TIERS.md](./RELEASE_TIERS.md), the release standard); repos without a webapp ship the `.mcpb` only.
 
-- `.mcpb` is for developer users installing via Claude Desktop. It does not replace `start.bat`.
-- `start.bat` is for running the full stack (Starlette backend + Vite webapp). It does not replace `.mcpb`.
-- For Python servers, `.mcpb` still requires the user to have Python — the single-click promise is partial. Anthropic recommends Node.js for fully self-contained bundles, but FastMCP Python is the fleet standard and we accept this tradeoff.
-- **Steve-class users** (non-dev, naked PC) need `start.bat` with the `Require-Command` pattern from [NAKED_PC_INSTALL_STANDARD.md](./NAKED_PC_INSTALL_STANDARD.md). mcpb alone will not help them.
+- **The NSIS installer is the default install for end users.** It is the only artifact that installs the webapp.
+- The `.mcpb` is the Claude-Desktop-only path. It registers the MCP server but installs no webapp, so READMEs present it second ("Only want the tools in Claude?"), never as the primary install.
+- Both are downloaded from **GitHub Releases**. Users never run `just` to get them. Build recipes belong in `docs/DEVELOPMENT.md` only.
+- For Python servers, `.mcpb` still requires the user to have Python (via `uv`), so the single-click promise is partial; the NSIS installer embeds the backend and has no such prerequisite.
+- `start.bat` / `start.ps1` are **developer** entry points (running the dev stack with live reload), not a user install path. The `Require-Command` naked-PC pattern in [NAKED_PC_INSTALL_STANDARD.md](./NAKED_PC_INSTALL_STANDARD.md) still applies to those scripts and to anything the installer launches.
 
 **What native installers bundle:** MCP server (embedded inside operator) + webapp — **one download, one shortcut**. **Never** host apps (Blender, Unity Editor), LLM runtimes (Ollama, vLLM), or model weights. See **[LLM_AND_INSTALL_TIERS.md](./LLM_AND_INSTALL_TIERS.md)** and [tauri_nsis_building.md](./rules/tauri_nsis_building.md) (pywinauto-mcp = reference impl).
 
@@ -74,9 +85,9 @@ These are **fleet build standards** for new and maintained **Python** MCP server
 
 ---
 
-## 6. Optional ergonomics: **pre-commit (Ruff)**, **`ty` in CI (non-blocking)**
+## 6. Optional ergonomics: **pre-commit (Ruff + Biome)**, **`ty` in CI (non-blocking)**
 
 | Practice | Requirement |
 |----------|-------------|
-| **Pre-commit + Ruff** | Repos SHOULD include **`.pre-commit-config.yaml`** with **[astral-sh/ruff-pre-commit](https://github.com/astral-sh/ruff-pre-commit)** (`ruff`, `ruff-format`). After clone: `pre-commit install` (or run `pre-commit run --all-files` in CI). Keeps format/lint consistent without relying on memory. Details → [CODE_QUALITY_STANDARDS.md](./CODE_QUALITY_STANDARDS.md). |
+| **Pre-commit + Ruff + Biome** | Repos SHOULD include **`.pre-commit-config.yaml`** with **[astral-sh/ruff-pre-commit](https://github.com/astral-sh/ruff-pre-commit)** (`ruff`, `ruff-format`) **and** a **local Biome hook** when `webapp/` or `web_sota/` exists. Templates: `templates/pre-commit-config.yaml.template`, `templates/pre-commit-biome.ps1`. After clone: `just bootstrap` (or `pre-commit install` + webapp `npm ci`). Details → [CODE_QUALITY_STANDARDS.md](./CODE_QUALITY_STANDARDS.md), [BIOME_STANDARDS.md](./BIOME_STANDARDS.md). |
 | **`ty` (Astral)** | Add **`ty`** as an optional dev dependency; run **`ty check`** (e.g. `uv run ty check src`) in **CI** with **`continue-on-error: true`** (or equivalent) until diagnostics are clean — then flip to **blocking**. Do not block shipping on `ty` during adoption. Same file → [CODE_QUALITY_STANDARDS.md](./CODE_QUALITY_STANDARDS.md). |

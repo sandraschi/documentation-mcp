@@ -1,13 +1,13 @@
 # learnbot-mcp — Status
 
-**Updated**: 2026-07-16
+**Updated**: 2026-10-02
 
 ## Current State
 
 | Area | Status | Notes |
 |------|--------|-------|
 | Core chat | ✅ | Persona CRUD, conversation lifecycle, safety, audit |
-| LLM bridge | ✅ | Default: llama3.2:3b via Ollama. Falls back to any OpenAI-compatible endpoint. |
+| LLM bridge | ✅ | Default: gemma4:12b via Ollama. Falls back to any OpenAI-compatible endpoint. |
 | Speech TTS | ✅ | Gemini TTS via speech-mcp (Leda voice), fallback windows/SAPI5 |
 | Emotion tags | ✅ | LLM infers mood, tags drive Gemini voice prosody + robot motion |
 | Robot orchestrator | ✅ | Emotion tags → Boomy (yahboom-mcp) motion, LEDs, camera gestures |
@@ -20,8 +20,11 @@
 | Japanese reference data | ✅ | kanji_search, vocab_lookup, jlpt_vocab_by_level, example_sentences, jlpt_quiz — local, bundled data (data/kanji.db, data/jlpt_questions.db), no external service required |
 | Compliance | ✅ | China/EU configurable regimes (real-name auth, retention, refusal templates) |
 | Proactive chat | ✅ | Scheduled triggers (interval, cron, time-of-day) |
-| REST API | ✅ | 20+ endpoints on port 11101 |
-| Webapp (SPA) | ✅ | 9 pages — Dashboard, Chat, Personas, Safety, Compliance, Audit, Voices, Avatar, Help |
+| REST API | ✅ | 30+ endpoints incl `/api/vr/*` on port 11101; 39 MCP tools |
+| Webapp (SPA) | ✅ | 13 pages — Dashboard, Chat, Personas, Safety, Compliance, Audit, Voices, Avatar, Demos, Lessons, Japanese, VR, Help |
+| Learn in VR | ✅ | `/vr` launchpad (Resonite/Overte/VRChat tracks), Miko summon, classroom quiz loop, persistent Overte classroom — shipped 2026-10-02, see VR_LEARN_IN_VR_PLAN.md |
+| Miko voice | ✅ | Gemini Leda for JP (A/B samples in `docs/audio/`); Kokoro EN-only gloss fallback |
+| VRChat (last) | 🚧 | Chatbox handoff works; needs 2FA login + Secure Boot/HVCI (EAC); Goliath has Secure Boot OFF |
 | Chat tag | ✅ | Floating widget at /chat-tag.html |
 | VRM 3D viewer | ✅ | three.js + @pixiv/three-vrm, Nekomimi-chan + AnimeGirl2 from depot |
 | Desktop mascot | ✅ | Transparent always-on-top page at /mascot.html, Tauri config ready |
@@ -52,12 +55,17 @@ learnbot-mcp (orchestrator)
 |---------|------|-------|
 | learnbot-mcp API | 11101 | Full REST + SPA serving |
 | speech-mcp | 10909 | Gemini TTS + Windows fallback |
-| Ollama | 11434 | llama3.2:3b default |
+| Ollama | 11434 | gemma4:12b default |
 | yahboom-mcp | 10892 | Robot control (when Boomy is online) |
 | avatar-mcp | 10792 | VRM model depot |
 | godot-mcp | 10993 | VRM 3D viewer pipeline |
+| resonite-mcp | 10979 | VR summon target (ResoniteLink bridge) — optional |
+| overte-mcp | 11110 | Greeting signs + classroom entities — optional |
+| vrchat-mcp | 10712 | Chatbox handoff (last track) — optional |
 
 ## What's Next
 
-See [TODO.md](TODO.md) for full roadmap. Key near-term: streaming responses,
-Resonite web panel for mascot, Gemini Live voice for realtime conversation.
+See [TODO.md](TODO.md) (repo root) for full roadmap. VR follow-ups: Sandra's
+ear check of Leda samples, `cua-webapp-test` VR screenshot, vrchat-mcp README
+port fix, VoiceStudio sidecar run. Near-term backlog unchanged: streaming
+responses, Resonite web panel for mascot, Gemini Live voice.

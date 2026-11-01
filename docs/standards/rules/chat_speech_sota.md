@@ -1,3 +1,13 @@
+---
+title: "Fleet Chat Speech Standard (SOTA 2026)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-07-08
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Fleet Chat Speech Standard (SOTA 2026)
 
 **Established**: 2026-07-05  

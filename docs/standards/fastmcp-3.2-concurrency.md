@@ -1,3 +1,13 @@
+---
+title: "FastMCP 3.2+ Universal Concurrency Safety Standards"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # FastMCP 3.2+ Universal Concurrency Safety Standards
 
 ## 🚨 Critical: Multi-Client Database Concurrency
@@ -137,6 +147,39 @@ class ThreadSafeFileOperations:
             await f.truncate()
 ```
 
+### 4. **No Blocking Calls on the Event Loop** (BUG-078)
+
+Every `async def` (MCP tool, FastAPI/Starlette route, lifespan task) shares ONE
+event loop. A blocking call inside it freezes every other request, `/health`
+included, for as long as the call runs. Dashboard symptom: endless spinner /
+"Checking..." while one slow probe runs.
+
+Blocking = `subprocess.run/check_output/call`, `Popen(...).communicate()`,
+`requests.*`, sync `httpx.get/post` (module-level, not `AsyncClient`),
+`urllib.request.urlopen`, `socket.create_connection`, `time.sleep`, and any
+of the repo's own sync helpers that do one of these (`gpu_vram()`, `_git()`,
+`is_service_running()`, ...).
+
+```python
+# NEVER - freezes the loop for up to 300 s
+@mcp.tool()
+async def analyze(path: str) -> dict:
+    proc = subprocess.run(["ghidra-headless", path], capture_output=True, timeout=300)
+    return {"gpus": gpu_vram(), "rc": proc.returncode}
+
+# ALWAYS - run blocking work in a worker thread
+@mcp.tool()
+async def analyze(path: str) -> dict:
+    proc = await asyncio.to_thread(subprocess.run, ["ghidra-headless", path], capture_output=True, timeout=300)
+    return {"gpus": await asyncio.to_thread(gpu_vram), "rc": proc.returncode}
+```
+
+Prefer native async clients where they already exist (`httpx.AsyncClient`,
+`asyncio.create_subprocess_exec`); `asyncio.to_thread` is the minimal fix for
+existing sync code. `time.sleep` in async code becomes `await asyncio.sleep`.
+Exempt: CLI scripts and startup code that runs before the server accepts
+requests.
+
 ---
 
 ## 📋 **Repository Checklist**
@@ -165,6 +208,7 @@ class ThreadSafeFileOperations:
 - [ ] Resource locking
 - [ ] Timeout handling
 - [ ] Error recovery
+- [ ] No blocking calls in `async def` (subprocess / sync HTTP / sleep / shell-out helpers -> `asyncio.to_thread`, BUG-078)
 
 ---
 

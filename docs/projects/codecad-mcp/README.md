@@ -1,36 +1,88 @@
 # codecad-mcp — Parametric CAD via build123d
 
-**Status:** Build brief ready — repo NOT yet created
-**Priority:** P2 (parallel with comfyops-mcp)
+**Version:** 0.1.0 (2026-08-15) · **Status:** Active
+**FastMCP 3.4.4+** · **Stack:** build123d (OCP/OCCT) · trimesh · FastAPI
 
-| Item | Details |
+Code-as-CAD: mechanical parts are Python source. The LLM writes, edits, diffs,
+and version-controls parts natively — no GUI automation. STEP out for
+manufacturing; STL/3MF/DXF/GLTF for downstream fleet handoff (kicad-mcp,
+blender-mcp).
+
+> ⚠️ **Heavy dependency**: `build123d` pulls the OCP/OCCT wheel (~250 MB).
+
+## Features
+
+- **`cad_part`** — create/edit/validate/list/get_source/delete. User source runs
+  in a **dedicated `python -I` subprocess** with an AST import allowlist
+  (build123d/math/numpy), jailed workdir, and a 60s timeout
+- **`cad_export`** — STEP (the reason this server exists), STL (linear/angular
+  deflection), 3MF, DXF (kicad outlines), GLTF (blender/godot handoff),
+  technical drawing (SVG orthographic; dimensions honest NotImplementedError)
+- **`cad_render`** — preview_png + multi_angle via the trimesh fallback path
+- **`cad_library`** — load-bearing `primitives_help` cheatsheet +
+  8 parametric standard-part generators (ISO bolts/nuts, washers, 608 bearings,
+  T-slot, brackets, plates)
+- **`cad_agentic_workflow`** — description → generate → compile → validate →
+  error-feedback retry (max 3)
+- **Depot** — SQLite metadata + versioned part files (`parts/`, gitignored)
+- **Webapp** — Parts depot, Create, Export, Render, Library, Tools, Skills,
+  Chat, Settings, Help, Logs
+
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/codecad-mcp
+cd codecad-mcp
+copy .env.example .env
+.\start.ps1        # backend :11082 + frontend :11083
+```
+
+See [INSTALL.md](INSTALL.md) and [docs/ONBOARDING.md](docs/ONBOARDING.md).
+
+## Ports
+
+| Port | Service |
 |------|---------|
-| **Repo** | `D:\Dev\repos\codecad-mcp` (not yet scaffolded) |
-| **Brief source** | `architecture/FLEET_GAP_ANALYSIS_2026-07.md` §4 |
-| **Stack** | build123d (+ OCP/OCCT ~250 MB), trimesh |
-| **Depends on** | mathops-mcp (soft — for dimension checking in `cad_agentic_workflow`) |
-| **Consumed by** | kicad-mcp (board outline via DXF), blender-mcp (visualization via GLTF), future FEM/CFD |
+| **11082** | Backend (FastAPI + FastMCP HTTP `/mcp`, REST `/api/*`) |
+| **11083** | Frontend (Vite React) |
 
-## What is Code-CAD?
-
-Parametric 3D modeling done by writing Python code via the `build123d` library (the modern successor to CadQuery). Parts are Python source — an LLM can generate, edit, diff, and version-control mechanical parts the same way it does software. No GUI, no mouse clicks, no brittle GUI automation.
-
-## Tools (5 portmanteau)
+## Tools
 
 | Tool | Ops | Notes |
 |------|-----|-------|
-| `cad_part` | create, edit, validate, list, get_source, delete | Python source → restricted subprocess exec → BREP |
-| `cad_export` | step, stl, 3mf, dxf, gltf, technical_drawing | STEP is the primary reason this server exists |
-| `cad_render` | preview_png, multi_angle | Offscreen OCP or trimesh fallback |
-| `cad_library` | primitives_help, standard_parts | Load-bearing cheatsheet + parametric bolt/washer/bearing generators |
-| `cad_agentic_workflow` | description → generate → validate → retry (max 3) | Highest-value single tool |
+| `cad_part` | 6 | subprocess-isolated exec, version chain |
+| `cad_export` | 6 | STEP primary; technical_drawing dims = NotImplementedError |
+| `cad_render` | 2 | trimesh fallback (stated in response) |
+| `cad_library` | 2 | cheatsheet + 8 parametric generators |
+| `cad_agentic_workflow` | 1 | sampling retry loop (max 3) |
+| `show_part_card` / `show_depot_card` | 2 | Prefab UI |
 
-## Execution Safety
+Full reference: [docs/TOOLS.md](docs/TOOLS.md) · Cheatsheet: [docs/BUILD123D_PATTERNS.md](docs/BUILD123D_PATTERNS.md) · Skill: `skill://codecad-expert`
 
-`cad_part.create` runs in a **dedicated subprocess** (not in-process eval), no network, jailed workdir, import allowlist (`build123d`, `math`, `numpy`), 60s timeout. Deepfang hardening noted as roadmap.
+## Environment
 
-## Acceptance
+See `.env.example`: `CODECAD_BACKEND_PORT`/`CODECAD_FRONTEND_PORT`,
+`CODECAD_EXEC_TIMEOUT_SECONDS` (60), `CODECAD_PARTS_DIR`/`CODECAD_EXPORTS_DIR`,
+`LLM_PROVIDER`/`LLM_BASE_URL`/`LLM_MODEL` (Ollama local-first).
 
-- Round-trip: parametric bracket with 4 counterbored holes → STEP → re-import → volume within 0.1%
-- Agentic: "40mm cube, 5mm filleted edges, 20mm through-hole" → valid part in ≤3 iterations
-- docs/BUILD123D_PATTERNS.md as the LLM cheatsheet
+## Development
+
+```powershell
+just test      # pytest (incl. STEP round-trip acceptance)
+just lint      # ruff check + format
+just ci        # lint + test + webapp build
+```
+
+## Roadmap
+
+- **Deepfang sandbox** hardening for part execution (subprocess isolation is
+  sufficient for v0.1 — noted in code)
+- OCP offscreen rendering (replaces the trimesh fallback)
+- Dimension annotation on technical drawings
+- Multi-part assemblies (blocked on build123d assembly maturity)
+- STEP re-import → parametric reconstruction (import is static in v0.1)
+
+## Links
+
+- Brief: `mcp-central-docs/architecture/FLEET_GAP_ANALYSIS_2026-07.md` §4 (P2)
+- Consumers: kicad-mcp (DXF outlines), blender-mcp (GLTF visualization)

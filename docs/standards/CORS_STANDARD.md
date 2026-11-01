@@ -1,3 +1,13 @@
+---
+title: "CORS Standard"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-08-07
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # CORS Standard
 
 **Established**: 2026-07-13
@@ -176,6 +186,34 @@ server.run()
 
 See `TAURI_PRODUCTION_PITFALLS.md` §IX (FastMCP HTTP routing preflight bug) for the full debugging story.
 
+### Separate webapp FastAPI app pitfall (immich-mcp + rustdesk-mcp, 2026-08-07)
+
+> **If the webapp REST routes live on a SEPARATE FastAPI app from the MCP `http_app()`, CORS must be added to BOTH.** Adding it only to the MCP app leaves `/api/v1/*` without `Access-Control-Allow-Origin` — the browser blocks every fetch with **"Failed to fetch"**, while `curl`/PowerShell/`httpx` all work fine (CORS is browser-only, §0.4). This makes the bug deceptive: backend health checks pass, the frontend still shows "No connection".
+
+The FastMCP 3.1 pattern is a wrapper app:
+
+```python
+_web_app = FastAPI(lifespan=_web_lifespan)
+_web_app.include_router(v1_router, prefix="/api/v1")   # webapp REST
+_web_app.mount("/mcp", mcp.http_app(path="/"))         # MCP transport
+
+# BUG: CORSMiddleware only added to mcp.http_app() in transport.py —
+# /api/v1/* responses carry NO ACAO header. Frontend "Failed to fetch".
+```
+
+**Fix**: apply the fleet CORS block (§ Implementation) to `_web_app` as well — same `allow_origins`, same unconditional `allow_origin_regex`, `allow_credentials=True`. Frontend port in `allow_origins` should be the repo's registered frontend port.
+
+**Detection** (one-liner — cheap and definitive):
+
+```powershell
+Invoke-WebRequest -Uri "http://127.0.0.1:PORT/api/v1/health" `
+  -Headers @{ Origin = "http://127.0.0.1:FRONTEND_PORT" } -UseBasicParsing |
+  Select-Object -ExpandProperty Headers
+# Empty Access-Control-Allow-Origin = this bug. Browser-only, so PowerShell still gets 200.
+```
+
+**Audit**: repos checked 2026-08-07 — `immich-mcp` (fixed), `rustdesk-mcp` (fixed). Repos using relative `API_BASE = "/api/v1"` with a Vite proxy + same-app static serving (robotics-mcp) are NOT affected. When scaffolding a new FastMCP webapp, grep the app that uvicorn actually runs for `CORSMiddleware` before calling it done.
+
 ---
 
 ## Per-Repo Checklist
@@ -184,6 +222,7 @@ See `TAURI_PRODUCTION_PITFALLS.md` §IX (FastMCP HTTP routing preflight bug) for
 - [ ] `allow_origin_regex` is set and covers Tailscale `*.ts.net`, LAN IPs, localhost
 - [ ] Regex applied **unconditionally** (not gated on `{REPO}_TAURI`)
 - [ ] FastMCP HTTP servers do NOT use `run_http_async()` — use direct `uvicorn.Server` on `mcp.http_app()` with CORS middleware attached
+- [ ] If webapp REST routes are on a **separate** FastAPI app from `mcp.http_app()` (FastMCP 3.1 wrapper pattern), CORS is added to THAT app too — verify `ACAO` header with an `Origin`-header request (§ separate webapp app pitfall)
 - [ ] No `allow_origins=["*"]` in any backend — not just hardening, it's a browser-enforced impossibility once `allow_credentials=True` is set (§0.2)
 - [ ] If a webapp ever needs to be reachable from outside the tailnet, CORS breadth is re-evaluated alongside real auth (§0.4) — the current regex's safety depends on the tailnet being the actual access boundary
 

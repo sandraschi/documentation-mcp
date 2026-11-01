@@ -1,7 +1,8 @@
 # Tapo Grid
 
-**Model:** One-time purchase ($4.99–9.99) or subscription ($1.99/mo) for multi-camera  
+**Model:** One-time purchase ($4.99–9.99) or subscription ($1.99/mo) for multi-camera
 **Comps:** TinyCam, IP Cam Viewer (generic RTSP clients)
+**Target:** Xcode 27.2, iOS/iPadOS 27 SDK (iPad wall-grid is the primary form factor)
 
 ## Product
 
@@ -37,4 +38,7 @@ Utility apps convert on **clear pain**: official Tapo app is heavy; you want a w
 ## Risks
 
 - RTSP codec quirks per camera firmware
-- App Review: declare local network usage (`NSLocalNetworkUsageDescription`)
+- App Review: declare local network usage (`NSLocalNetworkUsageDescription`) and Bonjour services (`NSBonjourServices`) if using LAN discovery — rejection risk if missing
+
+---
+*Status: spec only, no repo. Last updated: 2026-10-28.*

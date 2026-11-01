@@ -7,10 +7,18 @@ skill_candidate: true
 related:
   - fastmcp/sep-1577-sampling-with-tools.md
   - ecosystem/mcp-protocol/MCP_CLIENT_CAPABILITIES.md
-last_updated: 2026-02-22
+  - operations/MCP4_MRTR_PROBE_CASE_REPORT.md
+last_updated: 2026-08-02
 ---
 
 # FastMCP Sampling Anti-Patterns
+
+> **2026-08-02 FORWARD-LOOKING NOTE:** FastMCP 4.0.0b1 **removes** `ctx.sample()` /
+> `ctx.sample_step()` outright (replacement: SEP-2322 MRTR). Claude Desktop 1.24012.9.0
+> does **not** implement the MRTR client loop (empirically verified — see
+> [MCP4_MRTR_PROBE_CASE_REPORT](../operations/MCP4_MRTR_PROBE_CASE_REPORT.md)), so the
+> fleet stays on `fastmcp<4` and the 3.x `ctx.sample()` pattern below remains current
+> until Claude Desktop ships MRTR support.
 
 **Status:** Production-confirmed bugs (found 2026-02-22 in `advanced-memory-mcp` and `filesystem-mcp`)
 **FastMCP version:** 3.1.1+.1+

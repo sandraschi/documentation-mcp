@@ -21,7 +21,7 @@ GOOGLE_API_KEY=your-google-api-key
 # FUNASR_ENABLED=true
 # FUNASR_MODEL=FunAudioLLM/Fun-ASR-Nano-2512
 # FUNASR_DEVICE=cuda:0
-# FUNASR_OPENAI_URL=http://127.0.0.1:10910/v1
+# FUNASR_OPENAI_URL=http://127.0.0.1:10914/v1
 
 # openWakeWord — local wake-word detection (optional)
 # No API key required. Runs fully offline using ONNX models.
@@ -146,7 +146,7 @@ Keys in the `env` block take priority over `.env` file values.
 ## Log Location
 
 ```
-C:\Users\<you>\AppData\Roaming\Claude\logs\mcp-server-speechops.log
+C:\Users\<you>\AppData\Local\Claude\Logs\mcp-server-speechops.log (pre-2026-08-21: AppData\Roaming\Claude\logs)
 ```
 
 ---

@@ -1,3 +1,13 @@
+---
+title: "SOTA 2026 Architecting with LLMs"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-11
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # SOTA 2026 Architecting with LLMs
 
 **Scope:** Strategic architecture generation (systems, pipelines, multi-service stacks).
@@ -77,3 +87,11 @@ The architecture spec (step 1) must be written to a file (`ARCHITECTURE.md` or
 - Survives context compaction and resets
 - Can be reviewed by humans before implementation
 - Prevents the model from introducing new hallucinated dependencies during code pass
+
+### 7. Standalone Independence Principle (Zero Private Repo Dependencies)
+
+Every open-source or public repository in the fleet **MUST BE 100% STANDALONE**:
+- **Never require private sibling repos at runtime**: The repo must build, test, install, and run if cloned alone on a fresh machine.
+- **Bi-modal launchers**: When central orchestration (`mcp-central-docs`) exists, hook into it for multi-repo coordination; when absent, fall back gracefully to a self-contained local runner.
+- **No hardcoded workstation paths**: Never bake `D:\Dev\repos\...` or developer usernames into configs or scripts; anchor everything to `$PSScriptRoot` or the repo root.
+- **Guard central-only test/audit recipes**: In `justfile` or CI scripts, guard calls to internal scripts with existence checks (`if (Test-Path)`) so standard `just` commands never fail on naked installs.

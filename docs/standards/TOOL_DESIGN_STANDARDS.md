@@ -1,3 +1,13 @@
+---
+title: "Tool Design & Implementation (SOTA)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-09-12
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Tool Design & Implementation (SOTA)
 
 ## 1. The Portmanteau Pattern (2026 SOTA)
@@ -143,7 +153,7 @@ Fleet tools **MUST** satisfy §2–§3 and the **MUST** rows below. **SHOULD** r
 | **Output shape** | **Returns** in the docstring lists **stable keys** and meaning of `result` (and nested fields). | Use FastMCP **`output_schema=`** on `@mcp.tool()` when the success shape is stable (helps hosts and benchmarks). |
 | **Pagination** | Any tool that can return a **growing collection** (list/search/stream summary) implements **bounded** returns + continuation — §5. | Document default `limit` and max cap in Args + Returns. |
 | **Parameter constraints** | `operation` / mode params use **`Literal[...]`** (or enums). Numeric bounds use types + validation. | Prefer constrained types over `str` for categories; document regex/format in the Arg line when `str` is unavoidable. |
-| **Destructive / high-impact ops** | Deletes, overwrites, sends, money-like, or irreversible actions require **explicit agent-visible guardrails**: `confirm=True`, separate dry-run/preview, or a two-step pattern — documented in Args. | Set FastMCP annotation `DESTRUCTIVE` (§9) so hosts can reason about risk. |
+| **Destructive / high-impact ops** | Deletes, overwrites, sends, money-like, or irreversible actions require **explicit agent-visible guardrails**: `confirm=True`, separate dry-run/preview, or a two-step pattern - documented in Args. No `safety_override` / `bypass_safety` / `disable_guardrails` param that turns guardrails off (never return `BYPASSED`). Safety is always-on. | Set FastMCP annotation `DESTRUCTIVE` (§9) so hosts can reason about risk. |
 | **Naming** | One **verb-led** `snake_case` name per tool; portmanteau name matches domain (`resolve_timeline`, not `do_stuff`). | Same casing and verb patterns across a server (`list_*`, `get_*`, `set_*`). |
 | **FastMCP annotations** | — | Every tool sets **`annotations=`** on `@mcp.tool()` (§9) with accurate **`READ_ONLY` / `MUTATING` / `DESTRUCTIVE`** hints. |
 | **Prefab (list / status / stats)** | Tools in §3.3 **coverage rule** ship a **Prefab App** surface (`ToolResult` + `PrefabApp` or `app=True` tool); **`prefab-ui`** in core deps ([SOTA §2.2](./SOTA_REQUIREMENTS.md)). | Card/table layout matches the dict tool’s fields; document both in skills / `llms-full.txt`. |
@@ -275,18 +285,33 @@ except Exception as e:
 
 Every tool SHOULD set `annotations=` on `@mcp.tool()` to signal behavior to the agent.
 
-### Current approach (works with all FastMCP 3.x)
+### Current approach (works with all FastMCP 3.x) — use the REAL MCP hint keys
+
+> **Correction 2026-10-06 (found in onenote-mcp):** the earlier form
+> `_README_ONLY = {"readonly": True}` / `_MUTATING = {}` is **not an MCP annotation**.
+> FastMCP accepts it silently and the server then advertises `readOnlyHint=None`,
+> `destructiveHint=None` on every tool, so clients and scorers (Glama TDQS `behavior`)
+> see no safety signal. ~140 fleet files still use the old form. Verify with
+> `await app.list_tools()` and check `tool.annotations.readOnlyHint`.
 
 ```python
 from fastmcp import FastMCP
 
-_README_ONLY = {"readonly": True}
-_MUTATING = {}
+_READONLY = {"readOnlyHint": True, "openWorldHint": True}          # list/get/search (talks to the API)
+_LOCAL_READONLY = {"readOnlyHint": True, "openWorldHint": False}   # status/help (local only)
+_MUTATING = {"readOnlyHint": False, "destructiveHint": False, "openWorldHint": True}
+_DESTRUCTIVE = {"readOnlyHint": False, "destructiveHint": True, "openWorldHint": True}
 
-@mcp.tool(annotations=_README_ONLY)
+@mcp.tool(annotations=_READONLY)
 async def list_items(...) -> dict:
     """..."""
 ```
+
+Omitting `destructiveHint` leaves the MCP default (destructive = true), so set it
+explicitly on every non-read-only tool. A tool that writes local files or builds an
+index is not read-only even if it never changes the remote service.
+
+Regression test pattern: assert every tool has `annotations.readOnlyHint is not None`.
 
 ### Future import (when the annotations module ships in fastmcp)
 

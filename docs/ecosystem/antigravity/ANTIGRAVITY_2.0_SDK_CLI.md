@@ -216,7 +216,7 @@ config = LocalAgentConfig(
         McpSseServer(url="http://127.0.0.1:10702/sse"),   # git-github-mcp
         McpSseServer(url="http://127.0.0.1:10708/sse"),   # database-operations-mcp
     ],
-    skills_paths=[r"C:\Users\sandr\.gemini\antigravity\skills"],
+    skills_paths=[r"C:\Users\<user>\.gemini\antigravity\skills"],
     policies=[policy.allow_all()],
 )
 async with Agent(config) as agent:

@@ -1,5 +1,83 @@
 # Changelog
 
+## Unreleased
+
+### Hardening (assfix 2026-07-31)
+- CORS: explicit origins + unconditional Tailscale/LAN regex (was `["*"]` + Tauri-gated)
+- New `GET /api/capabilities` endpoint + `shutdown_server(confirm)` MCP tool
+- Health/diagnostics now report dynamic tool count (was hardcoded 14) and version 0.3.0
+- Version aligned to 0.3.0 across pyproject, tauri.conf.json, plugin.json, mcpb manifest, glama.json (glama now lists all 20 tools)
+- Docs: added `docs/DEVELOPMENT.md`, `docs/TROUBLESHOOTING.md`
+- Chat is now skill-first: `buildSystemPrompt` loads `GET /api/skills` content on mount
+- Dashboard: hero section with quick-start CTAs
+- `_error_response()` helper with auto-logging + `logging.basicConfig` in `main()`
+- justfile: added `fmt`, `mcpb-pack`, `build-native`, `cua-nsis-test`, `certify`
+- Webapp switched to bun (`bun.lock` committed, `package-lock.json` removed); bootstrap uses `bun install`
+- Test suite: coverage gate (30%) via pytest-cov; ruff/format/biome clean
+- Session context injection: added `.opencode/skills/` and `.agents/skills/`; tool counts refreshed to 19 (20 with shutdown_server)
+- MCPB prompts: system.md > 3000 words; `.mcpbignore` excludes `*.bak`
+- CI: `astral-sh/setup-uv@v3` + `ruff format --check` step; renovate.json added
+
+## 0.3.0 (2026-07-25)
+
+### Real-Time 3D WebGL Viewer
+- New **3D Viewer** page: Three.js live rendering of running simulations
+- WebSocket endpoint `/ws/sim/{job_id}` streams body positions/orientations every 50ms
+- `_sim_runner.py` now dumps `body_positions`, `body_orientations`, `body_parents` for scene reconstruction
+- OrbitControls for camera, bone connections between parent/child bodies
+
+### Trajectory Recorder + Timeline Playback
+- New `record_trajectory` MCP tool — touch `record.signal` to start recording
+- `list_trajectories` tool — query trajectory metadata
+- Trajectory Viewer page with play/pause, range slider, frame counter
+- REST endpoint `GET /api/trajectory/{job_id}` — returns full frame array + metadata
+
+### Population Runner
+- New `run_population` MCP tool — launch N parallel sims with parameter sweeps
+- New `population_results` MCP tool — aggregate completion status and final states
+- Population Runner page with model selection, sweep config, results table
+- Generic `POST /api/mcp/{tool_name}` bridge routes frontend to MCP tools
+
+### Gestural MJCF Editor
+- New **Model Editor** page: add/delete bodies, set name/size/color/parent
+- Three.js canvas with TransformControls (translate/rotate/scale)
+- One-click MJCF XML export
+
+### RL Training Playground
+- New `train_policy` MCP tool — trains PPO/SAC via stable-baselines3
+- New `rl_trainer.py` — Gymnasium MuJoCoEnv wrapper with configurable reward
+- RL Playground page with algorithm/timestep selection, training status
+- Optional dependency: `uv sync --extra rl` (stable-baselines3, sb3-contrib, tensorboard)
+
+### Infrastructure
+- WebSocket route `sim_ws.py` registered in backend
+- Vite proxy configured for `/ws` → ws://127.0.0.1:11046
+- Three.js (`three`, `@types/three`) added to webapp dependencies
+- `websockets>=10` added to Python dependencies
+- Sidebar grew to 12 entries: Dashboard, Simulations, **3D Viewer**, **Trajectory**, **Population**, **Editor**, **RL**, Models, Skills, Logging, LLM, Settings, Help
+
+## 0.2.1 (2026-07-24)
+
+### SOTA Provider Detection
+- Replaced free-text LLM provider/model config with SOTA provider detection stack
+- Settings page now probes Ollama (11434), LM Studio (1234), and vLLM (8000) in parallel on mount
+- Per-provider status indicators (green Detected / gray Not found / pulse Probing)
+- Provider dropdown populated only from detected providers
+- Model dropdown populated from selected provider's model list
+- Amber fallback prompt when no local LLM is detected
+- Selection persisted to localStorage across sessions
+
+### Backend
+- `GET /api/llm/providers` now probes all 3 providers via `asyncio.gather` + `httpx.AsyncClient`
+- `POST /api/llm/chat` routes to correct provider: Ollama `/api/generate`, LM Studio/vLLM `/v1/chat/completions`
+
+### Fixes
+- Created missing `web_sota/src/lib/api.ts` (fixed TS2307 crash in FloatingChat)
+- Fixed TRY401 redundant exception arg in `state_machine.py`
+- Fixed S110/S112 bare `except: pass/continue` — added logging
+- Applied ruff format (8 files reformatted)
+- Added `ruff` to dev dependencies
+
 ## 0.2.0 (2026-07-04)
 
 This release brings the repo to full fleet certification bar: NSIS build pipeline, standard compliance, and rich web UI features.

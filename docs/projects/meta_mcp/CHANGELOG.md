@@ -1,3 +1,117 @@
+## [Unreleased]
+
+### Added
+- Windows desktop app (Tauri 2.0 + NSIS): `web_sota/src-tauri/` operator
+  shell with embedded PyInstaller backend, kill-both-exes installer hooks,
+  backend-status dot + Ctrl+scroll zoom in the dashboard. Operator backend
+  on claimed port 11220 (dev stack keeps 10718/10719).
+  `meta-mcp-backend.spec` with frozen fixes (dist-info keeps, mypyc/tomli,
+  docket tasks, OTEL hook). Build: `just build-native`. Log: BUILD_LOG.md.
+
+## [0.5.1] -- 2026-09-29
+
+### Added
+- **Agentic chat loop** (dashboard Chat, agent mode on by default): system
+  preprompt with live tool catalog (42 tools), bounded function-call loop
+  over in-process fleet tools, Ollama-native + OpenAI-compatible wire
+  formats, per-turn tool trace UI, working personalities (mcp-expert,
+  fleet-operator, analyst). REST: `GET /api/v1/chat/context`,
+  `POST /api/v1/chat/agent`.
+- **Confirm gate for mutating agent calls**: known read-only portmanteau
+  operations run through, everything else pauses for approval (approve
+  selected / deny all); denials are fed back so the model replans. Paused
+  runs kept in memory with 30-min TTL. REST: `POST /api/v1/chat/agent/confirm`.
+- **Fleet Standards page**: card grid/list toggle, search, category filter,
+  detail view (143 handbook standards; honest empty state without handbook).
+- **Repo Inspiration Discover tab**: GitHub search proxy with popularity
+  markers (stars/forks/issues/cadence/rocket/archived/license/topics),
+  8 server-side presets, localStorage faves + fave picker, one-click study.
+  REST: `GET /api/v1/inspire/presets`, `GET /api/v1/inspire/search`
+  (optional `GITHUB_TOKEN` stays server-side).
+- **Session docs prune-by-cutoff** with shared-handbook guard (UI hides the
+  panel and the endpoint 403s on handbook source; private archives prune
+  normally). REST: `DELETE /api/v1/session-docs?before=YYYY-MM-DD`.
+- **Shared JsonView** (Pretty/Raw toggle, persisted) across 7 JSON surfaces
+  (tool modals, Tool Lab, Agent Hub, Fleet Ops preview, Assfix result).
+- **List-page standard** (search/filter/sort/paginate/count) in webapp SOTA
+  standards plus an assfix leporello check; Assess Reports, Session Docs,
+  and Standards pages upgraded to match.
+- `scripts/install-hooks.ps1`: pre-commit hook installer (ruff + biome
+  lint; formatting advisory).
+- Dual-mode bundle entry (`mcpb/run_server.py`): MCP stdio by default for
+  Claude Desktop, `--http` bridge for Tauri sidecar/dashboard backend.
+- MCPB prompts at the 3-4-100 gate (`assets/prompts/`: system 3004w, user
+  4003w, 106 tool examples) with refreshed manifest tool list.
+- `docs/WORKFLOWS.md`: mission tables moved out of the README.
+
+### Changed
+- README rewritten (86 lines): dual-audience hero (dashboard for people,
+  MCP/REST for agents), mermaid diagram, reading ladder.
+- Settings hero flattened to the standard compact header.
+- GitHub repo is now public (`meta-hypertools`, `meta-mcp` redirects).
+- Contrast pass: slate-400/500 body copy to slate-300 on five pages.
+
+### Fixed
+- Portable installs: `D:/Dev/repos` hardcodes replaced with env
+  (`FLEET_REPOS_ROOT`, `REPOS_DIR`) + repo-relative defaults (10 files).
+- Assess Reports scanned a `~/repos` fallback that never exists: now uses
+  the central `repos_root()` default.
+- Session docs default pointed at a nonexistent directory: falls back to
+  the handbook session-log.
+- Handbook resolution missed clones inside the repos root (sibling-only).
+- Pre-commit biome gate blocked every webapp commit on CRLF formatting:
+  relaxed to `biome lint`.
+
+## [0.5.2] -- 2026-08-31
+
+### Added
+- **Fleet Ops & Script Center (`FleetOps.tsx` & `ops_catalog.py`)**:
+  - Curated, searchable script runner with automatic parameter forms for fleet probes and local meta-mcp maintenance utilities (`mcp-watchdog`, `check-repo-standards`, `audit-uv`, `autofix-uv`, `mcp-swapper`, `repo-stats`, `kill-zombies`, `codemod-annotations`, `just-recipe`).
+  - Real-time job monitor tracking PID, elapsed runtime, live stdout/stderr console logs, and safe process termination.
+  - Elucidated report inspector with high-level summary telemetry for JSON artifacts and GitHub-flavored markdown rendering.
+- **Collapsible Navigation & Typography Overhaul (`Sidebar.tsx`)**:
+  - Replaced flat navigation list with 6 collapsible, structured categories (*Overview & AI*, *Fleet & Operations*, *MCP Registry & Tools*, *Analysis & Diagnostics*, *Builders & Dev*, *System*).
+  - Category collapse states persisted in `localStorage`.
+  - Upgraded typography to WCAG AA/AAA contrast standard (eliminated low-contrast fonts, $\ge 13\text{px}$ floor).
+- **Proactive Heartbeat Scheduler**:
+  - Wired `POST /api/v1/heartbeat/proactive` endpoint directly into `scheduler_service.register_task()`.
+- **Dynamic Tool Catalog**:
+  - Dynamic tool catalog generation in `GET /api/v1/tools/list` sourced directly from `tool_service.get_mcp_catalog()`.
+
+### Changed
+- **Windows Process Management Hardening**:
+  - `ServerProcess.kill()` in `DynamicRouter` now issues tree kills (`taskkill /F /T /PID`) preventing zombie Python worker leaks.
+  - Dynamically loads fleet server port mapping via `load_runtime_apps()` with static fallback.
+  - `kill-zombies.ps1` scoped strictly to meta-mcp ports (10718/10719) and workspace paths (removed dangerous system-wide wildcard).
+- **Telemetry Performance**:
+  - `MemoryLogHandler` migrated to thread-safe, $O(1)$ ring buffer using `collections.deque(maxlen=1000)`.
+- **Script Ergonomics & Cross-Platform Paths**:
+  - `mcp-watchdog.py`: Added status filtering `--filter` support; replaced hardcoded user paths with `Path.home()`.
+  - `audit_uv.py`, `autofix_uv.py`, `mcp-swapper.py`, `codemod_annotations.py`: Dynamic home directory and fleet repo root resolution (`FLEET_REPOS_ROOT`).
+  - Added 120s timeout to `autofix_uv.py` subprocess execution.
+- **Biome & Ruff Zero-Error Compliance**:
+  - Frontend Biome check and format passing with 0 errors across 68 files.
+  - Backend Ruff linter and formatter passing with 0 errors across 264 files.
+
+## [0.5.1] -- 2026-08-02
+
+### Added
+- **Standards checker v2** (check-repo-standards.ps1): FastMCP 3.4 floor, uv.lock, icon.png, 3-4-100 prompt word gates, mcpb/ layout support, live doc refs, ASCII output - synced upstream to mcp-central-docs
+- **MCPB 3-4-100 prompt gate met**: icon.png + system.md (3154w) + user.md (4226w) + examples.json (101 mappings)
+- **Fullstack builder modernization** (2768-line monolith): SQLite foundation, membership roster, onboarding wizard, fleet-standard chat (skill-first preprompt, example prompts), webshop (products/orders), APScheduler jobs + patrol demo job, Logs ring buffer + API Docs pages, Tauri 2.0 wrapper
+- **Auth protection** for /api/v1/fleet/start|stop|restart (previously unprotected)
+- **demo-app**: durable playground repo at D:\Dev\repos\demo-app (ports 11140/11141) with IDEAS.md roadmap
+
+### Changed
+- fleet.just: ASCII header, mcpb-pack repointed to mcpb/pack.ps1
+- justfile: serve -> start.ps1, install-hooks real pre-commit install
+- ruff: 47 errors fixed; per-file ignores for deliberate S310/S108/E402 patterns
+- Tests: 65 green (fixed auth-env, stale help-tool portmanteau test)
+
+### Removed
+- Dead scripts: bin/dev.ps1 (forbidden ports), backup-repo.ps1 (0B), fix-standards.ps1 (generated), sync-sota.ps1 (vestige), wisdom/gamemaker/webshop builders (stale ai-games-collection paths), mcp-watchdog.ps1 (dup of .py), mcpb-pack.ps1 (dup of mcpb/pack.ps1), scripts/out/
+- 79 committed .bak/.backup files (fleet cleanup)
+- fullstack_builder_ASSESSMENT.md (obsolete "runt" verdict)
 
 
 ## [Unreleased] -- 2026-07-12
@@ -571,6 +685,7 @@ Meta MCP follows the **"Argh-Coding" philosophy** - every feature is designed to
 ---
 
 **Meta MCP**: Turning "Argh!" moments into "Aha!" moments since 2026. ðŸš€
+
 
 
 

@@ -1,4 +1,6 @@
-# FastMCP Agentic Sampling: Autonomous Workflows
+# FastMCP Agentic Sampling: Autonomous Workflows (DEPRECATED)
+
+> **⚠️ DEPRECATED**: MCP 2026-07-28 removed `sampling/createMessage` (SEP-2577). `ctx.sample()` is removed in FastMCP 4. See [2026-07-28 Spec Migration Guide](./2026-07-28-spec-migration.md) for replacement patterns (direct LLM calls or MRTR). This doc is for FastMCP 3.x legacy reference only.
 
 **Last Updated:** 2026-04-21
 **Standard:** FastMCP 3.4.2 (originally written for 3.2.0 — `ctx.sample()` API unchanged)

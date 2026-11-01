@@ -19,6 +19,7 @@ MCP server for the [Zed editor](https://zed.dev) — settings management, extens
 | `zed_version` | Get installed Zed version |
 | `zed_list_agents` | List configured external MCP agents |
 | `zed_help` | Tool reference and config paths |
+| `zed_layout` | Inspect/set layout settings (pane border, opacity, dock position); preset switch is honest-fail, no external hook exists |
 
 ## Configuration
 
@@ -47,3 +48,14 @@ uv run python -m zed_mcp
 - Python 3.11+
 - [Zed editor](https://zed.dev) installed
 - `zed` CLI on PATH or at default install location
+
+## Docs
+
+In-depth Zed reference material lives in docs/, aimed at onboarding and cross-editor migration rather than just this server's tool API:
+
+- docs/01-zed-overview.md: architecture, what Zed is and is not
+- docs/02-cross-platform.md: Mac/Windows/Linux, why that matters for iOS/macOS dev on Windows
+- docs/03-ai-agents-acp.md: ACP, MCP support inside Zed, external agents
+- docs/04-xcode-integration.md: Zed plus Xcode 27 workflow for iOS/macOS dev
+- docs/05-coming-from-cursor-windsurf.md: what transfers from Cursor/Windsurf and what does not
+- docs/06-webapp-plan.md: planning notes for a standalone help webapp (not yet built)

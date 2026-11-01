@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.5.1] — 2026-07-21
+
+### Fixed
+- E501 line-too-long lint errors in `portmanteau.py` and `prompts.py`
+- `ruff format` applied to `server.py`
+
+### Packaging
+- MCPB bundle rebuilt: `dist/home-assistant-mcp-2.5.0.mcpb` (29.9 kB)
+
 ## [2.5.0] — 2026-07-14
 
 ### Fixed

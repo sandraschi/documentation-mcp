@@ -1,6 +1,6 @@
 # Monetization Strategy: The Software Factory Model
 
-Dark App Factory is built as a commercial engine for the **Schipal Software Factory** (Vienna, Austria). It operates on a high-efficiency, low-marginal-cost model.
+Dark App Factory is built as a commercial engine for the **S. Software Factory** (Vienna, Austria). It operates on a high-efficiency, low-marginal-cost model.
 
 ## 💶 Product Tiers (2026 Standard)
 

@@ -1,7 +1,8 @@
 # Ring Glance
 
-**Model:** One-time $3.99–6.99  
+**Model:** One-time $3.99–6.99
 **Comps:** Ring app (bloated); you want **doorbell + 2 cams, fast**
+**Target:** Xcode 27.2, iOS 27 SDK (widgets + Live Activities for doorbell press)
 
 ## Product
 
@@ -11,7 +12,7 @@ Login to Ring account (official API patterns from fleet ring-mcp research). Show
 
 | Piece | Source |
 |-------|--------|
-| Graph / WebRTC patterns | [ring-mcp](../../integrations/ring-mcp.md), ring-mcp webapp |
+| Graph / WebRTC patterns | [ring-mcp](../../../integrations/ring-mcp.md), ring-mcp webapp |
 | Integration docs | projects/ring-mcp in fleet |
 
 ## Monetization
@@ -30,3 +31,7 @@ Paid app — single SKU. Ring users already pay for hardware/sub; they’ll pay 
 ## Risks
 
 - Unofficial API — can break; disclose in release notes; budget maintenance time
+- Doorbell-press alerts worth a Critical Alerts entitlement request (separate Apple approval) — without it, alerts stay silent in Do Not Disturb
+
+---
+*Status: spec only, no repo. Last updated: 2026-10-28.*

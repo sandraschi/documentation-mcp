@@ -1,13 +1,131 @@
 
-## [Unreleased] — 2026-06-14
+## [0.2.2-beta] — 2026-07-30
+
+### Fixed
+- **Model tags were wrong** — `llama3.1:latest` and `qwen2.5-coder:latest` don't exist on this
+  machine. Replaced with `qwen3.6:27b` (foreman) and `qwen2.5-coder:32b-instruct-q4_K_M` (worker)
+  in settings.json, DEFAULT_SETTINGS, llm_client.py, .env.example, and all docs.
+- **No phantom bootable components** — `write_manifest_from_output` no longer inserts
+  `{"backend": "main.py"}` when empty. `load_manifest` returns `{"components": []}`.
+  No more npm ENOENT errors from non-existent servers.
+- **Preflight model check** — `preflight_models()` verifies all requested models exist in Ollama
+  before the pipeline starts. Fails fast in under 2s with the available-model list.
+- **Pipeline aborts on empty output** — if specs generation fails or the worker produces zero
+  files, the pipeline stops immediately. No more empty git init / showboat / judge on nothing.
+- **Install reporting is honest** — tri-state: `installed` / `skipped_nothing_to_install` /
+  `failed` instead of `True`/`False`. Judge verdict text adapts to the actual state.
+- **Showboat file counts exclude metadata dirs** — `.git/`, `demos/`, `.factory-logs/` no
+  longer counted. The count now matches the embedded file listing.
+- **DTU verification gated on app liveness** — skip DTU log query when the app never started.
+  No more "2 service calls" on a dead app.
+- **Server suicide fixed** — `KNOWN_FACTORY_PORTS` included port 10738, so `kill_zombies()`
+  taskkilled the server itself. Removed 10738/10739 from the zombie list.
+- **Backend crash on build fixed** — `launch_factory` now writes vibe to temp file instead of
+  passing content as file path. `read_vibe` no longer calls `sys.exit()` on missing file.
+- **16 pre-existing test failures fixed** — `ScenarioResult` missing `scenario_type`,
+  `parse_http_action` keyword priority, `classify_scenario` order.
 
 ### Added
-- Tauri 2.0 native wrapper with `bundle.resources` + `std::process::Command`
-- PyInstaller frozen backend embedded in NSIS installer
-- CUA-NSIS smoke test (`scripts/cua-smoke.py`, `scripts/cua-nsis-config.json`)
-- `just cua-nsis-test` recipe
-- Tauri CORS: `tauri://localhost` origins for WebView API access
-- `GET /api/v1/diagnostics` endpoint for CUA verification
+- **Real-time build progress** via SSE (`GET /api/progress/stream`): step timeline, specialist
+  status grid (19 specialists), generated file tree. Build page shows all three.
+- **Depot page** at `/depot`: browse, search, and launch generated apps.
+- **Build page** with vibe input, 6 example prompts, refine button, options panel (foreman/
+  worker model, output name), live run polling with log tail.
+- **JS/TS static gates** in ruffy_runner: `tsc --noEmit` (when tsconfig.json exists),
+  `vite build` (when vite.config.ts exists), `node --check` on all JS files.
+- **Import-to-dependency closure check** in ruffy_runner: parses imports from generated
+  files, cross-checks against `package.json`/`requirements.txt`, reports missing packages.
+- **Deep-crawl icon bug fix**: bare package import identifiers no longer materialised as
+  local components.
+- **Session context injection**: CLAUDE.md, .cursorrules, .claude-plugin/, .windsurfrules,
+  copilot-instructions.md.
+- **SOTA webapp** with 9 pages (Dashboard, Build, Inbox, Depot, Tools, Skills, Chat,
+  Settings, Help, Logs). Zustand stores, LLM provider auto-detection, Chat with 4
+  personalities.
+- `just test-e2e` recipe (Ollama-dependent, 10+ min per test, marked @pytest.mark.slow).
+- `/api/outputs/{name}/report` endpoint serving audit-report.md → build-report.md →
+  lint-report.txt → www/index.html.
+
+### Backend hardening
+- Hatchling build fixed (packages directive in pyproject.toml).
+- CORS middleware on both web and MCP endpoints (fleet standard origins + regex).
+- Replaced `mcp.run_http_async()` with `uvicorn.Server` on `mcp.http_app()`.
+- `_safe_launch()` wrapper catches `SystemExit` in background build tasks.
+- `logger.exception()` used in except blocks (captures tracebacks).
+- No silent `.catch(() => {})` in frontend — all API errors logged to console.
+- `API_BASE` configurable via `VITE_API_BASE` env var (no hardcoded `127.0.0.1:10738` in pages).
+- Model selection from Settings used everywhere (Chat, Refine, Build) — no fallback hardcodes.
+
+## [0.2.1-beta] - 2026-07-29
+
+### Fixed (Critical: boot and verify path)
+- **Generated apps were never given their dependencies before the Judge booted them.**
+  `RunManifest.boot()` ran `node server.js` / `python main.py` / `npm run dev` in a fresh
+  output directory with no `node_modules` and no installed pip packages, so the boot always
+  failed and every scenario ran against a dead server. `RunManifest` now installs first
+  (bun, then pnpm, then npm with `--legacy-peer-deps`; `pip install -r requirements.txt` for
+  Python), skips when `node_modules` already exists, and records the result.
+- **Startup detection could latch onto an unrelated server.** The old `_wait_for_startup()`
+  probed a shared list of common dev ports (3000, 8000, 5173, 5174, 8080) and treated any
+  listener as the generated app. On a machine running other dev servers this pointed
+  Playwright at the wrong application and could produce a PASS for a build that never
+  started. Ports are now allocated up front, passed to the child as `PORT` / `VITE_PORT`,
+  and only those ports are polled.
+- **Orphaned child processes.** `terminate()` called `Popen.terminate()` on a `shell=True`
+  process, killing the shell and leaving the real server alive holding its port. Replaced
+  with a process-tree kill (`taskkill /F /T` on Windows, process-group kill elsewhere).
+- **Zombie hunter scanned the wrong ports.** `kill_zombies()` covered only 19300-19400,
+  a range nothing in the system binds. It now also covers the ports actually used
+  (3000, 5173, 5174, 8000, 8001, 8002, 8080, 10738, 10739).
+- **Child output deadlock.** Components were started with unread `stdout=PIPE, stderr=PIPE`.
+  A verbose Vite or npm process fills the OS pipe buffer and blocks forever. Output now goes
+  to `.factory-logs/<component>.log` inside the output directory.
+- **DTU process leak.** `spin_up_dtu()` returned None while the uvicorn process was still
+  alive whenever the health check returned a non-200 status. The orphan then held port 8001
+  and blocked every subsequent run. The handle is now returned whenever the process is up.
+- **Judge could pass a dead app.** Added a deterministic FAIL gate: if the app never listened
+  on its assigned port, the verdict is FAIL with the install errors, process exit codes and
+  boot log tails attached, and the LLM commentary is demoted to advisory.
+
+### Added
+- `src/utils/ports.py`: shared port allocation, listener detection, and process-tree kill.
+  Replaces three divergent copies of this logic in factory.py, judge.py and run_manifest.py.
+- `RunManifest.boot_report`: mechanical record of install success, assigned ports, per-process
+  exit codes and log excerpts. Injected into the Judge prompt as objective evidence.
+- `tests/test_boot_path.py`: 11 tests covering port injection, boot-report defaults and the
+  install phase.
+
+### Changed
+- `critique.md` is now written both to the repo root (for the next Foreman run) and into the
+  output directory, so runs stop overwriting each other's critique.
+- `judge._detect_app_port()` is deprecated; it reads the assigned port from the boot report
+  rather than probing.
+- ruffy_runner.py: added JS/TS static gates (tsc --noEmit, vite build, node --check) and
+  import-to-dependency closure check.
+- worker.py deep-crawl: bare package import identifiers no longer materialised as local files.
+- README.md, llms-full.txt: updated known-gaps list.
+
+### Known issue
+- `tests/test_e2e_scaffold.py` hangs (does not complete in 4 minutes). The remaining 135
+  tests run in about 7 seconds. Needs a timeout and a marker for the LLM-dependent cases.
+
+## [0.2.0-beta] — 2026-07-29
+
+### Added
+- SOTA React+Vite+Tailwind webapp (web_sota/) — 8 pages: Dashboard, Chat, Tools, Skills, Settings, Help, Logs, Inbox
+- Chat page with 4 personalities, localStorage persistence, TTS SpeakButton, 6 example prompts
+- LLM provider auto-detection (Ollama/LM Studio) in Settings with model selector
+- Session context injection: CLAUDE.md, .cursorrules, .claude-plugin/, .windsurfrules, copilot-instructions.md
+- Zustand stores for LLM state and backend health
+- `just dev`, `just build-web`, `just gates-green` recipes
+- CORSMiddleware on both web and MCP HTTP endpoints (fleet standard origins + regex)
+
+### Fixed
+- CRITICAL: .env was bundled in NSIS installer instead of .env.example — now fixed
+- MCP server uses uvicorn.Server instead of run_http_async() (preserves CORS middleware)
+- Hatchling build: added packages directive to pyproject.toml
+- 16 pre-existing test failures (ScenarioResult missing scenario_type, parse_http_action keyword priority)
+
 # Changelog
 
 All notable changes to the Dark App Factory will be documented in this file.

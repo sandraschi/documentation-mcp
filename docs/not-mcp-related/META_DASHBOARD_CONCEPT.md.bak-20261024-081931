@@ -1,0 +1,267 @@
+# Meta-Dashboard Portal Concept
+
+**Created:** 2025-11-18  
+**Status:** Implemented  
+**Future:** GPU Compute Integration (Q1 2026)
+
+---
+
+## 🎯 Concept Overview
+
+A **"dashboard of dashboards"** - a single shareable URL that serves as the entry point for all available services, dashboards, and tools. Users can explore at their own pace with information tailored to their knowledge level.
+
+---
+
+## ✨ Key Features
+
+### Knowledge Level Adaptation
+
+The meta-dashboard adapts information to three knowledge levels:
+
+1. **👶 Beginner**
+   - Simple explanations
+   - Easy-to-use dashboards highlighted
+   - No technical jargon
+   - Perfect for first-time users
+
+2. **🎓 Intermediate**
+   - More detailed information
+   - Power user features
+   - Some technical details
+   - For users comfortable with technology
+
+3. **⚡ Advanced**
+   - Full technical details
+   - Developer/admin features
+   - API access information
+   - For developers and system administrators
+
+### Dashboard Cards
+
+Each service/dashboard gets a card showing:
+- **Icon** - Visual identifier
+- **Name** - Service name
+- **Status** - Running/Stopped/Unknown (with color coding)
+- **Description** - What it does
+- **Features** - Key capabilities as tags
+- **Actions** - Quick access buttons (Open/Start)
+
+### Statistics Bar
+
+Real-time statistics:
+- **Available Dashboards** - Total count
+- **Running Services** - Currently active services
+- **MCP Tools** - Available tools from MCP servers
+
+---
+
+## 🏗️ Implementation
+
+### Location
+- **Template**: `core/dashboard/templates/meta_dashboard.html`
+- **Route**: `/portal`
+- **URL**: `http://localhost:3060/portal`
+- **Production**: `http://goliath:3060/portal` (via Tailscale)
+
+### Architecture
+
+```
+Meta-Dashboard (/portal)
+├── Knowledge Level Selector
+├── Statistics Bar
+├── Info Panel (adapts to knowledge level)
+└── Dashboard Cards Grid
+    ├── MyAI Dashboard
+    ├── MCP Demo Dashboard
+    ├── Bob & Alice
+    ├── Gemini Tools (VeoGen)
+    ├── MyWienerLinien
+    ├── Grafana
+    └── Prometheus
+```
+
+### Adding New Dashboards
+
+Edit `meta_dashboard.html` JavaScript:
+
+```javascript
+const dashboards = [
+    {
+        id: "my-new-dashboard",
+        name: "My New Dashboard",
+        icon: "🎨",
+        url: "http://localhost:PORT",
+        description: "What this dashboard does...",
+        features: ["Feature 1", "Feature 2"],
+        knowledgeLevels: ["beginner", "intermediate", "advanced"],
+        statusEndpoint: "http://localhost:PORT/health",
+        external: true
+    }
+];
+```
+
+---
+
+## 📋 Current Dashboards
+
+### Core Dashboards
+
+1. **MyAI Dashboard** (`/`)
+   - Main control center
+   - Service management
+   - Health monitoring
+   - All knowledge levels
+
+2. **MCP Demo Dashboard** (`/mcp-demo`)
+   - MCP server discovery
+   - Tool exploration
+   - Server management
+   - Intermediate/Advanced
+
+### AI Services
+
+3. **Bob & Alice** (`http://localhost:5188`)
+   - AI conversations
+   - Character dialogue
+   - All knowledge levels
+
+4. **Gemini Tools (VeoGen)** (`http://localhost:6241`)
+   - Video generation
+   - Image creation
+   - Music generation
+   - All knowledge levels
+
+### Utilities
+
+5. **MyWienerLinien** (`http://localhost:3079`)
+   - Vienna transport map
+   - Real-time data
+   - All knowledge levels
+
+### Monitoring
+
+6. **Grafana** (`http://localhost:3100`)
+   - Metrics dashboards
+   - Log aggregation
+   - Intermediate/Advanced
+
+7. **Prometheus** (`http://localhost:9191`)
+   - Metrics collection
+   - Time series data
+   - Advanced only
+
+---
+
+## 🚀 Future Extensions
+
+### Q1 2026: GPU Compute Integration
+
+**Goal:** Integrate Weave.ai for DGX Spark GPU cluster access
+
+**Features to Add:**
+- **GPU Compute Dashboard Card**
+  - Show GPU availability
+  - Queue status
+  - Resource utilization
+  - Cost tracking
+
+- **Job Submission**
+  - Templates for common workloads
+  - Custom job configuration
+  - Batch job management
+  - Result retrieval
+
+- **Access Controls**
+  - Knowledge level-based access
+  - Beginner: Pre-configured templates only
+  - Intermediate: Template customization
+  - Advanced: Full API access, custom jobs
+
+- **Integration Points**
+  - Weave.ai MCP server
+  - API endpoints for job management
+  - Status monitoring
+  - Usage analytics
+
+**Architecture:**
+```
+Meta-Dashboard
+└── GPU Compute Section
+    ├── Weave.ai Integration
+    ├── Job Templates
+    ├── Queue Monitor
+    └── Usage Dashboard
+```
+
+---
+
+## 💡 Benefits
+
+1. **Single URL to Share**
+   - No confusion about what's available
+   - Professional presentation
+   - Easy onboarding
+
+2. **Self-Service Exploration**
+   - Users discover at their own pace
+   - Knowledge-adaptive information
+   - Clear categorization
+
+3. **Scalable Architecture**
+   - Easy to add new services
+   - Flexible card system
+   - Status monitoring built-in
+
+4. **Professional Showcase**
+   - Clean, organized interface
+   - Real-time status indicators
+   - Feature highlights
+
+---
+
+## 🔗 Related Documentation
+
+- **MyAI Platform**: `docs/PRODUCTION_DEPLOYMENT.md`
+- **MCP Integration**: `docs/MCP_DUAL_INTERFACE_GUIDE.md`
+- **Meta-Dashboard Guide**: `docs/META_DASHBOARD_GUIDE.md`
+
+---
+
+## 📝 Notes
+
+- Status checking is automatic via health endpoints
+- External services open in new tabs
+- Service start buttons require dashboard authentication
+- Statistics update every 30 seconds
+- Knowledge level selection persists during session
+
+---
+
+## 🎯 Use Cases
+
+1. **Sharing with Friends/Colleagues**
+   - Share single portal URL
+   - They explore at their own pace
+   - Knowledge level adapts to their experience
+
+2. **Onboarding New Users**
+   - Direct to portal
+   - Start with Beginner level
+   - Progressive disclosure of features
+
+3. **Showcasing Your Work**
+   - Professional presentation
+   - Clear categorization
+   - Status indicators show what's working
+
+4. **Future: GPU Compute Access**
+   - Weave.ai integration
+   - Job submission interface
+   - Resource monitoring
+   - Cost tracking
+
+---
+
+**Status:** ✅ Implemented and ready for production  
+**Next:** GPU Compute integration (Q1 2026)
+

@@ -66,7 +66,7 @@ If you don't have `just` installed:
 
 ---
 
-**Author:** Sandra Schipal · Vienna, Austria
+**Author:** Sandra S. · Vienna, Austria
 
 
 ## 🛡️ Industrial Quality Stack

@@ -1,4 +1,47 @@
 
+## [Unreleased] — 2026-07-24 (v4 — Component Browser + Reviews + WebSocket)
+
+### Fixed
+- CRITICAL: CORS allow_origin_regex now unconditional with Tailscale/LAN/CGNAT coverage
+- CRITICAL: Added /api/v1/health endpoint (was 404 — broke dashboard health polling)
+- CRITICAL: NSIS hooks.nsh process names fixed (kicad-backend → kicad-mcp-backend)
+- CRITICAL: tauri.conf.json bundles .env.example instead of .env (security — was leaking API keys)
+- CRITICAL: build.ps1 bundles .env.example instead of .env
+- CRITICAL: run_server.py now supports dual transport (MCP_HOST/PORT env → HTTP, fallback → stdio)
+- VERSION: tauri.conf.json synced to 0.3.0 (was 0.1.0), FastAPI title version synced
+- capabilities: Added shell:allow-spawn, shell:allow-execute, core:window:allow-set-focus
+- .gitignore: Added .env, .bak, reports/, *.mcpb, *.log, timestamp files
+- webapp/start.ps1: Fixed undefined $ProjectRoot variable, added -NoBrowser flag
+- webapp/api.ts: Exported API_BASE, added VITE_API_BASE env var override
+- TypeScript: Fixed 8 compilation errors (missing npm deps, untyped event, useRef init)
+- Python: Fixed bare except:pass in ipc_backend.py (Pattern 1 hardening)
+- ruff: Added as dev dependency, fixed lint warnings, formatted all source
+
+### Added
+- **Supercharged Component Browser**: Parametric filter bar (package, pin count), grid results with detail slide-out panel showing manufacturer, package, pins, stock, price, datasheet links
+- **Design Review Dashboard**: New /reviews page + /review/:id with SVG board viewer, annotation overlay, severity-coded markers, AI DRC audit (mock), shareable review IDs
+- **Live WebSocket Bridge**: /ws/board endpoint with subscribe/ping channels, live connection indicator (green pulse dot) on Dashboard
+- **Backend**: review_router.py (SQLite reviews + annotations), GET /api/v1/component/{query}, WebSocket endpoint, AI audit endpoint
+- **Frontend**: ReviewsPage (list + create), ReviewPage (SVG board + annotations + AI audit sidebar), WebSocket indicator on Dashboard
+- **AI PCB Design Co-Pilot**: Full Chat page with skill-first system prompt, 4 personalities (PCB Designer, Component Specialist, DFM Reviewer, Custom), localStorage conversation memory (100-msg cap), example prompts grouped by category, .txt export, LLM provider status indicator, and Ollama/LM Studio auto-discovery
+- **3D PCB Viewer**: Three.js interactive board preview on the Dashboard with orbit controls, procedural PCB rendering (traces, components, caps), dark theme, and responsive resize
+- **Fabrication Pipeline**: New /fab page with Gerber export + zip, order form (fab house, layers, quantity, color, dimensions), JLCPCB pricing estimate, SQLite-backed order history
+- **Backend LLM endpoints**: GET /api/v1/llm/discover (probes Ollama :11434 + LM Studio :1234), POST /api/v1/llm/chat (proxy to local LLM with Ollama/OAI-compatible fallback), GET /api/v1/skills (list + fetch SKILL.md content)
+- **PCB Design Skill**: Full SKILL.md with tool categories, design workflow guidance, example sequences for placement/routing/export
+- **Fab Router**: SQLite-backed fab_orders table, POST /api/v1/fab/export (zip Gerbers), POST /api/v1/fab/order, GET /api/v1/fab/orders
+- SPEC.md: Full product specification for all 6 proposed features
+- .env.example: Template for KiCad configuration (no real secrets)
+- glama.json: Fleet MCP registry metadata
+- llms-full.txt: Comprehensive LLM context document
+- Session context injection: .claude-plugin/plugin.json + hooks/hooks.json, .cursorrules, .windsurfrules, .github/copilot-instructions.md, .opencode/skills/kicad-mcp/SKILL.md
+- reports/ directory with assess-2026-07-24.md report
+- just mcpb-pack recipe for MCPB bundle generation
+- data-testid attributes on Dashboard KPI cards
+
+### Fixed
+- native/src/backend.rs: Added free_port() multi-layer kill (Stop-Process → taskkill → UAC elevated → 240s poll), stdout/stderr stream watching with backend-ready detection, and health check logging
+- webapp/index.css: Added color-scheme: dark for native form controls
+
 ## [Unreleased] — 2026-06-14
 
 ### Fixed

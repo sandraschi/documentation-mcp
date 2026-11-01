@@ -28,7 +28,7 @@ uv sync --extra ipc
 uv run python -m kicad_mcp.server --mode stdio
 ```
 
-Configured in `C:\Users\sandr\.cursor\mcp.json` with hybrid env vars (see [CURSOR_MCP.md](./CURSOR_MCP.md)).
+Configured in `C:\Users\<user>\.cursor\mcp.json` with hybrid env vars (see [CURSOR_MCP.md](./CURSOR_MCP.md)).
 
 ### Probe hybrid install
 
@@ -95,4 +95,4 @@ Override: `KICAD_MCP_CRUD_BACKEND=ipc|tcp|none`.
 
 ---
 
-*Status maintained by Sandra Schipal. Updated 2026-05-29 for v0.3.0 hybrid IPC.*
+*Status maintained by Sandra S.. Updated 2026-05-29 for v0.3.0 hybrid IPC.*

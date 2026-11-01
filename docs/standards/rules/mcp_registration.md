@@ -1,3 +1,13 @@
+---
+title: "FastMCP 3.4+ Tool Registration & CodeMode (SOTA 2026)"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-07-14
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # FastMCP 3.4+ Tool Registration & CodeMode (SOTA 2026)
 
 ## 1. Tool Registration Protocol

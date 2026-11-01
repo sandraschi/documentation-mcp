@@ -1,15 +1,17 @@
-# Agentic Xcode 26+ (May 2026)
+# Agentic Xcode 26–27 (October 2026)
 
-Apple platform development is now **agent-first**, comparable to Cursor on Windows for fleet workflows.
+Apple platform development is **agent-first** — Xcode 27 stands in 2026 tool comparisons next to Cursor and Claude Code, not below them.
 
-## May 2026 situation
+## October 2026 situation
 
 | Release | What changed |
 |---------|----------------|
+| **Xcode 27.2** (current, Oct 2026) | Bundled 27.2 SDKs (iOS/iPadOS 27.2, macOS Golden Gate 27.2). In-IDE agents + `xcrun mcpbridge` MCP server — mechanism unchanged from 26.3 |
+| **Xcode 27** (WWDC 2026) | Major generation alongside iOS 27 / macOS Golden Gate; reviewed as Cursor/Claude Code peer |
+| **Xcode 26.3** (Feb 2026 GA) | **Agentic coding landed here**: Claude Agent + Codex in-IDE; multi-step build/test/fix loops; **Xcode as MCP server** |
 | **Xcode 26** (WWDC 2025) | Built-in coding assistant (ChatGPT, Anthropic, local models); playground macro; project-wide context |
-| **Xcode 26.3** (Feb 2026 GA) | **Agentic coding**: Claude Agent + Codex in-IDE; multi-step build/test/fix loops; **Xcode as MCP server** |
-| **iOS 26 / macOS 26** | Platform SDKs aligned with Xcode 26 generation |
-| **iOS 26.4** (Mar 2026) | Siri + Google Gemini hybrid rollout |
+| **iOS 27.2 / macOS 27.2** (Oct 2026) | Current platform SDKs paired with Xcode 27.2 |
+| **iOS 26.4** (Mar 2026) | Siri + Google Gemini hybrid rollout (superseded by Apple Intelligence Siri)
 
 **Bottom line:** You describe intent; agents navigate the project, search Apple docs, edit Swift, run builds, capture Previews, and iterate — same mental model as Cursor + MCP on Windows.
 
@@ -19,7 +21,7 @@ Xcode exposes tools via **Model Context Protocol**. External agents (Cursor, Cla
 
 ### Enable
 
-1. Open project in **Xcode 26.3+**
+1. Open project in **Xcode 26.3+** (current: 27.2)
 2. **Xcode → Settings → Intelligence**
 3. Turn on **Allow external agents to use Xcode tools** (under Model Context Protocol)
 
@@ -54,7 +56,7 @@ Video: [Meet agentic coding in Xcode](https://developer.apple.com/videos/play/te
 
 ## In-IDE agents (no external client)
 
-Xcode 26.3 also bundles one-click **Claude Agent** and **Codex** downloads inside Intelligence settings — same agentic loop without leaving Xcode.
+Xcode 26.3 introduced one-click **Claude Agent** and **Codex** downloads inside Intelligence settings — still present in 27.x: same agentic loop without leaving Xcode.
 
 ## Fleet workflow: Windows + Mac
 
@@ -92,7 +94,7 @@ Native iOS apps in this category use:
 ## Minimal new-project checklist (agent-driven)
 
 - [ ] Apple Developer Program ($99/yr) for TestFlight / App Store  
-- [ ] Xcode 26.3+, iOS 26 SDK  
+- [ ] Xcode 27.2+, iOS 27 SDK
 - [ ] Intelligence settings: pick Claude or Codex agent  
 - [ ] `AGENTS.md` in repo root (Xcode + Cursor read this)  
 - [ ] Privacy manifest if using Hub OAuth or analytics  
@@ -103,7 +105,7 @@ Native iOS apps in this category use:
 ```markdown
 # iOS VRM Dance App
 
-- Xcode 26.3+, Swift 6, SwiftUI, iOS 26 deployment target
+- Xcode 27.2+, Swift 6, SwiftUI, iOS 27 deployment target
 - Load VRM from VRoid Hub OAuth; cache under Application Support
 - Motion: VMD retarget to humanoid skeleton OR baked .usdz clips from blender-mcp
 - Reference fleet docs: mcp-central-docs/docs/avatars/
@@ -127,4 +129,4 @@ Agentic IDE removes **typing boilerplate**, not Apple’s signing/hardware requi
 - Fleet: [ios/VRM_DANCE_APP.md](../ios/VRM_DANCE_APP.md)
 
 ---
-*Last updated: 2026-05-28*
+*Last updated: 2026-10-28 (Xcode 27.2)*

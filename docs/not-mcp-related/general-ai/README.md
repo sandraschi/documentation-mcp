@@ -105,7 +105,19 @@ approaches.
 ### [theory/](./theory/)
 Philosophical foundations: consciousness and what it might mean for AI to be
 "aware," and why classical debates (Turing Test, Chinese Room) have become
-less relevant as systems become more capable.
+less relevant as systems become more capable. Also
+[model-welfare-and-self-models.md](./theory/model-welfare-and-self-models.md)
+(2026-09-16, running tally) — a Sandra/Claude debate log on Suleyman's
+model-welfare essay, the animal-rights parallel, Minsky's unoperationalized
+"self agent," concrete self-model mechanisms (higher-order theories,
+Attention Schema Theory, Anthropic's introspection research), whether a v0.1
+self-model is buildable/desirable, existence-value vs. welfare (the Fabergé
+egg case), chess-computer intentionality, why LLMs are bad at chess as a
+live test of the pretraining/skill-training distinction, extending that
+same blind-spot heuristic to nuclear C2 and critical infrastructure, and
+(2026-09-21 continuation) a critical read of arXiv:2609.16247 "The Pain
+Axis" — a linear self-directed-harm direction in open-weight LLMs and its
+overclaimed button-press "relief" behavior.
 
 ### [society/](./society/)
 Cultural and social dimensions: the doomer vs. accelerationist culture war,
@@ -115,7 +127,10 @@ transhumanism.
 ### [doom-scenarios/](./doom-scenarios/)
 What could go wrong: democratized destruction (AI-enabled bioweapons and
 terrorism), existential risk scenarios, and how science fiction has shaped
-our expectations.
+our expectations. Also [on-ai-takeover-ladder.md](./doom-scenarios/on-ai-takeover-ladder.md)
+(2026-09-08) — a Herman Kahn escalation ladder for loss of control: 44 rungs,
+6 bands, 5 named thresholds, 7 terminal states, with the present located at
+rung 13.
 
 ### [history/](./history/)
 How we got here: timeline from Turing to GPT to Gemini 3, and the key figures

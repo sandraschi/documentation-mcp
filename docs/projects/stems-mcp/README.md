@@ -1,16 +1,42 @@
-# Stems-MCP
+# stems-mcp
 
-**Version**: v0.1.0
-**Backend**: 11126
-**Frontend**: 11127 (reserved)
+FastMCP 3.4+ server for audio stem separation using HTDemucs v4 via ONNX Runtime.
 
-ONNX Runtime stem separation server running HTDemucs v4. Separates any audio file into vocals, drums, bass, and other. Model auto-downloads from HuggingFace (~200MB) on first use.
+Separates audio into **vocals, drums, bass, and other** (4 stems) or **vocals + other** (2 stems).
 
-## Tool
+## Requirements
 
-`stems_separate`: separate, separate_vocals, status
+- Python 3.12+
+- CUDA-capable GPU recommended (RTX 4090 tested; runs on CPU but slower)
+- ~200 MB free disk for model cache
 
-## Links
+## Quick start
 
-- GitHub: https://github.com/sandraschi/stems-mcp
-- Model: https://huggingface.co/dhunstack/demucs-onnx
+```powershell
+uv sync
+uv run stems-mcp
+```
+
+### HTTP mode
+
+```powershell
+uv run stems-mcp --mode http
+# Server on http://127.0.0.1:11126
+```
+
+## Tools
+
+| Tool | Operations | Description |
+|------|-----------|-------------|
+| `stems_separate` | `separate`, `separate_vocals`, `status` | Portmanteau for all stem operations |
+
+## Ports
+
+| Service | Port |
+|---------|------|
+| Backend (MCP HTTP + REST) | 11126 |
+| Frontend (reserved) | 11127 |
+
+## Model
+
+Downloads `htdemucs.onnx` from HuggingFace on first use. Cached at `~/.cache/stems-mcp/` by default (override with `STEMS_MODEL_DIR`).

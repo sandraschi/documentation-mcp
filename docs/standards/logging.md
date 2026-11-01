@@ -1,3 +1,13 @@
+---
+title: "Logging Standards"
+category: standard
+status: review
+audience: mcp-dev
+last_updated: 2026-06-26
+# status: review -- added in bulk 2026-09-18; category is inferred and the
+# content has NOT been verified against the current codebase. Change to
+# active once someone has actually checked it.
+---
 # Logging Standards
 
 ## Overview
@@ -14,6 +24,11 @@ Comprehensive logging standards for MCP servers, ensuring consistent, structured
 > 2. **`backend-spawn.log`** — the Tauri Rust shell writes backend lifecycle logs to
 >    `%LOCALAPPDATA%\{identifier}\cache\backend-spawn.log` for diagnosing startup failures
 >    (see [rules/tauri_nsis_building.md](./rules/tauri_nsis_building.md) `backend.rs`).
+>
+> 3. **Log file location (HARD, BUG-063)** — never pass a bare filename or relative dir
+>    (`FileHandler("x.log")`, `log_dir="logs"`, `Path("exports")`). It resolves against the MCP
+>    host's cwd, which is often `D:\Dev\repos`, and litters the fleet root. Anchor to
+>    `Path(os.environ.get("LOCALAPPDATA") or Path.home()) / "<repo-name>" / "logs"` and `mkdir(parents=True)`.
 
 ## Logging Architecture
 
@@ -474,14 +489,19 @@ class AggregatingHandler(logging.Handler):
 ### Log Rotation and Retention
 ```python
 # src/mcp_server/config/logging.py (continued)
+import os
 from logging.handlers import TimedRotatingFileHandler
 
 
-def setup_production_logging(log_dir: str = "logs") -> None:
+# Absolute, never cwd-relative (BUG-063)
+LOG_DIR = Path(os.environ.get("LOCALAPPDATA") or Path.home()) / "<repo-name>" / "logs"
+
+
+def setup_production_logging(log_dir: Path = LOG_DIR) -> None:
     """Set up production logging with rotation."""
 
     # Ensure log directory exists
-    Path(log_dir).mkdir(exist_ok=True)
+    Path(log_dir).mkdir(parents=True, exist_ok=True)
 
     # Create rotating file handler
     file_handler = TimedRotatingFileHandler(

@@ -1,4 +1,51 @@
 
+
+## [0.3.2] - 2026-08-17
+
+### Fixed (webapp totally broken - "nothing works")
+- Root cause: the webapp posted bare JSON-RPC to `/mcp` with no MCP session. FastMCP 3.4
+  streamable HTTP requires an `initialize` handshake + `Mcp-Session-Id` header on every
+  request; every page call returned `400 "Missing session ID"`, so Tools/Bookmarks/
+  Chat/Dashboard chips all failed silently.
+- Added `webapp/src/lib/mcp.ts` - a minimal MCP client (initialize -> session header ->
+  SSE response parsing) used by Dashboard, Tools, Chat, and Bookmarks.
+- Server: `expose_headers=["Mcp-Session-Id"]` on CORS so the browser can read the
+  session header (previously hidden by CORS).
+- Verified in a real browser: Tools lists all 17 tools, Bookmarks lists actual Chrome
+  bookmarks, Dashboard shows Online + 17-tool KPI, zero console errors.
+
+## [0.3.1] - 2026-08-17
+
+### Security (CRITICAL fixes)
+- `native/build.ps1` bundles `.env.example` only — the real `.env` (with personal API keys) is never copied into the installer
+- `mcpb/` staging directory untracked from git; `*.bak`, `*.mcpb`, `reports/`, `mcpb/` added to `.gitignore`
+- Hardcoded-secret scan clean; `.env.example` holds no real values
+
+### Added
+- REST endpoints: `/api/status`, `/api/capabilities`, `/api/skills`, `/api/llm/discover`, `POST /api/llm/chat`, `GET /api/fleet/webapps`, `POST /api/shutdown`
+- `browser_help` and `browser_shutdown` MCP tools
+- `show_browsers_card` Prefab UI card (`prefab-ui` core dependency)
+- Settings page (backend status + LLM provider/model selection) and Help page; sidebar entries for both
+- Dashboard hero section with quick actions
+- Webapp: backend-status Tauri event listener + HTTP polling in Topbar; Ctrl+L (logger) / Ctrl+H (help) shortcuts; Tailwind CSS import fix (was shipping an unstyled app)
+- Test suite (11 tests: tool registration, docstrings, REST routes); pytest + pyright dev deps
+- CI workflow (ruff, format, pyright, pytest, tsc, vite build) on windows-latest
+- `.claude-plugin`, `.windsurfrules`, `.github/copilot-instructions.md`, `.opencode/skills`, `.agents/skills` session-context injection channels
+- `.pre-commit-config.yaml` (ruff + biome), `.gitattributes` (LF), `renovate.json`, `docs/` (CONFIGURATION, DEVELOPMENT, TOOLS, TROUBLESHOOTING)
+- MCPB prompts expanded to fleet 3-4-100 bar (system.md 3.0K+ words, user.md 4.1K+ words, examples.json 108)
+
+### Fixed
+- Bookmarks page posted JSON-RPC to `/health` (405) — now `/mcp`
+- Apps page called nonexistent `/api/fleet/webapps` — endpoint implemented
+- Chat page called nonexistent `/api/llm/chat` — endpoint implemented (Ollama proxy)
+- Webapp/backend port mismatch (10776 vs 10780): all frontend fetches unified on 10780
+- Circular import in workflow modules (server never imported) — lazy `browse_page` imports
+- `start.ps1` runt: now clears ports, starts backend in `--serve` mode, waits for health, launches frontend, opens browser
+- `cua-nsis-config.json`: health path `/health`, correct backend process names
+- Tool docstrings moved to SOTA format (`## Return Format` / `## Examples`, no `Args:`)
+- `T20` (print ban) added to ruff select; ruff, pyright, tsc, pytest, vite build all green
+- `.mcpbignore` now excludes `webapp/`, `mcpb/`, `*.bak`; mcpb manifest version/tool list synced
+
 ## [Unreleased] — 2026-07-13
 
 ### Fixed

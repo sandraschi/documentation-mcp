@@ -35,4 +35,4 @@ Thermal: Fanless MacBook Airs throttle under sustained heavy inference; Pro/Max 
 - **agentic-mcp / local RAG**: Minimum M1 Pro / 16 GB; recommended M3 Max / 64 GB; “best-in-class” M5 Pro / 128 GB is **project target**, not a current product.
 
 ---
-*© 2026 Materialist-Reductionist Systems • Alsergrund Technical Campus*
+*© 2026 Materialist-Reductionist Systems • Vienna Technical Campus*
