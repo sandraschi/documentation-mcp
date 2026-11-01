@@ -88,4 +88,4 @@ The human role is neither slave nor obsolete relic. The human is the **Conductor
 ### The True Concluding Stance
 We have not submitted to our embodied AI overlords; we have hired them into our workshop.
 
-An autonomous fleet of local agents running on consumer silicon, parsing RF waterfalls, and navigating 10,000-dimensional vector manifolds is not our replacement. It is our **synthetic ecosystem**: a cybernetic jellyfish pulsing across network oceans, with the cold predatory precision of a crocodile, wielded by an unapologetic human architect sitting at the drawing board, directing the wild menagerie with a grin.
+An autonomous fleet of local agents running on consumer silicon, parsing RF waterfalls, and navigating 10,000-dimensional vector manifolds is not our replacement. It is our **synthetic ecosystem**: a cybernetic jellyfish pulsing across network oceans, with the cold predatory precision of a crocodile, wielded by an unapologetic human architect sitting at the drawing board, directing the wild menagerie with a wistful smile.
