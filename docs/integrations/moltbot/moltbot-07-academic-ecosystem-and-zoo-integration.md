@@ -99,7 +99,7 @@ Moltbot’s differentiator in this set: **single gateway** owning **many messagi
 
 ## 4. Combining Moltbot with the MCP Server “Zoo”
 
-Your “zoo” is the set of MCP servers and composites documented in mcp-central-docs (e.g. advanced-memory-mcp, games-app, devices-mcp, robotics-mcp, obs-mcp, nest-protect-mcp, resonite-mcp, virtualdj-mcp, etc.) and analyzed by tools like the **MCP Zoo Runt Analyzer** (mcp-studio). Below are concrete ways to combine Moltbot with that zoo.
+Your “zoo” is the set of MCP servers and composites documented in mcp-central-docs (e.g. advanced-memory-mcp, ai-games-collection, devices-mcp, robotics-mcp, obs-mcp, nest-protect-mcp, resonite-mcp, virtualdj-mcp, etc.) and analyzed by tools like the **MCP Zoo Runt Analyzer** (mcp-studio). Below are concrete ways to combine Moltbot with that zoo.
 
 ### 4.1 Moltbot consumes MCP zoo (MCP-as-tools)
 
@@ -115,14 +115,14 @@ Your “zoo” is the set of MCP servers and composites documented in mcp-centra
 ### 4.3 Shared identity and routing
 
 - **Unified identity:** Optional integration between Moltbot pairing/device identity and your org’s auth (e.g. OIDC, API keys) so that zoo services and Moltbot share a notion of “who is acting.”
-- **Channel ↔ zoo routing:** Route certain channel messages (e.g. “deploy games-app”) to zoo-backed workflows (e.g. myai dashboard, games-app pipelines) via webhooks or MCP-triggered automation.
+- **Channel ↔ zoo routing:** Route certain channel messages (e.g. “deploy ai-games-collection”) to zoo-backed workflows (e.g. myai dashboard, ai-games-collection pipelines) via webhooks or MCP-triggered automation.
 
 ### 4.4 Domain-specific integrations (examples)
 
 | Zoo server / app | Integration idea |
 |------------------|------------------|
 | **advanced-memory-mcp** | “Knowledge” tool or skill that calls Advanced Memory RAG/graph; agent uses `~/clawd` plus your knowledge base. |
-| **games-app** | Webhooks or `moltbot agent` triggers (e.g. “start chess,” “fetch JLPT”) that hit games-app APIs; optional Discord/Slack bot that uses same backend. |
+| **ai-games-collection** | Webhooks or `moltbot agent` triggers (e.g. “start chess,” “fetch JLPT”) that hit ai-games-collection APIs; optional Discord/Slack bot that uses same backend. |
 | **devices-mcp** | Expose tapo/ring/lighting as Moltbot tools via MCP bridge; “turn off kitchen lights” from WhatsApp. |
 | **obs-mcp** | OBS control from a channel (e.g. “go live,” “switch scene”) via MCP bridge. |
 | **robotics-mcp** | Robot control or status from Moltbot (voice or chat) via MCP. |
@@ -140,7 +140,7 @@ Your “zoo” is the set of MCP servers and composites documented in mcp-centra
 - **Academic background:** Moltbot has no stated academic lineage. Relevant work includes ReAct, multi-agent orchestration (e.g. AgentOrchestra, MARCO, AgentFlow), and **Gradientsys** (MCP-based scheduler). These are conceptual neighbors, not direct predecessors.
 - **FOSS competitors:** Cleo, Jarvis, iamai-core, “Personal AI Assistant,” Open Interpreter, Devika, LocalAI, Ollama. Moltbot is distinguished by multi-channel ownership, skills, nodes, and productized local-first assistant.
 - **Extensions:** OpenAPI/IDL, MCP-native skills, skill versioning, tool composition, email channel, unified inbox API, rate limiting, threat model, sandbox profiles, secrets management, Prometheus, tracing, skill/tool analytics.
-- **Zoo integration:** (1) Moltbot consumes the zoo via an MCP bridge (skills/tools); (2) Zoo consumes Moltbot via a small Moltbot MCP server; (3) Shared identity and channel ↔ zoo routing; (4) Domain-specific hooks (advanced-memory, games-app, tapo, obs, robotics, obsidian); (5) Use zoo analyzer and portmanteau structure to guide bridging and tool exposure.
+- **Zoo integration:** (1) Moltbot consumes the zoo via an MCP bridge (skills/tools); (2) Zoo consumes Moltbot via a small Moltbot MCP server; (3) Shared identity and channel ↔ zoo routing; (4) Domain-specific hooks (advanced-memory, ai-games-collection, tapo, obs, robotics, obsidian); (5) Use zoo analyzer and portmanteau structure to guide bridging and tool exposure.
 
 ---
 

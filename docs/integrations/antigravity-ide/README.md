@@ -107,7 +107,7 @@ directly, but accessible via `local-llm-mcp` server if configured.
 ## Relevant Docs
 
 - Master MCP config: `operations/MASTER_MCP_CONFIG.json`
-- CodeMode / tool_search: `fastmcp/code-mode.md`
+- CodeMode / tool_search: `fastmcp/codemode-discovery.md`
 - Claude Desktop comparison: `integrations/claude-desktop/README.md`
 - Cursor IDE: `integrations/cursor-ide/README.md`
 - Local LLM standards: `standards/LOCAL_LLM_STANDARDS.md`

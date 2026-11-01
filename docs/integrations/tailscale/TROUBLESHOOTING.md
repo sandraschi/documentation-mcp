@@ -771,3 +771,77 @@ Following these troubleshooting patterns will help resolve common issues and imp
 **Last Updated**: October 23, 2025  
 **Version**: 1.0.0  
 **Purpose**: Troubleshooting guide for Tailscale integration across all MCP repositories
+
+
+---
+
+## 9. iOS devices cannot reach Tailscale Serve endpoints while ping/Taildrop work (ACL ip-grant pitfall)
+
+**Incident**: 2026-08-15, tailnet `tailfab45.ts.net` (fleet Intel Reports hub on goliath :11027).
+**Severity**: P1 (silent, tailnet-wide). **Depot entry**: [BUG-022](../../troubleshooting/BUGS_DEPOT.md).
+
+### Symptoms
+
+- iPads (and iPhone) on the tailnet can **ping** goliath's tailnet IP and receive
+  **Taildrop** files, but **every TCP connection fails**: Tailscale Serve HTTPS on
+  :11027, plain HTTP on :80, a direct plain-HTTP listener on the tailnet IP, and SMB.
+- The same endpoints return 200 from the host itself and from the LAN IP.
+- MagicDNS is enabled; DNS names resolve; reinstalling the Tailscale app changes nothing.
+- Safari on iOS reports "server stopped responding" / "cannot find server" for the
+  raw IP URL; it cannot bypass the hostname-bound certificate for IP HTTPS.
+
+### Root cause
+
+The tailnet ACL policy (grants model) contained **no `ip` grant**:
+
+- The default template's allow-all rule was present but **commented out**.
+- The only active grant was `app: { "tailscale.com/cap/drive": ... }` (Taildrive).
+- In the grants model, a rule with only `app` capabilities grants **no IP
+  connectivity**. Tailscale enforces the policy **on the sending device** from its
+  netmap, so the SYN is dropped before it ever leaves the client — the host never
+  sees it.
+- ACLs filter TCP/UDP only. **ICMP ping and Taildrop always pass**, which is why
+  "network works" tests succeeded while every real connection failed.
+
+### Diagnostic ladder (in order)
+
+1. **LAN-IP test** (fastest discriminator): from the failing device, open
+   `http://<host-lan-ip>:<port>` where the service also binds the LAN interface.
+   Works = app/browser fine, failure is tailnet-internal.
+2. **Connection watch on the host**: while the remote device retries, watch for
+   inbound SYNs. No SYNs arrive = sender-side drop (policy), not the server:
+   `Get-NetTCPConnection -LocalPort <port>` (Windows).
+3. **ACL readback** via the Admin API (key lives in `tailscale-mcp/.env`):
+   ```powershell
+   Invoke-WebRequest -Uri "https://api.tailscale.com/api/v2/tailnet/$TAILNET/acl" `
+     -Headers @{ Authorization = "Basic $auth" } -Method GET
+   ```
+   Look for an explicit `"ip": ["*"]` grant (the commented-out template line does
+   not count).
+
+### Fix
+
+POST a clean policy that carries the standard member-to-member IP grant (see
+[troubleshooting docs in tailscale-mcp](https://github.com/sandraschi/tailscale-mcp/blob/master/docs/TROUBLESHOOTING.md)
+for the exact body). Do **not** text-surgery the stored HuJSON — the template
+arrays (`nodeAttrs`, `grants`, `ssh`) close identically and the parser rejects
+malformed inserts. Propagation is seconds; toggle the iOS VPN to force a netmap
+refresh if needed.
+
+### Fleet audit result (2026-08-15)
+
+Grep across `D:\Dev\repos` for ACL policy files / `autogroup:member` templates:
+only documentation references (tailscale guides in database-operations-mcp,
+tailscale-mcp assets). No repo stores the tailnet ACL, so the antipattern is
+admin-console state, not repo code. Re-audit after any ACL edit.
+
+### Related iOS confounders (do not confuse with this bug)
+
+- **iOS Safari cannot bypass certificate mismatches** — IP-based HTTPS always fails;
+  use the `.ts.net` hostname.
+- **iOS suspends the Tailscale VPN extension when the app is backgrounded** — test
+  with the app foregrounded.
+- **Upstream [tailscale/tailscale #19147](https://github.com/tailscale/tailscale/issues/19147)**
+  (open): iPhone/iPad fail on Serve HTTPS endpoints even with healthy server side and
+  correct ACL. If ACL is correct and hostname HTTPS still fails on iOS while LAN IP
+  works, this bug is the suspect; plain-HTTP direct listeners are the workaround.

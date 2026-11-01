@@ -1,23 +1,27 @@
 # LiveKit Integration Guide
 
-**Last Updated:** 2026-04-06 (v2.0.0 Teams++)
+**Last Updated:** 2026-09-06 (server v1.13.6, agents v1.8.0, client v2.22.2, server-sdk v2.18.0)
 **Status:** SOTA Compliance
-**Reference Implementation:** teleconference-mcp (Teams++) at `D:\Dev\repos\teleconference-mcp`
+**Reference Implementation:** teleconference-mcp at `D:\Dev\repos\teleconference-mcp`
 
 ---
 
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Architecture](#architecture)
-3. [LiveKit Server](#livekit-server)
-4. [Web Client Integration](#web-client-integration)
-5. [AI Voice Agents](#ai-voice-agents)
-6. [MCP Integration](#mcp-integration)
-7. [Configuration](#configuration)
-8. [Deployment](#deployment)
-9. [Troubleshooting](#troubleshooting)
-10. [Best Practices](#best-practices)
+2. [History](#history)
+3. [Architecture](#architecture)
+4. [LiveKit Server](#livekit-server)
+5. [Web Client Integration](#web-client-integration)
+6. [AI Voice Agents](#ai-voice-agents)
+7. [MCP Integration](#mcp-integration)
+8. [Configuration](#configuration)
+9. [Deployment](#deployment)
+10. [Troubleshooting](#troubleshooting)
+11. [Best Practices](#best-practices)
+12. [Who Uses LiveKit](#who-uses-livekit)
+13. [Community](#community)
+14. [Bibliography](#bibliography)
 
 ---
 
@@ -33,22 +37,32 @@ LiveKit is an open-source **WebRTC SFU (Selective Forwarding Unit)** that provid
 - **Data channels** - Real-time messaging alongside media
 - **Agent framework** - Python SDK for voice AI participants
 
-### Key Features
+### Key Features (server v1.13.x)
 
 | Feature | Description |
 |--------|-------------|
 | **SFU Architecture** | Selective forwarding reduces bandwidth; each participant sends one stream |
 | **Adaptive Bitrate** | Automatic quality adjustment based on network conditions |
 | **Screen Sharing** | Native track publishing for screen capture |
-| **Recording** | Egress services for cloud recording (optional) |
-| **Agents** | Python/TypeScript SDK for bot participants (voice, transcription) |
+| **Recording** | Egress v2 (`createRoomCompositeEgress`, server v1.13.2+) with MP4/file/S3 output |
+| **Agents** | Python/TypeScript SDK for bot participants (voice, transcription, vision) |
+| **Data tracks** | Ordered, reliable data delivery on by default (server v1.11+) — replaces lossy data-channel for transcripts |
+| **Room auto-create** | `roomCreate` JWT grant spawns rooms on first join (server v1.12+, no explicit `room_create`) |
+| **SIP/Telephony** | PSTN ingress, call transfer RPC, Answering Machine Detection (agents) |
 
 ### When to Use LiveKit
 
 - **Video conferencing** - Standups, code reviews, team meetings
 - **Voice AI** - Real-time voice agents with STT/LLM/TTS pipelines
 - **Live streaming** - Low-latency broadcast with interactive participants
+- **Robotics teleoperation** - Low-latency video return (fleet: `teleoperator-mcp`, room `teleop-boomy`)
 - **Self-hosted** - Full control over infrastructure and data
+
+---
+
+## History
+
+Founded 2021 in San Francisco by **Russ d'Sa (CEO)** and **David Zhao (CTO)** as an open-source WebRTC SFU — self-hostable real-time media for the "metaverse" era (Twilio/Agora alternative). Demand for hosting from Spotify, Oracle, and Reddit produced **LiveKit Cloud**. After ChatGPT launched, d'Sa's LiveKit-powered voice demo won a deal to run **ChatGPT voice modes on LiveKit Cloud**, pivoting the company to voice-AI infrastructure: SDKs, UI components, SIP, egress, and the Agents framework. Funding: $7M seed (Redpoint, Dec 2021) + $8M (2022); $22M Series A (Altimeter, Jun 2024); $45M Series B (Altimeter, Apr 2025, $345M); **$100M Series C (Index Ventures, Jan 2026, $1B, $183M total)**. 300,000+ developers; `livekit/livekit` ~20.7k stars (Apache-2.0, Go); `livekit/agents` ~14k stars (Sep 2026). Fleet relevance: our `teleconference-mcp` + `teleoperator-mcp` both ride the `LiveKitSFU` Windows service (now v1.13.6).
 
 ---
 
@@ -60,7 +74,7 @@ LiveKit is an open-source **WebRTC SFU (Selective Forwarding Unit)** that provid
 +------------------+     +------------------+     +------------------+
 |   Web Client     |     |  LiveKit Server  |     |  Voice Agent     |
 |  (Next.js/React) |---->|  (Docker)        |<----|  (Python)        |
-|  livekit-client  |     |  Port 7880       |     |  livekit-agents  |
+|  livekit-client  |     |  Port 15580      |     |  livekit-agents  |
 +------------------+     +------------------+     +------------------+
         |                         |                         |
         | Token API                | WebRTC                  | Worker
@@ -82,44 +96,57 @@ LiveKit is an open-source **WebRTC SFU (Selective Forwarding Unit)** that provid
 
 ## LiveKit Server
 
-> **Fleet deployment (Goliath, 2026-08-03):** the fleet SFU runs as a **Windows service**
-> (`LiveKitSFU`, NSSM, native `livekit-server` 1.7.0, config `teleconference-mcp/livekit.yaml`, auto-start +
-> crash-restart) — **not** Docker. Verify: `Get-Service LiveKitSFU`; logs:
-> `D:\Dev\repos\teleconference-mcp\logs\livekit.out.log`; reinstall (elevated):
+> **Fleet deployment (Goliath):** the fleet SFU runs as a **Windows service**
+> (`LiveKitSFU`, NSSM, native `livekit-server` **1.13.6** since 2026-09-06, config `teleconference-mcp/livekit.yaml`,
+> auto-start + crash-restart) — **not** Docker. Verify: `Get-Service LiveKitSFU` + `& livekit-server --version`;
+> logs: `D:\Dev\repos\teleconference-mcp\logs\livekit.out.log` / `.err.log` (a Windows CPU-monitor notice in
+> `.err.log` is benign); reinstall (elevated):
 > `D:\Dev\repos\teleoperator-mcp\scripts\install-livekit-service.ps1`.
 > The Docker instructions below remain valid for non-Windows / dev machines.
 
 ### Docker Setup
 
 ```yaml
-# docker-compose.yaml
+# docker-compose.yaml (dev / non-Windows; pin the version, never :latest)
 services:
   livekit:
-    image: livekit/livekit-server:latest
+    image: livekit/livekit-server:v1.13.6
     command: --config /etc/livekit.yaml
     volumes:
       - ./livekit.yaml:/etc/livekit.yaml
     ports:
-      - "7880:7880"   # HTTP/WebSocket
-      - "7881:7881"   # WebRTC
-      - "7882:7882/udp"  # TURN (if needed)
+      - "15580:15580"   # HTTP/WebSocket (fleet port; upstream default is 7880)
+      - "7881:7881"     # WebRTC TCP
+      - "7882:7882/udp" # TURN (if needed)
     restart: always
 ```
 
 ### Configuration (livekit.yaml)
 
 ```yaml
-port: 7880
+port: 15580   # fleet port (upstream default 7880)
 rtc:
   port_range_start: 50000
   port_range_end: 60000
   use_external_ip: false
+  stun_servers:
+    - stun.l.google.com:19302     # host:port — no stun: prefix
+    - stun1.l.google.com:19302
+  # TURN (server v1.12+, TTL ENFORCED since v1.13.1 — old no-TTL creds stop working):
+  # turn:
+  #   enabled: true
+  #   secret: <rotate-me>
+  #   ttl_seconds: 300
 keys:
   devkey: secret   # API key
   # In production: use env vars or secrets
 logging:
   level: info
 ```
+
+> Server 1.10+ notes: log key `pID` was renamed `participantID` (update Loki/Grafana filters);
+> 1.13.x enforces per-participant TURN quota (default 12), WS read-size and API body-size limits,
+> and drops H.264 baseline (`42001f`) from default codecs.
 
 ### Token Generation
 
@@ -141,7 +168,10 @@ export async function POST(req: Request) {
   });
   token.addGrant({
     roomJoin: true,
+    roomCreate: true, // server v1.12+: room auto-created on first join
     room: roomName,
+    canPublish: true,
+    canSubscribe: true,
   });
 
   return Response.json({ token: await token.toJwt() });
@@ -168,9 +198,9 @@ jwt = token.to_jwt()
 ```json
 {
   "dependencies": {
-    "@livekit/components-react": "^2.9.19",
-    "livekit-client": "^2.17.0",
-    "livekit-server-sdk": "^2.15.0"
+    "@livekit/components-react": "^2.9.24",
+    "livekit-client": "^2.22.2",
+    "livekit-server-sdk": "^2.18.0"
   }
 }
 ```
@@ -254,50 +284,57 @@ The Python `livekit-agents` package provides:
 User Speech --> VAD --> STT (Whisper) --> LLM (Ollama) --> TTS (Piper) --> Room Audio
 ```
 
-### Dependencies
+### Dependencies (agents v1.8.0, Sep 2026)
 
 ```txt
-livekit-agents
-livekit-plugins-silero    # Voice Activity Detection
-livekit-plugins-whisper   # Speech-to-Text
-piper-tts                # Text-to-Speech (or kokoro-tts)
-ollama                    # Local LLM (or openai, anthropic)
-python-dotenv
+livekit-agents[pipeline,silero,turn-detector]>=1.8.0
+livekit-plugins-openai>=1.8.0
+livekit-plugins-silero>=1.8.0
+livekit-plugins-deepgram>=1.8.0
+livekit-plugins-elevenlabs>=1.8.0
+ollama>=0.4.0
+python-dotenv>=1.0.0
 ```
+
+> There is no `livekit-plugins-whisper` package — Whisper STT arrives via the OpenAI plugin
+> (`livekit-plugins-openai`) or local inference. A stale reference to it once broke the agent Docker build.
 
 ### Agent Entrypoint
 
 ```python
-from livekit.agents import JobContext, WorkerOptions, cli, llm
-from livekit.agents.pipeline import VoicePipelineAgent
-from livekit.plugins import piper, silero, whisper
+from livekit.agents import (
+    Agent, AgentSession, JobContext, WorkerOptions, cli,
+    llm,
+)
+from livekit.agents.voice import AutoRestartPolicy
+try:
+    from livekit.agents.voice import UserTurnLimitOptions  # 1.5.12+
+except ImportError:
+    UserTurnLimitOptions = None
 
 async def entrypoint(ctx: JobContext):
-    """SOTA 2026: FastMCP 3.2+ entrypoint."""
-    vad = silero.VAD.load()
-    stt = whisper.STT()
-    tts = piper.TTS()
-    llm_engine = SOTAOllamaLLM(model="gemma3-27b") # Upgraded for Teams++
-
-    agent = Agent(
-        vad=vad,
-        stt=stt,
-        llm=llm_engine,
-        tts=tts,
-        chat_ctx=initial_context,
+    session = AgentSession(
+        vad=silero.VAD.load(),
+        stt=openai.STT(model="whisper-1"),   # or local Whisper
+        llm=SOTAOllamaLLM(model="gemma2"),   # custom llm.LLM backend
+        tts=piper.TTS(),                     # or cloud TTS
+        turn_detection="auto",
+        user_turn_limits=(UserTurnLimitOptions(max_user_turn_duration=60.0)
+                          if UserTurnLimitOptions else None),
+        # expressive=True needs an inference TTS voice — off for local Piper
     )
-
-    @agent.on("user_speech_committed")
-    def on_speech(msg: llm.ChatMessage):
-        # Custom logic: trigger on keywords, jargon detection, etc.
-        pass
-
-    agent.start(ctx.room)
-    await agent.say("Agent operational.")
+    await session.start(room=ctx.room, agent=Agent(instructions="..."))
+    await session.say("Agent operational.")
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(WorkerOptions(
+        entrypoint_fnc=entrypoint,
+        job_restart_policy=AutoRestartPolicy.ALWAYS,
+    ))
 ```
+
+> Agents 1.7+ tag trace/log content keys as `lk.pii.*` (PII redaction) and speak full OTel GenAI
+> conventions — keep transcripts at DEBUG so Loki stays clean.
 
 ### Custom LLM Integration
 
@@ -315,7 +352,7 @@ class SOTAOllamaLLMStream(llm.LLMStream):
 ### Agent Configuration (Environment)
 
 ```bash
-LIVEKIT_URL=ws://localhost:7880
+LIVEKIT_URL=ws://localhost:15580
 LIVEKIT_API_KEY=devkey
 LIVEKIT_API_SECRET=secret
 ```
@@ -352,7 +389,7 @@ const LIVEKIT_ROOM_TOOL = {
   description: "Get active LiveKit rooms and participant counts",
   inputSchema: {
     type: "object",
-    properties: { livekit_url: { type: "string", default: "http://localhost:7880" } },
+    properties: { livekit_url: { type: "string", default: "http://localhost:15580" } },
   },
 };
 ```
@@ -381,7 +418,7 @@ Implementation would call LiveKit HTTP API (room list) or Redis for room state.
 
 | Variable | Description | Default |
 |---------|-------------|---------|
-| `LIVEKIT_URL` | WebSocket URL for LiveKit server | `ws://localhost:7880` |
+| `LIVEKIT_URL` | WebSocket URL for LiveKit server | `ws://localhost:15580` (fleet; upstream default `ws://localhost:7880`) |
 | `LIVEKIT_API_KEY` | API key for token signing | `devkey` |
 | `LIVEKIT_API_SECRET` | API secret for token signing | `secret` |
 | `NEXT_PUBLIC_LIVEKIT_URL` | Public URL for web client (must match server) | - |
@@ -432,7 +469,7 @@ Full dockerization: livekit, redis, web, and **agent** in one stack. **Ollama ru
 ```yaml
 services:
   livekit:
-    image: livekit/livekit-server:latest
+    image: livekit/livekit-server:v1.13.6
     # ... (see above)
 
   redis:
@@ -442,7 +479,7 @@ services:
   web:
     build: .
     environment:
-      - NEXT_PUBLIC_LIVEKIT_URL=ws://localhost:7880
+      - NEXT_PUBLIC_LIVEKIT_URL=ws://localhost:15580
       - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
       - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
     depends_on: [livekit]
@@ -450,7 +487,7 @@ services:
   agent:
     build: ./apps/agent
     environment:
-      - LIVEKIT_URL=ws://livekit:7880
+      - LIVEKIT_URL=ws://livekit:15580
       - LIVEKIT_API_KEY=${LIVEKIT_API_KEY}
       - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET}
       - OLLAMA_BASE_URL=http://host.docker.internal:11434/v1
@@ -468,7 +505,7 @@ services:
 
 | Symptom | Cause | Fix |
 |---------|-------|-----|
-| "Failed to connect" | Wrong URL or port | Verify `NEXT_PUBLIC_LIVEKIT_URL` matches server (ws://host:7880) |
+| "Failed to connect" | Wrong URL or port | Verify `NEXT_PUBLIC_LIVEKIT_URL` matches server (fleet `ws://host:15580`, upstream default `ws://host:7880`) |
 | "Invalid token" | Key/secret mismatch | Ensure API key/secret match livekit.yaml keys |
 | "Permission denied" | Camera/mic blocked | Check browser permissions; use /test page to verify devices |
 
@@ -488,11 +525,11 @@ services:
 | Echo | Multiple outputs | Use headphones or ensure single speaker path |
 | Choppy audio | Network | Check bandwidth; reduce video resolution |
 
-### Ports
+### Ports (fleet / upstream default)
 
-- **7880** - HTTP/WebSocket (primary)
-- **7881** - WebRTC
-- **50000-60000** - RTP (configurable in livekit.yaml)
+- **15580 / 7880** - HTTP/WebSocket (primary; fleet uses 15580)
+- **7881** - WebRTC TCP
+- **50000-60000** - RTP/ICE (configurable in livekit.yaml)
 
 ---
 
@@ -538,12 +575,47 @@ See reference implementation (teleconference-mcp) `PRD.md` for full Phase 2, 2.5
 
 ---
 
-## References
+## Who Uses LiveKit
 
-- [LiveKit Documentation](https://docs.livekit.io/)
-- [LiveKit Agents](https://docs.livekit.io/agents/)
-- [livekit-server-sdk (Node)](https://www.npmjs.com/package/livekit-server-sdk)
-- [@livekit/components-react](https://www.npmjs.com/package/@livekit/components-react)
-- [Turborepo MCP Monorepo Pattern](../../docs/patterns/TURBOREPO_MCP_MONOREPO_PATTERN.md)
+| User | What runs on LiveKit |
+|------|----------------------|
+| **OpenAI ChatGPT voice modes** | Realtime voice conversation on LiveKit Cloud |
+| **Apple FaceTime (iOS 18)** | LiveKit embedded for emergency calls |
+| **France's Visio** | Government video-conferencing platform on the OSS SFU |
+| **Spotify / Oracle / Reddit / AT&T** | Early Cloud adopters (livestreaming, interactive audio) |
+| **Salesforce, Meta** | Voice/video AI features (per company disclosures) |
+| **911 emergency services (US)** | Real-time emergency-call media |
+| **LiveKit Meet** (`livekit-examples/meet`, OSS) | Reference conferencing app our web UI descends from |
+| **Fleet** | `teleconference-mcp` (conferencing + Visio agent) and `teleoperator-mcp` (robot video return) |
+
+---
+
+## Community
+
+| Channel | Address |
+|---------|---------|
+| Docs (with `llms.txt`) | <https://docs.livekit.io> |
+| GitHub org | <https://github.com/livekit> |
+| Forum | <https://community.livekit.io> |
+| Slack | <https://livekit.com/join-slack> |
+| Blog | <https://livekit.io/blog> |
+| YouTube | <https://www.youtube.com/@livekit_io> |
+| Coding-agent support (MCP) | <https://docs.livekit.io/mcp> |
+
+---
+
+## Bibliography
+
+* Docs — <https://docs.livekit.io> and `llms.txt` (<https://docs.livekit.io/llms.txt>)
+* `livekit/livekit` (Go SFU, Apache-2.0) — <https://github.com/livekit/livekit>, releases <https://github.com/livekit/livekit/releases>
+* `livekit/agents` — <https://github.com/livekit/agents>, releases <https://github.com/livekit/agents/releases>
+* SDKs/components/server-SDKs under <https://github.com/livekit> (`client-sdk-js/swift/android/flutter`, `components-js`, `node-sdks`, `python-sdks`, `server-sdk-go/ruby`)
+* Wikipedia, "LiveKit" — <https://en.wikipedia.org/wiki/LiveKit>
+* Bass (2026-01-22), Bloomberg — <https://www.bloomberg.com/news/articles/2026-01-22/livekit-seller-of-voice-tools-to-openai-raises-100-million>
+* Wiggers (2025-04-10), TechCrunch — <https://techcrunch.com/2025/04/10/livekits-tools-help-power-real-time-communications/>
+* Shrivastava (2024-06-04), Forbes — <https://www.forbes.com/sites/rashishrivastava/2024/06/04/this-110-million-startup-is-building-a-nervous-system-for-ai/>
+* Bovenziner (2026-02-11), The Stack (France Visio) — <https://www.thestack.technology/inside-the-open-source-project-powering-frances-video-platform-revolution/>
+* Makaryan (2024-09-26), Center for Data Innovation (Q&A with Russ d'Sa) — <https://datainnovation.org/2024/09/5-qs-for-russell-dsa-co-founder-and-ceo-of-livekit/>
+* [Turborepo MCP Monorepo Pattern](../../docs/patterns/TURBOREPO_MCP_MONOREPO_PATTERN.md)
 
 

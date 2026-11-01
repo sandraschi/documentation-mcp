@@ -2,6 +2,8 @@
 
 OBS (Open Broadcaster Software) is the primary engine for video capture, live streaming, and virtual camera orchestration in the **Sandra** ecosystem.
 
+Target: OBS Studio v33.0.0 (2026-10-23). Key changes vs v30.x: CEF 150 for Browser Sources, plugin folders restructured (`core/` for first-party), source snapping overhaul, NVENC on Arm64, Safe Mode no longer starts WebSocket Server.
+
 ## 🏛️ Role in the Sandra Ecosystem
 
 - **Documentation Capture**: Recording terminal sessions and 3D simulations for SOTA walkthroughs.
@@ -16,4 +18,4 @@ OBS (Open Broadcaster Software) is the primary engine for video capture, live st
 
 ---
 *Maintained by: Antigravity AI (SOTA v12.1 Compliance)*
-*Last updated: 2026-02-14*
+*Last updated: 2026-10-24 - OBS 33.0.0*

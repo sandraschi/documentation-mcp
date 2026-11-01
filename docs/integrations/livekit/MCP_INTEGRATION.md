@@ -1,6 +1,6 @@
 # LiveKit MCP Integration
 
-**Last Updated:** 2026-04-06 (v2.0.0 Teams++)
+**Last Updated:** 2026-09-06 (server v1.13.6, agents v1.8.0)
 **Purpose:** SOTA MCP server patterns for LiveKit-based video conferencing and AI agent projects (FastMCP 3.2+ compliance)
 
 ---
@@ -19,24 +19,17 @@ The MCP server provides tools that help AI assistants understand and operate the
 
 ## Recommended Tools
 
-### Implemented (teleconference-mcp reference)
+### Implemented (teleconference-mcp reference, Sep 2026)
 
 | Tool | Description |
 |------|-------------|
-| `move_mouse` | Moves the system cursor (Remoting) |
-| `click_mouse` | Performs a mouse click (Remoting) |
-| `type_text` | Types text into active window (Remoting) |
-| `generate_meeting_summary` | Generates a styled synopsis (Conferencing) |
-| `extract_action_items` | Extracts TODOs from transcript (Conferencing) |
-
-### Proposed (LiveKit-aware)
-
-| Tool | Description |
-|------|-------------|
-| `livekit_room_list` | List active rooms and participant counts (via LiveKit HTTP API) |
-| `livekit_agent_status` | Check if agent worker is running, last heartbeat |
-| `livekit_token_generate` | Generate a test token for a room (dev only) |
-| `conference_health` | Aggregate health: LiveKit server, Redis, web app, agent |
+| `move_mouse` / `click_mouse` / `type_text` | System control (Remoting) |
+| `generate_meeting_summary` / `extract_action_items` | Synopsis + TODOs (Conferencing) |
+| `conference_schedule` / `conference_list` / `conference_get` / `conference_update` / `conference_cancel` / `conference_upcoming` | SQLite-backed scheduling (Conferencing) |
+| `participant_invite` / `participant_list_invited` / `participant_remove_invited` | Invitations (Conferencing) |
+| `conference_health` | Aggregate health: LiveKit TCP 15580, Ollama, system metrics |
+| Web `POST /api/token` (with `roomCreate:true`) | JWT issuance + room auto-create (server v1.12+) |
+| Web `POST /api/egress/start` + `/stop`, `GET ?type=recordings` | Real Egress v2 via `EgressClient` (server v1.13.2+) |
 
 ---
 

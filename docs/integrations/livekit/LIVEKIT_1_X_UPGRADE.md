@@ -1,5 +1,8 @@
 # LiveKit Agents 1.x Upgrade Guide
 
+**Last Updated:** 2026-09-06 (agents v1.8.0, server v1.13.6)
+**Fleet status:** `teleconference-mcp` runs agents >= 1.8.0, server 1.13.6 (`LiveKitSFU`).
+
 This document outlines the major changes in the **LiveKit Agents 1.0 (Python SDK)** release and how to leverage the new features in our architecture.
 
 ## 1. Core Architecture Changes
@@ -45,5 +48,35 @@ The move to `LLMStream._run()` allows for better error handling and "Reductionis
 
 ---
 
-**Status:** Draft / Research Complete
-**Integration:** Update `agent.py` and `LIVEKIT_INTEGRATION_GUIDE.md` to follow these patterns.
+**Status:** Maintained (covers through agents 1.8.0 / server 1.13.6)
+**Integration:** `agent.py` and `LIVEKIT_INTEGRATION_GUIDE.md` follow these patterns.
+
+---
+
+## 4. Agents 1.5 -> 1.8: What Changed (fleet-relevant)
+
+| Release | Change | Fleet impact |
+|---------|--------|--------------|
+| 1.5.8 | Barge-in cooldown window | Smoother interruptions in Visio; keep default |
+| 1.5.9 | Answering Machine Detection | Available for SIP/telephone call flows; not wired yet |
+| 1.5.10 | Model swaps via `update_options` | Swap STT/LLM/TTS mid-call; candidate, not wired yet |
+| 1.5.12 | `UserTurnLimitOptions` | Wired: caps user speech at 60 s (`agent.py`) |
+| 1.6.x | `RUF006` fails CI on dangling `asyncio.create_task` | Kept two `# noqa: RUF006` in `agent.py` (fire-and-forget by design) |
+| 1.7.0 | Expressive mode (`AgentSession(expressive=True)` + inference TTS), PII redaction (`lk.pii.*` trace keys), full OTel GenAI conventions | Expressive OFF (needs inference TTS; fleet runs local Piper). Transcripts kept at DEBUG for Loki |
+| 1.7.1/1.8.0 | Adaptive interruption without word timestamps, preemptive generation cancel, `transcription_delay ~0` fix, RoomIO mic-track replacement, `reasoning_tokens` in LLM metrics | Direct Visio barge-in/latency win; no code change required |
+
+`cli.run_app(WorkerOptions(entrypoint_fnc, job_restart_policy=ALWAYS))` survives to 1.8.0 unchanged.
+
+## 5. Server 1.10 -> 1.13: What Changed (fleet-relevant)
+
+| Release | Change | Fleet impact |
+|---------|--------|--------------|
+| 1.10 | Log key `pID` -> `participantID`; agent auto-restart support | Updated Loki/Grafana filters; `AutoRestartPolicy.ALWAYS` wired |
+| 1.11 | Data tracks on by default | Transcripts/intel broadcasts can move to ordered data tracks |
+| 1.12 | Room auto-create via `roomCreate` grant; TURN `ttl_seconds` (default 300) + CIDR allow/deny | `roomCreate:true` wired in `/api/token`; TURN still disabled in `livekit.yaml` |
+| 1.13.1 | **Removed no-TTL TURN compat**; CLI moved to `urfave/cli` v3.10 | Old TURN creds stop working — rotate `turn.secret` when enabling |
+| 1.13.2 | Egress v2 API; `ParticipantInfo.capabilities`; join-latency + `rtc_success` metrics; async participant attributes (data blob) | Real `createRoomCompositeEgress` wired in `/api/egress` |
+| 1.13.6 | Per-participant TURN quota (12), WS read-size + API body-size limits, H.264 baseline `42001f` removed, Safari relay-ICE fix | No config change needed; Safari guests benefit automatically |
+
+Docker pin: `livekit/livekit-server:v1.13.6` (never `:latest`). Windows service binary at
+`C:\Users\sandr\AppData\Local\Programs\LiveKit\livekit-server.exe` (NSSM `LiveKitSFU`).

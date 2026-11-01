@@ -16,7 +16,7 @@ Key differences from Claude Desktop:
 - Tool calls happen inline during code generation — less visible to the user
 - No red error overlay in the UI (errors appear in the agent output pane)
 - Context window is shared between code context and tool results
-- Multi-workspace setups require explicit shell context management (see `standards/CURSOR_RULES.md`)
+- Multi-workspace setups require explicit shell context management (see Multi-Workspace Shell Context Rule below)
 
 ---
 
@@ -49,7 +49,7 @@ using tools on a CodeMode server. The difference is how it surfaces:
 - **Claude Desktop:** `tool_search` call is visible in the chat window as a tool use block
 - **Cursor:** `tool_search` call appears in the Composer/Agent output, less prominent
 
-The underlying mechanism is identical — see `fastmcp/code-mode.md` for the full explanation.
+The underlying mechanism is identical — see `fastmcp/codemode-discovery.md` for the full explanation.
 The friction reduction is the same: Cursor doesn't load 200+ tool schemas into its code
 context at session start.
 
@@ -61,7 +61,7 @@ The portmanteau + CodeMode approach eliminates this.
 
 ## Multi-Workspace Shell Context Rule
 
-From `standards/CURSOR_RULES.md` — mandatory for multi-repo workspaces:
+From the Multi-Workspace rule below — mandatory for multi-repo workspaces:
 
 > When switching to work on a different repo in a multi-workspace setup:
 > 1. Start a fresh shell (don't reuse existing terminals from other repos)
@@ -132,7 +132,7 @@ Platform API MCP (cloud agents, usage) — distinct from **cursor-app-control** 
 - **[CHANGELOG_DIGEST_JUN_2026.md](../../ecosystem/cursor/CHANGELOG_DIGEST_JUN_2026.md)** — Jun 2026 SDK, Design Mode, context canvas, auto-review
 - **[CURSOR_V3_UPGRADE_APR_2026.md](CURSOR_V3_UPGRADE_APR_2026.md)** — Apr 2026 v3 release analysis
 - Master MCP config: `operations/MASTER_MCP_CONFIG.json`
-- Multi-workspace shell rule: `standards/CURSOR_RULES.md`
-- CodeMode / tool_search: `fastmcp/code-mode.md`
+- Multi-workspace shell rule: "Multi-Workspace Shell Context Rule" section above (no standalone standards file exists - the rule lives here)
+- CodeMode / tool_search: `fastmcp/codemode-discovery.md`
 - Claude Desktop comparison: `integrations/claude-desktop/README.md`
 - Antigravity IDE: `integrations/antigravity-ide/README.md`

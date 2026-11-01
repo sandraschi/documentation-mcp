@@ -1,130 +1,65 @@
-# 🎭 Resonite vs Other VR Platforms
+# Resonite vs Other VR Platforms
 
-**A comprehensive comparison of Resonite with VRChat, AltspaceVR, and other social VR platforms.**
+**A comparison of Resonite with the other social VR platforms still actually
+standing as of mid-2026, plus Overte for context (different niche — see
+below).**
 
-*This comparison complements the [Resonite Integration Guide](./RESONITE_INTEGRATION_GUIDE.md) by helping users understand Resonite's position in the VR social landscape.*
-
----
-
-## 📊 Quick Comparison Table
-
-| Feature | Resonite | VRChat | AltspaceVR | Rec Room |
-|---------|----------|--------|------------|----------|
-| **Primary Focus** | Creation & Social | Social & UGC | Events & Social | Games & Social |
-| **Programming** | ProtoFlux (Visual) | Udon (C#) | Limited | Game Maker |
-| **User Creation** | Full 3D World Building | Avatars & Worlds | Avatars Only | Mini-games |
-| **Platform Support** | PC, Quest, Mobile | PC, Quest, Mobile | PC, Quest, Mobile | PC, Quest, Mobile |
-| **Free/Paid** | Free | Free + Paid Avatars | Free | Free + Cosmetics |
-| **OSC Support** | Native | Limited | None | Limited |
-| **Community Size** | Medium | Large | Small | Large |
-| **Content Moderation** | User-driven | Strict | Moderate | Family-friendly |
+*This comparison complements the [resonite-mcp repo](file:///D:/Dev/repos/resonite-mcp) documentation.*
 
 ---
 
-## 🎮 VRChat - The Social Giant
+## What's actually still standing (2026)
 
-### Similarities with Resonite:
-- **Social VR focus** - Meeting people in virtual spaces
-- **User-generated content** - Avatars and worlds created by users
-- **Cross-platform** - PC, Quest, mobile support
-- **Real-time voice chat** - Spatial audio communication
+Most of the mid-2010s social VR field is dead or dying: AltspaceVR shut down
+(Microsoft, 2023) — though SideQuest acquired the name in 2026 with a
+fall-2026 relaunch planned, see [SOCIAL_VR_WATCH.md](../SOCIAL_VR_WATCH.md) —
+NeosVR's cloud services shut down and the platform was delisted from Steam
+(2025) — Resonite is its community-built successor.
+Horizon Worlds is dropping VR support for a mobile-first pivot (Feb 2026),
+alongside Meta cutting Reality Labs' budget 30% and closing three game studios.
+Practically speaking, the field that matters now is **VRChat, Resonite, and
+Overte** — three platforms with real, different audiences, not three
+competitors chasing the same one.
 
-### Key Differences:
+## Quick comparison
 
-**🎨 Creation Tools:**
-- **VRChat:** Udon scripting (C#), Unity-based world creation
-- **Resonite:** ProtoFlux visual programming, in-world building tools
-- **Advantage:** Resonite's visual programming is more accessible for non-programmers
+| | VRChat | Resonite | Overte |
+|---|---|---|---|
+| Core engine | Closed source (Unity-based) | Closed source (FrooxEngine) | Open source (HiFi fork) |
+| Scripting | Udon (C#), external Unity build | ProtoFlux (in-world visual, live collaborative) | JS (Interface client scripts) |
+| Self-hosting | No | No | Yes — you run the domain-server |
+| Community | Largest of the three | Smaller, technical/creator-heavy | Smallest, infra/self-host minded |
+| Openness | Proprietary | Mod ecosystem (ResoniteModLoader) around a closed core | Fully open, forkable |
 
-**🌍 World Building:**
-- **VRChat:** Worlds are separate Unity projects, uploaded as packages
-- **Resonite:** In-world building with immediate editing and sharing
-- **Advantage:** Resonite allows collaborative, real-time world building
+## Resonite vs VRChat
 
-**🎭 Avatar System:**
-- **VRChat:** Extensive avatar marketplace, complex rigging requirements
-- **Resonite:** Simpler avatar system, but powerful parameter control
-- **Advantage:** VRChat has more avatar variety; Resonite has better live control
+### Similarities
+- Social VR focus, user-generated avatars and worlds, cross-platform (PC/Quest/mobile), spatial voice.
 
-**👥 Community:**
-- **VRChat:** Massive community, famous for user events and concerts
-- **Resonite:** Smaller, more focused on creation and experimentation
-- **Advantage:** VRChat for social events; Resonite for creative collaboration
+### Differences
+- **Scripting**: VRChat's Udon (C#) needs an external Unity build step; Resonite's ProtoFlux is a node-based visual language edited live, in-world, collaboratively — no external engine needed at all.
+- **World building**: VRChat worlds are separate Unity projects uploaded as packages; Resonite worlds are edited directly in-session.
+- **Avatars**: VRChat has a much bigger avatar marketplace and rigging ecosystem; Resonite's avatar system is simpler but has stronger live parameter control.
+- **Community size**: VRChat's is much larger — Resonite's is smaller and skews toward creators/programmers over general social users.
 
-## 🏆 Resonite's Unique Advantages
+## Resonite vs Overte
 
-### 1. **ProtoFlux Visual Programming**
-- **What it is:** Node-based visual programming system
-- **Why unique:** Much more accessible than text coding
-- **Comparison:** Easier than VRChat's Udon (C#) or Unity development
+These serve different purposes more than they compete:
 
-### 2. **In-World Building Tools**
-- **What it is:** Edit worlds directly without external tools
-- **Why unique:** Real-time collaborative building
-- **Comparison:** Unlike VRChat's separate Unity workflow
+- **Overte** is what you reach for when you want to *own the whole stack* — self-hosted domain-server, open C++/JS codebase, full control, no dependency on anyone else's infrastructure. Weaker community, thinner creation tools, but nothing stops you from forking or patching the engine itself.
+- **Resonite** is what you reach for when you want *depth of in-world creation and an existing population* — ProtoFlux is a genuinely powerful live visual programming system, and there's an actual community building things in it right now (see the Metaverse Maker Contest). The tradeoff: FrooxEngine itself is closed, so extending Resonite means working through mods (ResoniteModLoader/MonkeyLoader, Harmony patches) that can break on any upstream update, and there's no way to self-host.
+- For `overte-mcp` (infrastructure you control) and `resonite-mcp` (rich existing creative space), the platform choice matches the actual use case for each project rather than one being objectively better.
 
-### 3. **OSC Integration**
-- **What it is:** Open Sound Control protocol support
-- **Why unique:** External applications can control Resonite
-- **Comparison:** Limited OSC support in other platforms
+## Who should use which
 
-### 4. **Complete Freedom**
-- **What it is:** No content restrictions, full creative freedom
-- **Why unique:** User-driven moderation system
-- **Comparison:** Other platforms have stricter content policies
-
-### 5. **Cross-Platform Asset Sharing**
-- **What it is:** Seamless asset sharing between users
-- **Why unique:** Easy to share and reuse creations
-- **Comparison:** More cumbersome in other platforms
+- **Want full control, self-hosting, or to build your own thing on an open codebase** — Overte.
+- **Want the biggest existing social audience, avatar variety** — VRChat.
+- **Want the deepest live in-world creation tools and a smaller, technical community** — Resonite.
 
 ---
 
-## 🎯 Who Should Choose Resonite?
+*For MCP integration setup and getting started, see the docs in the [resonite-mcp repo](file:///D:/Dev/repos/resonite-mcp) directly — not duplicated here to avoid drift.*
 
-### Perfect For:
-- **Creators & Builders** - World and experience designers
-- **Programmers** - Those interested in visual programming
-- **Artists** - Digital artists and performers
-- **Experimenters** - People who like to push boundaries
-- **Collaborators** - Teams working on virtual projects
-- **Performers** - Musicians, DJs, live event creators
-
-### Coming from VRChat:
-1. **Learn ProtoFlux** - Much more accessible than Udon
-2. **Explore In-World Building** - No external Unity required
-3. **Join Creator Communities** - Focus on Resonite's creator scene
-4. **Experiment with OSC** - Control Resonite from external apps
-
-### Coming from Other Platforms:
-- **From AltspaceVR:** Discover unlimited creation possibilities
-- **From Rec Room:** Learn advanced 3D creation tools
-- **From Horizon:** Experience true creative freedom
-
----
-
-## 🚀 Why Choose Resonite Over Others?
-
-**Resonite stands out as the most powerful and flexible social VR platform for creators and experimenters!**
-
-### Technical Excellence:
-- Superior performance and features
-- Innovative ProtoFlux system
-- Real-time collaborative tools
-
-### Creative Freedom:
-- No corporate restrictions
-- User-driven community
-- Experimental content encouraged
-
-### Growing Ecosystem:
-- Active creator community
-- Continuous feature development
-- Open platform philosophy
-
----
-
-*For detailed MCP integration setup, see the [Resonite Integration Guide](./RESONITE_INTEGRATION_GUIDE.md). For learning Resonite basics, check the [Beginner's Guide](./RESONITE_BEGINNERS_GUIDE.md).* 🎭🤖
 
 
 

@@ -617,3 +617,39 @@ Following these practices will result in robust, secure, and performant Tailscal
 **Last Updated**: October 23, 2025  
 **Version**: 1.0.0  
 **Purpose**: Best practices for Tailscale integration in MCP development
+
+
+---
+
+## Public access via Funnel — hardening pattern (2026-08-15, verified)
+
+Reference impl: Fleet Intel hub (fleet-agent-mcp, goliath) — `docs/INTEL_REPORTS_HUB.md`.
+
+Funnel exposes a local service on the **public internet** at `https://<node>.<tailnet>.ts.net`
+(ports 443/8443 HTTPS, 80 HTTP only — custom ports like 11027 are NOT funnelable;
+proxy to 127.0.0.1:<port> instead). Requirements: the `funnel` node attribute in the
+ACL (`nodeAttrs` target by **tailnet IP**, hostnames are rejected by the API), HTTPS
+enabled, and a public IP/relay reachability.
+
+**Non-negotiable rules:**
+
+1. **Funnel has no access control** — no ACLs, no rate limiting, no Tailscale auth.
+   Any app funneled public MUST carry its own auth gate (HTTP Basic is ~10 lines of
+   middleware; the reference impl uses env credentials + `hmac.compare_digest`).
+2. **Assume the URL is discovered** — funnel hostnames appear in public cert logs
+   and are indexed by scanners within hours. A "secret URL" is not a limit.
+3. **Public DNS is automatic** — once Funnel is on, the `.ts.net` hostname resolves
+   via ordinary public DNS (Tailscale relay IPs, e.g. 185.40.x.x). No MagicDNS,
+   no VPN needed on the visitor side. Verify with
+   `dns.google/resolve?name=<node>.<tailnet>.ts.net&type=A`.
+4. **Keep a harmless public surface** — expose only a `/public` status page
+   unauthenticated; gate everything else. Verified end-to-end from a device with
+   Tailscale disabled: `/public` 200, root 401 → login → 200.
+5. **Kill switch** — `tailscale funnel --https=443 off`. Funnel only exists while
+   you want it.
+6. **Default credentials are a trap** — change them before the URL leaves the
+   building (env vars or service script), and log a loud startup warning when the
+   app is serving unauthenticated.
+7. **Serve vs Funnel on the same port are mutually exclusive** — moving an existing
+   serve route to Funnel takes the port public; relocate other serve paths to
+   custom HTTPS ports first (they stay tailnet-only there).

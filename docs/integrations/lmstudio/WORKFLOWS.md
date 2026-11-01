@@ -1,23 +1,56 @@
-# LM Studio Workflows: Industrial Inference Management
+# LM Studio Workflows (0.4.0+, updated 2026-10-26)
 
-These workflows define the automated model serving patterns in the Sandra ecosystem.
+## 1. Headless deploy (`llmster`)
 
-## 🚀 Workflow: "The Dynamic Inference Switch"
+```bash
+lms daemon up        # start daemon (no GUI)
+lms get <model>      # download
+lms server start     # serve (default :1234)
+lms chat             # terminal chat smoke test
+```
 
-Switching models based on the complexity of the current USER_REQUEST.
+Linux boxes / cloud / CI: same `install.sh`/`install.ps1`, then daemon + server. Optional boot persistence: service/startup task (see Developer > core/headless, headless_llmster).
 
-1.  **Analysis**: Agent determines the request complexity (e.g., Simple Grammar vs. Complex Quantum Analysis).
-2.  **Selection**: Agent selects `Phi-3` for simple tasks or `Llama-3-70B` for complex ones.
-3.  **Switching**: `lmstudio_mcp` command triggers the model load into the RTX 4090.
-4.  **Inference**: Generation proceeds once the `get_server_status` confirms the new model is ready.
+## 2. Server automation
 
-## 📈 Workflow: "VRAM Optimization Audit"
+```bash
+lms server start --port 1234
+lms ls                 # on-disk models (My Models dir)
+lms ps                 # resident models
+lms load <id> --gpu=max --context-length=32768 --identifier="fleet-dev"
+lms log stream -s runtime   # llama.cpp-level logs
+lms unload --all
+lms server stop
+```
 
-Ensuring the fleet is operating at peak efficiency.
+Script model warm-up in `start.ps1`/CI before fleet jobs; assert `GET /api/v1/models` or `/v1/models`.
 
-1.  **Metrology**: Agent collects `get_generation_stats` from multiple test queries.
-2.  **Comparison**: Agent compares tokens-per-second against the "SOTA Baseline".
-3.  **Adjustment**: `lmstudio_mcp` modifies the number of GPU layers or the KV Cache quantization to hit performance targets.
+## 3. Stateful chat (small follow-ups)
+
+```bash
+curl http://localhost:1234/api/v1/chat -H "Authorization: Bearer $LM_API_TOKEN" \
+ -d '{"model":"openai/gpt-oss-20b","input":"Who are you?"}'
+# -> {response_id, output[], stats{input_tokens,total_output_tokens,tokens_per_second,time_to_first_token_seconds}}
+curl http://localhost:1234/api/v1/chat -H "Authorization: Bearer $LM_API_TOKEN" \
+ -d '{"model":"openai/gpt-oss-20b","previous_response_id":"resp_...","input":"And my last question was?"}'
+```
+
+Use for multi-step fleet loops to avoid resending full history.
+
+## 4. Per-request MCP (no mcp.json edit)
+
+```bash
+curl http://localhost:1234/api/v1/chat -H "Authorization: Bearer $LM_API_TOKEN" \
+ -d '{"model":"ibm/granite-4-micro","input":"Top trending HF model?","context_length":8000,
+      "integrations":[{"type":"ephemeral_mcp","server_label":"huggingface",
+       "server_url":"https://huggingface.co/mcp","allowed_tools":["model_search"]}]}'
+```
+
+Preconfigured equivalent: `"integrations":["mcp/playwright"]` (needs mcp.json + server-setting allow). Add `headers: {Authorization: "Bearer ..."}` for authed MCPs.
+
+## 5. VRAM arbitration (shared 4090)
+
+Before loading: `lms ps` (LM side) + `GET /api/ps` (Ollama side). Never co-reside. Evict the squatter (`lms unload --all` / Ollama `keep_alive: 0`), then load. Batch distillation benefits from Max Concurrent Predictions (default 4) — set per model in load dialog (Developer Mode).
 
 ---
-*Last updated: 2026-02-14*
+*Last updated: 2026-10-26. Prior: 2026-02-14.*

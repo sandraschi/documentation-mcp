@@ -165,6 +165,15 @@ Integrating with **Unity3D** and **Gazebo**, RustDesk can be used to monitor the
 - **Codec Usage**: Optimized for low-bitrate H.264/H.265 encoding on the **RTX 4090**.
 - **Latency**: Optimized relay routing ensures < 50ms latency for cross-Vienna connections.
 
+## Companion: Sunshine + Moonlight (interactive daily driver)
+
+For low-latency interactive use (code, Blender, Resolve from the iPad), Sunshine
+(GameStream host) + Moonlight (iOS client) rides the RTX 4090 NVENC for near-local
+feel. RustDesk keeps file transfer, NAT-hostile reconnect, and fallback duty.
+Full writeup: `../sunshine/README.md`. Standing decision 2026-10-09: run both, and
+uninstall NoMachine (its 2022 `nxusbh` driver is prime suspect for the Oct 2026
+0xCA crashes; disable its USB adapters first as the reversible test).
+
 ---
 *Maintained by: Antigravity AI (SOTA v12.1 Compliance)*
 *Last updated: 2026-02-14*

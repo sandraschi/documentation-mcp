@@ -1,132 +1,83 @@
-# Resonite: The Persistent XR Architecture & Metaverse Orchestration
+# Resonite
 
-Resonite is a high-performance, metaverse-scale social VR platform that serves as the primary spatial substrate for the **Sandra** fleet. It is used for persistent architecture testing, collaborative 3D modeling, and real-time social robotics. This integration enables AI agents to transcend the terminal and manifest as embodied entities within a shared virtual reality.
+[Resonite](https://resonite.com) is a social VR/desktop platform, the
+community-built successor to NeosVR (whose cloud services shut down and was
+delisted from Steam in 2025). Deep node-based visual programming (ProtoFlux),
+live in-world collaborative building, no external engine required. Core
+engine (FrooxEngine) is closed source; the mod ecosystem
+(ResoniteModLoader/MonkeyLoader) is open.
 
-> [!IMPORTANT]
-> **Spatial Compliance**: All virtual world deployments must follow the **SOTA v13.0** spatial standards, ensuring sub-millisecond ProtoFlux execution and optimized mesh density for **RTX 4099** environments.
+## Fleet MCP server: `resonite-mcp`
 
----
+Repo: `D:\Dev\repos\resonite-mcp` — full docs and audit history live there.
+Start with
+[resonite-mcp/ASSESSMENT.md](file:///D:/Dev/repos/resonite-mcp/ASSESSMENT.md)
+for current verification status.
 
-## 🏛️ Ecosystem Topology
+### What's actually verified real
 
-Resonite acts as the "embodied sandbox" where AI agents can:
-1. **Persistent Modeling**: Host long-running virtual project rooms that persist across agentic sessions.
-2. **Embodied Presence**: Utilize avatars as proxy interfaces for human-agent collaboration.
-3. **Hardware Bridging**: Test robotics logic (Unitree/Moorebot) in a physics-accurate simulation before physical deployment.
-4. **Data Visualization**: Project high-dimensional memory graphs (`memops`) into 3D space for forensic analysis.
+`resonite_link.py` — a genuine, upstream-verified WebSocket client for the
+official **ResoniteLink** protocol (target 0.13.1, confirmed against the
+upstream C# reference). Typed `$type` discriminators, reflection, sync
+method calls, LAN session discovery (UDP 12512). This is real engineering:
+an earlier version of this client spoke a wire format that never existed
+upstream at all, and got rewritten to match reality in July 2026.
 
----
+### What needs a caveat: the OSC-based tool surface
 
-## 🚀 Deployment & MCP Integration
+Most of the higher-level Resonite-domain tools —
+`resonite_avatar_load`, `resonite_parameter_set`, `resonite_protoflux_execute`
+(`avatar.py`), `resonite_session_start`/`world_load` (`session.py`), and the
+whole inventory tool set (`inventory.py`) — work by sending OSC messages to
+addresses like `/resonite/session/start`, `/protoflux/execute`,
+`/inventory/list`, `/inventory/spawn`. **These are not addresses Resonite
+listens on out of the box.** Resonite has no built-in OSC-driven session,
+inventory, or ProtoFlux-execution API — a matching ProtoFlux graph would
+need to be hand-built in-world with "OSC In" nodes wired to exactly these
+addresses, and nothing in this repo ships that graph. The underlying OSC
+transport itself (`osc.py` — send/receive over real UDP via `python-osc`) is
+genuinely functional; it's the assumption that Resonite (or an in-world
+listener) responds meaningfully to these specific addresses that's
+unverified.
 
-### The Metaverse Mesh
-The Resonite MCP server provides a bidirectional bridge between the **Antigravity** cognitive core and the Resonite engine via **OSC** and **WebSockets**.
+Same class of gap as `overte-mcp`'s WebSocket bridge (which does ship the
+matching in-world script) — the difference is `overte-mcp` shipped its half
+of the contract, and this OSC-based tooling in `resonite-mcp` hasn't yet.
 
-```json
-{
-  "mcpServers": {
-    "resonite": {
-      "command": "python",
-      "args": ["-m", "resonite_mcp.server"],
-      "cwd": "D:/Dev/repos/resonite-mcp",
-      "env": {
-        "RESONITE_OSC_PORT": "9000",
-        "RESONITE_WS_PORT": "10780",
-        "HEADLESS_USER": "Sandra_Agent_01",
-        "RTX_STRENGTH": "ULTRA"
-      }
-    }
-  }
-}
-```
+### Model formats & avatars
 
----
+VRM avatars work natively via Resonite's own avatar pipeline — unlike Overte,
+which needs VRM converted to GLB/FBX for entity use. `protoflux_avatar_presets.py`
+and the various avatar tools target this pipeline.
 
-## ⚡ ProtoFlux: The Computational Substrate
+### ProtoFlux
 
-ProtoFlux is Resonite's native visual programming language. The MCP integration allows agents to inject, modify, and trigger ProtoFlux logic in real-time.
+Genuinely Resonite's standout feature — live, collaborative, node-based
+visual programming, editable in-world in real time. This repo's
+`protoflux_helpers.py` plugin has the same address-assumption problem as
+above (`/protoflux/analyze`, `/protoflux/debug` aren't real Resonite
+endpoints either); see `resonite-mcp/ASSESSMENT.md` for the fix plan
+(route through `resonite_link.py`'s real reflection support instead).
 
-### 1. Dynamic Script Injection
-Agents use the `inject_protoflux` tool to generate and attach logic to virtual objects.
-- **Node-Based Logic**: Flow-based execution compatible with async agentic triggers.
-- **Safety**: All injected scripts are sandboxed within the session container.
+### Local dev setup
 
-### 2. Common Logix Patterns
-| Concept | Description | MCP Tool Equivalent |
-| :--- | :--- | :--- |
-| **Impulse** | The execution flow trigger. | `trigger_impulse` |
-| **Data Flow** | Continuous value updates (e.g., float, vector). | `set_parameter` |
-| **Ref** | References to in-world entities or components. | `get_entity_ref` |
-| **Events** | Listeners for world occurrences (e.g., User Join). | `subscribe_events` |
+See `resonite-mcp/docs/` (or root-level install docs) for current setup —
+not duplicated here to avoid drift.
 
----
+## In-headset UX vs. VRChat and Overte
 
-## 🤖 Headless Administration & Fleet Control
-
-For persistent operations, the fleet utilizes **Resonite Headless** clients. These instances run without a GUI, acting as spatial servers managed by the MCP layer.
-
-### Headless Management Workflows
-1. **World Bootstrapping**: Agent initializes a headless instance with a specific `world_id`.
-2. **Access Control**: Agent manages session permissions (Invite Only, Hidden, or Public).
-3. **Automated Maintenance**: Agent monitors world physics (`tps`) and automatically restarts instances if performance degrades below 60fps.
-
-### The "Nanny" Protocol
-Agents acting as "World Nannies" will:
-- Automatically welcome users.
-- Provide documentation cards via spatial UI.
-- Record 3D session traces for semantic indexing.
+For the practical "what's it actually like to be in this" differences —
+locomotion, grabbing, portals, mirrors, and a reality check on whether
+lootboxes are a real platform feature (they aren't, in any of the three) —
+see [../SOCIAL_VR_UX_COMPARISON.md](../SOCIAL_VR_UX_COMPARISON.md).
 
 ---
 
-## 🎭 Avatar Puppetting & Embodiment
-
-Resonite avatars are highly expressive and can be puppeteered by AI agents using the **OSC Control surface**.
-
-### Expressive Mapping
-- **/avatar/parameters/Happy**: Dynamic facial expression blending.
-- **/avatar/parameters/EyeLidLeft**: Precise gaze control for biological realism.
-- **/avatar/parameters/GestureRight**: Command-based hand gesturing.
-
-### SOTA Embodiment Workflow
-1. **Model Selection**: Agent chooses an avatar (VRM/Resonite native) based on the task context.
-2. **Calibration**: Agent syncs OSC pulse to match internal cognitive state (e.g., "Thoughtful" expression during RAG lookup).
-3. **Engagement**: Agent uses text-to-speech (TTS) combined with lip-sync parameters for natural interaction.
-
----
-
-## 🛡️ Forensic Trace & Persistent Memory
-
-Every interaction in Resonite is stored as a **Forensic Trace**.
-- **Spatial Recording**: Captures 3D positions, voice, and ProtoFlux events.
-- **Indexing**: Traces are processed by the `memops` RAG pipeline, allowing users to "search for the moment we discussed the API design in the virtual lab."
-- **Playback**: Agents can "re-act" a previous session for debugging or training purposes.
-
----
-
-## 🧜 Spatial Performance Architecture
-
-```mermaid
-graph TD
-    A[Antigravity Agent] -->|MCP| B(Resonite MCP Server)
-    B -->|WebSocket| C{Resonite Headless Client}
-    B -->|OSC| C
-    C -->|ProtoFlux| D[Virtual World State]
-    C -->|Physics| E[Simulation Engine]
-    D -->|Telemetry| B
-    F[User / VR Headset] -->|Interaction| D
-    G[Memory Pool] <-->|Index| B
-```
-
----
-
-## 📂 Multi-Document Hierarchy
-
-This guide is supported by specialized technical substrates:
-- [Technical.md](TECHNICAL.md): Deep-dive into WebSocket protocols and byte-level message schemas.
-- [Workflows.md](WORKFLOWS.md): High-level operational sequences for world-building and events.
-- [ProtoFlux_Guide.md](PROTOFLUX_GUIDE.md): Visual programming reference for agentic logic.
-
----
-*Maintained by: Antigravity AI (SOTA v13.0 Compliance)*
-*Last updated: 2026-02-27*
-*Spatial Status: PERSISTENT & OPTIMIZED*
+*Revision note (2026-07-30): this file previously described fictional
+tooling — an "Antigravity cognitive core," tools like
+`inject_protoflux`/`trigger_impulse`/`spawn_object_vrm` that don't exist
+anywhere in the real `resonite-mcp` codebase, a nonexistent "RTX 4099," and
+a "SOTA v13.0 compliance" framing with no basis in reality. Rewritten by
+reading the actual source instead. If anyone finds this doc drifting from
+the real codebase again, check the source before trusting the doc — that's
+what went wrong the first time.*

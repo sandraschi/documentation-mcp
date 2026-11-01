@@ -74,6 +74,7 @@ If native Windows Podman is missing or its VM environment is stopped, the server
 ---
 
 ## 4. Documentation Index
+*   [DOCKER_PARALLEL_VS_MIGRATE.md](DOCKER_PARALLEL_VS_MIGRATE.md) — Fleet guidance: Docker primary, Podman pilot, kubectl vs podman-mcp, Windows/WSL pitfalls.
 *   [COMPARISON.md](COMPARISON.md) — Detailed comparison of Podman vs. Docker vs. Kubernetes architectures.
 *   [docs/TOOLS.md](file:///d:/Dev/repos/podman-mcp/docs/TOOLS.md) — Reference specifications for all Python MCP tool inputs.
 *   [docs/ARCHITECTURE.md](file:///d:/Dev/repos/podman-mcp/docs/ARCHITECTURE.md) — Detailed breakdown of FastAPI REST endpoints, auth, and subprocess handling.

@@ -1,139 +1,110 @@
-# Salad.com GPU Sharing — Goliath Integration Notes
+# Salad.com GPU Sharing — Fleet Integration & Evaluation Guide
 
-**Status:** Evaluating / Not yet active  
-**Last updated:** 2026-05-01  
-**Relevant hardware:** Goliath (RTX 4090 24GB, AMD Ryzen 9 5900X, 64GB RAM)
-
----
-
-## What Is Salad?
-
-Salad.com is a distributed GPU compute marketplace with two sides:
-
-- **SaladCloud** — the enterprise/developer side. Businesses rent idle consumer GPUs for AI inference, image generation, LLM hosting, video transcoding, and other GPU workloads.
-- **Salad Chef app** — the contributor side. You install a lightweight Windows app, and when your machine is idle it picks up jobs from the queue and earns you Salad Balance, redeemable for cash (PayPal), Steam games, gift cards, etc.
-
-The community framing is deliberate and genuine: your RTX 4090 might be running inference for a startup in Lagos or a researcher in Nairobi who could never afford datacenter GPU time. Decentralized compute democratizes access to hardware that would otherwise be locked behind AWS/GCP pricing.
+**Status:** Evaluated / Integration Reference  
+**Last updated:** 2026-08-25  
+**Relevant hardware:** Goliath (NVIDIA RTX 4090 24GB VRAM, AMD Ryzen 9 5900X, 64GB RAM, 2TB NVMe)  
+**See also:** `integrations/vastai-gpu-hosting.md`
 
 ---
 
-## Why This Is Interesting for Goliath
+## Executive Summary
 
-Goliath runs 24/7 as a home lab server. Outside of active dev sessions, the RTX 4090 sits largely idle — MCP servers are CPU-bound, Plex transcoding is occasional, and local LLM inference (Ollama/LM Studio) is intermittent. That idle VRAM is a wasted resource.
+Salad (`salad.com`) is a distributed consumer GPU compute marketplace. Node providers ("Chefs") run the desktop client on idle Windows PCs to earn Salad Balance (redeemable via PayPal, crypto, store gift cards, or Visa prepaid cards). The client-facing cloud platform (**SaladCloud**) rents this hardware to developers and enterprise clients for AI/ML inference, image generation, audio transcription, and video processing container workloads.
 
-Key numbers (from Salad's published rates, May 2026). Electricity at Vienna Sozialtarif subsidised rate (~€0.08/kWh estimate — update with actual):
-
-| Metric | Value |
-|---|---|
-| RTX 4090 hourly rate | ~$0.20/hr |
-| Theoretical max (100% utilization) | ~$148/month |
-| Realistic (50% utilization) | ~$122/month gross |
-| Power draw during AI workloads | ~350W |
-| Power cost at ~€0.08/kWh, 50% util | ~€10/month |
-| Net at 50% utilization | ~€100/month |
-| Open frame thermal risk | None |
-
-The 4090 is specifically listed as a **guaranteed best-workload** GPU — Salad prioritizes it for LLM inference and high-end diffusion jobs, which command the highest rates.
+For an **NVIDIA RTX 4090 (24GB VRAM)**, Salad offers one of the simplest set-and-forget Windows sharing options, though net profitability is highly dependent on local electricity costs and network workload demand.
 
 ---
 
-## Economics vs. the AI Subscription Stack
+## Expected Income PCM (Per Calendar Month)
 
-Current monthly AI tooling spend (approximate):
-- Claude Pro: ~€20
-- Cursor Pro: ~€20
-- Windsurf Pro: ~€20 (may drop)
-- DeepSeek API: variable, low with cache hits
+Earnings on Salad are derived from **container job fulfillment** rather than traditional crypto mining. 
 
-At realistic utilization, Salad earnings could **fully offset DeepSeek API costs** and partially offset one subscription. Not life-changing money, but the hardware cost is already sunk and the electricity is the only marginal cost.
+### Gross Income Rates (RTX 4090)
+* **Hourly Rate (Active Container Job):** ~$0.12 – $0.22 / hour
+* **Daily Average (24/7 Availability):** ~$3.00 – $5.50 / day (subject to demand)
+* **Gross Income PCM:** **~$90 – $160 / month**
 
-More importantly: idle GPU doing nothing has zero return. Any positive number beats zero.
+### Net Profitability Matrix (Factoring Power Costs)
+An RTX 4090 system running full AI container workloads draws approximately **400W – 500W total wall power** (~10.8 – 12 kWh/day = **~324 – 360 kWh/month**).
 
----
+| Electricity Tariff | Monthly Power Cost | Estimated Net Profit PCM | Feasibility |
+| :--- | :--- | :--- | :--- |
+| **Subsidized / Free / Solar** (€0.05 / $0.05 per kWh) | ~$16 – $18 / month | **~$75 – $140 / month** | Highly Profitable |
+| **Standard US Rate** ($0.15 per kWh) | ~$48 – $54 / month | **~$45 – $100 / month** | Profitable |
+| **Standard EU Rate** (€0.28 – €0.35 per kWh) | ~$90 – $120 / month | **~$0 – $35 / month** | Marginal / Loss Risk |
 
-## The Community Angle
-
-Salad's network spans 191+ countries with 400k+ contributing nodes. The workloads that land on a Goliath-class machine are often inference jobs from researchers, small startups, or developers in regions where cloud GPU pricing is prohibitive relative to local income. 
-
-A 4090 in Vienna's 9th district running inference for someone in Nigeria, Nairobi, or Manila at a price point they can actually afford — there's something genuinely appealing about that. Compute as a shared resource rather than a hyperscaler monopoly.
-
----
-
-## Practical Setup
-
-### Prerequisites
-- Windows (required — contributor app is Windows-only) ✓
-- NVIDIA GPU (RTX 30/40 series) ✓
-- Stable internet (200+ Mbps recommended for large model jobs)
-- Account at salad.com
-
-### Installation
-1. Download the Salad Chef app from salad.com
-2. Sign in / create account
-3. The app runs in the system tray and starts/stops earning automatically
-4. Configure idle detection threshold (start earning after N minutes idle)
-
-### Config path
-The Salad app manages itself — no config files to edit. Earnings dashboard and payout settings are web-based.
+> [!IMPORTANT]
+> **Hardware Prerequisites for High-Tier Container Jobs:**  
+> Salad prioritizes nodes with at least **32 GB System RAM** (64 GB recommended), **500 GB+ SSD space**, and an unmetered, high-speed internet connection (100+ Mbps). Nodes below 32 GB RAM will miss out on top-paying LLM and Stable Diffusion jobs.
 
 ---
 
-## Operational Considerations for Goliath
+## Comprehensive Pros & Cons
 
-### Thermal
+### Pros
+1. **Low Friction & Set-and-Forget:** Simple Windows desktop application (`Salad Chef`). Auto-detects system idle state and manages container workloads automatically.
+2. **Top-Tier Card Priority:** The RTX 4090's 24 GB VRAM places it in the highest demand tier for enterprise container rentals (e.g., vLLM inference, SDXL/FLUX image generation, Whisper transcription).
+3. **Container Sandbox Isolation:** Workloads execute inside Windows Subsystem for Linux 2 (WSL2) / Hyper-V containers, preventing jobs from accessing host files or OS state.
+4. **Flexible Cashout Options:** Earnings can be cashed out to PayPal, pre-paid Visa cards, crypto (BTC/ETH), or digital platforms (Steam, Discord Nitro, Amazon).
 
-Goliath runs in an open frame — excellent ambient airflow, no enclosure heat buildup. Sustained inference workloads are not a thermal concern. No fan curve tuning needed.
-
-HWiNFO64 monitoring is still worthwhile for a baseline but is not a blocker for going live.
-
-### Conflict with Local Use
-
-The GPU will be occupied when Salad is active. Potential conflicts:
-
-| Activity | Conflict? | Resolution |
-|---|---|---|
-| MCP servers (CPU-bound) | None | Fine |
-| Plex transcoding (NVENC) | Minor | Salad releases GPU on demand |
-| Ollama / LM Studio | Yes — same VRAM | Pause Salad before starting local LLM |
-| Blender render (GPU) | Yes | Pause Salad before rendering |
-| Gaming | Yes | Salad auto-pauses when foreground GPU load detected |
-
-The Salad app has configurable auto-pause triggers (foreground app, CPU load threshold, user activity). Set these appropriately so it doesn't fight with active work.
-
-### DeepSeek V4 Open Weights (June 2026 target)
-
-If/when DeepSeek releases downloadable open weights for V4 (MoE architecture), the 4090's 24GB VRAM may be viable for running it locally — particularly because MoE active parameter count (~3B active per forward pass) is what matters for VRAM, not the total parameter count. This would create a direct conflict with Salad: can't share the GPU and run local inference simultaneously.
-
-**Decision point:** If local DS V4 becomes a daily driver, Salad stops making sense during active hours. If local DS V4 is only used for testing/offline scenarios, Salad remains viable during idle time.
+### Cons
+1. **Heavy Electricity Sensitivity:** Under sustained 400W–450W GPU load, power consumption eats 40% to 80%+ of gross revenue on non-subsidized utility tariffs.
+2. **Demand Fluctuation & Idle Downtime:** Payouts are non-guaranteed. During low demand cycles, machines sit idle or drop to minimal earnings.
+3. **Thermal & Hardware Degradation:** Continuous 24/7 high-power utilization produces substantial room heat (~450W thermal output) and accelerates fan and thermal pad degradation.
+4. **ISP Data & Proxy Risks:** The optional "Bandwidth Sharing" feature turns your node into a residential proxy exit node, which can trigger ISP data cap warnings or security flags if left unmonitored.
 
 ---
 
-## Alternatives Considered
+## Community Acceptance, Security & Reputation
 
-| Platform | RTX 4090 Rate | Notes |
-|---|---|---|
-| Salad.com | ~$0.20/hr | Best-workload guarantee for 4090, Windows app |
-| Vast.ai | ~$0.34–0.45/hr | **Under review** — higher rate, Docker already on Goliath, pending daemon stability fix. See `vastai-gpu-hosting.md` |
-| RunPod | ~$0.44/hr | Similar to Vast, more enterprise-oriented |
-| ShareAI | ~€2.50/hr (AI jobs) | Higher ceiling, less passive |
-
-Salad wins on **simplicity and passivity** — install and forget. Vast/RunPod require active container management. ShareAI is higher earning but higher effort. For a home lab running 24/7 with no babysitting, Salad is the right fit.
+* **Platform Legitimacy:** Salad is an established, widely accepted service with a large community (tens of thousands of active nodes on `r/SaladChefs`).
+* **Antivirus Detections:** The installer occasionally triggers antivirus alerts (false positives) due to legacy cryptomining executables bundled as fallback payloads. The client itself is legitimate and safe to whitelist.
+* **Privacy & ISP Stance:** Salad claims residential proxy traffic is restricted to streaming domains (e.g., Netflix, Hulu unblocking). However, community consensus strongly advises **disabling "Bandwidth Sharing"** in settings while keeping **"GPU Container Workloads" enabled** to avoid ISP flagging or data quota exhaustion.
 
 ---
 
-## Status / Next Steps
+## Commercial Competitors Matrix (Paid GPU Hosting)
 
-- [ ] Install Salad Chef app and configure idle thresholds
-- [ ] Run for one week, monitor thermals and earnings
-- [ ] Set fan curve in Afterburner if hotspot temps exceed 88°C under sustained load
-- [ ] Confirm auto-pause works correctly when starting Ollama or Blender
-- [ ] Revisit in June when DeepSeek open weights situation clarifies
+If higher yield or direct marketplace hosting is desired, consider these alternatives:
+
+| Platform | Model | RTX 4090 Rates | Key Pros | Key Cons / Requirements |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Salad.com](https://salad.com)** | Managed Queue | ~$0.12–$0.22/hr | Passive Windows app, simple cashout | Lower hourly rate, variable demand |
+| **[Vast.ai](https://vast.ai)** | Direct P2P Marketplace | ~$0.34–$0.45/hr | ~70% higher payouts, host control | Requires Linux, static IP, Docker maintenance |
+| **[RunPod Community](https://runpod.io)** | Cloud Rental | ~$0.35–$0.44/hr | Enterprise reputation, steady demand | Strict host verification, Linux required |
+| **[io.net](https://io.net)** | DePIN AI Cluster | Variable (Tokenized) | High yields during token reward campaigns | Paid in $IO token (crypto market volatility) |
+| **[Akash Network](https://akash.network)** | Decentralized Cloud | Variable ($AKT) | Open-source Kubernetes network | Requires Cosmos wallet & K8s host setup |
+| **[Clore.ai](https://clore.ai)** | P2P Compute | Variable ($CLORE) | Simple portal for host rigs | Price tied to native altcoin |
 
 ---
 
-## Related
+## FOSS & Free Alternatives (Share Compute for Open Source / Science)
 
-- `integrations/local-llm/` — Ollama, LM Studio, vLLM on Goliath
-- `integrations/ollama/` — local inference setup
-- `standards/LOCAL_LLM_STANDARDS.md` — fleet local LLM patterns
-- DeepSeek V4 Flash API is current daily driver via OpenCode; local weights pending June 2026 release
+For users who wish to donate their RTX 4090 compute power to open-source AI models, medical research, or scientific computing for free:
+
+### 1. Open AI & P2P LLM Inference
+* **[Petals](https://petals.dev)** (FOSS, MIT License): BitTorrent-style peer-to-peer network for running large language models (e.g., Llama-3, Mixtral). You donate your 4090's 24 GB VRAM to host specific model layers, allowing researchers and the public to run massive LLMs for free without cloud subscriptions.
+* **[Exo](https://github.com/exo-explore/exo)** (FOSS, Apache-2.0): Combines your local 4090 with other devices across your local network (Macs, secondary PCs, single-board computers) into a unified virtual GPU for home LLM inference.
+* **[Hivemind](https://github.com/learning-at-home/hivemind)** (FOSS, MIT): Framework for collaborative, decentralized neural network training across internet nodes using Decentralized Mixture of Experts (DMoE).
+
+### 2. Volunteer Scientific Research
+* **[Folding@home](https://foldingathome.org)**: Donates GPU cycles to perform molecular dynamics simulations for disease research (cancer, Alzheimer's, Parkinson's). An RTX 4090 achieves millions of points per day (PPD) and is highly efficient.
+* **[BOINC](https://boinc.berkeley.edu)** (FOSS, LGPL): The classic volunteer computing platform. Dedicated GPU projects include:
+  * **GPUGrid.net**: High-performance biomedical and molecular simulations.
+  * **Einstein@Home**: Searching for radio pulsars and gravitational waves from neutron stars.
+
+---
+
+## Goliath Fleet Integration Stance
+
+1. **Current Fleet Posture:** Goliath runs 24/7 as a home lab server hosting MCP services, Ollama/vLLM local inference, and media servers.
+2. **Salad Usage Mode:** If activated on Goliath, Salad should run strictly in **GPU Container mode** with **Bandwidth Sharing disabled**, with auto-pause enabled when local LLMs (Ollama) or Blender renders are launched.
+3. **Net Profit Decision Threshold:** At local Austrian/German electricity rates, hosting is only viable if power cost stays below €0.15/kWh or when surplus solar energy is available.
+
+---
+
+## Related Documentation
+
+* `integrations/vastai-gpu-hosting.md` — Direct P2P GPU marketplace hosting guide
+* `integrations/local-llm/README.md` — Goliath local LLM stack (Ollama, LM Studio, vLLM)
+* `standards/LOCAL_LLM_STANDARDS.md` — Fleet standards for local inference vs cloud APIs

@@ -3,7 +3,7 @@
 **Last Updated:** 2026-03-23
 **Applies to:** Claude Desktop Pro (current as of March 2026)
 **Config file:** `C:\Users\sandr\AppData\Roaming\Claude\claude_desktop_config.json`
-**Log folder:** `C:\Users\sandr\AppData\Roaming\Claude\logs\`
+**Log folder:** `C:\Users\sandr\AppData\Local\Claude\Logs\` (pre-2026-08-21: `AppData\Roaming\Claude\logs\`)
 
 ---
 
@@ -66,7 +66,7 @@ Claude Desktop **does not** natively defer MCP tool registration. When you hear 
 loading” or “call `load_tools` before using a tool,” interpret that as: **the model must
 invoke FastMCP CodeMode discovery meta-tools first** (commonly `tool_search` for search,
 then a schema tool such as `GetSchemas` in FastMCP terminology — some UIs paraphrase this
-as loading tools/schemas). Full detail: `fastmcp/code-mode.md` (section “Claude Desktop does not lazy-load tools natively”).
+as loading tools/schemas). Full detail: `fastmcp/codemode-discovery.md` (section “Claude Desktop does not lazy-load tools natively”).
 
 ### Why you see a `tool_search` call before actual tool calls
 
@@ -140,7 +140,7 @@ architecture matters for Claude Desktop usability.
 
 ## Logs and Debugging
 
-MCP server logs: `C:\Users\sandr\AppData\Roaming\Claude\logs\`
+MCP server logs: `C:\Users\sandr\AppData\Local\Claude\Logs\` (pre-2026-08-21: `AppData\Roaming\Claude\logs\`)
 
 Each server gets its own log file named after the server key in the config. Useful for:
 - Diagnosing startup failures (server process crashes before advertising tools)
@@ -238,9 +238,9 @@ If you restart Claude Desktop, all servers restart too — any in-memory server 
 
 ## Relevant Docs
 
-- FastMCP CodeMode (why tool_search exists): `fastmcp/code-mode.md`
-- FastMCP 3.1 features: `fastmcp/3.1-features.md`
-- Portmanteau pattern: `patterns/portmanteau.md`
+- FastMCP CodeMode (why tool_search exists): `fastmcp/codemode-discovery.md`
+- FastMCP 3.4 features: `fastmcp/3.4-features.md`
+- Portmanteau pattern: `patterns/PORTMANTEAU_CONCEPT.md`
 - Master MCP config: `operations/MASTER_MCP_CONFIG.json`
 - Fleet index: `projects/FLEET_INDEX.md`
 - Webapp ports: `operations/WEBAPP_PORTS.md`

@@ -1,11 +1,15 @@
 # MCP Integrations & Service Fleet
 
-This directory contains documentation for external tools and services integrated with the MCP ecosystem. The fleet consists of 59 specialized services providing multimodal capabilities across media, development, automation, and robotics.
+**Private — Sandra Schipal + collaborators only. Not for public distribution.**
 
-## Service Catalog (The 58 Fleet)
+**Last updated:** 2026-06-17 · **Standards:** FastMCP **3.2+** · **Packaging:** MCPB only · **Publish:** mandatory IN — [PUBLISH_UPDATE_CHECKLIST.md](../PUBLISH_UPDATE_CHECKLIST.md) §2
+
+This directory contains documentation for external tools and services integrated with the MCP ecosystem. The fleet consists of 60 specialized services providing multimodal capabilities across media, development, automation, and robotics.
+
+## Service Catalog (The 59 Fleet)
 
 ### 🤖 AI Assistants & Agent Platforms
-- **[Bastio](bastio/README.md)** — AI security gateway (Go binary): PII, jailbreak, prompt injection, secret detection in <50µs. Drop-in reverse proxy — no code changes. Self-hosted, single binary, works with any OpenAI-compatible client. License: FSL-1.1-ALv2 (-> Apache-2.0 after 2y). Full fleet assessment and deployment patterns.
+- **[Bastio](bastio/README.md)** — AI security gateway (Go binary): PII, jailbreak, prompt injection, secret detection in <50ms. Drop-in reverse proxy — no code changes. Self-hosted, single binary, works with any OpenAI-compatible client. License: FSL-1.1-ALv2 (→ Apache-2.0 after 2y). Fleet: recommended as default guardrail for all HTTP LLM calls.
 - **[Huashu Design (global agent skill)](huashu-design-skill.md)** — Third-party **agent skill** (not MCP): HTML hi-fi prototypes, Playwright checks, PPTX/motion export paths, five-dimension design review; install with `npx -y skills add alchaincyf/huashu-design --global --yes`. Fleet stance: global install, use heaviest in **companion webapps**; trust boundary vs FastMCP `skill://` in [fastmcp/skills-and-prompts.md](../fastmcp/skills-and-prompts.md).
 - **[Gemini Deep Research + Interactions API (April 2026)](gemini-deep-research-interactions-2026.md)** — Synthesis of Google’s **2026-04-21** Deep Research / Deep Research Max announcement (MCP, collaborative planning, charts), **Interactions API** entry points, **Tailscale Funnel** vs Cloudflare for remote MCP HTTPS, and verified starter links (`google-gemini/cookbook`, `gemini-skills`, `GoogleCloudPlatform/agent-starter-pack`). **ADN series:** [adn-notes/README.md](../adn-notes/README.md).
 - **[LeWM-MCP (LeWorldModel)](lewm-mcp.md)** — JEPA world model bridge (arXiv 2603.19312): single-GPU train/infer prep, agentic workflow + skills, glass webapp **10927/10928**; upstream [lucas-maes/le-wm](https://github.com/lucas-maes/le-wm). Central doc: [projects/lewm-mcp/README.md](../projects/lewm-mcp/README.md).
@@ -15,6 +19,7 @@ This directory contains documentation for external tools and services integrated
 - **[Agentmemory](agentmemory.md)** — Persistent memory engine for AI coding agents (13.1k stars): automatic session capture, 4-tier consolidation, triple-stream BM25+vector+graph search with 95.2% R@5 recall. 53 MCP tools, 22 OpenCode hooks, shared memory across all fleet agents (Claude Code, Cursor, Gemini CLI, OpenCode, OpenClaw, Hermes, OpenManus). Local SQLite + free embeddings — no cloud deps. ~$10/yr token cost vs $500+ without.
 - **[OpenManus](openmanus.md)** — **FOSS CLI** MetaGPT-class agent ([FoundationAgents/OpenManus](https://github.com/FoundationAgents/OpenManus)): **100% local LLM** when configured (Ollama / OpenAI-compatible local); **MCP client** via `mcp.json`. Fleet: **openmanus-mcp** (FastMCP 3.1) + **SOTA webapp** wraps CLI — Manus-class capability, **$0** Manus.im subscription. **Not** Manus.im. **Central project doc:** [projects/openmanus-mcp/README.md](../projects/openmanus-mcp/README.md).
 - **[Local LLM](local-llm/README.md)** — Consolidated local inference server integration (Ollama, LM Studio, vLLM).
+- **[Unsloth](unsloth/README.md)** — Local LLM **fine-tuning & RL** (Apache-2.0 core / AGPL-3.0 Studio): native Windows, ~2x faster training, ~70% less VRAM, QLoRA/GRPO/GGUF export, OpenAI-compatible API, `unsloth start opencode/claude/codex`, opt-in **MCP control endpoint**. Goliath 4090 verified 2026-08-05; complements cloud Foundry finetuning with a local track.
 - **Alexa** — Autonomous voice operations and data integration.
 
 ### 🎥 Media & Creative Processing
@@ -24,12 +29,17 @@ This directory contains documentation for external tools and services integrated
 - **Handbrake** — Automated video transcoding.
 - **Hume AI** — Emotionally intelligent voice AI (EVI & Octave).
 - **[Virtualdj](virtualdj/README.md)** — Live audio mixing and performance.
-- **[Resolume Arena (resolume-mcp)](resolume/README.md)** — VJ / live video: Resolume demo vs license (watermark), OSC bridge, fleet `resolume-mcp`.
+- **[Resolume Arena (resolume-mcp)](resolume/README.md)** — VJ / live video: demo watermark + periodic **“Resolume Avenue”** voice; license or **video-only** routing (audio from **mixxxxx**); OSC + NDI with mixx-dj-mcp.
 - **[Ableton Live](ableton-live/README.md)** — Legacy music production (Critical analysis vs. Bitwig).
 - **[Audiotool Nexus](audiotools.md)** — Cloud DAW orchestration via SOTA dashboard (v0.1.0).
 - **[Audio FX & Neural Foley](audio-fx/README.md)** — Generative sound design and Foley orchestration (ElevenLabs, Noiz AI, Stable Audio, FoleyCrafter).
 
 ### 🛠️ Development & Ops
+- **[FastMCP](fastmcp.md)** — Core MCP framework by **Jeremiah Lowin**: every Python MCP server in the fleet ships `fastmcp>=3.4.4,<4`. Creator of FastMCP, Prefab UI, MCP Apps support. Key docs in `fastmcp/`.
+- **[OpenSERP](openserp/README.md)** — FOSS self-hosted SERP API (MIT, Go binary): Google/Bing/Yandex/Baidu/DuckDuckGo/Ecosia search as structured JSON. MCP server via `npx @openserp/mcp`. Free SerpAPI alternative — no Docker needed, runs as background process on port 7000.
+- **[Hugging Face MCP Server](huggingface/README.md)** — Official **remote** HF server (`https://huggingface.co/mcp`, hosted at hf.co): hub model/dataset/space search, `hf://` filesystem, Gradio Space tools. Session-based Streamable HTTP, anonymous OK (rate-limited) or OAuth/Bearer. No repo, no port — opencode/Claude config only. Verified `@huggingface/mcp-services` v0.4.6.
+- **[Gradio](gradio/README.md)** — Python web-UI framework for ML demos; the A1111/Spaces shell. **Framework, not engine** — fleet stance (2026-08-05): no new Gradio+extensions projects; ComfyUI (comfyops-mcp) is the gen engine of record; hosted Gradio apps are consumed via the HF MCP bouquet; existing `myai/stablediff_gradio` stays.
+- **[Syncthing](syncthing.md)** — P2P folder sync (MPL 2.0): keep `D:\dev\repos` warm across Goliath, MiniPC, and other workstations without OneDrive lock-in. Caveats for git repos. Native Windows + Docker. v2.1: folder grouping, HTTP CONNECT proxy, configurable block indexing.
 - **[Dark App Factory](dark-app-factory.md)** — Software factory: vibe -> Foreman -> Council -> generated app. Dashboard 8002, DTU 8001, Foreman MCP via uv.
 - **[Traefik / Reverse Proxy](traefik/README.md)** — Edge router and traffic management.
 - **[Authentik](authentik/README.md)** — Identity orchestration and Zero-Trust.
@@ -38,12 +48,21 @@ This directory contains documentation for external tools and services integrated
 - **Meta_Mcp** — MCP server self-management and metadata; **`inspire_repo_*`** remote GitHub inspiration (native port of [Repomuse](https://www.npmjs.com/package/repomuse), MIT) — [repo-inspiration.md](repo-inspiration.md).
 - **Mcp Studio** — Visual development environment for MCP servers.
 - **Repomix** — Content bundling for LLM ingestion.
+- **[Spec Kit](spec-kit.md)** — GitHub's Spec-Driven Development toolkit (MIT). `specify` CLI bootstraps structured `/speckit.*` slash commands (constitution, specify, plan, tasks, implement) for opencode and 30+ agents. Formalizes the fleet's EXPLORE→PLAN→IMPLEMENT→VERIFY loop into persistent, version-controlled spec artifacts.
 - **[Repository inspiration (Repomuse → MetaMCP)](repo-inspiration.md)** — Study public GitHub repos without clone; credit to [repomuse](https://www.npmjs.com/package/repomuse) (praveene3127).
 - **Web Development** — Full-stack workflow automation.
+- **[Vis.js & ForceAtlas2](vis-network-forceatlas2.md)** -- Canvas-based network graph visualization and spatial clustering algorithm for fleet topology exploration, companion maps, and interactive webapp dashboards.
 - **[Cursor IDE](./cursor-ide/README.md)** — **Agent-First Platform (v3.0)**: Parallel agents, cloud orchestration, Agents Window; FastMCP 3.2+ concurrency. Deep docs: [ecosystem/cursor/](../ecosystem/cursor/README.md) (Cloud Agents, Profiles, [cursor-mcp](../projects/cursor-mcp/README.md) :11000 spend guardrails).
 - **[Zed IDE](./zed/README.md)** — **FOSS native editor (1.4.x)**: Skills, AGENTS.md, Ollama/LM Studio $0 agent path — [May–Jun digest](../ecosystem/zed/CHANGELOG_DIGEST_MAY_JUN_2026.md).
 - **[Reversing MCP](../projects/reversing-mcp/README.md)** — MCP server: binary analysis, Ghidra bridge (decompile, xrefs, strings), Directmedia DKI; webapp 10750 (Analyzer, Chat, Settings).
 - **[Frida](frida.md)** — Dynamic instrumentation (hook APIs, dump buffers); used with reversing-mcp scripts for Directmedia capture; no MCP server.
+- **[Hopper](hopper.md)** — Commercial disassembler (cheap IDA alternative): REA's recommended native provider (auto-installed by setup), consumed via reversing-mcp `rea_investigate`; no MCP server.
+
+### 🌐 Web Publishing & Static Sites
+- **[Docusaurus](docusaurus/README.md)** — Fleet standard for public playbook/documentation websites (React, MDX, search, versioning). One live deployment: `multi-gpu-cluster-recipes` on port 11136, funnel `/multigpu/`.
+- **[Eleventy](eleventy/README.md)** — Proposed lean SSG (zero JS by default, multi-engine, incremental adoption). No live deployment yet, under evaluation against Astro Starlight. Reach for it when Docusaurus is too heavy.
+- **Astro (Starlight)** — No dedicated page yet. Lean islands-architecture rival to Eleventy, evaluated as alternative in Docusaurus and Eleventy pages. Add `integrations/astro/README.md` if a Starlight pilot is justified.
+- **WordPress** — No page, no `wordpress-mcp`. CMS with authoring UI, rejected for Buttondown newsletter case as disproportionate maintenance/credential surface. Only reach for it when non-technical authors need a dashboard; document stance first, not a how-to.
 
 ### 🏠 Home Automation & IoT
 - **[Home Assistant (home-assistant-mcp)](../projects/home-assistant-mcp/README.md)** — HA MCP (FastMCP 3.1): get_states, call_service, trigger_automation; agentic workflow, prompts, skills. Ports 10796/10797. Webapp: States, Services, Automations. Control Dreame and all HA devices from one bridge.
@@ -79,11 +98,12 @@ This directory contains documentation for external tools and services integrated
 
 ### 🌍 Social & Virtual Worlds
 - **Vrchat / [Resonite](resonite/README.md)** — Social VR testing and deployment.
+- **[Social VR Watch](SOCIAL_VR_WATCH.md)** — Watch file: AltspaceVR relaunch under SideQuest (fall 2026), ghost-town problem analysis.
 - **[Avatar MCP](avatar/README.md)** — VRM registry, OSC, creative pipeline (`hub_download`, model_type). **Docs hub:** [docs/avatars/](../docs/avatars/README.md) (MMD, Godot, non-human VRM).
-- **[Cua Driver (external)](cua-driver.md)** — Host background computer-use; fleet parity via **pywinauto-mcp** ([pattern](../patterns/CUA_DRIVER_AND_PYWINAUTO.md)).
+- **[Cua Driver (external)](cua-driver.md)** — Host background computer-use; fleet parity via **windows-computer-use-mcp** ([pattern](../patterns/CUA_DRIVER_AND_PYWINAUTO.md)).
 - **[VRoid Studio MCP](vroidstudio/README.md)** — GUI automation export (pywinauto); pairs with avatar-mcp.
 - **Vienna Live** — Real-time local data for the 9th District.
-- **Mywienerlinien** — Public transport integration (Wiener Linien).
+- **Public Transport** — Public transport integration (Wiener Linien).
 
 ### 🦾 Robotics
 - **Robotics** — Unified control for Unitree and ROS hardware.
@@ -100,6 +120,7 @@ This directory contains documentation for external tools and services integrated
 4. **Register in Hub**: Update `apps_catalog.py` to add the service to the frontend.
 
 ## Documentation Index
+- [Bastio](bastio/README.md) — AI security gateway: PII, jailbreak, prompt injection, secret detection in <50ms; reverse proxy pattern, single Go binary, `docker compose up` deploy; fleet guardrail recommendation
 - [LeWM-MCP](lewm-mcp.md) — LeWorldModel JEPA world model: train/infer prep, agentic workflow, ports 10927/10928
 - [Plex MCP](plex-mcp.md) — Media server (FastMCP 3.1): movies (posters, detail modal, Play in Plex), RAG semantic search, Settings reindex
 - [Blender MCP](blender-mcp.md) — Fleet webapp vs PyPI asset integrations (Poly Haven, Sketchfab, Rodin, Hunyuan); dual-stack guide
@@ -113,7 +134,7 @@ This directory contains documentation for external tools and services integrated
     - [Plugin Architecture](davinci-resolve/PLUGINS.md)
     - [Pricing & Editions](davinci-resolve/PRICING_AND_EDITIONS.md)
 - [Ableton Live](ableton-live/README.md) - Critical Analysis & Integration
-- [Resolume Arena & resolume-mcp](resolume/README.md) — Official demo (watermark), Avenue vs Arena; OSC fleet bridge
+- [Resolume Arena & resolume-mcp](resolume/README.md) — Demo watermark/voice, mixxxxx audio + Resolume video-only, OSC fleet bridge
 - [Moltbot Series (00-07)](moltbot-00-overview.md)
 - [NemoClaw](nemoclaw.md) — Secure enterprise memory and state component for Robofang
 - [OpenManus](openmanus.md) — FOSS CLI; local LLM; openmanus-mcp + webapp; MCP client (`mcp.json`, `main.py` / `run_mcp.py` / `run_flow`)
@@ -123,13 +144,23 @@ This directory contains documentation for external tools and services integrated
 - [Dreame MCP](../projects/dreame-mcp/README.md) — Dreame D20 Pro Plus: DreameHome cloud, status, map (`/api/v1/map`); FastMCP 3.1, agentic workflow, webapp **10894/10895**
 - [Home Assistant MCP](../projects/home-assistant-mcp/README.md) — HA bridge: states, services, automations; FastMCP 3.1, agentic workflow, webapp 10796/10797
 - [Frida](frida.md) — Dynamic analysis; scripts in reversing-mcp; when to use vs Ghidra
+- [Hopper](hopper.md) — Commercial disassembler; REA's recommended native provider; via reversing-mcp `rea_investigate`
+- [RE tooling compared](re-tools-comparison.md) — Hopper vs IDA Free vs IDA Pro vs Ghidra vs Frida: cost, hosts, REA status, decision matrix
+- [CUA tour for RE](cua-re-tour.md) — Behavioral half of the Tier 3 combo (pointer to reversing-mcp spec, not built yet)
 - [llms.txt + llms-full fleet manifest](llms-txt-manifest.md) — Two-file LLM discovery standard for MCP repos (index + full)
 - [Anna’s Archive — MCP stance](annas-archive-mcp-stance.md) — Fleet posture, PD-first alternatives, prompt-level UX vs repo risk
 - [Cursor IDE](./cursor-ide/README.md) — Agent-First orchestration (v3.0); parallel execution; Agents Window
 - [Zed IDE](./zed/README.md) — High-performance native editor (v0.230.x); ACP Registry; Git Graph v2
+- [Spec Kit](spec-kit.md) — GitHub SDD toolkit: `/speckit.*` workflow, `specify` CLI, opencode-native integration
+- [Hugging Face MCP Server](huggingface/README.md) — Official remote HF server (`https://huggingface.co/mcp`): hub search, `hf://` FS, Gradio tools; OAuth/Bearer auth
+- [Gradio](gradio/README.md) — Python web-UI framework for ML demos; framework-not-engine stance, ComfyUI as fleet gen engine, Spaces consumed via HF MCP bouquet
+- [Salad.com GPU Sharing](salad-gpu-sharing.md) — Managed Windows consumer GPU sharing: 4090 rates, income PCM, security/proxy risks, competitors (Vast.ai, RunPod), FOSS alternatives (Petals, BOINC, Folding@home)
+- [json-render](json-render.md) - Generative UI framework (Vercel Labs): **evaluated, NOT adopted**. Targets the same MCP Apps protocol as fleet Prefab but is a Node/TypeScript server shipping a bundled HTML iframe; conflicts with the Prefab mandate. Pattern extraction only (catalog-as-guardrail, SpecStream).
+- [Docusaurus](docusaurus/README.md) - Fleet SSG standard for public playbooks; `/multigpu/` deployment, funnel `BASE_URL` pattern
+- [Eleventy](eleventy/README.md) - Proposed lean SSG; zero-JS alternative to Docusaurus, no live deployment yet
 
 
 ---
 *Maintained by: Antigravity AI (SOTA v12.1 Compliance)*
-*Last updated: 2026-03*
-*Fleet Status: 59 Services Registered*
+*Last updated: 2026-08-05*
+*Fleet Status: 62 Services Registered*

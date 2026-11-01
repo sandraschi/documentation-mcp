@@ -8,7 +8,7 @@ related:
   - standards/WEBAPP_SOTA_STANDARDS.md
   - standards/NAKED_PC_INSTALL_STANDARD.md
   - standards/CODE_QUALITY_STANDARDS.md
-last_updated: 2026-05-31
+last_updated: 2026-08-22
 ---
 
 # Bun — Reference
@@ -21,10 +21,10 @@ and how it behaves" companion.
 ## What it is
 
 Bun is an all-in-one JavaScript/TypeScript toolchain shipped as a single native
-binary: runtime + package manager + bundler + test runner + shell. Written in
-Zig (with C/C++ for the JSC bindings), built on JavaScriptCore (Safari's engine)
-rather than V8. It is a deliberate drop-in alternative to the Node + npm +
-webpack/esbuild + Jest stack.
+binary: runtime + package manager + bundler + test runner + shell. Originally written in
+Zig, **Bun 1.4 completed a full core rewrite into Rust (~1M lines)** for memory safety
+and performance. Built on JavaScriptCore (Safari's engine) rather than V8. It is a
+deliberate drop-in alternative to the Node + npm + webpack/esbuild + Jest stack.
 
 Mental model for this fleet: **`uv` is to Python what `bun` is to JavaScript** —
 one fast binary replacing a fragmented toolchain, winget-bootstrappable, fits
@@ -33,12 +33,12 @@ analogue.
 
 | Fact | Value |
 |---|---|
-| Latest stable | 1.3.14 (2026-05-12) |
+| Latest stable | 1.4.0 (2026-08-20) |
 | Engine | JavaScriptCore (not V8) |
-| Language | Zig + C/C++ |
+| Language | Rust (rewritten off Zig in 1.4) |
 | License | MIT |
 | Owner | Anthropic (acquired Dec 2025) |
-| Windows | Native since 1.1 (x64); ARM64 since 1.3.10 |
+| Windows | Native since 1.1 (x64); ARM64 since 1.3.10; 2.5x faster startup in 1.4 |
 | Lockfile | `bun.lock` (text, default since 1.2; replaced binary `bun.lockb`) |
 | Repo | github.com/oven-sh/bun |
 | Docs | bun.com/docs — full index at bun.com/docs/llms.txt |
@@ -63,6 +63,16 @@ Our repos pair a Python FastMCP backend (uv-managed) with a Vite/React frontend
 What it does **not** buy us: Vite 8 moved its bundler to Rolldown (Rust), so
 Vite's own build/HMR speed jumped and Bun's bundler advantage over Vite narrowed
 to "workload-specific, benchmark-your-own-app." We are **not** replacing Vite.
+
+## Bun 1.4 Release Highlights (August 2026)
+
+Bun 1.4 represents a major milestone for the JS tooling layer:
+
+- **1M-Line Rust Core Rewrite:** Completed the transition from Zig to Rust, yielding a ~20% smaller binary and matching/exceeding 1.3 performance benchmarks.
+- **Windows Performance:** 2.5x faster startup on Windows (`Goliath`), 5x idle CPU reduction, and up to 48% reduction in server memory.
+- **Node.js Compatibility Jump:** Passed 1,517 additional Node.js test suite tests, achieving Node 26.3.0 parity. This makes **Phase 2** (`bun run --bun dev` executing Vite on Bun runtime) much safer on Windows.
+- **New Package Manager Commands:** Added native `bun dedupe`, `bun audit fix`, and `bun prune`.
+- **New Built-in APIs:** `Bun.WebView` (native headless browser automation), `bun run --parallel`, `Bun.Image`, `Bun.markdown`, and `Bun.cron()`.
 
 ## Command cheatsheet (npm → bun)
 
