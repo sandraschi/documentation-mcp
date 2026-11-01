@@ -71,6 +71,10 @@ This directory contains documentation for external tools and services integrated
 - **Nest Protect** — Environmental safety monitoring (Smoke/CO).
 - **Netatmo Weather** — Micro-climate data analysis.
 
+- **[REA Tools & Automated Binary Decompilation](rea-tools/README.md)** — Headless binary analysis, Ghidra/Hopper orchestration, and pseudocode extraction via eversing-mcp.
+- **[Storytold ArtCraft](storytold-artcraft/README.md)** — Brandon Thomas's pure-Rust creative suite written via parallel Opus agent loops; reference blueprint for fleet rustification (11n).
+- **[High-Signal Radar & Content Distillation](high-signal-radar/README.md)** — Sovereign ingestion pipeline: bypassing clickbait videos via yt-dlp transcripts, Hacker News Algolia curation, and ArXiv codehunt tracking.
+
 ### 📚 Knowledge & Productivity
 - **[Anna’s Archive — MCP stance & PD alternatives](annas-archive-mcp-stance.md)** — Why the fleet does not ship Anna’s scrapers; browser sufficiency; Randall Munroe vs public-domain Orczy-style asks; Gutenberg / Open Library / IA; GitHub/US optics; not legal advice.
 - **[getbooks-mcp (planned)](../projects/getbooks-mcp/README.md)** — Multi-**safe**-source book MCP (Gutenberg, Open Library, IA, Standard Ebooks); **not** annasarchive-mcp; portmanteau sketch + source table.
