@@ -39,6 +39,7 @@ Avoid generic 15-minute reaction videos. Target creators who demonstrate ground-
 * **The Primeagen / Low Level JavaScript**: Terminal-native programming, performance audits, and system architecture.
 * **Andreas Kling (SerenityOS / Ladybird)**: Real native browser engine development from scratch in C++/Rust.
 * **Ben Eater**: Physical electronics, 6502 breadboard computers, and network packet construction from copper wire.
+* **Andrew Berman / In-Depth Tech Interviewers**: Long-form interviews with frontier founders (e.g., Sam Altman, Dario Amodei) that surface real roadmaps — **but mandate transcript-reading** to bypass the 20 minutes of pause-thinking, corporate hedges, and verbal filler.
 
 ---
 
@@ -54,5 +55,5 @@ yt-dlp -x --audio-format mp3 -o "audio.mp3" "URL"
 # Pass audio.mp3 to speech-mcp / whisper.cpp
 
 # 3. Model Prompt (Bonsai / Glimmer):
-# "Extract: 1. Core architectural thesis; 2. Hard technical numbers/benchmarks; 3. Trade-offs; 4. Novel GitHub links. Omit banter, sponsor spots, and intro."
+# "Extract: 1. Core thesis/admissions; 2. Hard technical numbers/timeline dates; 3. Direct answers vs. evasive hedges; 4. Novel tools/repos mentioned. Strip all conversational pauses, ums/ahs, boilerplate intros, and sponsor banter."
 ```
