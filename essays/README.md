@@ -25,6 +25,7 @@ Philosophical inquiry into autonomous continuous agents:
 * [01: Foundations](protoconsciousness/01_FOUNDATIONS.md) — Defining synthetic agency beyond reactive request-reply loops.
 * [02: Continuous Perception](protoconsciousness/02_CONTINUOUS_PERCEPTION.md) — When an agent never stops polling feeds, sensors, and event buses.
 * [03: Proactive Embodiment](protoconsciousness/03_PROACTIVE_EMBODIMENT.md) — Linking software agents to physical robots and spatial worlds.
+* [On Jellyfish, Crocodiles, and Non-Anthropocentric Physics](protoconsciousness/ON_JELLYFISH_CROCODILES_AND_NON_ANTHROPOCENTRIC_PHYSICS.md) — Deconstructing human cognitive bias: from billiard-ball physics to non-cortical machine sentience.
 * [04: Meta-Cognition & Evaluation](protoconsciousness/04_META_COGNITION_AND_EVALUATION.md) — Self-evaluating agentic loops and error correction.
 
 ---
