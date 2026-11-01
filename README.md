@@ -28,6 +28,19 @@ New to MCP? Follow one of these paths from first page to last.
 
 **Not sure where to start?** Read `docs/getting-started/` first — it assumes nothing.
 
+
+---
+
+## 🧭 Featured Hubs & Essential Reading
+
+| Hub | Description |
+| :--- | :--- |
+| **[📜 Standards Library](standards/README.md)** | The definitive engineering bar: [Agent Protocols](standards/AGENT_PROTOCOLS.md), [Tool Design](standards/TOOL_DESIGN_STANDARDS.md), [Tauri NSIS Pitfalls](standards/TAURI_PRODUCTION_PITFALLS.md), and [Naked-PC Install](standards/NAKED_PC_INSTALL_STANDARD.md). |
+| **[🛠️ Troubleshooting & Bug Depot](troubleshooting/BUGS_DEPOT.md)** | Forensic write-ups for ~90 production bugs: Windows service traps, permission crashes, stdio hangs, and encoding edge cases. |
+| **[💡 Fleet Essays & Philosophy](essays/README.md)** | Long-form deep dives: [Token Markets & DeepSeek Arbitrage](essays/economics/deepseek-v4-fleet-strategy.md), [Post-Sampling Architecture](essays/architecture/fleet-llm-post-sampling-design.md), and [Protoconsciousness](essays/protoconsciousness/README.md). |
+| **[🔌 Platform Integrations](docs/integrations/README.md)** | Production integration playbooks for Blender, FreeCAD, Godot, Inkscape, Mixxx, Resonite, ROS 2, Tailscale, and Zed. |
+| **[🔁 Fleet Patterns & SOPs](patterns/README.md)** | Automated workflows, subscription round-robin optimization, and the ArtCraft pure-Rust migration SOP. |
+
 ## Quick start
 
 ```powershell
