@@ -54,7 +54,7 @@ Thirteen files. Not from memory, not extrapolated from another repo.
 | 4 | `standards/TOOL_DESIGN_STANDARDS.md` | Portmanteau pattern, docstrings, Prefab UI, pagination *(Legacy Python track; Rust repos use ArtCraft Command Bus)* |
 | 5 | `standards/STARLETTE_NO_PYDANTIC_STANDARD.md` | Backend framework decision matrix *(Legacy Python track; INVALIDATED for Rust repos which call L1 in-process)* |
 | 6 | `standards/NAKED_PC_INSTALL_STANDARD.md` | start.ps1 / Require-Command / Steve-class install *(Legacy Python track; Rust repos ship zero-dep native `.exe`)* |
-| 7 | `standards/PACKAGING_STANDARDS.md` | Two-track distribution: mcpb + NSIS |
+| 7 | `standards/MCPB_PACKAGING_STANDARDS.md` | Two-track distribution: mcpb + NSIS |
 | 8 | `standards/MCPB_PACKAGING_STANDARDS.md` | Full .mcpb layout, manifest, forbidden commands |
 | 9 | `standards/TAURI_PRODUCTION_PITFALLS.md` | NSIS pitfalls Phase 1 checklist A-J |
 | 10 | `standards/rules/tauri_nsis_building.md` | NSIS build pipeline, embedded backend, cert |
@@ -94,7 +94,7 @@ hit is a lookup, not an investigation.
 | CUA / pywinauto smoke test | `standards/rules/cua_nsis_smoke_testing.md` |
 | Repo smoke test ("did it run?") | `standards/SMOKE_CONTRACT.md` (`just smoke`: versions, one real call, one artifact check) |
 | CUA webapp test (pre-Tauri) | `standards/rules/cua_webapp_testing.md` |
-| Publishing / promotion / Glama | `standards/FLEET_PROMOTION.md` + `standards/PACKAGING_STANDARDS.md` §3 |
+| Publishing / promotion / Glama | `standards/FLEET_PROMOTION.md` + `standards/MCPB_PACKAGING_STANDARDS.md` §3 |
 | End of session: "write up / report / document in discord" | `standards/WORK_REPORT_STANDARD.md` (report file + digest in `#sfb-work`, all agents) |
 | Destructive / exec / actuator / outbound-message tools | `standards/AGENT_ACTION_GATES.md` (gates the model cannot open) |
 | Docker / containerisation | `standards/docker-containerization.md` |
