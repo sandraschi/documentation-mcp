@@ -22,6 +22,7 @@ flowchart TD
   Fleet --> C8["🤖 Ch 8: The 15-Repo Mesh: From Idea to Startup"]
   Fleet --> C9["💾 Ch 9: Retro Classics: Turbo Pascal & Framework"]
   Fleet --> C10["📻 Ch 10: Kosmos Radiobasteln Reborn (SDR)"]
+  Fleet --> C11["⚡ Ch 11: The Heathkit Dream Lab in Resonite VR"]
 ```
 
 ---
@@ -201,6 +202,45 @@ flowchart LR
 2. **Real Airwaves, Zero Static**: An \ RTL-SDR USB dongle captures real spectrum. sdr-mcp streams the high-frequency I/Q samples into local DSP filters.
 3. **Modular Patching (cv-rack-mcp)**: Claude patches virtual envelope followers, bandpass filters, and heterodyne mixers into VCV Rack 2, generating the authentic warm vacuum-tube or germanium-diode acoustic resonance.
 4. **DX Hunting Across the Globe**: You sit in your 9th-district apartment, turn virtual brass dials, and let the agent scan shortwave bands for Morse beacons, aviation ATIS, and distant amateur radio operators. The smell of rosin flux is optional, but the magic is 100% back.
+
+
+---
+
+## Chapter 11: The Heathkit Dream Lab: Rebuilding the Unaffordable Crown Jewels in Virtual Reality
+*“Daddy said: 'Practice Schönschreiben and use your Rechenschieber! You don't need an Oscillo-Dingus!' Daddy was wrong.”*
+
+Every kid with solder in their blood remembers paging through the glossy pages of a **Heathkit catalog** from 1975, 1982, or 1990:
+* The legendary **Heathkit IO-12 / IO-4550 Cathode-Ray Oscilloscopes**: That curved, green phosphor CRT tube glowing in the dark with calibrated graticules and clunky rotary stepped attenuators.
+* The **Heathkit SB-104 Transceiver**: The crown jewel of amateur radio stations with die-cast chassis, analog illuminated needle S-meters, and knurled VFO tuning dials.
+* The **Heathkit Hero 1 Robot** (1982): That futuristic beige roving companion with a rotating ultrasonic turret and a synthesized robotic voice.
+
+You pleaded with your parents. Daddy pushed your slide rule (*Rechenschieber*) across the kitchen table and said: *“Practice your long division on paper! Nobody makes a living turning knobs on a cathode-ray dingus!”*
+
+### The Sovereign Revenge Loop: The Heathkit VR Retro-Mansion
+Thirty years later, you have 13,000 digitized books in your Calibre library, a full stack of CAD tools, and a virtual reality world waiting to be populated. Daddy’s slide rule has been replaced by an agentic compiler loop.
+
+`mermaid
+flowchart LR
+  Catalog["Heathkit Catalog / Manual<br/>(Calibre Library RAG)"]
+  CAD["freecad-mcp + blender-mcp<br/>(Sheet metal, dials, CRT curvature)"]
+  Logic["vcv-rack-mcp + sdr-mcp<br/>(Live phosphor sweep, audio heterodyne)"]
+  Mansion["Resonite VR Retro-Mansion<br/>(Interactive 3D Workbench)"]
+
+  Catalog --> CAD
+  CAD --> Logic
+  Logic --> Mansion
+`
+
+1. **Extract the Ground Truth (calibremcp / calibre-mcp)**: 
+   Claude queries the digitized Heathkit schematic and catalog archive: *"Pull the panel dimensions, knob placement, and circuit schematic for the Heathkit IO-4550 oscilloscope and HW-101 transceiver."*
+2. **CAD the Metal & Knobs (reecad-mcp + lender-mcp)**:
+   Claude models the authentic bent sheet-metal casing, knurled aluminum knobs, toggle switches, and the curved glass vacuum-tube faceplate with realistic PBR brushed-aluminum and hammertone paint materials.
+3. **Wire the Phosphor & Circuit Logic (cv-rack-mcp + sdr-mcp)**:
+   It’s not a static 3D prop. Claude hooks the virtual CRT screen to real signal shaders in Godot/Resonite. Route a live audio feed or local RTL-SDR radio stream through the virtual input BNC connector, and the green phosphor trace actually dances with realistic beam persistence and deflection jitter!
+4. **Step Into Your Virtual Retro-Mansion (esonite-mcp)**:
+   You slip on your VR headset. You are standing in a warm wood-paneled 1970s attic laboratory. On the heavy oak workbench sits the full, glowing Heathkit stack—every meter twitching to live radio signals, every rotary switch clicking with authentic haptic audio feedback.
+
+You can finally turn the dials on the oscillo-dingus. And you didn't have to practice your Schönschreiben to do it.
 
 ## Epilogue: The Creed of the Sovereign Architect
 
