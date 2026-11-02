@@ -33,7 +33,7 @@
   { "repo": "monitoring-mcp", "startPath": "web_sota/start.ps1", "port": 10851, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "multi-backup-mcp", "startPath": "web_sota/start.ps1", "port": 10799, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "myai", "startPath": "web_sota/start.ps1", "port": 10889, "healthPath": "/api/v1/health/status", "timeoutSec": 120 },
-  { "repo": "mywienerlinien", "startPath": "web_sota/start.ps1", "port": 10723, "healthPath": "/health", "timeoutSec": 90 },
+  { "repo": "publictransport-mcp", "startPath": "web_sota/start.ps1", "port": 10723, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "nest-protect-mcp", "startPath": "web_sota/start.ps1", "port": 10753, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "netatmo-weather-mcp", "startPath": "web_sota/start.ps1", "port": 10823, "healthPath": "/health", "timeoutSec": 90 },
   { "repo": "notepadpp-mcp", "startPath": "web_sota/start.ps1", "port": 10815, "healthPath": "/health", "timeoutSec": 90 },

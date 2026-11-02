@@ -67,7 +67,7 @@ $otherProjects = @(
     "mini-testapp",
     "miniclaude",
     "myscripts",
-    "mywienerlinien",
+    "publictransport-mcp",
     "nest-protect-mcp",
     "notion-mcp",
     "pdf-export-backup",
