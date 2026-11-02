@@ -92,7 +92,7 @@ Crucial configuration files for MCP clients.
 - **devices-mcp**: `D:/Dev/repos/devices-mcp`
 - **rtorrent-mcp**: `D:/Dev/repos/rtorrent-mcp`
 - **virtualization-mcp**: `D:/Dev/repos/virtualization-mcp`
-- **vienna-transit**: `D:\Dev\repos\mywienerlinien`
+- **vienna-transit**: `D:\Dev\repos\publictransport-mcp`
 - **winrar-mcp**: `D:/Dev/repos/winrar-mcp`
 
 ## UI Navigation Paths

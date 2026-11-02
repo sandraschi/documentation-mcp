@@ -38,7 +38,7 @@ Ensure every repo under `d:/dev/repos` that has a webapp (in `/web` or `/webapp`
 | **devices-mcp** | webapp/ (Python + web subfolder) | TBD | 10716 | Unknown | Unknown | **Audit** how dashboard is run; add start.ps1 + start.bat in webapp/ or root; ensure port 10716; port clear. |
 | **meta_mcp** | web/ (+ backend) | **14400** backend, **5173** frontend | 10718 | start-dev.ps1 | No | **Migrate** backend to 10718 (or 10718 backend + 10719 frontend if split). Add start.bat. Port clear; remove 5173/14400. |
 | **calibre-mcp** | webapp/ | 10720 backend, 10721 frontend | 10720, 10721 | Yes (webapp/start.ps1) | Yes (webapp/start.bat) | Compliant. No change. |
-| **mywienerlinien** | frontend/ | **3080** | 10722 | start.ps1 (root), frontend start script | start.bat (root) | **Migrate** app port to 10722. Update frontend config and start scripts; port clear. |
+| **publictransport-mcp** | frontend/ | **3080** | 10722 | start.ps1 (root), frontend start script | start.bat (root) | **Migrate** app port to 10722. Update frontend config and start scripts; port clear. |
 | **mcp-studio** | frontend/ + backend/ | **8000** (setup_dev.bat) | 10724 | No single start | setup_dev.bat (env only) | **Add** start.ps1 + start.bat that start backend + frontend on 10724 (or backend 10724 + frontend 10725 if split). Port clear. |
 | **games-app** | backend web_server | **9876** | 10726 | START_GAMES.ps1 | START_SERVER.bat etc. | **Migrate** main web port to 10726. Update START_GAMES.ps1 and .bat; port clear. |
 | **ring-mcp** | webapp/ | **11110** frontend, 8123 backend | 10728 | run-webapp.ps1 | run-webapp.bat | **Migrate** frontend to 10728. Update package.json "dev"/"start", run-webapp.ps1, proxy if any; port clear. Backend can stay 8123 or move to 10729 if desired. |
@@ -51,7 +51,7 @@ Ensure every repo under `d:/dev/repos` that has a webapp (in `/web` or `/webapp`
 1. **Port migrations (no new files)**  
    - robotics-mcp: 5173 → 10706 (vite.config.ts, web/scripts/start.ps1, web/start.bat).  
    - meta_mcp: 5173/14400 → 10718 (and 10719 if frontend separate). start-dev.ps1 + env/config.  
-   - mywienerlinien: 3080 → 10722 (frontend + start.ps1/start.bat).  
+   - publictransport-mcp: 3080 → 10722 (frontend + start.ps1/start.bat).  
    - games-app: 9876 → 10726 (backend web_server + START_GAMES.ps1 / .bat).  
    - ring-mcp: 11110 → 10728 (webapp package.json, run-webapp.ps1/.bat).
 

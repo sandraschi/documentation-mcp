@@ -61,7 +61,7 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10719 | meta_mcp | Frontend |
 | 10720 | calibre-mcp | Backend |
 | 10721 | calibre-mcp | Frontend |
-| 10722 | mywienerlinien | Frontend |
+| 10722 | publictransport-mcp | Frontend |
 | 10724 | mcp-studio | Backend |
 | 10725 | mcp-studio | Frontend |
 | 10728 | ring-mcp | Web dashboard |
@@ -199,7 +199,7 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 10893 | yahboom-mcp | Web dashboard frontend |
 | 10894 | dreame-mcp | Backend (MCP SSE + REST API, DreameHome cloud); fleet map: `GET /api/v1/map` |
 | 10895 | dreame-mcp | Frontend (Vite React dashboard; proxies `/api` → 10894) |
-| 10896 | mywienerlinien | Webapp dashboard (Vite, proxies → 3079) |
+| 10896 | publictransport-mcp | Webapp dashboard (Vite, proxies → 3079) |
 | 10897 | magentart-mcp | Magenta RT (Docker Backend) |
 | 10898 | magentart-mcp | Web dashboard frontend |
 | 10899 | magentart-mcp | Web dashboard backend (FastAPI) |
