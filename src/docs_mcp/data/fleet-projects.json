@@ -495,12 +495,12 @@
         "status":  "Active"
     },
     {
-        "id":  "mywienerlinien",
-        "name":  "mywienerlinien",
+        "id":  "publictransport-mcp",
+        "name":  "publictransport-mcp",
         "description":  "**Vienna Transit Hub (v2.0.1)** - Live map (port 3079), wienerlinien MCP server (Claude Desktop registered), Webapp dashboard (port 10896). GTFS DB + OGD Realtime V1.4.",
         "type":  "MCP Server",
-        "localPath":  "file:///D:/Dev/repos/mywienerlinien",
-        "docsPath":  "/docs/projects/mywienerlinien/README.md",
+        "localPath":  "file:///D:/Dev/repos/publictransport-mcp",
+        "docsPath":  "/docs/projects/publictransport-mcp/README.md",
         "status":  "Active"
     },
     {

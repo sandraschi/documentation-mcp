@@ -264,12 +264,12 @@ APPS_CATALOG: list[AppEntry] = [
         "startScript": "multi-backup-mcp/web_sota/start.ps1",
     },
     {
-        "label": "Mywienerlinien",
+        "label": "Public Transport",
         "url": "http://127.0.0.1:10722",
         "port": 10722,
         "whatItIs": "Frontend",
-        "whatYouCanDo": "Enable autonomous mywienerlinien operations and data integration within your fleet.",
-        "startScript": "mywienerlinien/start.ps1",
+        "whatYouCanDo": "Enable autonomous publictransport-mcp operations and data integration within your fleet.",
+        "startScript": "publictransport-mcp/start.ps1",
     },
     {
         "label": "Nest Protect",

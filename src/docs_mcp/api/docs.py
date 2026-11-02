@@ -179,6 +179,7 @@ async def api_content(path: str):
 
 
 @router.post("/reindex")
+@router.get("/reindex")
 async def api_reindex(background_tasks: BackgroundTasks):
     """Trigger manual re-indexing in the background."""
     job_id = uuid.uuid4().hex[:12]
