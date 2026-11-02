@@ -624,18 +624,18 @@
       },
       "disabled": true
     },
-    "mywienerlinien": {
+    "publictransport-mcp": {
       "command": "uv",
       "args": [
         "--directory",
-        "D:/Dev/repos/mywienerlinien",
+        "D:/Dev/repos/publictransport-mcp",
         "run",
         "python",
         "-m",
         "wienerlinien_mcp.server"
       ],
       "env": {
-        "PYTHONPATH": "D:/Dev/repos/mywienerlinien/src",
+        "PYTHONPATH": "D:/Dev/repos/publictransport-mcp/src",
         "PYTHONUNBUFFERED": "1"
       },
       "disabled": true

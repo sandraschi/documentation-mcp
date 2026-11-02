@@ -528,10 +528,10 @@
       ]
     },
     {
-      "id": "mywienerlinien",
-      "label": "Mywienerlinien",
+      "id": "publictransport-mcp",
+      "label": "Public Transport",
       "port": 10722,
-      "repo_path": "D:/Dev/repos/mywienerlinien",
+      "repo_path": "D:/Dev/repos/publictransport-mcp",
       "start_command": "powershell ./start.ps1",
       "tags": [
         "frontend",
