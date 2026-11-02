@@ -1,15 +1,16 @@
-﻿# Per-repo fleet start config for documentation-mcp
+# Per-repo fleet start config for documentation-mcp
 # Edit ports/backend target here - start.ps1 is fleet-standard.
 @{
     Name         = 'documentation-mcp'
     BackendPort  = 11033
     FrontendPort = 11032
     HealthPath   = '/api/settings'
-    WebRoot      = 'D:\Dev\repos\documentation-mcp\web_sota'
+    WebRoot      = 'web_sota'
     Backend = @{
         Kind          = 'uvicorn'
         UvicornTarget = 'docs_mcp.server:app'
         SyncExtras    = @('dev')
+        SyncOnStart  = $true
         Env           = @{ WEB_PORT = '11033' }
     }
     Frontend = @{
