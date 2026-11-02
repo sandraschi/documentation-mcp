@@ -4,6 +4,7 @@ pyproject.toml
 src/docs_mcp/__init__.py
 src/docs_mcp/__main__.py
 src/docs_mcp/cross_reference.py
+src/docs_mcp/export.py
 src/docs_mcp/memory_integration.py
 src/docs_mcp/releasebot.py
 src/docs_mcp/server.py
