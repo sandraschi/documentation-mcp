@@ -148,11 +148,28 @@ export function SearchView() {
         if (source !== 'docs') return // Only support syncing docs natively for now
         setSyncing(true)
         try {
-            const res = await fetch(API_BASE + '/api/reindex')
-            await res.json()
+            const res = await fetch(API_BASE + '/api/reindex', { method: 'POST' })
+            const data = await res.json()
+            const jobId = data.job_id
+            if (!jobId) {
+                setSyncing(false)
+                return
+            }
+            const poll = setInterval(async () => {
+                try {
+                    const pr = await fetch(API_BASE + `/api/reindex/${jobId}`)
+                    if (!pr.ok) return
+                    const pd = await pr.json()
+                    if (pd.status === "complete" || pd.status === "error") {
+                        clearInterval(poll)
+                        setSyncing(false)
+                    }
+                } catch {
+                    // ignore polling hiccup
+                }
+            }, 1200)
         } catch (err) {
             console.error("Sync failed:", err)
-        } finally {
             setSyncing(false)
         }
     }

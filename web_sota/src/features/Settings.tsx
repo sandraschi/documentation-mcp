@@ -152,15 +152,61 @@ export function Settings() {
 
     const handleReindex = async () => {
         setReindexLoading(true)
-        setReindexMessage(null)
+        setReindexMessage("Initiating reindex...")
         try {
-            const res = await fetch(API_BASE + "/api/reindex", { method: "POST", signal: AbortSignal.timeout(10000) })
+            const res = await fetch(API_BASE + "/api/reindex", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
             const data = await res.json()
-            const msg = data.message ?? (res.ok ? "Reindex started in background." : "Reindex failed.")
-            setReindexMessage(msg)
+            if (!res.ok) {
+                setReindexMessage(data.message || data.detail || "Reindex request failed.")
+                setReindexLoading(false)
+                return
+            }
+
+            const jobId = data.job_id
+            if (!jobId) {
+                setReindexMessage(data.message ?? "Reindex completed.")
+                setReindexLoading(false)
+                return
+            }
+
+            setReindexMessage("Indexing documentation in background...")
+            const pollInterval = setInterval(async () => {
+                try {
+                    const pollRes = await fetch(API_BASE + `/api/reindex/${jobId}`)
+                    if (!pollRes.ok) return
+                    const pollData = await pollRes.json()
+                    if (pollData.status === "complete") {
+                        clearInterval(pollInterval)
+                        setReindexMessage(`Reindex complete: ${pollData.chunks ?? 0} chunks indexed.`)
+                        setReindexLoading(false)
+                    } else if (pollData.status === "error") {
+                        clearInterval(pollInterval)
+                        setReindexMessage(`Reindex error: ${pollData.error || "failed"}`)
+                        setReindexLoading(false)
+                    } else if (pollData.status === "running") {
+                        setReindexMessage("Reindexing in progress...")
+                    }
+                } catch {
+                    // ignore polling network hiccup
+                }
+            }, 1200)
+
+            // Failsafe timeout after 5 minutes
+            setTimeout(() => {
+                clearInterval(pollInterval)
+                setReindexLoading((loading) => {
+                    if (loading) {
+                        setReindexMessage("Reindex running in background (check status later).")
+                        return false
+                    }
+                    return false
+                })
+            }, 300000)
         } catch (e) {
-            setReindexMessage("Request failed.")
-        } finally {
+            setReindexMessage("Request failed to reach backend.")
             setReindexLoading(false)
         }
     }

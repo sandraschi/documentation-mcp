@@ -150,13 +150,45 @@ export function Documents() {
                                 className="w-full h-8 gap-2 text-[11px] font-bold uppercase tracking-widest border-white/5"
                                 disabled={reindexLoading}
                                     onClick={async () => {
-                                        setReindexLoading(true); setReindexMessage(null);
+                                        setReindexLoading(true);
+                                        setReindexMessage("Starting reindex...");
                                         try {
-                                            const r = await fetch(API_BASE + "/api/reindex", { method: "POST", signal: AbortSignal.timeout(10000) });
+                                            const r = await fetch(API_BASE + "/api/reindex", { method: "POST" });
                                             const d = await r.json();
-                                            setReindexMessage(d.message ?? (r.ok ? "Reindex started in background." : "Failed."));
-                                        } catch { setReindexMessage("Could not reach backend."); }
-                                        finally { setReindexLoading(false); }
+                                            if (!r.ok) {
+                                                setReindexMessage(d.message || "Failed.");
+                                                setReindexLoading(false);
+                                                return;
+                                            }
+                                            const jobId = d.job_id;
+                                            if (!jobId) {
+                                                setReindexMessage("Reindexed.");
+                                                setReindexLoading(false);
+                                                return;
+                                            }
+                                            setReindexMessage("Reindexing in background...");
+                                            const poll = setInterval(async () => {
+                                                try {
+                                                    const pr = await fetch(API_BASE + `/api/reindex/${jobId}`);
+                                                    if (!pr.ok) return;
+                                                    const pd = await pr.json();
+                                                    if (pd.status === "complete") {
+                                                        clearInterval(poll);
+                                                        setReindexMessage(`Complete: ${pd.chunks ?? 0} chunks.`);
+                                                        setReindexLoading(false);
+                                                    } else if (pd.status === "error") {
+                                                        clearInterval(poll);
+                                                        setReindexMessage(`Error: ${pd.error || "failed"}`);
+                                                        setReindexLoading(false);
+                                                    }
+                                                } catch {
+                                                    // ignore polling error
+                                                }
+                                            }, 1200);
+                                        } catch {
+                                            setReindexMessage("Could not reach backend.");
+                                            setReindexLoading(false);
+                                        }
                                     }}
                             >
                                 {reindexLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCcw className="w-3 h-3" />}
