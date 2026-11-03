@@ -487,6 +487,7 @@ not webapp fronts and are not exposed.
 | 14110 | SoundCraft | `soundcraft --control 14110` |
 | 14111 | VectorCraft | `vectorcraft --control 14111` |
 | 14112 | WordCraft | `wordcraft --control 14112` |
+| 14113 | DatabaseCraft | `databasecraft --control 14113` |
 
 ## New Webapp Checklist
 
@@ -594,7 +595,7 @@ powershell -ExecutionPolicy Bypass -File "%~dp0start.ps1"
 | 11090 | admiral-mcp | Frontend (React/Vite dashboard) [retroactive fix 2026-07-13] |
 | 11091 | splatmaker-mcp | Backend (FastMCP 3.2+ HTTP `/mcp` + Starlette REST; self-hosted FOSS Gaussian-splat generation) |
 | 11092 | splatmaker-mcp | Frontend (Vite React dashboard) |
-| 11094 | fleet-public-relations-mcp | Backend (Starlette + FastMCP HTTP `/mcp`; infrastructure -- no webapp) |
+| 11094 | fleet-public-relations-mcp | Backend (Starlette + FastMCP HTTP `/mcp`; REST + webapp on 11095) |
 | 11095 | fleet-public-relations-mcp | Frontend (Vite React dashboard) |
 | 11096 | cline-mcp | MCP stdio / `CLINE_MCP_PORT` (Node.js server wrapping @cline/sdk); webapp moved to 11109/11103 |
 | 11097 | agy-mcp | Backend (FastMCP server for Antigravity IDE; stdio-only, no webapp) |
@@ -826,5 +827,7 @@ that the port is safe -- an idle container still owns its published port.
 | 13100 | `teleconference-mcp (compose)` | compose, not declared in config |
 | 14002 | `junk (compose)` | compose, not declared in config |
 | 14003 | `junk (compose)` | compose, not declared in config |
+| 11258 | splatmaker-native | Frontend (Vite) [registered 2026-11-01] |
+| 11259 | splatmaker-native | Backend (FastAPI + MCP HTTP /mcp) [registered 2026-11-01] |
 
 <!-- NON-FLEET-OCCUPANTS:END -->

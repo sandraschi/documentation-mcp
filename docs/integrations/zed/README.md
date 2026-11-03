@@ -206,7 +206,7 @@ Extensions are developed with:
 
 ---
 
-**Maintained by**: Sandra Schipal
+**Maintained by**: Sandra S.
 **Ecosystem Scale**: 14 production extensions deployed
 **Quality Standard**: SOTA packaging and distribution
 **Monorepo Support**: Intelligent entry point detection

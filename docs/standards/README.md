@@ -3,7 +3,7 @@ title: "Standards Library Index"
 category: standards
 status: active
 audience: all
-last_updated: 2026-11-01
+last_updated: 2026-11-02
 ---
 
 # Standards Library
@@ -19,9 +19,9 @@ of these to read and in what order.
 
 ## At a glance
 
-- **174 standards** (excluding backups and `_superseded/`)
+- **175 standards** (excluding backups and `_superseded/`)
 - **Current FastMCP floor: 3.4.4** — read from `JUNE_2026_STANDARDS_BAR.md`, which is the single source
-- **163 of 174** carry frontmatter; the rest have no declared status or last-updated date
+- **164 of 175** carry frontmatter; the rest have no declared status or last-updated date
 
 ### Where to start
 
@@ -75,7 +75,7 @@ of these to read and in what order.
 
 ## Standard
 
-129 files.
+130 files.
 
 | Standard | What it covers | Status | Updated |
 |---|---|---|---|
@@ -118,6 +118,7 @@ of these to read and in what order.
 | [HEALTH_ENDPOINT_STANDARD.md](./HEALTH_ENDPOINT_STANDARD.md) | 2026-07-17, advanced-memory-mcp: a SYSTEM-owned service child kept serving | review | 2026-07-17 |
 | [HOST_APP_LIFECYCLE.md](./HOST_APP_LIFECYCLE.md) | Mandatory pattern for all MCP servers that depend on a host application. | active | 2026-02-26 |
 | [IMPLEMENTATION_HONESTY_STANDARD.md](./IMPLEMENTATION_HONESTY_STANDARD.md) | Prevent "fake-green" systems where tools appear to succeed but are not implemented. | review | 2026-06-26 |
+| [INBOUND_TRIAGE.md](./INBOUND_TRIAGE.md) | Scope: automated first response to issues and PRs from strangers across fleet | draft | 2026-10-25 |
 | [INFRASTRUCTURE_RELIABILITY.md](./INFRASTRUCTURE_RELIABILITY.md) | Docker Desktop on Windows is a Tier-2 host. Always anticipate vpnkit or Named Pipe instability. | review | 2026-06-26 |
 | [JUNE_2026_STANDARDS_BAR.md](./JUNE_2026_STANDARDS_BAR.md) | Effective: 2026-06-17 | review | 2026-09-18 |
 | [JUSTFILE_RECIPES.md](./JUSTFILE_RECIPES.md) | Every MCP server repo SHOULD have repo-specific just recipes beyond the standard lint/test/serve ones. These g | review | 2026-06-26 |

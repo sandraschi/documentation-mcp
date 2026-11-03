@@ -1,4 +1,4 @@
-﻿# AvatarMCP Zed Extension
+# AvatarMCP Zed Extension
 
 FastMCP 3.1.1+.3 compatible VRM avatar management and animation server with VRChat OSC integration and agentic sampling workflows, packaged as a Zed IDE extension.
 
@@ -75,5 +75,5 @@ MIT License - see AvatarMCP repository for full license details.
 
 ## Author
 
-Sandra Schipal (sandraschipal@gmail.com)
+Sandra S. (<email>)
 

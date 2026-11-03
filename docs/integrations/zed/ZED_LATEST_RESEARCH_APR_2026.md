@@ -1,6 +1,6 @@
 # Zed IDE: Latest Research & Core Intelligence (April 2026)
 
-**By Sandra Schipal** | **Status: SOTA Research Sweep** | **Last Updated: April 9, 2026**
+**By Sandra S.** | **Status: SOTA Research Sweep** | **Last Updated: April 9, 2026**
 
 ## 🚀 Recent Release Intelligence
 
@@ -58,6 +58,6 @@ A complete overhaul of the Git visualization engine. It provides a dense, intera
 As of April 2026, **Zed** is no longer a niche tool for Mac users. Its **Full Native Windows/Linux support** and commitment to the **ACP open standard** have positioned it as the primary choice for developers seeking a high-performance, FOSS alternative to the proprietary AI IDE giants.
 
 ---
-**Author**: Sandra Schipal
+**Author**: Sandra S.
 **Verification**: Verified via DocsOps Releasebot telemetry and deep web search.
 **Tags**: `#zed-ide`, `#acp`, `#research-sweep`, `#agentic-platforms`
