@@ -3,7 +3,7 @@ title: "Standards Library Index"
 category: standards
 status: active
 audience: all
-last_updated: 2026-11-01
+last_updated: 2026-11-03
 ---
 
 # Standards Library
@@ -19,9 +19,9 @@ of these to read and in what order.
 
 ## At a glance
 
-- **174 standards** (excluding backups and `_superseded/`)
+- **176 standards** (excluding backups and `_superseded/`)
 - **Current FastMCP floor: 3.4.4** — read from `JUNE_2026_STANDARDS_BAR.md`, which is the single source
-- **163 of 174** carry frontmatter; the rest have no declared status or last-updated date
+- **165 of 176** carry frontmatter; the rest have no declared status or last-updated date
 
 ### Where to start
 
@@ -75,7 +75,7 @@ of these to read and in what order.
 
 ## Standard
 
-129 files.
+131 files.
 
 | Standard | What it covers | Status | Updated |
 |---|---|---|---|
@@ -118,6 +118,7 @@ of these to read and in what order.
 | [HEALTH_ENDPOINT_STANDARD.md](./HEALTH_ENDPOINT_STANDARD.md) | 2026-07-17, advanced-memory-mcp: a SYSTEM-owned service child kept serving | review | 2026-07-17 |
 | [HOST_APP_LIFECYCLE.md](./HOST_APP_LIFECYCLE.md) | Mandatory pattern for all MCP servers that depend on a host application. | active | 2026-02-26 |
 | [IMPLEMENTATION_HONESTY_STANDARD.md](./IMPLEMENTATION_HONESTY_STANDARD.md) | Prevent "fake-green" systems where tools appear to succeed but are not implemented. | review | 2026-06-26 |
+| [INBOUND_TRIAGE.md](./INBOUND_TRIAGE.md) | Scope: automated first response to issues and PRs from strangers across fleet | draft | 2026-10-25 |
 | [INFRASTRUCTURE_RELIABILITY.md](./INFRASTRUCTURE_RELIABILITY.md) | Docker Desktop on Windows is a Tier-2 host. Always anticipate vpnkit or Named Pipe instability. | review | 2026-06-26 |
 | [JUNE_2026_STANDARDS_BAR.md](./JUNE_2026_STANDARDS_BAR.md) | Effective: 2026-06-17 | review | 2026-09-18 |
 | [JUSTFILE_RECIPES.md](./JUSTFILE_RECIPES.md) | Every MCP server repo SHOULD have repo-specific just recipes beyond the standard lint/test/serve ones. These g | review | 2026-06-26 |
@@ -129,6 +130,7 @@ of these to read and in what order.
 | [MCPB_PACKAGING_STANDARDS.md](./MCPB_PACKAGING_STANDARDS.md) | Version: 2.2 (June 2026) | review | 2026-09-18 |
 | [MCP_REGISTRY_PUBLISHING.md](./MCP_REGISTRY_PUBLISHING.md) | Registry: https://registry.modelcontextprotocol.io (preview, API frozen at v0.1) | review | 2026-09-09 |
 | [MCP_WEBAPP_ABOUT_STANDARD.md](./MCP_WEBAPP_ABOUT_STANDARD.md) | Version: 1.0 (2026-08-27) | review | 2026-09-09 |
+| [MULTI_AGENT_CONCURRENCY.md](./MULTI_AGENT_CONCURRENCY.md) | Kit: templates/agent_kit/(../templates/agent_kit/) (AGENTS.md, .githooks/pre-commit). Helpers: scripts/Set-LfE | active | 2026-11-02 |
 | [NAKED_PC_INSTALL_STANDARD.md](./NAKED_PC_INSTALL_STANDARD.md) | Every MCP webapp start.ps1 MUST work on a fresh Windows machine with nothing pre-installed. This standard exis | review | 2026-10-05 |
 | [NEW_REPO_BUILD_COMPLETE.md](./NEW_REPO_BUILD_COMPLETE.md) | Version: 1.1 (2026-09-12) | review | 2026-09-12 |
 | [NEXTJS_TURBOPACK.md](./NEXTJS_TURBOPACK.md) | Canonical upstream reference: Next.js — Turbopack(https://nextjs.org/docs/app/api-reference/turbopack) and Tur | active | 2026-04-21 |
@@ -180,7 +182,7 @@ of these to read and in what order.
 | [WEBAPP_STANDARDS.md](./WEBAPP_STANDARDS.md) | > | superseded | 2026-09-18 |
 | [WEBVIEW2_VS_LEGACY.md](./WEBVIEW2_VS_LEGACY.md) | Windows has shipped three web rendering engines for native apps. Understanding the lineage | review | 2026-06-26 |
 | [WINDOWS_SERVICE_STANDARDS.md](./WINDOWS_SERVICE_STANDARDS.md) | Established: 2026-07-31 | review | 2026-09-10 |
-| [WIP_COMMIT_STANDARD.md](./WIP_COMMIT_STANDARD.md) | Version: 1.1 (2026-10-24: BUG-089 launcher-zeroing exclusion). Owner: Sandra. Script: | active | 2026-10-24 |
+| [WIP_COMMIT_STANDARD.md](./WIP_COMMIT_STANDARD.md) | > | active | 2026-10-24 |
 | [WIZFILE_STANDARDS.md](./WIZFILE_STANDARDS.md) | Version: 1.0 | active | 2026-04-20 |
 | [WIZTREE_STANDARDS.md](./WIZTREE_STANDARDS.md) | Version: 1.0 | active | 2026-04-20 |
 | [WORK_REPORT_STANDARD.md](./WORK_REPORT_STANDARD.md) | When Sandra says "write up your work in Discord" (or "report", "document in sfb"), every | active | 2026-10-02 |
@@ -220,7 +222,7 @@ of these to read and in what order.
 | [MCP_SERVER_FIRST_TIME_SUCCESS_GUARANTEE.md](./MCP_SERVER_FIRST_TIME_SUCCESS_GUARANTEE.md) | Every MCP server MUST work perfectly on first connection to any MCP client (Claude Desktop, Cursor, Zed, etc.) | obsolete | 2026-03-30 |
 | [SEARCH_TOOLING_POSTURE.md](./SEARCH_TOOLING_POSTURE.md) | Rule: discovery quality must not depend on a single dead backend. Verification beats retrieval. | — | 2026-09-30 |
 | [rust-crates/3D.md](./rust-crates/3D.md) | For rendering 3D content — AI-generated models (Hunyuan3D GLBs in Pinokio), | — | 2026-10-23 |
-| [rust-crates/BEVY.md](./rust-crates/BEVY.md) | bevy 0.20 (verified 2026-10-17, MIT/Apache-2.0): "a refreshingly simple | — | 2026-10-23 |
+| [rust-crates/BEVY.md](./rust-crates/BEVY.md) | bevy 0.20 (verified 2026-10-17, MIT/Apache-2.0): "a refreshingly simple | — | 2026-11-02 |
 | [rust-crates/COMMS.md](./rust-crates/COMMS.md) | Match the wire protocol with the smallest crate that speaks it. Everything | — | 2026-10-23 |
 | [rust-crates/DATABASE.md](./rust-crates/DATABASE.md) | Rules: data files live under %LOCALAPPDATA%/<app>/ (Windows) or the repo | — | 2026-10-23 |
 | [rust-crates/ECOSYSTEM.md](./rust-crates/ECOSYSTEM.md) | Honest map for agents planning rustifications: where Rust is strongest, | — | 2026-10-23 |

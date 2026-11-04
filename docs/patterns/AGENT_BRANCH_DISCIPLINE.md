@@ -6,7 +6,7 @@ audience: mcp-dev
 related:
   - standards/GIT_REPOSITORY_SAFETY.md
   - patterns/FLEET_MESHING_PHILOSOPHY.md
-last_updated: 2026-09-25
+last_updated: 2026-10-25
 ---
 
 # Agent Branch Discipline
@@ -43,6 +43,10 @@ The line isn't "agents shouldn't work independently" — it's **"don't leave sou
 2. If the change is incomplete and won't be finished this session: **revert it** (`git checkout -- <file>` / `git restore <file>`) rather than leaving it dirty. An abandoned idea should leave no trace, not a landmine for the next agent.
 3. If the change is intentionally a checkpoint for a longer-running task that will resume later (legitimate case): commit it anyway, with a `wip:` prefix and a clear message saying so, so the next agent can see it was deliberate and attributable, not orphaned. An uncommitted WIP pile and a committed `wip:` checkpoint look identical in `git status` until someone reads the log — commit it.
 4. **Never assume dirty files found at the start of a session are yours to resolve.** Per the pattern observed here: don't stage, commit, or discard files you didn't touch this session unless the user explicitly asks you to clean them up. Flag them, don't silently absorb or silently ignore them.
+5. **Whose WIP it is decides what you may do with it.** Do not treat all dirty state identically:
+   - *Your own other session* (another Sandra chat/session/agent run, especially days old — day-end close is the standard, so a days-old pile is abandoned, not in flight): fair game. Finish it: commit and push when the target repo is ours and the change is good (attribute honestly; `backlog:` prefix when it predates this run); revert when it is superseded or sits where it should not (fleet edits inside an upstream checkout, for example). Never push to a remote you do not own.
+   - *A collaborator's WIP* (Steve's branch, Steve's draft, anything clearly his): hands off entirely. Flag it, do not edit it, do not quality-drive-by it. Harmony outranks tidy trees.
+   - *Upstream checkouts* (`_upstream/`, submodules pointing at other owners): read-only. Local modifications there have no pushable home — revert to pristine (noting the content first when it looked intentional) rather than committing into someone else's tree.
 
 ## 4. Why this is a *branch* discipline question, not just a git-hygiene one
 

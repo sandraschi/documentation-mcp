@@ -38,6 +38,7 @@ foreach ($d in @("CADCraft","DeckCraft","DesignCraft","EffectCraft","FigCraft","
 | FilmCraft | `filmcraft-cli.exe` (66 MB) | 0.13.0 | yes | low |
 | GridCraft | `gridcraft-cli.exe` (14 MB) | 0.12.1 | yes | medium - sheets/XLSX + PDF |
 | LightCraft | `lightcraft-cli.exe` (108 MB) | 0.14.0 | yes | low - grade scanned pages |
+| MaterialCraft | `materialcraft-cli.exe` (14 MB) | 0.1.0 | `materialcraft.exe` (29 MB) | low - procedural CAD/PBR material engine (`.mcraft`) |
 | PdfCraft | `pdfcraft-cli.exe` (66 MB) | 0.14.0 | `pdfcraft.exe` (94 MB) | **primary - see S3** |
 | PhotoCraft | `photocraft-cli.exe` (75 MB) | 0.16.0 | yes | medium - `convert` + `info` pipeline |
 | SoundCraft | `soundcraft-cli.exe` (8 MB) | 0.13.1 | yes | none |
