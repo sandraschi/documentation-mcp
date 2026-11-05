@@ -1013,6 +1013,18 @@ if (Test-Path "webapp\vite.config.ts") {
     }
     Write-Host "PASS: CSS $([math]::Round($total/1024,1)) kB (Tailwind active)" -ForegroundColor Green
 }
+
+No `gates` aggregate in justfile is itself a finding (M1 remainder) — never
+a reason to skip this block. Hand-run it once. (2026-11-01, splatmaker:
+three green-gate runs certified an unstyled webapp and a broken engine CLI
+because no gates recipe existed, so build+CSS size and CLI execution were
+never run. The 57-byte stylesheet and the crashing ns-train both exited 0
+through every gate that did run.) Tailwind v3 note: the v3 path has no
+`@tailwindcss/vite` plugin — it needs `postcss.config.js` (tailwindcss +
+autoprefixer) plus `index.css` with `@tailwind` directives plus an intact
+`tailwind.config.js` (a bad `extend` can delete whole palettes). Also assert
+no raw `@tailwind` directives survive in dist CSS — raw directives in served
+CSS mean PostCSS never ran.
 ```
 
 **Pure-Rust repos** (replaces the block above — no ruff/pyright/biome/tsc):
@@ -1096,6 +1108,8 @@ uv run python -c "import sys,importlib.util as u; sys.path.insert(0,r'mcpb\src')
 ## Phase 6 — Verify & Push
 
 1. `just gates green` — all gates (lint + typecheck + tests) must pass. Gates cover Python/TS — they do **not** cover PowerShell/batch. Pure-Rust: `just check` + `just test` + `just fmt-check` + stdio probe + `--smoke` (or `just ci` when the repo has the §1W-R2 aggregate). Every `.ps1`/`.bat` this run created or rewrote must additionally have been executed at least once (for launchers: `-BackendOnly` + `/health`, bounded timeout). An unexecuted script is uncertified — do not commit it.
+
+1b. **Webapp live-serve proof (LOAD-BEARING, added 2026-11-01).** Build success (exit 0) proves nothing about rendering — vite exits 0 with an empty stylesheet. After any webapp change: start the stack, curl the root (HTTP 200), and assert in the served content at least one `data-testid` from the app's own pages AND no raw `@tailwind` directives. Headless-Edge `--dump-dom` when available; curl-the-HTML plus per-page testid greps otherwise. **Process-freshness rule:** the serving dev process must have started AFTER the newest webapp config file it depends on (`postcss.config.js`, `tailwind.config.js`, `vite.config.ts`) — never certify against a pre-existing dev process (`start.ps1 -ReuseIfRunning` will happily keep serving yesterday's broken build; observed 2026-11-01). Restart the frontend after any webapp config change. **CLI-execution rule:** exe-present ≠ working — run `<cli> --help` and require exit 0 for every wrapped CLI the server shells out to (2026-11-01: `ns-train.exe` present while the CLI crashed on missing modules and status reported ready).
 2. If `native/` exists: `just build-native` — verify NSIS installer
 3. If `native/` exists: `just cua-nsis-test` — install → launch → health → **nav walk (MUST step through sidebar: distinct per-page screenshots, live `/api/*` calls)** → uninstall. Identical screenshot sizes = nav walk failed → fix the smoke script before certifying.
 4. If `webapp/` exists: `just cua-webapp-test` — stack start → **Connected badge wait** (webapps show `Connecting...` while backend boots — wait + retry, do NOT instant-fail) → title-matching nav walk in the browser. See `cua_webapp_testing.md`.

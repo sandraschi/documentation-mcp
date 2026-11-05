@@ -1,6 +1,6 @@
 # Zed IDE: Comprehensive Analysis & MCP Integration Guide
 
-**By Sandra Schipal** | **Status: Complete Documentation Suite** | **Last Updated: April 9, 2026**
+**By Sandra S.** | **Status: Complete Documentation Suite** | **Last Updated: April 9, 2026**
 
 This overview synthesizes the complete Zed IDE documentation suite, providing a comprehensive understanding of Zed's position in the agentic IDE landscape, its revolutionary architecture, and practical MCP integration guides.
 
@@ -302,7 +302,7 @@ async def generate_code(prompt: str) -> str:
 
 ---
 
-**Author**: Sandra Schipal
+**Author**: Sandra S.
 **Documentation Scope**: Complete Zed IDE analysis and MCP integration guide
 **Key Thesis**: Zed's "coming from behind" position is actually a strategic advantage - modern architecture and FOSS commitment position it for industry leadership
 **Last Reviewed**: January 15, 2026

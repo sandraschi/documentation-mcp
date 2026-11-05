@@ -17,6 +17,7 @@ This section captures assessed primary sources (NVIDIA Newsroom, Microsoft Surfa
 | **[products/surface-rtx-spark-dev-box.md](products/surface-rtx-spark-dev-box.md)** | Microsoft Surface desktop dev box — deep product brief |
 | **[products/surface-laptop-ultra.md](products/surface-laptop-ultra.md)** | Microsoft Surface Laptop Ultra — deep product brief |
 | **[products/dgx-station-windows.md](products/dgx-station-windows.md)** | GB300 deskside enterprise node (contrast with affordable tier) |
+| **[auto-ontology/](auto-ontology/)** | Auto Ontology vendored reference (cdaf61e): semantic layer, text-to-SQL, MCP, fleet borrow/avoid notes |
 
 ## Related MCD
 

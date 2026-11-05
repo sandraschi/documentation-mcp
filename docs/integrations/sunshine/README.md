@@ -38,7 +38,7 @@ Short version: encoding a desktop stream costs essentially nothing on a 4090.
 ## Install (Goliath, verified)
 
 ```powershell
-& "C:\Users\sandr\AppData\Local\Microsoft\WindowsApps\winget.exe" install LizardByte.Sunshine
+& "C:\Users\<user>\AppData\Local\Microsoft\WindowsApps\winget.exe" install LizardByte.Sunshine
 ```
 
 The installer registers firewall rules for the streaming ports. Web UI defaults to

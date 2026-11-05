@@ -27,7 +27,7 @@ default and can be watched live when its app is attached.
 | 1 | Cover factory | photo:plate-grade -> design:print-spread -> pdf:portfolio | 14109 -> 14102 -> 14108 | ready |
 | 2 | Photo book | photo:batch-treatment -> design:print-spread -> pdf:portfolio | 14109 -> 14102 -> 14108 | ready |
 | 3 | Data deck | grid:homepage-grid -> deck:pitch-deck -> pdf:portfolio | 14106 -> 14101 -> 14108 | ready |
-| 4 | CAD board | cad:house-plan -> design:print-spread -> pdf:portfolio | 14100 -> 14102 -> 14108 | ready |
+| 4 | CAD board | cad:house-plan -> material:facade-material -> texture:godot-prop -> design:print-spread -> pdf:portfolio | 14100 -> material -> texture -> 14102 -> 14108 | ready |
 | 5 | Poster lab | vector:pelican-vector -> photo:plate-grade -> design:print-spread | 14111 -> 14109 -> 14102 | ready |
 | 6 | Data report | grid:homepage-grid -> word:demo-report -> pdf:portfolio | 14106 -> 14112 -> 14108 | ready |
 | 7 | Brand kit | vector:pelican-vector -> design:print-spread -> deck:transition-reel | 14111 -> 14102 -> 14101 | exploratory |
@@ -36,6 +36,9 @@ default and can be watched live when its app is attached.
 | 10 | Audiobook art | photo:plate-grade -> vector:pelican-vector -> pdf:portfolio | 14109 -> 14111 -> 14108 | ready |
 | 11 | Title sequence | design:print-spread -> effect:title-card -> film:timeline-cut | 14102 -> 14103 -> 14105 | exploratory (cut builds its own footage) |
 | 12 | Score-driven cut | sound:ident-jingle -> film:timeline-cut | 14110 -> 14105 | exploratory (own footage; SoundCraft VST3i, BUG-082) |
+| 13 | Product catalog | db:product-query -> photo:plate-grade -> design:print-spread -> pdf:portfolio | 14113 -> 14109 -> 14102 -> 14108 | ready |
+| 14 | Film cue sheets | db:call-sheet-query -> sound:ident-jingle -> film:timeline-cut | 14113 -> 14110 -> 14105 | ready |
+| 15 | Board metric deck | db:revenue-kpis -> grid:homepage-grid -> deck:pitch-deck -> pdf:portfolio | 14113 -> 14106 -> 14101 -> 14108 | ready |
 
 The seed catalog lives in `src/democraft_mcp/flows.py` (`SEED_FLOWS`); the webapp
 shows it at `/flows` and hints at more as the suite grows.
