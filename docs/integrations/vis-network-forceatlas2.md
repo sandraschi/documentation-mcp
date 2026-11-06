@@ -22,7 +22,7 @@
 
 ---
 
-## 2. Why the Sandra Schipal Fleet Uses It
+## 2. Why the Sandra S. Fleet Uses It
 
 The fleet consists of 200+ FastMCP repositories with complex multi-hub crossconnects:
 - Multi-domain hubs (`speech-mcp`, `email-mcp`, `aiwatcher-mcp`, `blender-mcp`, `resonite-mcp`)

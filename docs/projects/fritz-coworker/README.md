@@ -160,6 +160,16 @@ Recurrence also supports cron monthly (`0 9 1 * *`). Seed with `coworker_bootstr
 
 ---
 
+## Phase 3: Stigmergic Swarm & r11n Architecture (v0.3.0)
+
+See full action plan: **[STIGMERGIC_SWARM_R11N.md](./STIGMERGIC_SWARM_R11N.md)**
+
+* **Stigmergy over RPC**: Dispersed workers coordinate via repository state and `.r11n/claim.json` markers rather than polling a central SQLite database.
+* **Declarative Invariant Reconciliation**: Replaces rigid FlowForge YAML sequences with an active reconciliation loop (`Observe -> Diff -> Act`).
+* **Pilot Target**: Migrating Pilot 3 (`fritz-test` contribution ship) from linear `workflows/contribution.yaml` to an autonomous reconciliation loop.
+
+---
+
 ## Related docs
 
 | Location | Content |

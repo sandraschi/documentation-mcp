@@ -1,6 +1,6 @@
 # Cursor IDE: The v3 "Agent-First" Upgrade (April 2026)
 
-**By Sandra Schipal** | **Status: Major Version Analysis** | **Last Updated: April 9, 2026**
+**By Sandra S.** | **Status: Major Version Analysis** | **Last Updated: April 9, 2026**
 
 ## 🚀 The Cursor 3 Paradigm Shift
 
@@ -49,6 +49,6 @@ The introduction of **Parallel Agent Execution** in Cursor v3 significantly incr
 - **Risk**: Without strict locking, multiple parallel agents can corrupt the same database or filesystem resources simultaneously.
 
 ---
-**Author**: Sandra Schipal
+**Author**: Sandra S.
 **Verification**: Confirmed via Cursor release telemetry (April 2, 2026) and competitive feature mapping.
 **Tags**: `#cursor-v3`, `#agent-orchestration`, `#major-upgrade`, `#concurrency-warning`
