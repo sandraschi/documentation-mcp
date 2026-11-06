@@ -1,5 +1,7 @@
 # xkcd-mcp
 
+Comics for your LLM via the official xkcd JSON API - no scraping.
+
 <p align="center">
   <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
@@ -9,8 +11,6 @@
 
 
 > 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
-
-**MODEL CONTEXT PROTOCOL**  *fine print sold separately*
 
 ---
 

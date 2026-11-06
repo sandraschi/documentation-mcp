@@ -593,7 +593,7 @@
     {
       "id": "xkcd-mcp",
       "name": "xkcd-mcp",
-      "description": "MODEL CONTEXT PROTOCOL fine print sold separately",
+      "description": "Comics for your LLM via the official xkcd JSON API - no scraping.",
       "port": 10778,
       "repo_path": "D:/Dev/repos/xkcd-mcp",
       "category": "Dev",
