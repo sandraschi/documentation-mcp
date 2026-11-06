@@ -1039,28 +1039,6 @@
       ]
     },
     {
-      "id": "edge-bookmark-mcp-server",
-      "label": "Edge Bookmark MCP Server",
-      "port": 10891,
-      "repo_path": "D:/Dev/repos/edge-bookmark-mcp-server",
-      "start_command": "powershell ./web_sota/start.ps1",
-      "tags": [
-        "frontend",
-        "sota"
-      ]
-    },
-    {
-      "id": "fullstack-demo",
-      "label": "Fullstack Demo",
-      "port": 10893,
-      "repo_path": "D:/Dev/repos/fullstack-demo",
-      "start_command": "powershell ./start.ps1",
-      "tags": [
-        "frontend",
-        "sota"
-      ]
-    },
-    {
       "id": "games-app",
       "label": "Games App",
       "port": 10895,
