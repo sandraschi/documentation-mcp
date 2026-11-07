@@ -1,6 +1,6 @@
 # gazebo-mcp
 
-**Gazebo[^1] simulation via MCP[^2]. Load SDF[^3] worlds, spawn models, control via ROS 2 topics — through 14 MCP tools with AI workflows, a web dashboard, and a Tauri/NSIS native installer.**
+**Gazebo[^1] simulation via MCP[^2]. Load SDF[^3] worlds, spawn models, control via ROS 2 topics — through 19 MCP tools with AI workflows, a web dashboard, and a Tauri/NSIS native installer.**
 
 [![CI](https://github.com/sandraschi/gazebo-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/sandraschi/gazebo-mcp/actions/workflows/ci.yml)
 [![Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
@@ -12,7 +12,7 @@ gazebo-mcp bridges Gazebo Garden/Harmonic with the MCP ecosystem. Load any SDF/U
 
 Built for the fleet simulation pipeline: gazebo-mcp provides a high-fidelity physics backend consumed by unitree-mcp, limx-robotics-mcp, and other robot-specific fleet MCPs for multi-robot scenarios, sensor simulation, and environment interaction.
 
-**New in 0.2.0:** Tool annotations (READ_ONLY/MUTATING), Ctrl+Scroll zoom in desktop app, Skills page, `/api/v1/diagnostics` endpoint, Tauri/NSIS build pipeline with full CUA smoke testing, session context injection (`.cursorrules` + plugin), Biome JS/TS linting, Docker support, Gazebo Fuel browser with tag/category filtering and one-click download.
+**New in 0.2.0:** Tool annotations (READ_ONLY/MUTATING/DESTRUCTIVE), Ctrl+Scroll zoom, Skills page, `/api/v1/diagnostics` endpoint, Tauri/NSIS scaffold with build script (`native/`), session context injection (`.cursorrules` + plugin), Biome JS/TS linting, Docker support, Gazebo Fuel browser with tag/category filtering and one-click download.
 
 ## Table of Contents
 
@@ -40,7 +40,7 @@ uv run python -m gazebo_mcp
 
 ## Tools
 
-All 14 tools are annotated with READ_ONLY or MUTATING for agent safety.
+All 19 tools are annotated with READ_ONLY, MUTATING, or DESTRUCTIVE for agent safety.
 
 | # | Tool | Annotation | Description |
 |---|------|-----------|-------------|
@@ -51,30 +51,37 @@ All 14 tools are annotated with READ_ONLY or MUTATING for agent safety.
 | 5 | `stop_sim` | MUTATING | Stop physics stepping |
 | 6 | `get_state` | READ_ONLY | Read model poses, joint states, sensor data via Gazebo topics |
 | 7 | `apply_control` | MUTATING | Publish control commands (velocity, torque, position) via ROS 2 |
-| 8 | `list_worlds` | READ_ONLY | List all worlds in the depot |
-| 9 | `list_jobs` | READ_ONLY | List active and completed simulation jobs |
-| 10 | `agentic_sim_workflow` | MUTATING | Multi-step Gazebo workflow via LLM sampling |
-| 11 | `natural_language_control` | MUTATING | Control the sim via natural language ("move the robot forward 1m") |
-| 12 | `analyze_sim_state` | READ_ONLY | State analysis — contact forces, joint limits, odometry drift |
-| 13 | `analyze_sim_logs` | READ_ONLY | Parse Gazebo server logs for warnings and errors |
-| 14 | `discover_world` | MUTATING | Search and download worlds from the Gazebo Fuel repository |
+| 8 | `topic_list` | READ_ONLY | List all active Gazebo topics in the running simulation |
+| 9 | `service_call` | MUTATING | Call an arbitrary Gazebo service (spawn, delete, pause, custom) |
+| 10 | `delete_world` | DESTRUCTIVE | Delete a world from the depot (refuses while a live sim uses it) |
+| 11 | `rename_world` | MUTATING | Rename a depot world (registry key + SDF file) |
+| 12 | `list_worlds` | READ_ONLY | List all worlds in the depot |
+| 13 | `list_jobs` | READ_ONLY | List active and completed simulation jobs |
+| 14 | `agentic_sim_workflow` | MUTATING | Multi-step Gazebo workflow via LLM sampling |
+| 15 | `natural_language_control` | MUTATING | Control the sim via natural language ("move the robot forward 1m") |
+| 16 | `analyze_sim_state` | READ_ONLY | State analysis — contact forces, joint limits, odometry drift |
+| 17 | `analyze_sim_logs` | READ_ONLY | Parse Gazebo server logs for warnings and errors |
+| 18 | `discover_model` | MUTATING | Search and suggest SDF/URDF model URLs (Fuel + GitHub) |
+| 19 | `gazebo_shutdown` | DESTRUCTIVE | Stop active sims and terminate the server (confirmed=true) |
 
 [Full tool reference →](docs/TOOLS.md)
 
 ## Web Dashboard
 
-8-page React + Vite dashboard at `http://localhost:10990`:
+12-page React + Vite dashboard at `http://localhost:10990`:
 
 | Page | Features |
 |------|----------|
 | **Dashboard** | KPI cards (Gazebo, worlds, jobs, server status), Quick AI Workflow input, Active Jobs list |
+| **Inbox** | Live activity feed from the backend log buffer with search, level/kind filter, sort, pagination |
 | **Simulations** | Start/stop sims, world selection, headless toggle, AI analyze |
 | **Worlds** | Load from URL/path, list with metadata, two tabs: Local Depot + Gazebo Fuel browser with tag/category filtering, search, and one-click download |
+| **Tools** | Live MCP tool catalog (19 tools, annotations) with search, filter, sort, pagination |
 | **Skills** | Browse and load the Gazebo expert skill for agent guidance |
 | **Logging** | Log viewer with filters, tail mode, export JSON/CSV |
 | **LLM** | Chat with provider/model selectors, quick action cards |
 | **Settings** | World dir, jobs dir, LLM provider/model config |
-| **Help** | 4-tab help: Overview, Tools, Setup, Troubleshooting (dark-themed) |
+| **Help** | 6-tab help: Newbie start, Gazebo online, Fleet worlds, Tools, Setup, Troubleshooting (dark-themed) |
 
 AI features use the LLM through the `/api/llm/chat` endpoint, with Ollama auto-discovery.
 
@@ -106,7 +113,11 @@ Desktop:  Tauri Shell ──► FastAPI Backend (10991)
 
 | Doc | Contents |
 |-----|----------|
-| `docs/TOOLS.md` | Full reference for all 14 tools with inputs, outputs, examples |
+| `docs/TOOLS.md` | Full reference for all 19 tools with inputs, outputs, examples |
+| `docs/CONFIGURATION.md` | All env vars, ports, depot/job paths in one place |
+| `docs/DEVELOPMENT.md` | Layout, commands, conventions, version-bump checklist |
+| `docs/TROUBLESHOOTING.md` | Gazebo-missing, crash, CORS, /mcp session, shutdown fixes |
+| `docs/ONBOARDING.md` | First-timer path: Gazebo/WSL2, Ollama, Docker, first sim |
 | `docs/SETUP.md` | Installation, Gazebo version requirements, WSL2 config, troubleshooting |
 | `docs/GAZEBO_VS_OTHERS.md` | Comparison with MuJoCo, Isaac Sim, and physics backends |
 | `llms.txt` | LLM index for Claude Desktop discovery |
@@ -130,7 +141,7 @@ Desktop:  Tauri Shell ──► FastAPI Backend (10991)
 | `.cursorrules` / `.windsurfrules` | Session context injection for Cursor/Windsurf |
 | `.claude-plugin/plugin.json` | Claude Code session-start hook |
 | `.github/copilot-instructions.md` | GitHub Copilot custom instructions |
-| `biome.json` | JS/TS linting config |
+| `web_sota/biome.json` | JS/TS linting config (Biome 1.9.4, enforced in CI + pre-commit) |
 | `Dockerfile` / `docker-compose.yml` | Containerized deployment |
 
 ## Footnotes

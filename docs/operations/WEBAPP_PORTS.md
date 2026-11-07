@@ -11,8 +11,8 @@ last_updated: 2026-10-25
 
 # Webapp Port Reservoir
 
-**Version**: 1.0  
-**Last Updated**: 2026-10-25  
+**Version**: 1.0
+**Last Updated**: 2026-10-25
 **Status**: MANDATORY
 
 ---
@@ -44,7 +44,7 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 ## Port Allocation Registry
 
 | Port | Repo | Service |
-|------|------|---------| 
+|------|------|---------|
 | 10700 | virtualization-mcp | Frontend (Vite dev) |
 | 10701 | virtualization-mcp | Backend (FastAPI REST) |
 | 10702 | virtualization-mcp | MCP HTTP/SSE (streamable) |
@@ -437,8 +437,8 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 11238 | fleet-launcher-mcp | Backend (FastAPI + MCP HTTP `/mcp`) [registered 2026-10-25] |
 | 11239 | universal-actuator-mcp | Backend (FastAPI + MCP HTTP `/mcp`) [registered 2026-10-25] |
 | 11240 | universal-actuator-mcp | Frontend (Vite) [registered 2026-10-25] |
-| 11253 | qgiscraft-mcp | Frontend (Vite) [registered 2026-10-25] |
-| 11254 | qgiscraft-mcp | Backend (FastAPI + MCP HTTP `/mcp`) [registered 2026-10-25] |
+| 11253 | qgiscraft | Frontend (Vite) [registered 2026-10-25, renamed 2026-11-03] |
+| 11254 | qgiscraft | Backend (FastAPI + MCP HTTP `/mcp`) [registered 2026-10-25, renamed 2026-11-03] |
 
 ## Unified observability stack (Docker)
 
@@ -487,6 +487,18 @@ not webapp fronts and are not exposed.
 | 14110 | SoundCraft | `soundcraft --control 14110` |
 | 14111 | VectorCraft | `vectorcraft --control 14111` |
 | 14112 | WordCraft | `wordcraft --control 14112` |
+| 14113 | DatabaseCraft | `databasecraft --control 14113` |
+| 14115 | AppCraft | `appcraft --control 14115` |
+| 14116 | RobotCraft | `robotcraft --control 14116` |
+| 14117 | MoneyCraft | `moneycraft --control 14117` |
+| 14118 | DJCraft | `djcraft --control 14118` |
+| 14120 | ModCraft | `modcraft --control 14120` |
+| 14121 | WriterCraft | `writercraft --control 14121` |
+| 14128 | CoderCraft | `codercraft --control 14128` |
+| 14129 | TravelCraft | `travelcraft --control 14129` |
+| 14130 | MakerCraft | `makercraft --control 14130` |
+| 14131 | SportsCraft | `sportscraft --control 14131` |
+| 14132 | SpeechCraft | `speechcraft --control 14132` |
 
 ## New Webapp Checklist
 
@@ -504,7 +516,7 @@ For DJ/media fleet interoperability, servers that expose deck control should kee
 - `POST /api/v1/deck/{deck_id}/sync`
 - `POST /api/v1/deck/{deck_id}/cue`
 
-Current reference implementation: `virtualdj-mcp` (`10877` backend).  
+Current reference implementation: `virtualdj-mcp` (`10877` backend).
 Current upstream consumer: `songgeneration-mcp` Listen export flow (`10885` backend).
 
 ## Webapp Startup (MANDATORY)
@@ -594,7 +606,7 @@ powershell -ExecutionPolicy Bypass -File "%~dp0start.ps1"
 | 11090 | admiral-mcp | Frontend (React/Vite dashboard) [retroactive fix 2026-07-13] |
 | 11091 | splatmaker-mcp | Backend (FastMCP 3.2+ HTTP `/mcp` + Starlette REST; self-hosted FOSS Gaussian-splat generation) |
 | 11092 | splatmaker-mcp | Frontend (Vite React dashboard) |
-| 11094 | fleet-public-relations-mcp | Backend (Starlette + FastMCP HTTP `/mcp`; infrastructure -- no webapp) |
+| 11094 | fleet-public-relations-mcp | Backend (Starlette + FastMCP HTTP `/mcp`; REST + webapp on 11095) |
 | 11095 | fleet-public-relations-mcp | Frontend (Vite React dashboard) |
 | 11096 | cline-mcp | MCP stdio / `CLINE_MCP_PORT` (Node.js server wrapping @cline/sdk); webapp moved to 11109/11103 |
 | 11097 | agy-mcp | Backend (FastMCP server for Antigravity IDE; stdio-only, no webapp) |
@@ -742,6 +754,7 @@ powershell -ExecutionPolicy Bypass -File "%~dp0start.ps1"
 
 | 11249 | pinokio-mcp | Reserved (no servers: static `web_sota/catalog.html` + stdio MCP; launcher opens the HTML directly) [registered 2026-10-24, corrected 2026-10-31] |
 | 11250 | pinokio-mcp | Reserved (no servers: static `web_sota/catalog.html` + stdio MCP) [registered 2026-10-24, corrected 2026-10-31] |
+| 11540 | bohr-portal | Bohr Ordination patient portal (LAN demo, generated app in madeapps/ — not a craft) [registered 2026-11-05] |
 | 11251 | sysinternals-mcp | Frontend (Vite) [registered 2026-10-24] |
 | 11252 | vrchat-mcp | Frontend (Vite) [registered 2026-10-24] |
 
@@ -755,22 +768,19 @@ stacks, and anything started outside the fleet. **These are taken.** They are
 listed here because a port absent from this file reads as free, which is how
 repomix-mcp was allocated 11191 while open-webui was sitting on it.
 
-Refreshed 2026-10-31 by `fleet-gate/compose_ports.py --write-registry`, which the
+Refreshed 2026-11-05 by `fleet-gate/compose_ports.py --write-registry`, which the
 nightly gate runs. A port dropping off this list means the holder stopped, not
 that the port is safe -- an idle container still owns its published port.
 
 | Port | Held by | Source |
 |---|---|---|
-| 10722 | `python (79452)` | native process listening |
-| 10732 | `python (3244)` | native process listening |
+| 10722 | `calibre-mcp (compose)` | compose, not declared in config |
 | 10734 | `calibre-plus-frontend` | running container |
 | 10736 | `calibre-plus-backend` | running container |
 | 10786 | `monitoring-mcp (compose)` | compose, not declared in config |
 | 10855 | `mcp-federation-hub (compose)` | compose, not declared in config |
 | 10903 | `myai (compose)` | compose, not declared in config |
 | 10904 | `future-you-app` | running container |
-| 10956 | `deepfang (compose)` | compose, not declared in config |
-| 10957 | `deepfang (compose)` | compose, not declared in config |
 | 10958 | `deepfang (compose)` | compose, not declared in config |
 | 10959 | `deepfang (compose)` | compose, not declared in config |
 | 10960 | `deepfang (compose)` | compose, not declared in config |
@@ -778,10 +788,7 @@ that the port is safe -- an idle container still owns its published port.
 | 10962 | `deepfang (compose)` | compose, not declared in config |
 | 10963 | `deepfang (compose)` | compose, not declared in config |
 | 10966 | `cf-test` | running container |
-| 11027 | `tailscaled (7964)` | native process listening |
 | 11191 | `open-webui` | running container |
-| 11193 | `python (174896)` | native process listening |
-| 11194 | `node (204884)` | native process listening |
 | 11210 | `ai-games-collection (compose)` | compose, not declared in config |
 | 11211 | `ai-games-collection (compose)` | compose, not declared in config |
 | 11212 | `ai-games-collection (compose)` | compose, not declared in config |
@@ -803,8 +810,8 @@ that the port is safe -- an idle container still owns its published port.
 | 11257 | `myai (compose)` | compose, not declared in config |
 | 11311 | `robotics-mcp (compose)` | compose, not declared in config |
 | 11320 | `robotics-mcp (compose)` | compose, not declared in config |
-| 11434 | `ollama (19328)` | native process listening |
-| 11700 | `myai (compose)` | compose, not declared in config |
+| 11434 | `myai (compose)` | compose, not declared in config |
+| 11700 | `ai-dashboard` | running container |
 | 11702 | `myai-traefik` | running container |
 | 11703 | `myai (compose)` | compose, not declared in config |
 | 12000 | `unified-grafana` | running container |
@@ -820,9 +827,6 @@ that the port is safe -- an idle container still owns its published port.
 | 12222 | `rtorrent-mcp` | running container |
 | 12224 | `rtorrent-mcp` | running container |
 | 13000 | `teleconference-mcp (compose)` | compose, not declared in config |
-| 13030 | `ROGLiveService (6276)` | native process listening |
-| 13031 | `ArmouryCrate.Service (134004)` | native process listening |
-| 13032 | `ArmouryCrate.Service (134004)` | native process listening |
 | 13100 | `teleconference-mcp (compose)` | compose, not declared in config |
 | 14002 | `junk (compose)` | compose, not declared in config |
 | 14003 | `junk (compose)` | compose, not declared in config |

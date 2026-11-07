@@ -47,6 +47,9 @@ last_updated: 2026-09-18
 33. [`safety_override` flag that returns `BYPASSED` - policy ban magnet and design smell](#33-safety_override-flag-that-returns-bypassed---policy-ban-magnet-and-design-smell)
 34. [Canonical `pack.ps1.template` trusted names/paths without filesystem validation - bugs shipped fleet-wide via `sweep.ps1`](#34-canonical-packps1template-trusted-namespaths-without-filesystem-validation---bugs-shipped-fleet-wide-via-sweepps1)
 38. [`git commit -- <pathspec>` runs `repo: local` pre-commit hooks against HEAD, not the index - false-pass and false-fail](#38-git-commit----pathspec--runs-repo-local-pre-commit-hooks-against-head-not-the-index---false-pass-and-false-fail)
+46. [Long foreground calls reaped](standards/TRAPS_AND_PITFALLS.md)
+47. [Overstuffed shell calls fail mid-chain](standards/TRAPS_AND_PITFALLS.md)
+48. [Non-idempotent edit + silent retry duplicates code](standards/TRAPS_AND_PITFALLS.md)
 
 ---
 
@@ -1506,6 +1509,45 @@ Bonus from the same run, same family: (a) `biome-ignore` suppressions must name 
 
 **Related:** #38 (pathspec commits run hooks against HEAD), #40 (trailing newline vs end-of-file-fixer), #41 (stash/restore drops unstaged work) - same family: the commit validates something other than what you think; `repo-assess-and-fix.md` Phase 6 step 8 (hook-atomic batches), `NAKED_PC_INSTALL_STANDARD.md` §2b (absolute tool resolution in hooks).
 
+## 48. Long foreground tool calls get silently reaped - chunk the work, never queue behind a hung call
+
+Symptom (2026-10-25, triage-bot battery): two foreground battery passes returned empty results with no error; two `Start-Process`-wrapped launches were killed the same way. Partial per-issue writes persisted with no audit report, and relaunched duplicates raced the originals, interleaving GitHub labels. An hour went to forensics that a log file would have prevented.
+
+Causes, all operator error:
+- `uv run` without `--no-sync` pays a full dependency sync inside the timed call.
+- `| Select-Object -Last N` (and every full-buffer op) hides all partial progress - the call looks dead until the final second.
+- Relaunching without checking for an already-running instance creates duplicate runners that race on shared state.
+- Firing one blocking 10-minute call and queueing dependent work behind it. Everything behind a hung head-of-line call starves.
+
+Rule:
+- Foreground budget is about 60 seconds. Anything longer gets chunked into sub-60s foreground calls (idempotent flags so re-runs converge, skip-if-done), or detached to a log file with a sentinel (final summary line / report JSON) polled by short bounded reads (`Get-Content -Tail`, `Test-Path`).
+- Single-runner check before every relaunch (process list filtered on the command line, plus log-file growth).
+- Long mechanical verifications (stability re-runs, battery scoring) go to background task delegates; the main thread keeps the judgment calls and stays responsive.
+- Runners must write incrementally (per-item log lines), never report-only-at-end, so a reaped run still leaves evidence.
+
+## 49. Overstuffed shell calls fail in the middle and leave work half-done - one call, one job
+
+Symptom (2026-10-25, same session as #48): single PowerShell invocations chaining 4-6 steps (cleanup + `Start-Process` + sleep + log tail) failed partway - sometimes visibly, sometimes as an empty result - leaving half the steps undone with no record of which ran. Recovery was manual archaeology each time: relabel states, half-stripped labels, duplicate runners.
+
+Why one call is one failure domain: a `;`-separated chain shares a single timeout, a single output buffer, and a single error report. When step 3 of 6 dies, steps 4-6 never run, steps 1-2 already mutated state, and the error names the whole call, not the step. Quoting compounds it: quotes-inside-quotes-inside-tool-JSON break silently and differently on every layer (`ArgumentList` strings are the usual corpse).
+
+Rule:
+- One tool call, one job. Chain at most setup + action, or action + bounded read-back. Never setup + action + sleep + verify in one call.
+- Every mutating call ends in a verifiable state; the next call starts by reading that state (`Test-Path`, `git status`, label list) before acting. No call assumes the previous call's side effects happened.
+- If a command needs quotes-inside-quotes-inside-JSON, it is already overstuffed: split it, or write a `.ps1` / `.py` file and execute the file (one stable quoting layer instead of three).
+- Sleep-poll loops belong in the caller as short repeated calls, never `Start-Sleep` inside the worker call - a sleeping call is indistinguishable from a hung one and gets reaped the same way (#48).
+- `;`-chains are for read-only composition. The moment a step mutates, it gets its own call.
+
+## 50. Non-idempotent edit + silent retry duplicates code
+
+Symptom (2026-10-26, git-github-mcp OP_PARAMS): a single append Edit produced the 190-line block TWICE, back to back. The two copies differed only in comment wrapping - the code was identical, so the suite stayed green and a skim read fine. Found only because a count query ran before committing.
+
+Mechanism (best reconstruction): the tool call was applied, then something retried it; the oldString (a tail anchor) still matched after the first application - an anchor that is a prefix of its own result is not a guard, it is an invitation - so the retry inserted a second copy instead of failing. No error anywhere; success was reported once.
+
+Rule:
+- After EVERY structural edit (append, 50+ line replace), re-read the touched region and count what you expected (unique-marker count == 1). Never assume one call = one application.
+- When a duplicate is found, prove which copy is canonical (diff them; keep the one matching intent) and delete the other - never guess.
+- Related: #48 (silent reaping hides partial work). Same family: the tool reported less than what actually happened.
 
 
 

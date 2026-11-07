@@ -1,14 +1,15 @@
 # Linux Vulnerability Tracking
 
-**Last Updated**: 2026-05-02
+**Last Updated**: 2026-11-03
 
-Tracking significant Linux kernel and distro-level CVEs relevant to fleet infrastructure, IoT devices, and containerised workloads.
+Tracking significant Linux kernel, library, and distro-level CVEs relevant to fleet infrastructure, IoT devices, and containerised workloads.
 
 ## Active / Recently Disclosed
 
-| CVE | Name | CVSS | Kernel Versions | Status | Doc |
-|-----|------|------|-----------------|--------|-----|
-| CVE-2026-31431 | Copy Fail | 7.8 | ≥ 4.14 (2017+) | Distros patched; IoT/embedded permanently unpatched | [CVE-2026-31431-copy-fail.md](CVE-2026-31431-copy-fail.md) |
+| CVE | Name | CVSS | Affected Versions | Status | Doc |
+|-----|------|------|-------------------|--------|-----|
+| CVE-2026-111497 | Brotli2Shell | 9.2 | Brotli 1.0.3–1.2.0, Bun ≤ 1.4.3 | Fleet containers patched and committed; Bun updated | [CVE-2026-111497-brotli-rce.md](CVE-2026-111497-brotli-rce.md) |
+| CVE-2026-31431 | Copy Fail | 7.8 | Kernel ≥ 4.14 (2017+) | Distros patched; IoT/embedded permanently unpatched | [CVE-2026-31431-copy-fail.md](CVE-2026-31431-copy-fail.md) |
 
 ## Narrative / Analysis
 
@@ -16,6 +17,7 @@ Tracking significant Linux kernel and distro-level CVEs relevant to fleet infras
 |-----|---------|
 | [COPY-FAIL-THE-FULL-STORY.md](COPY-FAIL-THE-FULL-STORY.md) | Full narrative: Theori/Xint, how it was found, disclosure timeline, frantic patching, and the billions of devices that will never be fixed |
 | [AI_VULN_DISCOVERY_IMPLICATIONS.md](AI_VULN_DISCOVERY_IMPLICATIONS.md) | How AI-assisted discovery changes the vulnerability threat model for the fleet |
+| [2026-11-04-openai-thousand-paths-to-root.md](2026-11-04-openai-thousand-paths-to-root.md) | 2026-11-04 OpenAI pipeline: 2,308 candidates → 1,724 reproduced → 948 LPEs + patches, $1.2M; why 3-month lag = root |
 
 ## Related
 

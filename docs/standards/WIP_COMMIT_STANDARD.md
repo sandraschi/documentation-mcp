@@ -7,7 +7,28 @@ last_updated: 2026-10-24
 ---
 # WIP commit standard (nightly sweep)
 
-**Version:** 1.1 (2026-10-24: BUG-089 launcher-zeroing exclusion). **Owner:** Sandra. **Script:**
+> **v2.0 (2026-11-02, owner decision): the commit-and-push sweep is retired.**
+> It committed every agent's half-finished work to the default branch on a timer, pushed it, and
+> fell back to `--no-verify` when hooks objected. That is the same failure as the gamecraft
+> `v0.13.0` incident (another agent's uncommitted manifest edits swept into a pushed release), run
+> nightly across the whole fleet. Replaced by
+> [`scripts/Invoke-FleetWipSnapshot.ps1`](../scripts/Invoke-FleetWipSnapshot.ps1):
+>
+> - builds a snapshot commit of the whole worktree (tracked + untracked, `.gitignore` respected) in a
+>   temporary index, parented on HEAD, stored at `refs/wip/<host>/<date>` and pushed to that ref only;
+> - never touches any branch, the real index, the working tree or hooks, so WIP cannot enter a
+>   release and no `--no-verify` exists;
+> - keeps the v1 safety checks that still make sense: secret-looking files/content and files over
+>   50 MB are left out of the snapshot; more than 5000 changed files means skip and report;
+> - restore: `git diff HEAD refs/wip/<host>/<date>`, `git checkout refs/wip/<host>/<date> -- <path>`;
+>   list: `git for-each-ref refs/wip`; log: `operations/session-log/wip-snapshot-<date>.md`.
+>
+> Agents now commit **only their own work** with named paths (see
+> [MULTI_AGENT_CONCURRENCY.md](./MULTI_AGENT_CONCURRENCY.md)); rules 2, 3, 4, 8 and 9 below describe
+> the retired v1 and are kept for history. Task Scheduler: `\Fleet\WipSweep` disabled,
+> `\Fleet\WipSnapshot` (04:00) replaces it.
+
+**Version (v1, retired):** 1.1 (2026-10-24: BUG-089 launcher-zeroing exclusion). **Owner:** Sandra. **Script:**
 [`scripts/Invoke-FleetWipSweep.ps1`](../scripts/Invoke-FleetWipSweep.ps1).
 **Supersedes:** `scripts/fleet_git_sync_simple.py` (blind `git add .`, one
 fixed message, no checks - do not use).
@@ -25,7 +46,7 @@ not. Therefore: **all work is committed and pushed every night, whoever made it.
 1. **Nothing uncommitted survives the night.** The sweep runs daily at 04:00
    (Task Scheduler `\Fleet\WipSweep`) over every git repo directly under
    `D:\Dev\repos`, commits all WIP and pushes.
-2. **Agents commit everything they find, not only their own edits.** "Not
+2. **[v1, retired - v2: commit only your own work] Agents commit everything they find, not only their own edits.** "Not
    mine" is not a reason to leave WIP uncommitted. Applies at the end of any
    session in a repo, independent of the nightly sweep.
 3. **WIP commits are honest about being WIP.** Message:

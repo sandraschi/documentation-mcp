@@ -79,4 +79,4 @@ The move to `LLMStream._run()` allows for better error handling and "Reductionis
 | 1.13.6 | Per-participant TURN quota (12), WS read-size + API body-size limits, H.264 baseline `42001f` removed, Safari relay-ICE fix | No config change needed; Safari guests benefit automatically |
 
 Docker pin: `livekit/livekit-server:v1.13.6` (never `:latest`). Windows service binary at
-`C:\Users\sandr\AppData\Local\Programs\LiveKit\livekit-server.exe` (NSSM `LiveKitSFU`).
+`C:\Users\<user>\AppData\Local\Programs\LiveKit\livekit-server.exe` (NSSM `LiveKitSFU`).

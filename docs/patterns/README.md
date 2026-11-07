@@ -8,6 +8,23 @@
 
 ## 📚 Patterns
 
+### **gstack methodology port (design audit + premise challenge + review gate)** NEW
+
+[GSTACK_METHODOLOGY_ADOPTION.md](GSTACK_METHODOLOGY_ADOPTION.md)
+[DESIGN_REVIEW_80_ITEM_AUDIT.md](DESIGN_REVIEW_80_ITEM_AUDIT.md)
+[PREMISE_CHALLENGE_SIX_QUESTIONS.md](PREMISE_CHALLENGE_SIX_QUESTIONS.md)
+[REVIEW_GATE_INTEGRITY.md](REVIEW_GATE_INTEGRITY.md)
+
+**Decision: port the transferable methodology from `garrytan/gstack` at a pinned commit, do not install the harness.** The repo (Garry Tan / YC, MIT, pinned at `622e8b1f`) ships 60+ Markdown skills that would collide with ~20 existing fleet skills in the same trigger space; `--team` installs a Node commit hook across repos; and its safety hooks block only on Claude Code while being advisory-only on OpenCode. Three things were worth taking:
+
+- **`DESIGN_REVIEW_80_ITEM_AUDIT.md`** - 10 categories, ~80 visual checks, trunk test, goodwill reservoir, dual Design + AI Slop scoring with weights and grade computation, bounded 30-fix repair loop with before/after screenshots. Closes the gap that `fakefind` / `gapfind` / `webapp-coverage-audit` are read-only.
+- **`PREMISE_CHALLENGE_SIX_QUESTIONS.md`** - six forcing questions (demand reality, status quo, desperate specificity, narrowest wedge, observation, future fit), anti-sycophancy rules, five pushback patterns, smart routing by stage. Runs **before** `SPEC_INTERVIEW_SOP.md`: this asks whether it should exist, that SOP asks what it must do.
+- **`REVIEW_GATE_INTEGRITY.md`** - every weakened test/timeout/snapshot/suppression reaches a human by name; review freshness tied to content fingerprints not commit hashes; completed vs converged vs clean kept separate; defects vs advisories in separate accounting.
+
+Re-evaluation gates and date (2026-12-02) are in the decision doc. No vendored upstream copies; provenance is SHA plus reproducible fetch commands.
+
+---
+
 ### **Repo Rustification & Conversion SOP (`repconv`)** NEW
 
 [REPCONV_SOP.md](REPCONV_SOP.md)
@@ -390,7 +407,7 @@ Use the audit checklist to find and fix across all MCP server repos.
 
 ---
 
-**Last Updated**: 2026-02-11
+**Last Updated**: 2026-11-04
 
 
 

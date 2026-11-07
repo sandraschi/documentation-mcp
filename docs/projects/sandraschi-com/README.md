@@ -81,7 +81,7 @@ zinc-300 floor (accessibility pass 2026-10-25).
   2026-10-25: 45 containers, authentik ×2 unhealthy, disk 96%.
 - **devices-mcp** (`:10717`): health, device census, Hue rooms, climate demo flag.
 - **qgiscraft** (`:11254`): layer catalog + `/api/features` points. There is
-  no `qgis-mcp` repo — the GIS backend is qgiscraft-mcp.
+  no `qgis-mcp` repo — the GIS backend is qgiscraft.
 - **Voice bus**: roster parsed from `config/voice_command_bus.yaml`
   (wake words, default entity fritz, 9 receivers incl. japanophile caveat).
 
