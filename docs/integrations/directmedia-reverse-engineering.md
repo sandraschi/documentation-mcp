@@ -1,7 +1,7 @@
-﻿# ðŸ” Directmedia Digitale Bibliothek Reverse Engineering - Complete Sleuthing Report
+# ðŸ” Directmedia Digitale Bibliothek Reverse Engineering - Complete Sleuthing Report
 
 **Date:** Wednesday, December 24, 2025
-**Author:** Sandra Schipal (retired developer, Vienna)
+**Author:** Sandra S. (retired developer, Vienna)
 **Mission:** Reverse engineer 1990s Directmedia proprietary file formats for digital preservation
 **Status:** âœ… **MISSION ACCOMPLISHED** - Full programmatic access achieved
 
@@ -406,7 +406,7 @@ Shared Components:
 
 *This report represents a complete technical and methodological documentation of high-quality reverse engineering work. The tools and techniques developed are immediately usable and provide a foundation for future digital preservation projects.*
 
-**Sandra Schipal**
+**Sandra S.**
 **December 24, 2025**
 **Vienna, Austria** ðŸš€ðŸ“šâœ¨
 

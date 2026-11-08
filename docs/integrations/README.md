@@ -1,6 +1,6 @@
 # MCP Integrations & Service Fleet
 
-**Private — Sandra Schipal + collaborators only. Not for public distribution.**
+**Private — Sandra S. + collaborators only. Not for public distribution.**
 
 **Last updated:** 2026-06-17 · **Standards:** FastMCP **3.2+** · **Packaging:** MCPB only · **Publish:** mandatory IN — [PUBLISH_UPDATE_CHECKLIST.md](../PUBLISH_UPDATE_CHECKLIST.md) §2
 
