@@ -2,8 +2,8 @@
 
 **Purpose:** Scoped refresh list for public `sandraschi-collected-docs` — **active** fleet repos, **advanced/innovative** first.  
 **Not in scope yet:** `meta_mcp` `update_doc_repository` agentic tool — manual/table-driven pass.  
-**Bar:** [JUNE_2026_STANDARDS_BAR.md](../standards/JUNE_2026_STANDARDS_BAR.md) · [PUBLISH_UPDATE_CHECKLIST.md](../PUBLISH_UPDATE_CHECKLIST.md)  
-**Last updated:** 2026-06-17
+**Bar:** [STANDARDS_BAR.md](../standards/STANDARDS_BAR.md) (living bar; `JUNE_2026_STANDARDS_BAR.md` is a superseded snapshot) · [PUBLISH_UPDATE_CHECKLIST.md](../PUBLISH_UPDATE_CHECKLIST.md)
+**Last updated:** 2026-06-17 (stale — verify against `operations/fleet-status.md` + `projects/craft-fleet/README.md`)
 
 ---
 

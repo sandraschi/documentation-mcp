@@ -63,8 +63,10 @@ failure, and each one costs more trust than any feature earns back.
   regression will thank present-you.
 - Conventional messages (`fix(...)`, `feat(...)`, `docs(...)`, `chore(...)`)
   so changelogs and release notes write themselves.
-- Never leave the tree dirty at end of session in a shared repo: finish and
-  commit, or revert. Someone else's morning starts from your evening's tree.
+- At the end of a session in a shared repo, commit your own work (named paths) and say what is
+  left uncommitted and whose it appears to be. Never revert, clean or stash files you did not
+  change. The nightly `refs/wip` snapshot backs up the rest. Someone else's morning starts from
+  your evening's tree. (Amended 2026-11-02; was "commit or revert".)
 - Never commit secrets, tokens, `.env`, or OAuth caches (`data/token.json`,
   `oauth_client.json`). Ever. No exceptions, no "I'll remove it later."
 
@@ -73,6 +75,7 @@ failure, and each one costs more trust than any feature earns back.
 Run this when cutting any L2/L3-visible release. L1-only pushes need only
 section 4.
 
+- [ ] **Tag commit is verified**: the tag points at a commit on the default branch, `git status` was clean when you cut it, and a clean clone of that exact commit builds and passes tests (gamecraft `v0.13.0` was tagged from a tree whose manifests named an uncommitted crate).
 - [ ] **Install from scratch works**: clean clone (or fresh download), documented steps only, no tribal knowledge. For T3: naked-PC validation per `NAKED_INSTALL_TESTING.md`.
 - [ ] **Launch works**: `start.ps1` brings up backend + frontend, `/health` 200s, no instacrash. (The 2026-09-28 `-NoNewWindow`/`-WindowStyle` episode is what happens when nobody runs the launcher before release.)
 - [ ] **README lies about nothing**: screenshots match the current UI, install steps match the current scripts, port numbers match the registry, badges/versions are current.
