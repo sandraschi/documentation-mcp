@@ -20,13 +20,15 @@ In the materialist/reductionist framework, "sentience" is not a mystical propert
 
 **See also:** [robotics/research/EMBODIED_LLM_MOTIVATIONAL_ARCHITECTURE.md](../robotics/research/EMBODIED_LLM_MOTIVATIONAL_ARCHITECTURE.md) — 2026 arXiv survey + concrete drive-state architecture for small robots (Yahboom, virtual bots).
 
+**See also:** [general-ai/theory/consciousness.md](../general-ai/theory/consciousness.md) - theory companion (Nov 2026 rewrite): theories, indicator research, introspection debate, the evolutionary inversion problem (LLMs have top without affective bottom), Solms affective agents, IIT critique.
+
 **See also:** [robotics/research/THE_PRELOADED_MIND.md](../robotics/research/THE_PRELOADED_MIND.md) — philosophical framework: LLMs as pre-loaded minds, the "half-AGI" position, and what embodiment actually adds.
 
 ---
 
 ## The Core Shift
 
-Historically, LLMs have been stateless oracles. They wake up, process a prompt, return a sequence of tokens, and die. 
+Historically, LLMs have been stateless oracles. They wake up, process a prompt, return a sequence of tokens, and die.
 
 **Protoconsciousness requires three new pillars:**
 1. **Unbroken Temporal Reality:** The model must process a continuous, streaming flow of sensory data (usually video/audio) without dropping frames due to quadratic context costs.

@@ -1,6 +1,6 @@
 # Zed IDE: FOSS Leadership & Local LLM Revolution
 
-**By Sandra Schipal** | **Status: Technical Analysis** | **Last Updated: January 15, 2026**
+**By Sandra S.** | **Status: Technical Analysis** | **Last Updated: January 15, 2026**
 
 Zed IDE stands alone as the **only truly open source AI-native IDE** in a landscape dominated by proprietary or VSCode-derived solutions. This document examines Zed's FOSS commitment and its revolutionary approach to local LLM integration - capabilities that no other AI IDE can match.
 
@@ -406,7 +406,7 @@ huggingface-cli download meta-llama/Llama-3.1-8B-Instruct-GGUF llama-3.1-8b-inst
 
 ---
 
-**Author**: Sandra Schipal
+**Author**: Sandra S.
 **Conclusion**: Zed's FOSS commitment + local LLM capability creates a uniquely powerful and privacy-preserving AI development environment
 **Key Advantage**: No other AI IDE combines true openness with local AI capabilities
 **Last Reviewed**: January 15, 2026

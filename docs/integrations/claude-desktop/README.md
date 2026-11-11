@@ -2,8 +2,8 @@
 
 **Last Updated:** 2026-03-23
 **Applies to:** Claude Desktop Pro (current as of March 2026)
-**Config file:** `C:\Users\sandr\AppData\Roaming\Claude\claude_desktop_config.json`
-**Log folder:** `C:\Users\sandr\AppData\Local\Claude\Logs\` (pre-2026-08-21: `AppData\Roaming\Claude\logs\`)
+**Config file:** `C:\Users\<user>\AppData\Roaming\Claude\claude_desktop_config.json`
+**Log folder:** `C:\Users\<user>\AppData\Local\Claude\Logs\` (pre-2026-08-21: `AppData\Roaming\Claude\logs\`)
 
 ---
 
@@ -24,7 +24,7 @@ Key characteristics as an MCP client:
 
 ## Config File Structure
 
-Location: `C:\Users\sandr\AppData\Roaming\Claude\claude_desktop_config.json`
+Location: `C:\Users\<user>\AppData\Roaming\Claude\claude_desktop_config.json`
 
 ```json
 {
@@ -140,7 +140,7 @@ architecture matters for Claude Desktop usability.
 
 ## Logs and Debugging
 
-MCP server logs: `C:\Users\sandr\AppData\Local\Claude\Logs\` (pre-2026-08-21: `AppData\Roaming\Claude\logs\`)
+MCP server logs: `C:\Users\<user>\AppData\Local\Claude\Logs\` (pre-2026-08-21: `AppData\Roaming\Claude\logs\`)
 
 Each server gets its own log file named after the server key in the config. Useful for:
 - Diagnosing startup failures (server process crashes before advertising tools)
@@ -205,9 +205,9 @@ Older transport, still supported. Prefer streamable-http for new servers.
 Master config: `D:\Dev\repos\mcp-central-docs\operations\MASTER_MCP_CONFIG.json`
 
 The master config is the source of truth for all server entries. Sync it to:
-- `C:\Users\sandr\AppData\Roaming\Claude\claude_desktop_config.json` (Claude Desktop)
-- `C:\Users\sandr\.cursor\mcp.json` (Cursor)
-- `C:\Users\sandr\.gemini\antigravity` (Google Antigravity — note: non-standard path)
+- `C:\Users\<user>\AppData\Roaming\Claude\claude_desktop_config.json` (Claude Desktop)
+- `C:\Users\<user>\.cursor\mcp.json` (Cursor)
+- `C:\Users\<user>\.gemini\antigravity` (Google Antigravity — note: non-standard path)
 
 ---
 

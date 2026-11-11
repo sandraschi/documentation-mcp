@@ -48,3 +48,8 @@ bevy = { version = "0.20", default-features = false, features = [
   `TRAPS_AND_PITFALLS.md` (qwen3.8:27b residency vs. render workloads).
 - **Mobile/web**: works (Android/iOS/WASM tiers exist) but each is its own
   packaging adventure; desktop-first unless the PRD says otherwise.
+
+## Learning path
+
+New to ECS? Read [guides/bevy-explained.md](../../guides/bevy-explained.md), a from-zero walkthrough that uses the GameCraft Bevy games as its running example.
+

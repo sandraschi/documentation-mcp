@@ -31,7 +31,7 @@ For manual control or LM Studio integration:
 Qwen 3.6 excels at understanding the `Protocol Definition` of MCP. It can generate complex handlers for servers like `blender-mcp` or `devices-mcp` with zero-shot accuracy.
 
 ### B. Fleet-Wide RAG Grounding
-When used with [SOTA Industrial RAG](file:///C:/Users/sandr/.gemini/antigravity/knowledge/sota-industrial-rag-pattern/artifacts/pattern_definition.md), this model provides the highest groundedness scores for multicomponent retrievals.
+When used with [SOTA Industrial RAG](file:///C:/Users/<user>/.gemini/antigravity/knowledge/sota-industrial-rag-pattern/artifacts/pattern_definition.md), this model provides the highest groundedness scores for multicomponent retrievals.
 
 ### C. Creative & Technical Synthesis
 Ideal for the `ai-producer-hub` and `reversing-mcp` workflows where both technical precision and creative drafting are required.

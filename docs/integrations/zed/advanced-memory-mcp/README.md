@@ -1,4 +1,4 @@
-﻿# Advanced Memory MCP Zed Extension
+# Advanced Memory MCP Zed Extension
 
 Local-first knowledge management system with MCP bidirectional communication, FastMCP 3.1.1+.3 conversational error handling, and agentic content workflows, packaged as a Zed IDE extension.
 
@@ -97,5 +97,5 @@ MIT License - see Advanced Memory MCP repository for full license details.
 
 ## Author
 
-Sandra Schipal (sandraschipal@gmail.com)
+Sandra S. (<email>)
 

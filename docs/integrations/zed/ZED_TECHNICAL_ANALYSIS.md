@@ -1,6 +1,6 @@
 # Zed IDE: Technical Analysis & Agentic IDE Evolution
 
-**By Sandra Schipal** | **Status: Technical Deep Dive** | **Last Updated: January 15, 2026**
+**By Sandra S.** | **Status: Technical Deep Dive** | **Last Updated: January 15, 2026**
 
 This document provides a comprehensive technical analysis of Zed IDE's architecture, comparing it to traditional AI IDEs and examining its position in the agentic IDE landscape. Special attention is given to Zed's unique technical strengths and remaining gaps in multi-agent capabilities.
 
@@ -433,7 +433,7 @@ Memory Usage     | +50MB     | +120MB
 
 ---
 
-**Author**: Sandra Schipal
+**Author**: Sandra S.
 **Analysis Framework**: Technical architecture, market positioning, competitive analysis
 **Key Finding**: Zed's "coming from behind" position is actually a strategic advantage - modern architecture beats legacy feature accumulation
 **Last Reviewed**: January 15, 2026
