@@ -9,7 +9,40 @@
 
 ---
 
-## Projects
+## Sovereign Craft Suite & Craft Bundler Apps
+
+Consolidated domain workstations replacing micro-daemon sprawl (see [Craft Bundler Architecture](../architecture/CRAFT_BUNDLER_ARCHITECTURE.md)):
+
+| Project | Description | Type | Status |
+|---------|-------------|------|--------|
+| [craft-deck](./craft-deck/README.md) | Universal Desktop Launcher & Card Manager for All Craft Apps | Universal Launcher | **v0.2.0 Active** |
+| [aicraft](./aicraft/README.md) | Sovereign AI Ops, Model Routing & Token Telemetry (**11260/11261**) | Craft Bundler Studio + MCP | **v0.1.0 Released** |
+| [devcraft](./devcraft/README.md) | Sovereign Developer Cockpit, Fleet Hygiene & Git Governance (**11258/11259**) | Craft Bundler Studio + MCP | **v0.1.0 Released** |
+| [codercraft](./codercraft/README.md) | Local-First Agentic IDE & Universal MCP Server (**14128**) | Sovereign IDE Studio | **v0.1.0 Active** |
+| [databasecraft](./databasecraft/README.md) | L1 SQLite Relational Storage & Vector Embeddings (**14113**) | Storage Engine + Studio | **v0.5.0 Production** |
+| [robotcraft](./robotcraft/README.md) | Universal Robotics Teleop, Kinematics & Gazebo Simulation (**14116**) | Robotics Bundler + Studio | Active |
+| [djcraft](./djcraft/README.md) | 4-Deck Digital Mixing, Real-Time Stem Extraction & Waveforms (**14118**) | Audio Mixing Studio | Active |
+| [splatcraft](./splatcraft/README.md) | Pure-Rust 3D Gaussian Splatting & Radiance Fields | Spatial 3D Studio | Active |
+| [gamecraft](./gamecraft/README.md) | Natural-Language to Godot 4 Game Development Studio | Game Studio + MCP | Active |
+| [rsicraft](./rsicraft/README.md) | Recursive Self-Improvement & Parameter Optimization Studio | AI Training Engine | Hardened |
+| [bookcraft](./bookcraft/README.md) | Pure-Rust Calibre Library Manager, Ingestion & Conversion Engine | Literature & Reader | Active |
+| [giscraft](./giscraft/README.md) | Geographic Information Systems & Geospatial Analysis (**11253/11254**) | GIS Studio + Axum | Active |
+| [on-metacraft](./on-metacraft/README.md) | The Reimplementation Cost Collapse Treatise & Ledger (**11026**) | Theoretical Treatise | Active |
+| [taskcraft](./taskcraft/README.md) | Local-First Issue Tracker & Kanban Sprint Board with Git Commit Linking | Back-Office Suite | Active |
+| [billcraft](./billcraft/README.md) | Invoicing, Subscription Recurring Billing & Austrian ebInterface 6.1 XML | Back-Office Suite | Production-Ready |
+| [helmcraft](./helmcraft/README.md) | Executive Radar, Cash Runway & Board Briefing Generator | Back-Office Suite | Production-Ready |
+| [spendcraft](./spendcraft/README.md) | Expense Tracking & Statutory Travel Allowance Reimbursement Engine | Back-Office Suite | Production-Ready |
+| [hirecraft](./hirecraft/README.md) | ATS Recruiting Funnel & Blind Quantitative Scorecards | Back-Office Suite | Production-Ready |
+| [moneycraft](./moneycraft/README.md) | Personal Finance, Double-Entry Bank Ledger & Cashflow (**14117**) | Back-Office Suite | Active |
+| [appcraft](./appcraft/README.md) | Sovereign Desktop Application Builder & Web Container (**14115**) | Application Shell | Active |
+| [speechcraft](./speechcraft/README.md) | Text-to-Speech, Voice Design & Neural Audio Synthesis (**14132**) | Audio Studio | Active |
+| [makercraft](./makercraft/README.md) | Hardware Workshop, 3D Printing & CNC G-Code Studio (**14130**) | Hardware Studio | Active |
+| [writercraft](./writercraft/README.md) | Distraction-Free Prose & Long-Form Literary Studio (**14121**) | Writing Studio | Active |
+| [craft-showcase](./craft-showcase/README.md) | In-Browser WebAssembly Studio & Sovereign Presentation Portal (**11270**) | WASM Showcase + Webapp | Production-Ready |
+
+---
+
+## MCP Servers & Micro-Services
 
 | Project | Description | Type | Status |
 |---------|-------------|------|--------|
@@ -298,7 +331,7 @@ Each project folder contains:
 - **MCP Server:** 21 tools across 5 categories
 - **Categories:** Vault Ops (6), Search (3), Link Analysis (3), Austrian Efficiency (3), Canvas (6)
 - **Key Tech:** FastMCP 3.1.1+.1, structlog, aiofiles, PyYAML, pytest
-- **Key Features:** 
+- **Key Features:**
   - Full vault management + graph analysis
   - Canvas operations (JSON Canvas 1.0)
   - Pytest-based test harness
@@ -432,6 +465,3 @@ Each project folder contains:
 - **Docs Location:** `mcp-central-docs/autohotkey/` (special case - extensive docs)
 - **Source Repo:** `D:\Dev\repos\autohotkey-test`
 - **Key Tech:** AutoHotkey v2, Migration tools, Compatibility scanner
-
-
-

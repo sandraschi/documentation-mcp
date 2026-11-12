@@ -38,6 +38,39 @@ Do not copy their GitHub-hosted release workflow onto a private fleet repo. [GIT
 
 The fleet cut is local, on Goliath: gates, the repo's NSIS installer, checksums, notes from `HANDOVER.md`, then a person runs `gh release create`. Agents do not publish.
 
+## Release assets: no zips (HARD, 2026-11-09)
+
+Applies to every Rust craft app and `rust-*-mcp`, whatever builds the release (script,
+justfile recipe, or a person with `gh`).
+
+- Every shipped executable is attached to the GitHub release **as a plain `.exe` asset**.
+  A zip is never the only way to get an executable.
+- Asset names are **stable and unversioned** (`splatcraft.exe`, `splatcraft-cli.exe`), so
+  `releases/latest/download/<name>.exe` is a fixed URL that MCP configs and agent install
+  steps can use. The tag carries the version.
+- `SHA256SUMS.txt` covers every asset, executables included.
+- Optional extras sit beside the exes, never instead of them: the `.mcpb` bundle (wraps the
+  CLI/MCP binary), once a repo has one the NSIS installer (`<app>-setup.exe`), and the
+  craft-launcher zip below.
+- **Launcher-only exception:** the upstream craft-launcher only discovers an app through an
+  asset named `{id}-{version}-windows-x64-portable.zip` with `{id}.exe` at its root. That zip
+  is allowed as an extra so the launcher can install the app. It holds the same exes that
+  are attached plainly, nothing else, and the release notes say it exists for the launcher.
+  `scripts/craft-alpha-pack.ps1` in mcd produces exactly this set.
+- README, INSTALL, licences and changelog stay in the repo. Do not copy them into release
+  assets, and do not add a `START-HERE.txt`; INSTALL.md is the entry point.
+
+Why: a zip is one more step for a person and an extra extract-and-guess-the-path step for
+the agentic install route, which is the primary one. splatcraft v0.1.0, giscraft v0.1.0 to
+v0.2.1 and 16 more releases across 15 apps (appcraft, bookcraft, codercraft, djcraft, lookcraft,
+makercraft, modcraft, moneycraft, robotcraft, rsicraft, speechcraft, sportscraft,
+studiocraft, travelcraft, writercraft) shipped zip-only and were backfilled 2026-11-10.
+
+Reference implementations: `scripts/craft-alpha-pack.ps1` in mcd for a quick alpha of any
+craft app (build, plain exes, launcher zip, checksums, opt-in `-Publish`), and
+`splatcraft/scripts/release.ps1` for a repo with its own gated release (fmt, clippy, tests,
+smoke, plain exes + mcpb). Use one of these until the shared recipe above exists.
+
 ## Out of scope
 
 - Reconstructing the private playbook, font rules, or contributor script.

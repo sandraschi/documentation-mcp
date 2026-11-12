@@ -1,6 +1,6 @@
 # Zed MCP Extensions: Ecosystem Expansion & Monorepo Solutions
 
-**By Sandra Schipal** | **Status: Ecosystem Expansion** | **Last Updated: January 15, 2026**
+**By Sandra S.** | **Status: Ecosystem Expansion** | **Last Updated: January 15, 2026**
 
 The Zed extension ecosystem has expanded from a single proof-of-concept to a comprehensive suite of 14 production-ready MCP server integrations. This document details the expansion strategy, monorepo handling solutions, and the path to Zed registry submission.
 
@@ -297,7 +297,7 @@ match id.0.as_str() {
 
 ---
 
-**Author**: Sandra Schipal
+**Author**: Sandra S.
 **Expansion Strategy**: From single proof-of-concept to comprehensive ecosystem
 **Technical Achievement**: Automated monorepo handling and quality assurance pipeline
 **Business Impact**: Establishes MCP as the standard for AI tool integration
