@@ -1,21 +1,24 @@
 # MakerCraft — Assessment
 
-**Repo:** `D:\Dev\repos\makercraft` · **Date:** 2026-11-09 · **Grade: B+** · **Origin:** fleet-owned
+**Repo:** `D:\Dev\repos\makercraft` · **Date:** 2026-11-13 · **Grade: B+** · **Origin:** fleet-owned
+
+Recount 13 November 2026. Physical lines in the nine `.rs` files: 3,796 (the 3,570 figure used this same count). tokei Rust code: 3,399. `cargo test --workspace --offline` passed 38 tests. The catalog is 17 tools. The grade is the 9 November assessment.
 
 ## What it is
 
-Local-first digital-fabrication bench and hardware instrument studio in pure Rust (port `14130`, `3,570 LOC`, `37 tests`, 4 crates, 15 MCP tools): 3D printing (Klipper/Moonraker), CNC milling (GRBL with full alarm/error oracle and machine-safety envelope), USBTMC oscilloscope capture (Rigol/Siglent SCPI), and `sigrok-cli` logic analyzer protocol decoding.
+Local-first digital-fabrication bench and hardware instrument studio in pure Rust (3,796 physical lines in nine `.rs` files, 38 passing tests, 4 crates, 17 MCP tools over stdio): 3D printing (Klipper/Moonraker), CNC milling (GRBL with full alarm/error oracle and machine-safety envelope), USBTMC oscilloscope capture (Rigol/Siglent SCPI), and `sigrok-cli` logic analyzer protocol decoding.
 
 ## Model / verbs
 
 - **Model:** fabrication job (G-code toolpath + bounding-box/feedrate safety check + GRBL/Klipper state) + bench instrument capture (USBTMC waveform / `sigrok` logic trace).
-- **15 MCP tools / CLI verbs:**
+- **17 MCP tools / CLI verbs on `makercraft-mcp`:**
   - Fabrication & CNC: G-code parser/validator, bounding-box & feedrate safety envelope check, GRBL status/alarm/error code oracle, Klipper/Moonraker print status, emergency stop (`confirm` gated).
   - Bench instruments: USBTMC oscilloscope SCPI query/waveform capture (`scope_*`), `sigrok-cli` logic analyzer protocol decode (`logic_*`), serial port enumeration, and hardware `doctor`.
+  - Capture: `instrument.sources` and `instrument.capture`. The capture file is labelled demo.
 
 ## Architecture
 
-4-crate Pure-Rust ArtCraft 3-tier workspace (`makercraft-hal`, `makercraft-core`, `makercraft-mcp`, `makercraft-app`), `3,570 LOC`, `37 tests`, `clippy -D warnings` clean.
+4-crate Pure-Rust ArtCraft 3-tier workspace (`makercraft-hal`, `makercraft-core`, `makercraft-mcp`, `makercraft-app`). Recounted 13 November 2026: 3,796 physical Rust lines, 3,399 tokei code lines, 38 passing tests.
 
 ## Strengths
 
@@ -35,4 +38,4 @@ Local-first digital-fabrication bench and hardware instrument studio in pure Rus
 
 ## Verdict
 
-Grade B+: 3,570 LOC, 37 passing tests, 15 MCP tools, USBTMC + sigrok instrument integration, and G-code safety envelopes make `makercraft` the fleet's flagship hardware bench.
+Grade B+ stands from 9 November. The 13 November recount is 3,796 physical Rust lines and 38 passing tests. The catalog is 17 tools.
