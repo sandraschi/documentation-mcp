@@ -49,13 +49,14 @@ Before any **batch edit** (define as: **≥3 files** in `src/`, `tests/`, or `we
 
 ```powershell
 Set-Location <repo-root>
-git add -A
-git status --short
-# If changes exist:
-git commit -m "checkpoint: before <short description>"
+git status --short            # whose changes are these?
+git add <your paths>
+git commit -m "checkpoint: before <short description>" -- <your paths>
 ```
 
 User did not need to ask for this commit — agents **must** create it unless the user forbids git writes.
+
+**Amended 2026-11-02:** name your paths. `git add -A` / `git commit -a` is acceptable only in a repo, branch or worktree that the agent alone owns (its own `agent/<tool>-<topic>` branch or a fresh worktree). In a shared tree it sweeps other agents' unfinished work into your commit (gamecraft `v0.13.0`). See [MULTI_AGENT_CONCURRENCY.md](./MULTI_AGENT_CONCURRENCY.md). Uncommitted work that is not yours is backed up by the nightly `refs/wip` snapshot; leave it alone.
 
 ### 4. Forbidden without checkpoint
 
@@ -144,14 +145,14 @@ gh auth setup-git        # tell git to use gh as credential helper
 
 ```powershell
 # On PC1 — when done
-git add -A && git commit -m "..."
+git add <your paths>; git commit -m "..." -- <your paths>
 git push
 
 # On PC2 — before starting
 git pull --rebase         # rebase keeps history linear
 
 # On PC2 — when done
-git add -A && git commit -m "..."
+git add <your paths>; git commit -m "..." -- <your paths>
 git push
 
 # Back on PC1 — before starting again

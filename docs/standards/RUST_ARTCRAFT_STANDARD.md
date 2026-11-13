@@ -8,10 +8,10 @@ last_updated: 2026-10-18
 
 # Pure-Rust ArtCraft MCP Architecture & Fleet Rustification Standard
 
-**Status:** Canonical Fleet Architecture Standard (established 2026-10-17 -- Red-Letter Regime Change)  
-**Pilot Reference Implementation:** [`rust-devices-mcp`](../projects/rust-devices-mcp/README.md) (`D:\Dev\repos\rust-devices-mcp`, `v0.4.0+` Alpha, 4 crates, 24 tools, 58/58 tests)  
-**Operational Conversion Macro / SOP:** [`repconv <repo>` (`patterns/REPCONV_SOP.md`)](../patterns/REPCONV_SOP.md)  
-**Methodology Provenance:** Adapted from the **ArtCraft** containment harness (Brandon Thomas / `storytold` on GitHub). Public banner bearer of this Rust wave: Thomas and the 13 Crafting Apps (CADCraft, DeckCraft, DesignCraft, EffectCraft, FigCraft, FilmCraft, GridCraft, LightCraft, PdfCraft, PhotoCraft, SoundCraft, VectorCraft, WordCraft), each a pure-Rust native app with a CLI and an MCP server. Fleet r11n borrows the harness and wraps those engines. It does not reimplement them. Inventory: [`CRAFT_APPS_MCP_UTILIZATION.md`](./rust-artcraft/CRAFT_APPS_MCP_UTILIZATION.md). Desired and not yet built: the shared release factory and agent learnings, [`RELEASE_FACTORY.md`](./rust-artcraft/RELEASE_FACTORY.md). Parity method: [`ORACLE_LOOP.md`](./rust-artcraft/ORACLE_LOOP.md).  
+**Status:** Canonical Fleet Architecture Standard (established 2026-10-17 -- Red-Letter Regime Change)
+**Pilot Reference Implementation:** [`rust-devices-mcp`](../projects/rust-devices-mcp/README.md) (`D:\Dev\repos\rust-devices-mcp`, `v0.4.0+` Alpha, 4 crates, 24 tools, 58/58 tests)
+**Operational Conversion Macro / SOP:** [`repconv <repo>` (`patterns/REPCONV_SOP.md`)](../patterns/REPCONV_SOP.md)
+**Methodology Provenance:** Adapted from the **ArtCraft** containment harness (Brandon Thomas / `storytold` on GitHub). Public banner bearer of this Rust wave: Thomas and the 13 Crafting Apps (CADCraft, DeckCraft, DesignCraft, EffectCraft, FigCraft, FilmCraft, GridCraft, LightCraft, PdfCraft, PhotoCraft, SoundCraft, VectorCraft, WordCraft), each a pure-Rust native app with a CLI and an MCP server. Fleet r11n borrows the harness and wraps those engines. It does not reimplement them. Inventory: [`CRAFT_APPS_MCP_UTILIZATION.md`](./rust-artcraft/CRAFT_APPS_MCP_UTILIZATION.md). Desired and not yet built: the shared release factory and agent learnings, [`RELEASE_FACTORY.md`](./rust-artcraft/RELEASE_FACTORY.md). Parity method: [`ORACLE_LOOP.md`](./rust-artcraft/ORACLE_LOOP.md).
 **Navigation Hub:** [AGENT_PROTOCOLS.md](./AGENT_PROTOCOLS.md) | [STANDARDS_BAR.md](./STANDARDS_BAR.md) | [AGENT_READING_ORDER.md](./AGENT_READING_ORDER.md) | [Rust Language Hub](../languages/rust/README.md)
 
 > [!IMPORTANT]
@@ -36,6 +36,7 @@ To keep context windows lean and high-signal, the Pure-Rust ArtCraft standard is
 ---
 
 | **8. [CRAFT_COMMAND_BUS.md](./rust-artcraft/CRAFT_COMMAND_BUS.md)** | - **The two planes:** headless `run` (in-process engine) vs live `mcp --attach` / `--bridge` / `--connect` to `<app> --control PORT`.<br>- **The command registry** (`commands --json`, `describe`, JSON params) is the whole API.<br>- **Per-app flag table**, verified usage examples (Photo, Deck, Grid, Sound, Fig), client-config shapes, and traps (opt-in control, fails fast, syntax drift). | **Read before wiring a Craft app to an agent or claiming a live hands-in demo.** |
+| **9. [CRAFT_MENU_BAR_STANDARD.md](./rust-artcraft/CRAFT_MENU_BAR_STANDARD.md)** | - **Universal Top Menu Bar Anatomy:** Immutable Front Bookend (`File`, `Edit`, `View`), domain-specific middle menus, immutable Tail Bookend (`Window`, `Help`).<br>- **The Standard 5-Item Help Suite:** `Command Palette...`, `Keyboard Shortcuts...`, `Project Files & Docs...`, `Licenses & Notices...`, `About <AppName>`.<br>- **Native Desktop Ergonomics:** `switch_on_hover` behavior, hotkey tooltips, and non-modal dialog popups. | **Mandatory when implementing or reviewing the top menu bar across any Craft application.** |
 
 ## 0. What Is Invalidated vs. What Replaces It: The Great Cruft Extinction (2026-10-17)
 

@@ -1,6 +1,6 @@
 # MCP Integrations & Service Fleet
 
-**Private — Sandra Schipal + collaborators only. Not for public distribution.**
+**Private — Sandra S. + collaborators only. Not for public distribution.**
 
 **Last updated:** 2026-06-17 · **Standards:** FastMCP **3.2+** · **Packaging:** MCPB only · **Publish:** mandatory IN — [PUBLISH_UPDATE_CHECKLIST.md](../PUBLISH_UPDATE_CHECKLIST.md) §2
 
@@ -37,6 +37,7 @@ This directory contains documentation for external tools and services integrated
 ### 🛠️ Development & Ops
 - **[FastMCP](fastmcp.md)** — Core MCP framework by **Jeremiah Lowin**: every Python MCP server in the fleet ships `fastmcp>=3.4.4,<4`. Creator of FastMCP, Prefab UI, MCP Apps support. Key docs in `fastmcp/`.
 - **[OpenSERP](openserp/README.md)** — FOSS self-hosted SERP API (MIT, Go binary): Google/Bing/Yandex/Baidu/DuckDuckGo/Ecosia search as structured JSON. MCP server via `npx @openserp/mcp`. Free SerpAPI alternative — no Docker needed, runs as background process on port 7000.
+- **[Obscura](obscura/README.md)** — Headless Rust browser for agents/scraping (Apache-2.0, ~32k stars): V8 JS, CDP drop-in for Puppeteer/Playwright, `fetch`/`scrape`/`serve` CLI, screenshots/PDF, MCP `browser_*` tools. Fleet stance: cheap first-pass smoke browser (ephemeral `serve --allow-private-network` per build); Chromium stays the pixel-truth final gate. CDP `9222` safe; MCP HTTP default `8080` FORBIDDEN — remap to a claimed port.
 - **[Hugging Face MCP Server](huggingface/README.md)** — Official **remote** HF server (`https://huggingface.co/mcp`, hosted at hf.co): hub model/dataset/space search, `hf://` filesystem, Gradio Space tools. Session-based Streamable HTTP, anonymous OK (rate-limited) or OAuth/Bearer. No repo, no port — opencode/Claude config only. Verified `@huggingface/mcp-services` v0.4.6.
 - **[Gradio](gradio/README.md)** — Python web-UI framework for ML demos; the A1111/Spaces shell. **Framework, not engine** — fleet stance (2026-08-05): no new Gradio+extensions projects; ComfyUI (comfyops-mcp) is the gen engine of record; hosted Gradio apps are consumed via the HF MCP bouquet; existing `myai/stablediff_gradio` stays.
 - **[Syncthing](syncthing.md)** — P2P folder sync (MPL 2.0): keep `D:\dev\repos` warm across Goliath, MiniPC, and other workstations without OneDrive lock-in. Caveats for git repos. Native Windows + Docker. v2.1: folder grouping, HTTP CONNECT proxy, configurable block indexing.
@@ -157,6 +158,7 @@ This directory contains documentation for external tools and services integrated
 - [Zed IDE](./zed/README.md) — High-performance native editor (v0.230.x); ACP Registry; Git Graph v2
 - [Spec Kit](spec-kit.md) — GitHub SDD toolkit: `/speckit.*` workflow, `specify` CLI, opencode-native integration
 - [Hugging Face MCP Server](huggingface/README.md) — Official remote HF server (`https://huggingface.co/mcp`): hub search, `hf://` FS, Gradio tools; OAuth/Bearer auth
+- [Obscura](obscura/README.md) — Headless Rust browser (Apache-2.0): V8 + CDP + `fetch`/`scrape`/`serve` + MCP `browser_*`; per-repo scenarios (craft-anything ephemeral CDP, webapp smoke, searchstudio JS fallback, REA dynamic half)
 - [Gradio](gradio/README.md) — Python web-UI framework for ML demos; framework-not-engine stance, ComfyUI as fleet gen engine, Spaces consumed via HF MCP bouquet
 - [Salad.com GPU Sharing](salad-gpu-sharing.md) — Managed Windows consumer GPU sharing: 4090 rates, income PCM, security/proxy risks, competitors (Vast.ai, RunPod), FOSS alternatives (Petals, BOINC, Folding@home)
 - [json-render](json-render.md) - Generative UI framework (Vercel Labs): **evaluated, NOT adopted**. Targets the same MCP Apps protocol as fleet Prefab but is a Node/TypeScript server shipping a bundled HTML iframe; conflicts with the Prefab mandate. Pattern extraction only (catalog-as-guardrail, SpecStream).

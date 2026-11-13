@@ -1,0 +1,134 @@
+---
+title: "Craft app start and release scaffold"
+category: standard
+status: active
+audience: all-craft-agents
+last_updated: 2026-11-12
+---
+
+# Craft app start and release scaffold
+
+**Parent Hub:** [RUST_ARTCRAFT_STANDARD.md](../RUST_ARTCRAFT_STANDARD.md)
+**Related:** [RELEASE_FACTORY.md](RELEASE_FACTORY.md) (asset rules), [START_SCRIPT_STANDARD.md](../START_SCRIPT_STANDARD.md) (webapps)
+**Masters:** `templates/craft-app/` - **Sync:** `scripts/sync-craft-scaffold.ps1`
+**Reference repos:** gaincraft, teamcraft (released with it, 2026-11-12)
+
+Every Rust craft app (`D:\Dev\repos\*craft`) starts and releases the same way. One engine,
+vendored identically into every repo, one small config per repo. Same pattern as the webapp
+start engine: the masters live here, repos carry copies, differences live only in config.
+
+## Files in every craft repo
+
+| File | Edit in the repo? | What it does |
+|---|---|---|
+| `start.ps1` | **No** (vendored) | Incremental build, then run the desktop app. `-Release`, `-NoBuild`, `-New`, `-Smoke`, `-Mcp`, `-Cli`; other arguments go to the app |
+| `start.bat` | **No** (vendored) | Double-click wrapper; window held open on errors |
+| `scripts/craft-common.ps1` | **No** (vendored) | Config loading, cargo on PATH, real target dir (`cargo metadata`), build helper |
+| `scripts/release.ps1` | **No** (vendored) | Gates, release build, smoke, plain exes, NSIS installer, mcpb, launcher zip, SHA256SUMS, opt-in `-Publish` |
+| `installer/craft-installer.nsi` | **No** (vendored) | Per-user installer; everything comes in as `/D` defines |
+| `scripts/craft.config.psd1` | **Yes** | Names and smoke arguments of this repo (below) |
+| `mcpb/manifest.json` | Yes | Only with `Mcpb = $true`; tool list kept equal to the catalog by a test |
+| `CHANGELOG_LATEST.md` | Yes | Notes of the version being released; required for `-Publish` |
+
+Plus, in mcd: `starts/<repo>-start.bat`, the guarded fleet launcher (cd into the repo, run
+`start.ps1`, hold the window on error). The sync tool writes it.
+
+Vendored files carry the marker `VENDORED from mcp-central-docs`. To change them, edit
+`templates/craft-app/` and run the sync; never patch one repo's copy.
+
+## craft.config.psd1
+
+```powershell
+@{
+    Name        = 'gaincraft'               # repo, release asset prefix, data folder name
+    Display     = 'GainCraft'               # start menu, installer, window
+    AppPackage  = 'gaincraft-app'           # cargo package of the desktop app
+    AppBin      = 'gaincraft-app'           # its binary
+    AppSmoke    = @('--smoke', '--db', '{db}')
+    CliPackage  = 'gaincraft-mcp'           # cargo package of the CLI / MCP server
+    CliBin      = 'gaincraft'
+    CliSmoke    = @('--db', '{db}', 'status')
+    McpArgs     = @('mcp')                  # start.ps1 -Mcp
+    McpSmoke    = @('--db', '{db}', 'mcp')  # release: JSON-RPC initialize must answer
+    Installer   = $true
+    Mcpb        = $true
+    # optional: AppArgs = @('--control', '14132'), LauncherZip = $false, Repository = 'https://...'
+    # optional: McpPackage / McpBin when the MCP server is not the CLI (djcraft-mcp, aicraft-mcp)
+}
+```
+
+`{db}` becomes a throwaway database path, so a smoke never touches the user's data. An empty
+list means "no such smoke"; the release then only builds that binary. The sync tool detects
+the first version of this file (binaries, owning packages, `main_with` / `--smoke` / clap
+`Status` / `Mcp` / global `--db`); after that the repo owns it and the sync never overwrites it.
+
+## start.ps1 behaviour (why it is shaped this way)
+
+- **Always the current code.** Default is `cargo build -p <AppPackage> --bin <AppBin>` then run.
+  An up-to-date build costs a second or two; a stale exe from days ago cost a lot more
+  (teamcraft, 2026-11-12: the debug exe was two days older than the code).
+- **Real target dir.** Exe paths come from `cargo metadata`, so `CARGO_TARGET_DIR`
+  (`D:\Dev\cargo-target` in buchcraft) works.
+- **Open window, newer code:** start says so and exits 2 (the .bat holds the window) instead
+  of starting a second, different window. `-New` starts another one anyway.
+- **Running exe cannot be rebuilt on Windows.** `-Smoke` then uses that build and says so; the
+  release script stops with "close it" instead of a cargo "Access is denied".
+- PowerShell 5.1, ASCII only, no `&&`. Native tools are judged by exit code; EAP stays
+  `Continue` because 5.1 turns redirected stderr progress into error records.
+
+## release.ps1 behaviour
+
+Phases: preflight (version from `cargo metadata` of the app package, clean tree, on the trunk -
+`origin/HEAD`, else `main`/`master` - no stray branches, tag free, CHANGELOG_LATEST for
+`-Publish`, makensis present), gates (fmt, clippy `-D warnings`, tests), release build of the
+configured binaries, smoke (app, CLI, MCP initialize as configured), artifacts, opt-in publish.
+
+Assets follow [RELEASE_FACTORY.md](RELEASE_FACTORY.md): plain exes under stable names, the
+installer `<name>-<version>-setup.exe`, the `.mcpb` when configured, the launcher zip only as an
+extra, `SHA256SUMS.txt`. Dry runs (`just release-dry`) never tag or upload; an existing tag is a
+note in a dry run and an error with `-Publish`.
+
+Launcher zip: craft-deck installs the root executable named `<Name>.exe`. Inside the zip (and only
+there) the window is renamed to `<Name>.exe` and a CLI that already holds that name becomes
+`<Name>-cli.exe`; everything sits in one `<name>-<version>-windows-x64-portable/` folder with
+`/` separators (written with System.IO.Compression, not `Compress-Archive`, which writes `\`).
+
+**Who publishes:** a person runs `just release` (or tells an agent to, explicitly).
+
+## Sync
+
+```powershell
+cd D:\Dev\repos\mcp-central-docs\scripts
+.\sync-craft-scaffold.ps1 -DryRun                 # detection table, writes nothing
+.\sync-craft-scaffold.ps1 -Repo gaincraft         # one repo
+.\sync-craft-scaffold.ps1                         # every *craft repo
+.\sync-craft-scaffold.ps1 -Repo x -RegenConfig    # re-detect a config (overwrites it)
+```
+
+The sync also appends `smoke`, `release-dry` and `release` recipes to an existing `justfile`,
+adds `/dist` to `.gitignore`, and keeps a repo's own non-vendored `release.ps1` (splatcraft,
+wikicraft) unless the repo is passed in `-AdoptRelease`.
+
+## MCP bundle (mcpb)
+
+`mcpb/manifest.json` is the authority on which binary serves MCP (`server.entry_point`) and how
+it starts (`mcp_config.args`: `mcp`, `--mcp` or none). The config mirrors it: `McpBin` /
+`McpPackage` (default: the CLI), `McpArgs`, `McpSmoke`, `Mcpb = $true`. The release builds
+`McpBin`, smokes its `initialize`, refuses a manifest whose `entry_point` is not `<McpBin>.exe`,
+and packs it with `bunx @anthropic-ai/mcpb`. The version is the `__VERSION__` placeholder.
+
+Generate or refresh manifests from the running server (never by hand):
+
+```powershell
+python D:\Dev\repos\mcp-central-docs\scripts\gen-craft-mcpb-manifests.py               # repos without one
+python D:\Dev\repos\mcp-central-docs\scripts\gen-craft-mcpb-manifests.py --force moneycraft
+```
+
+It builds the server, sends `initialize` + `tools/list` over stdio and writes the tool list it
+gets back, then sets the config keys above. Re-run it when tools change.
+
+## Known gaps
+
+- No manifest: artcraft (upstream storytold fork) and modcraft (`modcraft-mcp` is a status
+  printer, not a stdio MCP server).
+- `start.ps1 -Smoke` builds debug binaries; a first build of a large repo takes minutes.

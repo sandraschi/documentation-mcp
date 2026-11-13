@@ -153,6 +153,6 @@ Zed exemplifies **true open source development**:
 
 ---
 
-**Author**: Sandra Schipal
+**Author**: Sandra S.
 **Purpose**: Essential reference for Zed extension development
 **Last Updated**: January 15, 2026

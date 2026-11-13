@@ -1,6 +1,6 @@
 # Zed IDE: History, Ecosystem, and Agentic IDE Evolution
 
-**By Sandra Schipal** | **Status: Analysis** | **Last Updated: April 9, 2026**
+**By Sandra S.** | **Status: Analysis** | **Last Updated: April 9, 2026**
 
 Zed represents a **paradigm shift** in IDE development - the first major IDE designed from the ground up for AI integration rather than having AI features bolted on as an afterthought. This document examines Zed's history, unique position in the agentic IDE landscape, and its revolutionary approach to AI-native development.
 
@@ -379,7 +379,7 @@ graph TD
 
 ---
 
-**Author**: Sandra Schipal
+**Author**: Sandra S.
 **Analysis**: Zed represents the future of AI-native IDE development
 **Key Insight**: Clean architecture beats feature count
 **Last Reviewed**: January 15, 2026
