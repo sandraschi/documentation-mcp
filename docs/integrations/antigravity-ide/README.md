@@ -2,7 +2,7 @@
 
 **Last Updated:** 2026-03-23
 **Also known as:** Google AI Studio IDE, Gemini IDE
-**MCP config location:** `C:\Users\sandr\.gemini\antigravity`
+**MCP config location:** `C:\Users\<user>\.gemini\antigravity`
 **⚠️ Non-standard path** — NOT in AppData\Roaming, NOT in standard IDE config locations
 
 ---
@@ -19,7 +19,7 @@ implementation than Claude Desktop or Cursor as of March 2026, but actively deve
 
 ## ⚠️ Critical: Non-Standard Config Path
 
-**Config location:** `C:\Users\sandr\.gemini\antigravity`
+**Config location:** `C:\Users\<user>\.gemini\antigravity`
 
 This is unusual — most IDE MCP configs are in:
 - `AppData\Roaming\<AppName>\` (Windows standard)

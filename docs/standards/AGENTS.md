@@ -69,6 +69,12 @@ cargo run -p rust-devices-mcp -- status --json
 cargo run -p rust-devices-mcp -- mcp
 ```
 
+#### UI/UX Architecture & Fleet Pattern Separation
+Fleet UI/UX follows three distinct, cleanly separated patterns (see **[`standards/rust-artcraft/CRAFT_MENU_BAR_STANDARD.md`](./rust-artcraft/CRAFT_MENU_BAR_STANDARD.md)**):
+1. **Pattern 1: Page-Centric Dashboard** (Web SOTA / `devices-mcp`): Retractable navigation sidebar routing to distinct pages. Adding a new capability (e.g. device handler) = add entry to sidebar navigation + author dedicated handler page view.
+2. **Pattern 2: Viewport-Centric Craft Workstation** (`celcraft`, `cadcraft`, `anicraft`): Persistent central viewport with dockable panels, quick toolbars/swatches, and a universal top menu bar (`File`, `Edit`, `View`, `Insert`, `Modify`, `Commands`, `Window`, `Help`) with the standard 5-dialog Help suite (`Command Palette...`, `Keyboard Shortcuts...`, `Project Files & Docs...`, `Licenses & Notices...`, `About <App>`). In non-file apps, `File` is omitted/replaced; baseline is `Edit`, `Insert`/`Add`, `View`, `Command`, `Help`. Adding a new tool/capability = add visibility toggle under `View` menu + add tool/swatch in sidebar/HUD + route through `Command::dispatch`.
+3. **Pattern 3: Minimalist Inspector Sidecar**: Compact floating HUD / telemetry stream.
+
 ### Track B: Legacy Python / FastMCP Repos (`pyproject.toml` at root)
 
 ```powershell
@@ -208,7 +214,7 @@ Do **not** leave CRITICAL/HIGH gaps for a later assfix.
    - INSTALL link to ONBOARDING near the top
    - Webapp: **big red onboarding button under Dashboard hero** (`data-testid="onboarding-cue"`)
    - Webapp: **MOCK-until-onboarded** sample KPIs/lists (visible **MOCK** badges; fake names e.g. Joe Mocky / Sandra Mockinger) that **clear after successful onboarding**
-   - Health/probe signal that flips “configured” when the wrappee/account is ready  
+   - Health/probe signal that flips “configured” when the wrappee/account is ready
    **N/A only (rare):** no wrappee **and** no online account necessary - write `Onboarding: N/A` + one-line rationale in `docs/DEVELOPMENT.md`. If either a wrappee or an online account exists, onboarding is mandatory. Missing = **gate fail**.
 9. **Good `.gitignore` (HARD)** - Exists **before** first `git add`. Must ignore at least: `node_modules/` / `**/node_modules/`, `.venv/`, `target/` / `**/target/` (Tauri + rust-analyzer), `webapp/dist/`, `src-tauri/target/`, `src-tauri/binaries/`, **`mcpb/src/`** (MCPB pack staging - exact copy of `src/`, never commit), `data/` or `*.sqlite3` / `*.db*`, `.env` (keep `.env.example`), `.coverage`, `*.mcpb`, **`*.bak` and `*.bak.*`** (timestamped sneak-in specialist backups accumulate - both patterns required). Copy from `GITIGNORE_STANDARDS.md` §1b. Spot-check `git status` for `node_modules` / `target` / `mcpb/src` / `*.bak*` before commit. Committing those = **gate fail**.
 10. **Good `.mcpbignore` (HARD)** - Exists on every MCPB-packaged repo. Must exclude `.venv/`, `node_modules/`, `webapp/`, `src-tauri/`, `tests/`, `data/`, `target/`, build artifacts, **`*.bak` and `*.bak.*`**. Pack script **MUST wipe+recopy** `src/` → `mcpb/src/` immediately before `mcpb pack` (gitignore alone does not stop a stale local twin from shipping). See `MCPB_PACKAGING_STANDARDS.md` § Fresh copy before pack. Packing `.venv` or `node_modules` into `.mcpb` = **gate fail**.

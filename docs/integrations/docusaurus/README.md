@@ -35,7 +35,7 @@ This page gives Docusaurus its own home instead of leaving it as a one-line ment
 ## Usage in This Fleet
 
 - **One live deployment**: `multi-gpu-cluster-recipes` — a Docusaurus static site over `docs/`, registered on port `11136`, deployed both to GitHub Pages and locally on Goliath.
-- **Public exposure**: mounted at `/multigpu/` on `https://goliath.tailfab45.ts.net` via Tailscale Funnel, unauthenticated (public docs, no personal data).
+- **Public exposure**: mounted at `/multigpu/` on `https://goliath.<tailnet>.ts.net` via Tailscale Funnel, unauthenticated (public docs, no personal data).
 - **Why it needs no path-strip proxy, unlike `/games/` or `/intel/`**: Docusaurus is rebuilt with `BASE_URL=/` for the funnel build, baking the mount path into every internal link at build time. This is the documented "static site generator" pattern in `TailscaleFunnel.md` §5b, alongside uvicorn's `root_path` (used by the Intel Reports Hub) and a generic path-strip reverse proxy (used by the AI games dashboard) as the three ways the fleet handles non-root mount paths.
 - **Not the fleet's general documentation tool**: `mcp-central-docs` itself, and essentially every other `integrations/` page, is plain Markdown read directly in-repo — by editors, by GitHub's renderer, and by AI agents in context. Docusaurus is reserved specifically for the one case where the actual goal is a public, browsable *website* rather than in-repo reference material. That's a deliberate scope decision, not an oversight.
 

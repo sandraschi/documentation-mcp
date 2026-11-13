@@ -777,7 +777,7 @@ Following these troubleshooting patterns will help resolve common issues and imp
 
 ## 9. iOS devices cannot reach Tailscale Serve endpoints while ping/Taildrop work (ACL ip-grant pitfall)
 
-**Incident**: 2026-08-15, tailnet `tailfab45.ts.net` (fleet Intel Reports hub on goliath :11027).
+**Incident**: 2026-08-15, tailnet `<tailnet>.ts.net` (fleet Intel Reports hub on goliath :11027).
 **Severity**: P1 (silent, tailnet-wide). **Depot entry**: [BUG-022](../../troubleshooting/BUGS_DEPOT.md).
 
 ### Symptoms

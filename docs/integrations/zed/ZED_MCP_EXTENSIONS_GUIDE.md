@@ -1,6 +1,6 @@
 # Zed IDE MCP Extensions: Complete Implementation Guide
 
-**By Sandra Schipal** | **Status: Production-Ready** | **Last Updated: January 15, 2026**
+**By Sandra S.** | **Status: Production-Ready** | **Last Updated: January 15, 2026**
 
 Zed IDE has emerged as a **breakthrough development environment** that combines native performance with AI-first design. Unlike traditional IDEs that bolt on AI features, Zed was built from the ground up with AI integration as a core principle. This guide covers the revolutionary MCP (Model Context Protocol) extension system that allows seamless integration of external tools and servers.
 
@@ -237,8 +237,8 @@ impl zed::Extension for MultiServerExtension {
 
 ---
 
-**Author**: Sandra Schipal
-**Contact**: sandraschipal@gmail.com
+**Author**: Sandra S.
+**Contact**: <email>
 **License**: MIT
 **Last Reviewed**: January 15, 2026
 

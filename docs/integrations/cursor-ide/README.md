@@ -2,7 +2,7 @@
 
 **Last Updated:** June 6, 2026
 **Cursor version:** 3.0 (Pro)
-**MCP config:** `C:\Users\sandr\.cursor\mcp.json`
+**MCP config:** `C:\Users\<user>\.cursor\mcp.json`
 **Global rules:** `.cursor/rules/` per-repo or Cursor Settings → Rules
 
 ---
@@ -22,7 +22,7 @@ Key differences from Claude Desktop:
 
 ## MCP Config File
 
-Location: `C:\Users\sandr\.cursor\mcp.json`
+Location: `C:\Users\<user>\.cursor\mcp.json`
 
 Same JSON structure as Claude Desktop:
 
