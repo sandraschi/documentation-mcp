@@ -439,6 +439,12 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 11240 | universal-actuator-mcp | Frontend (Vite) [registered 2026-10-25] |
 | 11253 | giscraft | Frontend (Vite) [registered 2026-10-25, renamed 2026-11-03, 2026-11-08] |
 | 11254 | giscraft | Backend (Axum sidecar, REST `/api`) [registered 2026-10-25, renamed 2026-11-03, 2026-11-08] |
+| 11258 | devcraft | Frontend (egui studio) [registered 2026-11-14] |
+| 11259 | devcraft | Backend (MCP control) [registered 2026-11-14] |
+| 11260 | aicraft | Frontend (egui studio) [registered 2026-11-14] |
+| 11261 | aicraft | Backend (MCP control) [registered 2026-11-14] |
+| 11262 | spendcraft | Frontend (Vite companion) [registered 2026-11-14] |
+| 11263 | spendcraft | Backend (companion API) [registered 2026-11-14] |
 | 11270 | craft-showcase | Web Showcase & In-Browser WASM Studio [registered 2026-11-10] |
 
 ## Unified observability stack (Docker)

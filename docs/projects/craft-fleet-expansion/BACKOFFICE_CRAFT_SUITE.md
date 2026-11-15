@@ -14,6 +14,8 @@ Austrian business: bookkeeping, tasks, HR time records, assets, contracts,
 support, customer success, surveys and an engineering knowledge base. Each is a
 normal fleet craft app (L1 core + store, L2 CLI/MCP binary, L3 egui app), so a
 human can click it and an agent can drive it through the same command bus.
+The point of the suite is to stop renting that work. Peppol is one of those rents:
+the network is open, the access-point seat is the product being cut. See `PEPPOL.md`.
 
 This doc does three things:
 

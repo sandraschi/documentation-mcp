@@ -1,6 +1,6 @@
 # CelCraft - Tiered Execution Plan (Tiers 1-8)
 
-**Document Version:** 1.5.0
+**Document Version:** 1.6.0
 **Date:** 2026-11-13
 **Status:** Active
 **Execution Model:** 8-Tier ArtCraft Incremental Delivery
@@ -31,7 +31,7 @@ Following the fleet's **Pure-Rust ArtCraft Containment Standard**, CelCraft avoi
 [ Tier 6: Persistence & Paint ]                   --> v1.4.0
       |
       v
-[ Tier 7: Audio & Master Delivery ]               --> v1.5.0
+[ Tier 7: Audio & Master Delivery ]               --> v1.5.2
       |
       v
 [ Tier 8: GPU Render Parity & Hardening ]         --> planned
@@ -198,46 +198,66 @@ Following the fleet's **Pure-Rust ArtCraft Containment Standard**, CelCraft avoi
 
 ---
 
-### Tier 7: Audio & Master Delivery (`v1.5.0`)
+### Tier 7: Audio & Master Delivery (`v1.5.2`)
 *Focus: full parity with the Toonz/OpenToonz delivery pipeline. These are required features, not optional extras.*
 
 - [x] **Milestone 7.1: CPAL playback engine (`cel-audio`)**
-  - Sample-accurate playback device with jog/shuttle scrubbing planned; shipped play/stop on a worker thread with resampling.
-  - `cel-audio` now uses `cpal` for output; jog/shuttle scrubbing is deferred.
+  - Play/stop on a dedicated worker thread (device handle never crosses the command bus), linear resampling to the device rate, f32/i16/u16 output formats.
+  - Jog/shuttle scrubbing moved to Tier 8 (deferred, not dropped).
 - [x] **Milestone 7.2: Waveform cache (`cel-audio`, `cel-ui`)**
-  - Vertical waveform cache aligned to X-sheet frame intervals; timeline overlay.
+  - Peak/RMS buckets; timeline overlay drawn from `AudioWaveform` output.
 - [x] **Milestone 7.3: ProRes 4444 streaming (`cel-render`, `cel-mcp`)**
-  - Open the FFmpeg stdin pipe and stream `yuva444p10le` frames; no temp disk writes.
-  - Current state: argument generation and pixel conversion exist; no stream is opened.
+  - FFmpeg stdin pipe carries `yuva444p10le` frames with no temp writes.
+  - Verified: 120-frame / 5 s ProRes master with a valid moov atom (ffprobe).
 - [x] **Milestone 7.4: OpenEXR write command (`cel-render`, `cel-core`)**
-  - Wire `export_openexr_16f` to a `RenderFrame`/export command and the UI.
-  - Current state: exporter function exists; no command writes a file.
+  - `export-exr` wired through the command bus, CLI, MCP and UI.
+  - Verified: 3.1 MB 16F master frame at 640x360.
 - [x] **Milestone 7.5: BLAKE3 content-addressable storage (`cel-core`)**
-  - Frame deduplication and loop storage; add `blake3` dependency.
+  - `cas-index` hashes every canvas and reports duplicate groups.
+  - Verified: two identical stroke canvases collapse to one unique hash.
 - [x] **Milestone 7.6: Dialogue ingest in the workstation**
-  - Import audio, run LPC lip-sync, insert A/I/U/E/O exposures into the X-sheet.
+  - Import/generate a WAV, run LPC lip-sync, insert A/I/U/E/O exposures into the X-sheet.
+  - Verified: 120 exposures written into the `Dialogue` column for the 5 s short.
+- [x] **Milestone 7.7: Delivery hardening (`v1.5.1`)**
+  - Found by rendering a 120-frame short: an undrained FFmpeg stderr pipe deadlocked the encoder once the log buffer filled. 24-frame exports passed by luck; long ones wrote a moov-less `.mov`.
+  - Fix: stderr drained on a thread, tail surfaced on failure. Long-sequence ProRes verified.
+- [x] **Milestone 7.8: Workstation completeness (`v1.5.2`)**
+  - Every menu entry dispatches: fixture-backed TNZ/TLV import, engine-backed Cut/Copy/Paste/Select All, dispatching command palette, working `Ctrl+N/S/E/0` and `Ctrl+X/C/V/A`.
+  - Detailed Help: versioned About, accurate shortcut sheet, corrected docs blurbs, complete crate credits.
+- [x] **Milestone 7.9: Asset and fixture baseline (`v1.5.2`)**
+  - Deterministic `assets/fixtures/sample.tnz` and `sample.tlv`, both imported through the engine.
+  - Three fal.ai anime reference plates (Ghibli meadow, Neo-Tokyo alley, OVA cockpit); key in the OS keychain, never in the repo. $0.60 of a $5.00 budget.
+- [x] **Milestone 7.10: First short film**
+  - `demo-output/short/`: 120 PNG frames, `short_with_dialogue.mp4` (h264 + AAC, 5.000 s), `lipsync.json`, ProRes master, EXR master frame.
 
 **Tier 7 Verification Gate:** a project with a WAV plays it (fire-and-forget), shows waveform peaks, writes lip-sync exposures, exports ProRes 4444 through the pipe, writes a valid EXR, and deduplicates identical frames by hash.
 
+**Evidence recorded 2026-11-13:** `cel-mcp status` reports Tier 7 at v1.5.2; MCP advertises 37 tools; ffprobe confirms the 120-frame ProRes master; `--smoke` is green through Tier 7; 36 workspace tests pass with clippy `-D warnings` and fmt clean.
+
 ---
 
-### Tier 8: GPU Render Parity & Workstation Hardening (planned)
-*Focus: closing the remaining distance to a production workstation.*
+### Tier 8: Scene workstation, then GPU (8.1-8.5 in v1.6.0)
+*Focus: file I/O and a real cel first. GPU, snapshots, docking, and scrub follow.*
 
-- [ ] **Milestone 8.1: wgpu compute evaluator DAG (`cel-render`)**
-  - Multiplane parallax and layer compositing on the GPU; CPU path retained as fallback.
-  - Current state: `wgpu` is present only through `eframe` window presentation.
-- [ ] **Milestone 8.2: `egui_kittest` golden snapshots (`cel-ui`)**
+- [x] **Milestone 8.1: Native file dialog (`cel-ui`)** — `rfd` save/open/recent in 1.6.0.
+- [x] **Milestone 8.2: Rebuild preview paint from an opened project (`cel-ui`)** — `StagePreview` restores the cel.
+- [x] **Milestone 8.3: Compact project format (`cel-core`)** — base64 RLE; legacy `pixels` arrays still open.
+- [x] **Milestone 8.4: Paint channel (`cel-core`, `cel-ui`)** — Pen writes ink, Bucket fills paint.
+- [x] **Milestone 8.5: Plate and character cel (`cel-core`, `cel-ui`)** — PNG plate, X-sheet level frame, one default shot. No multi-shot editor yet.
+- [ ] **Milestone 8.6: wgpu compute evaluator DAG (`cel-render`)**
+  - [x] Plate/cel over-blend is a Dx12 compute shader and matches the CPU integer pixels. This machine: NVIDIA GeForce RTX 4090 / Dx12. No adapter uses the CPU blend.
+  - [x] Multiplane parallax resample matches the CPU pixels on Dx12. See the repo `docs/TIERED_PLAN.md`.
+  - [ ] Bokeh and the rest of the evaluator DAG stay on the CPU.
+- [ ] **Milestone 8.7: `egui_kittest` golden snapshots (`cel-ui`)**
   - Widget-level PNG regression tests alongside `--smoke`.
-- [ ] **Milestone 8.3: Window panel docking (`cel-ui`)**
+- [ ] **Milestone 8.8: Window panel docking (`cel-ui`)**
   - `Window` menu shows/hides panels; layout persistence.
-- [ ] **Milestone 8.4: Native file dialog (`cel-ui`)**
-  - `rfd` save/open/recent projects; removes the fixed `demo-output/project.celcraft` path.
-- [ ] **Milestone 8.5: Layer system and separate paint channel (`cel-core`, `cel-ui`)**
-  - Pen writes ink; Bucket fills the paint channel; multiple layers per frame composite in order.
-- [ ] **Milestone 8.6: Rebuild preview paint from an opened project (`cel-ui`)**
-  - Load `paint_<frame>` into the preview without a JSON-sized canvas round-trip.
-- [ ] **Milestone 8.7: Compact project format**
-  - Base64 + RLE for canvases; the current `.celcraft` JSON is uncompressed.
+- [ ] **Milestone 8.9: Audio scrub/seek (`cel-audio`, `cel-ui`)**
+  - Deferred from Milestone 7.1: jog/shuttle scrubbing with Hann-windowed micro-bursts, and timeline seek in sync with playback.
+- [x] **Milestone 8.10: Weight-free character cutout.** Runner `foreground-v1`. See the repo `docs/TIERED_PLAN.md`.
+- [x] **Milestone 8.11: ISNet ONNX on CPU.** Runner `isnet-onnx`. See the repo `docs/TIERED_PLAN.md`.
+- [ ] **Milestone 8.12: ToonOut and SAM.** ToonOut (`toonout-onnx`) runs. DirectML on the machine that checked it. SAM is not built. See the repo `docs/TIERED_PLAN.md`.
 
-**Tier 8 Verification Gate:** GPU and CPU renders match within tolerance, golden snapshots pass, layers composite correctly, and save/open round-trips including the preview.
+**Tier 8 Verification Gate:** a short with an imported background plate and a character level (driven by X-sheet exposures) saves, reopens with its preview intact, plays with scrubbable audio, and exports ProRes; GPU and CPU renders match within tolerance; golden snapshots pass. Milestone 8.10 is checked on a flat-color blob.
+
+**Carried gap:** 8.1-8.5, the weight-free cutout (8.10), and ISNet ONNX (8.11) shipped in 1.6.0. The 8.6 over-blend and the parallax resample match the CPU pixels on Dx12. Bokeh, snapshots, docking, and scrub remain. ToonOut runs. SAM is still 8.12. See the repo `docs/TIERED_PLAN.md`.

@@ -5,6 +5,37 @@ All notable changes to CelCraft will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-11-13
+### Added
+- **Tier 8.1-8.5, the scene workstation.** Native save/open/recent dialogs (`rfd`). Recent paths persist in `demo-output/recent-projects.txt`. `Ctrl+O` opens the dialog; `Ctrl+S` still saves the current path.
+- **Compact project files.** Canvases serialize as base64 RLE. Legacy `pixels` arrays still open.
+- **Preview rebuild, paint fill, background plate, X-sheet character cel, one default shot (`Shot 01`).** MCP surface is 42 tools.
+- **Character cutout (Tier 8.10), weight-free.** `foreground-v1` masks one figure on a plain field. `TraceContour` writes 1-pixel ink.
+- **ISNet ONNX (Tier 8.11).** `--runner isnet` runs SkyTNT `isnetis.onnx` on CPU. Weights stay in the user cache. See the repo `CHANGELOG.md`.
+- **ToonOut (start of Tier 8.12).** `--runner toonout` runs `birefnet-toonout-fp16.onnx` through ONNX Runtime. DirectML loaded on the machine that checked it. Weights stay in the user cache. The collage mask kept the painted plate, not a tight figure. SAM is not in this release. See the repo `CHANGELOG.md`.
+- **Delivery uses the scene.** PNG, EXR, and ProRes composite the plate and the character cel over the meadow. An empty project still exports the meadow. The over-blend is a Dx12 compute shader when an adapter is present, and the same integer blend on the CPU otherwise.
+- **GPU over-blend and multiplane parallax (Tier 8.6).** Checked on an NVIDIA GeForce RTX 4090 (Dx12): both shaders matched the CPU pixels. Bokeh stays on the CPU. See the repo `CHANGELOG.md`.
+- **Windows Ink pressure.** `cel-ink` reads `WM_POINTER` pressure from any active digitizer Windows reports as a pen. A curve is 1-pixel links between samples. Width stays 1 pixel. A mouse or a capacitive screen stays solid.
+
+### Known limitations
+- The wgpu path is the over-blend and the parallax resample. Bokeh, `egui_kittest`, panel docking, and audio scrub remain Tier 8.6-8.9.
+- Pen width, tilt, barrel buttons, and hover are unread. Capacitive screens have no pressure. See the repo `CHANGELOG.md`.
+- `foreground-v1` is the corner-color mask. SAM is still Tier 8.12. ToonOut is linked and is not a tight figure cut on the collage still.
+
+## [1.5.2] - 2026-11-13
+### Added
+- Every remaining dead menu entry is now connected. File imports the bundled `assets/fixtures/sample.tnz` / `sample.tlv` through the real engine; Edit Cut/Copy/Paste/Select All operate a real X-sheet clipboard backed by `XSheetSetCell` / `XSheetClearCell` (with Ctrl+X/C/V/A shortcuts); the command palette dispatches instead of printing; all `Ctrl+N/S/E/0` shortcuts work.
+- Detailed Help: versioned About dialog (`CARGO_PKG_VERSION`, 37 MCP tools), accurate shortcuts sheet, corrected project-docs blurbs, and complete crate credits (cpal, blake3, image).
+- Anime reference plates (`assets/reference/`, fal.ai, $0.60 total): Ghibli meadow, Neo-Tokyo alley, OVA cockpit - for palette inspiration and scan-batch demos.
+
+### Fixed
+- Palette entries no longer claim execution without dispatching.
+- Shortcuts sheet no longer lists unbound `Ctrl+N/S/E/0` as if they worked - they now do.
+
+## [1.5.1] - 2026-11-13
+### Fixed
+- FFmpeg's stderr is now drained on a dedicated thread during ProRes streaming. Without it, the encoder deadlocked once its log pipe filled: 24-frame exports passed by luck, 120-frame exports stalled mid-stream and produced a `.mov` without a moov atom. `ExportProRes` now returns FFmpeg's error tail when the pipe fails.
+
 ## [1.5.0] - 2026-11-13
 ### Added
 - **Tier 7: Audio & Master Delivery.**
@@ -20,6 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - `cel-mcp` ran clap on a larger worker stack: the full subcommand tree overflowed the default Windows main-thread stack once Tier 7 commands were added.
+- The WAV lip-sync MCP tool is named `cel_audio_lipsync_wav` to avoid colliding with the older synthetic-analysis `cel_audio_lip_sync`.
+- CLI kebab-case: the correct invocations are `audio-lip-sync` and `export-pro-res`, not `audio-lipsync` / `export-pro-res`.
 
 ### Known limitations
 - Playback is fire-and-forget: the CLI needs `--wait` to stay alive; there is no seek/scrub yet.
