@@ -75,7 +75,7 @@ List prices below are what the named SaaS publishes for a small team. They are c
 | `spendcraft` | Expensify, Pleo | Early. §26 Kilometergeld and Tagesdiäten, pain.001. Few tests | €15–€30 | €1,800–€3,600 | no |
 | `wikicraft` | Confluence, Notion | Early. FTS5, links, ADR, a GitHub wiki export. Five tests | €10–€18 | €1,200–€2,160 | no |
 | `formcraft` | Typeform, Qualtrics | Early. NPS and a small DE/EN lexicon. No collection server | €15–€30 | €1,800–€3,600 | no |
-| `billcraft` | Stripe Billing, Chargebee | Partial. ebInterface, pain.008, and the XRechnung fixture are tested. Not Peppol. | €25–€50 | €3,000–€6,000 | no |
+| `billcraft` | Stripe Billing, Chargebee, a rented Peppol access point | Partial. ebInterface, pain.008, and the XRechnung fixture are tested. A sender exists. It is not an access point, and no live receipt has been recorded. See PEPPOL.md. Still not counted. | €25–€50 | €3,000–€6,000 | no |
 | `hirecraft` | Greenhouse, Lever | Thin. Stages, scorecards, one hire cascade. Not an ATS | €30–€60 | €3,600–€7,200 | no |
 | `helmcraft` | Geckoboard, Baremetrics | Honest empty radar. Unread sources stay missing. No treasury book | €20–€40 | €2,400–€4,800 | no |
 
@@ -133,7 +133,7 @@ List prices below are what the named SaaS publishes for a small team. They are c
 
 ### 9. `billcraft`
 - String-built ebInterface 6.1 and pain.008, covered by `test_invoice_creation_and_recalculation`.
-- `export_xrechnung` writes a UBL 2.1 invoice. The store fixture was accepted by KoSIT Validator 1.6.3 with the XRechnung 3.0.2 configuration of 31 August 2026. It does not speak Peppol AS4.
+- `export_xrechnung` writes a UBL 2.1 invoice. The store fixture was accepted by KoSIT Validator 1.6.3 with the XRechnung 3.0.2 configuration of 31 August 2026. `peppol-send` posts one AS4 message when the firm's own certificate and SMP URL are set. Without them the package stays prepared. This is not an access point. See [PEPPOL.md](PEPPOL.md).
 - Subscription rows and invoice status changes exist. Consuming `contract.signed` and `timesheet.approved` is not demonstrated.
 
 ### 10. `spendcraft`

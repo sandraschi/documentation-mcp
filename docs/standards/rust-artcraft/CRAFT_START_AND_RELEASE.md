@@ -3,7 +3,7 @@ title: "Craft app start and release scaffold"
 category: standard
 status: active
 audience: all-craft-agents
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # Craft app start and release scaffold
@@ -126,6 +126,49 @@ python D:\Dev\repos\mcp-central-docs\scripts\gen-craft-mcpb-manifests.py --force
 
 It builds the server, sends `initialize` + `tools/list` over stdio and writes the tool list it
 gets back, then sets the config keys above. Re-run it when tools change.
+
+## Install
+
+High in `README.md`, before the product description:
+
+    ## Install
+
+    Tell Cursor, Claude, Antigravity, or OpenCode: **Install this.**
+
+        powershell -NoProfile -ExecutionPolicy Bypass -File scripts\install-craft.ps1
+
+That sentence is the whole request. The script (`scripts/install-craft.ps1`, vendored)
+installs three things: the Windows app and the CLI under
+`%LOCALAPPDATA%\Programs\<Display>` (Start Menu shortcut, CLI on the user PATH),
+and the `.mcpb` into Claude Desktop. It also registers the installed MCP exe with
+Cursor, Claude Desktop, Claude Code, Antigravity
+(`%USERPROFILE%\.gemini\config\mcp_config.json`), and OpenCode. `-Check` prints
+the plan and writes nothing.
+
+## Freshness
+
+`start.ps1` rebuilds the debug exe at launch, unless that exact exe is already running.
+It does not refresh `target\release` or `dist`. Those lag the cockpit until someone
+runs a release.
+
+`scripts/Invoke-CraftFreshness.ps1` walks every Rust craft app (`scripts\craft.config.psd1`
+plus `Cargo.toml`). If a debug exe, release exe, installer, mcpb, or launcher zip is
+missing, or older than the newest changelog, handover, release notes, docs page, or
+Rust source, it rebuilds that repo: debug, release, then the dist files. It does not
+tag or upload. A successful pass writes `target\craft-freshness.stamp`, because cargo
+leaves an exe's timestamp alone when the sources did not change. A running exe is
+skipped until the window is closed. A target drive with under 8 GB free is
+skipped as well, so the job does not compile a repo onto a full disk.
+
+`scripts/Install-CraftFreshness.ps1` registers `\Fleet\Craft-Freshness` every two
+hours (3 hour limit, a second run does not stack). Log:
+`%LOCALAPPDATA%\craft-freshness\craft-freshness.log`.
+
+```powershell
+.\Invoke-CraftFreshness.ps1 -WhatIf
+.\Invoke-CraftFreshness.ps1 -Repo devcraft
+.\Install-CraftFreshness.ps1
+```
 
 ## Known gaps
 

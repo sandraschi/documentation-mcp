@@ -39,11 +39,29 @@ Shared kernel: `craft-biz` (bus, MCP loop, confinement).
 - No sprints / cycles; capacity is shown from teamcraft, not planned against.
 - Git sync is on demand only (no hook/watcher); no GitHub/GitLab cloud import.
 
-## Next 3 steps
+## Planned improvements (scope extension 2026-11-14)
 
-1. Add comments thread to the issue inspector drawer.
-2. Integrate with `devcraft.safe_commit_and_snapshot` to auto-link commits upon snapshot.
-3. democraft recipes (`task/blocker-gate`, `task/git-close`).
+Sandra asked for a real SaaS replacement for a startup or small company. taskcraft grows from issue tracker into project management. All of it is planned, none of it built. Specs in the repo: `docs/TIERED_PLAN.md` (Tiers 5-10), `docs/PM_SPEC.md` (schema v2-v7, test criteria, hand-computed CPM fixtures), `HANDOVER.md`.
+
+| Tier | What | Days |
+|---|---|---|
+| 4b | Skills + in-app chat, fleet pilot of `standards/rust-artcraft/CRAFT_SKILLS_AND_CHAT_STANDARD.md` | 0.25 here, after 2-2.5 shared |
+| 5 | Migration runner (v1 store refuses other versions), people table, comments, attachments, epics/subtasks, templates, custom fields, saved views | 1-1.5 |
+| 6 | Sprints planned against teamcraft capacity, burndown, velocity | 1-1.5 |
+| 7 | Own CPM scheduler (FS/SS/FF + lag, AT calendar), Gantt widget, baselines, forecast | 2-3 |
+| 8 | Portfolio, programs, workload heatmap, actual hours, health, `timesheet.approved` to billcraft | 1.5-2 |
+| 9 | Importers (Jira, Linear, Asana, Trello, ClickUp, GitHub), MS Project XML, .ics, PDF reports | 1.5-2 |
+| 10 | Team sharing, option A (decided): `taskcraft serve` single-writer host + egui clients | 2-3 |
+
+Bus corrections from reading the code: no `leave.approved` (teamcraft capacity already subtracts leave; teamcraft re-emits `capacity.changed` instead), no `time.billable` (billcraft already consumes `timesheet.approved`).
+
+Gantt: no usable egui Gantt or CPM crate exists (checked 2026-11-14). Plan: a standalone `egui_gantt` crate (egui only, publishable to crates.io) wrapped by `craft-biz-ui::gantt`, reusable by contractcraft, hirecraft, teamcraft.
+
+## Next steps
+
+1. Close Tier 4 (Insert/Modify/Commands menus, File items, exe release assets).
+2. Tier 5 starts with the migration runner and a committed v1 fixture DB.
+3. Carried over: democraft recipes (`task/blocker-gate`, `task/git-close`); devcraft snapshot commit linking.
 
 ## Verdict
 
