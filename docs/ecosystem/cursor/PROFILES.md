@@ -39,7 +39,7 @@ Cursor still has no native multi-account switch. Workaround: separate installs o
 cursor --user-data-dir="D:\CursorProfiles\work"
 ```
 
-Each dir keeps its own login, settings, MCP config, and billing.
+Each dir keeps its own login, settings, MCP config, and billing. For CLI isolation (`unshare` / Windows 11 wrappers) and full details, see [Multi-Account Switching](MULTI_ACCOUNT_SWITCHING.md).
 
 ---
 

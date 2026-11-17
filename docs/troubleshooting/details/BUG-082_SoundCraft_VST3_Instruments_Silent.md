@@ -3,7 +3,7 @@
 **Severity**: P2 (feature failure; no data loss)
 **Date**: 2026-10-20
 **Component**: SoundCraft 26.02 (ArtCraft); exercised via `democraft-mcp`
-**Status**: Open - retested on SoundCraft 0.13.1 (2026-10-25), still silent across Surge XT and 8 Dexed program slots; upstream PR #347 unmerged. A same-day "fixed" claim was retracted after the numbers could not be reproduced.
+**Status**: Partially fixed in local fork PR #1577 (2026-11-15); **open upstream on SoundCraft 0.20.1** (Surge XT & Dexed both still `-144.0 dB` on stock `0.20.1`; PR #1577 fixes Dexed & Cardinal Synth, Surge XT `in=[2] out=[2,2,2]` still silent).
 
 ## Upstream
 
@@ -43,6 +43,19 @@ correctly.
 Reproduced with Surge XT 1.4.0 and Dexed 1.0.1 (instruments) and Valhalla
 Supermassive 5.0.0 (effect), against a 16-note MIDI clip imported with
 `file.import_midi`.
+
+## Retest 2026-11-15 — SoundCraft 0.20.1 + PR #1577
+
+1. **Stock `soundcraft-cli 0.20.1` (`C:\Program Files\SoundCraft\soundcraft-cli.exe`):**
+   - Built-in synth (control): `peak_db = -18.14 dB`, `lufs = -29.30` (**audible**)
+   - Surge XT 1.4.0 (`vst3:01EFCDAB8291EBFA566D624153675854`): `peak_db = -144.0 dB`, `lufs = -144.0` (**silent**)
+   - Dexed 1.0.1 (`vst3:01EFCDAB8291EBFA4447534244657864`): `peak_db = -144.0 dB`, `lufs = -144.0` (**silent**)
+2. **Upstream PR #1552 alone** (skipping `ParamID >= 0x4000_0000` MIDI-mapped params):
+   - Surge XT and Dexed both still bounced `-144.0 dB` (**silent**).
+3. **PR #1577 (`https://github.com/storytold/soundcraft/pull/1577`)** — skips `0x4000_0000+` MIDI-mapped params **and** tracks `dirty: Vec<bool>` in `Vst3Plugin` so `prepare()` only re-sends explicitly modified parameters:
+   - **Dexed 1.0.1**: `peak_db = -18.03 dB`, `lufs = -25.87` (**audible**)
+   - **Cardinal Synth 26.02**: `peak_db = -16.80 dB`, `lufs = -22.68` (**audible**)
+   - **Surge XT 1.4.0** (`in=[2] out=[2,2,2]`): still `-144.0 dB` (**silent**, separate multi-bus/sidechain issue).
 
 ## Retest 2026-10-25 — SoundCraft 0.13.1: still silent, BUG stands (and a retraction)
 
