@@ -1,11 +1,11 @@
 # RobotCraft Specification & Architecture Plan
 **Embodied Intelligence Studio & Universal Robotics Operating Environment**
 
-**Version**: 0.1.0-DRAFT  
-**Date**: 2026-11-04  
-**Author**: sandraschi fleet architecture / DeepMind AGY  
-**Domain**: Robotics Telemetry, Kinematics, Gazebo/Isaac Simulation, Multi-Robot Swarm Control  
-**Standard Port**: 14116 (status id only; the 0.3.0 process does not listen)  
+**Version**: 0.1.0-DRAFT
+**Date**: 2026-11-04
+**Author**: sandraschi fleet architecture / DeepMind AGY
+**Domain**: Robotics Telemetry, Kinematics, Gazebo/Isaac Simulation, Multi-Robot Swarm Control
+**Standard Port**: 14116 (status id only; the 0.3.0 process does not listen)
 
 **Shipped subset (2026-11-13, app 0.3.0):** the crate split and `Command::dispatch` exist. Live peers are `yahboom-mcp` (`:10892`), `vla-mcp` (`:11024`), and `isaac-mcp` (`:11049`), with a confirm gate. The Nori expanded URDF loads and poses link boxes. Pinocchio, Gazebo, MuJoCo, Unitree UDP, and STL mesh rendering in this draft are not built. Operator truth is `D:\Dev\repos\robotcraft\README.md` and `docs\PRD.md`. This document stays the long-range plan.
 

@@ -3,7 +3,7 @@
 **Private — Sandra S. + collaborators only. Not for public distribution.**
 
 **Purpose:** Central documentation for all major projects
-**Last Updated:** 2026-07-26 — publish tier: **mandatory IN** after update ([PUBLISH_UPDATE_CHECKLIST.md](../../PUBLISH_UPDATE_CHECKLIST.md))
+**Last Updated:** 2026-11-16 — publish tier: **mandatory IN** after update ([PUBLISH_UPDATE_CHECKLIST.md](../../PUBLISH_UPDATE_CHECKLIST.md))
 
 **Ideas not yet built:** [POSSIBLE_PROJECTS.md](./POSSIBLE_PROJECTS.md). Recent ship: [civitai-mcp](./civitai-mcp/README.md).
 
@@ -39,6 +39,28 @@ Consolidated domain workstations replacing micro-daemon sprawl (see [Craft Bundl
 | [makercraft](./makercraft/README.md) | Hardware Workshop, 3D Printing & CNC G-Code Studio (**14130**) | Hardware Studio | Active |
 | [writercraft](./writercraft/README.md) | Distraction-Free Prose & Long-Form Literary Studio (**14121**) | Writing Studio | Active |
 | [craft-showcase](./craft-showcase/README.md) | In-Browser WebAssembly Studio & Sovereign Presentation Portal (**11270**) | WASM Showcase + Webapp | Production-Ready |
+| [craftcraft](./craftcraft/README.md) | Keeper of the Craft zoo — zoo table, parity tracking & releases | Pure-Rust (`egui`) | Active |
+| [craft-ai](./craft-ai/README.md) | Shared LLM layer (`craft-ai-core`) for Rust Craft apps | Rust Library Crate | Active |
+| [craft-biz](./craft-biz/README.md) | Shared back-office kernel for business Craft apps (Austrian validators, EKR, tax keys) | Rust Shared Kernel | Active |
+| [setupcraft](./setupcraft/README.md) | Onboard a small Austrian GmbH or FlexKapG. Wizard writes one founder card. `demo-write` writes the founding batch | Back-Office Suite | v0.1.0 |
+| [assetcraft](./assetcraft/README.md) | Asset management, AfA depreciation, licence audit & QR labels | Back-Office Suite | Active |
+| [buchcraft](./buchcraft/README.md) | Bookkeeping/accounting Craft app (`egui` + L1 command bus) | Back-Office Suite | Active |
+| [contractcraft](./contractcraft/README.md) | Contract lifecycle board, risks, redline, seals & terms | Back-Office Suite | Active |
+| [deskcraft](./deskcraft/README.md) | Help desk views, ticket conversation, status board & macros | Back-Office Suite | Active |
+| [formcraft](./formcraft/README.md) | Form designer, live responses & NPS/sentiment analytics | Back-Office Suite | Active |
+| [gaincraft](./gaincraft/README.md) | Customer success / Customer 360, renewals, signals & CTA cockpit | Back-Office Suite | Active |
+| [teamcraft](./teamcraft/README.md) | Time clock, timesheet, absence calendar & Austrian AZG compliance | Back-Office Suite | Active |
+| [lenscraft](./lenscraft/README.md) | Local vision identification engine (photo → ranked IDs + evidence) | Pure-Rust ArtCraft | Active |
+| [lookcraft](./lookcraft/README.md) | Native `egui` desktop mail client | Pure-Rust (`egui`) | Active |
+| [modcraft](./modcraft/README.md) | Local-first parametric 3D solid modeling, CSG & BOM synthesis | Pure-Rust ArtCraft | Active |
+| [patterncraft](./patterncraft/README.md) | Native `egui` preview bench & Pattern IR | Pure-Rust (`egui`) | Active |
+| [sportscraft](./sportscraft/README.md) | Local spectator + personal-trainer sports studio | Pure-Rust ArtCraft | Active |
+| [studiocraft](./studiocraft/README.md) | Native `egui` desktop host for StudioCraft | Pure-Rust (`egui`) | Active |
+| [travelcraft](./travelcraft/README.md) | Chrono-cartography studio & local travel guide ("Baedeker 2030") | Pure-Rust ArtCraft | Active |
+| [vmcraft](./vmcraft/README.md) | Native `egui` desktop VM manager | Pure-Rust (`egui`) | Active |
+| [wincraft](./wincraft/README.md) | Native `egui` desktop workstation for Windows management | Pure-Rust (`egui`) | Active |
+| [musiccraft](./musiccraft/README.md) | Reserved Craft app slot for music creation/production | Reserved | Plan |
+| [smallvideocraft](./smallvideocraft/README.md) | Reserved Craft app slot for small-video workflows | Reserved | Alpha / Plan |
 
 ---
 
@@ -63,8 +85,8 @@ Consolidated domain workstations replacing micro-daemon sprawl (see [Craft Bundl
 | [resonite-mcp](./resonite-mcp/) | Resonite Social VR MCP (31 tools) | MCP Server | Production-Ready (v0.4.0) |
 | [virtualdj-mcp](./virtualdj-mcp/) | VirtualDJ Automation MCP (12 portmanteau) | MCP Server | Production-Ready |
 | [reaper-mcp](./reaper-mcp/) | Reaper DAW via OSC (4 portmanteau) | MCP Server | Production-Ready |
-| [davinci-resolve-mcp](./davinci-resolve-mcp/) | Resolve scripting API â€” 8 portmanteau tools, FastMCP 3.1+, dashboard **10842/10843** | MCP Server | Active |
-| [dreame-mcp](./dreame-mcp/) | Dreame D20 Pro Plus vacuum â€” DreameHome cloud, LIDAR map, portmanteau; webapp 10894/10895 | MCP Server | Production-Ready |
+| [davinci-resolve-mcp](./davinci-resolve-mcp/) | Resolve scripting API — 8 portmanteau tools, FastMCP 3.1+, dashboard **10842/10843** | MCP Server | Active |
+| [dreame-mcp](./dreame-mcp/) | Dreame D20 Pro Plus vacuum — DreameHome cloud, LIDAR map, portmanteau; webapp 10894/10895 | MCP Server | Production-Ready |
 | [reversing-mcp](./reversing-mcp/README.md) | Static RE + heuristic DKI (**ReVa = separate MCP** for Ghidra); Digibib5/DKI as **small-app test case**; webapp **10750/10751** | MCP Server | **Production-Ready** |
 | **directmedia-mcp** | Directmedia Digitale Bibliothek Decompressor | MCP Server | **Production-Ready** |
 | [mcp-studio](./mcp-studio/) | MCP Mission Control Dashboard (v2.0) | MCP Platform | Production-Ready |
@@ -88,7 +110,7 @@ Consolidated domain workstations replacing micro-daemon sprawl (see [Craft Bundl
 | [ittybitty](./ittybitty/) | **ittybitty** — AI narrated video MCP (short + 3–15 min); videographer rules; **11054/11055**; package `videogen-mcp` | MCP Server + Tauri | **0.1.0 MVP** |
 | [open-drone-mcp](./open-drone-mcp/) | FOSS drone control via MCP: safety engine (geofence, speed cap, battery floor, audit), declared simulator + Crazyflie (cflib) backend, web console with STOP on **11221/11222**, simulator-only MCPB; MAVLink later; not DJI. Crazyflie path not yet flown on hardware. MIT | MCP Server + Webapp | **0.1.0 (not flown)** |
 | [bumi-mcp](./bumi-mcp/) | Noetix Bumi humanoid MCP; FastMCP 3.1, webapp **10774/10775**, virtual twin map | MCP Server + Dashboard | **0.1.0** |
-| [calibre-mcp](./calibre-mcp/) | Calibre library MCP â€” metadata RAG, FTS phrase jump, webapp **10720/10721** | MCP Server + Dashboard | Active |
+| [calibre-mcp](./calibre-mcp/) | Calibre library MCP — metadata RAG, FTS phrase jump, webapp **10720/10721** | MCP Server + Dashboard | Active |
 | [chitchat](./chitchat/) | Conversation starters, archive, and fleet docs crosslink. 64 curated topics, 4 MCP tools. Backend **10974**, frontend **10975**. FastMCP 3.2. | MCP Server + Webapp | **0.1.0** |
 | [fritz-coworker](./fritz-coworker/) | Poor Man's Viktor: pulses, inbox/day prep, devices watch, Intel Hub **11027**, urgent alerts. Agent: [fleet-agent-mcp](./fleet-agent-mcp.md) **10996**. [CHANGELOG](./fritz-coworker/CHANGELOG.md) | Agent plan + pilot | **0.2.1-pre** |
 | [libreoffice-mcp](./libreoffice-mcp/) | Headless LO convert + ODT merge + webapp PDF preview; ports **10981/10983**. FOSS office layer for Fritz coworker flows. [CHANGELOG](./libreoffice-mcp/CHANGELOG.md) | MCP Server + Webapp | **0.1.0** |

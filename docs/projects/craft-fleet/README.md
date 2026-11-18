@@ -80,6 +80,10 @@ The six Nov-4 Python FastMCP craft scaffolds were audited and retired from activ
 | [gitcraft](gitcraft.md) | `sandraschi/gitcraft` (451 LOC) | **`git-github-mcp` + [codercraft](codercraft.md)** | 6 thin `subprocess.run(["git"/"gh"])` wrappers; superseded by `git-github-mcp`. |
 | [containercraft](containercraft.md) | `sandraschi/containercraft` (256 LOC) | **`docker-mcp` + [vmcraft](vmcraft.md)** | 6 thin `subprocess.run(["docker"])` wrappers; superseded by `docker-mcp`. |
 
+## Proposed apps (2026-11-16)
+
+The proposal list, the demo cuts, and the full-cut estimates are in [NEW_CRAFT_APPS.md](NEW_CRAFT_APPS.md). Four local demos started the same day: `horsecraft`, `bridgeclubcraft`, `philosophercraft`, `crochetcraft`.
+
 ## Spoke template (for new assessments)
 
 ```markdown

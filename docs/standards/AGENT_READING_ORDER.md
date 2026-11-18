@@ -80,6 +80,7 @@ hit is a lookup, not an investigation.
 |-------------|------|
 | **Pure-Rust MCP / ArtCraft port (`rust-*-mcp` or `Cargo.toml` root)** | **`standards/RUST_ARTCRAFT_STANDARD.md` (FIRST -- supersedes Python/FastMCP/sidecar rules)** + `<repo>/AGENTS.md` |
 | **Repo conversion / Rustification (`repconv <repo>` / `rustify`)** | **`patterns/REPCONV_SOP.md` + `standards/rust-artcraft/FLEET_CONVERSION_STANDARD.md` + `standards/rust-artcraft/FLEET_TRIAGE_AND_PYPI_TRANSPILATION.md`** |
+| **Greenfield Craft App / One-Shot Scaffold** | **`standards/RUST_ARTCRAFT_STANDARD.md` + `standards/rust-artcraft/CRAFT_ONE_SHOT_SCAFFOLD_STANDARD.md`** |
 | New MCP server scaffold | **New Repo Gate** -- `standards/RUST_ARTCRAFT_STANDARD.md` (Bucket A/B default) or `standards/AGENTS.md` §4.1 (Bucket C/D Python) |
 | PowerShell scripts | `standards/POWERSHELL_STANDARDS.md` + `standards/rules/powershell-script-standards.md` |
 | AutoHotkey scripts | `standards/rules/autohotkey_v2_standard.md` |

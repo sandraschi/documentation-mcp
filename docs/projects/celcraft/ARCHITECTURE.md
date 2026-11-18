@@ -1,7 +1,7 @@
 # CelCraft - System Architecture & Technical Specification
 
-**Document Version:** 1.4.0
-**Date:** 2026-11-12
+**Document Version:** 1.6.0
+**Date:** 2026-11-14
 **Status:** Active (capability claims match the implementation-status matrix in PRD section 6)
 **Parent Standard:** [`standards/RUST_ARTCRAFT_STANDARD.md`](../../standards/RUST_ARTCRAFT_STANDARD.md)
 
@@ -50,12 +50,14 @@ CelCraft is built around three inviolable principles:
 | `cel-core` | L1 Core | Document AST, project seeder, palette models, X-sheet matrix, animation frame renderer, `.celcraft` project JSON persistence, BLAKE3 canvas index, and the universal `Command` bus. |
 | `cel-tlv` | L1 Engine | Dual-channel 32-bit packed raster canvas, ink-over-paint blending, scanline fill, autogap barriers, vector tape |
 | `cel-dsp` | L1 Signal | Acme/Oxberry peg registration, Sauvola adaptive binarization, SAT / Integral Images, optical flow |
-| `cel-render` | L1 Render | CPU evaluator DAG, 2.5D normal map synthesis, OpenEXR 16F exporter (command wired), ProRes 4444 FFmpeg streaming. wgpu compute DAG planned Tier 8. |
+| `cel-render` | L1 Render | CPU evaluator DAG, 2.5D normal map synthesis, OpenEXR 16F exporter (command wired), ProRes 4444 FFmpeg streaming. The plate/cel over-blend and the multiplane parallax resample are Dx12 compute shaders with a CPU fallback. Bokeh stays on the CPU. |
 | `cel-audio` | L1 Audio | LPC formant acoustic lip-sync DSP (A/I/U/E/O), WAV reader/writer, waveform peak cache, CPAL playback on a worker thread (Tier 7 done). No scrub yet. |
-| `cel-mcp` | L2 Driver | CLI-first binary (`clap` + `--json`) and pure-stdio MCP JSON-RPC 2024-11-05 driver executing `cel_core::dispatch` (29 tools) |
-| `cel-ui` | L3 App | `egui` / `eframe` workstation: Stage render, timeline, Pen painting, undo/redo, save/open, render export, X-sheet |
+| `cel-cutout` | L1 Mask | `foreground-v1` (no weights), SkyTNT ISNet via `tract` on CPU, and BiRefNet ToonOut via ONNX Runtime (DirectML, then CPU). Weights stay in the user cache. The app does not download them. |
+| `cel-ink` | L1 Input | Windows Ink `WM_POINTER` pressure shim. The only crate that calls Win32. |
+| `cel-mcp` | L2 Driver | CLI-first binary (`clap` + `--json`) and pure-stdio MCP JSON-RPC 2024-11-05 driver executing `cel_core::dispatch` (42 tools). The CLI runs on a larger worker stack (see Known limitations in CHANGELOG). |
+| `cel-ui` | L3 App | `egui` / `eframe` workstation: Stage render, timeline, Pen painting, undo/redo, save/open, render export, X-sheet, character cutout |
 
-Current delivery note: `wgpu` is present through `eframe` for window presentation; a compute-shader DAG is Tier 8. BLAKE3 CAS (`blake3` crate) and CPAL playback shipped in 1.5.0. Everything remains in scope for the full-parity target.
+Current delivery note: `wgpu` draws the window through `eframe`. The plate/cel over-blend runs a compute shader when a Dx12 adapter is present, and uses the CPU integer blend otherwise. Parallax resample uses the same split. Delivery frames are not parallaxed. Bokeh stays on the CPU. BLAKE3 CAS (`blake3` crate) and CPAL playback shipped in 1.5.0. Everything remains in scope for the full-parity target.
 
 ---
 
