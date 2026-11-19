@@ -10,7 +10,7 @@ last_updated: 2026-09-18
 ---
 # Fleet README Structure Standard
 
-**Status**: ACTIVE — applies to all sandraschi MCP server repos  
+**Status**: ACTIVE — applies to all sandraschi MCP server repos
 **Adopted**: 2026-05-28
 
 ---
@@ -70,9 +70,10 @@ When the product wraps a host app or needs a vendor account (**default for fleet
 
 ## Primary README.md
 
-**Audience**: First-time user, evaluating whether to install  
-**Length**: 100–200 lines maximum  
-**Tone**: Friendly, benefit-focused, no jargon  
+**Audience**: First-time user, evaluating whether to install
+**Length**: 100–200 lines maximum
+**Tone**: Friendly, benefit-focused, no jargon
+**Avoid LLM-ese / buzzwords**: Never use `"sovereign"` — be precise instead: use `"local"` (runs on your machine/LAN, may still use network), `"offline"` (works without internet), or `"airgapped"` (strict zero-network mode, when supported as an option); put `"runs on your machine"` in a footnote if needed. Also avoid `"delve"`, `"tapestry"`, `"seamless(ly)"`, `"holistic"`, `"paradigm shift"`, `"game-changer"`, and `"pivotal"`.
 
 ### Required Sections (in order)
 
@@ -216,8 +217,8 @@ Minimal: OS, Claude Desktop version, any hard dependencies
 
 ## INSTALL.md
 
-**Audience**: Any user trying to install, across all experience levels  
-**Length**: 150–300 lines  
+**Audience**: Any user trying to install, across all experience levels
+**Length**: 150–300 lines
 **Critical requirement**: Must work on a naked Windows box with zero dev tools
 
 **Normative bundling and LLM tiers:** [LLM_AND_INSTALL_TIERS.md](./LLM_AND_INSTALL_TIERS.md) — host apps and models are never in the installer; document Ollama/LM Studio **and** cloud API paths when the repo uses inference; Docker is not an Option A prerequisite.
@@ -238,8 +239,8 @@ Install these if you don't have them already:
 | Python + uv | Run server (Option C/D only) | `winget install astral-sh.uv` |
 | Node.js | mcpb CLI (Option B only) | `winget install OpenJS.NodeJS` |
 
-> Windows: all installs via [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/)  
-> macOS: use `brew install` equivalents  
+> Windows: all installs via [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/)
+> macOS: use `brew install` equivalents
 > Linux: use your distro package manager
 
 ## Option A — Windows installer (Recommended, repos with a webapp)
@@ -251,7 +252,7 @@ Installs the webapp and the backend; no other prerequisites. Per-user install, n
 
 ## Option A2 — Claude Desktop bundle (.mcpb; Recommended for repos with no webapp)
 1. Download `{repo}-{version}.mcpb` from the same release
-2. Open Claude Desktop → drag the file onto the window  
+2. Open Claude Desktop → drag the file onto the window
    *Or*: Settings → MCP Servers → Install from file
 
 Registers the MCP server in Claude Desktop only. It does **not** install the webapp.
@@ -315,7 +316,7 @@ See [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for common issues.
 
 ## docs/CONFIGURATION.md
 
-**Audience**: User who has installed and wants to customize  
+**Audience**: User who has installed and wants to customize
 **Format**: Table of all environment variables, then any config file format
 
 ```markdown
@@ -347,7 +348,7 @@ In `claude_desktop_config.json`:
 
 ## docs/DEVELOPMENT.md
 
-**Audience**: Developer who wants to contribute or run from source  
+**Audience**: Developer who wants to contribute or run from source
 **Must include**: Every tool needed, with install commands — do not assume anything
 
 ```markdown
@@ -396,7 +397,7 @@ Link to mcp-central-docs standards.
 
 ## docs/TOOLS.md (MCP repos only)
 
-**Audience**: Developer/power user who wants to understand all tools  
+**Audience**: Developer/power user who wants to understand all tools
 **Format**: One section per tool, with operation enum and examples
 
 ---
@@ -409,11 +410,11 @@ Link to mcp-central-docs standards.
 # Troubleshooting
 
 ## Server doesn't appear in Claude Desktop
-**Cause**: Config JSON is malformed  
+**Cause**: Config JSON is malformed
 **Fix**: Validate at jsonlint.com, check for trailing commas
 
 ## "command not found: uv"
-**Cause**: uv not installed or not in PATH  
+**Cause**: uv not installed or not in PATH
 **Fix**: `winget install astral-sh.uv` then restart terminal
 
 ## Tool returns empty results

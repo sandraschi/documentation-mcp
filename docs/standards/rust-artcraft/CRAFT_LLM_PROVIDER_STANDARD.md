@@ -144,8 +144,15 @@ Codercraft (`codercraft_llm_*`) is the reference implementation.
   (cloud key) sections per `LLM_AND_INSTALL_TIERS.md`; webapp/egui
   Settings implements §5; `docs/CONFIGURATION.md` documents the env vars.
 
+## 8. Known defects (found 2026-11-14)
+
+- `CraftAiClient::complete()` returns invented text as `Ok` on every failure (curl missing, HTTP error, bad JSON, empty reply). This contradicts section 5 rules 5 and 6 ("ok only on a live reply", "no fallback"). Fix and caller list: [CRAFT_SKILLS_AND_CHAT_STANDARD.md](./CRAFT_SKILLS_AND_CHAT_STANDARD.md) section 5.1.
+- `complete()` passes the request body and the auth header as curl arguments. Long prompts hit the Windows 32,767-character command-line limit, and the key is visible in the process list. Fix: section 5.3 of the same standard.
+- Chat (multi-turn, tool calls) is specified there; this standard keeps owning providers, config, keys and VRAM.
+
 ## Changelog
 
 | Date | Change |
 |------|--------|
+| 2026-11-14 | Section 8 known defects in `complete()`; chat and skills moved to CRAFT_SKILLS_AND_CHAT_STANDARD. |
 | 2026-11-06 | Initial: provider table, config layering, transport rules, engine ops, egui UI contract, MCP contract. Reference impl: `craft-ai-core::providers` + codercraft L1/L2/L3. |

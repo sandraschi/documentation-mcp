@@ -14,6 +14,8 @@ Austrian business: bookkeeping, tasks, HR time records, assets, contracts,
 support, customer success, surveys and an engineering knowledge base. Each is a
 normal fleet craft app (L1 core + store, L2 CLI/MCP binary, L3 egui app), so a
 human can click it and an agent can drive it through the same command bus.
+The point of the suite is to stop renting that work. Peppol is one of those rents:
+the network is open, the access-point seat is the product being cut. See `PEPPOL.md`.
 
 This doc does three things:
 
@@ -58,7 +60,7 @@ Next: formcraft. All repos are local commits on `main`, not pushed.
 | App | Replaces | Core idea |
 |---|---|---|
 | **buchcraft** | BMD, RZL, sevDesk, DATEV | Austrian EKR double-entry ledger, Storno-only corrections, George CSV import, U30 pre-fill |
-| **taskcraft** | Jira, Linear | Local issue tracker bound to git refs |
+| **taskcraft** | Jira, Linear, Asana, ClickUp; planning half of MS Project (Tiers 5-9, see 4.2) | Local issue tracker bound to git refs, growing into sprints, timeline/CPM and portfolio |
 | **teamcraft** | Personio, BambooHR (time + leave only) | AZG-checked time records, leave balances, KV wage-floor check |
 | **assetcraft** | Snipe-IT, Lansweeper | Hardware/licence inventory with AfA/GWG schedule in integer cents |
 | **contractcraft** | Ironclad, PandaDoc (not DocuSign) | Templates, clause risk rules, redlines, deadlines, integrity seal |
@@ -195,7 +197,20 @@ Initial event kinds (the only cross-app links built in v1):
 | contractcraft | taskcraft | `contract.deadline` | Issue created with due date |
 | deskcraft | taskcraft | `ticket.escalated` | Bug issue linked back to ticket id |
 | deskcraft, formcraft | gaincraft | `signal.negative` | Sentiment component updated |
-| teamcraft | taskcraft | `capacity.changed` | Sprint capacity note on milestone |
+| teamcraft | taskcraft | `capacity.changed` | Per-employee available minutes for an ISO week, stored and shown in status (no sprints yet; planning against it is taskcraft Tier 6) |
+
+Planned with the taskcraft project-management tiers (2026-11-14, not built):
+
+| From | To | Kind | Effect in target |
+|---|---|---|---|
+| teamcraft | taskcraft | `capacity.changed` (existing) | Also emitted when a leave decision touches a week (teamcraft change, taskcraft Tier 6) |
+| teamcraft | taskcraft | `time.logged` | Actual hours on the issue (aggregate per issue) |
+| taskcraft | gaincraft | `milestone.slipped` | CTA, only for projects with a customer account; gaincraft needs a handler |
+| taskcraft | billcraft | `timesheet.approved` (existing kind) | Draft T&M invoice lines, opt-in per project |
+
+The first draft's `leave.approved` and `time.billable` are dropped. teamcraft
+capacity already subtracts leave, and billcraft already consumes
+`timesheet.approved`. Details in `taskcraft/docs/PM_SPEC.md` section 0.
 
 Everything else in the Gemini integration matrices is out of scope until a pilot
 user asks for it.
@@ -210,6 +225,11 @@ Common to all: repo `D:\Dev\repos\<app>`, crates `<app>-core`, `<app>-store`
 every file-touching verb. Demo vendor seeds a realistic fixture DB with
 `<app> demo seed`. Tool names below are MCP names; CLI verbs mirror them
 (`buchcraft entry book ...`).
+Planned for all (2026-11-14): bundled skills served as `skill://` MCP
+resources plus `<app>_skill_read`, and a Window > Chat dock that uses those
+skills and the live app state as preprompt, per
+`standards/rust-artcraft/CRAFT_SKILLS_AND_CHAT_STANDARD.md`. Pilot: taskcraft
+(Tier 4b).
 
 ### 4.1 buchcraft (build first: it is the hub)
 
@@ -241,6 +261,20 @@ every file-touching verb. Demo vendor seeds a realistic fixture DB with
   `task_inbox_drain`.
 - **Overlap check:** gitops-mcp handles GitHub issues; taskcraft is the local
   tracker. A GitHub import is Phase 3, not v1.
+- **Scope extension (2026-11-14): project management.** Sandra asked for a
+  real SaaS replacement for a startup / small company, not only a tracker.
+  Tiers 5-10 in `taskcraft/docs/TIERED_PLAN.md`:
+  T5 collaboration (comments, attachments, epics/subtasks, custom fields),
+  T6 sprints against teamcraft capacity, T7 timeline/Gantt with a working-calendar
+  scheduler, critical path and baselines, T8 portfolio, workload and actual
+  hours, T9 importers (Jira, Linear, Asana, Trello, ClickUp, GitHub) plus
+  MS Project XML round-trip and PDF status reports, T10 team sharing.
+  About 9-14 days for T5-T9.
+- **T10 decided (2026-11-14): option A.** One host runs `taskcraft serve` on
+  a registered port as the only DB writer. Clients run the egui app with
+  `--server` against the command bus over HTTP, with version checks, per-user
+  tokens and LAN/Tailscale-only binding. B (sync log) and C (single-seat) were
+  rejected. See decision 7.5 and the section 5 exception.
 
 ### 4.3 teamcraft (time and leave, not payroll)
 
@@ -343,7 +377,9 @@ codercraft instead of a new app.
 
 ## 5. Explicit non-goals (all nine)
 
-- No cloud sync, no multi-user server, no web UI.
+- No cloud sync, no multi-user server, no web UI. Exception: taskcraft Tier 10
+  `taskcraft serve`. It is a single-writer host on a private network (LAN /
+  Tailscale), with no cloud and no browser UI (decision 7.5).
 - No filing with authorities (FinanzOnline, ELDA, Firmenbuch).
 - No qualified signatures, no payroll, no Registrierkasse.
 - No live trading (moneycraft keeps its refusal).
@@ -384,6 +420,11 @@ guard, fleet launcher in `starts/`.
    hidden: Tier 1/2 verify invariants and Austrian rules against fixtures and
    published examples, not against a live business. Grades stay capped at B
    until real data has gone through buchcraft and teamcraft.
+5. **taskcraft team sharing (2026-11-14):** option A, a single-writer host.
+   One machine runs `taskcraft serve` and owns the SQLite DB; other seats are
+   egui clients over the command bus. This is the first multi-user exception
+   to section 5. Other suite apps stay single-seat until they have the same need.
+
 ## Related
 
 - `standards/RUST_ARTCRAFT_STANDARD.md`, `standards/rust-artcraft/CONTAINMENT_AND_CRATES.md`
