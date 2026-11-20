@@ -3,7 +3,7 @@ title: "Storytold Craft App Menu Bar & Command Hierarchy Standard"
 category: standard
 status: active
 audience: all-craft-agents
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # Storytold Craft App Menu Bar & Command Hierarchy Standard
@@ -118,16 +118,25 @@ For animation and classical 2D production applications (`anicraft`, `celcraft`),
 - **Palette Studio** (Toggle color swatch inspector)
 - **Render & Lip-Sync Controls** (Toggle compute sidebars)
 
-#### B. `Help` (The Standardized 5-Item Transparency Suite)
+#### B. `Help` (Transparency Suite + Real Help Content Standard)
 Every Storytold Craft application MUST implement these exact five items under `Help`:
 
 | Help Item | Hotkey | Function |
 | :--- | :--- | :--- |
 | **Command Palette...** | `Ctrl/Cmd+Shift+P` or `Ctrl/Cmd+K` | Fuzzy-searchable overlay listing every engine tool, command, and UI shortcut. Pressing Enter executes the command immediately. |
 | **Keyboard Shortcuts...** | `Ctrl/Cmd+/` or `F1` | Modal cheat sheet displaying all categorized hotkeys, studio keystrokes, and navigation controls. |
-| **Project Files & Docs...** | — | Opens direct links/modals to local repository documentation (`PRD.md`, `ARCHITECTURE.md`, `TIERED_PLAN.md`, `HANDOVER.md`). |
+| **Project Files & Docs...** (or **Help & Docs...**) | — | Tabbed Help Center + repository documentation (`HELP.md`, `PRD.md`, `TIERED_PLAN.md`, `TOOLS.md`). Must present real user help, not just a bare list of file paths. |
 | **Licenses & Notices...** | — | Comprehensive third-party open source attributions, `#![forbid(unsafe_code)]` compliance declaration, and MIT/Apache-2.0 legal notices. |
 | **About `<AppName>`** | — | Application name, SemVer version, 100% Safe Rust guarantee, build date, commit SHA, and links. |
+
+##### Mandatory "Real Help" Content (In-App + `HELP.md`)
+A bare list of markdown filenames or `--help` flags does NOT satisfy the Help standard. Both `HELP.md` (at the repo root) and the in-app Help window (`Project Files & Docs...` / `Help & Docs...` or dedicated `Help` menu sub-items) MUST include these five user-facing sections/tabs:
+
+1. **Get Started**: 5-step first-run tour (launch with demo state -> create/open project -> first edit -> render/run -> export).
+2. **Functions**: Clear summary of each core capability and engine module.
+3. **Usage (GUI, CLI & MCP)**: Concrete workflows across the desktop window, `--json` CLI commands, and MCP `stdio` server.
+4. **Tips & Tricks**: Practical domain advice, parameter/gain/workflow tips, non-destructive dry runs, and fast keyboard flows.
+5. **Other Crafts**: Ecosystem table explaining how this app connects to sibling Storytold Craft apps (inputs, handoffs, and normative boundaries).
 
 ---
 
@@ -163,7 +172,8 @@ When verifying a Craft application against this standard:
 - [ ] Top menu bar is present and pinned to the top of the window (`egui::Panel::top`).
 - [ ] `File`, `Edit`, `View` bookend the left; `Window`, `Help` bookend the right.
 - [ ] Domain-specific action menus occupy the center (e.g. `Insert`, `Modify`, `Commands` for animation).
-- [ ] `Help` contains: `Command Palette`, `Keyboard Shortcuts`, `Project Files & Docs`, `Licenses & Notices`, `About <AppName>`.
+- [ ] `Help` contains: `Command Palette`, `Keyboard Shortcuts`, `Project Files & Docs` (or `Help & Docs`), `Licenses & Notices`, `About <AppName>`.
+- [ ] Both `HELP.md` and the in-app Help window provide real help content covering **Get Started**, **Functions**, **Usage (GUI/CLI/MCP)**, **Tips & Tricks**, and **Other Crafts**.
 - [ ] `switch_on_hover` operates smoothly when moving between open top menus.
 - [ ] All menu actions dispatch directly into the universal `Command::dispatch` bus.
 - [ ] Headless `--smoke` runs without window initialization and verifies menu command dispatch parity.

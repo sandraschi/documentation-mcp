@@ -17,6 +17,8 @@ Tier 2  Discovery + onboarding engine           v0.3.0   ~1-1.5 h   (+ LAN sessi
 Tier 3  Pattern 2 workstation UI                v0.4.0   ~1.5-2 h
 Tier 4  HA replacement: service, rules, events,
         appliances, presence, motion, VLM, PTZ  v0.5.0   ~2 h       (+ LAN session)
+Tier 4.1 Energy charts + alert board            v0.5.1   ~1 h       (done 2026-11-17)
+Tier 4.2 Climate history, overview, camera fixes v0.5.2   ~1 h       (done 2026-11-17)
 Tier 5  ONNX detection                          v0.6.0   ~1 h       (+ LAN session)
 Tier 6  Release, docs set, soak, cutover        v1.0.0   ~1 h       (+ 7-day soak)
 ```
@@ -89,49 +91,88 @@ Goal: a renamed, green copy of `rust-devices-mcp` with the craft repo skeleton. 
 Rebuilds `devices-app` (today a Pattern 1 sidebar of pages) as a workstation; reuses its
 widgets, charts and RTSP player.
 
-- [ ] Menu bar exactly as PRD 8.1: Session, Edit, View, Add, Device, Automate, Commands,
-      Window, Help; `switch_on_hover`; hotkey tooltips; every item a `Command`.
-- [ ] Help 5-item suite: Command Palette (Ctrl+Shift+P / Ctrl+K), Keyboard Shortcuts
+- [x] Menu bar as PRD 8.1: Session, Edit, View, Add, Device, Automate, Commands, Window,
+      Help; `switch_on_hover`; hotkey tooltips; actions go through the command bus.
+      Deviations recorded in `docs/UI_PARITY.md` (no Save: home.db autosaves).
+- [x] Help 5-item suite: Command Palette (Ctrl+Shift+P / Ctrl+K), Keyboard Shortcuts
       (F1 / Ctrl+/), Project Files & Docs, Licenses & Notices, About HomeCraft.
-- [ ] Toolbox (home tree, Discovered, Scenes, Rules), persistent viewport with six modes
+- [x] Toolbox (home tree, Discovered, Scenes), persistent viewport with six modes
       (Home, Floorplan, Cameras, Energy, Climate, Events), Inspector, status bar, quick row.
-- [ ] Cards / List / JSON switcher with filter, numeric-aware sort, pagination, CSV/MD/TXT/JSON export
-      for Home, Events, Discovered.
-- [ ] Floorplan: rooms as rectangles; drag device onto room dispatches `room.assign`.
-- [ ] Onboarding wizard window; confirm modal; Undo/Redo for registry edits.
-- [ ] High-contrast light and dark themes, Ctrl+mouse-wheel zoom (persisted), language
-      selector, sun/moon toggle, hairline borders.
-- [ ] No network on the UI thread.
-- [ ] `--smoke` dispatches every menu command against Demo.
-- **Gate:** 6 gates; `egui_kittest` goldens per view mode in both themes plus the wizard;
-  tofu guard; menu-bar checklist (standard section 4) ticked with screenshots in
-  `docs/UI_PARITY.md`.
-
+      Rules join the toolbox in Tier 4.
+- [x] Cards / List / JSON with filter, numeric-aware sort, paging (50), CSV/MD/TXT/JSON export
+      on Home and Events. Discovered stays a toolbox list (deviation, see UI_PARITY).
+- [x] Floorplan: rooms as drop zones; dropping a device dispatches `room.assign`.
+- [x] Onboarding wizard window; confirm modal; Undo/Redo for registry edits.
+- [x] High-contrast light and dark themes, Ctrl+mouse-wheel zoom, language selector,
+      sun/moon toggle, hairline borders.
+- [x] No network on the UI thread (all dispatches spawn; the only `block_on` is `--smoke`).
+- [x] `--smoke` runs 26 menu commands against a temp demo home in sim mode.
+- **Gate (closed 2026-11-12, v0.4.0):** clippy / fmt / tests green; 10 goldens (5 views x 2
+  themes, wizard included) checked by eye; tofu guard; menu-bar checklist ticked in
+  `docs/UI_PARITY.md`. Open: live-window check at 150 % scaling and CJK goldens.
 ## Tier 4 - Home Assistant replacement (v0.5.0, ~2 h + LAN session)
 
-- [ ] Events model: `event.list/ack`, retention; sensor health (stale, low battery, offline).
-- [ ] Rules: `rule.list/save/enable/test`; triggers time, sunrise/sunset, threshold-for-N,
-      device event, presence; actions scene/command/alert/`bridge.*`; no confirm targets;
-      critical alerts unmutable.
-- [ ] `homecraft-mcp watch` (+ `--status`): polling, rollups, rules, alerts; poller lock
-      shared with the app; timers rebuilt from `home.db` on restart. NSSM install
-      documented via wincraft.
-- [ ] Appliances: iKettle driver; `energy.anomalies` from learned per-plug bands.
-- [ ] Climate: Netatmo valves set-target (confirm above 26 C), `climate.summary`.
-- [ ] Nest Protect: port devices-mcp's path if it works live, else dated `down` receipt.
-- [ ] Presence: phone MAC/IP via ARP + ping with grace period; `presence.status`.
-- [ ] Motion (FR-VIS-01): frame diff, ONVIF motion events, Ring dings into one event;
-      `motion.events`, `motion.configure`.
-- [ ] Scene description (FR-VIS-02): `camera.describe_scene` via `craft-ai-core`, default
-      local Ollama Gemma 4 12B; cloud only with per-camera opt-in.
-- [ ] Tapo PTZ if supported by the camera on the LAN, else dated skip.
-- [ ] **LAN session:** `watch` installed as a service; a threshold rule on a real plug
-      fires `bridge.event`; presence flips when a phone leaves Wi-Fi; one live
-      describe_scene recorded with latency.
-- **Gate:** 6 gates; rule engine tests with a fake clock (Vienna sunset on a fixed date,
-  threshold-for-N, no double fire, restart rebuild); frame-diff fixtures (static, flicker
-  below threshold, motion inside mask); presence grace-period test; anomaly band test;
-  describe_scene opt-in refusal test.
+- [x] Events: `event.list/ack`, retention prune (default 90 days, `retention_days`); device health
+      (offline after 3 failed reads, back-online event). **Not done:** low-battery (no battery
+      readings are wired yet).
+- [x] Rules: `rule.list/save/enable/remove/test/fire`; triggers time, sunrise/sunset,
+      threshold-for-N, event, presence; actions scene / device / alert / notify / speak; never
+      confirm; confirm_required and readonly targets refused at save; rule/actuation events can
+      not trigger rules (no loops). Rules have no action that acks or mutes alerts.
+- [x] `homecraft-mcp watch` (`--once`, `--status`, `--force`): meters, health, presence, motion,
+      Ring dings (auth failures pause Ring for 6 h: a failed login sends an SMS code), hourly
+      rollups, anomalies, prune, rules; poller lock with heartbeat; state in `home.db`.
+      App: Session > Start / Stop Service, status bar. NSSM install documented in HELP.md.
+- [x] Appliances: `energy.anomalies` from learned hourly bands. iKettle ported but UNVERIFIED
+      (devices-mcp's guessed HTTP API; no kettle in the fleet config).
+- [x] Climate: `climate.summary` (read-only). **Down 2026-11-14:** valve set-target, no valves in
+      the fleet config.
+- [x] Nest Protect: **down 2026-11-14.** devices-mcp only has Google's Device Access (SDM) API,
+      which does not expose Protect; nothing to port.
+- [x] Presence: `person.add/list/remove`, `presence.status/scan` (ARP + ping, 10 min grace).
+- [x] Motion: frame difference with masks, Ring dings and Ring motion into `motion` /
+      `doorbell` events; `motion.configure`, `motion.events`. ONVIF event subscription not wired.
+- [x] Scene description: `camera.describe_scene` via Ollama `/api/chat` with the image
+      (default `gemma4:e4b`, the local model with a vision projector). Deviation:
+      craft-ai-core is text-only, so not through it yet. Cloud only with per-camera opt-in.
+- [ ] Tapo PTZ: **skipped 2026-11-14**, moves real hardware; needs a session at the camera.
+- [ ] **LAN session (partly done 2026-11-14, on a copy of home.db):** one live `watch --once`
+      cycle 4.0 s, 397.6 W over 2 meters, 21 devices healthy, Ring auth expired (found the SMS
+      retry problem, fixed). Live describe_scene on the USB webcam: 12.0 s model latency, real
+      answer (the frame was black). Still open: `watch` as an NSSM service, a threshold rule on a
+      real plug firing `bridge.event`, presence flip with a real phone.
+- **Gate (closed in code 2026-11-14, v0.5.0):** clippy / fmt / tests green; fake-clock rule tests
+  (Vienna sun times against published 2026 tables, time once + missed, threshold-for-N with
+  re-arm, event cursor, presence all_away); frame-diff fixtures; presence grace test; band test;
+  lock test; vision local/cloud refusal test.
+## Tier 4.1 - Charts and alert board (v0.5.1, done 2026-11-17)
+
+- [x] `energy.series`: per-meter points bucketed by range (1 min to 6 h), normal band, house total;
+      hourly rollups fill hours whose raw readings are gone.
+- [x] Time-series chart widget (`chart.rs`): local time axis with day breaks, nice value ticks,
+      gradient fills, gaps, bands with out-of-band markers, hover crosshair, drag-zoom /
+      Shift-pan / double-click reset shared across charts, legend toggles.
+- [x] Energy view rebuilt: range picker, KPI tiles, all-meters chart, per-meter small multiples;
+      the legacy live meter kept as a folded section.
+- [x] Store v4 `alerts`; `alert.list/move/raise/note/sync`; the watch cycle turns logbook events
+      into deduplicated cards, back-online resolves offline cards, snoozes wake.
+- [x] Alerts view (Ctrl+7): four-column board with drag and drop, buttons and right-click menu.
+- [x] Climate series (indoor/outdoor temperature): done in Tier 4.2.
+
+## Tier 4.2 - Climate history, Home overview, camera fixes, e2e tests (v0.5.2, done 2026-11-17)
+
+- [x] Watch records climate every 15 min (Netatmo live, demo/sim synthetic, Open-Meteo outdoor);
+      `climate.series`, `climate.record`, `climate.configure`; silent sources become alert cards.
+- [x] Climate view charts (temperature, humidity, CO2 with healthy band); fitted value axes.
+- [x] Home overview tiles, redesigned device cards with live readings and pills; Inspector
+      history chart; Events in local time with coloured severity.
+- [x] Per-camera logins (`camera.set_login`, devices-mcp per-IP entries): .206 captures live.
+- [x] USB warm-up + black-frame detection; Describe Scene refuses black frames.
+- [x] `camera.capture`, `device.ping` (Device > Ping Device).
+- [x] End-to-end tests over the real binary (CLI + MCP stdio).
+- [ ] .164 C520WS: Tapo `password_shadow` (SHA-crypt) login transform, driver work.
+- [ ] USB webcam on Goliath delivers only black frames (covered / shutter / virtual camera?):
+      check at the machine.
 
 ## Tier 5 - Detection (v0.6.0, ~1 h + LAN session)
 
@@ -165,6 +206,23 @@ widgets, charts and RTSP player.
       deleted.
 - [ ] Craft-fleet spoke `projects/craft-fleet/homecraft.md` with grade and evidence.
 - **Gate:** 6 gates; PRD section 13 walked line by line with evidence.
+
+## GDoc Architecture Sync (2026-11-17)
+
+Synced from `Homecraft Architecture & README` and `Homecraft & Hybrid UI Architecture Chat History` (2026-11-17):
+
+- [x] **Embedded ACID storage + schema versioning:** already implemented in `homecraft-store` via `rusqlite` (SQLite WAL, schema v4) instead of `redb`. Keep `rusqlite` unless a dedicated `redb` migration is needed.
+- [x] **Hybrid UI (telemetry dashboard + reactive Kanban) with non-blocking async channels:** already implemented in `homecraft-app` (`Energy` charts in `chart.rs`, 4-column `Alerts` Kanban board in `insight.rs`, background Tokio/spawned dispatches).
+- [x] **Native stdio JSON-RPC MCP tools (`get_device_state`):** already covered by `device.state` (85 total MCP tools in `homecraft-mcp`).
+- [x] **Offline/stale device health tracking:** already implemented in `watch` (offline after 3 failed reads, back-online events, `alert.sync` auto-resolve).
+- [ ] **30-second last-seen heartbeat watchdog (`Online` -> `OfflineStale`):** optional enhancement over the 3-failed-reads poll counter if sub-minute staleness is needed.
+- [x] **`device.ping`:** done in v0.5.2 (ICMP + service-port TCP latency). `device.restart` stays
+      open: rebooting a plug cuts what hangs off it, so it needs the readonly / confirm fences and a
+      per-vendor call first.
+- [ ] **Simultaneous split-view dashboard + Kanban layout in `egui`:** optional `View` toggle combining the live telemetry radiator and `Alerts` board side-by-side in one viewport.
+- [x] **Status indicator pills:** done in v0.5.2 (OFFLINE / READ-ONLY / CONFIRM on device cards).
+- [ ] **Embedded JetBrains Mono typography:** open (font size and licence notice to weigh).
+- [ ] **Post-v1.0 / optional: Eclipse Zenoh pub/sub mesh (`goliath/home/**`):** evaluate only if multi-node telemetry routing is needed beyond local `home.db` + `watch` polling.
 
 ## Risks
 

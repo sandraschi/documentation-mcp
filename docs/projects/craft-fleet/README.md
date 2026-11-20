@@ -58,6 +58,7 @@ are **not** rewritten as Rust crafts.
 | [gaincraft](gaincraft.md) | `D:\Dev\repos\gaincraft` | fleet-owned | Rust ArtCraft v0.1.0 (craft-biz suite) | 4 crates (store/core/mcp/app), Account health & CTAs (Gainsight-equiv) & native Customer 360 | 3,100+ | 22 | 2026-11-10 | A- |
 | [deskcraft](deskcraft.md) | `D:\Dev\repos\deskcraft` | fleet-owned | Rust ArtCraft v0.1.0 (craft-biz suite) | 4 crates (store/core/mcp/app), Support tickets from .eml/Maildir (Zendesk-equiv) & native inbox | 3,100+ | 20 | 2026-11-10 | A- |
 | [formcraft](formcraft.md) | `D:\Dev\repos\formcraft` | fleet-owned | Rust ArtCraft v0.1.0 (craft-biz suite) | 4 crates (store/core/mcp/app), Surveys, NPS scorecards, detractor routing (:11258/:11259) | 2,750+ | 3 | 2026-11-10 | A- |
+| [homecraft](../homecraft/PRD.md) | `D:\Dev\repos\homecraft` | fleet-owned (absorbs rust-devices-mcp, devices-mcp, home-assistant-mcp) | Rust ArtCraft 3-tier v0.5.2 | 4 crates (core/store/mcp/app), 91 MCP tools, `watch` service, rules, energy + climate charts, alert board, e2e tests over the binary | 25,500+ | 171 | 2026-11-17 | A- |
 | [wikicraft](wikicraft.md) | `D:\Dev\repos\wikicraft` | fleet-owned | Rust ArtCraft v0.1.0 (craft-biz suite) | 4 crates (store/core/mcp/app), Markdown wiki, FTS5 search, ADR state machine (:11260/:11261) | 3,100+ | 4 | 2026-11-10 | A- |
 | [billcraft](billcraft.md) | `D:\Dev\repos\billcraft` | fleet-owned | Rust ArtCraft v0.1.0 (craft-biz suite) | 4 crates (store/core/mcp/app), Austrian ebInterface 6.1 & SEPA pain.008 direct debit & native GUI | 3,250+ | 1 | 2026-11-10 | A- |
 | [spendcraft](spendcraft.md) | `D:\Dev\repos\spendcraft` | fleet-owned | Rust ArtCraft v0.1.0 (craft-biz suite) | 4 crates (store/core/mcp/app), Austrian §26 EStG travel allowances & SEPA pain.001 credit transfer & native GUI | 3,150+ | 1 | 2026-11-10 | A- |
@@ -79,6 +80,10 @@ The six Nov-4 Python FastMCP craft scaffolds were audited and retired from activ
 | [doccraft](doccraft.md) | `sandraschi/doccraft` (418 LOC) | **[bookcraft](bookcraft.md) (`v0.5.0`) + `office-mcp`** | Thin `soffice --headless` + 25-line `pypdf` wrapper; superseded by `bookcraft` (30 tools) and `office-mcp`. |
 | [gitcraft](gitcraft.md) | `sandraschi/gitcraft` (451 LOC) | **`git-github-mcp` + [codercraft](codercraft.md)** | 6 thin `subprocess.run(["git"/"gh"])` wrappers; superseded by `git-github-mcp`. |
 | [containercraft](containercraft.md) | `sandraschi/containercraft` (256 LOC) | **`docker-mcp` + [vmcraft](vmcraft.md)** | 6 thin `subprocess.run(["docker"])` wrappers; superseded by `docker-mcp`. |
+
+## Proposed apps (2026-11-16)
+
+The proposal list, the demo cuts, and the full-cut estimates are in [NEW_CRAFT_APPS.md](NEW_CRAFT_APPS.md). Four local demos started the same day: `horsecraft`, `bridgeclubcraft`, `philosophercraft`, `crochetcraft`.
 
 ## Spoke template (for new assessments)
 

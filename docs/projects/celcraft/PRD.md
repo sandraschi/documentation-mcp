@@ -1,9 +1,9 @@
 # CelCraft - Product Requirements Document (PRD)
 
 **Project Name:** CelCraft
-**Document Version:** 1.5.0
-**Date:** 2026-11-13
-**Status:** Active (see section 6 Implementation Status for what is built)
+**Document Version:** 1.6.0
+**Date:** 2026-11-14
+**Status:** Active. This mirror lags some rows. The repo `docs/PRD.md` is authoritative for 1.6.0.
 **Author:** AI Agent / Antigravity Pair
 **Parent Framework:** Pure-Rust ArtCraft Architecture (`RUST_ARTCRAFT_STANDARD.md`)
 
@@ -133,7 +133,7 @@ CelCraft is a ground-up, clean-room reimplementation written in 100% safe Rust (
 
 ---
 
-## 6. Implementation Status (1.4.0)
+## 6. Implementation Status (1.5.2)
 
 Requirements above describe the target. This table states what is actually built and tested.
 
@@ -145,17 +145,18 @@ Requirements above describe the target. This table states what is actually built
 | `cel-core` BLAKE3 content-addressed storage (FR-COR-04) | Implemented | `CasIndex` hashes canvases and reports duplicate groups |
 | `cel-audio` LPC lip-sync analysis (FR-AUD-03) | Implemented | Produces A/I/U/E/O exposures |
 | `cel-audio` CPAL playback and waveform cache (FR-AUD-01/02) | Implemented | Worker-thread playback, WAV reader, peak/RMS cache |
-| `cel-render` evaluator DAG + normal maps (FR-RND-01/02) | Implemented on CPU | GPU compute DAG is planned Tier 8; `wgpu` today is `eframe` presentation |
+| `cel-render` evaluator DAG + normal maps (FR-RND-01/02) | Partial | Plate/cel over-blend and parallax resample match the CPU on Dx12. Bokeh and normal maps stay on the CPU |
 | OpenEXR export (FR-RND-03) | Implemented | `export-exr` writes 16F files (verified 3.1 MB frame) |
 | ProRes 4444 (FR-RND-04) | Implemented | `export-pro-res` streams yuva444p10le to FFmpeg (verified 24-frame .mov) |
-| `cel-mcp` CLI + stdio MCP (FR-MCP-01..03) | Implemented | 29 tools; every command runs engine code |
+| `cel-mcp` CLI + stdio MCP (FR-MCP-01..03) | Implemented | 42 tools; every command runs engine code. WAV lip-sync tool is named `cel_audio_lipsync_wav` (the older synthetic `cel_audio_lip_sync` still exists). |
 | Interop `.tlv` / `.tnz` / scan batch / layered ingest | Implemented | Round-trip tests |
-| `cel-ui` menus, Stage render, timeline, Pen paint, undo/redo, save/open, render export | Implemented | See README for the remaining gaps |
-| `cel-ui` Window panel show/hide, file dialog, kittest snapshots | **Planned - Tier 8** | Panel docking, `rfd` file dialog, `egui_kittest` (8.2-8.4) |
+| `cel-ui` menus, Stage render, timeline, Pen paint, undo/redo, save/open, render export | Partial | Pen and Bucket draw. Seed Preset loads Ghibli, Neo-Tokyo, and OVA Mecha Cockpit. X-sheet keys write the engine. Tape, Picker, and Eraser are labels. The Window menu does not hide panels. See the repo `docs/PRD.md` |
+| `cel-ui` file dialog | Implemented | `rfd` save/open/recent. Panel docking and `egui_kittest` remain |
 | `cel-core` AST hierarchy (FR-COR-01) | Partial | `Project` holds a canvas `HashMap`; `Scene`/`Level` are not separate typed nodes |
 | `cel-ui` onion skin (FR-UI-03) | Partial | Previous-frame texture overlay with opacity; no ruler-integrated handles |
-| Tier 6 persistence + paint (FR-PER-01..05) | Implemented | `.celcraft` is uncompressed JSON (compact format planned Tier 8); opening does not rebuild the preview paint overlay |
+| Tier 6 persistence + paint (FR-PER-01..05) | Implemented | Canvases are base64 RLE. Open rebuilds the stage preview from the character cel |
+| Anime character cutout | Partial | `foreground-v1`, ISNet (`isnet-onnx`), and ToonOut (`toonout-onnx`, DirectML on this machine) run. SAM is not linked. See the repo `docs/PRD.md` |
 
-Full feature parity remains the target: every requirement in section 3 stays in scope. Tier 7 (audio + master delivery) is complete in 1.5.0; Tier 8 is the remaining build-out; nothing has been dropped.
+Full feature parity remains the target: every requirement in section 3 stays in scope. Tier 7 shipped in 1.5.0. Tier 8.1-8.5, the weight-free cutout, ISNet, ToonOut, and the Dx12 over-blend and parallax resample shipped in 1.6.0. Bokeh, snapshots, docking, audio scrub, and SAM remain. Nothing has been dropped.
 
 The verification gate for any claim in this table is `just gates` plus the specific CLI command named in the note.

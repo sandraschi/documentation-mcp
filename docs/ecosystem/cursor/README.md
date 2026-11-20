@@ -2,7 +2,7 @@
 
 **Status:** Active  
 **Updated:** 2026-07-27  
-**Index:** [MCP UX 3.13 (Jul 2026)](MCP_UX_3_13_DIGEST.md) · [Jun 2026 changelog](CHANGELOG_DIGEST_JUN_2026.md) · [No local provider](NO_LOCAL_PROVIDER.md) · [Cloud Agents](CLOUD_AGENTS.md) · [Profiles](PROFILES.md) · [cursor-mcp](CURSOR_MCP_PROPOSAL.md)
+**Index:** [MCP UX 3.13 (Jul 2026)](MCP_UX_3_13_DIGEST.md) · [Jun 2026 changelog](CHANGELOG_DIGEST_JUN_2026.md) · [No local provider](NO_LOCAL_PROVIDER.md) · [Cloud Agents](CLOUD_AGENTS.md) · [Profiles](PROFILES.md) · [Multi-account switching](MULTI_ACCOUNT_SWITCHING.md) · [Grok vs Composer](GROK_VS_COMPOSER.md) · [cursor-mcp](CURSOR_MCP_PROPOSAL.md)
 **Target:** Cursor 2.x (Oct 2025+), 3.x (2026)
 
 Cursor has evolved rapidly in late 2025 and early 2026, adding multi-agent workflows, native Skills, and deeper MCP integration. This guide covers MCP server setup, Agent modes, Skills, and SOTA patterns for MCP development.

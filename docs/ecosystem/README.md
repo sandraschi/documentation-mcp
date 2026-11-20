@@ -14,6 +14,7 @@ The Model Context Protocol ecosystem - tools, platforms, and services that suppo
 | **[cursor/](cursor/)** | Cursor IDE — [Jun 2026 digest](cursor/CHANGELOG_DIGEST_JUN_2026.md), [no local provider](cursor/NO_LOCAL_PROVIDER.md), Cloud Agents, [cursor-mcp](cursor/CURSOR_MCP_PROPOSAL.md) |
 | **[zed/](zed/)** | Zed IDE — [May–Jun 2026 digest](zed/CHANGELOG_DIGEST_MAY_JUN_2026.md), FOSS, Ollama/LM Studio $0 path |
 | **[IDE_LOCAL_INFERENCE.md](IDE_LOCAL_INFERENCE.md)** | Cross-IDE matrix: Cursor / Antigravity 2.0 / Zed / OpenCode — who has Ollama, DeepSeek, $0 |
+| **[AGENTIC_CODING_COMPARISON_NOV_2026.md](AGENTIC_CODING_COMPARISON_NOV_2026.md)** | Full comparison: Claude Code vs. Antigravity vs. Cursor vs. OpenCode (features, quirks, gaps, rotation strategy) |
 | **[glama/](glama/)** | Glama MCP server registry |
 | **[mcpb/](mcpb/)** | MCPB packaging standards |
 | **[FREE_AI_CODING_RESOURCES.md](FREE_AI_CODING_RESOURCES.md)** | Free AI coding options: Bonsai, Antigravity, Xcode 26.3 (2026) |

@@ -142,7 +142,7 @@ To prevent "Runts", the Tools page MUST be powerful and analytical:
 - **Schema Validation**: Display the underlying JSON Schema for every tool.
 
 ### 3. Automated Generation (`GrokTools`)
-- **Integration**: Webapps should ideally leverage a meta-analysis tool (e.g., `meta-mcp:grok_tools`) to generate the initial "Tools Page" layout based on real-time server introspection. 
+- **Integration**: Webapps should ideally leverage a meta-analysis tool (e.g., `meta-mcp:grok_tools`) to generate the initial "Tools Page" layout based on real-time server introspection.
 
 - **Dark Mode First**: No white/light backgrounds. Use `#09090b` (Zinc-950) or `#020617` (Slate-950). Dark is the **default and permanent** - a light-mode toggle is OPTIONAL and only via the CSS invert hack with mandatory guardrails, see `rules/chat_skills_prefab_standard.md` §7.1.
 - **Glassmorphism**: Use `backdrop-blur` for modals and sidebars.
@@ -375,6 +375,7 @@ the install-Ollama path. Full setup lives in Settings provider cards. The
 - **start.ps1**: MUST clear the targeted port (reservoir in `operations/WEBAPP_PORTS.md`, currently 10700-12000) before binding.
 - **start.bat**: Shell wrapper for Windows "Double-Click" convenience.
 - **Port Adjacency (MANDATORY)**: Projects requiring both Frontend and Backend MUST allocate adjacent ports (e.g., 10792/10793) to ensure logical grouping.
+- **Loopback Binding & Explicit CORS (MANDATORY, 2026-11-18)**: Backends MUST bind to `127.0.0.1` by default (never `0.0.0.0` unless explicitly configured via env var for a LAN/Tailscale service with token auth). `CORSMiddleware` MUST use an explicit `allow_origins` list scoped to the repo's registered frontend port (`http://localhost:<frontend_port>`, `http://127.0.0.1:<frontend_port>`) and Tauri origins (`tauri://localhost`, `http://tauri.localhost`, `https://tauri.localhost`). `allow_origins=["*"]` and `CorsLayer::permissive()` are forbidden. See `safety/2026-11-18-llm-vuln-flood-local-fleet-posture.md`.
 
 ---
 
@@ -455,5 +456,5 @@ Starlette has no built-in docs. New servers use FastAPI. Existing Starlette serv
 
 ---
 
-**Owner:** Sandra S.  
+**Owner:** Sandra S.
 **Last Updated:** 2026-09-30
