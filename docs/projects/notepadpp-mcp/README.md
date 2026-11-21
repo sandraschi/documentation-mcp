@@ -4,20 +4,25 @@
   <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
-  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.4.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.4.4-7c5cfc?style=flat-square" alt="FastMCP"></a>
 </p>
 
 
 > 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+> **[Onboarding](docs/ONBOARDING.md)** — Notepad++ wrappee required (Windows, N++ 8+); sanity checks + pitfalls
+
+**Claude Desktop one-click:** download `notepadpp-mcp.mcpb` from
+[releases/latest](https://github.com/sandraschi/notepadpp-mcp/releases/latest/download/notepadpp-mcp.mcpb)
+and drag it into Claude Desktop, or run `.\dist\install.ps1` after `just mcpb-pack`.
 
 [![CI](https://github.com/sandraschi/notepadpp-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/sandraschi/notepadpp-mcp/actions/workflows/ci.yml)
 [![Release](https://github.com/sandraschi/notepadpp-mcp/actions/workflows/release.yml/badge.svg)](https://github.com/sandraschi/notepadpp-mcp/actions/workflows/release.yml)
 [![Python](https://img.shields.io/badge/python-3.12+-blue.svg)](https://python.org)
-[![FastMCP](https://img.shields.io/badge/FastMCP-3.4.2-green.svg)](https://github.com/jlowin/fastmcp)
+[![FastMCP](https://img.shields.io/badge/FastMCP-3.4.4-green.svg)](https://github.com/jlowin/fastmcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)](https://github.com/sandraschi/notepadpp-mcp/releases)
+[![Version](https://img.shields.io/badge/version-0.2.1-blue.svg)](https://github.com/sandraschi/notepadpp-mcp/releases)
 
-MCP server for **Notepad++** on **Windows**. Uses **FastMCP 3.4.2** with portmanteau tools (fewer tools, same coverage), optional **HTTP bridge**, **sampling** (Ollama-compatible HTTP or client LLM), **prompts**, **`skill://` resources**, and **agentic** workflows.
+MCP server for **Notepad++** on **Windows**. Uses **FastMCP 3.4.4** with portmanteau tools (fewer tools, same coverage), optional **HTTP bridge**, **sampling** (Ollama-compatible HTTP or client LLM), **prompts**, **`skill://` resources**, and **agentic** workflows.
 
 **Editor vs this repo:** Notepad++s own strengths (Scintilla, plugins, macros, sessions, ) are separate from what this MCP exposes. See **[docs/EDITOR_AND_MCP_SCOPE.md](docs/EDITOR_AND_MCP_SCOPE.md)** for a clear split and a fuller editor-side overview.
 
@@ -132,11 +137,41 @@ The assistant calls MCP tools by name; you do not run these in PowerShell. Examp
 | `status_ops` | `help`, `system_status`, `health_check` |
 | `tab_ops` | `list`, `switch`, `close` |
 | `session_ops` | `save`, `load`, `list` |
-| `linting_ops` | `python`, `javascript`, `json`, `markdown`,  |
+| `linting_ops` | `auto`, `python`, `javascript`, `typescript`, `json`, `markdown`, `yaml`, `toml`, `ahk`, `tools` |
 | `display_ops` | `fix_invisible_text`, `fix_display_issue` |
 | `plugin_ops` | `discover`, `install`, `list`, `execute` |
 
 Also: **`suggest_notepad_plan`**, **`agentic_notepad_workflow`** (orchestration), depending on build.
+
+### Linting (`linting_ops`)
+
+One tool lints a **saved file on disk** with the best engine installed, falling back to built-in checks so it always returns something useful. `operation="auto"` picks the language from the extension; `operation="tools"` shows which engine each language would use on this machine.
+
+| Language | Preferred engine | Fallback |
+|---|---|---|
+| Python | `ruff` (PATH, else `uvx ruff`) | syntax check (`ast`) |
+| JavaScript | `biome` | `node --check` (syntax only) |
+| TypeScript | `biome` | - |
+| JSON | strict parse (line/column of the first error) | - |
+| Markdown | `markdownlint-cli2` | built-in (heading jumps, trailing spaces, unclosed fences) |
+| YAML | `yamllint` | PyYAML parse |
+| TOML | strict parse (`tomllib`) | - |
+| AutoHotkey | `ahk-lint` + structural checks | structural checks (never runs the script) |
+
+Every result has the same shape: `issues: [{line, column, code, message, severity}]`, plus `engine`, `issue_count`, `error_count` and `notes`.
+
+Install the engines you want: `uv tool install ruff yamllint`, `npm i -g @biomejs/biome markdownlint-cli2` (or `winget install BiomeJS.Biome`).
+
+**Safety:** ESLint is not used because its config (`eslint.config.js`) is code that would run from the linted file's folder; markdownlint-cli2 lints a copy in an empty temp folder for the same reason (its `.markdownlint-cli2.cjs` config is code). npm `.cmd` shims are only called with safe arguments.
+
+### Allowed directories (file access confinement)
+
+Every path passed to `file_ops` (`open`, `save_as`, `reload_from_disk`, `find_in_files`, `diff_buffer`), `linting_ops` and the web bridge's `/api/file/stats` must resolve **inside an allowed directory**. Paths outside it (including `..` traversal, symlinks/junctions pointing out, UNC paths) are refused with `error_code: PATH_NOT_ALLOWED`.
+
+- **`NOTEPADPP_MCP_ALLOWED_DIRS`**: absolute directories separated by `;`, e.g. `C:\Users\me\Documents;D:\Dev\repos`.
+- **Unset**: defaults to your `Documents` folder. **Set but empty**: all path-based file operations are refused.
+
+Set it in the `env` block of your MCP client config (e.g. Claude Desktop) and restart the server. This protects against prompt-injected content steering the agent into reading or writing files elsewhere on the machine.
 
 ### Session snapshots (`session_ops`)
 
@@ -163,7 +198,7 @@ Optional. Set env vars as documented in the server / `NotepadSamplingHandler`, f
 | **status_ops** | Help, system status, health |
 | **tab_ops** | List / switch / close tabs |
 | **session_ops** | Save / load / list workspace sessions |
-| **linting_ops** | Python, JS, JSON, Markdown,  (uses `ruff` / `eslint` on PATH when available) |
+| **linting_ops** | Python, JS/TS, JSON, Markdown, YAML, TOML, AutoHotkey (ruff, Biome, markdownlint-cli2, yamllint; built-in fallbacks) - see *Linting* below |
 | **display_ops** | Invisible text / display glitches |
 | **plugin_ops** | Discover / install / list / execute plugins |
 
@@ -242,7 +277,7 @@ Older changelog bullets (multi-instance, plugin analytics, etc.) are folded into
 ## Changelog (short)
 
 - **0.2.x**  **`session_ops`** persists named sessions: copies live `session.xml`, loads via **`-openSession`** (see README section *Session snapshots*).
-- **0.2.0**  FastMCP 3.4.2, sampling, skills, prompts, agentic workflow, HTTP bridge + web hooks as implemented in `server.py`.
+- **0.2.0**  FastMCP 3.4.4, sampling, skills, prompts, agentic workflow, HTTP bridge + web hooks as implemented in `server.py`.
 - **Earlier**  Portmanteau tool consolidation, linting and plugin tooling.
 
 ---

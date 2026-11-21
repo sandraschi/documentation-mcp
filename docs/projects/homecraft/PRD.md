@@ -1,8 +1,9 @@
 # HomeCraft - Product Requirements Document (PRD)
 
-**Project:** HomeCraft (`D:\Dev\repos\homecraft`, not yet created)
-**Version:** 1.1.0-draft
-**Date:** 2026-11-11
+**Project:** HomeCraft (`D:\Dev\repos\homecraft`, `sandraschi/homecraft`)
+**Version:** 1.3.0-draft (1.1.0 plus the 2026-11-17 amendments: energy charts, alert board,
+climate history, Home overview, per-camera logins)
+**Date:** 2026-11-11, amended 2026-11-17
 **Status:** Draft, all scoping decisions settled 2026-11-11 (section 12)
 **Authors:** Claude (takeover), based on Antigravity's cut-off draft
 **Parent framework:** [RUST_ARTCRAFT_STANDARD.md](../../standards/RUST_ARTCRAFT_STANDARD.md)
@@ -71,7 +72,8 @@ The HA jobs Sandra actually used, and where each lands:
 | Automations | Rules engine (6.6) with dry-run and event log |
 | Dashboards | Pattern 2 workstation (section 8) |
 | History / recorder | `home.db` telemetry with rollups and retention |
-| Energy dashboard | Energy view, `energy.*` commands, anomaly flags |
+| Energy dashboard | Energy view: time-series charts 1 h to 90 d with normal bands, `energy.*` commands, anomaly flags |
+| Notifications inbox / persistent notifications | Alert board (6.6, FR-ALR) |
 | Notifications | `bridge.event` (aiwatcher), `bridge.speak` (speech-mcp), webhook |
 | Presence | Phone-on-Wi-Fi presence (6.8) |
 | Backup | Session > Backup Home (home.db + profile export; vault excluded) |
@@ -214,6 +216,29 @@ Persisted in `home.db`; JSON home profile export/import for backup and moving ma
   health for the app status bar and fleetwatcher.
 - **FR-SVC-02:** Service restart loses nothing: rule timers and threshold windows are
   rebuilt from `home.db`.
+- **FR-ALR-01 (2026-11-17):** Alert board. Store table `alerts` (schema v4); one card per open
+  problem, deduplicated by key (repeats bump a count). Columns new / acknowledged / snoozed /
+  resolved. `alert.list {resolved_hours?}`, `alert.move {id, status, snooze_min?}`,
+  `alert.raise {title, severity?, device_id?, note?}`, `alert.note {id, note}`, `alert.sync`.
+- **FR-ALR-02:** Cards come from the logbook (offline, energy out of band, motion, doorbell, Ring
+  auth, failed rule or scene, rule alert actions) via a cursor, every watch cycle. Back-online
+  resolves the open offline card; snoozed cards return to new when due. Moving a card writes no
+  logbook event (no feedback loop). Resolved cards follow event retention.
+- **FR-NRG-01 (2026-11-17):** `energy.series {hours 1..2160, device_id?}`: every power meter's
+  points bucketed by range (1 min up to 6 h, 5 min up to 48 h, 1 h up to 14 d, else 6 h), its
+  normal band from 7 days of hourly rollups, and the house total. Hourly rollups fill hours whose
+  raw readings were pruned.
+- **FR-CLM-01 (2026-11-17):** Climate history. The watch records every 15 minutes: each weather
+  device (Netatmo station and modules by name; synthetic curves for demo devices and in sim) plus
+  an Open-Meteo outdoor reference at the home location. `climate.series {hours}` (bucket never
+  finer than 15 min, healthy CO2 band 400-1000 ppm), `climate.record`, `climate.configure {lat,
+  lon, outdoor}`. A source that stops reporting writes one `climate` warning (alert card) and one
+  info when it reports again (resolves the card).
+- **FR-CAM-01 (2026-11-17):** Per-camera logins: vault slots `CAMERA_<ip>_USERNAME/PASSWORD`
+  (`camera.set_login {device_id, username, password, verify?}`), then the devices-mcp entry for
+  that IP, then the shared login. `camera.capture {device_id, out?}` returns size, dimensions and
+  `black`; vision refuses black frames (`black_frame`). USB capture warms up and skips dark frames.
+- **FR-DEV-01 (2026-11-17):** `device.ping {id}`: ICMP plus service-port TCP connect latency.
 
 ### 6.7 Vision (Tier 4 and Tier 5)
 
@@ -269,17 +294,18 @@ databasecraft, moneycraft, travelcraft).
 +--------------------------------------------------------------------------------------------+
 | Session  Edit  View  Add  Device  Automate  Commands  Window  Help     [En] [sun/moon] 0 unsafe |
 +--------------------------------------------------------------------------------------------+
-| [Home] [Floorplan] [Cameras] [Energy] [Climate] [Events]   quick row = shortcuts into View |
+| [Home] [Floorplan] [Cameras] [Energy] [Climate] [Events] [Alerts]  quick row = View shortcuts |
 +---------------+-------------------------------------------------------+-------------------+
 | TOOLBOX       |  VIEWPORT (persistent, never unloaded)                | INSPECTOR         |
 | Home tree     |  Home: device cards by room  [Cards|List|JSON] filter | selected device   |
 |  Wohnzimmer   |  Floorplan: 2D rooms, drag devices in                 | state, caps       |
 |  Kueche       |  Cameras: video wall, motion/detection overlay        | actions, readonly |
-|  Buero        |  Energy: live W, kWh, anomalies                       | history sparkline |
+|  Buero        |  Energy: charts 1 h-90 d, bands, KPI tiles, zoom       | history sparkline |
 | Discovered(3) |  Climate: rooms, Netatmo, outdoor                     | describe scene    |
 | Scenes, Rules |  Events: logbook, ack, filters                        |                   |
+| People        |  Alerts: board New / Acknowledged / Snoozed / Resolved |                   |
 +---------------+-------------------------------------------------------+-------------------+
-| service: running | 14 devices, 1 offline | 412 W | 2 unacked alerts | sim: off | 60 FPS     |
+| service: running | 14 devices, 1 offline | 412 W | 2 open alerts | sim: off | 60 FPS        |
 +--------------------------------------------------------------------------------------------+
 ```
 
@@ -289,11 +315,11 @@ databasecraft, moneycraft, travelcraft).
 |---|---|
 | **Session** | Open Home Profile... (Ctrl+O), Export Home Profile... (Ctrl+E; no Save item, home.db is written on every change), Import from devices-mcp..., Backup Home..., Restore Home..., sep, Service: Start / Stop / Status, Simulation Mode (toggle), sep, Quit (Ctrl+Q) |
 | **Edit** | Undo (Ctrl+Z), Redo (Ctrl+Y), sep, Cut, Copy, Paste, Select All, sep, Rename (F2), Delete (Del), sep, Preferences... (Ctrl+,) |
-| **View** | the six view modes (Ctrl+1..6), sep, Zoom In / Out / Reset (Ctrl+= / Ctrl+- / Ctrl+0; Ctrl+mouse wheel anywhere), sep, Cards / List / JSON (for list-like views), Show Offline Devices, Show Readonly Badges, sep, Interface Theme > Dark / Light / System, Language > 7 locales |
-| **Add** | Scan Network (F5), Add Device Wizard... (Ctrl+N), sep, Add Room..., Add Floor..., Add Scene..., Add Rule..., Add Person (presence)... |
+| **View** | the seven view modes (Ctrl+1..7: Home, Floorplan, Cameras, Energy, Climate, Events, Alerts), sep, Zoom In / Out / Reset (Ctrl+= / Ctrl+- / Ctrl+0; Ctrl+mouse wheel anywhere), sep, Cards / List / JSON (for list-like views), Show Offline Devices, Show Readonly Badges, sep, Interface Theme > Dark / Light / System, Language > 7 locales |
+| **Add** | Scan Network (F5), Add Device Wizard... (Ctrl+N), sep, Add Room..., Add Floor..., Add Scene..., Raise Alert..., Add Rule..., Add Person (presence)... |
 | **Device** | Toggle Power (Space), Set Level..., Set Color..., Snapshot (Ctrl+Shift+S), PTZ..., sep, Mark Read-Only, Require Confirmation, Move to Room..., Re-run Pre-flight, Remove Device |
-| **Automate** | Apply Scene (1-9), Test Rule (dry run), Enable/Disable Rule, sep, Acknowledge Alert (A), Acknowledge All |
-| **Commands** | Describe Scene (current camera), Run Detection Now, Recompute Energy Rollups, Learn Appliance Bands, Check Sensor Health, Ping All Devices, Export Diagnostics... |
+| **Automate** | Apply Scene (1-9), Test Rule (dry run), Enable/Disable Rule, sep, Acknowledge Event (A), Acknowledge All, Event Log (Ctrl+6), Alert Board (Ctrl+7), Sync Alerts from Logbook |
+| **Commands** | Describe Scene (current camera), Run Detection Now, Energy Charts, Recompute Energy Rollups, Learn Appliance Bands, Check Sensor Health, Ping All Devices, Export Diagnostics... |
 | **Window** | Reset Panel Layout, sep, Toolbox, Inspector, Status Bar, Event Log Dock, Onboarding Wizard |
 | **Help** | Command Palette... (Ctrl+Shift+P / Ctrl+K), Keyboard Shortcuts... (F1 / Ctrl+/), Project Files & Docs..., Licenses & Notices..., About HomeCraft |
 
@@ -314,7 +340,13 @@ Rules:
 - List-like views (Home, Events, Discovered) use the fleet Cards / List / JSON
   switcher with live filter, numeric-aware sort, pagination and CSV / MD / TXT / JSON
   export.
-- Charts are zero-dep painter charts reading `home.db` (as in rust-devices-mcp today).
+- Charts are zero-dep painter charts (`homecraft-app/src/chart.rs`) fed by `energy.series`:
+  local time axis with day breaks, 1-2-5 value ticks with units, gradient area fills, gaps
+  where no data was recorded, shaded normal band with out-of-band markers, hover crosshair with
+  every series' value, legend toggles, drag-to-zoom / Shift+drag pan / double-click reset
+  shared across the view. Plain wheel scrolls, Ctrl+wheel stays the UI zoom.
+- The alert board is a drag-and-drop kanban (egui dnd); every move is also a card button and
+  a right-click item, so it works without a mouse.
 - No network call on the UI thread; offline devices render as offline, never as a
   frozen frame.
 - 7 locales (En, De, Fr, Es, Ja, Ko, Zh) in `homecraft-core/src/i18n.rs`; De and Ja

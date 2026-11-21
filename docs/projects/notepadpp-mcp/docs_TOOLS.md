@@ -9,13 +9,10 @@ All MCP tools follow the portmanteau pattern: one tool per domain, an
 | `text_ops` | insert, find | Insert text at the caret; find in the active buffer |
 | `tab_ops` | list, switch, close | Manage editor tabs (0-based indices) |
 | `session_ops` | save, load, list | Persist/restore named workspace sessions (XML) |
-| `linting_ops` | python, javascript, json, markdown, tools | Lint disk files with available engines |
+| `linting_ops` | auto, python, javascript, typescript, json, markdown, yaml, toml, ahk, tools | Lint disk files (ruff, Biome, markdownlint-cli2, yamllint; built-in fallbacks) |
 | `display_ops` | fix_invisible_text, fix_display_issue, theme_status, set_dark_mode, set_editor_theme | Rendering fixes and theme control |
 | `plugin_ops` | discover, install, list, execute | Official plugin catalog + installed plugins |
 | `status_ops` | help, system_status, health_check | Help system, server snapshot, connectivity |
-| `lint_javascript_file` | — | ESLint JSON output (heuristic fallback) |
-| `lint_json_file` | — | JSON validation + style nits |
-| `lint_markdown_file` | — | Markdown structure checks |
 | `notepad_dashboard` | — | Prefab UI dashboard (status, active tab, fleet) |
 | `suggest_notepad_plan` | — | Sampling-based multi-step plan |
 | `agentic_notepad_workflow` | — | Sampling loop with tool calls (max_iterations) |

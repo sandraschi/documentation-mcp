@@ -1,8 +1,19 @@
 # MCP Server Security Guide
 
-**Last Updated:** 2025-12-04
+**Last Updated:** 2026-11-18
 
 Security best practices for MCP server deployment.
+
+---
+
+## Loopback Binding & CORS Hardening (MANDATORY)
+
+To prevent browser-to-localhost CSRF/fetch pivoting from untrusted websites and LAN exposure:
+
+1. **Default Loopback Bind (`127.0.0.1`)**: All FastAPI, Starlette, Uvicorn, and Rust Axum backends MUST bind to `127.0.0.1` by default (`os.getenv("<REPO>_HOST", "127.0.0.1")`), never `0.0.0.0`.
+2. **No Wildcard CORS (`allow_origins=["*"]`)**: Scope `allow_origins` strictly to the repo's registered frontend port from `operations/WEBAPP_PORTS.md` plus Tauri webview origins (`tauri://localhost`, `http://tauri.localhost`, `https://tauri.localhost`).
+3. **Destructive / Actuator Tool Gates**: Any tool that executes code, modifies system state, sends external messages, or moves physical actuators MUST obey [standards/AGENT_ACTION_GATES.md](../standards/AGENT_ACTION_GATES.md) (operator env flags or MCP elicitation, never model-satisfiable `confirm=True` args).
+4. **Outbound Fetch / SSRF Guards**: See [safety/2026-10-06-protocol-pivoting-mcp-ssrf.md](../safety/2026-10-06-protocol-pivoting-mcp-ssrf.md) and [safety/2026-11-18-llm-vuln-flood-local-fleet-posture.md](../safety/2026-11-18-llm-vuln-flood-local-fleet-posture.md).
 
 ---
 
@@ -16,11 +27,11 @@ from fastapi import Header, HTTPException
 async def verify_api_key(authorization: str = Header(None)):
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401)
-    
+
     api_key = authorization.split("Bearer ")[1]
     if api_key not in VALID_API_KEYS:
         raise HTTPException(status_code=401)
-    
+
     return api_key
 ```
 
@@ -327,4 +338,3 @@ sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 ---
 
 → See [README.md](README.md) for complete deployment guide
-

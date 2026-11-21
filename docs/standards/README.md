@@ -3,7 +3,7 @@ title: "Standards Library Index"
 category: standards
 status: active
 audience: all
-last_updated: 2026-11-13
+last_updated: 2026-11-20
 ---
 
 # Standards Library
@@ -19,9 +19,9 @@ of these to read and in what order.
 
 ## At a glance
 
-- **181 standards** (excluding backups and `_superseded/`)
+- **184 standards** (excluding backups and `_superseded/`)
 - **Current FastMCP floor: 3.4.4** — read from `JUNE_2026_STANDARDS_BAR.md`, which is the single source
-- **168 of 181** carry frontmatter; the rest have no declared status or last-updated date
+- **171 of 184** carry frontmatter; the rest have no declared status or last-updated date
 
 ### Where to start
 
@@ -75,7 +75,7 @@ of these to read and in what order.
 
 ## Standard
 
-134 files.
+137 files.
 
 | Standard | What it covers | Status | Updated |
 |---|---|---|---|
@@ -92,6 +92,7 @@ of these to read and in what order.
 | [CODE_QUALITY_STANDARDS.md](./CODE_QUALITY_STANDARDS.md) | Ruff is MANDATORY for all Python-based MCP servers. | review | 2026-07-29 |
 | [CONTROL_PLANE_INSTALL.md](./CONTROL_PLANE_INSTALL.md) | Adopted: 2026-05-28 | review | 2026-06-26 |
 | [CORS_STANDARD.md](./CORS_STANDARD.md) | Established: 2026-07-13 | review | 2026-08-07 |
+| [CRAFT_FLEET_RULES.md](./CRAFT_FLEET_RULES.md) | Applies to every craft repo (pure-Rust ArtCraft apps: L1 core, L2 CLI + MCP, L3 egui). | active | 2026-11-19 |
 | [DEEPLINK_STANDARD.md](./DEEPLINK_STANDARD.md) | Effective: 2025-10-28 | review | 2026-08-06 |
 | [DEPLOYMENT_STANDARDS.md](./DEPLOYMENT_STANDARDS.md) | To maintain friction-less operation, all servers should support: | review | 2026-06-26 |
 | [DIALOGIC_RETURNS.md](./DIALOGIC_RETURNS.md) | A Dialogic Return is a tool result that facilitates a conversational loop between the Tool and the AI Agent. I | review | 2026-06-26 |
@@ -200,8 +201,10 @@ of these to read and in what order.
 | [rust-artcraft/CRAFT_APPS_MCP_UTILIZATION.md](./rust-artcraft/CRAFT_APPS_MCP_UTILIZATION.md) | Parent Hub: RUST_ARTCRAFT_STANDARD.md(../RUST_ARTCRAFT_STANDARD.md) | active | 2026-10-20 |
 | [rust-artcraft/CRAFT_COMMAND_BUS.md](./rust-artcraft/CRAFT_COMMAND_BUS.md) | Why this doc exists. Every Craft app is a GUI application that can also be | review | 2026-10-20 |
 | [rust-artcraft/CRAFT_LLM_PROVIDER_STANDARD.md](./rust-artcraft/CRAFT_LLM_PROVIDER_STANDARD.md) | Existing apps migrate on next touch; no flag-day. | active | 2026-11-06 |
-| [rust-artcraft/CRAFT_MENU_BAR_STANDARD.md](./rust-artcraft/CRAFT_MENU_BAR_STANDARD.md) | Parent Hub: RUST_ARTCRAFT_STANDARD.md(../RUST_ARTCRAFT_STANDARD.md) | active | 2026-11-11 |
-| [rust-artcraft/CRAFT_START_AND_RELEASE.md](./rust-artcraft/CRAFT_START_AND_RELEASE.md) | Parent Hub: RUST_ARTCRAFT_STANDARD.md(../RUST_ARTCRAFT_STANDARD.md) | active | 2026-11-12 |
+| [rust-artcraft/CRAFT_MENU_BAR_STANDARD.md](./rust-artcraft/CRAFT_MENU_BAR_STANDARD.md) | Parent Hub: RUST_ARTCRAFT_STANDARD.md(../RUST_ARTCRAFT_STANDARD.md) | active | 2026-11-15 |
+| [rust-artcraft/CRAFT_ONE_SHOT_SCAFFOLD_STANDARD.md](./rust-artcraft/CRAFT_ONE_SHOT_SCAFFOLD_STANDARD.md) | Parent Hub: RUST_ARTCRAFT_STANDARD.md(../RUST_ARTCRAFT_STANDARD.md) | active | 2026-11-17 |
+| [rust-artcraft/CRAFT_SKILLS_AND_CHAT_STANDARD.md](./rust-artcraft/CRAFT_SKILLS_AND_CHAT_STANDARD.md) | Parent hub: RUST_ARTCRAFT_STANDARD.md(../RUST_ARTCRAFT_STANDARD.md). Builds on CRAFT_LLM_PROVIDER_STANDARD.md  | active | 2026-11-15 |
+| [rust-artcraft/CRAFT_START_AND_RELEASE.md](./rust-artcraft/CRAFT_START_AND_RELEASE.md) | Parent Hub: RUST_ARTCRAFT_STANDARD.md(../RUST_ARTCRAFT_STANDARD.md) | active | 2026-11-16 |
 | [rust-artcraft/ECOSYSTEM_IMPACT_SWIFT_AND_AGENTS.md](./rust-artcraft/ECOSYSTEM_IMPACT_SWIFT_AND_AGENTS.md) | Parent Hub: RUST_ARTCRAFT_STANDARD.md(../RUST_ARTCRAFT_STANDARD.md) | active | 2026-10-17 |
 | [rust-artcraft/EGUI_DESKTOP_UI_AND_PARITY.md](./rust-artcraft/EGUI_DESKTOP_UI_AND_PARITY.md) | Parent Hub: RUST_ARTCRAFT_STANDARD.md(../RUST_ARTCRAFT_STANDARD.md) | active | 2026-10-17 |
 | [rust-artcraft/FLEET_CONVERSION_STANDARD.md](./rust-artcraft/FLEET_CONVERSION_STANDARD.md) | Parent Hub: RUST_ARTCRAFT_STANDARD.md(../RUST_ARTCRAFT_STANDARD.md) | active | 2026-10-18 |

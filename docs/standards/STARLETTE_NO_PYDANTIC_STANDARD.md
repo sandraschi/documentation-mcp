@@ -121,7 +121,7 @@ app = Starlette(
 )
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=10700)
 ```
 
 ### Request body (no Pydantic)
@@ -192,6 +192,36 @@ class ItemRequest(BaseModel):
 async def create_item(body: ItemRequest):
     return {"created": body.name, "value": body.value}
 ```
+
+### Loopback Binding & Port-Scoped CORS (MANDATORY, 2026-11-18)
+
+Never bind local fleet backends to `0.0.0.0` by default, and never use `allow_origins=["*"]` (which lets malicious JS on any website the user visits in their browser pivot into local `localhost:107xx` endpoints).
+
+```python
+import os
+from fastapi.middleware.cors import CORSMiddleware
+
+HOST = os.getenv("MCP_HOST", "127.0.0.1")
+FRONTEND_PORT = int(os.getenv("MCP_FRONTEND_PORT", "10701"))
+
+ALLOWED_ORIGINS = [
+    f"http://localhost:{FRONTEND_PORT}",
+    f"http://127.0.0.1:{FRONTEND_PORT}",
+    "tauri://localhost",
+    "http://tauri.localhost",
+    "https://tauri.localhost",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
+```
+
+See [safety/2026-11-18-llm-vuln-flood-local-fleet-posture.md](../safety/2026-11-18-llm-vuln-flood-local-fleet-posture.md).
 
 ### Suppressing docs in production (optional)
 

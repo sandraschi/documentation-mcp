@@ -1,6 +1,6 @@
 # Operational Safety
 
-**Last Updated**: 2026-10-20
+**Last Updated**: 2026-11-18
 
 AI security guardrails, LLM attack research, prompt injection defence, Linux CVE tracking, PowerShell safety patterns, and frontier-lab safety culture timelines for the fleet.
 
@@ -8,6 +8,7 @@ AI security guardrails, LLM attack research, prompt injection defence, Linux CVE
 
 | Doc | Purpose |
 |-----|---------|
+| [2026-11-18-llm-vuln-flood-local-fleet-posture.md](2026-11-18-llm-vuln-flood-local-fleet-posture.md) | 2026-11-18: LLM vulnerability flood vs. local fleet threat model, measured fleet exposure (61 repos with `0.0.0.0` bind, 81 with wildcard CORS, 22 with both, 14 missing lockfiles), and 5-phase hardening sweep plan |
 | [UAC_AUTOMATION_BOUNDARY.md](UAC_AUTOMATION_BOUNDARY.md) | 2026-10-20: UAC consent cannot be automated (secure desktop); forbidden policy changes, allowed standing elevation, CUA-vs-UAC distinction, fleet install practice |
 | [powershell-recycle-bin-workaround.md](powershell-recycle-bin-workaround.md) | PowerShell `Remove-Item` permanently deletes; workaround for Recycle Bin |
 | [dark-twin-honeytrap-pattern.md](dark-twin-honeytrap-pattern.md) | DTU pattern for safe/test/honeytrap agent installs; prompt injection detection |

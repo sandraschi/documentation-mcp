@@ -27,7 +27,7 @@ Both repos read the same Digitale Bibliothek discs (the `.DKI` volumes). One app
 
 ### 3. Fold the bench into MakerCraft
 
-Started 13 November 2026. `instrument.capture` writes one labelled demo file per source. Live scope, logic, and Bus Pirate probes were already commands. The meter, generator, spectrum analyzer, and JTAG adapter are files only. The Python servers are still on disk.
+Started 13 November 2026. `instrument.capture` writes one labelled demo file per source. The Machines tab lists the seven. Live scope, logic, and Bus Pirate probes were already commands. The meter, generator, spectrum analyzer, and JTAG adapter are files only. The Python servers are still on disk. Handover: `D:\Dev\repos\makercraft\HANDOVER.md`.
 
 MakerCraft is already the fabrication bench and already talks to a Bus Pirate. These repos become sources in that app, each behind the command bus, with the capture saved as a file:
 

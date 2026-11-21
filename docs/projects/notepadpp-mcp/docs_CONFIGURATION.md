@@ -4,6 +4,17 @@ All configuration is environment-variable driven. Copy `.env.example` to `.env`
 (repo root) and adjust. There is no settings file; the webapp reads its own
 `VITE_MCP_WEB_USER` / `VITE_MCP_WEB_PASSWORD` values from `web_sota/.env.local`.
 
+## File access (security)
+
+| Var | Default | Purpose |
+|-----|---------|---------|
+| `NOTEPADPP_MCP_ALLOWED_DIRS` | `~/Documents` | `;`-separated absolute directories. Every path given to `file_ops`, `linting_ops` and `/api/file/stats` must resolve inside one of them (symlinks followed, `..` and UNC paths rejected). Set but empty = no file access. |
+
+## Linting engines (optional, auto-detected)
+
+`linting_ops` uses whatever is on `PATH`: `ruff` (or `uvx ruff`), `biome`, `markdownlint-cli2`,
+`yamllint`, `ahk-lint`; otherwise built-in checks. `linting_ops(operation="tools")` shows what is used.
+
 ## Dashboard auth (optional)
 
 | Var | Purpose |

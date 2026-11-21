@@ -439,6 +439,12 @@ All MCP server webapps and dashboards MUST use ports from the reserved range **1
 | 11240 | universal-actuator-mcp | Frontend (Vite) [registered 2026-10-25] |
 | 11253 | giscraft | Frontend (Vite) [registered 2026-10-25, renamed 2026-11-03, 2026-11-08] |
 | 11254 | giscraft | Backend (Axum sidecar, REST `/api`) [registered 2026-10-25, renamed 2026-11-03, 2026-11-08] |
+| 11258 | devcraft | Frontend (egui studio) [registered 2026-11-14] |
+| 11259 | devcraft | Backend (MCP control) [registered 2026-11-14] |
+| 11260 | aicraft | Frontend (egui studio) [registered 2026-11-14] |
+| 11261 | aicraft | Backend (MCP control) [registered 2026-11-14] |
+| 11262 | spendcraft | Frontend (Vite companion) [registered 2026-11-14] |
+| 11263 | spendcraft | Backend (companion API) [registered 2026-11-14] |
 | 11270 | craft-showcase | Web Showcase & In-Browser WASM Studio [registered 2026-11-10] |
 
 ## Unified observability stack (Docker)
@@ -770,13 +776,13 @@ stacks, and anything started outside the fleet. **These are taken.** They are
 listed here because a port absent from this file reads as free, which is how
 repomix-mcp was allocated 11191 while open-webui was sitting on it.
 
-Refreshed 2026-11-13 by `fleet-gate/compose_ports.py --write-registry`, which the
+Refreshed 2026-11-20 by `fleet-gate/compose_ports.py --write-registry`, which the
 nightly gate runs. A port dropping off this list means the holder stopped, not
 that the port is safe -- an idle container still owns its published port.
 
 | Port | Held by | Source |
 |---|---|---|
-| 10722 | `python (81492)` | native process listening |
+| 10722 | `python (258728)` | native process listening |
 | 10732 | `python (15996)` | native process listening |
 | 10734 | `calibre-plus-frontend` | running container |
 | 10736 | `calibre-plus-backend` | running container |
@@ -812,13 +818,14 @@ that the port is safe -- an idle container still owns its published port.
 | 11255 | `docker-mcp (compose)` | compose, not declared in config |
 | 11256 | `docker-mcp (compose)` | compose, not declared in config |
 | 11257 | `myai (compose)` | compose, not declared in config |
-| 11270 | `python (133720)` | native process listening |
+| 11270 | `python (168472)` | native process listening |
 | 11311 | `robotics-mcp (compose)` | compose, not declared in config |
 | 11320 | `robotics-mcp (compose)` | compose, not declared in config |
-| 11434 | `ollama (55488)` | native process listening |
+| 11434 | `ollama (135828)` | native process listening |
 | 11700 | `ai-dashboard` | running container |
 | 11702 | `myai-traefik` | running container |
 | 11703 | `myai (compose)` | compose, not declared in config |
+| 11968 | `freecad (197280)` | native process listening |
 | 12000 | `unified-grafana` | running container |
 | 12001 | `unified-prometheus` | running container |
 | 12002 | `unified-loki` | running container |

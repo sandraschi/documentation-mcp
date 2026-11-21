@@ -3,7 +3,7 @@ title: "Craft app start and release scaffold"
 category: standard
 status: active
 audience: all-craft-agents
-last_updated: 2026-11-12
+last_updated: 2026-11-16
 ---
 
 # Craft app start and release scaffold
@@ -24,6 +24,7 @@ start engine: the masters live here, repos carry copies, differences live only i
 | `start.ps1` | **No** (vendored) | Incremental build, then run the desktop app. `-Release`, `-NoBuild`, `-New`, `-Smoke`, `-Mcp`, `-Cli`; other arguments go to the app |
 | `start.bat` | **No** (vendored) | Double-click wrapper; window held open on errors |
 | `scripts/craft-common.ps1` | **No** (vendored) | Config loading, cargo on PATH, real target dir (`cargo metadata`), build helper |
+| `scripts/craft-floor.ps1` | **No** (vendored) | New-app gate. Runs from `start.ps1` when `Floor = $true` |
 | `scripts/release.ps1` | **No** (vendored) | Gates, release build, smoke, plain exes, NSIS installer, mcpb, launcher zip, SHA256SUMS, opt-in `-Publish` |
 | `installer/craft-installer.nsi` | **No** (vendored) | Per-user installer; everything comes in as `/D` defines |
 | `scripts/craft.config.psd1` | **Yes** | Names and smoke arguments of this repo (below) |
@@ -54,6 +55,7 @@ Vendored files carry the marker `VENDORED from mcp-central-docs`. To change them
     Mcpb        = $true
     # optional: AppArgs = @('--control', '14132'), LauncherZip = $false, Repository = 'https://...'
     # optional: McpPackage / McpBin when the MCP server is not the CLI (djcraft-mcp, aicraft-mcp)
+    # Floor = $true   # new apps only. start.ps1 then refuses to open until scripts\craft-floor.ps1 passes.
 }
 ```
 
@@ -61,6 +63,30 @@ Vendored files carry the marker `VENDORED from mcp-central-docs`. To change them
 list means "no such smoke"; the release then only builds that binary. The sync tool detects
 the first version of this file (binaries, owning packages, `main_with` / `--smoke` / clap
 `Status` / `Mcp` / global `--db`); after that the repo owns it and the sync never overwrites it.
+A config written by the sync for a repo that did not have one sets `Floor = $true`.
+
+## New app floor
+
+A new craft app is not done because it compiles. `scripts/craft-floor.ps1` (vendored) is the
+gate. `start.ps1` runs it before a build or a window when `Floor = $true`, and leaves the
+window closed when the gate fails. Old repos stay on `Floor = $false` until their config says
+otherwise. The sync vendors the script with the rest of the scaffold.
+
+The gate fails unless all of these are in the repo:
+
+- L1 `*-core` with `fn dispatch`, L2 `*-mcp` or `*-cli`, L3 `*-app`, `#![forbid(unsafe_code)]`
+- `start.ps1`, `start.bat`, and this scaffold
+- The eight menus `File`, `Edit`, `View`, `Insert`, `Modify`, `Commands`, `Window`, `Help`
+- Help items `Command Palette`, `Keyboard Shortcuts`, `Licenses`, `About`
+- `HELP.md` sections Get Started, Functions, Usage, Tips, Other Crafts
+- A left sidebar (`Panel::left`), Dark and Light, English and Deutsch (or `AppLocale`)
+- Readable text (`override_text_color`)
+- A chat path that names `Chat` and `LlmConfig`, `craft_ai_core`, or `no model selected`
+- The window calls `dispatch`
+- No menu item that says the command is not in the demo
+- `assets/MANIFEST.txt` listing at least one png, svg, or webp that exists and meets the byte size on its line (playing cards, tools, portraits: the pictures of this craft)
+
+`last_updated` for this section: 2026-11-16.
 
 ## start.ps1 behaviour (why it is shaped this way)
 
@@ -126,6 +152,50 @@ python D:\Dev\repos\mcp-central-docs\scripts\gen-craft-mcpb-manifests.py --force
 
 It builds the server, sends `initialize` + `tools/list` over stdio and writes the tool list it
 gets back, then sets the config keys above. Re-run it when tools change.
+
+## Install
+
+High in `README.md`, before the product description:
+
+    ## Install
+
+    Tell Cursor, Claude, Antigravity, or OpenCode: **Install this.**
+
+        powershell -NoProfile -ExecutionPolicy Bypass -File scripts\install-craft.ps1
+
+That command installs the Windows app and the CLI under
+`%LOCALAPPDATA%\Programs\<Display>` (Start Menu shortcut, CLI on the user PATH).
+`-RegisterClients` also registers the installed MCP exe with the IDEs that are
+present: Cursor, Claude Desktop, Claude Code, Antigravity, Windsurf, and OpenCode.
+`-Clients cursor,claude-desktop` limits that list. `-Mcpb` packs the bundle when
+`mcpb\manifest.json` exists and installs it into Claude Desktop. A `.mcpb` is
+Claude Desktop only. `-Uninstall` removes the app, the Start Menu entries, the
+PATH entry, and the IDE config entries. `-Check` prints the plan and writes nothing.
+
+## Freshness
+
+`start.ps1` rebuilds the debug exe at launch, unless that exact exe is already running.
+It does not refresh `target\release` or `dist`. Those lag the cockpit until someone
+runs a release.
+
+`scripts/Invoke-CraftFreshness.ps1` walks every Rust craft app (`scripts\craft.config.psd1`
+plus `Cargo.toml`). If a debug exe, release exe, installer, mcpb, or launcher zip is
+missing, or older than the newest changelog, handover, release notes, docs page, or
+Rust source, it rebuilds that repo: debug, release, then the dist files. It does not
+tag or upload. A successful pass writes `target\craft-freshness.stamp`, because cargo
+leaves an exe's timestamp alone when the sources did not change. A running exe is
+skipped until the window is closed. A target drive with under 8 GB free is
+skipped as well, so the job does not compile a repo onto a full disk.
+
+`scripts/Install-CraftFreshness.ps1` registers `\Fleet\Craft-Freshness` every two
+hours (3 hour limit, a second run does not stack). Log:
+`%LOCALAPPDATA%\craft-freshness\craft-freshness.log`.
+
+```powershell
+.\Invoke-CraftFreshness.ps1 -WhatIf
+.\Invoke-CraftFreshness.ps1 -Repo devcraft
+.\Install-CraftFreshness.ps1
+```
 
 ## Known gaps
 

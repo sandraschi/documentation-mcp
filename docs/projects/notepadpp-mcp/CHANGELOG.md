@@ -2,6 +2,83 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-11-19 (linting refresh)
+
+### Changed
+- **`linting_ops` rewritten** around a new engine module (`lint_engines.py`) with one result shape
+  (`issues: [{line, column, code, message, severity}]`, `engine`, `issue_count`, `error_count`, `notes`).
+  - Python: ruff (PATH, else `uvx ruff`), fallback syntax check.
+  - JavaScript / **TypeScript (new)**: Biome; JS fallback `node --check`.
+  - Markdown: markdownlint-cli2, fallback built-in checks (heading jumps, trailing spaces, unclosed fences).
+  - **YAML (new)**: yamllint, fallback PyYAML parse. **TOML (new)**: strict `tomllib` parse.
+  - JSON: strict parse with line/column. AutoHotkey: unchanged behaviour (ahk-lint + structural).
+  - New `operation="auto"` detects the language from the file extension; `tools` now reports the
+    engine each language would actually use (it previously claimed flake8 support that did not exist).
+- `linting_ops(javascript|markdown)` previously ignored ESLint and ran only heuristics; all paths now
+  share one engine per language.
+
+### Removed
+- **`lint_javascript_file`, `lint_json_file`, `lint_markdown_file`** standalone tools. Use
+  `linting_ops(operation="javascript"|"json"|"markdown", file_path=...)`.
+- ESLint support: its config (`eslint.config.js`) executes code from the linted file's folder.
+
+### Security
+- markdownlint-cli2 lints a copy in an empty temp folder so a `.markdownlint-cli2.cjs` next to an
+  untrusted file cannot run. `.cmd`/`.bat` shims only receive arguments matching a strict
+  safe-character pattern. Every linter call has a timeout and a 5 MB file-size cap.
+
+## [0.2.2] - 2026-11-19 (security)
+
+### Security
+- **Path confinement for tool-supplied paths (High).** `file_ops` `save_as`, `open`,
+  `reload_from_disk`, `find_in_files` and `diff_buffer`, the `linting_ops` / `lint_*`
+  tools and the web bridge `/api/file/stats` accepted any path (only `os.path.abspath`),
+  allowing arbitrary file write (-> code execution) and arbitrary file read, reachable
+  via prompt injection. All such paths must now resolve (realpath, symlinks followed,
+  case-insensitive) inside `NOTEPADPP_MCP_ALLOWED_DIRS` (default: `~/Documents`);
+  `find_in_files` also re-checks every matched file so glob patterns cannot escape.
+  Reported by Ameen (@ameen191).
+- SECURITY.md: reporting now goes through GitHub private vulnerability reporting
+  (the previous contact address was unreachable).
+
+## [Unreleased] - 2026-10-09 (assfix: MCPB NONSPEC, ruff hardening, onboarding, GH triage)
+
+### Fixed
+- MCPB NONSPEC (CRITICAL): `manifest.json` + `glama.json` `PYTHONPATH ${PWD}` ->
+  `${__dirname}` (Claude Desktop never expands `${PWD}`).
+- Ruff hardening: removed S110/S112 from `ignore` (was masking silent swallows);
+  added T20 + per-file-ignores for CLI `__main__` blocks. Fixed 5 `except: pass`
+  in `tools/controller.py` with `logger.debug` fallbacks.
+- Transport: `run_http_async()` (drops CORSMiddleware) replaced with
+  `uvicorn.Server` on `mcp.http_app()`.
+- `glama.json`: version 0.2.0 -> 0.2.1, FastMCP 2.14.1 -> 3.4.4, tools 26 -> 8.
+- Pack script version 1.2.0 -> 0.2.1; justfile bare `Set-Location` lines joined;
+  dashboard.tsx biome format.
+- GitHub triage: closed 9 superseded dependabot PRs (#1-#7, #9-#10, ~374d old,
+  red CI; Renovate now owns github-actions bumps); closed issue #11 (regex
+  search already supported via `find_in_files` + `replace_all regex` flag).
+
+### Added
+- `docs/ONBOARDING.md` (Notepad++ wrappee: Windows, N++ 8+, sanity checks,
+  pitfalls) + red `data-testid="onboarding-cue"` CTA on dashboard when the
+  bridge is down.
+- `renovate.json` (Monday schedule, stabilityDays 3, github-actions automerge).
+- README: onboarding pointer + Claude Desktop `.mcpb` one-liner.
+
+### Gates (all pass)
+ruff 0 · pyright 0 · format clean · pytest 118 passed · tsc 0 · biome clean (35 files)
+
+## [0.2.1] - 2026-10-03 (assfix: version sync + audit trail)
+
+### Fixed
+- Version sync: `server.py` 0.2.0 -> 0.2.1, `manifest.json` 0.2.0 -> 0.2.1 to match `pyproject.toml` 0.2.1.
+- README badges/text: FastMCP 3.4.2 -> 3.4.4 (matches `pyproject.toml` `fastmcp>=3.4.4,<4`), version badge 0.2.0 -> 0.2.1.
+- `.gitignore`: added `!docs/assess-reports/` negation (blanket `reports/` was swallowing the committed registry copy) + `mcpb/src/` staging ignore.
+- `.mcpbignore`: added `*.bak.*` (was only `*.bak`).
+
+### Added
+- Committed audit copy: `docs/assess-reports/2026-10-03.md` (mirrors `reports/assess-2026-10-03.md`).
+
 ## [0.2.0] - 2026-08-07 (assfix re-run: gates green)
 
 ### Fixed

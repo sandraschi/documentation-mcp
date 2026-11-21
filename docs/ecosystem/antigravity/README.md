@@ -48,6 +48,10 @@ Despite having no public GitHub repo, a surprisingly active third-party ecosyste
 
 See **[THIRD_PARTY_ECOSYSTEM.md](THIRD_PARTY_ECOSYSTEM.md)** for the full directory (10+ projects, including cockpit-tools at 7.9k stars).
 
+For CLI multi-account switching (`unshare` on Linux/WSL2 and Windows 11 equivalents), see **[MULTI_ACCOUNT_SWITCHING.md](MULTI_ACCOUNT_SWITCHING.md)**.
+
+For the Gemini 4 model lineup (**Carbon**, **Argon**, **Hydrogen**) and **Orchestrator** usage on a Pro account, see **[GEMINI_4_MODELS_AND_ORCHESTRATOR.md](GEMINI_4_MODELS_AND_ORCHESTRATOR.md)**.
+
 ## Fleet integration (resolved 2026-08-29)
 
 The "Antigravity fleet" concept referenced elsewhere in fleet tooling (e.g. memops `adn_system`) is **not** a separate mystery integration — it's **[agy-fleet-mcp](../../projects/agy-fleet-mcp/README.md)** (v0.1.0, Beta, port 10825): a config-bridge MCP that syncs the Cursor MCP fleet into Antigravity CLI's Gemini config paths (`~/.gemini/config/mcp_config.json`, `~/.gemini/antigravity-cli/`, `~/.gemini/antigravity/`), diffs configs, validates commands, and enforces Antigravity's ~50-tool budget. Direction matters: **agy-fleet-mcp** pushes fleet config *into* Antigravity; the separate **agy-mcp** (PyPI, unbuilt stub at `projects/agy-mcp`) would go the other direction — wrapping the `agy` CLI itself as MCP tools. Don't confuse the two when grepping.
